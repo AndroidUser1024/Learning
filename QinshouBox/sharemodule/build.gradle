@@ -1,0 +1,59 @@
+apply plugin: 'com.android.library'
+//Mob 移动开发者平台的插件
+apply plugin: 'com.mob.sdk'
+
+MobSDK {
+    appKey "248dc56241a12"
+    appSecret "b0fa12a87e0ac5682326cef630704db4"
+
+    ShareSDK {//平台配置信息
+        devInfo {
+            SinaWeibo {
+                appKey ""
+                appSecret ""
+                callbackUri ""
+                shareByAppClient false
+            }
+            Wechat {
+                appId ""
+                appSecret ""
+            }
+            QQ {
+                appId ""
+                appKey ""
+            }
+        }
+    }
+}
+android {
+    compileSdkVersion 27
+
+
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}

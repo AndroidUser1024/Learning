@@ -1,4 +1,4 @@
-include ':app'
+include ':app', ':commonmodule', ':imagemodule', ':networkmodule', ':immodule', ':pushmodule', ':sharemodule'
 
 //引入 Flutter Module
 setBinding(new Binding([gradle:this]))
