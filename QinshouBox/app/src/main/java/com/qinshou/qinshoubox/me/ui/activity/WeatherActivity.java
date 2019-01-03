@@ -2,6 +2,7 @@ package com.qinshou.qinshoubox.me.ui.activity;
 
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,6 +31,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import io.flutter.facade.Flutter;
+import io.flutter.view.FlutterView;
 
 /**
  * Description:天气界面
@@ -77,106 +81,110 @@ public class WeatherActivity extends MyBaseActivity {
 
     @Override
     public void initView() {
-        rootView = findViewByID(R.id.root_view);
-        final LinearLayout linearLayout = findViewByID(R.id.linear_layout_1);
-        linearLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                StatusBarUtil.appendStatusBarPadding(linearLayout, linearLayout.getMeasuredHeight());
-            }
-        });
-        ibChooseCity = findViewByID(R.id.ib_choose_city);
-        addNotInterceptView(ibChooseCity);
-        tvCity = findViewByID(R.id.tv_city);
-        ibShare = findViewByID(R.id.ib_share);
-        tvTemperature = findViewByID(R.id.tv_temperature);
-        tvWeather = findViewByID(R.id.tv_weather);
-        tvUpdateTime = findViewByID(R.id.tv_update_time);
-        tvWeek = findViewByID(R.id.tv_week);
-        ivAirCondition = findViewByID(R.id.iv_air_condition);
-        tvAirCondition = findViewByID(R.id.tv_air_condition);
-        tvWind = findViewByID(R.id.tv_wind);
-        tvHumidity = findViewByID(R.id.tv_humidity);
-        tvSunrise = findViewByID(R.id.tv_sunrise);
-        tvSunset = findViewByID(R.id.tv_sunset);
-        tvWashIndex = findViewByID(R.id.tv_wash_index);
-        tvExerciseIndex = findViewByID(R.id.tv_exercise_index);
-        tvColdIndex = findViewByID(R.id.tv_cold_index);
-        tvDressingIndex = findViewByID(R.id.tv_dressing_index);
+        View flutterView = Flutter.createView(getActivity(), getActivity().getLifecycle(), "WeatherView");
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
+        addContentView(flutterView,layoutParams);
+
+//        rootView = findViewByID(R.id.root_view);
+//        final LinearLayout linearLayout = findViewByID(R.id.linear_layout_1);
+//        linearLayout.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                StatusBarUtil.appendStatusBarPadding(linearLayout, linearLayout.getMeasuredHeight());
+//            }
+//        });
+//        ibChooseCity = findViewByID(R.id.ib_choose_city);
+//        addNotInterceptView(ibChooseCity);
+//        tvCity = findViewByID(R.id.tv_city);
+//        ibShare = findViewByID(R.id.ib_share);
+//        tvTemperature = findViewByID(R.id.tv_temperature);
+//        tvWeather = findViewByID(R.id.tv_weather);
+//        tvUpdateTime = findViewByID(R.id.tv_update_time);
+//        tvWeek = findViewByID(R.id.tv_week);
+//        ivAirCondition = findViewByID(R.id.iv_air_condition);
+//        tvAirCondition = findViewByID(R.id.tv_air_condition);
+//        tvWind = findViewByID(R.id.tv_wind);
+//        tvHumidity = findViewByID(R.id.tv_humidity);
+//        tvSunrise = findViewByID(R.id.tv_sunrise);
+//        tvSunset = findViewByID(R.id.tv_sunset);
+//        tvWashIndex = findViewByID(R.id.tv_wash_index);
+//        tvExerciseIndex = findViewByID(R.id.tv_exercise_index);
+//        tvColdIndex = findViewByID(R.id.tv_cold_index);
+//        tvDressingIndex = findViewByID(R.id.tv_dressing_index);
     }
 
     @Override
     public void setListener() {
-        ibChooseCity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showCityPickerView();
-            }
-        });
-        ibShare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ShareUtil.showShare(getContext());
-            }
-        });
+//        ibChooseCity.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                showCityPickerView();
+//            }
+//        });
+//        ibShare.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ShareUtil.showShare(getContext());
+//            }
+//        });
     }
 
     @Override
     public void initData() {
-        String ip = SystemUtil.getIPAddress(getActivity());
-        MobApi.getInstance().queryWeatherByIp(ip, new BaseObserver<List<WeatherBean>>() {
-            @Override
-            public void onNext(List<WeatherBean> value) {
-                if (value.size() > 0) {
-                    updateUi(value.get(0));
-                }
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                loadData(null, SharedPreferencesUtil.getString(getContext(), Constant.LAST_CHOOSE_CITY));
-                ShowLogUtil.logi("ip--->" + e.getMessage());
-            }
-        });
-        MobApi.getInstance().queryCityList(new BaseObserver<List<ProvinceBean>>() {
-            @Override
-            public void onNext(List<ProvinceBean> value) {
-                provinceList.clear();
-                cityList.clear();
-                districtList.clear();
-
-                provinceList = value;
-                for (ProvinceBean provinceBean : value) {
-                    cityList.add(provinceBean.getCityList());
-                    List<List<DistrictBean>> list = new ArrayList<>();
-                    for (CityBean cityBean : provinceBean.getCityList()) {
-                        list.add(cityBean.getDistrictList());
-                    }
-                    districtList.add(list);
-                }
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                ShowLogUtil.logi(e.getMessage());
-            }
-        });
+//        String ip = SystemUtil.getIPAddress(getActivity());
+//        MobApi.getInstance().queryWeatherByIp(ip, new BaseObserver<List<WeatherBean>>() {
+//            @Override
+//            public void onNext(List<WeatherBean> value) {
+//                if (value.size() > 0) {
+//                    updateUi(value.get(0));
+//                }
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//                loadData(null, SharedPreferencesUtil.getString(getContext(), Constant.LAST_CHOOSE_CITY));
+//                ShowLogUtil.logi("ip--->" + e.getMessage());
+//            }
+//        });
+//        MobApi.getInstance().queryCityList(new BaseObserver<List<ProvinceBean>>() {
+//            @Override
+//            public void onNext(List<ProvinceBean> value) {
+//                provinceList.clear();
+//                cityList.clear();
+//                districtList.clear();
+//
+//                provinceList = value;
+//                for (ProvinceBean provinceBean : value) {
+//                    cityList.add(provinceBean.getCityList());
+//                    List<List<DistrictBean>> list = new ArrayList<>();
+//                    for (CityBean cityBean : provinceBean.getCityList()) {
+//                        list.add(cityBean.getDistrictList());
+//                    }
+//                    districtList.add(list);
+//                }
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//                ShowLogUtil.logi(e.getMessage());
+//            }
+//        });
     }
 
     private void loadData(String province, String city) {
-        MobApi.getInstance().queryWeatherByCity(province, city, new BaseObserver<List<WeatherBean>>() {
-            @Override
-            public void onNext(List<WeatherBean> value) {
-                if (value.size() > 0) {
-                    updateUi(value.get(0));
-                }
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                ShowLogUtil.logi(e.getMessage());
-            }
-        });
+//        MobApi.getInstance().queryWeatherByCity(province, city, new BaseObserver<List<WeatherBean>>() {
+//            @Override
+//            public void onNext(List<WeatherBean> value) {
+//                if (value.size() > 0) {
+//                    updateUi(value.get(0));
+//                }
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//                ShowLogUtil.logi(e.getMessage());
+//            }
+//        });
     }
 
     /**
