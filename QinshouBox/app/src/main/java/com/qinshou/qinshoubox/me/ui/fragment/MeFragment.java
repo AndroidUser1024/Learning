@@ -13,6 +13,7 @@ import com.qinshou.qinshoubox.me.ui.activity.PuzzleActivity;
 import com.qinshou.qinshoubox.me.ui.activity.TestActivity;
 import com.qinshou.qinshoubox.me.ui.activity.TurningRobotActivity;
 import com.qinshou.qinshoubox.me.ui.activity.WeatherActivity;
+import com.qinshou.qinshoubox.me.ui.activity.WheelOfFortuneActivity;
 
 /**
  * Description:"我"界面
@@ -31,6 +32,7 @@ public class MeFragment extends MyBaseFragment {
     private Button btnPuzzle;
     private Button btnContactList;
     private Button btnWeather;
+    private Button mBtnWheelOfFortune;
 
     @Override
     public boolean getIsImmersive() {
@@ -58,6 +60,7 @@ public class MeFragment extends MyBaseFragment {
         btnMagicTower = findViewByID(R.id.btn_magic_tower);
         btnContactList = findViewByID(R.id.btn_contact_list);
         btnWeather = findViewByID(R.id.btn_weather);
+        mBtnWheelOfFortune = findViewByID(R.id.btn_wheel_of_fortune);
     }
 
     @Override
@@ -71,6 +74,7 @@ public class MeFragment extends MyBaseFragment {
         btnPuzzle.setOnClickListener(mOnClickListener);
         btnContactList.setOnClickListener(mOnClickListener);
         btnWeather.setOnClickListener(mOnClickListener);
+        mBtnWheelOfFortune.setOnClickListener(mOnClickListener);
     }
 
     @Override
@@ -122,6 +126,9 @@ public class MeFragment extends MyBaseFragment {
                 case R.id.ib_login_by_wechat:
                     break;
                 case R.id.ib_login_by_weibo:
+                    break;
+                case R.id.btn_wheel_of_fortune:
+                    startActivity(new Intent(getContext(),WheelOfFortuneActivity.class));
                     break;
                 default:
                     break;

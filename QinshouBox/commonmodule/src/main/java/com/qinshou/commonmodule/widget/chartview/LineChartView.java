@@ -23,6 +23,7 @@ import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 
+
 import com.qinshou.commonmodule.widget.chartview.component.Axis;
 import com.qinshou.commonmodule.widget.chartview.component.AxisText;
 import com.qinshou.commonmodule.widget.chartview.component.DataLine;
@@ -77,6 +78,7 @@ public class LineChartView extends View {
     private boolean mShowTouchLineX = true;  //触摸图表时是否显示触摸点最近的数据点的横轴线
     private boolean mShowTouchLineY = true;  //触摸图表时是否显示触摸点最近的数据点的纵轴线
     private boolean mShowTouchLinePoint = true;  //触摸图表时是否显示触摸点最近的数据点
+    private boolean mShowTouchLinePointText = true;  //触摸图表时是否显示触摸点最近的数据点的文字
     private float mTouchLineWidth;    //触摸指示线的宽度
     private int mTouchLineColor;    //触摸指示线的颜色
     private float mTouchLineTextSize;    //触摸指示线的文字大小
@@ -133,8 +135,7 @@ public class LineChartView extends View {
 
         mTouchLinePaint = new Paint();
         mTouchLinePaint.setAntiAlias(true);
-        mTouchLinePaint.setColor(Color.parseColor("#FF000000"));
-        mTouchLinePaint.setStrokeWidth(1f);
+        mTouchLinePaint.setStyle(Paint.Style.FILL_AND_STROKE);
     }
 
     @Override
@@ -514,7 +515,8 @@ public class LineChartView extends View {
                 int width = textBounds.width();
                 int height = textBounds.height();
                 //确定轴标签文字的 x、y 坐标
-                float x = eachX * axisText.getX() + getPaddingLeft() + mBgPaint.getStrokeWidth() - width / 2;
+//                float x = eachX * axisText.getX() + getPaddingLeft() + mBgPaint.getStrokeWidth() - width / 2;
+                float x = eachX * axisText.getX() + getPaddingLeft() + mBgPaint.getStrokeWidth() - width / 2 + axisText.getMarginLeft() - axisText.getMarginRight();
                 float y = mHeight - getPaddingBottom() - mBgPaint.getStrokeWidth();
                 if (axisText.getPosition() == AxisText.Position.INSIDE) {
                     y = y - axisText.getMarginBottom();
@@ -603,6 +605,8 @@ public class LineChartView extends View {
         mTouchLinePaint.setStrokeWidth(mTouchLineWidth);
         if (mShowTouchLineY) {
             //纵轴线
+            mTouchLinePaint.setColor(Color.parseColor("#FF000000"));
+            mTouchLinePaint.setStrokeWidth(1f);
             canvas.drawLine(eachX * touchPosition + getPaddingLeft() + mBgPaint.getStrokeWidth()
                     , getPaddingTop()
                     , eachX * touchPosition + getPaddingLeft() + mBgPaint.getStrokeWidth()
@@ -617,6 +621,8 @@ public class LineChartView extends View {
             }
             if (mShowTouchLineX) {
                 //横轴线
+                mTouchLinePaint.setColor(Color.parseColor("#FF000000"));
+                mTouchLinePaint.setStrokeWidth(1f);
                 canvas.drawLine(getPaddingLeft()
                         , eachY * (yMax - dataLine.getDataPointList().get(touchPosition).getY()) + getPaddingTop() + mBgPaint.getStrokeWidth() + chartPaddingTop
                         , mWidth - getPaddingRight()
@@ -626,19 +632,23 @@ public class LineChartView extends View {
             }
             if (mShowTouchLinePoint) {
                 //触摸点最近的数据点
+                mTouchLinePaint.setColor(dataLine.getColor());
+                mTouchLinePaint.setStrokeWidth(4f);
                 canvas.drawCircle(eachX * touchPosition + getPaddingLeft() + mBgPaint.getStrokeWidth()
                         , eachY * (yMax - dataLine.getDataPointList().get(touchPosition).getY()) + getPaddingTop() + mBgPaint.getStrokeWidth() + chartPaddingTop
                         , mTouchLinePaint.getStrokeWidth() * 2
                         , mTouchLinePaint
                 );
-                //绘制数据点的值
-                String text = String.valueOf(dataLine.getDataPointList().get(touchPosition).getY());
-                TextPaint textPaint = getTextPaint(mTouchLineTextSize, mTouchLineTextColor);
-                textPaint.getTextBounds(text, 0, text.length(), textBounds);
-                canvas.drawText(text
-                        , eachX * touchPosition + getPaddingLeft() + mBgPaint.getStrokeWidth() + 15
-                        , eachY * (yMax - dataLine.getDataPointList().get(touchPosition).getY()) + getPaddingTop() + mBgPaint.getStrokeWidth() + chartPaddingTop - 15
-                        , textPaint);
+                if (mShowTouchLinePointText) {
+                    //绘制数据点的值
+                    String text = String.valueOf(dataLine.getDataPointList().get(touchPosition).getY());
+                    TextPaint textPaint = getTextPaint(mTouchLineTextSize, mTouchLineTextColor);
+                    textPaint.getTextBounds(text, 0, text.length(), textBounds);
+                    canvas.drawText(text
+                            , eachX * touchPosition + getPaddingLeft() + mBgPaint.getStrokeWidth() + 15
+                            , eachY * (yMax - dataLine.getDataPointList().get(touchPosition).getY()) + getPaddingTop() + mBgPaint.getStrokeWidth() + chartPaddingTop - 15
+                            , textPaint);
+                }
             }
 
         }
@@ -906,6 +916,10 @@ public class LineChartView extends View {
 
     public void setShowTouchLinePoint(boolean showTouchLinePoint) {
         this.mShowTouchLinePoint = showTouchLinePoint;
+    }
+
+    public void setShowTouchLinePointText(boolean showTouchLinePointText) {
+        mShowTouchLinePointText = showTouchLinePointText;
     }
 
     public void setOnDataPointSelectedListener(IOnDataPointSelectedListener onDataPointSelectedListener) {

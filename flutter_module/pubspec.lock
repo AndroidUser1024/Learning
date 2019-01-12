@@ -41,6 +41,15 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_picker:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: a22a4d40a131fa9ecbd43b0c02acaf7ccde5def3
+      url: "git://github.com/yangyxd/flutter_picker.git"
+    source: git
+    version: "1.0.5"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -151,3 +160,4 @@ packages:
     version: "2.0.8"
 sdks:
   dart: ">=2.0.0 <3.0.0"
+  flutter: ">=0.1.4 <2.0.0"

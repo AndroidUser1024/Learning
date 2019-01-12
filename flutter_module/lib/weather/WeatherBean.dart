@@ -20,7 +20,7 @@ class WeatherBean {
   String exerciseIndex; //运动指数
   String dayTime; //白天天气
   String night; //晚上天气
-  List<WeatherBean> future; //未来一周的天气
+  List<WeatherBean> future; //未来一周的天气 
 
   WeatherBean();
 
