@@ -12,10 +12,6 @@ import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.qinshou.commonmodule.util.SharedPreferencesUtil;
-import com.qinshou.commonmodule.util.ShowLogUtil;
-import com.qinshou.commonmodule.util.StatusBarUtil;
-import com.qinshou.commonmodule.util.SystemUtil;
-import com.qinshou.networkmodule.BaseObserver;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.MyBaseActivity;
 import com.qinshou.qinshoubox.me.bean.CityBean;
@@ -23,8 +19,6 @@ import com.qinshou.qinshoubox.me.bean.DistrictBean;
 import com.qinshou.qinshoubox.me.bean.ProvinceBean;
 import com.qinshou.qinshoubox.me.bean.WeatherBean;
 import com.qinshou.qinshoubox.me.constant.Constant;
-import com.qinshou.qinshoubox.me.network.mob.MobApi;
-import com.qinshou.sharemodule.util.ShareUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,8 +26,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import io.flutter.app.FlutterActivity;
 import io.flutter.facade.Flutter;
-import io.flutter.view.FlutterView;
+import io.flutter.view.FlutterMain;
+
 
 /**
  * Description:天气界面
@@ -81,9 +77,10 @@ public class WeatherActivity extends MyBaseActivity {
 
     @Override
     public void initView() {
+        unbindSlideBackActivity();
         View flutterView = Flutter.createView(getActivity(), getActivity().getLifecycle(), "WeatherView");
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
-        addContentView(flutterView,layoutParams);
+        addContentView(flutterView, layoutParams);
 
 //        rootView = findViewByID(R.id.root_view);
 //        final LinearLayout linearLayout = findViewByID(R.id.linear_layout_1);

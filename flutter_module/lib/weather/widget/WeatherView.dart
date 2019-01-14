@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_module/FileLoadUtil.dart';
-import 'package:flutter_module/weather/MobApiResultBean.dart';
-import 'package:flutter_module/weather/WeatherBean.dart';
 import 'dart:ui';
 import 'dart:convert';
 
 import 'package:flutter_picker/flutter_picker.dart';
 
+import 'package:flutter_module/FileLoadUtil.dart';
+import 'package:flutter_module/weather/bean/WeatherBean.dart';
+import 'package:flutter_module/Http.dart';
+import 'package:flutter_module/weather/bean/MobApiResultBean.dart';
 
 class WeatherView extends StatefulWidget {
   WeatherState weatherState = WeatherState();
@@ -239,31 +240,31 @@ class WeatherState extends State<WeatherView> {
   }
 
   void showCityPicker(BuildContext buildContext, String provinceListJson) {
-//    new Picker(
-//        adapter: PickerDataAdapter<String>(
-//            pickerdata: new JsonDecoder().convert(provinceListJson)),
-//        changeToFirst: true,
-//        hideHeader: false,
-//        confirmText: "确定",
-//        cancelText: "取消",
-//        onConfirm: (Picker picker, List value) {
-//          String selectedProvince = picker.getSelectedValues().elementAt(0);
-//          String selectedDistrict = picker.getSelectedValues().elementAt(2);
-//          String url =
-//              "http://apicloud.mob.com/v1/weather/query?key=248dc56241a12&province=" +
-//                  selectedProvince +
-//                  "&city=" +
-//                  selectedDistrict;
-//          getRequest(url, (String data) {
-//            MobApiResultBean mobApiResultBean =
-//                MobApiResultBean.fromJson(json.decode(data));
-//            WeatherBean weatherBean = WeatherBean.fromJson(
-//                json.decode(json.encode(mobApiResultBean.result.elementAt(0))));
-//            print(weatherBean);
-//            setWeatherBean(weatherBean);
-//          }, (int errorCode) {
-//            print(errorCode);
-//          });
-//        }).showModal(buildContext); //_scaffoldKey.currentState);
+    new Picker(
+        adapter: PickerDataAdapter<String>(
+            pickerdata: new JsonDecoder().convert(provinceListJson)),
+        changeToFirst: true,
+        hideHeader: false,
+        confirmText: "确定",
+        cancelText: "取消",
+        onConfirm: (Picker picker, List value) {
+          String selectedProvince = picker.getSelectedValues().elementAt(0);
+          String selectedDistrict = picker.getSelectedValues().elementAt(2);
+          String url =
+              "http://apicloud.mob.com/v1/weather/query?key=248dc56241a12&province=" +
+                  selectedProvince +
+                  "&city=" +
+                  selectedDistrict;
+          getRequest(url, (String data) {
+            MobApiResultBean mobApiResultBean =
+                MobApiResultBean.fromJson(json.decode(data));
+            WeatherBean weatherBean = WeatherBean.fromJson(
+                json.decode(json.encode(mobApiResultBean.result.elementAt(0))));
+            print(weatherBean);
+            setWeatherBean(weatherBean);
+          }, (int errorCode) {
+            print(errorCode);
+          });
+        }).showModal(buildContext); //_scaffoldKey.currentState);
   }
 }
