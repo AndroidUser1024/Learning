@@ -605,8 +605,6 @@ public class LineChartView extends View {
         mTouchLinePaint.setStrokeWidth(mTouchLineWidth);
         if (mShowTouchLineY) {
             //纵轴线
-            mTouchLinePaint.setColor(Color.parseColor("#FF000000"));
-            mTouchLinePaint.setStrokeWidth(1f);
             canvas.drawLine(eachX * touchPosition + getPaddingLeft() + mBgPaint.getStrokeWidth()
                     , getPaddingTop()
                     , eachX * touchPosition + getPaddingLeft() + mBgPaint.getStrokeWidth()
@@ -621,8 +619,6 @@ public class LineChartView extends View {
             }
             if (mShowTouchLineX) {
                 //横轴线
-                mTouchLinePaint.setColor(Color.parseColor("#FF000000"));
-                mTouchLinePaint.setStrokeWidth(1f);
                 canvas.drawLine(getPaddingLeft()
                         , eachY * (yMax - dataLine.getDataPointList().get(touchPosition).getY()) + getPaddingTop() + mBgPaint.getStrokeWidth() + chartPaddingTop
                         , mWidth - getPaddingRight()
