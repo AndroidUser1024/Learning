@@ -10,7 +10,7 @@ import com.qinshou.qinshoubox.base.MyBaseFragment;
 import com.qinshou.qinshoubox.me.ui.activity.ContactListActivity;
 import com.qinshou.qinshoubox.me.ui.activity.MagicTowerActivity;
 import com.qinshou.qinshoubox.me.ui.activity.PuzzleActivity;
-import com.qinshou.qinshoubox.me.ui.activity.TestActivity;
+import com.qinshou.qinshoubox.me.ui.activity.ChartActivity;
 import com.qinshou.qinshoubox.me.ui.activity.TurningRobotActivity;
 import com.qinshou.qinshoubox.me.ui.activity.WeatherActivity;
 import com.qinshou.qinshoubox.me.ui.activity.WheelOfFortuneActivity;
@@ -33,6 +33,7 @@ public class MeFragment extends MyBaseFragment {
     private Button btnContactList;
     private Button btnWeather;
     private Button mBtnWheelOfFortune;
+    private Button mBtnChart;
 
     @Override
     public boolean getIsImmersive() {
@@ -61,6 +62,7 @@ public class MeFragment extends MyBaseFragment {
         btnContactList = findViewByID(R.id.btn_contact_list);
         btnWeather = findViewByID(R.id.btn_weather);
         mBtnWheelOfFortune = findViewByID(R.id.btn_wheel_of_fortune);
+        mBtnChart = findViewByID(R.id.btn_chart);
     }
 
     @Override
@@ -75,6 +77,7 @@ public class MeFragment extends MyBaseFragment {
         btnContactList.setOnClickListener(mOnClickListener);
         btnWeather.setOnClickListener(mOnClickListener);
         mBtnWheelOfFortune.setOnClickListener(mOnClickListener);
+        mBtnChart.setOnClickListener(mOnClickListener);
     }
 
     @Override
@@ -85,23 +88,7 @@ public class MeFragment extends MyBaseFragment {
         @Override
         public void onClick(final View v) {
             switch (v.getId()) {
-                case R.id.btn_puzzle:
-                    startActivity(new Intent(getContext(), PuzzleActivity.class));
-                    break;
-                case R.id.btn_turning_robot:
-                    startActivity(new Intent(getContext(), TurningRobotActivity.class));
-                    break;
-                case R.id.btn_magic_tower:
-                    startActivity(new Intent(getContext(), MagicTowerActivity.class));
-                    break;
-                case R.id.btn_contact_list:
-                    startActivity(new Intent(getContext(), ContactListActivity.class));
-                    break;
-                case R.id.btn_weather:
-                    startActivity(new Intent(getContext(), WeatherActivity.class));
-                    break;
                 case R.id.ib_login_by_username_password:
-                    startActivity(new Intent(getContext(), TestActivity.class));
 //                    EMClient.getInstance().login("cqflqinhao", "123456", new EMCallBack() {//回调
 //                        @Override
 //                        public void onSuccess() {
@@ -127,8 +114,26 @@ public class MeFragment extends MyBaseFragment {
                     break;
                 case R.id.ib_login_by_weibo:
                     break;
+                case R.id.btn_puzzle:
+                    startActivity(new Intent(getContext(), PuzzleActivity.class));
+                    break;
+                case R.id.btn_turning_robot:
+                    startActivity(new Intent(getContext(), TurningRobotActivity.class));
+                    break;
+                case R.id.btn_magic_tower:
+                    startActivity(new Intent(getContext(), MagicTowerActivity.class));
+                    break;
+                case R.id.btn_contact_list:
+                    startActivity(new Intent(getContext(), ContactListActivity.class));
+                    break;
+                case R.id.btn_weather:
+                    startActivity(new Intent(getContext(), WeatherActivity.class));
+                    break;
                 case R.id.btn_wheel_of_fortune:
-                    startActivity(new Intent(getContext(),WheelOfFortuneActivity.class));
+                    startActivity(new Intent(getContext(), WheelOfFortuneActivity.class));
+                    break;
+                case R.id.btn_chart:
+                    startActivity(new Intent(getContext(), ChartActivity.class));
                     break;
                 default:
                     break;

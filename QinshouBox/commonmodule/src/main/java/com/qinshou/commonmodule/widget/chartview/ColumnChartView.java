@@ -7,25 +7,22 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
-import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.PathMeasure;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.Shader;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 
 
 import com.qinshou.commonmodule.widget.chartview.component.Axis;
 import com.qinshou.commonmodule.widget.chartview.component.AxisText;
+import com.qinshou.commonmodule.widget.chartview.component.DataColumn;
 import com.qinshou.commonmodule.widget.chartview.component.DataLine;
 import com.qinshou.commonmodule.widget.chartview.component.DataPoint;
 import com.qinshou.commonmodule.widget.chartview.component.HighlightDataPoint;
@@ -38,10 +35,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Description:折线图控件，支持多条数据线、自定义标签、添加水平辅助线、高亮数据点、触摸事件，还有贝塞尔曲线样式和动态绘制
- * Date:2018/12/25
+ * Description:
+ * Created by 禽兽先生
+ * Created on 2019/1/16
  */
-public class LineChartView extends View {
+public class ColumnChartView extends View {
     private int mWidth;
     private int mHeight;
 
@@ -52,15 +50,12 @@ public class LineChartView extends View {
     private int mBgStrokeColor;    //背景边框颜色
     private float mBgStrokeRadius; //背景边框的圆角度
 
-    private List<DataLine> mDataLineList = new ArrayList<>(); //数据线的集合
-    private Paint mDataLinePaint;   //数据线的画笔
-
+    private ArrayList<DataColumn> mDataColumnList = new ArrayList<>(); //数据线的集合
+    private Paint mDataColumnPaint;   //数据线的画笔
     private float eachX;    //横轴每一单元的长度
     private float eachY;    //纵轴每一单元的长度
     private float yMax;     //纵轴最大值
     private float yMin;     //纵轴最小值
-
-    private static final float SMOOTHNESS = 0.25f;  //贝塞尔曲线平滑度
 
     private float chartPaddingTop;
     private float chartPaddingBottom;
@@ -90,19 +85,19 @@ public class LineChartView extends View {
     private IOnDataPointSelectedListener mOnDataPointSelectedListener;  //触摸图表时最近的的数据点的回调监听
 
     private boolean mAnimateDraw = false;    //是否动态绘制的标志位
-    private SparseArray<Path> mDataLinePathSparseArray = new SparseArray<>();
-    private SparseArray<Path> mDataLineAnimatePathSparseArray = new SparseArray<>();
+    //    private List<DataColumn> mAnimateDataColumnList = new ArrayList<>();
+    private float mAnimateValue = 0f;
     private boolean mAnimateDrawing = false;    //是否正在进行动态绘制
 
-    public LineChartView(Context context) {
+    public ColumnChartView(Context context) {
         this(context, null);
     }
 
-    public LineChartView(Context context, @Nullable AttributeSet attrs) {
+    public ColumnChartView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public LineChartView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public ColumnChartView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
             setLayerType(LAYER_TYPE_SOFTWARE, null);
@@ -124,8 +119,8 @@ public class LineChartView extends View {
         mBgPaint.setAntiAlias(true);
         mBgPaint.setStrokeWidth(1f);
 
-        mDataLinePaint = new Paint();
-        mDataLinePaint.setAntiAlias(true);
+        mDataColumnPaint = new Paint();
+        mDataColumnPaint.setAntiAlias(true);
 
         mHorizontalLinePaint = new Paint();
         mHorizontalLinePaint.setAntiAlias(true);
@@ -163,6 +158,7 @@ public class LineChartView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
         //画背景及边框
         drawBackground(canvas);
 
@@ -174,9 +170,13 @@ public class LineChartView extends View {
             }
         }
 
-        //画数据线
-        for (int i = 0; i < mDataLineList.size(); i++) {
-            drawDataLine(canvas, mDataLineList.get(i));
+        //画数据柱
+        for (int i = 0; i < mDataColumnList.size(); i++) {
+//            if (mAnimateDraw) {
+//                drawDataColumn(canvas, mAnimateDataColumnList.get(i), i);
+//            } else {
+            drawDataColumn(canvas, mDataColumnList.get(i), i);
+//            }
         }
 
         //画层级处于数据线之上的水平辅助线
@@ -221,9 +221,6 @@ public class LineChartView extends View {
                 getParent().requestDisallowInterceptTouchEvent(true);
                 mTouching = true;
                 touchPosition = (int) ((event.getX() - getPaddingLeft() - getPaddingRight()) / eachX);
-                if (((event.getX() - getPaddingLeft() - getPaddingRight()) % eachX) > eachX / 2) {
-                    touchPosition++;
-                }
                 if (mOnDataPointSelectedListener != null) {
                     mOnDataPointSelectedListener.onDataPointSelected(event.getRawX(), event.getRawY(), touchPosition);
                 }
@@ -241,9 +238,6 @@ public class LineChartView extends View {
                 }
                 mTouching = true;
                 touchPosition = (int) ((event.getX() - getPaddingLeft() - getPaddingRight()) / eachX);
-                if (((event.getX() - getPaddingLeft() - getPaddingRight()) % eachX) > eachX / 2) {
-                    touchPosition++;
-                }
                 if (mOnDataPointSelectedListener != null) {
                     mOnDataPointSelectedListener.onDataPointSelected(event.getRawX(), event.getRawY(), touchPosition);
                 }
@@ -266,7 +260,7 @@ public class LineChartView extends View {
      * Create On:2018/12/22 17:07
      * Description:画背景及边框
      */
-    private void drawBackground(Canvas canvas) {
+    protected void drawBackground(Canvas canvas) {
         //设置圆角矩形的宽高
         mBgStroke.set(getPaddingLeft() + mBgPaint.getStrokeWidth()
                 , getPaddingTop() + mBgPaint.getStrokeWidth()
@@ -283,156 +277,6 @@ public class LineChartView extends View {
         mBgPaint.setStyle(Paint.Style.STROKE);
         mBgPaint.setColor(mBgStrokeColor);
         canvas.drawRoundRect(mBgStroke, mBgStrokeRadius, mBgStrokeRadius, mBgPaint);
-    }
-
-    /**
-     * Create By:禽兽先生
-     * Create On:2018/12/22 0022 17:07
-     * Description:画数据线
-     */
-    private void drawDataLine(Canvas canvas, DataLine dataLine) {
-        Path path;
-        if (mAnimateDraw) {
-            //如果动态绘制，则 path 为拷贝的动态 path
-            path = mDataLineAnimatePathSparseArray.get(dataLine.hashCode());
-        } else {
-            //否则直接拿到 path
-            path = getDataLinePath(dataLine);
-        }
-        if (path == null) {
-            return;
-        }
-        //画填充部分
-        if (dataLine.isFill()) {
-            Path fillPath = new Path(path);
-            PathMeasure pathMeasure = new PathMeasure(fillPath, false);
-            float[] pos = new float[2];
-            float[] tan = new float[2];
-            pathMeasure.getPosTan(pathMeasure.getLength(), pos, tan);
-            //连接 path 最后一点和横轴上与其横坐标相等的点
-            fillPath.lineTo(pos[0]
-                    , mHeight - getPaddingBottom() - mBgPaint.getStrokeWidth()
-            );
-            //连接图表左下角的点
-            fillPath.lineTo(getPaddingLeft() + mBgPaint.getStrokeWidth()
-                    , mHeight - getPaddingBottom() - mBgPaint.getStrokeWidth()
-            );
-            pathMeasure.getPosTan(0, pos, tan);
-            //连接第一个数据点，也就是 path 第一个点，也可以使用
-//            pathMeasure.getPosTan(0, pos, tan);
-//            fillPath.lineTo(pos[0],pos[1]);
-            fillPath.lineTo(eachX * dataLine.getDataPointList().get(0).getX() + getPaddingLeft() + mBgPaint.getStrokeWidth()
-                    , eachY * (yMax - dataLine.getDataPointList().get(0).getY()) + getPaddingTop() + mBgPaint.getStrokeWidth()
-            );
-            //重新设置画笔画填充部分
-            mDataLinePaint.setStrokeWidth(1f);
-            mDataLinePaint.setStyle(Paint.Style.FILL);
-            mDataLinePaint.setShader(new LinearGradient(0
-                    , eachY * (yMax - dataLine.getMax()) + getPaddingTop() + mBgPaint.getStrokeWidth() + chartPaddingTop
-                    , 0
-                    , mHeight - getPaddingBottom() - mBgPaint.getStrokeWidth()
-                    , dataLine.getFillColors()
-                    , null
-                    , Shader.TileMode.CLAMP));
-            canvas.drawPath(fillPath, mDataLinePaint);
-        }
-        //画数据线
-        mDataLinePaint.setStrokeWidth(dataLine.getWidth());
-        mDataLinePaint.setStyle(Paint.Style.STROKE);
-        mDataLinePaint.setShader(null);
-        mDataLinePaint.setColor(dataLine.getColor());
-        canvas.drawPath(path, mDataLinePaint);
-    }
-
-    private Path getDataLinePath(DataLine dataLine) {
-        //先从容器中取，如果没有再创建并存到容器中
-        Path path = mDataLinePathSparseArray.get(dataLine.hashCode());
-        if (path == null) {
-            path = new Path();
-            mDataLinePathSparseArray.put(dataLine.hashCode(), path);
-            if (dataLine.getType() == DataLine.Type.LINEAR) {
-                //普通折线图
-                for (int i = 0; i < dataLine.getDataPointList().size(); i++) {
-                    if (i == 0) {
-                        path.moveTo(eachX * dataLine.getDataPointList().get(i).getX() + getPaddingLeft() + mBgPaint.getStrokeWidth()
-                                , eachY * (yMax - dataLine.getDataPointList().get(i).getY()) + getPaddingTop() + mBgPaint.getStrokeWidth() + chartPaddingTop
-                        );
-                    } else {
-                        path.lineTo(eachX * +dataLine.getDataPointList().get(i).getX() + getPaddingLeft() + mBgPaint.getStrokeWidth()
-                                , eachY * (yMax - dataLine.getDataPointList().get(i).getY()) + getPaddingTop() + mBgPaint.getStrokeWidth() + chartPaddingTop
-                        );
-                    }
-                }
-            } else if (dataLine.getType() == DataLine.Type.BEZIER) {
-                //贝塞尔曲线图
-                for (int i = 0; i < dataLine.getDataPointList().size(); i++) {
-                    if (i == 0) {
-                        path.moveTo(eachX * dataLine.getDataPointList().get(i).getX() + getPaddingLeft() + mBgPaint.getStrokeWidth()
-                                , eachY * (yMax - dataLine.getDataPointList().get(i).getY()) + getPaddingTop() + mBgPaint.getStrokeWidth() + chartPaddingTop
-                        );
-                    } else if (i == 1) {
-                        List<DataPoint> controlPointList = getBezierControlPoint(dataLine.getDataPointList().get(i - 1)
-                                , dataLine.getDataPointList().get(i - 1)
-                                , dataLine.getDataPointList().get(i)
-                                , dataLine.getDataPointList().get(i + 1));
-                        path.cubicTo(eachX * controlPointList.get(0).getX() + getPaddingLeft() + mBgPaint.getStrokeWidth()
-                                , eachY * (yMax - controlPointList.get(0).getY()) + getPaddingTop() + mBgPaint.getStrokeWidth() + chartPaddingTop
-                                , eachX * controlPointList.get(1).getX() + getPaddingLeft() + mBgPaint.getStrokeWidth()
-                                , eachY * (yMax - controlPointList.get(1).getY()) + getPaddingTop() + mBgPaint.getStrokeWidth() + chartPaddingTop
-                                , eachX * dataLine.getDataPointList().get(i).getX() + getPaddingLeft() + mBgPaint.getStrokeWidth()
-                                , eachY * (yMax - dataLine.getDataPointList().get(i).getY()) + getPaddingTop() + mBgPaint.getStrokeWidth() + chartPaddingTop
-                        );
-                    } else if (i == dataLine.getDataPointList().size() - 1) {
-                        List<DataPoint> controlPointList = getBezierControlPoint(dataLine.getDataPointList().get(i - 2)
-                                , dataLine.getDataPointList().get(i - 1)
-                                , dataLine.getDataPointList().get(i)
-                                , dataLine.getDataPointList().get(i));
-                        path.cubicTo(eachX * controlPointList.get(0).getX() + getPaddingLeft() + mBgPaint.getStrokeWidth()
-                                , eachY * (yMax - controlPointList.get(0).getY()) + getPaddingTop() + mBgPaint.getStrokeWidth() + chartPaddingTop
-                                , eachX * controlPointList.get(1).getX() + getPaddingLeft() + mBgPaint.getStrokeWidth()
-                                , eachY * (yMax - controlPointList.get(1).getY()) + getPaddingTop() + mBgPaint.getStrokeWidth() + chartPaddingTop
-                                , eachX * dataLine.getDataPointList().get(i).getX() + getPaddingLeft() + mBgPaint.getStrokeWidth()
-                                , eachY * (yMax - dataLine.getDataPointList().get(i).getY()) + getPaddingTop() + mBgPaint.getStrokeWidth() + chartPaddingTop
-                        );
-                    } else {
-                        List<DataPoint> controlPointList = getBezierControlPoint(dataLine.getDataPointList().get(i - 2)
-                                , dataLine.getDataPointList().get(i - 1)
-                                , dataLine.getDataPointList().get(i)
-                                , dataLine.getDataPointList().get(i + 1));
-                        path.cubicTo(eachX * controlPointList.get(0).getX() + getPaddingLeft() + mBgPaint.getStrokeWidth()
-                                , eachY * (yMax - controlPointList.get(0).getY()) + getPaddingTop() + mBgPaint.getStrokeWidth() + chartPaddingTop
-                                , eachX * controlPointList.get(1).getX() + getPaddingLeft() + mBgPaint.getStrokeWidth()
-                                , eachY * (yMax - controlPointList.get(1).getY()) + getPaddingTop() + mBgPaint.getStrokeWidth() + chartPaddingTop
-                                , eachX * dataLine.getDataPointList().get(i).getX() + getPaddingLeft() + mBgPaint.getStrokeWidth()
-                                , eachY * (yMax - dataLine.getDataPointList().get(i).getY()) + getPaddingTop() + mBgPaint.getStrokeWidth() + chartPaddingTop
-                        );
-                    }
-                }
-            }
-        }
-        return path;
-    }
-
-    /**
-     * Create By:禽兽先生
-     * Create On:2018/12/23 10:42
-     * Description:求两点间的三次贝塞尔的控制点,但是数据的第一个点和最后一个点没办法使用该公式
-     * 解决办法是第一个点将 point1 作为 point0,最后一个点将 point2 作为 point3
-     *
-     * @param point0 两点左端点的上一个点
-     * @param point1 两点的左端点
-     * @param point2 两点的右端点
-     * @param point3 两点右端点的下一个点
-     */
-    private List<DataPoint> getBezierControlPoint(DataPoint point0, DataPoint point1, DataPoint point2, DataPoint point3) {
-        List<DataPoint> list = new ArrayList<>();
-        DataPoint controlPoint1 = new DataPoint(point1.getX() + (point2.getX() - point0.getX()) * SMOOTHNESS
-                , point1.getY() + (point2.getY() - point0.getY()) * SMOOTHNESS);
-        DataPoint controlPoint2 = new DataPoint(point2.getX() - (point3.getX() - point1.getX()) * SMOOTHNESS
-                , point2.getY() - (point3.getY() - point1.getY()) * SMOOTHNESS);
-        list.add(controlPoint1);
-        list.add(controlPoint2);
-        return list;
     }
 
     /**
@@ -481,15 +325,32 @@ public class LineChartView extends View {
 
     /**
      * Create By:禽兽先生
-     * Create On:2018/12/23 14:01
-     * Description: 获取绘制文字的画笔
+     * Create On:2019/01/24 15/28
+     * Description:画数据柱
      */
-    private TextPaint getTextPaint(float textSize, int textColor) {
-        TextPaint textPaint = new TextPaint();
-        textPaint.setAntiAlias(true);
-        textPaint.setTextSize(textSize);
-        textPaint.setColor(textColor);
-        return textPaint;
+    private void drawDataColumn(Canvas canvas, DataColumn dataColumn, int index) {
+        for (int i = 0; i < dataColumn.getSize(); i++) {
+            RectF rectF = new RectF();
+            float eachColumnWidth = eachX / mDataColumnList.size();
+            float left = eachX * dataColumn.getDataPointList().get(i).getX()
+                    + getPaddingLeft()
+                    + mBgPaint.getStrokeWidth()
+                    + dataColumn.getMarginLeft()
+                    + eachColumnWidth * index;
+            float top = eachY * (yMax - dataColumn.getDataPointList().get(i).getY())
+                    + getPaddingTop()
+                    + mBgPaint.getStrokeWidth()
+                    + chartPaddingTop;
+            float right = left + eachColumnWidth - dataColumn.getMarginRight() - dataColumn.getMarginLeft();
+            float bottom = mHeight - getPaddingBottom() - mBgPaint.getStrokeWidth();
+            //mAnimateValue 为 1f 时，top 就等于 bottom，mAnimateValue 为 1f 时，top 就等于原 top，mAnimateValue 会从 1f 变化到 0f 就形成动态绘制效果
+            top = top + (bottom - top) * mAnimateValue;
+            rectF.set(left, top, right, bottom);
+
+            mDataColumnPaint.setStyle(Paint.Style.FILL);
+            mDataColumnPaint.setColor(dataColumn.getColor());
+            canvas.drawRect(rectF, mDataColumnPaint);
+        }
     }
 
     /**
@@ -594,13 +455,25 @@ public class LineChartView extends View {
      */
     private void drawHighlightPoint(Canvas canvas, HighlightDataPoint highlightDataPoint) {
         mHighlightDataPointPaint.setColor(highlightDataPoint.getColor());
-        DataLine dataLine = highlightDataPoint.getDataLine();
-        //如果高亮数据点所属的数据线为 null 或者数据线集合中不包含该数据线则跳过绘制
-        if (dataLine == null || !mDataLineList.contains(dataLine)) {
+        DataColumn dataColumn = highlightDataPoint.getDataColumn();
+        //如果高亮数据点所属的数据柱为 null 或者数据柱集合中不包含该数据柱则跳过绘制
+        if (dataColumn == null || !mDataColumnList.contains(dataColumn)) {
             return;
         }
-        canvas.drawCircle(eachX * dataLine.getDataPointList().get(highlightDataPoint.getIndex()).getX() + getPaddingLeft() + mBgPaint.getStrokeWidth()
-                , eachY * (yMax - dataLine.getDataPointList().get(highlightDataPoint.getIndex()).getY()) + getPaddingTop() + mBgPaint.getStrokeWidth() + chartPaddingTop
+        int index = highlightDataPoint.getIndex();
+        float eachColumnWidth = eachX / mDataColumnList.size();
+        float left = eachX * dataColumn.getDataPointList().get(index).getX()
+                + getPaddingLeft()
+                + mBgPaint.getStrokeWidth()
+                + dataColumn.getMarginLeft()
+                + eachColumnWidth * mDataColumnList.indexOf(dataColumn);
+        float right = left + eachColumnWidth - dataColumn.getMarginRight() - dataColumn.getMarginLeft();
+        float x = left + (right - left) / 2;    //x 坐标为该数据柱的该数据点的中间点
+        float y = eachY * (yMax - dataColumn.getDataPointList().get(index).getY())
+                + getPaddingTop()
+                + mBgPaint.getStrokeWidth()
+                + chartPaddingTop;
+        canvas.drawCircle(x, y
                 , highlightDataPoint.getRadius()
                 , mHighlightDataPointPaint
         );
@@ -612,50 +485,61 @@ public class LineChartView extends View {
      * Description:画触摸位置
      */
     private void drawTouchPosition(Canvas canvas) {
-        if (mShowTouchLineY) {
-            //纵轴线
-            mTouchLinePaint.setColor(mTouchLineColor);
-            mTouchLinePaint.setStrokeWidth(mTouchLineWidth);
-            canvas.drawLine(eachX * touchPosition + getPaddingLeft() + mBgPaint.getStrokeWidth()
-                    , getPaddingTop()
-                    , eachX * touchPosition + getPaddingLeft() + mBgPaint.getStrokeWidth()
-                    , mHeight - getPaddingBottom()
-                    , mTouchLinePaint
-            );
-        }
         Rect textBounds = new Rect();
-        for (DataLine dataLine : mDataLineList) {
-            if (dataLine == null || dataLine.getDataPointList().isEmpty()) {
+        for (DataColumn dataColumn : mDataColumnList) {
+            if (dataColumn == null || dataColumn.getDataPointList().isEmpty()) {
                 continue;
+            }
+            float eachColumnWidth = eachX / mDataColumnList.size();
+            float left = eachX * dataColumn.getDataPointList().get(touchPosition).getX()
+                    + getPaddingLeft()
+                    + mBgPaint.getStrokeWidth()
+                    + dataColumn.getMarginLeft()
+                    + eachColumnWidth * mDataColumnList.indexOf(dataColumn);
+            float right = left + eachColumnWidth - dataColumn.getMarginRight() - dataColumn.getMarginLeft();
+            float x = left + (right - left) / 2;    //x 坐标为该数据柱的该数据点的中间点
+            float y = eachY * (yMax - dataColumn.getDataPointList().get(touchPosition).getY())
+                    + getPaddingTop()
+                    + mBgPaint.getStrokeWidth()
+                    + chartPaddingTop;
+            if (mShowTouchLineY) {
+                //纵轴线
+                mTouchLinePaint.setColor(mTouchLineColor);
+                mTouchLinePaint.setStrokeWidth(mTouchLineWidth);
+                canvas.drawLine(x
+                        , getPaddingTop()
+                        , x
+                        , mHeight - getPaddingBottom()
+                        , mTouchLinePaint
+                );
             }
             if (mShowTouchLineX) {
                 //横轴线
                 mTouchLinePaint.setColor(mTouchLineColor);
                 mTouchLinePaint.setStrokeWidth(mTouchLineWidth);
                 canvas.drawLine(getPaddingLeft()
-                        , eachY * (yMax - dataLine.getDataPointList().get(touchPosition).getY()) + getPaddingTop() + mBgPaint.getStrokeWidth() + chartPaddingTop
+                        , y
                         , mWidth - getPaddingRight()
-                        , eachY * (yMax - dataLine.getDataPointList().get(touchPosition).getY()) + getPaddingTop() + mBgPaint.getStrokeWidth() + chartPaddingTop
+                        , y
                         , mTouchLinePaint
                 );
             }
             if (mShowTouchLinePoint) {
                 //触摸点最近的数据点
-                mTouchLinePaint.setColor(dataLine.getColor());
+                mTouchLinePaint.setColor(dataColumn.getColor());
                 mTouchLinePaint.setStrokeWidth(4f);
-                canvas.drawCircle(eachX * touchPosition + getPaddingLeft() + mBgPaint.getStrokeWidth()
-                        , eachY * (yMax - dataLine.getDataPointList().get(touchPosition).getY()) + getPaddingTop() + mBgPaint.getStrokeWidth() + chartPaddingTop
+                canvas.drawCircle(x, y
                         , mTouchLinePaint.getStrokeWidth() * 2
                         , mTouchLinePaint
                 );
                 if (mShowTouchLinePointText) {
                     //绘制数据点的值
-                    String text = String.valueOf(dataLine.getDataPointList().get(touchPosition).getY());
+                    String text = String.valueOf(dataColumn.getDataPointList().get(touchPosition).getY());
                     TextPaint textPaint = getTextPaint(mTouchLineTextSize, mTouchLineTextColor);
                     textPaint.getTextBounds(text, 0, text.length(), textBounds);
                     canvas.drawText(text
-                            , eachX * touchPosition + getPaddingLeft() + mBgPaint.getStrokeWidth() + 15
-                            , eachY * (yMax - dataLine.getDataPointList().get(touchPosition).getY()) + getPaddingTop() + mBgPaint.getStrokeWidth() + chartPaddingTop - 15
+                            , x + 15
+                            , y - 15
                             , textPaint);
                 }
             }
@@ -663,60 +547,17 @@ public class LineChartView extends View {
         }
     }
 
-    private void animateDraw() {
-        //延时执行，保证 eachX 和 eachY 设置了值
-        this.post(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < mDataLineList.size(); i++) {
-                    final DataLine dataLine = mDataLineList.get(i);
-                    if (dataLine.getDataPointList().isEmpty()) {
-                        continue;
-                    }
-                    final Path path = getDataLinePath(dataLine);
-                    final PathMeasure pathMeasure = new PathMeasure(path, false);
-                    ValueAnimator valueAnimator = ValueAnimator.ofFloat(0f, 1f);
-                    valueAnimator.setDuration(2000);
-                    valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                        @Override
-                        public void onAnimationUpdate(ValueAnimator animation) {
-                            //先从容器中取动态绘制的 Path，如果没有再创建并存到容器中
-                            Path dataLineAnimatePath = mDataLineAnimatePathSparseArray.get(dataLine.hashCode());
-                            if (dataLineAnimatePath == null) {
-                                dataLineAnimatePath = new Path();
-                                mDataLineAnimatePathSparseArray.put(dataLine.hashCode(), dataLineAnimatePath);
-                            }
-                            float value = (float) animation.getAnimatedValue();
-                            //每次重置一下 dataLineAnimatePath，如果不重置，drawDataLine() 方法中拿到 dataLineAnimatePath 的长度不会变化
-                            //导致绘制填充部分有问题
-                            dataLineAnimatePath.reset();
-                            dataLineAnimatePath.moveTo(eachX * dataLine.getDataPointList().get(0).getX() + getPaddingLeft() + mBgPaint.getStrokeWidth()
-                                    , eachY * (yMax - dataLine.getDataPointList().get(0).getY()) + getPaddingTop() + mBgPaint.getStrokeWidth() + chartPaddingTop
-                            );
-                            boolean success = pathMeasure.getSegment(0, pathMeasure.getLength() * value, dataLineAnimatePath, true);
-                            //拷贝的 dataLineAnimatePath 的长度不为 0 才去绘制
-                            if (success) {
-                                invalidate();
-                            }
-                        }
-                    });
-                    valueAnimator.addListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationStart(Animator animation) {
-                            super.onAnimationStart(animation);
-                            mAnimateDrawing = true;
-                        }
-
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                            mAnimateDrawing = false;
-                        }
-                    });
-                    valueAnimator.start();
-                }
-            }
-        });
+    /**
+     * Create By:禽兽先生
+     * Create On:2018/12/23 14:01
+     * Description: 获取绘制文字的画笔
+     */
+    private TextPaint getTextPaint(float textSize, int textColor) {
+        TextPaint textPaint = new TextPaint();
+        textPaint.setAntiAlias(true);
+        textPaint.setTextSize(textSize);
+        textPaint.setColor(textColor);
+        return textPaint;
     }
 
     /**
@@ -730,7 +571,7 @@ public class LineChartView extends View {
             @Override
             public void run() {
                 eachX = (float) (mWidth - getPaddingLeft() - getPaddingRight() - mBgPaint.getStrokeWidth() * 2)
-                        / (float) (size - 1);
+                        / (float) (size);
             }
         });
         mAxisX = mAxisMap.get(Axis.Type.X);
@@ -764,44 +605,30 @@ public class LineChartView extends View {
         }
     }
 
-    public float getEachY() {
-        return eachY;
-    }
+    private void animateDraw() {
+        ValueAnimator valueAnimator = ValueAnimator.ofFloat(1f, 0f);
+        valueAnimator.setDuration(2000);
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                mAnimateValue = (float) animation.getAnimatedValue();
+                invalidate();
+            }
+        });
+        valueAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+                mAnimateDrawing = true;
+            }
 
-    public int getBgColor() {
-        return mBgColor;
-    }
-
-    public void setBgColor(int bgColor) {
-        this.mBgColor = bgColor;
-    }
-
-    public int getBgStrokeWidth() {
-        return mBgStrokeWidth;
-    }
-
-    public void setBgStrokeWidth(int bgStrokeWidth) {
-        mBgStrokeWidth = bgStrokeWidth;
-    }
-
-    public int getBgStrokeColor() {
-        return mBgStrokeColor;
-    }
-
-    public void setBgStrokeColor(int bgStrokeColor) {
-        this.mBgStrokeColor = bgStrokeColor;
-    }
-
-    public float getBgStrokeRadius() {
-        return mBgStrokeRadius;
-    }
-
-    public void setBgStrokeRadius(float bgStrokeRadius) {
-        this.mBgStrokeRadius = bgStrokeRadius;
-    }
-
-    public float getYMax() {
-        return yMax;
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                mAnimateDrawing = false;
+            }
+        });
+        valueAnimator.start();
     }
 
     public void setYMax(final float yMax) {
@@ -809,49 +636,16 @@ public class LineChartView extends View {
         setEachY();
     }
 
-    public void setYMin(final float yMin) {
-        this.yMin = yMin;
-        setEachY();
-    }
-
-    public float getYMin() {
-        return yMin;
-    }
-
-    public float getChartPaddingTop() {
-        return chartPaddingTop;
-    }
-
-    public void setChartPaddingTop(float chartPaddingTop) {
-        this.chartPaddingTop = chartPaddingTop;
-    }
-
-    public float getChartPaddingBottom() {
-        return chartPaddingBottom;
-    }
-
-    public void setChartPaddingBottom(float chartPaddingBottom) {
-        this.chartPaddingBottom = chartPaddingBottom;
-    }
-
-    public Axis getAxisX() {
-        return mAxisX;
-    }
-
-    public Axis getAxisY() {
-        return mAxisY;
-    }
-
     /**
      * Create By:禽兽先生
      * Create On:2018/12/23 11:04
      * Description: 添加数据线
      */
-    public void addDataLine(DataLine dataLine) {
-        mDataLineList.add(dataLine);
+    public void addDataColumn(DataColumn dataColumn) {
+        mDataColumnList.add(dataColumn);
         int size = 0;
         //找到每条数据线的个数、最大值中的最大值，每条数据线最小值中的最小值
-        for (DataLine d : mDataLineList) {
+        for (DataColumn d : mDataColumnList) {
             if (d.getSize() > size) {
                 size = d.getSize();
             }
@@ -864,7 +658,6 @@ public class LineChartView extends View {
         }
         setEachX(size);
         setYMax(yMax);
-        setYMin(yMin);
     }
 
     /**
@@ -885,48 +678,12 @@ public class LineChartView extends View {
         mHighlightDataPointList.add(highlightDataPoint);
     }
 
-    public void setShowTouchLineX(boolean showTouchLineX) {
-        this.mShowTouchLineX = showTouchLineX;
-    }
-
-    public void setShowTouchLineY(boolean showTouchLineY) {
-        this.mShowTouchLineY = showTouchLineY;
-    }
-
-    public void setTouchLineWidth(float touchLineWidth) {
-        this.mTouchLineWidth = touchLineWidth;
-    }
-
-    public void setTouchLineColor(int touchLineColor) {
-        this.mTouchLineColor = touchLineColor;
-    }
-
-    public void setTouchLineTextSize(int touchLineTextSize) {
-        this.mTouchLineTextSize = touchLineTextSize;
-    }
-
-    public void setTouchLineTextColor(int touchLineTextColor) {
-        this.mTouchLineTextColor = touchLineTextColor;
-    }
-
-    public void setShowTouchLinePoint(boolean showTouchLinePoint) {
-        this.mShowTouchLinePoint = showTouchLinePoint;
-    }
-
-    public void setShowTouchLinePointText(boolean showTouchLinePointText) {
-        mShowTouchLinePointText = showTouchLinePointText;
-    }
-
-    public void setOnDataPointSelectedListener(IOnDataPointSelectedListener onDataPointSelectedListener) {
-        mOnDataPointSelectedListener = onDataPointSelectedListener;
-    }
-
     public void setAnimateDraw(boolean animateDraw) {
         this.mAnimateDraw = animateDraw;
     }
 
     public void reset() {
-        mDataLineList.clear();
+        mDataColumnList.clear();
         mHorizontalLineList.clear();
         mHighlightDataPointList.clear();
         if (mAxisX != null) {

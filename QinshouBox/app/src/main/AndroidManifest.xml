@@ -72,7 +72,7 @@
             android:screenOrientation="portrait"/>
         <!-- Demo 界面 -->
         <activity
-            android:name=".me.ui.activity.TestActivity"
+            android:name=".me.ui.activity.ChartActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"/>
     </application>

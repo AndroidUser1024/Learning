@@ -7,30 +7,44 @@ package com.qinshou.commonmodule.widget.chartview.component;
  */
 
 public class HighlightDataPoint {
-    private float x;
-    private float y;
+    private DataLine mDataLine; //需要显示高亮数据点的数据线
+    private DataColumn mDataColumn; //需要显示高亮数据点的数据柱
+    private int index;  //需要高亮显示的数据点在数据集合中的下标
     private float radius;
     private int color;
 
-    public HighlightDataPoint(float x, float y) {
-        this.x = x;
-        this.y = y;
+    public HighlightDataPoint(DataLine dataLine, int index) {
+        this.mDataLine = dataLine;
+        this.index = index;
     }
 
-    public float getX() {
-        return x;
+    public HighlightDataPoint(DataColumn dataColumn, int index) {
+        this.mDataColumn = dataColumn;
+        this.index = index;
     }
 
-    public void setX(float x) {
-        this.x = x;
+    public DataLine getDataLine() {
+        return mDataLine;
     }
 
-    public float getY() {
-        return y;
+    public void setDataLine(DataLine dataLine) {
+        mDataLine = dataLine;
     }
 
-    public void setY(float y) {
-        this.y = y;
+    public DataColumn getDataColumn() {
+        return mDataColumn;
+    }
+
+    public void setDataColumn(DataColumn dataColumn) {
+        mDataColumn = dataColumn;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     public float getRadius() {
@@ -51,9 +65,10 @@ public class HighlightDataPoint {
 
     @Override
     public String toString() {
-        return "HighlightPoint{" +
-                "x=" + x +
-                ", y=" + y +
+        return "HighlightDataPoint{" +
+                "mDataLine=" + mDataLine +
+                ", mDataColumn=" + mDataColumn +
+                ", index=" + index +
                 ", radius=" + radius +
                 ", color=" + color +
                 '}';

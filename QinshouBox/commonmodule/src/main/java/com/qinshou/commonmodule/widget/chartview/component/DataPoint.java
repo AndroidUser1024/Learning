@@ -6,7 +6,7 @@ package com.qinshou.commonmodule.widget.chartview.component;
  * Created on 2018/3/13
  */
 
-public class DataPoint {
+public class DataPoint implements Cloneable {
     private float x;
     private float y;
 
@@ -29,6 +29,19 @@ public class DataPoint {
 
     public void setY(float y) {
         this.y = y;
+    }
+
+    @Override
+    protected DataPoint clone() {
+        try {
+            DataPoint dataPoint = (DataPoint) super.clone();
+            dataPoint.x = this.x;
+            dataPoint.y = this.y;
+            return dataPoint;
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override

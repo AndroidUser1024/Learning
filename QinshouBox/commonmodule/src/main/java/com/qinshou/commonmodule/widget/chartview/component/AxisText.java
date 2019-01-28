@@ -11,7 +11,7 @@ import android.graphics.Color;
 public class AxisText {
     private float x;
     private float y;
-        private String text;
+    private String text;
     private int textColor;
     private int textSize;
     private Position mPosition;  //标签显示的位置
