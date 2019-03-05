@@ -145,6 +145,16 @@
                     android:text="@string/me_qr_code_scan"
                     android:textColor="@color/black"
                     android:textSize="@dimen/sp20" />
+
+                <Button
+                    android:id="@+id/btn_pei_qi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:gravity="start|center_vertical"
+                    android:text="@string/me_pei_qi"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp20" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

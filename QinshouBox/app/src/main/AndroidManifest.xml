@@ -49,32 +49,37 @@
         <activity
             android:name=".me.ui.activity.TurningRobotActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <!-- 联系人列表界面 -->
         <activity
             android:name=".me.ui.activity.ContactListActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <!-- 天气界面 -->
         <activity
             android:name=".me.ui.activity.WeatherActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <!-- 魔塔游戏界面 -->
         <activity
             android:name=".me.ui.activity.MagicTowerActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <!-- 命运之轮界面 -->
         <activity
             android:name=".me.ui.activity.WheelOfFortuneActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"/>
-        <!-- Demo 界面 -->
+            android:screenOrientation="portrait" />
+        <!-- 图表界面 -->
         <activity
             android:name=".me.ui.activity.ChartActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+        <!-- 佩奇界面 -->
+        <activity
+            android:name=".me.ui.activity.PeiQiActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

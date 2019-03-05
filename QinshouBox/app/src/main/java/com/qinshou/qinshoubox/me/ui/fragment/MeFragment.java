@@ -9,6 +9,7 @@ import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.MyBaseFragment;
 import com.qinshou.qinshoubox.me.ui.activity.ContactListActivity;
 import com.qinshou.qinshoubox.me.ui.activity.MagicTowerActivity;
+import com.qinshou.qinshoubox.me.ui.activity.PeiQiActivity;
 import com.qinshou.qinshoubox.me.ui.activity.PuzzleActivity;
 import com.qinshou.qinshoubox.me.ui.activity.ChartActivity;
 import com.qinshou.qinshoubox.me.ui.activity.TurningRobotActivity;
@@ -36,6 +37,7 @@ public class MeFragment extends MyBaseFragment {
     private Button mBtnWheelOfFortune;
     private Button mBtnChart;
     private Button mBtnQRCodeScan;
+    private Button mBtnPeiQi;
 
     @Override
     public boolean getIsImmersive() {
@@ -66,6 +68,7 @@ public class MeFragment extends MyBaseFragment {
         mBtnWheelOfFortune = findViewByID(R.id.btn_wheel_of_fortune);
         mBtnChart = findViewByID(R.id.btn_chart);
         mBtnQRCodeScan = findViewByID(R.id.btn_qr_code_scan);
+        mBtnPeiQi = findViewByID(R.id.btn_pei_qi);
     }
 
     @Override
@@ -82,6 +85,7 @@ public class MeFragment extends MyBaseFragment {
         mBtnWheelOfFortune.setOnClickListener(mOnClickListener);
         mBtnChart.setOnClickListener(mOnClickListener);
         mBtnQRCodeScan.setOnClickListener(mOnClickListener);
+        mBtnPeiQi.setOnClickListener(mOnClickListener);
     }
 
     @Override
@@ -141,6 +145,9 @@ public class MeFragment extends MyBaseFragment {
                     break;
                 case R.id.btn_qr_code_scan:
                     startActivity(new Intent(getContext(), QRCodeScanActivity.class));
+                    break;
+                case R.id.btn_pei_qi:
+                    startActivity(new Intent(getContext(), PeiQiActivity.class));
                     break;
                 default:
                     break;
