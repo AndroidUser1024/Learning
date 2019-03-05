@@ -80,7 +80,7 @@ public class HomepageFragment extends MyBaseFragment {
 
     @Override
     public void setListener() {
-        refreshLayout.setOnRefreshLoadMoreListener(new RefreshLayout.OnRefreshLoadMoreListener() {
+        refreshLayout.setOnRefreshLoadMoreListener(new RefreshLayout.IOnRefreshLoadMoreListener() {
             @Override
             public void onRefresh(RefreshLayout refreshLayout) {
                 page = 0;

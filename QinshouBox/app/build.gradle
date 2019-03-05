@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 //Mob 移动开发者平台的插件
-apply plugin: 'com.mob.sdk'
+//apply plugin: 'com.mob.sdk'
 
 android {
     compileSdkVersion 27
@@ -68,7 +68,8 @@ dependencies {
     implementation project(':imagemodule')
     implementation project(':networkmodule')
     implementation project(':pushmodule')
-    implementation project(':sharemodule')
+    implementation project(':qrcodemodule')
+//    implementation project(':sharemodule')
 //    implementation project(':immodule')
 
     //仿 iOS 的 PickerView 控件，有时间选择器和选项选择器

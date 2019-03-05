@@ -9,15 +9,15 @@ import android.support.v7.widget.RecyclerView;
 
 import com.qinshou.commonmodule.decoration.StickyDecoration;
 import com.qinshou.commonmodule.util.ShowLogUtil;
-import com.qinshou.commonmodule.util.permissionutil.OnRequestPermissionResultCallBack;
+import com.qinshou.commonmodule.util.permissionutil.IOnRequestPermissionResultCallBack;
 import com.qinshou.commonmodule.util.permissionutil.PermissionUtil;
 import com.qinshou.commonmodule.widget.WaveSideBar;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.MyBaseActivity;
 import com.qinshou.qinshoubox.me.adapter.RvContactAdapter;
+import com.qinshou.qinshoubox.me.bean.ContactBean;
 import com.qinshou.qinshoubox.me.comparator.ContactComparator;
 import com.qinshou.qinshoubox.me.comparator.PinyinComparator;
-import com.qinshou.qinshoubox.me.bean.ContactBean;
 import com.qinshou.qinshoubox.me.util.PinyinUtil;
 
 import java.util.ArrayList;
@@ -61,7 +61,7 @@ public class ContactListActivity extends MyBaseActivity {
 
     @Override
     public void initData() {
-        PermissionUtil.requestPermission(getActivity(), Manifest.permission.READ_CONTACTS, new OnRequestPermissionResultCallBack() {
+        PermissionUtil.requestPermission(getActivity(), Manifest.permission.READ_CONTACTS, new IOnRequestPermissionResultCallBack() {
             @Override
             public void onSuccess() {
                 List<ContactBean> contactBeanList = getContactList();

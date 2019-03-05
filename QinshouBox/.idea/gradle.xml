@@ -7,6 +7,7 @@
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
+            <option value="D:/Software/FlutterSDK/flutter/.pub-cache/git/flutter_picker-a22a4d40a131fa9ecbd43b0c02acaf7ccde5def3/android" />
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/commonmodule" />
@@ -14,6 +15,7 @@
             <option value="$PROJECT_DIR$/immodule" />
             <option value="$PROJECT_DIR$/networkmodule" />
             <option value="$PROJECT_DIR$/pushmodule" />
+            <option value="$PROJECT_DIR$/qrcodemodule" />
             <option value="$PROJECT_DIR$/sharemodule" />
             <option value="$PROJECT_DIR$/../flutter_module/.android/Flutter" />
           </set>

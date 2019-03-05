@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.qinshou.commonmodule.adapter.RcvSingleBaseAdapter;
-import com.qinshou.commonmodule.adapter.holder.BaseViewHolder;
+import com.qinshou.commonmodule.adapter.baseholder.BaseViewHolder;
 import com.qinshou.commonmodule.widget.FlowLayout;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.knowledgesystem.bean.KnowledgeSystemBean;

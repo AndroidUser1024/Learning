@@ -6,8 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.qinshou.commonmodule.adapter.holder.BaseViewHolder;
-import com.qinshou.commonmodule.adapter.listener.OnItemClickListener;
+import com.qinshou.commonmodule.adapter.baseholder.BaseViewHolder;
+import com.qinshou.commonmodule.adapter.listener.IOnItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,24 +19,32 @@ import java.util.List;
  */
 public abstract class RcvBaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
 
-    private Context context;
+    private Context mContext;
     private int layoutId;
     private List<T> dataList = new ArrayList<>();
-    private OnItemClickListener mOnItemClickListener;
+    private IOnItemClickListener<T> mOnItemClickListener;
+    private View mEmptyView;
+    public static final int EMPTY_ITEM_VIEW_TYPE = Integer.MAX_VALUE - 1;
 
     public RcvBaseAdapter(Context context, int layoutId) {
-        this.context = context;
+        this.mContext = context;
         this.layoutId = layoutId;
     }
 
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(layoutId, parent, false);
-        return new BaseViewHolder(context, itemView);
+        if ((dataList == null || dataList.size() == 0) && mEmptyView != null) {
+            return new BaseViewHolder(mContext, mEmptyView);
+        }
+        View itemView = LayoutInflater.from(mContext).inflate(layoutId, parent, false);
+        return new BaseViewHolder(mContext, itemView);
     }
 
     @Override
     public void onBindViewHolder(final BaseViewHolder holder, int position) {
+        if (dataList == null || dataList.size() == 0) {
+            return;
+        }
         if (mOnItemClickListener != null) {
             holder.getItemView().setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -51,13 +59,24 @@ public abstract class RcvBaseAdapter<T> extends RecyclerView.Adapter<BaseViewHol
 
     @Override
     public int getItemCount() {
-        return dataList == null ? 0 : dataList.size();
+        if (dataList == null || dataList.size() == 0) {
+            return mEmptyView == null ? 0 : 1;
+        }
+        return dataList.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if ((dataList == null || dataList.size() == 0) && mEmptyView != null) {
+            return EMPTY_ITEM_VIEW_TYPE;
+        }
+        return super.getItemViewType(position);
     }
 
     public abstract void bindViewHolder(BaseViewHolder holder, T itemData, int position);
 
     public Context getContext() {
-        return context;
+        return mContext;
     }
 
     public int getLayoutId() {
@@ -83,6 +102,16 @@ public abstract class RcvBaseAdapter<T> extends RecyclerView.Adapter<BaseViewHol
      * Description:添加数据
      * Date:2018/3/9
      *
+     * @param dataList 需要添加的数据
+     */
+    public void addDataList(List<T> dataList) {
+        addDataList(dataList, false);
+    }
+
+    /**
+     * Description:添加数据
+     * Date:2018/3/9
+     *
      * @param dataList  需要添加的数据
      * @param isRefresh 是否是刷新,如果为 true 则会先清空当前数据再添加,为 false 则会追加
      */
@@ -102,7 +131,15 @@ public abstract class RcvBaseAdapter<T> extends RecyclerView.Adapter<BaseViewHol
      * Description:设置 item 的点击监听器
      * Date:2018/3/9
      */
-    public void setOnItemClickListener(OnItemClickListener<T> onItemClickListener) {
+    public void setOnItemClickListener(IOnItemClickListener<T> onItemClickListener) {
         this.mOnItemClickListener = onItemClickListener;
+    }
+
+    public void setEmptyView(View emptyView) {
+        mEmptyView = emptyView;
+    }
+
+    public View getEmptyView() {
+        return mEmptyView;
     }
 }

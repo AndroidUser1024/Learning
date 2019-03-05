@@ -105,6 +105,7 @@
                     android:text="@string/me_contact_list"
                     android:textColor="@color/black"
                     android:textSize="@dimen/sp20" />
+
                 <Button
                     android:id="@+id/btn_weather"
                     android:layout_width="match_parent"
@@ -114,6 +115,7 @@
                     android:text="@string/me_weather"
                     android:textColor="@color/black"
                     android:textSize="@dimen/sp20" />
+
                 <Button
                     android:id="@+id/btn_wheel_of_fortune"
                     android:layout_width="match_parent"
@@ -123,6 +125,7 @@
                     android:text="@string/me_wheel_of_fortune"
                     android:textColor="@color/black"
                     android:textSize="@dimen/sp20" />
+
                 <Button
                     android:id="@+id/btn_chart"
                     android:layout_width="match_parent"
@@ -130,6 +133,16 @@
                     android:background="@null"
                     android:gravity="start|center_vertical"
                     android:text="@string/me_chart"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp20" />
+
+                <Button
+                    android:id="@+id/btn_qr_code_scan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:gravity="start|center_vertical"
+                    android:text="@string/me_qr_code_scan"
                     android:textColor="@color/black"
                     android:textSize="@dimen/sp20" />
             </LinearLayout>

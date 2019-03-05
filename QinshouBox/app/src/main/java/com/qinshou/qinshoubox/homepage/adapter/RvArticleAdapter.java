@@ -3,8 +3,8 @@ package com.qinshou.qinshoubox.homepage.adapter;
 import android.content.Context;
 
 import com.qinshou.commonmodule.adapter.RcvSingleBaseAdapter;
-import com.qinshou.commonmodule.adapter.holder.BaseViewHolder;
-import com.qinshou.commonmodule.adapter.listener.OnItemClickListener;
+import com.qinshou.commonmodule.adapter.baseholder.BaseViewHolder;
+import com.qinshou.commonmodule.adapter.listener.IOnItemClickListener;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.WebActivity;
 import com.qinshou.qinshoubox.homepage.bean.ArticleBean;
@@ -19,7 +19,7 @@ import com.qinshou.qinshoubox.homepage.util.HtmlTextUtil;
 public class RvArticleAdapter extends RcvSingleBaseAdapter<ArticleBean> {
     public RvArticleAdapter(Context context) {
         super(context, R.layout.item_rv_homepage_article);
-        setOnItemClickListener(new OnItemClickListener<ArticleBean>() {
+        setOnItemClickListener(new IOnItemClickListener<ArticleBean>() {
             @Override
             public void onItemClick(BaseViewHolder holder, ArticleBean itemData, int position) {
                 getContext().startActivity(WebActivity.getJumpIntent(getContext(), itemData.getLink()));

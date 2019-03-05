@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
-import com.qinshou.commonmodule.adapter.holder.BaseViewHolder;
+import com.qinshou.commonmodule.adapter.baseholder.BaseViewHolder;
 import com.qinshou.commonmodule.adapter.itemview.BaseItemView;
 
 
@@ -21,25 +21,31 @@ import com.qinshou.commonmodule.adapter.itemview.BaseItemView;
  * Created on 2018/4/9
  */
 
-public class RcvMultipleBaseAdapter extends RcvBaseAdapter {
-    private SparseArray<BaseItemView> itemViewSparseArray;
+public class RcvMultipleBaseAdapter<T> extends RcvBaseAdapter<T> {
+    private SparseArray<BaseItemView> mItemViewSparseArray;
 
     public RcvMultipleBaseAdapter(Context context) {
         super(context, 0);
-        itemViewSparseArray = new SparseArray<>();
+        mItemViewSparseArray = new SparseArray<>();
     }
 
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return itemViewSparseArray.get(viewType).onCreateViewHolder(parent);
+        if (viewType == RcvBaseAdapter.EMPTY_ITEM_VIEW_TYPE) {
+            return super.onCreateViewHolder(parent, viewType);
+        }
+        return mItemViewSparseArray.get(viewType).onCreateViewHolder(parent);
     }
 
     @Override
     public int getItemViewType(int position) {
-        for (int i = 0; i < itemViewSparseArray.size(); i++) {
-        BaseItemView baseItemView = itemViewSparseArray.valueAt(i);
+        if (super.getItemViewType(position) == RcvBaseAdapter.EMPTY_ITEM_VIEW_TYPE) {
+            return super.getItemViewType(position);
+        }
+        for (int i = 0; i < mItemViewSparseArray.size(); i++) {
+            BaseItemView baseItemView = mItemViewSparseArray.valueAt(i);
             if (baseItemView.isForViewType(getDataList().get(position), position)) {
-                return itemViewSparseArray.keyAt(i);
+                return mItemViewSparseArray.keyAt(i);
             }
         }
         throw new IllegalArgumentException("No ItemView added that matches position=" + position + " in data source");
@@ -47,8 +53,8 @@ public class RcvMultipleBaseAdapter extends RcvBaseAdapter {
 
     @Override
     public void bindViewHolder(BaseViewHolder holder, Object itemData, int position) {
-        for (int i = 0; i < itemViewSparseArray.size(); i++) {
-            BaseItemView baseItemView = itemViewSparseArray.valueAt(i);
+        for (int i = 0; i < mItemViewSparseArray.size(); i++) {
+            BaseItemView baseItemView = mItemViewSparseArray.valueAt(i);
             if (baseItemView.isForViewType(itemData, position)) {
                 baseItemView.bindViewHolder(holder, itemData, position);
                 return;
@@ -57,11 +63,10 @@ public class RcvMultipleBaseAdapter extends RcvBaseAdapter {
     }
 
     public void addItemView(BaseItemView baseItemView) {
-        itemViewSparseArray.put(baseItemView.hashCode(), baseItemView);
+        mItemViewSparseArray.put(baseItemView.hashCode(), baseItemView);
     }
 
     public void removeItemView(BaseItemView baseItemView) {
-        itemViewSparseArray.remove(baseItemView.hashCode());
+        mItemViewSparseArray.remove(baseItemView.hashCode());
     }
 }
-

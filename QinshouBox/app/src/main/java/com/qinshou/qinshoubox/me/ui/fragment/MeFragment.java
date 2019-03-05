@@ -14,6 +14,7 @@ import com.qinshou.qinshoubox.me.ui.activity.ChartActivity;
 import com.qinshou.qinshoubox.me.ui.activity.TurningRobotActivity;
 import com.qinshou.qinshoubox.me.ui.activity.WeatherActivity;
 import com.qinshou.qinshoubox.me.ui.activity.WheelOfFortuneActivity;
+import com.qinshou.qrcodemodule.QRCodeScanActivity;
 
 /**
  * Description:"我"界面
@@ -34,6 +35,7 @@ public class MeFragment extends MyBaseFragment {
     private Button btnWeather;
     private Button mBtnWheelOfFortune;
     private Button mBtnChart;
+    private Button mBtnQRCodeScan;
 
     @Override
     public boolean getIsImmersive() {
@@ -63,6 +65,7 @@ public class MeFragment extends MyBaseFragment {
         btnWeather = findViewByID(R.id.btn_weather);
         mBtnWheelOfFortune = findViewByID(R.id.btn_wheel_of_fortune);
         mBtnChart = findViewByID(R.id.btn_chart);
+        mBtnQRCodeScan = findViewByID(R.id.btn_qr_code_scan);
     }
 
     @Override
@@ -78,6 +81,7 @@ public class MeFragment extends MyBaseFragment {
         btnWeather.setOnClickListener(mOnClickListener);
         mBtnWheelOfFortune.setOnClickListener(mOnClickListener);
         mBtnChart.setOnClickListener(mOnClickListener);
+        mBtnQRCodeScan.setOnClickListener(mOnClickListener);
     }
 
     @Override
@@ -134,6 +138,9 @@ public class MeFragment extends MyBaseFragment {
                     break;
                 case R.id.btn_chart:
                     startActivity(new Intent(getContext(), ChartActivity.class));
+                    break;
+                case R.id.btn_qr_code_scan:
+                    startActivity(new Intent(getContext(), QRCodeScanActivity.class));
                     break;
                 default:
                     break;

@@ -7,7 +7,7 @@ import java.util.List;
  * Created by 禽兽先生
  * Created on 2018/4/18
  */
-public interface OnRequestPermissionResultCallBack {
+public interface IOnRequestPermissionResultCallBack {
     void onSuccess();
 
     void onError(List<String> deniedPermissionList);

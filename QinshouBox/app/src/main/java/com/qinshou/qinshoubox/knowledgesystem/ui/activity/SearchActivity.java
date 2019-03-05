@@ -44,7 +44,7 @@ public class SearchActivity extends MyBaseActivity {
 
     @Override
     public void setListener() {
-        refreshLayout.setOnRefreshLoadMoreListener(new RefreshLayout.OnRefreshLoadMoreListener() {
+        refreshLayout.setOnRefreshLoadMoreListener(new RefreshLayout.IOnRefreshLoadMoreListener() {
             @Override
             public void onRefresh(RefreshLayout refreshLayout) {
                 page = 0;

@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.qinshou.commonmodule.adapter.holder.BaseViewHolder;
+import com.qinshou.commonmodule.adapter.baseholder.BaseViewHolder;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -17,17 +17,17 @@ import java.lang.reflect.Type;
  */
 
 public abstract class BaseItemView<T> {
-    private Context context;
+    private Context mContext;
     private int layoutId;
 
     public BaseItemView(Context context, int layoutId) {
-        this.context = context;
+        this.mContext = context;
         this.layoutId = layoutId;
     }
 
     public BaseViewHolder onCreateViewHolder(ViewGroup parent) {
-        View itemView = LayoutInflater.from(context).inflate(layoutId, parent, false);
-        return new BaseViewHolder(context, itemView);
+        View itemView = LayoutInflater.from(mContext).inflate(layoutId, parent, false);
+        return new BaseViewHolder(mContext, itemView);
     }
 
     /**

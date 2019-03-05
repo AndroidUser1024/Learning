@@ -16,12 +16,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.qinshou.commonmodule.adapter.holder.BaseViewHolder;
-import com.qinshou.commonmodule.adapter.listener.OnItemClickListener;
+import com.qinshou.commonmodule.adapter.baseholder.BaseViewHolder;
+import com.qinshou.commonmodule.adapter.listener.IOnItemClickListener;
 import com.qinshou.commonmodule.util.BackgroundUtil;
 import com.qinshou.commonmodule.util.SnackbarUtil;
 import com.qinshou.commonmodule.util.SystemUtil;
-import com.qinshou.commonmodule.util.permissionutil.OnRequestPermissionResultCallBack;
+import com.qinshou.commonmodule.util.permissionutil.IOnRequestPermissionResultCallBack;
 import com.qinshou.commonmodule.util.permissionutil.PermissionUtil;
 import com.qinshou.imagemodule.callback.OnImageChooseResultCallback;
 import com.qinshou.imagemodule.util.BitmapUtil;
@@ -97,7 +97,7 @@ public class PuzzleActivity extends MyBaseActivity {
         btnChooseDifficulty.setOnClickListener(mOnClickListener);
         btnShowOriginImg.setOnClickListener(mOnClickListener);
         btnReset.setOnClickListener(mOnClickListener);
-        mRvPuzzleAdapter.setOnItemClickListener(new OnItemClickListener<PuzzleItemBean>() {
+        mRvPuzzleAdapter.setOnItemClickListener(new IOnItemClickListener<PuzzleItemBean>() {
             @Override
             public void onItemClick(BaseViewHolder holder, PuzzleItemBean puzzleItemBean, int position) {
                 //如果已经成功了，重新加载
@@ -190,7 +190,7 @@ public class PuzzleActivity extends MyBaseActivity {
      * return
      */
     private void chooseImg() {
-        PermissionUtil.requestPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE, new OnRequestPermissionResultCallBack() {
+        PermissionUtil.requestPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE, new IOnRequestPermissionResultCallBack() {
             @Override
             public void onSuccess() {
                 ImageChooseUtil.chooseImage(getActivity(), new OnImageChooseResultCallback() {

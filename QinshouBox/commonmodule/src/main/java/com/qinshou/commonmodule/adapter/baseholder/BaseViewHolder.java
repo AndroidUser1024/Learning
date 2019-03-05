@@ -1,4 +1,4 @@
-package com.qinshou.commonmodule.adapter.holder;
+package com.qinshou.commonmodule.adapter.baseholder;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -23,26 +23,26 @@ import android.widget.TextView;
  */
 
 public class BaseViewHolder extends RecyclerView.ViewHolder {
-    private Context context;
-    private View itemView;
-    private SparseArray<View> viewSparseArray;
+    private Context mContext;
+    private View mItemView;
+    private SparseArray<View> mViewSparseArray;
 
     public BaseViewHolder(Context context, View itemView) {
         super(itemView);
-        this.context = context;
-        this.itemView = itemView;
-        this.viewSparseArray = new SparseArray<View>();
+        this.mContext = context;
+        this.mItemView = itemView;
+        this.mViewSparseArray = new SparseArray<View>();
     }
 
     public View getItemView() {
-        return itemView;
+        return mItemView;
     }
 
     public <T extends View> T findViewById(int viewId) {
-        View view = viewSparseArray.get(viewId);
+        View view = mViewSparseArray.get(viewId);
         if (view == null) {
-            view = itemView.findViewById(viewId);
-            viewSparseArray.put(viewId, view);
+            view = mItemView.findViewById(viewId);
+            mViewSparseArray.put(viewId, view);
         }
         return (T) view;
     }
@@ -78,7 +78,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     public BaseViewHolder setTvText(int viewId, @StringRes int resId) {
         TextView mTextView = findViewById(viewId);
         if (mTextView != null) {
-            mTextView.setText(context.getResources().getString(resId));
+            mTextView.setText(mContext.getResources().getString(resId));
         }
         return this;
     }
@@ -114,7 +114,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     public BaseViewHolder setBtnText(int viewId, @StringRes int resId) {
         Button mButton = findViewById(viewId);
         if (mButton != null) {
-            mButton.setText(context.getResources().getString(resId));
+            mButton.setText(mContext.getResources().getString(resId));
         }
         return this;
     }

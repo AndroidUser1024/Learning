@@ -139,13 +139,13 @@ public class RefreshLayout extends SmartRefreshLayout {
      * Description:设置下拉刷新监听器
      * Date:2017/10/13
      */
-    public void setOnRefreshListener(final OnRefreshListener onRefreshListener) {
+    public void setOnRefreshListener(final IOnRefreshListener IOnRefreshListener) {
         //调用继承的控件的下拉刷新监听器
         setOnRefreshListener(new com.scwang.smartrefresh.layout.listener.OnRefreshListener() {
             @Override
             public void onRefresh(com.scwang.smartrefresh.layout.api.RefreshLayout refreshlayout) {
                 //当继承的控件回调时再调用自己的回调方法
-                onRefreshListener.onRefresh((RefreshLayout) refreshlayout);
+                IOnRefreshListener.onRefresh((RefreshLayout) refreshlayout);
             }
         });
     }
@@ -154,13 +154,13 @@ public class RefreshLayout extends SmartRefreshLayout {
      * Description:设置上拉加载监听器
      * Date:2017/10/13
      */
-    public void setOnLoadMoreListener(final OnLoadMoreListener onLoadMoreListener) {
+    public void setOnLoadMoreListener(final IOnLoadMoreListener IOnLoadMoreListener) {
         //调用继承的控件的上拉加载更多监听器
         setOnLoadMoreListener(new com.scwang.smartrefresh.layout.listener.OnLoadMoreListener() {
             @Override
             public void onLoadMore(com.scwang.smartrefresh.layout.api.RefreshLayout refreshlayout) {
                 //当继承的控件回调时再调用自己的回调方法
-                onLoadMoreListener.onLoadMore((RefreshLayout) refreshlayout);
+                IOnLoadMoreListener.onLoadMore((RefreshLayout) refreshlayout);
             }
         });
     }
@@ -169,7 +169,7 @@ public class RefreshLayout extends SmartRefreshLayout {
      * Description:设置上拉加载和下拉刷新监听器
      * Date:2017/10/13
      */
-    public void setOnRefreshLoadMoreListener(final OnRefreshLoadMoreListener onRefreshLoadmoreListener) {
+    public void setOnRefreshLoadMoreListener(final IOnRefreshLoadMoreListener onRefreshLoadmoreListener) {
         setOnRefreshLoadMoreListener(new com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener() {
             @Override
             public void onLoadMore(com.scwang.smartrefresh.layout.api.RefreshLayout refreshLayout) {
@@ -183,15 +183,15 @@ public class RefreshLayout extends SmartRefreshLayout {
         });
     }
 
-    public interface OnRefreshListener {
+    public interface IOnRefreshListener {
         void onRefresh(RefreshLayout refreshLayout);
     }
 
-    public interface OnLoadMoreListener {
+    public interface IOnLoadMoreListener {
         void onLoadMore(RefreshLayout refreshLayout);
     }
 
-    public interface OnRefreshLoadMoreListener {
+    public interface IOnRefreshLoadMoreListener {
         void onRefresh(RefreshLayout refreshLayout);
 
         void onLoadMore(RefreshLayout refreshLayout);

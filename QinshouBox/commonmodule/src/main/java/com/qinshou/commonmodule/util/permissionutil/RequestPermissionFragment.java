@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class RequestPermissionFragment extends Fragment {
     private static final int REQUEST_CODE = 200;
-    private OnRequestPermissionResultCallBack mCallBack;
+    private IOnRequestPermissionResultCallBack mCallBack;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -25,8 +25,8 @@ public class RequestPermissionFragment extends Fragment {
         setRetainInstance(true);
     }
 
-    public void requestPermission(String[] permissionArray, OnRequestPermissionResultCallBack onRequestPermissionResultCallBack) {
-        this.mCallBack = onRequestPermissionResultCallBack;
+    public void requestPermission(String[] permissionArray, IOnRequestPermissionResultCallBack IOnRequestPermissionResultCallBack) {
+        this.mCallBack = IOnRequestPermissionResultCallBack;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions(permissionArray, REQUEST_CODE);
         } else {

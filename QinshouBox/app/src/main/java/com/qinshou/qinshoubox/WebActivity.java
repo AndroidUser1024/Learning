@@ -106,7 +106,7 @@ public class WebActivity extends MyBaseActivity {
 
     @Override
     public void setListener() {
-        refreshLayout.setOnRefreshListener(new RefreshLayout.OnRefreshListener() {
+        refreshLayout.setOnRefreshListener(new RefreshLayout.IOnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshLayout) {
                 webView.reload();

@@ -3,7 +3,7 @@ package com.qinshou.qinshoubox.me.adapter;
 import android.content.Context;
 
 import com.qinshou.commonmodule.adapter.RcvBaseAdapter;
-import com.qinshou.commonmodule.adapter.holder.BaseViewHolder;
+import com.qinshou.commonmodule.adapter.baseholder.BaseViewHolder;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.bean.PuzzleItemBean;
 

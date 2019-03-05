@@ -1,7 +1,9 @@
 package com.qinshou.qinshoubox.knowledgesystem.ui.fragment;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.provider.Settings;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.DividerItemDecoration;
@@ -13,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.zxing.Result;
 import com.qinshou.commonmodule.util.ScreenShotsUtil;
 import com.qinshou.commonmodule.widget.FlowLayout;
 import com.qinshou.commonmodule.widget.RefreshLayout;
@@ -25,6 +28,11 @@ import com.qinshou.qinshoubox.knowledgesystem.bean.HotSearchWordsBean;
 import com.qinshou.qinshoubox.knowledgesystem.bean.KnowledgeSystemBean;
 import com.qinshou.qinshoubox.knowledgesystem.ui.activity.SearchActivity;
 import com.qinshou.qinshoubox.network.wanandroid.WanAndroidApi;
+import com.qinshou.qrcodemodule.ICaptureView;
+import com.qinshou.qrcodemodule.camera.CameraManager;
+import com.qinshou.qrcodemodule.handler.CaptureHandler;
+import com.qinshou.qrcodemodule.manager.ConfigManager;
+import com.qinshou.qrcodemodule.widget.ViewfinderView;
 
 import java.util.List;
 import java.util.Random;
@@ -105,7 +113,7 @@ public class KnowledgeSystemFragment extends MyBaseFragment {
 
     @Override
     public void setListener() {
-        refreshLayout.setOnRefreshListener(new RefreshLayout.OnRefreshListener() {
+        refreshLayout.setOnRefreshListener(new RefreshLayout.IOnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshLayout) {
                 initData();
@@ -222,6 +230,7 @@ public class KnowledgeSystemFragment extends MyBaseFragment {
 //
 //                        }
 //                    });
+//                    startActivity(new Intent(getContext(), CaptureActivity.class));
                     break;
                 case R.id.ib_screen_shots_big:
                 case R.id.ib_screen_shots_small:
@@ -229,8 +238,36 @@ public class KnowledgeSystemFragment extends MyBaseFragment {
                     break;
                 case R.id.ib_pay_way_big:
                 case R.id.ib_pay_way_small:
+                    Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
+                    startActivity(intent);
                     break;
             }
+        }
+    };
+    private ICaptureView mCaptureView = new ICaptureView() {
+        @Override
+        public ConfigManager getConfigManager() {
+            return null;
+        }
+
+        @Override
+        public CameraManager getCameraManager() {
+            return null;
+        }
+
+        @Override
+        public CaptureHandler getCaptureHandler() {
+            return null;
+        }
+
+        @Override
+        public ViewfinderView getViewfinderView() {
+            return null;
+        }
+
+        @Override
+        public void handleDecode(Result rawResult) {
+
         }
     };
 }

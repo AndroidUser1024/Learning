@@ -1,6 +1,5 @@
 package com.qinshou.commonmodule.util.permissionutil;
 
-import android.content.pm.PackageManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
@@ -10,14 +9,11 @@ import android.support.v4.app.FragmentManager;
  * Created on 2018/4/18
  */
 public class PermissionUtil {
-    public static final int REQUEST_PERMISSION_SUCCESS = PackageManager.PERMISSION_GRANTED;
-    public static final int REQUEST_PERMISSION_FAIL = PackageManager.PERMISSION_DENIED;
-
-    public static void requestPermission(FragmentActivity activity, String permission, OnRequestPermissionResultCallBack onRequestPermissionResultCallBack) {
-        requestPermission(activity, new String[]{permission}, onRequestPermissionResultCallBack);
+    public static void requestPermission(FragmentActivity activity, String permission, IOnRequestPermissionResultCallBack IOnRequestPermissionResultCallBack) {
+        requestPermission(activity, new String[]{permission}, IOnRequestPermissionResultCallBack);
     }
 
-    public static void requestPermission(FragmentActivity activity, String[] permissionArray, OnRequestPermissionResultCallBack onRequestPermissionResultCallBack) {
+    public static void requestPermission(FragmentActivity activity, String[] permissionArray, IOnRequestPermissionResultCallBack IOnRequestPermissionResultCallBack) {
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
         RequestPermissionFragment requestPermissionFragment = (RequestPermissionFragment) fragmentManager.findFragmentByTag(RequestPermissionFragment.class.getSimpleName());
         if (requestPermissionFragment == null) {
@@ -27,6 +23,6 @@ public class PermissionUtil {
                     .commitAllowingStateLoss();
             fragmentManager.executePendingTransactions();
         }
-        requestPermissionFragment.requestPermission(permissionArray, onRequestPermissionResultCallBack);
+        requestPermissionFragment.requestPermission(permissionArray, IOnRequestPermissionResultCallBack);
     }
 }
