@@ -1,8 +1,0 @@
-include ':app', ':commonmodule', ':imagemodule', ':networkmodule', ':immodule', ':pushmodule', ':sharemodule', ':qrcodemodule'
-
-//引入 Flutter Module
-setBinding(new Binding([gradle:this]))
-evaluate(new File(
-        settingsDir.parentFile,
-        "flutter_module/.android/include_flutter.groovy"
-))

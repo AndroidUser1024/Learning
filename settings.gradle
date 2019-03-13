@@ -1,0 +1,1 @@
+include ':app', ':commonmodule', ':imagemodule', ':networkmodule', ':immodule', ':pushmodule', ':sharemodule', ':qrcodemodule'
