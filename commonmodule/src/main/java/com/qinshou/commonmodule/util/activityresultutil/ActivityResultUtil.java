@@ -1,8 +1,8 @@
 package com.qinshou.commonmodule.util.activityresultutil;
 
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 
 /**
  * Description:启动需要接收返回结果的 Activity 的工具类
@@ -11,7 +11,13 @@ import android.support.v7.app.AppCompatActivity;
  */
 
 public class ActivityResultUtil {
-    public static void startActivityForResult(AppCompatActivity activity,Class<?> targetClass,OnActivityResultCallBack onActivityResultCallBack) {
+    private static final int REQUEST_CODE = 200;
+
+    public static void startActivityForResult(FragmentActivity activity, Class<?> targetClass, OnActivityResultCallBack onActivityResultCallBack) {
+        startActivityForResult(activity, targetClass, REQUEST_CODE, onActivityResultCallBack);
+    }
+
+    public static void startActivityForResult(FragmentActivity activity, Class<?> targetClass, int requestCode, OnActivityResultCallBack onActivityResultCallBack) {
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
         ActivityResultFragment activityResultFragment = (ActivityResultFragment) fragmentManager.findFragmentByTag(ActivityResultFragment.class.getSimpleName());
         if (activityResultFragment == null) {
@@ -22,6 +28,23 @@ public class ActivityResultUtil {
             fragmentManager.executePendingTransactions();
         }
         Intent intent = new Intent(activity, targetClass);
-        activityResultFragment.startActivityForResult(intent, onActivityResultCallBack);
+        activityResultFragment.startActivityForResult(intent, requestCode, onActivityResultCallBack);
+    }
+
+    public static void startActivityForResult(FragmentActivity activity, Intent intent, OnActivityResultCallBack onActivityResultCallBack) {
+        startActivityForResult(activity, intent, REQUEST_CODE, onActivityResultCallBack);
+    }
+
+    public static void startActivityForResult(FragmentActivity activity, Intent intent, int requestCode, OnActivityResultCallBack onActivityResultCallBack) {
+        FragmentManager fragmentManager = activity.getSupportFragmentManager();
+        ActivityResultFragment activityResultFragment = (ActivityResultFragment) fragmentManager.findFragmentByTag(ActivityResultFragment.class.getSimpleName());
+        if (activityResultFragment == null) {
+            activityResultFragment = new ActivityResultFragment();
+            fragmentManager.beginTransaction()
+                    .add(activityResultFragment, ActivityResultFragment.class.getSimpleName())
+                    .commitAllowingStateLoss();
+            fragmentManager.executePendingTransactions();
+        }
+        activityResultFragment.startActivityForResult(intent, requestCode, onActivityResultCallBack);
     }
 }
