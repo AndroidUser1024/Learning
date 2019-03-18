@@ -2,6 +2,8 @@ package com.qinshou.qinshoubox.me.ui.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.media.AudioFormat;
+import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.Handler;
 import android.os.Looper;
@@ -19,6 +21,7 @@ import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.MyBaseActivity;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -33,11 +36,13 @@ import java.util.concurrent.Executors;
 public class TurningRobotActivity extends MyBaseActivity {
 
     private Button mBtnPressToSpeech;
+    private Button mBtnPressToSpeech2;
 
     private ExecutorService mExecutorService;   //录音 JNI 函数不具备线程安全性,所以要用单线程
     private MediaRecorder mMediaRecorder;   //录音类
     private Handler mHandler;
     private long mStartRecordTime;
+    private volatile boolean mRecording;
 
     @Override
     public int getLayoutId() {
@@ -52,6 +57,7 @@ public class TurningRobotActivity extends MyBaseActivity {
     @Override
     public void initView() {
         mBtnPressToSpeech = findViewByID(R.id.btn_press_to_speech);
+        mBtnPressToSpeech2 = findViewByID(R.id.btn_press_to_speech2);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -67,6 +73,21 @@ public class TurningRobotActivity extends MyBaseActivity {
                     case MotionEvent.ACTION_UP:
                     case MotionEvent.ACTION_CANCEL:
                         stopRecord();
+                        break;
+                }
+                return true;
+            }
+        });
+        mBtnPressToSpeech2.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        startRecord2();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        stopRecord2();
                         break;
                 }
                 return true;
@@ -126,7 +147,7 @@ public class TurningRobotActivity extends MyBaseActivity {
      */
     private void stopRecord() {
         //修改 UI 状态
-        mBtnPressToSpeech.setText("按住录音");
+        mBtnPressToSpeech.setText("按住说话");
         //结束录音任务
         mExecutorService.submit(new Runnable() {
             @Override
@@ -134,7 +155,6 @@ public class TurningRobotActivity extends MyBaseActivity {
                 if (!doStop()) {
                     recordFailure();
                 }
-
                 //释放之前的 Recorder
                 releaseRecorder();
             }
@@ -195,8 +215,8 @@ public class TurningRobotActivity extends MyBaseActivity {
      * Description: 停止录音的具体逻辑
      */
     private boolean doStop() {
-        //停止录音
         try {
+            //停止录音
             mMediaRecorder.stop();
         } catch (IllegalStateException e) {
             e.printStackTrace();
@@ -238,4 +258,105 @@ public class TurningRobotActivity extends MyBaseActivity {
         });
     }
 
+    private void startRecord2() {
+        //修改 UI 状态
+        mBtnPressToSpeech2.setText("松开结束");
+        //开始录音任务
+        mExecutorService.submit(new Runnable() {
+            @Override
+            public void run() {
+                if (!doStart2()){
+                    recordFailure();
+                }
+            }
+        });
+    }
+
+    private boolean doStart2() {
+        FileOutputStream fileOutputStream = null;
+        AudioRecord audioRecord = null;
+        try {
+            mRecording = true;
+            //创建录音文件
+            File file = new File(getCacheDir() + "/Audio/speech.pcm");
+            if (!file.exists()) {
+                file.getParentFile().mkdirs();
+                file.createNewFile();
+            }
+            //创建输出流
+            fileOutputStream = new FileOutputStream(file);
+
+            //配置 AudioRecord
+            //录音来源
+            int audioSource = MediaRecorder.AudioSource.MIC;
+            //录音频率
+            int sampleRate = 44100;
+            //声道为单声道
+            int channelConfig = AudioFormat.CHANNEL_IN_MONO;
+            //音频格式
+            int audioFormat = AudioFormat.ENCODING_PCM_16BIT;
+            //计算 AudioRecord 缓冲区的 Buffer 的最小大小
+            int minBufferSize = AudioRecord.getMinBufferSize(sampleRate, channelConfig, audioFormat);
+            //自己定义的每次读取缓冲区的最小 SIZE
+            byte[] buffer = new byte[1024 * 2];
+
+            //创建 AudioRecord
+            audioRecord = new AudioRecord(audioSource
+                    , sampleRate
+                    , channelConfig
+                    , audioFormat
+                    , Math.max(minBufferSize, buffer.length));
+
+            //开始录音
+            audioRecord.startRecording();
+            //记录开始录音时间
+            mStartRecordTime = System.currentTimeMillis();
+            Log.i("daolema", "startRecordTime--->" + mStartRecordTime);
+            //循环读取数据,写入到输出流中
+            while (mRecording) {
+                int length = audioRecord.read(buffer, 0, buffer.length);
+                if (length > 0) {
+                    fileOutputStream.write(buffer, 0, length);
+                } else {
+                    //读取失败
+                    return false;
+                }
+            }
+
+            //停止录音
+            audioRecord.stop();
+            //记录结束时间,计算录音时间
+            long stopRecordTime = System.currentTimeMillis();
+            long recordTime = stopRecordTime - mStartRecordTime;
+            Log.i("daolema", "recordTime--->" + recordTime);
+            //小于 2s 不算有效录音
+            if (recordTime < 2000) {
+                return false;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (fileOutputStream != null) {
+                try {
+                    fileOutputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (audioRecord != null) {
+                audioRecord.release();
+            }
+        }
+        return true;
+    }
+
+    private void stopRecord2() {
+        //修改 UI 状态
+        mBtnPressToSpeech2.setText("按住说话");
+        mRecording = false;
+    }
 }
