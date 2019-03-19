@@ -54,6 +54,16 @@
             android:name=".me.ui.activity.TurningRobotActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
+        <!-- MediaRecorder 录音界面 -->
+        <activity
+            android:name=".me.ui.activity.RecordActivity1"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <!-- AudioRecorder 录音界面 -->
+        <activity
+            android:name=".me.ui.activity.RecordActivity2"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
         <!-- 联系人列表界面 -->
         <activity
             android:name=".me.ui.activity.ContactListActivity"

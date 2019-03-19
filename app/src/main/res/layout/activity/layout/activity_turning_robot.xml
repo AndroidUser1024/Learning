@@ -1,30 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/activity_background_color"
+    android:orientation="vertical"
     tools:context=".me.ui.activity.TurningRobotActivity">
 
     <Button
-        android:id="@+id/btn_press_to_speech"
+        android:id="@+id/btn_record_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="按住说话"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:text="MediaRecorder 录音"/>
+
     <Button
-        android:id="@+id/btn_press_to_speech2"
+        android:id="@+id/btn_record_2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="按住说话"
-        app:layout_constraintBottom_toTopOf="@id/btn_press_to_speech"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-</android.support.constraint.ConstraintLayout>
+        android:text="AudioRecorder 录音" />
+</LinearLayout>
