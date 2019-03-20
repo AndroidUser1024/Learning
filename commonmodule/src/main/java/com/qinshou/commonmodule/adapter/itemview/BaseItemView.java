@@ -25,6 +25,10 @@ public abstract class BaseItemView<T> {
         this.layoutId = layoutId;
     }
 
+    public Context getContext() {
+        return mContext;
+    }
+
     public BaseViewHolder onCreateViewHolder(ViewGroup parent) {
         View itemView = LayoutInflater.from(mContext).inflate(layoutId, parent, false);
         return new BaseViewHolder(mContext, itemView);

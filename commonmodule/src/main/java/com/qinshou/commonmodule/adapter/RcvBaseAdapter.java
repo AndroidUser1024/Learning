@@ -6,8 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.qinshou.commonmodule.adapter.baseholder.BaseViewHolder;
-import com.qinshou.commonmodule.adapter.listener.IOnItemClickListener;
+import com.jeejio.controller.view.adapter.rcvbaseadapter.baseholder.BaseViewHolder;
+import com.jeejio.controller.view.adapter.rcvbaseadapter.listener.IOnItemClickListener;
+import com.jeejio.controller.view.adapter.rcvbaseadapter.listener.IOnItemLongClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ public abstract class RcvBaseAdapter<T> extends RecyclerView.Adapter<BaseViewHol
     private int layoutId;
     private List<T> dataList = new ArrayList<>();
     private IOnItemClickListener<T> mOnItemClickListener;
+    private IOnItemLongClickListener<T> mOnItemLongClickListener;
     private View mEmptyView;
     public static final int EMPTY_ITEM_VIEW_TYPE = Integer.MAX_VALUE - 1;
 
@@ -51,6 +53,16 @@ public abstract class RcvBaseAdapter<T> extends RecyclerView.Adapter<BaseViewHol
                 public void onClick(View v) {
                     int position = holder.getLayoutPosition();
                     mOnItemClickListener.onItemClick(holder, dataList.get(position), position);
+                }
+            });
+        }
+        if (mOnItemLongClickListener != null) {
+            holder.getItemView().setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    int position = holder.getLayoutPosition();
+                    mOnItemLongClickListener.onItemLongClick(holder, dataList.get(position), position);
+                    return true;
                 }
             });
         }
@@ -94,6 +106,9 @@ public abstract class RcvBaseAdapter<T> extends RecyclerView.Adapter<BaseViewHol
      * @param dataList 需要添加的数据
      */
     public void setDataList(List<T> dataList) {
+        if (dataList == null) {
+            dataList = new ArrayList<>();
+        }
         this.dataList = dataList;
         notifyDataSetChanged();
     }
@@ -116,6 +131,9 @@ public abstract class RcvBaseAdapter<T> extends RecyclerView.Adapter<BaseViewHol
      * @param isRefresh 是否是刷新,如果为 true 则会先清空当前数据再添加,为 false 则会追加
      */
     public void addDataList(List<T> dataList, boolean isRefresh) {
+        if (dataList == null) {
+            dataList = new ArrayList<>();
+        }
         if (isRefresh) {
             this.dataList.clear();
         }
@@ -133,6 +151,14 @@ public abstract class RcvBaseAdapter<T> extends RecyclerView.Adapter<BaseViewHol
      */
     public void setOnItemClickListener(IOnItemClickListener<T> onItemClickListener) {
         this.mOnItemClickListener = onItemClickListener;
+    }
+
+    /**
+     * Description:设置 item 的长按点击监听器
+     * Date:2018/3/9
+     */
+    public void setOnItemLongClickListener(IOnItemLongClickListener<T> onItemLongClickListener) {
+        this.mOnItemLongClickListener = onItemLongClickListener;
     }
 
     public void setEmptyView(View emptyView) {

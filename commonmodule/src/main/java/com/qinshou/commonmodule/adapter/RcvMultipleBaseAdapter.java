@@ -4,8 +4,8 @@ import android.content.Context;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
-import com.qinshou.commonmodule.adapter.baseholder.BaseViewHolder;
-import com.qinshou.commonmodule.adapter.itemview.BaseItemView;
+import com.jeejio.controller.view.adapter.rcvbaseadapter.baseholder.BaseViewHolder;
+import com.jeejio.controller.view.adapter.rcvbaseadapter.itemview.BaseItemView;
 
 
 /**
