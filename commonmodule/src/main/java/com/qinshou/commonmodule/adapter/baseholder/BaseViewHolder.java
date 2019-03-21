@@ -47,6 +47,24 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         return (T) view;
     }
 
+    public TextView getTextView(int textViewId) {
+        TextView textView = (TextView) mViewSparseArray.get(textViewId);
+        if (textView == null) {
+            textView = (TextView) mItemView.findViewById(textViewId);
+            mViewSparseArray.put(textViewId, textView);
+        }
+        return textView;
+    }
+
+    public ImageView getImageView(int imageViewId) {
+        ImageView imageView = (ImageView) mViewSparseArray.get(imageViewId);
+        if (imageView == null) {
+            imageView = (ImageView) mItemView.findViewById(imageViewId);
+            mViewSparseArray.put(imageViewId, imageView);
+        }
+        return imageView;
+    }
+
     /**
      * Description:设置控件是否可见
      * Date:2018/3/9

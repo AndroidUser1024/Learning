@@ -11,7 +11,7 @@ import android.support.v4.app.Fragment;
  */
 
 public class ActivityResultFragment extends Fragment {
-    private static final int REQUEST_CODE = 200;
+    private int mRequestCode;
     private OnActivityResultCallBack mCallBack;
 
     @Override
@@ -20,17 +20,17 @@ public class ActivityResultFragment extends Fragment {
         setRetainInstance(true);
     }
 
-    public void startActivityForResult(Intent intent, OnActivityResultCallBack onActivityResultCallBack) {
+    public void startActivityForResult(Intent intent, int requestCode, OnActivityResultCallBack onActivityResultCallBack) {
         this.mCallBack = onActivityResultCallBack;
-        startActivityForResult(intent, REQUEST_CODE);
+        this.mRequestCode = requestCode;
+        startActivityForResult(intent, requestCode);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE && mCallBack != null) {
-            mCallBack.onActivityResult(data);
+        if (requestCode == mRequestCode && mCallBack != null) {
+            mCallBack.onActivityResult(requestCode, resultCode, data);
         }
     }
-
 }

@@ -9,5 +9,5 @@ import android.content.Intent;
  */
 
 public interface OnActivityResultCallBack {
-    void onActivityResult(Intent data);
+    void onActivityResult(int requestCode, int resultCode, Intent data);
 }

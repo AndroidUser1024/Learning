@@ -3,21 +3,11 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
+        <compositeConfiguration>
+          <compositeBuild compositeDefinitionSource="SCRIPT" />
+        </compositeConfiguration>
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="modules">
-          <set>
-            <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/commonmodule" />
-            <option value="$PROJECT_DIR$/imagemodule" />
-            <option value="$PROJECT_DIR$/immodule" />
-            <option value="$PROJECT_DIR$/networkmodule" />
-            <option value="$PROJECT_DIR$/pushmodule" />
-            <option value="$PROJECT_DIR$/qrcodemodule" />
-            <option value="$PROJECT_DIR$/sharemodule" />
-          </set>
-        </option>
         <option name="resolveModulePerSourceSet" value="false" />
       </GradleProjectSettings>
     </option>
