@@ -5,6 +5,10 @@
 
     <!-- 允许程序读取通讯录的权限 -->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <!-- 允许程序录音的权限 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <!-- 允许程序操作 SD 卡的权限 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:name=".App"
@@ -48,6 +52,16 @@
         <!-- 聊天机器人界面 -->
         <activity
             android:name=".me.ui.activity.TurningRobotActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <!-- MediaRecorder 录音界面 -->
+        <activity
+            android:name=".me.ui.activity.RecordActivity1"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <!-- AudioRecorder 录音界面 -->
+        <activity
+            android:name=".me.ui.activity.RecordActivity2"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <!-- 联系人列表界面 -->

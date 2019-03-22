@@ -1,11 +1,8 @@
 package com.qinshou.qinshoubox.me.ui.activity;
 
-import android.text.TextUtils;
+import android.content.Intent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 
-import com.qinshou.commonmodule.util.SnackbarUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.MyBaseActivity;
 
@@ -16,8 +13,6 @@ import com.qinshou.qinshoubox.base.MyBaseActivity;
  */
 
 public class TurningRobotActivity extends MyBaseActivity {
-    private EditText etMessage;
-    private Button btnSend;
 
     @Override
     public int getLayoutId() {
@@ -31,27 +26,25 @@ public class TurningRobotActivity extends MyBaseActivity {
 
     @Override
     public void initView() {
-        etMessage = findViewByID(R.id.et_message);
-        btnSend = findViewByID(R.id.btn_send);
     }
 
     @Override
     public void setListener() {
-        btnSend.setOnClickListener(new View.OnClickListener() {
+        findViewByID(R.id.btn_record_1).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                String message = etMessage.getText().toString().trim();
-                if (TextUtils.isEmpty(message)) {
-                    SnackbarUtil.showSnackbar(getActivity(), "不允许发送空白消息");
-                    return;
-                }
+            public void onClick(View view) {
+                startActivity(new Intent(getContext(),RecordActivity1.class));
+            }
+        });
+        findViewByID(R.id.btn_record_2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getContext(),RecordActivity2.class));
             }
         });
     }
 
     @Override
     public void initData() {
-
     }
-
 }
