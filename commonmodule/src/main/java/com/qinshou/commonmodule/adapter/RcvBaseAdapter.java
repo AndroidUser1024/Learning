@@ -6,9 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.jeejio.controller.view.adapter.rcvbaseadapter.baseholder.BaseViewHolder;
-import com.jeejio.controller.view.adapter.rcvbaseadapter.listener.IOnItemClickListener;
-import com.jeejio.controller.view.adapter.rcvbaseadapter.listener.IOnItemLongClickListener;
+import com.qinshou.commonmodule.adapter.baseholder.BaseViewHolder;
+import com.qinshou.commonmodule.adapter.listener.IOnItemClickListener;
+import com.qinshou.commonmodule.adapter.listener.IOnItemLongClickListener;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,7 +1,7 @@
 package com.qinshou.commonmodule.adapter.listener;
 
 
-import com.jeejio.controller.view.adapter.rcvbaseadapter.baseholder.BaseViewHolder;
+import com.qinshou.commonmodule.adapter.baseholder.BaseViewHolder;
 
 /**
  * Description:RcvBaseAdapter 适配器 Item 的点击监听器
