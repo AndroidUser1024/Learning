@@ -1,6 +1,10 @@
 package com.qinshou.qinshoubox.me.bean;
 
+import android.databinding.BaseObservable;
+import android.databinding.Bindable;
+
 import com.google.gson.annotations.SerializedName;
+import com.qinshou.qinshoubox.BR;
 
 import java.util.List;
 
@@ -9,10 +13,11 @@ import java.util.List;
  * Created by 禽兽先生
  * Created on 2018/11/13
  */
-public class WeatherBean {
+public class WeatherBean extends BaseObservable {
     @SerializedName("airCondition")
     private String airCondition;    //空气质量
     @SerializedName("city")
+    @Bindable
     private String city;    //城市
     @SerializedName("coldIndex")
     private String coldIndex;   //感冒指数
@@ -57,6 +62,7 @@ public class WeatherBean {
 
     public WeatherBean() {
     }
+
 
     public String getAirCondition() {
         return airCondition;
