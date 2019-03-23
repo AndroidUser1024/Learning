@@ -136,9 +136,9 @@ public class HorizontalLine {
     }
 
     public static class DashEffect {
-        private float lineLength;
-        private float spaceLength;
-        private float phase;
+        private float lineLength;   //虚线的每一段线长
+        private float spaceLength;  //虚线两段之间的距离
+        private float phase;    //偏移量
 
         public DashEffect() {
             this.lineLength = 20f;
