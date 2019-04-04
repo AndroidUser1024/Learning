@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.qinshou.commonmodule.widget.SlideBackLayout;
+
 /**
  * Description:适合 MVP 架构的 BaseActivity
  * Author: QinHao
@@ -14,6 +16,7 @@ import android.view.View;
 public abstract class BaseMVPActivity<P extends AbsBasePresenter> extends AppCompatActivity implements IBaseView {
     private View mRootView;
     private P mPresenter;
+    private SlideBackLayout mSlideBackLayout;
 
     /**
      * Description:初始化布局资源 ID
@@ -51,6 +54,8 @@ public abstract class BaseMVPActivity<P extends AbsBasePresenter> extends AppCom
         super.onCreate(savedInstanceState);
         mRootView = LayoutInflater.from(this).inflate(getLayoutId(), null, false);
         setContentView(mRootView);
+        mSlideBackLayout = new SlideBackLayout(this);
+        mSlideBackLayout.bindActivity(this);
         mPresenter = initPresenter();
         if (mPresenter != null) {
             mPresenter.attachView(this);
