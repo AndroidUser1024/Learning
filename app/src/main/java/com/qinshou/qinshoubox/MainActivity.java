@@ -19,10 +19,17 @@ import com.qinshou.qinshoubox.playandroid.view.fragment.PlayAndroidFragment;
  * Description:主 Activity
  * Date:2018/4/9
  */
-public class MainActivity extends BaseMVPActivity<MainPresenter> implements IMainContract.IMainView {
-    private PlayAndroidFragment mPlayAndroidFragment;
-    private MusicListFragment mMusicListFragment;
-    private BottomNavigationView mBottomNavigationView;
+public class MainActivity extends MyBaseActivity {
+
+    private TabLayout tabLayout;
+    private HomepageFragment mHomepageFragment;
+    private KnowledgeSystemFragment mKnowledgeSystemFragment;
+    private MeFragment mMeFragment;
+
+    @Override
+    public boolean getIsImmersive() {
+        return true;
+    }
 
     @Override
     public int getLayoutId() {
@@ -30,41 +37,66 @@ public class MainActivity extends BaseMVPActivity<MainPresenter> implements IMai
     }
 
     @Override
-    public MainPresenter initPresenter() {
-        return new MainPresenter();
+    public void setPresenter() {
+
     }
 
     @Override
     public void initView() {
-        mBottomNavigationView = findViewById(R.id.bottom_navigation_view);
+//        View flutterView = Flutter.createView(this, this.getLifecycle(), "HomePage");
+
+        unbindSlideBackActivity();
+        tabLayout = findViewByID(R.id.tab_layout);
+
+        mHomepageFragment = new HomepageFragment();
+        mKnowledgeSystemFragment = new KnowledgeSystemFragment();
+        mMeFragment = new MeFragment();
+        FragmentUtil.showFragment(getActivity(), R.id.fl_container, mHomepageFragment);
     }
 
     @Override
     public void setListener() {
-        mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                switch (menuItem.getItemId()) {
-                    case R.id.bottom_navigation_btn_play_android:
-                        fragmentTransaction.replace(R.id.fl_fragment_container, mPlayAndroidFragment);
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()) {
+                    case 0:
+                        FragmentUtil.showFragment(getActivity(), R.id.fl_container, mHomepageFragment);
                         break;
-                    case R.id.bottom_navigation_btn_music:
-                        fragmentTransaction.replace(R.id.fl_fragment_container, mMusicListFragment);
+                    case 1:
+                        FragmentUtil.showFragment(getActivity(), R.id.fl_container, mKnowledgeSystemFragment);
                         break;
-                    case R.id.bottom_navigation_btn_personal_center:
+                    case 2:
+                        FragmentUtil.showFragment(getActivity(), R.id.fl_container, mMeFragment);
                         break;
                 }
-                fragmentTransaction.commitAllowingStateLoss();
-                return true;
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
             }
         });
     }
 
     @Override
     public void initData() {
-        mPlayAndroidFragment = new PlayAndroidFragment();
-        mMusicListFragment = new MusicListFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.fl_fragment_container, mPlayAndroidFragment).commit();
+//        PushUtil.setOnGetPushListener(new OnGetPushListener() {
+//            @Override
+//            public void getPush(String content) {
+//                ShowLogUtil.logi(content);
+//            }
+//        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+//        DisposableManager.getInstance().clear();
     }
 }

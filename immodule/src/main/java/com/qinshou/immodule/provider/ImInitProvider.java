@@ -7,8 +7,6 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMOptions;
 
 /**
  * Description:
