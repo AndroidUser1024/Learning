@@ -32,15 +32,7 @@ import java.util.Random;
 public class ChartActivity extends MyBaseActivity {
     private static final int MSG_DRAW = 1;
     private LineChartView mLineChartView;
-    private Handler mHandler = new Handler(new Handler.Callback() {
-        @Override
-        public boolean handleMessage(Message msg) {
-            if (msg.what == MSG_DRAW) {
-                mLineChartView.draw();
-            }
-            return true;
-        }
-    });
+    private ColumnChartView mColumnChartView;
 
     @Override
     public int getLayoutId() {
@@ -54,6 +46,7 @@ public class ChartActivity extends MyBaseActivity {
 
     @Override
     public void initView() {
+        mColumnChartView = findViewById(R.id.column_chart_view);
         mLineChartView = findViewById(R.id.line_chart_view);
     }
 
@@ -64,29 +57,54 @@ public class ChartActivity extends MyBaseActivity {
 
     @Override
     public void initData() {
-        OkHttpUtil.getInstance().request(OkHttpUtil.Method.GET, IUrlConstants.GET_REAL_TIME_TIME_SHARING_DATA, new ARequestCallback<YiYuanApiResultBean<RealTimeTimeSharingBean>>() {
+        drawColumnChartView();
+        drawLineChartView();
+    }
+
+    private void drawLineChartView() {
+        mLineChartView.setBgColor(Color.parseColor("#FF000000"));
+        mLineChartView.setTouchLineColor(Color.parseColor("#FFFFFFFF"));
+        mLineChartView.setTouchLineTextColor(Color.parseColor("#FFFFFFFF"));
+
+        DataLine dataLine1 = new DataLine();
+        dataLine1.setColor(Color.parseColor("#FFFFFFFF"));
+        dataLine1.setWidth(3f);
+
+        List<Float> nowPriceList = new ArrayList<>();
+        for (int i = 0; i < 30; i++) {
+            DataPoint dataPoint = new DataPoint(i, new Random().nextInt(20));
+            dataLine1.addDataPoint(dataPoint);
+            nowPriceList.add(dataPoint.getY());
+        }
+        mLineChartView.addDataLine(dataLine1);
+        float yMin = Collections.min(nowPriceList);
+        mLineChartView.setYMin(yMin);
+//        mLineChartView.setYMax(dataBean.getYesterdayClose() + (dataBean.getYesterdayClose() - yMin));
+
+        mLineChartView.getAxisX().setAxisTextFormatter(new IAxisTextFormatter() {
             @Override
-            public void onSuccess(final YiYuanApiResultBean<RealTimeTimeSharingBean> data) {
-                Log.i("daolema", "data--->" + data);
-                if (data.getT() == null || data.getT().getDataBeanList() == null || data.getT().getDataBeanList().size() == 0) {
-                    return;
-                }
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        drawRealTimeTimeSharingChart(data.getT().getDataBeanList().get(0));
-                    }
-                }).start();
+            public AxisText formatAxisText(int position, AxisText axisText) {
+                return null;
             }
+        });
 
-            @Override
-            public void onFailure(Exception e) {
-                Log.i("daolema", "e--->" + e.getMessage());
-            }
-        }, new Parameter("showapi_appid", "60420"), new Parameter("showapi_sign", "b9db6f8d15a849619c72bfc7e0744c41"), new Parameter("code", "300355"));
+        HighlightDataPoint highlightDataPoint1 = new HighlightDataPoint(dataLine1, dataLine1.getSize() - 1);
+        highlightDataPoint1.setRadius(5f);
+        highlightDataPoint1.setColor(Color.parseColor("#FFFF0000"));
+        mLineChartView.addHighlightDataPoint(highlightDataPoint1);
 
-        ColumnChartView columnChartView = findViewById(R.id.column_chart_view);
+        HorizontalLine horizontalLine = new HorizontalLine();
+        horizontalLine.setColor(Color.parseColor("#FFFFFF00"));
+        horizontalLine.setDashEffect(new HorizontalLine.DashEffect(10f, 10f, 0));
+        horizontalLine.setShowText(true);
+        horizontalLine.setTextColor(Color.parseColor("#FFFFFFFF"));
+        mLineChartView.addHorizontalLine(horizontalLine);
 
+        mLineChartView.setAnimateDraw(true);
+        mLineChartView.draw();
+    }
+
+    private void drawColumnChartView() {
         DataColumn dataColumn1 = new DataColumn();
         dataColumn1.setColor(Color.parseColor("#FF4A93FA"));
         dataColumn1.setMarginLeft(30);
@@ -106,68 +124,22 @@ public class ChartActivity extends MyBaseActivity {
             dataColumn2.addDataPoint(new DataPoint(i, new Random().nextInt(10) + 5));
             dataColumn3.addDataPoint(new DataPoint(i, new Random().nextInt(10) + 5));
         }
-        columnChartView.setYMax(20);
-        columnChartView.addDataColumn(dataColumn1);
-        columnChartView.addDataColumn(dataColumn2);
-        columnChartView.addDataColumn(dataColumn3);
+        mColumnChartView.setYMax(20);
+        mColumnChartView.addDataColumn(dataColumn1);
+        mColumnChartView.addDataColumn(dataColumn2);
+        mColumnChartView.addDataColumn(dataColumn3);
 
         HighlightDataPoint highlightDataPoint3 = new HighlightDataPoint(dataColumn3, dataColumn3.getSize() - 1);
         highlightDataPoint3.setRadius(5f);
         highlightDataPoint3.setColor(Color.BLACK);
-        columnChartView.addHighlightDataPoint(highlightDataPoint3);
+        mColumnChartView.addHighlightDataPoint(highlightDataPoint3);
 
         HighlightDataPoint highlightDataPoint4 = new HighlightDataPoint(dataColumn2, dataColumn3.getSize() - 1);
         highlightDataPoint4.setRadius(5f);
         highlightDataPoint4.setColor(Color.BLACK);
-        columnChartView.addHighlightDataPoint(highlightDataPoint4);
+        mColumnChartView.addHighlightDataPoint(highlightDataPoint4);
 
-        columnChartView.setAnimateDraw(true);
-        columnChartView.draw();
-    }
-
-    private void drawRealTimeTimeSharingChart(RealTimeTimeSharingBean.DataBean dataBean) {
-        if (dataBean == null || dataBean.getMinuteBeanList() == null || dataBean.getMinuteBeanList().size() == 0) {
-            return;
-        }
-        mLineChartView.setBgColor(Color.parseColor("#FF000000"));
-        mLineChartView.setTouchLineColor(Color.parseColor("#FFFFFFFF"));
-        mLineChartView.setTouchLineTextColor(Color.parseColor("#FFFFFFFF"));
-
-        DataLine dataLine1 = new DataLine();
-        dataLine1.setColor(Color.parseColor("#FFFFFFFF"));
-        dataLine1.setWidth(3f);
-
-        List<Float> nowPriceList = new ArrayList<>();
-        for (int i = 0; i < dataBean.getMinuteBeanList().size(); i++) {
-            dataLine1.addDataPoint(new DataPoint(i, dataBean.getMinuteBeanList().get(i).getNowPrice()));
-            nowPriceList.add(dataBean.getMinuteBeanList().get(i).getNowPrice());
-        }
-        mLineChartView.addDataLine(dataLine1);
-        float yMin = Collections.min(nowPriceList);
-        mLineChartView.setYMin(yMin);
-        mLineChartView.setYMax(dataBean.getYesterdayClose() + (dataBean.getYesterdayClose() - yMin));
-
-        mLineChartView.getAxisX().setAxisTextFormatter(new IAxisTextFormatter() {
-            @Override
-            public AxisText formatAxisText(int position, AxisText axisText) {
-                return null;
-            }
-        });
-
-        HighlightDataPoint highlightDataPoint1 = new HighlightDataPoint(dataLine1, dataLine1.getSize() - 1);
-        highlightDataPoint1.setRadius(5f);
-        highlightDataPoint1.setColor(Color.parseColor("#FFFF0000"));
-        mLineChartView.addHighlightDataPoint(highlightDataPoint1);
-
-        HorizontalLine horizontalLine = new HorizontalLine();
-        horizontalLine.setColor(Color.parseColor("#FFFFFF00"));
-        horizontalLine.setDashEffect(new HorizontalLine.DashEffect(10f, 10f, 0));
-        horizontalLine.setY(dataBean.getYesterdayClose());
-        horizontalLine.setShowText(true);
-        horizontalLine.setTextColor(Color.parseColor("#FFFFFFFF"));
-        mLineChartView.addHorizontalLine(horizontalLine);
-
-        mLineChartView.setAnimateDraw(true);
-        mHandler.sendEmptyMessage(MSG_DRAW);
+        mColumnChartView.setAnimateDraw(true);
+        mColumnChartView.draw();
     }
 }

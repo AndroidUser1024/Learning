@@ -76,7 +76,7 @@ public class RealTimeTimeSharingBean {
     }
 
     //分时数据列表实体类
-    public class DataBean {
+    public static class DataBean {
         @SerializedName("count")
         private int count;  //总条目数
         @SerializedName("date")
@@ -144,7 +144,7 @@ public class RealTimeTimeSharingBean {
     }
 
     //分时数据每一个点对应实体类
-    public class MinuteBean {
+    public static class MinuteBean {
         @SerializedName("time")
         private String time;    //时间
         @SerializedName("nowPrice")
