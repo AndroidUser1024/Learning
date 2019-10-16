@@ -1,6 +1,7 @@
 package com.qinshou.qinshoubox.homepage.bean;
 
 import com.google.gson.annotations.SerializedName;
+import com.qinshou.qinshoubox.network.QinshouBoxApi;
 
 /**
  * Author: QinHao
@@ -45,6 +46,9 @@ public class WallpaperBean {
     }
 
     public String getPath() {
+        if (!path.startsWith(QinshouBoxApi.DEFAULT_DEMAIN)) {
+            path = QinshouBoxApi.DEFAULT_DEMAIN + path;
+        }
         return path;
     }
 
