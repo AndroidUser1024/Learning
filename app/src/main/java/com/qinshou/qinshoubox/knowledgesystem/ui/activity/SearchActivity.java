@@ -2,18 +2,12 @@ package com.qinshou.qinshoubox.knowledgesystem.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 
 import com.qinshou.commonmodule.widget.RefreshLayout;
-import com.qinshou.networkmodule.BaseObserver;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.MyBaseActivity;
 import com.qinshou.qinshoubox.homepage.adapter.RvArticleAdapter;
-import com.qinshou.qinshoubox.homepage.bean.ArticleListBean;
-import com.qinshou.qinshoubox.network.wanandroid.WanAndroidApi;
 
 public class SearchActivity extends MyBaseActivity {
     private static final String SEARCH_KEY_WORDS = "searchKeyWords";
@@ -61,20 +55,6 @@ public class SearchActivity extends MyBaseActivity {
         if (TextUtils.isEmpty(searchKeyWords)) {
             return;
         }
-        WanAndroidApi.getInstance().search(page, searchKeyWords, new BaseObserver<ArticleListBean>() {
-
-            @Override
-            public void onNext(ArticleListBean value) {
-                mRvArticleAdapter.addDataList(value.getArticleList(), page == 0);
-
-                refreshLayout.stopRefreshAndLoadMore();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                refreshLayout.stopRefreshAndLoadMore();
-            }
-        });
     }
 
     public static Intent getJumpIntent(Context context, String searchKeyWords) {

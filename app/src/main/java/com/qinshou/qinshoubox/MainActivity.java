@@ -12,7 +12,7 @@ import com.qinshou.qinshoubox.me.ui.fragment.MeFragment;
  * Description:主 Activity
  * Date:2018/4/9
  */
-public class MainActivity extends MyBaseActivity {
+public class MainActivity extends MyBaseActivity<MainPresenter> implements IMainContract.IView {
 
     private TabLayout tabLayout;
     private HomepageFragment mHomepageFragment;
@@ -29,42 +29,42 @@ public class MainActivity extends MyBaseActivity {
 //        View flutterView = Flutter.createView(this, this.getLifecycle(), "HomePage");
 
 //        unbindSlideBackActivity();
-//        tabLayout = findViewByID(R.id.tab_layout);
+        tabLayout = findViewByID(R.id.tab_layout);
 //
-//        mHomepageFragment = new HomepageFragment();
-//        mKnowledgeSystemFragment = new KnowledgeSystemFragment();
-//        mMeFragment = new MeFragment();
-//        FragmentUtil.showFragment(getActivity(), R.id.fl_container, mHomepageFragment);
+        mHomepageFragment = new HomepageFragment();
+        mKnowledgeSystemFragment = new KnowledgeSystemFragment();
+        mMeFragment = new MeFragment();
+        FragmentUtil.showFragment(getActivity(), R.id.fl_container, mHomepageFragment);
     }
 
     @Override
     public void setListener() {
-//        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-//            @Override
-//            public void onTabSelected(TabLayout.Tab tab) {
-//                switch (tab.getPosition()) {
-//                    case 0:
-//                        FragmentUtil.showFragment(getActivity(), R.id.fl_container, mHomepageFragment);
-//                        break;
-//                    case 1:
-//                        FragmentUtil.showFragment(getActivity(), R.id.fl_container, mKnowledgeSystemFragment);
-//                        break;
-//                    case 2:
-//                        FragmentUtil.showFragment(getActivity(), R.id.fl_container, mMeFragment);
-//                        break;
-//                }
-//            }
-//
-//            @Override
-//            public void onTabUnselected(TabLayout.Tab tab) {
-//
-//            }
-//
-//            @Override
-//            public void onTabReselected(TabLayout.Tab tab) {
-//
-//            }
-//        });
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()) {
+                    case 0:
+                        FragmentUtil.showFragment(getActivity(), R.id.fl_container, mHomepageFragment);
+                        break;
+                    case 1:
+                        FragmentUtil.showFragment(getActivity(), R.id.fl_container, mKnowledgeSystemFragment);
+                        break;
+                    case 2:
+                        FragmentUtil.showFragment(getActivity(), R.id.fl_container, mMeFragment);
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 
     @Override
@@ -75,11 +75,5 @@ public class MainActivity extends MyBaseActivity {
 //                ShowLogUtil.logi(content);
 //            }
 //        });
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-//        DisposableManager.getInstance().clear();
     }
 }

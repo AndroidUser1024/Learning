@@ -67,11 +67,12 @@ dependencies {
 
     implementation project(':commonmodule')
     implementation project(':imagemodule')
-    implementation project(':networkmodule')
     implementation project(':pushmodule')
     implementation project(':qrcodemodule')
 //    implementation project(':sharemodule')
 //    implementation project(':immodule')
+    implementation project(':OkHttpHelper')
+    annotationProcessor project(':OkHttpHelperProcessor')
 
     //仿 iOS 的 PickerView 控件，有时间选择器和选项选择器
     implementation 'com.contrarywind:Android-PickerView:4.1.6'

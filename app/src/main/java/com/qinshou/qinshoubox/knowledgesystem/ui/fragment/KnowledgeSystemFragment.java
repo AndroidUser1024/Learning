@@ -6,36 +6,23 @@ import android.graphics.Color;
 import android.provider.Settings;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.AppBarLayout;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.google.zxing.Result;
 import com.qinshou.commonmodule.util.ScreenShotsUtil;
 import com.qinshou.commonmodule.widget.FlowLayout;
 import com.qinshou.commonmodule.widget.RefreshLayout;
-import com.qinshou.networkmodule.BaseObserver;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.MyBaseFragment;
 import com.qinshou.qinshoubox.knowledgesystem.adapter.RvKnowledgeSystemAdapter;
-import com.qinshou.qinshoubox.knowledgesystem.bean.CommonWebSiteBean;
-import com.qinshou.qinshoubox.knowledgesystem.bean.HotSearchWordsBean;
-import com.qinshou.qinshoubox.knowledgesystem.bean.KnowledgeSystemBean;
 import com.qinshou.qinshoubox.knowledgesystem.ui.activity.SearchActivity;
-import com.qinshou.qinshoubox.network.wanandroid.WanAndroidApi;
 import com.qinshou.qrcodemodule.ICaptureView;
 import com.qinshou.qrcodemodule.camera.CameraManager;
 import com.qinshou.qrcodemodule.handler.CaptureHandler;
 import com.qinshou.qrcodemodule.manager.ConfigManager;
 import com.qinshou.qrcodemodule.widget.ViewfinderView;
-
-import java.util.List;
-import java.util.Random;
 
 /**
  * Description:知识体系界面

@@ -1,0 +1,44 @@
+apply plugin: 'java-library'
+//apply plugin: 'maven'
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.google.code.gson:gson:2.8.5'
+    compile "com.squareup.okhttp3:okhttp:3.8.0"
+    compile 'com.squareup.okio:okio:1.13.0'
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+//uploadArchives {
+//    repositories.mavenDeployer {
+//        // 本地仓库路径D:\WorkSpace
+//        repository(url: "file://F:/AndroidWorkSpace/Repository/")
+//        // 远程仓库地址和帐号密码
+////        repository(url: "xxx") {
+////            authentication(userName: "admin", password: "xxx")
+////        }
+//        // 唯一标识
+//        pom.groupId = "com.qinshou.qinshoubox"
+//        // 项目名称
+//        pom.artifactId = "OkHttpHelper"
+//        // 版本号
+//        pom.version = "1.0.0"
+//    }
+//}
+
+//jar {
+//    String someString = ''
+//    configurations.runtime.each { someString = someString + " lib//" + it.name }
+//    manifest {
+//        attributes 'Class-Path': someString
+//    }
+//    into("libs") {
+//        from configurations.runtime
+//    }
+//}

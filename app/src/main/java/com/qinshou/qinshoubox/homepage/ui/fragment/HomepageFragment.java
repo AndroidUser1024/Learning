@@ -3,11 +3,18 @@ package com.qinshou.qinshoubox.homepage.ui.fragment;
 import android.support.v4.view.ViewPager;
 
 import com.qinshou.commonmodule.adapter.InfiniteCycleViewPagerAdapter;
+import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.widget.RefreshLayout;
 import com.qinshou.commonmodule.widget.ViewPagerPoints;
+import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.MyBaseFragment;
 import com.qinshou.qinshoubox.homepage.adapter.RvArticleAdapter;
+import com.qinshou.qinshoubox.homepage.bean.WallpaperBean;
+import com.qinshou.qinshoubox.homepage.transformer.QinshouBoxApiTransformer;
+import com.qinshou.qinshoubox.network.OkHttpHelperForQinshouBoxApi;
+
+import java.util.List;
 
 /**
  * Description:首页界面
@@ -68,7 +75,7 @@ public class HomepageFragment extends MyBaseFragment {
 
     @Override
     public void initData() {
-        loadBeautyGirls();
+        loadWallpaperList();
         loadHomePageArticles();
     }
 
@@ -96,7 +103,21 @@ public class HomepageFragment extends MyBaseFragment {
      * Description:加载美女轮播图
      * Date:2018/5/14
      */
-    private void loadBeautyGirls() {
+    private void loadWallpaperList() {
+        ShowLogUtil.logi("loadWallpaperList");
+        OkHttpHelperForQinshouBoxApi.SINGLETON.getWallpaperList(1, 5)
+                .transform(new QinshouBoxApiTransformer<List<WallpaperBean>>())
+                .enqueue(new Callback<List<WallpaperBean>>() {
+                    @Override
+                    public void onSuccess(List<WallpaperBean> data) {
+                        ShowLogUtil.logi(data);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        ShowLogUtil.logi(e.getMessage());
+                    }
+                });
 //        GankIoApi.getInstance().getBeautyGirls(4, 1, new BaseObserver<List<WelfareBean>>() {
 //
 //            @Override

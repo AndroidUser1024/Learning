@@ -5,17 +5,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
-import com.qinshou.commonmodule.util.SharedPreferencesUtil;
-import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.util.SystemUtil;
-import com.qinshou.networkmodule.BaseObserver;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.databinding.ActivityWeatherBinding;
 import com.qinshou.qinshoubox.me.bean.WeatherBean;
-import com.qinshou.qinshoubox.me.constant.Constant;
-import com.qinshou.qinshoubox.me.network.mob.MobApi;
-
-import java.util.List;
 
 
 /**
@@ -39,34 +32,6 @@ public class WeatherActivity extends AppCompatActivity {
 
     private void queryWeather() {
         String ip = SystemUtil.getIPAddress(this);
-        MobApi.getInstance().queryWeatherByIp(ip, new BaseObserver<List<WeatherBean>>() {
-            @Override
-            public void onNext(List<WeatherBean> value) {
-                if (value.size() > 0) {
-                    mWeatherBean.setCity(value.get(0).getCity());
-                }
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                String city = SharedPreferencesUtil.getString(WeatherActivity.this, Constant.LAST_CHOOSE_CITY);
-                MobApi.getInstance().queryWeatherByCity(null, city, new BaseObserver<List<WeatherBean>>() {
-                    @Override
-                    public void onNext(List<WeatherBean> value) {
-                        if (value.size() > 0) {
-//                            mWeatherBean.setCity(value.get(0).getCity());
-                            mWeatherBean = value.get(0);
-                            mWeatherBean.notifyChange();
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        ShowLogUtil.logi(e.getMessage());
-                    }
-                });
-            }
-        });
     }
 //    @Override
 //    public void setListener() {

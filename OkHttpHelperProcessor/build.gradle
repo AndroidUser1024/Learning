@@ -1,0 +1,32 @@
+apply plugin: 'java-library'
+//apply plugin: 'maven'
+
+dependencies {
+    compile 'com.google.auto.service:auto-service:1.0-rc4'
+    compile 'com.squareup:javapoet:1.11.1'
+    compile project(':OkHttpHelper')
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+//uploadArchives {
+//    repositories.mavenDeployer {
+//        // 本地仓库路径D:\WorkSpace
+//         repository(url: "file://F:/AndroidWorkSpace/Repository/")
+//        // 远程仓库地址和帐号密码
+////        repository(url: "xxx") {
+////            authentication(userName: "admin", password: "xxx")
+////        }
+//        // 唯一标识
+//        pom.groupId = "com.qinshou.qinshoubox"
+//        // 项目名称
+//        pom.artifactId = "OkHttpHelperProcessor"
+//        // 版本号
+//        pom.version = "1.0.0"
+//    }
+//}

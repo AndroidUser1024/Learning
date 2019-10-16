@@ -7,7 +7,7 @@ import com.qinshou.commonmodule.base.AbsMVPActivity;
 import com.qinshou.commonmodule.widget.CountDownView;
 import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.login.SplashPresenter;
+import com.qinshou.qinshoubox.login.presenter.SplashPresenter;
 import com.qinshou.qinshoubox.login.contract.ISplashContract;
 
 /**

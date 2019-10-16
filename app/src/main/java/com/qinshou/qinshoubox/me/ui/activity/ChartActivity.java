@@ -1,10 +1,6 @@
 package com.qinshou.qinshoubox.me.ui.activity;
 
 import android.graphics.Color;
-import android.os.Handler;
-import android.os.Message;
-import android.support.annotation.ColorRes;
-import android.util.Log;
 
 import com.qinshou.commonmodule.widget.chartview.ColumnChartView;
 import com.qinshou.commonmodule.widget.chartview.LineChartView;
@@ -15,14 +11,8 @@ import com.qinshou.commonmodule.widget.chartview.component.DataPoint;
 import com.qinshou.commonmodule.widget.chartview.component.HighlightDataPoint;
 import com.qinshou.commonmodule.widget.chartview.component.HorizontalLine;
 import com.qinshou.commonmodule.widget.chartview.component.IAxisTextFormatter;
-import com.qinshou.networkmodule.okhttp.OkHttpUtil;
-import com.qinshou.networkmodule.okhttp.Parameter;
-import com.qinshou.networkmodule.okhttp.callback.ARequestCallback;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.MyBaseActivity;
-import com.qinshou.qinshoubox.me.bean.RealTimeTimeSharingBean;
-import com.qinshou.qinshoubox.me.bean.YiYuanApiResultBean;
-import com.qinshou.qinshoubox.network.IUrlConstants;
 
 import java.util.ArrayList;
 import java.util.Collections;
