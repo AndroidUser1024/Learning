@@ -53,15 +53,11 @@ public class RecordActivity1 extends MyBaseActivity {
         return R.layout.activity_record_1;
     }
 
-    @Override
-    public void setPresenter() {
-
-    }
 
     @Override
     public void initView() {
-        mBtnPressToSpeech = findViewByID(R.id.btn_press_to_speech);
-        mBtnPlay = findViewByID(R.id.btn_play);
+//        mBtnPressToSpeech = findViewByID(R.id.btn_press_to_speech);
+//        mBtnPlay = findViewByID(R.id.btn_play);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -92,19 +88,19 @@ public class RecordActivity1 extends MyBaseActivity {
 
     @Override
     public void initData() {
-        PermissionUtil.requestPermission(this, new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE}, new IOnRequestPermissionResultCallBack() {
-            @Override
-            public void onSuccess() {
-
-            }
-
-            @Override
-            public void onError(List<String> deniedPermissionList) {
-                Toast.makeText(getContext(), "没有录音相关权限", Toast.LENGTH_LONG).show();
-            }
-        });
-        mExecutorService = Executors.newSingleThreadExecutor();
-        mHandler = new Handler(Looper.getMainLooper());
+//        PermissionUtil.requestPermission(this, new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE}, new IOnRequestPermissionResultCallBack() {
+//            @Override
+//            public void onSuccess() {
+//
+//            }
+//
+//            @Override
+//            public void onError(List<String> deniedPermissionList) {
+//                Toast.makeText(getContext(), "没有录音相关权限", Toast.LENGTH_LONG).show();
+//            }
+//        });
+//        mExecutorService = Executors.newSingleThreadExecutor();
+//        mHandler = new Handler(Looper.getMainLooper());
     }
 
     /**

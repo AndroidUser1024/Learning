@@ -1,10 +1,7 @@
 package com.qinshou.qinshoubox.me.ui.activity;
 
 import android.graphics.Color;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
-import com.qinshou.commonmodule.base.BaseActivity;
 import com.qinshou.commonmodule.widget.WheelOfFortuneView;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.MyBaseActivity;
@@ -22,11 +19,6 @@ public class WheelOfFortuneActivity extends MyBaseActivity {
     @Override
     public int getLayoutId() {
         return R.layout.activity_wheel_of_fortune;
-    }
-
-    @Override
-    public void setPresenter() {
-
     }
 
     @Override

@@ -68,10 +68,6 @@ public class KnowledgeSystemFragment extends MyBaseFragment {
     private ImageButton ibSearchBig;
     private ImageButton ibSearchSmall;
 
-    @Override
-    public boolean getIsImmersive() {
-        return true;
-    }
 
     @Override
     public int getLayoutId() {
@@ -79,135 +75,130 @@ public class KnowledgeSystemFragment extends MyBaseFragment {
     }
 
     @Override
-    public void setPresenter() {
-
-    }
-
-    @Override
     public void initView() {
-        RecyclerView rvKnowledgeSystem = findViewByID(R.id.rv_knowledge_system);
-        rvKnowledgeSystem.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        mRvKnowledgeSystemAdapter = new RvKnowledgeSystemAdapter(getContext());
-        rvKnowledgeSystem.setAdapter(mRvKnowledgeSystemAdapter);
-        rvKnowledgeSystem.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        rvKnowledgeSystem.setNestedScrollingEnabled(false);
-
-        refreshLayout = findViewByID(R.id.refresh_layout);
-        refreshLayout.canLoadMore(false);
-
-        flHotSearchWords = findViewByID(R.id.fl_hot_search_words);
-        flCommonWebSites = findViewByID(R.id.fl_common_web_sites);
-        appBarLayout = findViewByID(R.id.app_bar_layout);
-        layoutFunctionsBig = findViewByID(R.id.layout_functions_big);
-        layoutFunctionsSmall = findViewByID(R.id.layout_functions_small);
-        ibSearchBig = findViewByID(R.id.ib_search_big);
-        ibSearchSmall = findViewByID(R.id.ib_search_small);
-        ibScanQRCodeBig = findViewByID(R.id.ib_scan_qr_code_big);
-        ibScanQRCodeSmall = findViewByID(R.id.ib_scan_qr_code_small);
-        ibScreenShotsBig = findViewByID(R.id.ib_screen_shots_big);
-        ibScreenShotsSmall = findViewByID(R.id.ib_screen_shots_small);
-        ibPayWayBig = findViewByID(R.id.ib_pay_way_big);
-        ibPayWaySmall = findViewByID(R.id.ib_pay_way_small);
+//        RecyclerView rvKnowledgeSystem = findViewByID(R.id.rv_knowledge_system);
+//        rvKnowledgeSystem.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+//        mRvKnowledgeSystemAdapter = new RvKnowledgeSystemAdapter(getContext());
+//        rvKnowledgeSystem.setAdapter(mRvKnowledgeSystemAdapter);
+//        rvKnowledgeSystem.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+//        rvKnowledgeSystem.setNestedScrollingEnabled(false);
+//
+//        refreshLayout = findViewByID(R.id.refresh_layout);
+//        refreshLayout.canLoadMore(false);
+//
+//        flHotSearchWords = findViewByID(R.id.fl_hot_search_words);
+//        flCommonWebSites = findViewByID(R.id.fl_common_web_sites);
+//        appBarLayout = findViewByID(R.id.app_bar_layout);
+//        layoutFunctionsBig = findViewByID(R.id.layout_functions_big);
+//        layoutFunctionsSmall = findViewByID(R.id.layout_functions_small);
+//        ibSearchBig = findViewByID(R.id.ib_search_big);
+//        ibSearchSmall = findViewByID(R.id.ib_search_small);
+//        ibScanQRCodeBig = findViewByID(R.id.ib_scan_qr_code_big);
+//        ibScanQRCodeSmall = findViewByID(R.id.ib_scan_qr_code_small);
+//        ibScreenShotsBig = findViewByID(R.id.ib_screen_shots_big);
+//        ibScreenShotsSmall = findViewByID(R.id.ib_screen_shots_small);
+//        ibPayWayBig = findViewByID(R.id.ib_pay_way_big);
+//        ibPayWaySmall = findViewByID(R.id.ib_pay_way_small);
     }
 
 
     @Override
     public void setListener() {
-        refreshLayout.setOnRefreshListener(new RefreshLayout.IOnRefreshListener() {
-            @Override
-            public void onRefresh(RefreshLayout refreshLayout) {
-                initData();
-            }
-        });
-
-        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                int height = layoutFunctionsBig.getMeasuredHeight();
-                layoutFunctionsSmall.setAlpha((float) Math.abs(verticalOffset) / (float) height);
-                layoutFunctionsBig.setAlpha(1 - (float) Math.abs(verticalOffset) / (float) height);
-                layoutFunctionsSmall.setVisibility(layoutFunctionsSmall.getAlpha() == 0 ? View.GONE : View.VISIBLE);
-            }
-        });
-        ibPayWayBig.setOnClickListener(mOnClickListener);
-        ibSearchSmall.setOnClickListener(mOnClickListener);
-        ibSearchBig.setOnClickListener(mOnClickListener);
-        ibScanQRCodeSmall.setOnClickListener(mOnClickListener);
-        ibScreenShotsSmall.setOnClickListener(mOnClickListener);
-        ibScanQRCodeBig.setOnClickListener(mOnClickListener);
-        ibScreenShotsBig.setOnClickListener(mOnClickListener);
-        ibPayWaySmall.setOnClickListener(mOnClickListener);
+//        refreshLayout.setOnRefreshListener(new RefreshLayout.IOnRefreshListener() {
+//            @Override
+//            public void onRefresh(RefreshLayout refreshLayout) {
+//                initData();
+//            }
+//        });
+//
+//        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+//            @Override
+//            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+//                int height = layoutFunctionsBig.getMeasuredHeight();
+//                layoutFunctionsSmall.setAlpha((float) Math.abs(verticalOffset) / (float) height);
+//                layoutFunctionsBig.setAlpha(1 - (float) Math.abs(verticalOffset) / (float) height);
+//                layoutFunctionsSmall.setVisibility(layoutFunctionsSmall.getAlpha() == 0 ? View.GONE : View.VISIBLE);
+//            }
+//        });
+//        ibPayWayBig.setOnClickListener(mOnClickListener);
+//        ibSearchSmall.setOnClickListener(mOnClickListener);
+//        ibSearchBig.setOnClickListener(mOnClickListener);
+//        ibScanQRCodeSmall.setOnClickListener(mOnClickListener);
+//        ibScreenShotsSmall.setOnClickListener(mOnClickListener);
+//        ibScanQRCodeBig.setOnClickListener(mOnClickListener);
+//        ibScreenShotsBig.setOnClickListener(mOnClickListener);
+//        ibPayWaySmall.setOnClickListener(mOnClickListener);
     }
 
     @Override
     public void initData() {
-        WanAndroidApi.getInstance().getHotSearchWords(new BaseObserver<List<HotSearchWordsBean>>() {
-            @Override
-            public void onNext(List<HotSearchWordsBean> value) {
-                flHotSearchWords.removeAllViews();
-                for (int i = 0; i < value.size(); i++) {
-                    final TextView mTextView = new TextView(getContext());
-                    ViewGroup.MarginLayoutParams mMarginLayoutParams = new ViewGroup.MarginLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    mMarginLayoutParams.rightMargin = 30;
-                    mMarginLayoutParams.topMargin = 15;
-                    mMarginLayoutParams.bottomMargin = 15;
-                    mTextView.setLayoutParams(mMarginLayoutParams);
-                    mTextView.setTextSize(20);
-                    mTextView.setTextColor(colors[new Random().nextInt(colors.length)]);
-                    mTextView.setText(value.get(i).getName());
-                    mTextView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            startActivity(SearchActivity.getJumpIntent(getContext(), mTextView.getText().toString()));
-                        }
-                    });
-                    flHotSearchWords.addView(mTextView);
-                }
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-        });
-        WanAndroidApi.getInstance().getCommonWebSite(new BaseObserver<List<CommonWebSiteBean>>() {
-
-            @Override
-            public void onNext(List<CommonWebSiteBean> value) {
-                flCommonWebSites.removeAllViews();
-                for (int i = 0; i < value.size(); i++) {
-                    TextView mTextView = new TextView(getContext());
-                    ViewGroup.MarginLayoutParams mMarginLayoutParams = new ViewGroup.MarginLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    mMarginLayoutParams.rightMargin = 15;
-                    mMarginLayoutParams.topMargin = 10;
-                    mMarginLayoutParams.bottomMargin = 10;
-                    mTextView.setLayoutParams(mMarginLayoutParams);
-                    mTextView.setTextSize(20);
-                    mTextView.setTextColor(colors[new Random().nextInt(colors.length)]);
-                    mTextView.setText(value.get(i).getName());
-                    flCommonWebSites.addView(mTextView);
-                }
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-        });
-        WanAndroidApi.getInstance().getKnowledgeSystem(new BaseObserver<List<KnowledgeSystemBean>>() {
-
-            @Override
-            public void onNext(List<KnowledgeSystemBean> value) {
-                mRvKnowledgeSystemAdapter.setDataList(value);
-                refreshLayout.stopRefreshAndLoadMore();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                refreshLayout.stopRefreshAndLoadMore();
-            }
-
-        });
+//        WanAndroidApi.getInstance().getHotSearchWords(new BaseObserver<List<HotSearchWordsBean>>() {
+//            @Override
+//            public void onNext(List<HotSearchWordsBean> value) {
+//                flHotSearchWords.removeAllViews();
+//                for (int i = 0; i < value.size(); i++) {
+//                    final TextView mTextView = new TextView(getContext());
+//                    ViewGroup.MarginLayoutParams mMarginLayoutParams = new ViewGroup.MarginLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//                    mMarginLayoutParams.rightMargin = 30;
+//                    mMarginLayoutParams.topMargin = 15;
+//                    mMarginLayoutParams.bottomMargin = 15;
+//                    mTextView.setLayoutParams(mMarginLayoutParams);
+//                    mTextView.setTextSize(20);
+//                    mTextView.setTextColor(colors[new Random().nextInt(colors.length)]);
+//                    mTextView.setText(value.get(i).getName());
+//                    mTextView.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            startActivity(SearchActivity.getJumpIntent(getContext(), mTextView.getText().toString()));
+//                        }
+//                    });
+//                    flHotSearchWords.addView(mTextView);
+//                }
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//
+//            }
+//        });
+//        WanAndroidApi.getInstance().getCommonWebSite(new BaseObserver<List<CommonWebSiteBean>>() {
+//
+//            @Override
+//            public void onNext(List<CommonWebSiteBean> value) {
+//                flCommonWebSites.removeAllViews();
+//                for (int i = 0; i < value.size(); i++) {
+//                    TextView mTextView = new TextView(getContext());
+//                    ViewGroup.MarginLayoutParams mMarginLayoutParams = new ViewGroup.MarginLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//                    mMarginLayoutParams.rightMargin = 15;
+//                    mMarginLayoutParams.topMargin = 10;
+//                    mMarginLayoutParams.bottomMargin = 10;
+//                    mTextView.setLayoutParams(mMarginLayoutParams);
+//                    mTextView.setTextSize(20);
+//                    mTextView.setTextColor(colors[new Random().nextInt(colors.length)]);
+//                    mTextView.setText(value.get(i).getName());
+//                    flCommonWebSites.addView(mTextView);
+//                }
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//
+//            }
+//        });
+//        WanAndroidApi.getInstance().getKnowledgeSystem(new BaseObserver<List<KnowledgeSystemBean>>() {
+//
+//            @Override
+//            public void onNext(List<KnowledgeSystemBean> value) {
+//                mRvKnowledgeSystemAdapter.setDataList(value);
+//                refreshLayout.stopRefreshAndLoadMore();
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//                refreshLayout.stopRefreshAndLoadMore();
+//            }
+//
+//        });
     }
 
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {

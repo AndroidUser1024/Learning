@@ -8,7 +8,6 @@ import android.widget.ImageButton;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.MyBaseFragment;
 import com.qinshou.qinshoubox.me.ui.activity.ContactListActivity;
-import com.qinshou.qinshoubox.me.ui.activity.MagicTowerActivity;
 import com.qinshou.qinshoubox.me.ui.activity.PeiQiActivity;
 import com.qinshou.qinshoubox.me.ui.activity.PuzzleActivity;
 import com.qinshou.qinshoubox.me.ui.activity.ChartActivity;
@@ -39,53 +38,45 @@ public class MeFragment extends MyBaseFragment {
     private Button mBtnQRCodeScan;
     private Button mBtnPeiQi;
 
-    @Override
-    public boolean getIsImmersive() {
-        return true;
-    }
 
     @Override
     public int getLayoutId() {
         return R.layout.fragment_me;
     }
 
-    @Override
-    public void setPresenter() {
-
-    }
 
     @Override
     public void initView() {
-        ibLoginByUsernamePassword = findViewByID(R.id.ib_login_by_username_password);
-        ibLoginByQq = findViewByID(R.id.ib_login_by_qq);
-        ibLoginByWechat = findViewByID(R.id.ib_login_by_wechat);
-        ibLoginByWeibo = findViewByID(R.id.ib_login_by_weibo);
-        btnPuzzle = findViewByID(R.id.btn_puzzle);
-        btnTurningRobot = findViewByID(R.id.btn_turning_robot);
-        btnMagicTower = findViewByID(R.id.btn_magic_tower);
-        btnContactList = findViewByID(R.id.btn_contact_list);
-        btnWeather = findViewByID(R.id.btn_weather);
-        mBtnWheelOfFortune = findViewByID(R.id.btn_wheel_of_fortune);
-        mBtnChart = findViewByID(R.id.btn_chart);
-        mBtnQRCodeScan = findViewByID(R.id.btn_qr_code_scan);
-        mBtnPeiQi = findViewByID(R.id.btn_pei_qi);
+//        ibLoginByUsernamePassword = findViewByID(R.id.ib_login_by_username_password);
+//        ibLoginByQq = findViewByID(R.id.ib_login_by_qq);
+//        ibLoginByWechat = findViewByID(R.id.ib_login_by_wechat);
+//        ibLoginByWeibo = findViewByID(R.id.ib_login_by_weibo);
+//        btnPuzzle = findViewByID(R.id.btn_puzzle);
+//        btnTurningRobot = findViewByID(R.id.btn_turning_robot);
+//        btnMagicTower = findViewByID(R.id.btn_magic_tower);
+//        btnContactList = findViewByID(R.id.btn_contact_list);
+//        btnWeather = findViewByID(R.id.btn_weather);
+//        mBtnWheelOfFortune = findViewByID(R.id.btn_wheel_of_fortune);
+//        mBtnChart = findViewByID(R.id.btn_chart);
+//        mBtnQRCodeScan = findViewByID(R.id.btn_qr_code_scan);
+//        mBtnPeiQi = findViewByID(R.id.btn_pei_qi);
     }
 
     @Override
     public void setListener() {
-        ibLoginByUsernamePassword.setOnClickListener(mOnClickListener);
-        ibLoginByQq.setOnClickListener(mOnClickListener);
-        ibLoginByWechat.setOnClickListener(mOnClickListener);
-        ibLoginByWeibo.setOnClickListener(mOnClickListener);
-        btnTurningRobot.setOnClickListener(mOnClickListener);
-        btnMagicTower.setOnClickListener(mOnClickListener);
-        btnPuzzle.setOnClickListener(mOnClickListener);
-        btnContactList.setOnClickListener(mOnClickListener);
-        btnWeather.setOnClickListener(mOnClickListener);
-        mBtnWheelOfFortune.setOnClickListener(mOnClickListener);
-        mBtnChart.setOnClickListener(mOnClickListener);
-        mBtnQRCodeScan.setOnClickListener(mOnClickListener);
-        mBtnPeiQi.setOnClickListener(mOnClickListener);
+//        ibLoginByUsernamePassword.setOnClickListener(mOnClickListener);
+//        ibLoginByQq.setOnClickListener(mOnClickListener);
+//        ibLoginByWechat.setOnClickListener(mOnClickListener);
+//        ibLoginByWeibo.setOnClickListener(mOnClickListener);
+//        btnTurningRobot.setOnClickListener(mOnClickListener);
+//        btnMagicTower.setOnClickListener(mOnClickListener);
+//        btnPuzzle.setOnClickListener(mOnClickListener);
+//        btnContactList.setOnClickListener(mOnClickListener);
+//        btnWeather.setOnClickListener(mOnClickListener);
+//        mBtnWheelOfFortune.setOnClickListener(mOnClickListener);
+//        mBtnChart.setOnClickListener(mOnClickListener);
+//        mBtnQRCodeScan.setOnClickListener(mOnClickListener);
+//        mBtnPeiQi.setOnClickListener(mOnClickListener);
     }
 
     @Override
@@ -129,7 +120,7 @@ public class MeFragment extends MyBaseFragment {
                     startActivity(new Intent(getContext(), TurningRobotActivity.class));
                     break;
                 case R.id.btn_magic_tower:
-                    startActivity(new Intent(getContext(), MagicTowerActivity.class));
+//                    startActivity(new Intent(getContext(), MagicTowerActivity.class));
                     break;
                 case R.id.btn_contact_list:
                     startActivity(new Intent(getContext(), ContactListActivity.class));

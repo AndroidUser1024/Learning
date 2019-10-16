@@ -10,5 +10,5 @@ import java.util.List;
 public interface IOnRequestPermissionResultCallBack {
     void onSuccess();
 
-    void onError(List<String> deniedPermissionList);
+    void onFailure(List<String> deniedPermissionList);
 }

@@ -1,22 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- 标题栏 -->
-    <declare-styleable name="TitleBar">
-        <attr name="titleText" format="string" />
-        <attr name="titleTextSize" format="dimension" />
-        <attr name="titleTextColor" format="color" />
-        <attr name="leftText" format="string" />
-        <attr name="leftTextSize" format="dimension" />
-        <attr name="leftTextColor" format="color" />
-        <attr name="leftIcon" format="reference" />
-        <attr name="leftMarginLeft" format="dimension" />
-        <attr name="rightText" format="string" />
-        <attr name="rightTextSize" format="dimension" />
-        <attr name="rightTextColor" format="color" />
-        <attr name="rightIcon" format="reference" />
-        <attr name="rightMarginRight" format="dimension" />
-    </declare-styleable>
-
     <!-- 倒计时控件 -->
     <declare-styleable name="CountDownView">
         <attr name="duration" format="float" />
@@ -71,21 +54,47 @@
         <attr name="sidebar_wave" format="boolean" />
         <attr name="sidebar_show_select_index_item_window" format="boolean" />
     </declare-styleable>
+    <!-- TitleBar -->
+    <declare-styleable name="TitleBar">
+        <attr name="paddingLeft" format="dimension|reference" />
+        <attr name="paddingTop" format="dimension|reference" />
+        <attr name="paddingRight" format="dimension|reference" />
+        <attr name="paddingBottom" format="dimension|reference" />
 
-    <!-- 可以定制圆角的布局 -->
-    <declare-styleable name="RCRelativeLayout">
-        <!-- 圆形 -->
-        <attr name="round_as_circle" format="boolean" />
-        <!-- 全部圆角半径 -->
-        <attr name="round_corner" format="integer|dimension" />
-        <!-- 针对各个角的半径 -->
-        <attr name="round_corner_top_left" format="integer|dimension" />
-        <attr name="round_corner_top_right" format="integer|dimension" />
-        <attr name="round_corner_bottom_left" format="integer|dimension" />
-        <attr name="round_corner_bottom_right" format="integer|dimension" />
-        <!-- 描边颜色 -->
-        <attr name="stroke_color" format="color|reference" />
-        <!-- 描边半径 -->
-        <attr name="stroke_width" format="integer|dimension" />
+        <attr name="titleText" format="string|reference" />
+        <attr name="titleTextSize" format="dimension|reference" />
+        <attr name="titleTextColor" format="color|reference" />
+
+        <attr name="leftText" format="string|reference" />
+        <attr name="leftTextSize" format="dimension|reference" />
+        <attr name="leftTextColor" format="color|reference" />
+        <attr name="leftTextPadding" format="dimension|reference" />
+        <attr name="leftTextPaddingLeft" format="dimension|reference" />
+        <attr name="leftTextPaddingTop" format="dimension|reference" />
+        <attr name="leftTextPaddingRight" format="dimension|reference" />
+        <attr name="leftTextPaddingBottom" format="dimension|reference" />
+
+        <attr name="leftImageResource" format="color|reference" />
+        <attr name="leftImagePadding" format="dimension|reference" />
+        <attr name="leftImagePaddingLeft" format="dimension|reference" />
+        <attr name="leftImagePaddingTop" format="dimension|reference" />
+        <attr name="leftImagePaddingRight" format="dimension|reference" />
+        <attr name="leftImagePaddingBottom" format="dimension|reference" />
+
+        <attr name="rightText" format="string|reference" />
+        <attr name="rightTextSize" format="dimension|reference" />
+        <attr name="rightTextColor" format="color|reference" />
+        <attr name="rightTextPadding" format="dimension|reference" />
+        <attr name="rightTextPaddingLeft" format="dimension|reference" />
+        <attr name="rightTextPaddingTop" format="dimension|reference" />
+        <attr name="rightTextPaddingRight" format="dimension|reference" />
+        <attr name="rightTextPaddingBottom" format="dimension|reference" />
+
+        <attr name="rightImageResource" format="color|reference" />
+        <attr name="rightImagePadding" format="dimension|reference" />
+        <attr name="rightImagePaddingLeft" format="dimension|reference" />
+        <attr name="rightImagePaddingTop" format="dimension|reference" />
+        <attr name="rightImagePaddingRight" format="dimension|reference" />
+        <attr name="rightImagePaddingBottom" format="dimension|reference" />
     </declare-styleable>
 </resources>

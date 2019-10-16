@@ -1,22 +1,16 @@
 package com.qinshou.qinshoubox.me.ui.activity;
 
-import android.Manifest;
 import android.database.Cursor;
 import android.provider.ContactsContract;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 
-import com.qinshou.commonmodule.decoration.StickyDecoration;
-import com.qinshou.commonmodule.util.ShowLogUtil;
-import com.qinshou.commonmodule.util.permissionutil.IOnRequestPermissionResultCallBack;
-import com.qinshou.commonmodule.util.permissionutil.PermissionUtil;
+import com.qinshou.commonmodule.rcvdecoration.StickyDecoration;
 import com.qinshou.commonmodule.widget.WaveSideBar;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.MyBaseActivity;
 import com.qinshou.qinshoubox.me.adapter.RvContactAdapter;
 import com.qinshou.qinshoubox.me.bean.ContactBean;
-import com.qinshou.qinshoubox.me.comparator.ContactComparator;
 import com.qinshou.qinshoubox.me.comparator.PinyinComparator;
 import com.qinshou.qinshoubox.me.util.PinyinUtil;
 
@@ -41,17 +35,12 @@ public class ContactListActivity extends MyBaseActivity {
     }
 
     @Override
-    public void setPresenter() {
-
-    }
-
-    @Override
     public void initView() {
-        rvContact = findViewByID(R.id.rv_contact);
-        rvContact.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        mRvContactAdapter = new RvContactAdapter(getContext());
-        rvContact.setAdapter(mRvContactAdapter);
-        waveSideBar = findViewByID(R.id.wave_side_bar);
+//        rvContact = findViewByID(R.id.rv_contact);
+//        rvContact.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+//        mRvContactAdapter = new RvContactAdapter(getContext());
+//        rvContact.setAdapter(mRvContactAdapter);
+//        waveSideBar = findViewByID(R.id.wave_side_bar);
     }
 
     @Override
@@ -61,26 +50,26 @@ public class ContactListActivity extends MyBaseActivity {
 
     @Override
     public void initData() {
-        PermissionUtil.requestPermission(getActivity(), Manifest.permission.READ_CONTACTS, new IOnRequestPermissionResultCallBack() {
-            @Override
-            public void onSuccess() {
-                List<ContactBean> contactBeanList = getContactList();
-                //对联系人集合排序
-                Collections.sort(contactBeanList, new ContactComparator());
-                mRvContactAdapter.setDataList(contactBeanList);
-                //添加粘性头部
-                MyStickyHeadDecoration myStickyHeadDecoration = new MyStickyHeadDecoration(contactBeanList);
-                rvContact.addItemDecoration(myStickyHeadDecoration);
-                //为侧边索引设置数据
-                waveSideBar.setIndexItems(getIndexList(contactBeanList));
-                waveSideBar.setOnSelectIndexItemListener(new WaveSideBarListener(contactBeanList));
-            }
-
-            @Override
-            public void onError(List<String> deniedPermissionList) {
-                ShowLogUtil.logi("没有获取联系人权限");
-            }
-        });
+//        PermissionUtil.requestPermission(getActivity(), Manifest.permission.READ_CONTACTS, new IOnRequestPermissionResultCallBack() {
+//            @Override
+//            public void onSuccess() {
+//                List<ContactBean> contactBeanList = getContactList();
+//                //对联系人集合排序
+//                Collections.sort(contactBeanList, new ContactComparator());
+//                mRvContactAdapter.setDataList(contactBeanList);
+//                //添加粘性头部
+//                MyStickyHeadDecoration myStickyHeadDecoration = new MyStickyHeadDecoration(contactBeanList);
+//                rvContact.addItemDecoration(myStickyHeadDecoration);
+//                //为侧边索引设置数据
+//                waveSideBar.setIndexItems(getIndexList(contactBeanList));
+//                waveSideBar.setOnSelectIndexItemListener(new WaveSideBarListener(contactBeanList));
+//            }
+//
+//            @Override
+//            public void onError(List<String> deniedPermissionList) {
+//                ShowLogUtil.logi("没有获取联系人权限");
+//            }
+//        });
     }
 
     /**

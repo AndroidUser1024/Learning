@@ -27,81 +27,67 @@ public class WebActivity extends MyBaseActivity {
     private ProgressBar pbLoadProgress;
     private RefreshLayout refreshLayout;
 
-    @Override
-    public boolean getIsImmersive() {
-        return true;
-    }
-
-    @Override
-    public boolean getStatusBarIsDark() {
-        return true;
-    }
 
     @Override
     public int getLayoutId() {
         return R.layout.activity_web;
     }
 
-    @Override
-    public void setPresenter() {
-
-    }
-
     @SuppressLint({"SetJavaScriptEnabled", "JavascriptInterface", "AddJavascriptInterface"})
     @Override
     public void initView() {
-        final RelativeLayout rootView = findViewByID(R.id.root_view);
-        rootView.post(new Runnable() {
-            @Override
-            public void run() {
-                StatusBarUtil.appendStatusBarPadding(rootView, rootView.getMeasuredHeight());
-            }
-        });
-        refreshLayout = findViewByID(R.id.refresh_layout);
-        refreshLayout.canLoadMore(false);
-        refreshLayout.setRefreshHeader(new ClassicsHeader(getContext()));
-
-        webView = findViewByID(R.id.web_view);
-        pbLoadProgress = findViewByID(R.id.pb_load_progress);
-        WebSettings webSettings = webView.getSettings();
-        //设置自适应屏幕，两者合用
-        webSettings.setUseWideViewPort(true); //将图片调整到适合webview的大小
-        webSettings.setLoadWithOverviewMode(true); // 缩放至屏幕的大小
-
-        //缩放操作
-        webSettings.setSupportZoom(true); //支持缩放，默认为true。是下面那个的前提。
-        webSettings.setBuiltInZoomControls(true); //设置内置的缩放控件。若为false，则该WebView不可缩放
-        webSettings.setDisplayZoomControls(false); //隐藏原生的缩放控件
-
-        webSettings.setLoadsImagesAutomatically(true); //支持自动加载图片
-
-        webSettings.setJavaScriptEnabled(true);    //如果访问的页面中要与Javascript交互，则 WebView 必须设置支持 JavaScript
-        //添加 JS 脚本,使能监听网页中的图片点击事件
-        webView.addJavascriptInterface(new JsCallJavaObj() {
-            @Override
-            @JavascriptInterface
-            public void showBigImage(String url) {
-                ArrayList<String> imageList = new ArrayList<>();
-                imageList.add(url);
-                startActivity(PhotoViewActivity.getJumpIntent(getContext(), imageList));
-            }
-        }, "jsCallJavaObj");
-        webView.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-                setWebImageClick(view);
-                refreshLayout.stopRefreshAndLoadMore();
-            }
-        });
-        webView.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public void onProgressChanged(WebView view, int newProgress) {
-                super.onProgressChanged(view, newProgress);
-                pbLoadProgress.setVisibility(newProgress == 100 ? View.GONE : View.VISIBLE);
-                pbLoadProgress.setProgress(newProgress);
-            }
-        });
+//        final RelativeLayout rootView = findViewByID(R.id.root_view);
+//        rootView.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                StatusBarUtil.appendStatusBarPadding(rootView, rootView.getMeasuredHeight());
+//            }
+//        });
+//        refreshLayout = findViewByID(R.id.refresh_layout);
+//        refreshLayout.canLoadMore(false);
+//        refreshLayout.setRefreshHeader(new ClassicsHeader(getContext()));
+//
+//        webView = findViewByID(R.id.web_view);
+//        pbLoadProgress = findViewByID(R.id.pb_load_progress);
+//        WebSettings webSettings = webView.getSettings();
+//        //设置自适应屏幕，两者合用
+//        webSettings.setUseWideViewPort(true); //将图片调整到适合webview的大小
+//        webSettings.setLoadWithOverviewMode(true); // 缩放至屏幕的大小
+//
+//        //缩放操作
+//        webSettings.setSupportZoom(true); //支持缩放，默认为true。是下面那个的前提。
+//        webSettings.setBuiltInZoomControls(true); //设置内置的缩放控件。若为false，则该WebView不可缩放
+//        webSettings.setDisplayZoomControls(false); //隐藏原生的缩放控件
+//
+//        webSettings.setLoadsImagesAutomatically(true); //支持自动加载图片
+//
+//        webSettings.setJavaScriptEnabled(true);    //如果访问的页面中要与Javascript交互，则 WebView 必须设置支持 JavaScript
+//        //添加 JS 脚本,使能监听网页中的图片点击事件
+//        webView.addJavascriptInterface(new JsCallJavaObj() {
+//            @Override
+//            @JavascriptInterface
+//            public void showBigImage(String url) {
+//                ArrayList<String> imageList = new ArrayList<>();
+//                imageList.add(url);
+//                startActivity(PhotoViewActivity.getJumpIntent(getContext(), imageList));
+//            }
+//        }, "jsCallJavaObj");
+//        webView.setWebViewClient(new WebViewClient() {
+//            @Override
+//            public void onPageFinished(WebView view, String url) {
+//                super.onPageFinished(view, url);
+//                setWebImageClick(view);
+//                refreshLayout.stopRefreshAndLoadMore();
+//            }
+//        });
+//        webView.setWebChromeClient(new WebChromeClient() {
+//            @Override
+//            public void onProgressChanged(WebView view, int newProgress) {
+//                super.onProgressChanged(view, newProgress);
+//                pbLoadProgress.setVisibility(newProgress == 100 ? View.GONE : View.VISIBLE);
+//                pbLoadProgress.setProgress(newProgress);
+//            }
+//        });
     }
 
     @Override

@@ -32,6 +32,10 @@ public class BaseApplication extends Application {
         instance = this;
     }
 
+    public List<Activity> getActivityList() {
+        return mActivityList;
+    }
+
     public void addActivity(Activity activity) {
         if (!mActivityList.contains(activity)) {
             mActivityList.add(activity);

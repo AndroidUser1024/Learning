@@ -20,11 +20,6 @@ public class TurningRobotActivity extends MyBaseActivity {
     }
 
     @Override
-    public void setPresenter() {
-
-    }
-
-    @Override
     public void initView() {
     }
 

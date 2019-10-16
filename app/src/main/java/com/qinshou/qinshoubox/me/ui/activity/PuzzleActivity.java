@@ -16,8 +16,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.qinshou.commonmodule.adapter.baseholder.BaseViewHolder;
-import com.qinshou.commonmodule.adapter.listener.IOnItemClickListener;
+import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
+import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemClickListener;
 import com.qinshou.commonmodule.util.BackgroundUtil;
 import com.qinshou.commonmodule.util.SnackbarUtil;
 import com.qinshou.commonmodule.util.SystemUtil;
@@ -61,22 +61,18 @@ public class PuzzleActivity extends MyBaseActivity {
     }
 
     @Override
-    public void setPresenter() {
-    }
-
-    @Override
     public void initView() {
-        rvPuzzle = findViewByID(R.id.rv_puzzle);
-        rvPuzzle.setLayoutManager(new GridLayoutManager(getContext(), PuzzleUtil.PUZZLE_TYPE));
-        mRvPuzzleAdapter = new RvPuzzleAdapter(getContext());
-        rvPuzzle.setAdapter(mRvPuzzleAdapter);
-
-        btnChooseImg = findViewByID(R.id.btn_choose_img);
-        btnChooseDifficulty = findViewByID(R.id.btn_choose_difficulty);
-        btnShowOriginImg = findViewByID(R.id.btn_show_origin_img);
-        btnReset = findViewByID(R.id.btn_reset);
-        tvStep = findViewByID(R.id.tv_step);
-        tvTime = findViewByID(R.id.tv_time);
+//        rvPuzzle = findViewByID(R.id.rv_puzzle);
+//        rvPuzzle.setLayoutManager(new GridLayoutManager(getContext(), PuzzleUtil.PUZZLE_TYPE));
+//        mRvPuzzleAdapter = new RvPuzzleAdapter(getContext());
+//        rvPuzzle.setAdapter(mRvPuzzleAdapter);
+//
+//        btnChooseImg = findViewByID(R.id.btn_choose_img);
+//        btnChooseDifficulty = findViewByID(R.id.btn_choose_difficulty);
+//        btnShowOriginImg = findViewByID(R.id.btn_show_origin_img);
+//        btnReset = findViewByID(R.id.btn_reset);
+//        tvStep = findViewByID(R.id.tv_step);
+//        tvTime = findViewByID(R.id.tv_time);
 
         new BackgroundUtil.BackgroundBuilder(btnChooseDifficulty)
 //                .addState(new BackgroundUtil.BackgroundBuilder()
@@ -97,39 +93,39 @@ public class PuzzleActivity extends MyBaseActivity {
         btnChooseDifficulty.setOnClickListener(mOnClickListener);
         btnShowOriginImg.setOnClickListener(mOnClickListener);
         btnReset.setOnClickListener(mOnClickListener);
-        mRvPuzzleAdapter.setOnItemClickListener(new IOnItemClickListener<PuzzleItemBean>() {
-            @Override
-            public void onItemClick(BaseViewHolder holder, PuzzleItemBean puzzleItemBean, int position) {
-                //如果已经成功了，重新加载
-                if (PuzzleUtil.success(mRvPuzzleAdapter.getDataList())) {
-                    loadPuzzle(mPuzzleBitmap);
-                    return;
-                }
-                //如果当前点击的拼图块不能执行交换操作，则 return
-                if (!PuzzleUtil.canSwap(position)) {
-                    return;
-                }
-                //步数 +1
-                step++;
-                tvStep.setText("计步：" + step);
-                //如果计时线程为空，开始计时
-                if (mTimeRunnable == null) {
-                    mTimeRunnable = new TimeRunnable();
-                    mHandler.postDelayed(mTimeRunnable, 1000);
-                }
-                //得到交换后的拼图块数组
-                List<PuzzleItemBean> puzzleItemBeanList = PuzzleUtil.swapPuzzleItemBean(mRvPuzzleAdapter.getDataList(), position);
-                //如果已经拼图成功，则给出提示，停止计时
-                if (PuzzleUtil.success(puzzleItemBeanList)) {
-                    puzzleItemBeanList = PuzzleUtil.addMissingBitmap(puzzleItemBeanList);
-                    SnackbarUtil.showSnackbar(getActivity(), "拼图成功");
-                    mHandler.removeCallbacks(mTimeRunnable);
-                    mTimeRunnable = null;
-                }
-                //刷新拼图块列表
-                mRvPuzzleAdapter.setDataList(puzzleItemBeanList);
-            }
-        });
+//        mRvPuzzleAdapter.setOnItemClickListener(new IOnItemClickListener<PuzzleItemBean>() {
+//            @Override
+//            public void onItemClick(BaseViewHolder holder, PuzzleItemBean puzzleItemBean, int position) {
+//                //如果已经成功了，重新加载
+//                if (PuzzleUtil.success(mRvPuzzleAdapter.getDataList())) {
+//                    loadPuzzle(mPuzzleBitmap);
+//                    return;
+//                }
+//                //如果当前点击的拼图块不能执行交换操作，则 return
+//                if (!PuzzleUtil.canSwap(position)) {
+//                    return;
+//                }
+//                //步数 +1
+//                step++;
+//                tvStep.setText("计步：" + step);
+//                //如果计时线程为空，开始计时
+//                if (mTimeRunnable == null) {
+//                    mTimeRunnable = new TimeRunnable();
+//                    mHandler.postDelayed(mTimeRunnable, 1000);
+//                }
+//                //得到交换后的拼图块数组
+//                List<PuzzleItemBean> puzzleItemBeanList = PuzzleUtil.swapPuzzleItemBean(mRvPuzzleAdapter.getDataList(), position);
+//                //如果已经拼图成功，则给出提示，停止计时
+//                if (PuzzleUtil.success(puzzleItemBeanList)) {
+//                    puzzleItemBeanList = PuzzleUtil.addMissingBitmap(puzzleItemBeanList);
+//                    SnackbarUtil.showSnackbar(getActivity(), "拼图成功");
+//                    mHandler.removeCallbacks(mTimeRunnable);
+//                    mTimeRunnable = null;
+//                }
+//                //刷新拼图块列表
+//                mRvPuzzleAdapter.setDataList(puzzleItemBeanList);
+//            }
+//        });
     }
 
     @Override
@@ -150,11 +146,11 @@ public class PuzzleActivity extends MyBaseActivity {
         //根据拼图图片获取拼图块数组
         List<PuzzleItemBean> puzzleItemBeanList = PuzzleUtil.getPuzzleItemBeanList(mPuzzleBitmap);
         //如果拼图块数组有解，则设置拼图块列表，如果没有解则重新创建
-        if (PuzzleUtil.canResolve(puzzleItemBeanList)) {
-            mRvPuzzleAdapter.setDataList(puzzleItemBeanList);
-        } else {
-            loadPuzzle(mPuzzleBitmap);
-        }
+//        if (PuzzleUtil.canResolve(puzzleItemBeanList)) {
+//            mRvPuzzleAdapter.setDataList(puzzleItemBeanList);
+//        } else {
+//            loadPuzzle(mPuzzleBitmap);
+//        }
         //重置所用步数和所用时间
         tvStep.setText("计步：0");
         tvTime.setText("计时：0m0s");
@@ -190,29 +186,29 @@ public class PuzzleActivity extends MyBaseActivity {
      * return
      */
     private void chooseImg() {
-        PermissionUtil.requestPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE, new IOnRequestPermissionResultCallBack() {
-            @Override
-            public void onSuccess() {
-                ImageChooseUtil.chooseImage(getActivity(), new OnImageChooseResultCallback() {
-                    @Override
-                    public void onSuccess(ArrayList<String> resultsPathList) {
-
-                    }
-
-                    @Override
-                    public void onSuccess(List<Bitmap> results) {
-                        if (results != null && results.size() > 0) {
-                            loadPuzzle(results.get(0));
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onError(List<String> deniedPermissionList) {
-
-            }
-        });
+//        PermissionUtil.requestPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE, new IOnRequestPermissionResultCallBack() {
+//            @Override
+//            public void onSuccess() {
+//                ImageChooseUtil.chooseImage(getActivity(), new OnImageChooseResultCallback() {
+//                    @Override
+//                    public void onSuccess(ArrayList<String> resultsPathList) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onSuccess(List<Bitmap> results) {
+//                        if (results != null && results.size() > 0) {
+//                            loadPuzzle(results.get(0));
+//                        }
+//                    }
+//                });
+//            }
+//
+//            @Override
+//            public void onError(List<String> deniedPermissionList) {
+//
+//            }
+//        });
     }
 
     /**

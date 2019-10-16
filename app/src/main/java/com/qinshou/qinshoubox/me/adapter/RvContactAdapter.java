@@ -2,8 +2,8 @@ package com.qinshou.qinshoubox.me.adapter;
 
 import android.content.Context;
 
-import com.qinshou.commonmodule.adapter.RcvSingleBaseAdapter;
-import com.qinshou.commonmodule.adapter.baseholder.BaseViewHolder;
+import com.qinshou.commonmodule.rcvbaseadapter.RcvBaseAdapter;
+import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.bean.ContactBean;
 
@@ -13,7 +13,7 @@ import com.qinshou.qinshoubox.me.bean.ContactBean;
  * Created on 2018/8/6
  */
 
-public class RvContactAdapter extends RcvSingleBaseAdapter<ContactBean> {
+public class RvContactAdapter extends RcvBaseAdapter<ContactBean> {
     public RvContactAdapter(Context context) {
         super(context, R.layout.item_rv_contact);
     }

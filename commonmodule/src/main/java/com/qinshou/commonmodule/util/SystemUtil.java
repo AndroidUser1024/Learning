@@ -283,8 +283,8 @@ public class SystemUtil {
     public static String getDeviceId(FragmentActivity activity) {
         if (PermissionChecker.checkSelfPermission(activity, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_DENIED
                 || PermissionChecker.checkSelfPermission(activity, Manifest.permission.ACCESS_WIFI_STATE) == PackageManager.PERMISSION_DENIED) {
-            PermissionUtil.requestPermission(activity, Manifest.permission.READ_PHONE_STATE, null);
-            PermissionUtil.requestPermission(activity, Manifest.permission.ACCESS_WIFI_STATE, null);
+            PermissionUtil.requestPermission(activity.getSupportFragmentManager(), null, Manifest.permission.READ_PHONE_STATE);
+            PermissionUtil.requestPermission(activity.getSupportFragmentManager(), null, Manifest.permission.ACCESS_WIFI_STATE);
             return null;
         }
         try {
@@ -345,8 +345,8 @@ public class SystemUtil {
     public static String getIPAddress(FragmentActivity activity) {
         if (PermissionChecker.checkSelfPermission(activity, Manifest.permission.ACCESS_NETWORK_STATE) == PackageManager.PERMISSION_DENIED
                 || PermissionChecker.checkSelfPermission(activity, Manifest.permission.ACCESS_WIFI_STATE) == PackageManager.PERMISSION_DENIED) {
-            PermissionUtil.requestPermission(activity, Manifest.permission.ACCESS_NETWORK_STATE, null);
-            PermissionUtil.requestPermission(activity, Manifest.permission.ACCESS_WIFI_STATE, null);
+            PermissionUtil.requestPermission(activity.getSupportFragmentManager(), null, Manifest.permission.ACCESS_NETWORK_STATE);
+            PermissionUtil.requestPermission(activity.getSupportFragmentManager(), null, Manifest.permission.ACCESS_WIFI_STATE);
             return null;
         }
         ConnectivityManager connectivityManager = ((ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE));

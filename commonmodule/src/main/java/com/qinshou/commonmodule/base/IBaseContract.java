@@ -6,6 +6,16 @@ package com.qinshou.commonmodule.base;
  * Date: 2019/4/4 8:55
  * <p>
  * 示例
+ * public interface ITestContract extends IBaseContract {
+ * interface IView extends IBaseView {
+ * }
+ * <p>
+ * interface IModel extends IBaseModel {
+ * }
+ * <p>
+ * interface IPresenter {
+ * }
+ * }
  */
 public interface IBaseContract {
 

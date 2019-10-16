@@ -1,6 +1,5 @@
 package com.qinshou.commonmodule.util.permissionutil;
 
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
 /**
@@ -9,12 +8,10 @@ import android.support.v4.app.FragmentManager;
  * Created on 2018/4/18
  */
 public class PermissionUtil {
-    public static void requestPermission(FragmentActivity activity, String permission, IOnRequestPermissionResultCallBack IOnRequestPermissionResultCallBack) {
-        requestPermission(activity, new String[]{permission}, IOnRequestPermissionResultCallBack);
-    }
-
-    public static void requestPermission(FragmentActivity activity, String[] permissionArray, IOnRequestPermissionResultCallBack IOnRequestPermissionResultCallBack) {
-        FragmentManager fragmentManager = activity.getSupportFragmentManager();
+    public static void requestPermission(FragmentManager fragmentManager, IOnRequestPermissionResultCallBack onRequestPermissionResultCallBack, String... permissions) {
+        if (permissions == null || permissions.length == 0) {
+            return;
+        }
         RequestPermissionFragment requestPermissionFragment = (RequestPermissionFragment) fragmentManager.findFragmentByTag(RequestPermissionFragment.class.getSimpleName());
         if (requestPermissionFragment == null) {
             requestPermissionFragment = new RequestPermissionFragment();
@@ -23,6 +20,6 @@ public class PermissionUtil {
                     .commitAllowingStateLoss();
             fragmentManager.executePendingTransactions();
         }
-        requestPermissionFragment.requestPermission(permissionArray, IOnRequestPermissionResultCallBack);
+        requestPermissionFragment.requestPermission(onRequestPermissionResultCallBack, permissions);
     }
 }

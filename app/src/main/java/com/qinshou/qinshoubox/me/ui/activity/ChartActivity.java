@@ -40,11 +40,6 @@ public class ChartActivity extends MyBaseActivity {
     }
 
     @Override
-    public void setPresenter() {
-
-    }
-
-    @Override
     public void initView() {
         mColumnChartView = findViewById(R.id.column_chart_view);
         mLineChartView = findViewById(R.id.line_chart_view);

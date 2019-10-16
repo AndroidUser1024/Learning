@@ -25,25 +25,25 @@ public class RequestPermissionFragment extends Fragment {
         setRetainInstance(true);
     }
 
-    public void requestPermission(String[] permissionArray, IOnRequestPermissionResultCallBack IOnRequestPermissionResultCallBack) {
-        this.mCallBack = IOnRequestPermissionResultCallBack;
+    public void requestPermission(IOnRequestPermissionResultCallBack onRequestPermissionResultCallBack, String... permissions) {
+        this.mCallBack = onRequestPermissionResultCallBack;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(permissionArray, REQUEST_CODE);
+            requestPermissions(permissions, REQUEST_CODE);
         } else {
             boolean allPermissionGranted = true;
             List<String> deniedPermissionList = new LinkedList<>();
-            for (int i = 0; i < permissionArray.length; i++) {
-                int grantResult = ContextCompat.checkSelfPermission(getContext(), permissionArray[i]);
+            for (int i = 0; i < permissions.length; i++) {
+                int grantResult = ContextCompat.checkSelfPermission(getContext(), permissions[i]);
                 if (grantResult == PackageManager.PERMISSION_DENIED) {
                     allPermissionGranted = false;
-                    deniedPermissionList.add(permissionArray[i]);
+                    deniedPermissionList.add(permissions[i]);
                 }
             }
             if (mCallBack != null) {
                 if (allPermissionGranted) {
                     mCallBack.onSuccess();
                 } else {
-                    mCallBack.onError(deniedPermissionList);
+                    mCallBack.onFailure(deniedPermissionList);
                 }
             }
         }
@@ -64,7 +64,7 @@ public class RequestPermissionFragment extends Fragment {
             if (allPermissionGranted) {
                 mCallBack.onSuccess();
             } else {
-                mCallBack.onError(deniedPermissionList);
+                mCallBack.onFailure(deniedPermissionList);
             }
         }
     }

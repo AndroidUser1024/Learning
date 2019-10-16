@@ -20,7 +20,7 @@
         android:theme="@style/BaseAppTheme"
         tools:replace="android:name">
         <activity
-            android:name=".LoadActivity"
+            android:name=".login.view.activity.SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -75,10 +75,6 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <!-- 魔塔游戏界面 -->
-        <activity
-            android:name=".me.ui.activity.MagicTowerActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
         <!-- 命运之轮界面 -->
         <activity
             android:name=".me.ui.activity.WheelOfFortuneActivity"

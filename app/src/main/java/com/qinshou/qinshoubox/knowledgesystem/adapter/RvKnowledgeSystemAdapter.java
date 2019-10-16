@@ -5,8 +5,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.qinshou.commonmodule.adapter.RcvSingleBaseAdapter;
-import com.qinshou.commonmodule.adapter.baseholder.BaseViewHolder;
+import com.qinshou.commonmodule.rcvbaseadapter.RcvBaseAdapter;
+import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.commonmodule.widget.FlowLayout;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.knowledgesystem.bean.KnowledgeSystemBean;
@@ -17,7 +17,7 @@ import com.qinshou.qinshoubox.knowledgesystem.bean.KnowledgeSystemBean;
  * Created on 2018/4/6
  */
 
-public class RvKnowledgeSystemAdapter extends RcvSingleBaseAdapter<KnowledgeSystemBean> {
+public class RvKnowledgeSystemAdapter extends RcvBaseAdapter<KnowledgeSystemBean> {
     public RvKnowledgeSystemAdapter(Context context) {
         super(context, R.layout.item_rv_knowledge_system);
     }
@@ -27,12 +27,12 @@ public class RvKnowledgeSystemAdapter extends RcvSingleBaseAdapter<KnowledgeSyst
         holder.setTvText(R.id.tv_level_1_catalog, itemData.getName());
         FlowLayout flowLayout = holder.findViewById(R.id.flow_layout);
         flowLayout.removeAllViews();
-        for (int i =0;i<itemData.getChildren().size();i++) {
+        for (int i = 0; i < itemData.getChildren().size(); i++) {
             //添加二级目录
             TextView mTextView = new TextView(getContext());
             ViewGroup.MarginLayoutParams mMarginLayoutParams = new ViewGroup.MarginLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            mMarginLayoutParams.rightMargin= 15;
-            mMarginLayoutParams.topMargin=10;
+            mMarginLayoutParams.rightMargin = 15;
+            mMarginLayoutParams.topMargin = 10;
             mMarginLayoutParams.bottomMargin = 10;
             mTextView.setLayoutParams(mMarginLayoutParams);
             mTextView.setTextSize(14);

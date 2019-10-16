@@ -19,11 +19,6 @@ public class PeiQiActivity extends MyBaseActivity {
     }
 
     @Override
-    public void setPresenter() {
-
-    }
-
-    @Override
     public void initView() {
 
     }

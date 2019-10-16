@@ -26,20 +26,16 @@ public class SearchActivity extends MyBaseActivity {
         return R.layout.activity_search;
     }
 
-    @Override
-    public void setPresenter() {
-
-    }
 
     @Override
     public void initView() {
-        refreshLayout = findViewByID(R.id.refresh_layout);
-        RecyclerView rvArticle = findViewByID(R.id.rv_article);
-        rvArticle.setNestedScrollingEnabled(false);
-        rvArticle.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        mRvArticleAdapter = new RvArticleAdapter(this);
-        rvArticle.setAdapter(mRvArticleAdapter);
-        rvArticle.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+//        refreshLayout = findViewByID(R.id.refresh_layout);
+//        RecyclerView rvArticle = findViewByID(R.id.rv_article);
+//        rvArticle.setNestedScrollingEnabled(false);
+//        rvArticle.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+//        mRvArticleAdapter = new RvArticleAdapter(this);
+//        rvArticle.setAdapter(mRvArticleAdapter);
+//        rvArticle.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
     }
 
     @Override
