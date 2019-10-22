@@ -142,7 +142,7 @@ public class HomepageFragment extends MyBaseFragment<HomepagePresenter> implemen
             final ImageView imageView = new ImageView(getContext());
             imageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            ImageLoadUtil.getInstance().loadImage(getContext(), wallpaperBeanList.get(i).getPath(), imageView);
+            ImageLoadUtil.SINGLETON.loadImage(getContext(), wallpaperBeanList.get(i).getPath(), imageView);
             imageList.add(wallpaperBeanList.get(i).getPath());
             final int finalI = i;
             imageView.setOnClickListener(new View.OnClickListener() {

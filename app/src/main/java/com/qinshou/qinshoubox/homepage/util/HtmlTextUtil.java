@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.qinshou.imagemodule.callback.IOnGetImageCallback;
+import com.qinshou.imagemodule.util.BitmapUtil;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 
 /**
@@ -84,21 +85,22 @@ public class HtmlTextUtil {
 
         @Override
         public Drawable getDrawable(String source) {
-            final LevelListDrawable drawable = new LevelListDrawable();
-            ImageLoadUtil.getInstance().getImage(context, source, new IOnGetImageCallback() {
+            final LevelListDrawable levelListDrawable = new LevelListDrawable();
+            ImageLoadUtil.SINGLETON.getImage(context, source, new IOnGetImageCallback() {
                 @Override
-                public void onSuccess(Bitmap bitmap) {
+                public void onSuccess(Drawable drawable) {
                     //Bitmap 转为 BitmapDrawable
+                    Bitmap bitmap = BitmapUtil.drawable2Bitmap(drawable);
                     BitmapDrawable bitmapDrawable = new BitmapDrawable(bitmap);
-                    drawable.addLevel(1, 1, bitmapDrawable);
+                    levelListDrawable.addLevel(1, 1, bitmapDrawable);
                     //计算 TextView 控件宽与图片的宽的比例
                     double scale = ((double) textView.getWidth() / (double) bitmap.getWidth());
                     //图片宽缩放为控件宽
                     int width = textView.getWidth();
                     //图片高等比例缩放为控件高
                     int height = (int) (bitmap.getHeight() * scale);
-                    drawable.setBounds(0, 0, width, height);
-                    drawable.setLevel(1);
+                    levelListDrawable.setBounds(0, 0, width, height);
+                    levelListDrawable.setLevel(1);
                     CharSequence text = textView.getText();
                     textView.setText(text);
                     //加载完图片后需刷新
@@ -106,11 +108,11 @@ public class HtmlTextUtil {
                 }
 
                 @Override
-                public void onFailure(String error, Bitmap errorBitmap) {
+                public void onFailure(String error, Drawable errorDrawable) {
 
                 }
             });
-            return drawable;
+            return levelListDrawable;
         }
     }
 

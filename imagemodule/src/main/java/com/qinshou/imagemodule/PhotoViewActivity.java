@@ -43,7 +43,7 @@ public class PhotoViewActivity extends AppCompatActivity {
                 //创建 PhotoView
                 PhotoView photoView = new PhotoView(this);
                 //设置图片
-                ImageLoadUtil.getInstance().loadImage(this, mImageList.get(i), photoView);
+                ImageLoadUtil.SINGLETON.loadImage(this, mImageList.get(i), photoView);
                 //开启缩放功能
                 photoView.enable();
                 //设置图片显示类型
