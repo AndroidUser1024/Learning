@@ -7,11 +7,14 @@ import android.provider.Settings;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.AppBarLayout;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.zxing.Result;
 import com.qinshou.commonmodule.util.ScreenShotsUtil;
+import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.widget.FlowLayout;
 import com.qinshou.commonmodule.widget.RefreshLayout;
 import com.qinshou.qinshoubox.R;
@@ -73,7 +76,23 @@ public class KnowledgeSystemFragment extends MyBaseFragment {
 //        refreshLayout = findViewByID(R.id.refresh_layout);
 //        refreshLayout.canLoadMore(false);
 //
-//        flHotSearchWords = findViewByID(R.id.fl_hot_search_words);
+        flHotSearchWords = (FlowLayout) findViewByID(R.id.fl_hot_search_words);
+        flHotSearchWords.removeAllViews();
+        for (int i = 0; i < 20; i++) {
+            //添加二级目录
+            TextView mTextView = new TextView(getContext());
+            ViewGroup.MarginLayoutParams mMarginLayoutParams = new ViewGroup.MarginLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            mMarginLayoutParams.rightMargin = 15;
+            mMarginLayoutParams.topMargin = 10;
+            mMarginLayoutParams.bottomMargin = 10;
+            mTextView.setLayoutParams(mMarginLayoutParams);
+            mTextView.setTextSize(14);
+            mTextView.setText("测试文字" + i);
+            ShowLogUtil.logi("mTextView--->" + mTextView.getMeasuredWidth());
+            ShowLogUtil.logi("mTextView--->" + mTextView.getMeasuredHeight());
+            flHotSearchWords.addView(mTextView);
+        }
+        ShowLogUtil.logi("flHotSearchWords--->" + flHotSearchWords.getMeasuredHeight());
 //        flCommonWebSites = findViewByID(R.id.fl_common_web_sites);
 //        appBarLayout = findViewByID(R.id.app_bar_layout);
 //        layoutFunctionsBig = findViewByID(R.id.layout_functions_big);

@@ -118,7 +118,7 @@ public class OkHttpHelperProcessor extends AbstractProcessor {
                             .addStatement("this.mOkHttpClient = okHttpClient")
                             .build());
             MethodSpec.Builder constructorBuilder = MethodSpec.constructorBuilder()
-                    .addStatement("$T okHttpClientBuilder=new $T()", OkHttpClient.Builder.class, OkHttpClient.Builder.class)
+                    .addStatement("$T okHttpClientBuilder = new $T()", OkHttpClient.Builder.class, OkHttpClient.Builder.class)
                     // 连接超时时间
                     .addStatement("okHttpClientBuilder.connectTimeout($L,$T.$L)", 15 * 1000, TimeUnit.class, TimeUnit.MILLISECONDS)
                     // 读取超时时间

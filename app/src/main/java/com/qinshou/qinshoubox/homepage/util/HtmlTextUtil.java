@@ -16,7 +16,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.qinshou.imagemodule.callback.OnGetImageCallback;
+import com.qinshou.imagemodule.callback.IOnGetImageCallback;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 
 /**
@@ -85,7 +85,7 @@ public class HtmlTextUtil {
         @Override
         public Drawable getDrawable(String source) {
             final LevelListDrawable drawable = new LevelListDrawable();
-            ImageLoadUtil.getInstance().getImage(context, source, new OnGetImageCallback() {
+            ImageLoadUtil.getInstance().getImage(context, source, new IOnGetImageCallback() {
                 @Override
                 public void onSuccess(Bitmap bitmap) {
                     //Bitmap 转为 BitmapDrawable

@@ -1,8 +1,6 @@
 package com.qinshou.qinshoubox.homepage.ui.fragment;
 
-import android.graphics.Bitmap;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -12,18 +10,13 @@ import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.widget.RefreshLayout;
 import com.qinshou.commonmodule.widget.ViewPagerPoints;
 import com.qinshou.imagemodule.PhotoViewActivity;
-import com.qinshou.imagemodule.callback.OnGetImageCallback;
-import com.qinshou.imagemodule.util.BitmapUtil;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
-import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.MyBaseFragment;
 import com.qinshou.qinshoubox.homepage.contract.IHomepageContract;
 import com.qinshou.qinshoubox.homepage.presenter.HomepagePresenter;
 import com.qinshou.qinshoubox.homepage.ui.adapter.RvArticleAdapter;
 import com.qinshou.qinshoubox.homepage.bean.WallpaperBean;
-import com.qinshou.qinshoubox.homepage.transformer.QinshouBoxApiTransformer;
-import com.qinshou.qinshoubox.network.OkHttpHelperForQinshouBoxApi;
 
 import java.util.ArrayList;
 import java.util.List;
