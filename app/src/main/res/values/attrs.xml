@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 仿 iOS 风格的开关 -->
+    <declare-styleable name="SwitchButton">
+        <attr name="colorUnchecked" format="color|reference" />
+        <attr name="colorChecked" format="color|reference" />
+        <attr name="buttonColor" format="color|reference" />
+        <attr name="buttonRadius" format="dimension" />
+        <attr name="buttonMargin" format="dimension" />
+    </declare-styleable>
+</resources>
