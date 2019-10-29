@@ -8,14 +8,26 @@ import android.text.TextUtils;
 import android.view.View;
 
 public abstract class StickyDecoration extends RecyclerView.ItemDecoration {
+    /**
+     * 分隔线高度
+     */
     private int mHeight;
+    /**
+     * 分隔线颜色
+     */
     private int mColor = 0xFF888888;
+    /**
+     * 文字颜色
+     */
     private int mTextColor = 0xFF000000;
+    /**
+     * 文字大小
+     */
     private float mTextSize = 36;
+    /**
+     * 设置文字距离左边的距离
+     */
     private float paddingLeft;
-    private float paddingTop;
-    private float paddingRight;
-    private float paddingBottom;
     private Paint mPaint;
     private Rect mTextBounds;
     private int mSpanCount;
