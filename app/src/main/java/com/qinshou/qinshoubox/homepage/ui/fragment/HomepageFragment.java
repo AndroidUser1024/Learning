@@ -28,9 +28,9 @@ import java.util.List;
  */
 
 public class HomepageFragment extends MyBaseFragment<HomepagePresenter> implements IHomepageContract.IView {
-    private ViewPager vpWallpaper;
+    private ViewPager mVpWallpaper;
     private InfiniteCycleViewPagerAdapter mInfiniteViewPagerAdapter;
-    private ViewPagerPoints viewPagerPoints;
+    private ViewPagerPoints mViewPagerPoints;
 
     private int page = 0;
     private RvArticleAdapter mRvArticleAdapter;
@@ -63,12 +63,13 @@ public class HomepageFragment extends MyBaseFragment<HomepagePresenter> implemen
 
     @Override
     public void initView() {
-        vpWallpaper = findViewByID(R.id.vp_wallpaper);
-        mInfiniteViewPagerAdapter = new InfiniteCycleViewPagerAdapter(getActivity(), vpWallpaper);
-        vpWallpaper.setAdapter(mInfiniteViewPagerAdapter);
-        viewPagerPoints = findViewByID(R.id.view_pager_points);
-        viewPagerPoints.setupWithViewPager(vpWallpaper);
+        mVpWallpaper = findViewByID(R.id.vp_wallpaper);
+        mInfiniteViewPagerAdapter = new InfiniteCycleViewPagerAdapter(getActivity(), mVpWallpaper);
+        mVpWallpaper.setAdapter(mInfiniteViewPagerAdapter);
+        mViewPagerPoints = findViewByID(R.id.view_pager_points);
+        mViewPagerPoints.setupWithViewPager(mVpWallpaper);
 
+        refreshLayout = findViewByID(R.id.refresh_layout);
 //        RecyclerView rvArticle = findViewByID(R.id.rv_article);
 //        //RecyclerView 去除焦点
 //        rvArticle.setFocusableInTouchMode(false);
@@ -78,64 +79,32 @@ public class HomepageFragment extends MyBaseFragment<HomepagePresenter> implemen
 //        rvArticle.setAdapter(mRvArticleAdapter);
 //        rvArticle.setNestedScrollingEnabled(false);
 //
-//        refreshLayout = findViewByID(R.id.refresh_layout);
     }
 
     @Override
     public void setListener() {
-//        refreshLayout.setOnRefreshLoadMoreListener(new RefreshLayout.IOnRefreshLoadMoreListener() {
-//            @Override
-//            public void onRefresh(RefreshLayout refreshLayout) {
-//                page = 0;
+        refreshLayout.setOnRefreshLoadMoreListener(new RefreshLayout.IOnRefreshLoadMoreListener() {
+            @Override
+            public void onRefresh(RefreshLayout refreshLayout) {
+                page = 0;
 //                initData();
-//            }
-//
-//            @Override
-//            public void onLoadMore(RefreshLayout refreshLayout) {
-//                page++;
+            }
+
+            @Override
+            public void onLoadMore(RefreshLayout refreshLayout) {
+                page++;
 //                loadHomePageArticles();
-//            }
-//        });
+            }
+        });
     }
 
     @Override
     public void initData() {
-        loadWallpaperList();
-        loadHomePageArticles();
-    }
-
-
-    /**
-     * Description:加载美女轮播图
-     * Date:2018/5/14
-     */
-    private void loadWallpaperList() {
         getPresenter().getWallpaperList();
-    }
-
-    /**
-     * Description:加载首页文章
-     * Date:2018/5/14
-     */
-    private void loadHomePageArticles() {
-//        WanAndroidApi.getInstance().getHomepage(page, new BaseObserver<ArticleListBean>() {
-//
-//            @Override
-//            public void onNext(ArticleListBean value) {
-//                mRvArticleAdapter.addDataList(value.getArticleList(), page == 0);
-//                refreshLayout.stopRefreshAndLoadMore();
-//            }
-//
-//            @Override
-//            public void onError(Throwable e) {
-//                refreshLayout.stopRefreshAndLoadMore();
-//            }
-//        });
     }
 
     @Override
     public void getWallpaperListSuccess(List<WallpaperBean> wallpaperBeanList) {
-        ShowLogUtil.logi(wallpaperBeanList);
         ArrayList<View> viewList = new ArrayList<>();
         final ArrayList<String> imageList = new ArrayList<String>();
         for (int i = 0; i < wallpaperBeanList.size(); i++) {
@@ -155,7 +124,7 @@ public class HomepageFragment extends MyBaseFragment<HomepagePresenter> implemen
         }
         mInfiniteViewPagerAdapter.setData(viewList);
         mInfiniteViewPagerAdapter.startLoop();
-        viewPagerPoints.setCount(wallpaperBeanList.size());
+        mViewPagerPoints.setCount(wallpaperBeanList.size());
     }
 
     @Override

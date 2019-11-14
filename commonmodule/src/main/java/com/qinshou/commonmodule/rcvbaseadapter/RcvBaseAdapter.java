@@ -25,7 +25,14 @@ public abstract class RcvBaseAdapter<T> extends RecyclerView.Adapter<BaseViewHol
     private List<T> dataList = new ArrayList<>();
     private IOnItemClickListener<T> mOnItemClickListener;
     private IOnItemLongClickListener<T> mOnItemLongClickListener;
-    private View mEmptyView;
+    /**
+     * 空布局资源 id
+     */
+    private int mEmptyViewLayoutId;
+    /**
+     * 是否显示空布局
+     */
+    private boolean mShowEmptyView;
     public static final int EMPTY_ITEM_VIEW_TYPE = Integer.MAX_VALUE - 1;
 
     public RcvBaseAdapter(Context context, int layoutId) {
@@ -35,8 +42,9 @@ public abstract class RcvBaseAdapter<T> extends RecyclerView.Adapter<BaseViewHol
 
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if ((dataList == null || dataList.size() == 0) && mEmptyView != null) {
-            return new BaseViewHolder(mContext, mEmptyView);
+        if ((dataList == null || dataList.size() == 0) && mEmptyViewLayoutId != 0 && mShowEmptyView) {
+            View emptyView = LayoutInflater.from(mContext).inflate(mEmptyViewLayoutId, parent, false);
+            return new BaseViewHolder(mContext, emptyView);
         }
         View itemView = LayoutInflater.from(mContext).inflate(layoutId, parent, false);
         return new BaseViewHolder(mContext, itemView);
@@ -45,6 +53,7 @@ public abstract class RcvBaseAdapter<T> extends RecyclerView.Adapter<BaseViewHol
     @Override
     public void onBindViewHolder(final BaseViewHolder holder, int position) {
         if (dataList == null || dataList.size() == 0) {
+            bindViewHolder(holder, null, position);
             return;
         }
         if (mOnItemClickListener != null) {
@@ -71,15 +80,15 @@ public abstract class RcvBaseAdapter<T> extends RecyclerView.Adapter<BaseViewHol
 
     @Override
     public int getItemCount() {
-        if (dataList == null || dataList.size() == 0) {
-            return mEmptyView == null ? 0 : 1;
+        if ((dataList == null || dataList.size() == 0) && mShowEmptyView) {
+            return mEmptyViewLayoutId == 0 ? 0 : 1;
         }
         return dataList.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        if ((dataList == null || dataList.size() == 0) && mEmptyView != null) {
+        if ((dataList == null || dataList.size() == 0) && mEmptyViewLayoutId != 0 && mShowEmptyView) {
             return EMPTY_ITEM_VIEW_TYPE;
         }
         return super.getItemViewType(position);
@@ -106,10 +115,21 @@ public abstract class RcvBaseAdapter<T> extends RecyclerView.Adapter<BaseViewHol
      * @param dataList 需要添加的数据
      */
     public void setDataList(List<T> dataList) {
+        setDataList(dataList, true);
+    }
+
+    /**
+     * Description:设置数据,所有数据将被替换
+     * Date:2018/3/9
+     *
+     * @param dataList 需要添加的数据
+     */
+    public void setDataList(List<T> dataList, boolean showEmptyView) {
         if (dataList == null) {
             dataList = new ArrayList<>();
         }
         this.dataList = dataList;
+        mShowEmptyView = showEmptyView;
         notifyDataSetChanged();
     }
 
@@ -161,11 +181,8 @@ public abstract class RcvBaseAdapter<T> extends RecyclerView.Adapter<BaseViewHol
         this.mOnItemLongClickListener = onItemLongClickListener;
     }
 
-    public void setEmptyView(View emptyView) {
-        mEmptyView = emptyView;
-    }
-
-    public View getEmptyView() {
-        return mEmptyView;
+    public void setEmptyView(int emptyViewLayoutId) {
+        mEmptyViewLayoutId = emptyViewLayoutId;
+        mShowEmptyView = true;
     }
 }

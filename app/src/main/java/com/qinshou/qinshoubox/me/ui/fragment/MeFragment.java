@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
+import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.MyBaseFragment;
 import com.qinshou.qinshoubox.me.ui.activity.ContactListActivity;
@@ -77,6 +78,7 @@ public class MeFragment extends MyBaseFragment {
 //        mBtnChart.setOnClickListener(mOnClickListener);
 //        mBtnQRCodeScan.setOnClickListener(mOnClickListener);
 //        mBtnPeiQi.setOnClickListener(mOnClickListener);
+        findViewByID(R.id.btn_test).setOnClickListener(mOnClickListener);
     }
 
     @Override
@@ -139,6 +141,9 @@ public class MeFragment extends MyBaseFragment {
                     break;
                 case R.id.btn_pei_qi:
                     startActivity(new Intent(getContext(), PeiQiActivity.class));
+                    break;
+                case R.id.btn_test:
+                    startActivity(ContainerActivity.getJumpIntent(getContext(), TestFragment.class));
                     break;
                 default:
                     break;
