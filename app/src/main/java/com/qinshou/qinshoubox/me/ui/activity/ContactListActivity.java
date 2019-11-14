@@ -6,12 +6,12 @@ import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 
 import com.qinshou.commonmodule.rcvdecoration.StickyDecoration;
-import com.qinshou.commonmodule.widget.WaveSideBar;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.MyBaseActivity;
 import com.qinshou.qinshoubox.me.adapter.RvContactAdapter;
 import com.qinshou.qinshoubox.me.bean.ContactBean;
 import com.qinshou.qinshoubox.me.comparator.PinyinComparator;
+import com.qinshou.qinshoubox.me.ui.widget.WaveSideBar;
 import com.qinshou.qinshoubox.me.util.PinyinUtil;
 
 import java.util.ArrayList;
@@ -142,51 +142,51 @@ public class ContactListActivity extends MyBaseActivity {
         }
     }
 
-    private class WaveSideBarListener extends WaveSideBar.OnSelectIndexItemListener {
-        private List<ContactBean> mContactBeanList;
-
-        WaveSideBarListener(List<ContactBean> contactBeanList) {
-            this.mContactBeanList = contactBeanList;
-        }
-
-        @Override
-        public void onSelectIndexItem(String index) {
-            if (mContactBeanList == null || mContactBeanList.isEmpty()) {
-                return;
-            }
-//            tvIndex.setVisibility(View.VISIBLE);
-//            tvIndex.setText(index);
-            for (ContactBean contactBean : mContactBeanList) {
-                if (contactBean.getSortLetter().equals(index)) {
-                    LinearSmoothScroller linearSmoothScroller = new LinearSmoothScroller(getContext()) {
-                        //重新计算滚动时间,保证最长滚动时间不超过多少
-                        @Override
-                        protected int calculateTimeForScrolling(int dx) {
-                            if (dx > 3000) {
-                                dx = 3000;
-                            }
-                            return super.calculateTimeForScrolling(dx);
-                        }
-
-                        //计算滚动位置,让滚动到的目标位置显示在第一个
-                        @Override
-                        public int calculateDtToFit(int viewStart, int viewEnd, int boxStart, int boxEnd, int snapPreference) {
-                            return boxStart - viewStart;
-                        }
-                    };
-                    linearSmoothScroller.setTargetPosition(mContactBeanList.indexOf(contactBean));
-                    rvContact.getLayoutManager().startSmoothScroll(linearSmoothScroller);
-                    break;
-                }
-            }
-        }
-
-        @Override
-        public void onCancelSelectIndexItem() {
-            if (mContactBeanList == null || mContactBeanList.isEmpty()) {
-                return;
-            }
-//            tvIndex.setVisibility(View.INVISIBLE);
-        }
-    }
+//    private class WaveSideBarListener extends WaveSideBar.IOnItemSelectedListener {
+//        private List<ContactBean> mContactBeanList;
+//
+//        WaveSideBarListener(List<ContactBean> contactBeanList) {
+//            this.mContactBeanList = contactBeanList;
+//        }
+//
+//        @Override
+//        public void onSelectIndexItem(String index) {
+//            if (mContactBeanList == null || mContactBeanList.isEmpty()) {
+//                return;
+//            }
+////            tvIndex.setVisibility(View.VISIBLE);
+////            tvIndex.setText(index);
+//            for (ContactBean contactBean : mContactBeanList) {
+//                if (contactBean.getSortLetter().equals(index)) {
+//                    LinearSmoothScroller linearSmoothScroller = new LinearSmoothScroller(getContext()) {
+//                        //重新计算滚动时间,保证最长滚动时间不超过多少
+//                        @Override
+//                        protected int calculateTimeForScrolling(int dx) {
+//                            if (dx > 3000) {
+//                                dx = 3000;
+//                            }
+//                            return super.calculateTimeForScrolling(dx);
+//                        }
+//
+//                        //计算滚动位置,让滚动到的目标位置显示在第一个
+//                        @Override
+//                        public int calculateDtToFit(int viewStart, int viewEnd, int boxStart, int boxEnd, int snapPreference) {
+//                            return boxStart - viewStart;
+//                        }
+//                    };
+//                    linearSmoothScroller.setTargetPosition(mContactBeanList.indexOf(contactBean));
+//                    rvContact.getLayoutManager().startSmoothScroll(linearSmoothScroller);
+//                    break;
+//                }
+//            }
+//        }
+//
+//        @Override
+//        public void onCancelSelectIndexItem() {
+//            if (mContactBeanList == null || mContactBeanList.isEmpty()) {
+//                return;
+//            }
+////            tvIndex.setVisibility(View.INVISIBLE);
+//        }
+//    }
 }

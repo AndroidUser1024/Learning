@@ -7,10 +7,101 @@
     android:orientation="vertical"
     tools:context="com.qinshou.qinshoubox.me.ui.fragment.TestFragment">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rcv_test"
+    <!--<android.support.v7.widget.RecyclerView-->
+    <!--android:id="@+id/rcv_test"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent">-->
+
+    <!--</android.support.v7.widget.RecyclerView>-->
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </android.support.v7.widget.RecyclerView>
+        <com.qinshou.qinshoubox.me.ui.widget.LoveHeartView
+            android:id="@+id/love_heart_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+        <LinearLayout
+            android:id="@+id/ll_switch_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/love_heart_view"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="WaveSideBar 位置" />
+
+                <com.qinshou.qinshoubox.me.ui.widget.SwitchButton
+                    android:id="@+id/sb_wave_side_bar_position"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="WaveSideBar 波动" />
+
+                <com.qinshou.qinshoubox.me.ui.widget.SwitchButton
+                    android:id="@+id/sb_wave_side_bar_wave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="WaveSideBar 显示选中框" />
+
+                <com.qinshou.qinshoubox.me.ui.widget.SwitchButton
+                    android:id="@+id/sb_wave_side_bar_show_item_selected_popup_window"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <com.qinshou.qinshoubox.me.ui.widget.GossipView
+            android:id="@+id/gossip_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ll_switch_button"
+            android:layout_margin="15dp" />
+
+        <com.qinshou.qinshoubox.me.ui.widget.WaveSideBar
+            android:id="@+id/wave_side_bar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <!--<com.qinshou.qinshoubox.me.ui.widget.WeChatSideBar-->
+            <!--android:id="@+id/we_chat_side_bar"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent" />-->
+    </RelativeLayout>
 </LinearLayout>
