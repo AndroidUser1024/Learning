@@ -1,4 +1,4 @@
-package com.qinshou.qinshoubox.me.adapter;
+package com.qinshou.qinshoubox.me.ui.adapter;
 
 import android.content.Context;
 

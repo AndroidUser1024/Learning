@@ -1,6 +1,5 @@
 package com.qinshou.qinshoubox.me.ui.activity;
 
-import android.Manifest;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,23 +15,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
-import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemClickListener;
 import com.qinshou.commonmodule.util.BackgroundUtil;
-import com.qinshou.commonmodule.util.SnackbarUtil;
 import com.qinshou.commonmodule.util.SystemUtil;
-import com.qinshou.commonmodule.util.permissionutil.IOnRequestPermissionResultCallBack;
-import com.qinshou.commonmodule.util.permissionutil.PermissionUtil;
-import com.qinshou.imagemodule.callback.OnImageChooseResultCallback;
 import com.qinshou.imagemodule.util.BitmapUtil;
-import com.qinshou.imagemodule.util.ImageChooseUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.MyBaseActivity;
-import com.qinshou.qinshoubox.me.adapter.RvPuzzleAdapter;
+import com.qinshou.qinshoubox.me.ui.adapter.RvPuzzleAdapter;
 import com.qinshou.qinshoubox.me.bean.PuzzleItemBean;
-import com.qinshou.qinshoubox.me.util.PuzzleUtil;
+import com.qinshou.qinshoubox.util.PuzzleUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

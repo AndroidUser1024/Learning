@@ -28,12 +28,13 @@
     <string name="me_test">测试界面</string>
     <!-- 我界面 end -->
 
-    <!-- 登录界面 start -->
-    <string name="str_please_input_username">请输入用户名</string>
-    <string name="str_please_input_password">请输入密码</string>
-    <string name="str_login">登录</string>
-    <string name="str_register">注册</string>
-    <!-- 登录界面 end -->
+    <!-- 登录界面 -->
+    <string name="login_tv_login_text">Login</string>
+    <string name="login_tv_register_text">Register</string>
+    <string name="login_et_username_hint">请输入用户名</string>
+    <string name="et_login_password_hint">请输入密码</string>
+    <string name="login_btn_login_or_register_text">登录</string>
+    <string name="login_btn_login_or_register_text2">注册</string>
 
     <!-- 图灵机器人界面 start -->
     <string name="str_send">发送</string>

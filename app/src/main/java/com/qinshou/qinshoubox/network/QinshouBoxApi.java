@@ -5,7 +5,7 @@ import com.qinshou.okhttphelper.annotation.DefaultDomain;
 import com.qinshou.okhttphelper.annotation.Get;
 import com.qinshou.okhttphelper.annotation.Query;
 import com.qinshou.okhttphelper.call.Call;
-import com.qinshou.qinshoubox.homepage.bean.QinshouBoxResultBean;
+import com.qinshou.qinshoubox.homepage.bean.QinshouResultBean;
 import com.qinshou.qinshoubox.homepage.bean.WallpaperBean;
 
 import java.util.List;
@@ -19,8 +19,8 @@ import java.util.List;
 @Api
 public interface QinshouBoxApi {
     @DefaultDomain
-    String DEFAULT_DEMAIN = "http://www.mrqinshou.com:7000/";
+    String DEFAULT_DOMAIN = "http://www.mrqinshou.com:7000/";
 
     @Get("wallpaper/getList/")
-    Call<QinshouBoxResultBean<List<WallpaperBean>>> getWallpaperList(@Query(name = "page") int page, @Query(name = "pageSize") int pageSize);
+    Call<QinshouResultBean<List<WallpaperBean>>> getWallpaperList(@Query(name = "page") int page, @Query(name = "pageSize") int pageSize);
 }

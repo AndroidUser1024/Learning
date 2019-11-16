@@ -1,24 +1,13 @@
 package com.qinshou.qinshoubox.me.ui.fragment;
 
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
-import android.widget.CompoundButton;
-
 import com.qinshou.commonmodule.base.AbsMVPFragment;
-import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
-import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemClickListener;
-import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemLongClickListener;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.me.adapter.RcvTestAdapter;
+import com.qinshou.qinshoubox.me.ui.adapter.RcvTestAdapter;
 import com.qinshou.qinshoubox.me.contract.ITestContract;
 import com.qinshou.qinshoubox.me.presenter.TestPresenter;
 import com.qinshou.qinshoubox.me.ui.widget.SwitchButton;
 import com.qinshou.qinshoubox.me.ui.widget.WaveSideBar;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Author: QinHao

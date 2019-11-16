@@ -16,6 +16,7 @@ import com.qinshou.qinshoubox.me.ui.activity.TurningRobotActivity;
 import com.qinshou.qinshoubox.me.ui.activity.WeatherActivity;
 import com.qinshou.qinshoubox.me.ui.activity.WheelOfFortuneActivity;
 import com.qinshou.qrcodemodule.QRCodeScanActivity;
+import com.umeng.commonsdk.debug.I;
 
 /**
  * Description:"我"界面
@@ -65,7 +66,7 @@ public class MeFragment extends MyBaseFragment {
 
     @Override
     public void setListener() {
-//        ibLoginByUsernamePassword.setOnClickListener(mOnClickListener);
+        findViewByID(R.id.tv_nickname).setOnClickListener(mOnClickListener);
 //        ibLoginByQq.setOnClickListener(mOnClickListener);
 //        ibLoginByWechat.setOnClickListener(mOnClickListener);
 //        ibLoginByWeibo.setOnClickListener(mOnClickListener);
@@ -89,32 +90,14 @@ public class MeFragment extends MyBaseFragment {
         @Override
         public void onClick(final View v) {
             switch (v.getId()) {
-                case R.id.ib_login_by_username_password:
-//                    EMClient.getInstance().login("cqflqinhao", "123456", new EMCallBack() {//回调
-//                        @Override
-//                        public void onSuccess() {
-//                            EMClient.getInstance().groupManager().loadAllGroups();
-//                            EMClient.getInstance().chatManager().loadAllConversations();
-//                            ShowLogUtil.logi("登录聊天服务器成功！");
-//                        }
-//
-//                        @Override
-//                        public void onProgress(int progress, String status) {
-//
-//                        }
-//
-//                        @Override
-//                        public void onError(int code, String message) {
-//                            ShowLogUtil.logi("登录聊天服务器失败！");
-//                        }
-//                    });
+                case R.id.tv_nickname:
+                    startActivity(ContainerActivity.getJumpIntent(getContext(), LoginOrRegisterFragment.class));
                     break;
-                case R.id.ib_login_by_qq:
-                    break;
-                case R.id.ib_login_by_wechat:
-                    break;
-                case R.id.ib_login_by_weibo:
-                    break;
+//                case R.id.ib_login_by_qq:
+//                    break;
+//                case R.id.ib_login_by_wechat:
+//                    break;
+//                case R.id.ib_login_by_weibo:
                 case R.id.btn_puzzle:
                     startActivity(new Intent(getContext(), PuzzleActivity.class));
                     break;

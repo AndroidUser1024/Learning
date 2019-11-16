@@ -46,8 +46,8 @@ public class WallpaperBean {
     }
 
     public String getPath() {
-        if (!path.startsWith(QinshouBoxApi.DEFAULT_DEMAIN)) {
-            path = QinshouBoxApi.DEFAULT_DEMAIN + path;
+        if (!path.startsWith(QinshouBoxApi.DEFAULT_DOMAIN)) {
+            path = QinshouBoxApi.DEFAULT_DOMAIN + path;
         }
         return path;
     }

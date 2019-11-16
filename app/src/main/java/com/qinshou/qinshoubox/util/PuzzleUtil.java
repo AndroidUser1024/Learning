@@ -1,4 +1,4 @@
-package com.qinshou.qinshoubox.me.util;
+package com.qinshou.qinshoubox.util;
 
 import android.graphics.Bitmap;
 

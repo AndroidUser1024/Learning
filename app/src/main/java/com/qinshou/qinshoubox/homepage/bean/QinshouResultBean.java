@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
  * Date: 2019/10/16 16:55
  * Description:QinshouBox Api 返回的数据的统一格式
  */
-public class QinshouBoxResultBean<T> {
+public class QinshouResultBean<T> {
     @SerializedName("success")
     private int success;
     @SerializedName("failureInfo")
@@ -16,12 +16,12 @@ public class QinshouBoxResultBean<T> {
     @SerializedName("data")
     private T data;
 
-    public QinshouBoxResultBean() {
+    public QinshouResultBean() {
     }
 
     @Override
     public String toString() {
-        return "QinshouBoxResultBean{" +
+        return "QinshouResultBean{" +
                 "success=" + success +
                 ", failureInfo='" + failureInfo + '\'' +
                 ", data=" + data +

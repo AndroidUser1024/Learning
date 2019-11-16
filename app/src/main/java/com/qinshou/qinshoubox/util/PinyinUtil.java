@@ -1,4 +1,4 @@
-package com.qinshou.qinshoubox.me.util;
+package com.qinshou.qinshoubox.util;
 
 
 import net.sourceforge.pinyin4j.PinyinHelper;

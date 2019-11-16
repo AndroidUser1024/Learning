@@ -62,7 +62,7 @@ public class WeatherActivity extends AppCompatActivity {
 //
 //            @Override
 //            public void onError(Throwable e) {
-//                queryWeather(null, SharedPreferencesUtil.getString(getContext(), Constant.LAST_CHOOSE_CITY));
+//                queryWeather(null, SharedPreferencesUtil.getString(getContext(), IConstant.LAST_CHOOSE_CITY));
 ////                ShowLogUtil.logi("ip--->" + e.getMessage());
 //            }
 //        });
@@ -113,7 +113,7 @@ public class WeatherActivity extends AppCompatActivity {
 
 //    private void updateUI(WeatherBean weatherBean) {
 //        mWeatherBean = weatherBean;
-//        SharedPreferencesUtil.putString(getContext(), Constant.LAST_CHOOSE_CITY, weatherBean.getCity());
+//        SharedPreferencesUtil.putString(getContext(), IConstant.LAST_CHOOSE_CITY, weatherBean.getCity());
 //        rootView.setBackgroundResource(getBackground(weatherBean.getWeather()));
 //        tvCity.setText(weatherBean.getCity());
 //        tvTemperature.setText(weatherBean.getTemperature());

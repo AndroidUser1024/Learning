@@ -70,7 +70,7 @@ dependencies {
     implementation project(':pushmodule')
     implementation project(':qrcodemodule')
 //    implementation project(':sharemodule')
-//    implementation project(':immodule')
+    implementation project(':immodule')
     implementation project(':OkHttpHelper')
     annotationProcessor project(':OkHttpHelperProcessor')
 

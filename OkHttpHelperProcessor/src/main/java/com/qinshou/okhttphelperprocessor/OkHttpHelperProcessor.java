@@ -126,7 +126,7 @@ public class OkHttpHelperProcessor extends AbstractProcessor {
                     // 写入超时时间
                     .addStatement("okHttpClientBuilder.writeTimeout($L,$T.$L)", 15 * 1000, TimeUnit.class, TimeUnit.MILLISECONDS)
                     // 请求日志拦截器
-                    .addStatement("okHttpClientBuilder.addInterceptor(new $T($T.Level.BODY, new $T.Logger() {\n" +
+                    .addStatement("okHttpClientBuilder.addInterceptor(new $T($T.Level.BASIC, new $T.Logger() {\n" +
                             "@Override" +
                             "\n" +
                             "public void log(String message) {" +

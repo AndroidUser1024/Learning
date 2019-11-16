@@ -2,17 +2,16 @@ package com.qinshou.qinshoubox.me.ui.activity;
 
 import android.database.Cursor;
 import android.provider.ContactsContract;
-import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 
 import com.qinshou.commonmodule.rcvdecoration.StickyDecoration;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.MyBaseActivity;
-import com.qinshou.qinshoubox.me.adapter.RvContactAdapter;
+import com.qinshou.qinshoubox.me.ui.adapter.RvContactAdapter;
 import com.qinshou.qinshoubox.me.bean.ContactBean;
 import com.qinshou.qinshoubox.me.comparator.PinyinComparator;
 import com.qinshou.qinshoubox.me.ui.widget.WaveSideBar;
-import com.qinshou.qinshoubox.me.util.PinyinUtil;
+import com.qinshou.qinshoubox.util.PinyinUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
