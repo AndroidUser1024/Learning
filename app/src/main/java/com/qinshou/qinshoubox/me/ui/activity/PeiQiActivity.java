@@ -3,7 +3,7 @@ package com.qinshou.qinshoubox.me.ui.activity;
 import android.view.View;
 
 import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.base.MyBaseActivity;
+import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.me.ui.widget.PeiQiView;
 
 /**
@@ -11,7 +11,7 @@ import com.qinshou.qinshoubox.me.ui.widget.PeiQiView;
  * Create On:2019-03-05 22:56
  * Description:
  */
-public class PeiQiActivity extends MyBaseActivity {
+public class PeiQiActivity extends QSActivity {
 
     @Override
     public int getLayoutId() {

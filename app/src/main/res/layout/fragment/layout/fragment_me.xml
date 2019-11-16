@@ -33,29 +33,29 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/tv_nickname"
+                    android:id="@+id/tv_click_2_login"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/px30"
                     android:layout_marginLeft="@dimen/px30"
-                    android:text="点击登录"
+                    android:text="@string/me_tv_click_2_login_text"
                     android:textColor="#FF000000"
                     android:textSize="@dimen/px40"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@id/tv_username"
+                    app:layout_constraintBottom_toTopOf="@id/tv_login_2_have_more_function"
                     app:layout_constraintLeft_toRightOf="@id/iv_head_img"
                     app:layout_constraintStart_toEndOf="@id/iv_head_img"
                     app:layout_constraintTop_toTopOf="@id/iv_head_img" />
 
                 <TextView
-                    android:id="@+id/tv_username"
+                    android:id="@+id/tv_login_2_have_more_function"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="登录后，体验更多功能"
+                    android:text="@string/me_tv_login_2_have_more_function_text"
                     app:layout_constraintBottom_toBottomOf="@id/iv_head_img"
-                    app:layout_constraintLeft_toLeftOf="@id/tv_nickname"
-                    app:layout_constraintStart_toStartOf="@id/tv_nickname"
-                    app:layout_constraintTop_toBottomOf="@id/tv_nickname" />
+                    app:layout_constraintLeft_toLeftOf="@id/tv_click_2_login"
+                    app:layout_constraintStart_toStartOf="@id/tv_click_2_login"
+                    app:layout_constraintTop_toBottomOf="@id/tv_click_2_login" />
             </android.support.constraint.ConstraintLayout>
 
             <LinearLayout
@@ -150,6 +150,16 @@
                     android:background="@null"
                     android:gravity="start|center_vertical"
                     android:text="@string/me_pei_qi"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp20" />
+
+                <Button
+                    android:id="@+id/btn_chat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:gravity="start|center_vertical"
+                    android:text="@string/me_btn_chat_text"
                     android:textColor="@color/black"
                     android:textSize="@dimen/sp20" />
 

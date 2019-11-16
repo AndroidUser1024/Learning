@@ -14,6 +14,8 @@
     <!-- 知识体系界面 end -->
 
     <!-- 我界面 start -->
+    <string name="me_tv_click_2_login_text">点击登录</string>
+    <string name="me_tv_login_2_have_more_function_text">登录后，体验更多功能</string>
     <string name="me_my_collection">我的收藏</string>
     <string name="me_turning_robot">图灵机器人</string>
     <string name="me_magic_tower">魔塔</string>
@@ -26,6 +28,7 @@
     <string name="me_qr_code_scan">二维码扫描</string>
     <string name="me_pei_qi">啥是佩奇</string>
     <string name="me_test">测试界面</string>
+    <string name="me_btn_chat_text">聊天</string>
     <!-- 我界面 end -->
 
     <!-- 登录界面 -->
@@ -36,9 +39,16 @@
     <string name="login_btn_login_or_register_text">登录</string>
     <string name="login_btn_login_or_register_text2">注册</string>
 
-    <!-- 图灵机器人界面 start -->
-    <string name="str_send">发送</string>
-    <!-- 图灵机器人界面 end -->
-
+    <!-- 聊天界面 -->
+    <string name="chat_btn_press_to_speech_text">按住说话</string>
+    <string name="chat_btn_press_to_speech_text2">松开结束</string>
+    <string name="chat_btn_send_text">发送</string>
+    <string name="chat_toast_no_more_message_text">没有更多消息了</string>
+    <string name="chat_toast_can_not_send_empty_message_text">不能发送空白消息</string>
+    <string name="chat_tv_cancel_send_voice_prompt_text">手指上滑,取消发送</string>
+    <string name="chat_tv_cancel_send_voice_prompt_text_2">松开手指,取消发送</string>
+    <string name="chat_tv_send_file_text">文件</string>
+    <string name="chat_tv_send_img_text">图片</string>
+    <string name="chat_et_content_hint">请输入命令</string>
     <!-- 我界面 end -->
 </resources>

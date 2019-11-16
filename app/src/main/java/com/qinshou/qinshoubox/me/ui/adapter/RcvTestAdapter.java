@@ -34,6 +34,5 @@ public class RcvTestAdapter extends RcvSingleBaseAdapter<String> implements IOnI
         dataList.add(toPosition, itemData);
         // 通知数据发生移动
         notifyItemMoved(fromPosition, toPosition);
-        ShowLogUtil.logi(dataList);
     }
 }

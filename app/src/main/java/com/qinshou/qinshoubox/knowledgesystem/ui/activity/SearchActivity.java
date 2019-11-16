@@ -6,10 +6,10 @@ import android.text.TextUtils;
 
 import com.qinshou.commonmodule.widget.RefreshLayout;
 import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.base.MyBaseActivity;
+import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.homepage.ui.adapter.RvArticleAdapter;
 
-public class SearchActivity extends MyBaseActivity {
+public class SearchActivity extends QSActivity {
     private static final String SEARCH_KEY_WORDS = "searchKeyWords";
     private int page = 0;
     private RvArticleAdapter mRvArticleAdapter;

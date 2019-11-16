@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- item：一个 Drawable，后添加的会覆盖先添加的，item 常用的属性如下：-->
+    <!-- drawable：直接引用已有的 drawable 资源 -->
+    <!-- left：左边偏移量，相当于左边内边距 -->
+    <!-- top：上边偏移量，相当于上边内边距 -->
+    <!-- right：右边偏移量，相当于右边内边距 -->
+    <!-- bottom：下边偏移量，相当于下边内边距 -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#FFD8D8DB" />
+        </shape>
+    </item>
+    <item android:top="@dimen/px1">
+        <shape android:shape="rectangle">
+            <solid android:color="#FFF0F1F4" />
+        </shape>
+    </item>
+</layer-list>

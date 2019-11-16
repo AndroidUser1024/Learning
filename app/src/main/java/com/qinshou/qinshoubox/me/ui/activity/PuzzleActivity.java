@@ -19,7 +19,7 @@ import com.qinshou.commonmodule.util.BackgroundUtil;
 import com.qinshou.commonmodule.util.SystemUtil;
 import com.qinshou.imagemodule.util.BitmapUtil;
 import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.base.MyBaseActivity;
+import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.me.ui.adapter.RvPuzzleAdapter;
 import com.qinshou.qinshoubox.me.bean.PuzzleItemBean;
 import com.qinshou.qinshoubox.util.PuzzleUtil;
@@ -31,7 +31,7 @@ import java.util.List;
  * Created by 禽兽先生
  * Created on 2018/8/29
  */
-public class PuzzleActivity extends MyBaseActivity {
+public class PuzzleActivity extends QSActivity {
     private RecyclerView rvPuzzle;  //拼图块列表容器
     private RvPuzzleAdapter mRvPuzzleAdapter;   //拼图块列表适配器
     private Button btnChooseImg;    //选择相册中的图片按钮

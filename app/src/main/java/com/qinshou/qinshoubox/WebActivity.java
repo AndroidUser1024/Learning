@@ -3,25 +3,14 @@ package com.qinshou.qinshoubox;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.view.View;
-import android.webkit.JavascriptInterface;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 
-import com.qinshou.commonmodule.util.StatusBarUtil;
 import com.qinshou.commonmodule.widget.RefreshLayout;
-import com.qinshou.imagemodule.PhotoViewActivity;
-import com.qinshou.qinshoubox.base.MyBaseActivity;
-import com.scwang.smartrefresh.layout.header.ClassicsHeader;
-
-import java.util.ArrayList;
+import com.qinshou.qinshoubox.base.QSActivity;
 
 
-public class WebActivity extends MyBaseActivity {
+public class WebActivity extends QSActivity {
     private static final String URL = "url";
     private WebView webView;
     private ProgressBar pbLoadProgress;

@@ -1,43 +1,34 @@
 package com.qinshou.qinshoubox.me.ui.activity;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.media.AudioAttributes;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioRecord;
 import android.media.AudioTrack;
-import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.qinshou.commonmodule.util.permissionutil.IOnRequestPermissionResultCallBack;
-import com.qinshou.commonmodule.util.permissionutil.PermissionUtil;
 import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.base.MyBaseActivity;
+import com.qinshou.qinshoubox.base.QSActivity;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * Create By:禽兽先生
  * Create On:2019-03-19 21:05
  * Description:
  */
-public class RecordActivity2 extends MyBaseActivity {
+public class RecordActivity2 extends QSActivity {
     private Button mBtnPressToSpeech;
 
     private ExecutorService mExecutorService;   //录音 JNI 函数不具备线程安全性,所以要用单线程

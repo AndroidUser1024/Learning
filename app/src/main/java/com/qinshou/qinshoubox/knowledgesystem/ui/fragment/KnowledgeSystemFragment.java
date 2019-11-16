@@ -18,7 +18,7 @@ import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.widget.FlowLayout;
 import com.qinshou.commonmodule.widget.RefreshLayout;
 import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.base.MyBaseFragment;
+import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.knowledgesystem.adapter.RvKnowledgeSystemAdapter;
 import com.qinshou.qinshoubox.knowledgesystem.ui.activity.SearchActivity;
 import com.qinshou.qrcodemodule.ICaptureView;
@@ -33,7 +33,7 @@ import com.qinshou.qrcodemodule.widget.ViewfinderView;
  * Created on 2018/4/10
  */
 
-public class KnowledgeSystemFragment extends MyBaseFragment {
+public class KnowledgeSystemFragment extends QSFragment {
 
     private RvKnowledgeSystemAdapter mRvKnowledgeSystemAdapter;
     private RefreshLayout refreshLayout;

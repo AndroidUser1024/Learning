@@ -12,7 +12,7 @@ import com.qinshou.commonmodule.widget.ViewPagerPoints;
 import com.qinshou.imagemodule.PhotoViewActivity;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.base.MyBaseFragment;
+import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.homepage.contract.IHomepageContract;
 import com.qinshou.qinshoubox.homepage.presenter.HomepagePresenter;
 import com.qinshou.qinshoubox.homepage.ui.adapter.RvArticleAdapter;
@@ -27,7 +27,7 @@ import java.util.List;
  * Created on 2018/4/4
  */
 
-public class HomepageFragment extends MyBaseFragment<HomepagePresenter> implements IHomepageContract.IView {
+public class HomepageFragment extends QSFragment<HomepagePresenter> implements IHomepageContract.IView {
     private ViewPager mVpWallpaper;
     private InfiniteCycleViewPagerAdapter mInfiniteViewPagerAdapter;
     private ViewPagerPoints mViewPagerPoints;
@@ -129,6 +129,5 @@ public class HomepageFragment extends MyBaseFragment<HomepagePresenter> implemen
 
     @Override
     public void getWallpaperListFailure(Exception e) {
-        ShowLogUtil.logi(e.getMessage());
     }
 }

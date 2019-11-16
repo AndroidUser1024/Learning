@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/px19"
+    android:paddingBottom="@dimen/px19"
+    tools:context=".chat.view.adapter.RcvMessageAdapterToMessageItemView">
+
+    <!-- 消息发送时间 -->
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#FF999999"
+        android:textSize="@dimen/px24"
+        tools:text="14:31" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/px37"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/px20"
+            android:layout_marginRight="@dimen/px20"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:orientation="vertical">
+
+            <!-- 昵称 -->
+            <TextView
+                android:id="@+id/tv_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/px20"
+                android:textColor="#FFCCCCCC"
+                android:textSize="@dimen/px24"
+                android:visibility="gone"
+                tools:text="昵称"
+                tools:visibility="visible" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/px133"
+                android:layout_marginLeft="@dimen/px133"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <!-- 发送失败提示 -->
+                <ImageView
+                    android:id="@+id/iv_send_message_failure"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/px28"
+                    android:layout_marginRight="@dimen/px28"
+                    android:src="@drawable/chat_iv_send_message_failure_src"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <!-- 消息内容 -->
+                <LinearLayout
+                    android:id="@+id/ll_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/chat_tv_content_bg_to"
+                    android:gravity="center_vertical"
+                    android:minHeight="@dimen/px81"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#FFFFFFFF"
+                        android:textSize="@dimen/px28"
+                        tools:text="一二三四" />
+
+                    <ImageView
+                        android:id="@+id/iv_voice_to"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/px11"
+                        android:layout_marginLeft="@dimen/px11"
+                        android:visibility="gone"
+                        tools:src="@drawable/chat_iv_voice_to_1"
+                        tools:visibility="visible" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 头像 -->
+        <ImageView
+            android:id="@+id/iv_head_img"
+            android:layout_width="@dimen/px81"
+            android:layout_height="@dimen/px81"
+            android:layout_marginEnd="@dimen/px32"
+            android:layout_marginRight="@dimen/px32"
+            android:scaleType="centerCrop"
+            tools:src="@mipmap/ic_launcher" />
+    </LinearLayout>
+
+
+</LinearLayout>

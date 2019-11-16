@@ -180,7 +180,6 @@ public class SwitchButton extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        ShowLogUtil.logi(event.getAction());
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             return true;
         }

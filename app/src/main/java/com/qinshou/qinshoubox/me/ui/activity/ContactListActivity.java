@@ -6,7 +6,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.qinshou.commonmodule.rcvdecoration.StickyDecoration;
 import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.base.MyBaseActivity;
+import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.me.ui.adapter.RvContactAdapter;
 import com.qinshou.qinshoubox.me.bean.ContactBean;
 import com.qinshou.qinshoubox.me.comparator.PinyinComparator;
@@ -22,7 +22,7 @@ import java.util.List;
  * Created by 禽兽先生
  * Created on 2018/11/8
  */
-public class ContactListActivity extends MyBaseActivity {
+public class ContactListActivity extends QSActivity {
 
     private RecyclerView rvContact;
     private RvContactAdapter mRvContactAdapter;

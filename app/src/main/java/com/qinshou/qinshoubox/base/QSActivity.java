@@ -8,5 +8,5 @@ import com.qinshou.commonmodule.base.AbsPresenter;
  * Created by 禽兽先生
  * Created on 2018/11/13
  */
-public abstract class MyBaseActivity<P extends AbsPresenter> extends AbsMVPActivity<P> {
+public abstract class QSActivity<P extends AbsPresenter> extends AbsMVPActivity<P> {
 }

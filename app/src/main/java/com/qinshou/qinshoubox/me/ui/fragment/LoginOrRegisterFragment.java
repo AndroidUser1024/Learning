@@ -18,17 +18,19 @@ import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.util.SoftKeyboardUtil;
 import com.qinshou.qinshoubox.R;
+import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.me.bean.UserBean;
 import com.qinshou.qinshoubox.me.contract.ILoginOrRegisterContract;
 import com.qinshou.qinshoubox.me.presenter.LoginOrRegisterPresenter;
+import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 /**
  * Description:登录注册界面
  * Author: QinHao
  * Date: 2019/5/5 17:16
  */
-public class LoginOrRegisterFragment extends AbsMVPFragment<LoginOrRegisterPresenter> implements ILoginOrRegisterContract.IView {
+public class LoginOrRegisterFragment extends QSFragment<LoginOrRegisterPresenter> implements ILoginOrRegisterContract.IView {
     /**
      * 登录文本框
      */
@@ -61,7 +63,7 @@ public class LoginOrRegisterFragment extends AbsMVPFragment<LoginOrRegisterPrese
 
     @Override
     public void initView() {
-        mTvLogin = findViewByID(R.id.tv_login);
+        mTvLogin = findViewByID(R.id.tv_click_2_login);
         mTvRegister = findViewByID(R.id.tv_register);
         mLlInput = findViewByID(R.id.ll_input);
         mBtnLoginOrRegister = findViewByID(R.id.btn_login_or_register);
@@ -100,9 +102,7 @@ public class LoginOrRegisterFragment extends AbsMVPFragment<LoginOrRegisterPrese
     @Override
     public void loginSuccess(UserBean userBean) {
         ShowLogUtil.logi("loginSuccess" + " : " + "userBean--->" + userBean);
-        SharedPreferencesHelper.SINGLETON.putString(IConstant.SP_KEY_LAST_LOGIN_USERNANE, userBean.getUsername());
-//        UserStatusManager.SINGLETON.login(getContext(), userBean);
-        finish();
+        UserStatusManager.SINGLETON.login(getContext(), userBean);
     }
 
     @Override

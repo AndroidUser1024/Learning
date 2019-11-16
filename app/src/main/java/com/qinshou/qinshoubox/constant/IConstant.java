@@ -7,6 +7,10 @@ package com.qinshou.qinshoubox.constant;
  */
 public interface IConstant {
     /**
+     * 分页加载数据的起始页
+     */
+    int PAGE_START = 0;
+    /**
      * 最后一次登录成功的用户名存储在 SharedPreferences 中的 key
      */
     String SP_KEY_LAST_LOGIN_USERNANE = "lastLoginUsername";

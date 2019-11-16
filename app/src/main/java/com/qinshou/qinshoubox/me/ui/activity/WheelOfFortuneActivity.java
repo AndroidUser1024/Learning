@@ -4,7 +4,7 @@ import android.graphics.Color;
 
 import com.qinshou.commonmodule.widget.WheelOfFortuneView;
 import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.base.MyBaseActivity;
+import com.qinshou.qinshoubox.base.QSActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.List;
  * Create On:2019-01-12 15:53
  * Description:
  */
-public class WheelOfFortuneActivity extends MyBaseActivity {
+public class WheelOfFortuneActivity extends QSActivity {
 
     @Override
     public int getLayoutId() {

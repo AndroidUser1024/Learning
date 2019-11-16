@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.view.View;
 
 import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.base.MyBaseActivity;
+import com.qinshou.qinshoubox.base.QSActivity;
 
 /**
  * Description:图灵机器人游戏界面
@@ -12,7 +12,7 @@ import com.qinshou.qinshoubox.base.MyBaseActivity;
  * Created on 2018/8/29
  */
 
-public class TurningRobotActivity extends MyBaseActivity {
+public class TurningRobotActivity extends QSActivity {
 
     @Override
     public int getLayoutId() {

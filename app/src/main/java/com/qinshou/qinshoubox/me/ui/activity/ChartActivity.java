@@ -12,14 +12,14 @@ import com.qinshou.commonmodule.widget.chartview.component.HighlightDataPoint;
 import com.qinshou.commonmodule.widget.chartview.component.HorizontalLine;
 import com.qinshou.commonmodule.widget.chartview.component.IAxisTextFormatter;
 import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.base.MyBaseActivity;
+import com.qinshou.qinshoubox.base.QSActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class ChartActivity extends MyBaseActivity {
+public class ChartActivity extends QSActivity {
     private static final int MSG_DRAW = 1;
     private LineChartView mLineChartView;
     private ColumnChartView mColumnChartView;

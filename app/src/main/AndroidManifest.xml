@@ -33,6 +33,7 @@
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <!-- WanAndroid 搜索关键词界面 -->
         <activity
@@ -89,6 +90,11 @@
         <activity
             android:name=".me.ui.activity.PeiQiActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <!-- 聊天界面 -->
+        <activity
+            android:name=".me.ui.activity.ChatActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
     </application>
 

@@ -76,4 +76,6 @@ dependencies {
 
     //仿 iOS 的 PickerView 控件，有时间选择器和选项选择器
     implementation 'com.contrarywind:Android-PickerView:4.1.6'
+    // Eventbus
+    implementation 'org.greenrobot:eventbus:3.0.0'
 }

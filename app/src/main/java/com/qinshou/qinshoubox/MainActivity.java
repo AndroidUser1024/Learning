@@ -3,7 +3,7 @@ package com.qinshou.qinshoubox;
 import android.support.design.widget.TabLayout;
 
 import com.qinshou.commonmodule.util.FragmentUtil;
-import com.qinshou.qinshoubox.base.MyBaseActivity;
+import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.homepage.ui.fragment.HomepageFragment;
 import com.qinshou.qinshoubox.knowledgesystem.ui.fragment.KnowledgeSystemFragment;
 import com.qinshou.qinshoubox.me.ui.fragment.MeFragment;
@@ -12,7 +12,7 @@ import com.qinshou.qinshoubox.me.ui.fragment.MeFragment;
  * Description:主 Activity
  * Date:2018/4/9
  */
-public class MainActivity extends MyBaseActivity<MainPresenter> implements IMainContract.IView {
+public class MainActivity extends QSActivity<MainPresenter> implements IMainContract.IView {
 
     private TabLayout tabLayout;
     private HomepageFragment mHomepageFragment;
