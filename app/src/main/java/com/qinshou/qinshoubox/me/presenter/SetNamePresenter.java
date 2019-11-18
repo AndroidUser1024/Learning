@@ -21,8 +21,8 @@ public class SetNamePresenter extends AbsPresenter<ISetNameContract.IView, ISetN
     }
 
     @Override
-    public void setUserInfo(long id, final String nickname) {
-        getModel().setUserInfo(id,nickname, new Callback<UserBean>() {
+    public void setUserInfo(String username, final String nickname) {
+        getModel().setUserInfo(username, nickname, new Callback<UserBean>() {
             @Override
             public void onSuccess(UserBean userBean) {
                 if (!isViewAttached()) {

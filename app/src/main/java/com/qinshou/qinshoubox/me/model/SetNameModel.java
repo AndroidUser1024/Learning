@@ -15,8 +15,8 @@ import com.qinshou.qinshoubox.transformer.QSApiTransformer;
  */
 public class SetNameModel implements ISetNameContract.IModel {
     @Override
-    public void setUserInfo(long id, String nickname, Callback<UserBean> callback) {
-        OkHttpHelperForQSBoxApi.SINGLETON.setInfo(id, nickname)
+    public void setUserInfo(String username, String nickname, Callback<UserBean> callback) {
+        OkHttpHelperForQSBoxApi.SINGLETON.setInfo(username, nickname)
                 .transform(new QSApiTransformer<UserBean>())
                 .enqueue(callback);
     }

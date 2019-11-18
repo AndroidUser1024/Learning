@@ -18,10 +18,11 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:showDividers="middle"
-        android:divider="@drawable/divider_2"
+        android:layout_marginTop="@dimen/px1"
         android:background="#FFFFFFFF"
-        android:orientation="vertical">
+        android:divider="@drawable/divider_2"
+        android:orientation="vertical"
+        android:showDividers="middle">
 
         <!-- 头像 start -->
         <LinearLayout
@@ -122,4 +123,15 @@
         </LinearLayout>
         <!-- 我的二维码 end -->
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_logout"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px100"
+        android:layout_marginTop="@dimen/px16"
+        android:background="#FFFFFFFF"
+        android:text="@string/data_setting_btn_logout_text"
+        android:textColor="#FF333333"
+        android:textSize="@dimen/px30" />
 </LinearLayout>

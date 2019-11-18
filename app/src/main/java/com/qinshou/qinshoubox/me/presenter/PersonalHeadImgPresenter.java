@@ -22,8 +22,8 @@ public class PersonalHeadImgPresenter extends AbsPresenter<IPersonalHeadImgContr
     }
 
     @Override
-    public void setHeadImg(long id, File file) {
-        getModel().setHeadImg(id, file, new Callback<UserBean>() {
+    public void setHeadImg(String username, File file) {
+        getModel().setHeadImg(username, file, new Callback<UserBean>() {
             @Override
             public void onSuccess(UserBean data) {
                 if (!isViewAttached()) {

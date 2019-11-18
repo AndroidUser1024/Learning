@@ -179,8 +179,14 @@ public class MeFragment extends QSFragment<MePresenter> implements IMeContract.I
     public void updateUserBean(UserBean userBean) {
         TextView tvNickname = findViewByID(R.id.tv_click_2_login);
         TextView tvUsername = findViewByID(R.id.tv_login_2_have_more_function);
-        ImageLoadUtil.SINGLETON.loadImage(getContext(), userBean.getHeadImgSmall(), mIvHeadImg);
-        tvNickname.setText(userBean.getNickname());
-        tvUsername.setText(userBean.getUsername());
+        if (TextUtils.isEmpty(userBean.getHeadImgSmall())) {
+            ImageLoadUtil.SINGLETON.loadImage(getContext(), R.drawable.default_head_img, mIvHeadImg);
+            tvNickname.setText(getString(R.string.me_tv_click_2_login_text));
+            tvUsername.setText(getString(R.string.me_tv_login_2_have_more_function_text));
+        } else {
+            ImageLoadUtil.SINGLETON.loadImage(getContext(), userBean.getHeadImgSmall(), mIvHeadImg);
+            tvNickname.setText(userBean.getNickname());
+            tvUsername.setText(userBean.getUsername());
+        }
     }
 }

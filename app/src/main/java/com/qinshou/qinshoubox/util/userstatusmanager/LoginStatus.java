@@ -1,12 +1,16 @@
 package com.qinshou.qinshoubox.util.userstatusmanager;
 
 import android.content.Context;
+import android.content.Intent;
 
 import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.util.ShowLogUtil;
+import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.me.bean.UserBean;
 import com.qinshou.qinshoubox.me.ui.fragment.DataSettingFragment;
 import com.qinshou.qinshoubox.me.ui.fragment.LoginOrRegisterFragment;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Author: QinHao
@@ -33,6 +37,8 @@ public class LoginStatus implements IUserStatus {
 
     @Override
     public void logout(Context context) {
+        context.startActivity(new Intent(context, MainActivity.class));
+        EventBus.getDefault().post(new UserBean());
         UserStatusManager.SINGLETON.setUserStatus(new LogoutStatus());
     }
 

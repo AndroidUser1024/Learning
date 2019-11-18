@@ -60,6 +60,7 @@
     <string name="data_setting_tv_nickname_prompt_text">名字</string>
     <string name="data_setting_tv_username_prompt_text">帐号</string>
     <string name="data_setting_tv_qr_code_prompt_text">我的二维码</string>
+    <string name="data_setting_btn_logout_text">退出登录</string>
 
     <!-- 个人头像界面 -->
     <string name="personal_head_img_tv_title_text">个人头像</string>

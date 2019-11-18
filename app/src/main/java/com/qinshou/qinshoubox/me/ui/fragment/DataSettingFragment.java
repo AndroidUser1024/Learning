@@ -3,6 +3,7 @@ package com.qinshou.qinshoubox.me.ui.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qinshou.commonmodule.ContainerActivity;
+import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.widget.TitleBar;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.R;
@@ -42,6 +44,27 @@ public class DataSettingFragment extends QSFragment<DataSettingPresenter> implem
      * 本人系统账号
      */
     private TextView mTvUsername;
+    private View.OnClickListener mOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.ll_head_img:
+                    startActivity(ContainerActivity.getJumpIntent(getContext(), PersonalHeadImgFragment.class));
+                    break;
+                case R.id.ll_nickname:
+                    String nickname = mTvNickname.getText().toString().trim();
+                    SetNameFragment.start(getContext(), nickname);
+                    break;
+                case R.id.ll_qr_code:
+                    startActivity(ContainerActivity.getJumpIntent(getContext(), MyQRCodeFragment.class));
+                    break;
+                case R.id.btn_logout:
+                    getPresenter().logout(UserStatusManager.SINGLETON.getUserBean().getUsername());
+                    UserStatusManager.SINGLETON.logout(getContext());
+                    break;
+            }
+        }
+    };
 
     @Override
     public void onDestroyView() {
@@ -76,25 +99,10 @@ public class DataSettingFragment extends QSFragment<DataSettingPresenter> implem
                 finish();
             }
         });
-        findViewByID(R.id.ll_head_img).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(ContainerActivity.getJumpIntent(getContext(), PersonalHeadImgFragment.class));
-            }
-        });
-        findViewByID(R.id.ll_nickname).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String nickname = mTvNickname.getText().toString().trim();
-                SetNameFragment.start(getContext(), nickname);
-            }
-        });
-        findViewByID(R.id.ll_qr_code).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(ContainerActivity.getJumpIntent(getContext(), MyQRCodeFragment.class));
-            }
-        });
+        findViewByID(R.id.ll_head_img).setOnClickListener(mOnClickListener);
+        findViewByID(R.id.ll_nickname).setOnClickListener(mOnClickListener);
+        findViewByID(R.id.ll_qr_code).setOnClickListener(mOnClickListener);
+        findViewByID(R.id.btn_logout).setOnClickListener(mOnClickListener);
     }
 
     @Override

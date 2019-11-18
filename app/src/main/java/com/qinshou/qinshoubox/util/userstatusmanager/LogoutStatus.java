@@ -27,10 +27,10 @@ public class LogoutStatus implements IUserStatus {
 
     @Override
     public void login(Context context, UserBean userBean) {
-        UserStatusManager.SINGLETON.setUserStatus(new LoginStatus(userBean));
         SharedPreferencesHelper.SINGLETON.putString(IConstant.SP_KEY_LAST_LOGIN_USERNANE, userBean.getUsername());
         context.startActivity(new Intent(context, MainActivity.class));
         EventBus.getDefault().post(userBean);
+        UserStatusManager.SINGLETON.setUserStatus(new LoginStatus(userBean));
     }
 
     @Override
