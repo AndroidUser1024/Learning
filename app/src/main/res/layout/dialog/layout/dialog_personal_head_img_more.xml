@@ -4,55 +4,46 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/set_name_dialog_name_is_empty_bg"
+    android:divider="@drawable/divider"
     android:orientation="vertical"
+    android:showDividers="middle"
     tools:context="com.qinshou.qinshoubox.me.ui.dialog.PersonalHeadImgDialog">
 
-    <TextView
-        android:id="@+id/tv_take_photo"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/px86"
-        android:gravity="center"
-        android:text="@string/personal_head_img_tv_take_photo_text"
-        android:textColor="#FF333333"
-        android:textSize="@dimen/px30" />
+        android:layout_height="wrap_content"
+        android:divider="@drawable/divider_2"
+        android:orientation="vertical"
+        android:showDividers="middle">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/px1"
-        android:layout_marginStart="@dimen/px32"
-        android:layout_marginLeft="@dimen/px32"
-        android:layout_marginEnd="@dimen/px32"
-        android:layout_marginRight="@dimen/px32"
-        android:background="#FFF2F2F2" />
+        <!--<TextView-->
+        <!--android:id="@+id/tv_take_photo"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="@dimen/px86"-->
+        <!--android:gravity="center"-->
+        <!--android:text="@string/personal_head_img_tv_take_photo_text"-->
+        <!--android:textColor="#FF333333"-->
+        <!--android:textSize="@dimen/px30" />-->
 
-    <TextView
-        android:id="@+id/tv_pick_photo"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/px86"
-        android:gravity="center"
-        android:text="@string/personal_head_img_tv_pick_photo_text"
-        android:textColor="#FF333333"
-        android:textSize="@dimen/px30" />
+        <TextView
+            android:id="@+id/tv_pick_photo"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/px86"
+            android:gravity="center"
+            android:text="@string/personal_head_img_tv_pick_photo_text"
+            android:textColor="#FF333333"
+            android:textSize="@dimen/px30" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/px1"
-        android:layout_marginStart="@dimen/px32"
-        android:layout_marginLeft="@dimen/px32"
-        android:layout_marginEnd="@dimen/px32"
-        android:layout_marginRight="@dimen/px32"
-        android:background="#FFF2F2F2" />
+        <TextView
+            android:id="@+id/tv_save_image"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/px86"
+            android:gravity="center"
+            android:text="@string/personal_head_img_tv_save_image_text"
+            android:textColor="#FF333333"
+            android:textSize="@dimen/px30" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_save_image"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/px86"
-        android:gravity="center"
-        android:text="@string/personal_head_img_tv_save_image_text"
-        android:textColor="#FF333333"
-        android:textSize="@dimen/px30" />
-
-    <include layout="@layout/layout_divider" />
 
     <TextView
         android:id="@+id/tv_cancel"

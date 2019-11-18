@@ -10,20 +10,27 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 
+import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.util.activityresultutil.ActivityResultUtil;
 import com.qinshou.commonmodule.util.activityresultutil.OnActivityResultCallBack;
 import com.qinshou.commonmodule.util.permissionutil.IOnRequestPermissionResultCallBack;
 import com.qinshou.commonmodule.util.permissionutil.PermissionUtil;
 import com.qinshou.commonmodule.widget.TitleBar;
 import com.qinshou.imagemodule.callback.IOnGetImageCallback;
+import com.qinshou.imagemodule.callback.IOnImageChooseResultCallback;
+import com.qinshou.imagemodule.callback.IOnImageCropResultCallback;
 import com.qinshou.imagemodule.util.BitmapUtil;
+import com.qinshou.imagemodule.util.ImageChooseUtil;
+import com.qinshou.imagemodule.util.ImageCropUtil;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
+import com.qinshou.imagemodule.util.ImagePathUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.me.bean.UserBean;
@@ -34,13 +41,20 @@ import com.qinshou.qinshoubox.util.QSUtil;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 import com.qinshou.qrcodemodule.decode.ImageUtil;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import top.zibin.luban.CompressionPredicate;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 
 /**
  * Author: QinHao
@@ -158,6 +172,7 @@ public class PersonalHeadImgFragment extends QSFragment<PersonalHeadImgPresenter
         UserStatusManager.SINGLETON.getUserBean().setHeadImgSmall(userBean.getHeadImgSmall());
         // 设置头像
         ImageLoadUtil.SINGLETON.loadImage(getContext(), userBean.getHeadImg(), mIvHeadImg);
+        EventBus.getDefault().post(UserStatusManager.SINGLETON.getUserBean());
     }
 
     @Override
@@ -271,29 +286,85 @@ public class PersonalHeadImgFragment extends QSFragment<PersonalHeadImgPresenter
      * Description:选择图片
      */
     public void pickPhoto() {
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-        ActivityResultUtil.startActivityForResult(getActivity(), intent, PICK_PHOTO_REQUEST_CODE, new OnActivityResultCallBack() {
+//        Intent intent = new Intent(Intent.ACTION_PICK);
+//        intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+//        ActivityResultUtil.startActivityForResult(getActivity(), intent, PICK_PHOTO_REQUEST_CODE, new OnActivityResultCallBack() {
+//            @Override
+//            public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//                // 请求码和返回码不对则 return
+//                if (requestCode != PICK_PHOTO_REQUEST_CODE || resultCode != Activity.RESULT_OK) {
+//                    return;
+//                }
+//                // 数据为空则 return
+//                if (data == null) {
+//                    return;
+//                }
+//                Uri uri = data.getData();
+//                // 获取图片的路径
+//                String path = ImagePathUtil.getImageAbsolutePath(getContext(), uri);
+//                if (path == null || "".equals(path)) {
+//                    toastShort(getString(R.string.personal_head_img_toast_pick_photo_failure_text));
+//                    return;
+//                }
+//                // 上传头像
+//                File file = new File(path);
+//                getPresenter().setHeadImg(UserStatusManager.SINGLETON.getUserBean().getId(), file);
+//            }
+//        });
+        ImageChooseUtil.chooseImage(getActivity(), new IOnImageChooseResultCallback() {
             @Override
-            public void onActivityResult(int requestCode, int resultCode, Intent data) {
-                // 请求码和返回码不对则 return
-                if (requestCode != PICK_PHOTO_REQUEST_CODE || resultCode != Activity.RESULT_OK) {
-                    return;
-                }
-                // 数据为空则 return
-                if (data == null) {
-                    return;
-                }
-                Uri uri = data.getData();
-                // 获取图片的路径
-                String path = ImageUtil.getImageAbsolutePath(getContext(), uri);
-                if (path == null || "".equals(path)) {
+            public void onSuccess(List<Uri> uriList) {
+                if (uriList == null || uriList.size() == 0) {
                     toastShort(getString(R.string.personal_head_img_toast_pick_photo_failure_text));
                     return;
                 }
-                // 上传头像
-                File file = new File(path);
-                getPresenter().setHeadImg(UserStatusManager.SINGLETON.getUserBean().getId(), file);
+                String path = ImagePathUtil.getRealPathFromUri(getContext(), uriList.get(0));
+                if (TextUtils.isEmpty(path)) {
+                    toastShort(getString(R.string.personal_head_img_toast_pick_photo_failure_text));
+                    return;
+                }
+                ArrayList<String> imagePathList = new ArrayList<>();
+                imagePathList.add(path);
+                ImageCropUtil.cropImage(getActivity(), imagePathList, new IOnImageCropResultCallback() {
+                    @Override
+                    public void onSuccess(List<String> resultList) {
+                        if (resultList == null || resultList.size() == 0) {
+                            toastShort(getString(R.string.personal_head_img_toast_pick_photo_failure_text));
+                            return;
+                        }
+                        // 上传头像
+                        File origin = new File(resultList.get(0));
+                        Luban.with(getContext())
+                                .load(origin)
+                                .ignoreBy(100)
+                                .setTargetDir(getContext().getCacheDir() + "/Image")
+                                .filter(new CompressionPredicate() {
+                                    @Override
+                                    public boolean apply(String path) {
+                                        return !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif"));
+                                    }
+                                })
+                                .setCompressListener(new OnCompressListener() {
+                                    @Override
+                                    public void onStart() {
+                                        // 压缩开始前调用，可以在方法内启动 loading UI
+                                    }
+
+                                    @Override
+                                    public void onSuccess(File file) {
+                                        // 压缩成功后调用，返回压缩后的图片文件
+                                        getPresenter().setHeadImg(UserStatusManager.SINGLETON.getUserBean().getId(), file);
+                                        // TODO
+                                    }
+
+                                    @Override
+                                    public void onError(Throwable e) {
+                                        // 当压缩过程出现问题时调用
+                                        ShowLogUtil.logi("onError: e--->" + e.getMessage());
+                                    }
+                                }).launch();
+                    }
+                });
             }
         });
     }

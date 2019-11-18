@@ -19,12 +19,10 @@ public class LoginStatus implements IUserStatus {
 
     public LoginStatus(UserBean userBean) {
         mUserBean = userBean;
-        ShowLogUtil.logi("mUserBean--->" + mUserBean);
     }
 
     @Override
     public UserBean getUserBean() {
-        ShowLogUtil.logi("getUserBean--->" + mUserBean);
         return mUserBean;
     }
 

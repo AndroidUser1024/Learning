@@ -3,7 +3,7 @@ package com.qinshou.imagemodule.util;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
-import com.qinshou.imagemodule.callback.OnImageCropResultCallback;
+import com.qinshou.imagemodule.callback.IOnImageCropResultCallback;
 import com.qinshou.imagemodule.fragment.ImageCropResultFragment;
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
  */
 
 public class ImageCropUtil {
-    public static void cropImage(FragmentActivity activity, ArrayList<String> imagePathList, OnImageCropResultCallback OnImageCropResultCallback) {
+    public static void cropImage(FragmentActivity activity, ArrayList<String> imagePathList, IOnImageCropResultCallback OnImageCropResultCallback) {
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
         ImageCropResultFragment imageCropResultFragment = (ImageCropResultFragment) fragmentManager.findFragmentByTag(ImageCropResultFragment.class.getSimpleName());
         if (imageCropResultFragment == null) {

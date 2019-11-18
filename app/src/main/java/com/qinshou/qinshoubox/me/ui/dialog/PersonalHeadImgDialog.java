@@ -31,15 +31,15 @@ public class PersonalHeadImgDialog extends AbsDialogFragment {
 
     @Override
     public void setListener() {
-        findViewByID(R.id.tv_take_photo).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mOnDismissListener != null) {
-                    mOnDismissListener.onDismiss(getDialog(), Type.TAKE_PHOTO);
-                }
-                dismiss();
-            }
-        });
+//        findViewByID(R.id.tv_take_photo).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (mOnDismissListener != null) {
+//                    mOnDismissListener.onDismiss(getDialog(), Type.TAKE_PHOTO);
+//                }
+//                dismiss();
+//            }
+//        });
         findViewByID(R.id.tv_pick_photo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

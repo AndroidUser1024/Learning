@@ -180,7 +180,7 @@ public class PuzzleActivity extends QSActivity {
 //        PermissionUtil.requestPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE, new IOnRequestPermissionResultCallBack() {
 //            @Override
 //            public void onSuccess() {
-//                ImageChooseUtil.chooseImage(getActivity(), new OnImageChooseResultCallback() {
+//                ImageChooseUtil.chooseImage(getActivity(), new IOnImageChooseResultCallback() {
 //                    @Override
 //                    public void onSuccess(ArrayList<String> resultsPathList) {
 //

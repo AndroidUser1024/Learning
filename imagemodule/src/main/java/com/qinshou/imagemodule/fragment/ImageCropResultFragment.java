@@ -6,7 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-import com.qinshou.imagemodule.callback.OnImageCropResultCallback;
+import com.qinshou.imagemodule.callback.IOnImageCropResultCallback;
 import com.yanzhenjie.durban.Controller;
 import com.yanzhenjie.durban.Durban;
 
@@ -24,7 +24,7 @@ import static android.app.Activity.RESULT_OK;
 public class ImageCropResultFragment extends Fragment {
     public static final int REQUEST_CODE = 200;
     //    public static final int RESULT_CODE = 201;
-    private OnImageCropResultCallback mCallBack;
+    private IOnImageCropResultCallback mCallBack;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,7 +32,7 @@ public class ImageCropResultFragment extends Fragment {
         setRetainInstance(true);
     }
 
-    public void startActivityForResult(ArrayList<String> imagePathList, OnImageCropResultCallback onImageCropResultCallback) {
+    public void startActivityForResult(ArrayList<String> imagePathList, IOnImageCropResultCallback onImageCropResultCallback) {
         this.mCallBack = onImageCropResultCallback;
         Durban.with(this)
                 // Che title of the UI.
@@ -54,7 +54,7 @@ public class ImageCropResultFragment extends Fragment {
                 // Output format: JPEG, PNG.
                 .compressFormat(Durban.COMPRESS_JPEG)
                 // Compress quality, see Bitmap#compress(Bitmap.CompressFormat, int, OutputStream)
-                .compressQuality(90)
+                .compressQuality(100)
                 // Gesture: ROTATE, SCALE, ALL, NONE.
                 //支持哪些手势
                 .gesture(Durban.GESTURE_SCALE)
@@ -76,14 +76,8 @@ public class ImageCropResultFragment extends Fragment {
         if (requestCode == REQUEST_CODE
                 && resultCode == RESULT_OK
                 && mCallBack != null) {
-            ArrayList<String> resultsPathList = Durban.parseResult(data);
-            List<Bitmap> results = new ArrayList<>();
-            for (int i = 0; i < resultsPathList.size(); i++) {
-                Bitmap bitmap = BitmapFactory.decodeFile(resultsPathList.get(i));
-                results.add(bitmap);
-            }
-            mCallBack.onSuccess(resultsPathList);
-            mCallBack.onSuccess(results);
+            List<String> resultList = Durban.parseResult(data);
+            mCallBack.onSuccess(resultList);
         }
     }
 }

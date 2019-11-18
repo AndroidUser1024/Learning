@@ -3,7 +3,7 @@ package com.qinshou.imagemodule.util;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
-import com.qinshou.imagemodule.callback.OnImageChooseResultCallback;
+import com.qinshou.imagemodule.callback.IOnImageChooseResultCallback;
 import com.qinshou.imagemodule.fragment.ImageChooseResultFragment;
 
 
@@ -15,7 +15,7 @@ import com.qinshou.imagemodule.fragment.ImageChooseResultFragment;
  */
 
 public class ImageChooseUtil {
-    public static void chooseImage(FragmentActivity activity, int maxSize, OnImageChooseResultCallback OnImageChooseResultCallback) {
+    public static void chooseImage(FragmentActivity activity, int maxSize, IOnImageChooseResultCallback OnImageChooseResultCallback) {
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
         ImageChooseResultFragment imageChooseResultFragment = (ImageChooseResultFragment) fragmentManager.findFragmentByTag(ImageChooseResultFragment.class.getSimpleName());
         if (imageChooseResultFragment == null) {
@@ -28,7 +28,7 @@ public class ImageChooseUtil {
         imageChooseResultFragment.startActivityForResult(maxSize, OnImageChooseResultCallback);
     }
 
-    public static void chooseImage(FragmentActivity activity, OnImageChooseResultCallback OnImageChooseResultCallback) {
+    public static void chooseImage(FragmentActivity activity, IOnImageChooseResultCallback OnImageChooseResultCallback) {
         chooseImage(activity, 9, OnImageChooseResultCallback);
     }
 }
