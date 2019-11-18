@@ -6,6 +6,11 @@
     <string name="common_get_camera_permission_failure">获取照相机权限失败</string>
     <string name="common_get_external_storage_permission_failure">获取SD卡权限失败</string>
 
+    <!-- 主界面 -->
+    <string name="main_tv_tab_text_chat">首页</string>
+    <string name="main_tv_tab_text_contact">联系人</string>
+    <string name="main_tv_tab_text_mine">我的</string>
+
     <!-- 首页界面 start -->
     <string name="str_author">作者</string>
     <string name="str_type">分类</string>
@@ -13,11 +18,16 @@
     <string name="str_collection">收藏</string>
     <!-- 首页界面 end -->
 
-    <!-- 知识体系界面 start -->
-    <string name="str_hot_search_words">热门搜索词</string>
-    <string name="str_common_web_sites">常用网站</string>
-    <!-- 知识体系界面 end -->
+    <!-- 好友界面 -->
+    <string name="friend_tv_title_text">好友</string>
+    <string name="friend_tv_new_friend_text">新的朋友</string>
+    <string name="friend_tv_create_group_chat">创建群聊</string>
+    <string name="friend_tv_status_text">离线</string>
+    <string name="friend_tv_status_text_2">在线</string>
+    <string name="friend_ti_friend_text">好友</string>
+    <string name="friend_ti_group_chat_text">群聊</string>
 
+    <!-- "我"界面 -->
     <string name="me_tv_click_2_login_text">点击登录</string>
     <string name="me_tv_login_2_have_more_function_text">登录后，体验更多功能</string>
     <string name="me_my_collection">我的收藏</string>

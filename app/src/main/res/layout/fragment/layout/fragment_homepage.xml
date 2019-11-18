@@ -17,6 +17,7 @@
             android:orientation="vertical">
 
             <RelativeLayout
+                android:id="@+id/rl_wallpaper"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/px500"
                 android:background="@color/black"

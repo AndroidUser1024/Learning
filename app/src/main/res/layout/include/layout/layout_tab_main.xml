@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/iv_tab"
+        android:layout_width="@dimen/px46"
+        android:layout_height="@dimen/px46"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/tv_unread_count"
+        android:layout_width="@dimen/px28"
+        android:layout_height="@dimen/px28"
+        android:background="@drawable/main_tv_unread_count_bg"
+        android:gravity="center"
+        android:textColor="#FFFFFFFF"
+        android:textSize="@dimen/px22"
+        android:visibility="gone"
+        app:layout_constraintCircle="@id/iv_tab"
+        app:layout_constraintCircleAngle="45"
+        app:layout_constraintCircleRadius="@dimen/px24"
+        app:layout_constraintRight_toRightOf="@id/iv_tab"
+        app:layout_constraintTop_toTopOf="@id/iv_tab"
+        tools:text="99+"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/tv_tab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FF666666"
+        android:textSize="@dimen/px22"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_tab"
+        tools:text="@string/main_tv_tab_text_chat" />
+</android.support.constraint.ConstraintLayout>

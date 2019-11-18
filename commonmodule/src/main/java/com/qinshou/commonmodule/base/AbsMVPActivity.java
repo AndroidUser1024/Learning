@@ -1,6 +1,7 @@
 package com.qinshou.commonmodule.base;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
@@ -8,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
+
+import com.qinshou.commonmodule.util.StatusBarUtil;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -61,6 +64,17 @@ public abstract class AbsMVPActivity<P extends AbsPresenter> extends AppCompatAc
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mRootView = LayoutInflater.from(this).inflate(getLayoutId(), null, false);
+        if (isImmersive()) {
+            //使内容延伸到状态栏下
+            StatusBarUtil.setStatusBarTranslucent(getActivity().getWindow(), true);
+            //使状态栏透明
+            StatusBarUtil.setStatusBarColor(getActivity().getWindow(), Color.TRANSPARENT, true);
+        } else {
+            StatusBarUtil.setStatusBarTranslucent(getActivity().getWindow(), false);
+            StatusBarUtil.setStatusBarColor(getActivity().getWindow(), initStatusBarColor(), false);
+        }
+        //状态栏深色图标
+        StatusBarUtil.setStatusBarStyle(getActivity().getWindow(), initStatusBarDark());
         setContentView(mRootView);
 //        mSlideBackLayout = new SlideBackLayout(getContext());
 //        mSlideBackLayout.bindActivity(getActivity());
@@ -183,5 +197,35 @@ public abstract class AbsMVPActivity<P extends AbsPresenter> extends AppCompatAc
 
     public void toastLong(String content) {
         Toast.makeText(this, content, Toast.LENGTH_LONG).show();
+    }
+
+    /**
+     * Author: QinHao
+     * Email:qinhao@jeejio.com
+     * Date:2019/10/26 17:26
+     * Description:是否沉浸式,使内容延伸到状态栏下并使状态栏透明
+     */
+    public boolean isImmersive() {
+        return false;
+    }
+
+    /**
+     * Author: QinHao
+     * Email:qinhao@jeejio.com
+     * Date:2019/10/26 17:31
+     * Description:设置状态栏颜色,需在 initLayoutId() 方法前调用,通常在 isImmersive() 方法中设置
+     */
+    public int initStatusBarColor() {
+        return 0xFF000000;
+    }
+
+    /**
+     * Author: QinHao
+     * Email:qinhao@jeejio.com
+     * Date:2019/10/26 17:31
+     * Description:设置状态栏图标是否为深色,需在 initLayoutId() 方法前调用,通常在 isImmersive() 方法中设置
+     */
+    public boolean initStatusBarDark() {
+        return false;
     }
 }

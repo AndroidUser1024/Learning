@@ -120,6 +120,11 @@ public class MeFragment extends QSFragment<MePresenter> implements IMeContract.I
     };
 
     @Override
+    public int initStatusBarColor() {
+        return 0xFFFFFFFF;
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         EventBus.getDefault().unregister(this);

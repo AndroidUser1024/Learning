@@ -7,6 +7,7 @@ import android.widget.ImageView;
 
 import com.qinshou.commonmodule.adapter.InfiniteCycleViewPagerAdapter;
 import com.qinshou.commonmodule.util.ShowLogUtil;
+import com.qinshou.commonmodule.util.StatusBarUtil;
 import com.qinshou.commonmodule.widget.RefreshLayout;
 import com.qinshou.commonmodule.widget.ViewPagerPoints;
 import com.qinshou.imagemodule.PhotoViewActivity;
@@ -37,6 +38,24 @@ public class HomepageFragment extends QSFragment<HomepagePresenter> implements I
     private RefreshLayout refreshLayout;
 
     @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            StatusBarUtil.setStatusBarTranslucent(getActivity().getWindow(), true);
+        }
+    }
+
+    @Override
+    public int initStatusBarColor() {
+        return 0x00000000;
+    }
+
+    @Override
+    public boolean initStatusBarDark() {
+        return false;
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         if (mInfiniteViewPagerAdapter != null && !mInfiniteViewPagerAdapter.isLooping()) {
@@ -58,6 +77,7 @@ public class HomepageFragment extends QSFragment<HomepagePresenter> implements I
 
     @Override
     public int getLayoutId() {
+        StatusBarUtil.setStatusBarTranslucent(getActivity().getWindow(), true);
         return R.layout.fragment_homepage;
     }
 
