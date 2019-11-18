@@ -38,6 +38,10 @@ import org.greenrobot.eventbus.ThreadMode;
 
 public class MeFragment extends QSFragment<MePresenter> implements IMeContract.IView {
 
+    /**
+     * 头像
+     */
+    private ImageView mIvHeadImg;
     private ImageButton ibLoginByUsernamePassword;
     private ImageButton ibLoginByQq;
     private ImageButton ibLoginByWechat;
@@ -56,8 +60,10 @@ public class MeFragment extends QSFragment<MePresenter> implements IMeContract.I
         @Override
         public void onClick(final View v) {
             switch (v.getId()) {
+                case R.id.iv_head_img:
                 case R.id.tv_click_2_login:
-                    startActivity(ContainerActivity.getJumpIntent(getContext(), LoginOrRegisterFragment.class));
+                case R.id.tv_login_2_have_more_function:
+                    UserStatusManager.SINGLETON.jump2DataSetting(getContext());
                     break;
 //                case R.id.ib_login_by_qq:
 //                    break;
@@ -128,6 +134,7 @@ public class MeFragment extends QSFragment<MePresenter> implements IMeContract.I
     @Override
     public void initView() {
         EventBus.getDefault().register(this);
+        mIvHeadImg = findViewByID(R.id.iv_head_img);
 //        ibLoginByUsernamePassword = findViewByID(R.id.ib_login_by_username_password);
 //        ibLoginByQq = findViewByID(R.id.ib_login_by_qq);
 //        ibLoginByWechat = findViewByID(R.id.ib_login_by_wechat);
@@ -145,7 +152,9 @@ public class MeFragment extends QSFragment<MePresenter> implements IMeContract.I
 
     @Override
     public void setListener() {
+        mIvHeadImg.setOnClickListener(mOnClickListener);
         findViewByID(R.id.tv_click_2_login).setOnClickListener(mOnClickListener);
+        findViewByID(R.id.tv_login_2_have_more_function).setOnClickListener(mOnClickListener);
 //        ibLoginByQq.setOnClickListener(mOnClickListener);
 //        ibLoginByWechat.setOnClickListener(mOnClickListener);
 //        ibLoginByWeibo.setOnClickListener(mOnClickListener);
@@ -168,10 +177,9 @@ public class MeFragment extends QSFragment<MePresenter> implements IMeContract.I
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void updateUserBean(UserBean userBean) {
-        ImageView ivHeadImg = findViewByID(R.id.iv_head_img);
         TextView tvNickname = findViewByID(R.id.tv_click_2_login);
         TextView tvUsername = findViewByID(R.id.tv_login_2_have_more_function);
-        ImageLoadUtil.SINGLETON.loadImage(getContext(), userBean.getHeadImgSmall(), ivHeadImg);
+        ImageLoadUtil.SINGLETON.loadImage(getContext(), userBean.getHeadImgSmall(), mIvHeadImg);
         tvNickname.setText(userBean.getNickname());
         tvUsername.setText(userBean.getUsername());
     }

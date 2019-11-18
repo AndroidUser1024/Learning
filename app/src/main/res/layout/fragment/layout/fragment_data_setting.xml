@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/activity_background_color"
+    android:orientation="vertical"
+    tools:context="com.qinshou.qinshoubox.me.ui.fragment.DataSettingFragment">
+
+    <com.qinshou.commonmodule.widget.TitleBar
+        style="@style/TitleBarBaseStyle"
+        app:leftImageResource="@drawable/common_iv_back_src"
+        app:titleText="@string/data_setting_tv_title_text">
+
+    </com.qinshou.commonmodule.widget.TitleBar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:showDividers="middle"
+        android:divider="@drawable/divider_2"
+        android:background="#FFFFFFFF"
+        android:orientation="vertical">
+
+        <!-- 头像 start -->
+        <LinearLayout
+            android:id="@+id/ll_head_img"
+            style="@style/DataSettingLlHeadImgBaseStyle">
+
+            <TextView
+                style="@style/DataSettingTvHeadImgPromptBaseStyle"
+                android:text="@string/data_setting_tv_head_img_prompt_text" />
+
+            <ImageView
+                android:id="@+id/iv_head_img"
+                android:layout_width="@dimen/px82"
+                android:layout_height="@dimen/px82"
+                tools:src="@mipmap/ic_launcher" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/px22"
+                android:layout_marginLeft="@dimen/px22"
+                android:src="@drawable/common_iv_arrow_right_src" />
+        </LinearLayout>
+        <!-- 头像 end -->
+
+        <!-- 名字 start -->
+        <LinearLayout
+            android:id="@+id/ll_nickname"
+            style="@style/DataSettingLlHeadImgBaseStyle">
+
+
+            <TextView
+                style="@style/DataSettingTvHeadImgPromptBaseStyle"
+                android:layout_width="wrap_content"
+                android:layout_marginEnd="@dimen/px48"
+                android:layout_marginRight="@dimen/px48"
+                android:layout_weight="0"
+                android:text="@string/data_setting_tv_nickname_prompt_text" />
+
+            <TextView
+                android:id="@+id/tv_nickname"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:gravity="right"
+                android:maxLines="1"
+                android:textColor="#FF999999"
+                android:textSize="@dimen/px26"
+                tools:text="物栖用户" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/px22"
+                android:layout_marginLeft="@dimen/px22"
+                android:src="@drawable/common_iv_arrow_right_src" />
+        </LinearLayout>
+        <!-- 名字 end -->
+
+        <!-- 帐号 start -->
+        <LinearLayout style="@style/DataSettingLlHeadImgBaseStyle">
+
+            <TextView
+                style="@style/DataSettingTvHeadImgPromptBaseStyle"
+                android:text="@string/data_setting_tv_username_prompt_text" />
+
+            <TextView
+                android:id="@+id/tv_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FF999999"
+                android:textSize="@dimen/px26"
+                tools:text="10000" />
+        </LinearLayout>
+        <!-- 帐号 end -->
+
+        <!-- 我的二维码 start -->
+        <LinearLayout
+            android:id="@+id/ll_qr_code"
+            style="@style/DataSettingLlHeadImgBaseStyle">
+
+            <TextView
+                style="@style/DataSettingTvHeadImgPromptBaseStyle"
+                android:text="@string/data_setting_tv_qr_code_prompt_text" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/data_setting_iv_qr_code_src" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/px22"
+                android:layout_marginLeft="@dimen/px22"
+                android:src="@drawable/common_iv_arrow_right_src" />
+        </LinearLayout>
+        <!-- 我的二维码 end -->
+    </LinearLayout>
+</LinearLayout>

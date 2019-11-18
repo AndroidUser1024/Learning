@@ -2,7 +2,9 @@ package com.qinshou.qinshoubox.util.userstatusmanager;
 
 import android.content.Context;
 
+import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.qinshoubox.me.bean.UserBean;
+import com.qinshou.qinshoubox.me.ui.fragment.LoginOrRegisterFragment;
 
 
 /**
@@ -35,4 +37,7 @@ public enum UserStatusManager {
         mUserStatus.logout(context);
     }
 
+    public void jump2DataSetting(Context context) {
+        mUserStatus.jump2DataSetting(context);
+    }
 }

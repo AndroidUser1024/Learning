@@ -5,6 +5,8 @@ import android.content.Context;
 import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.me.bean.UserBean;
+import com.qinshou.qinshoubox.me.ui.fragment.DataSettingFragment;
+import com.qinshou.qinshoubox.me.ui.fragment.LoginOrRegisterFragment;
 
 /**
  * Author: QinHao
@@ -34,5 +36,10 @@ public class LoginStatus implements IUserStatus {
     @Override
     public void logout(Context context) {
         UserStatusManager.SINGLETON.setUserStatus(new LogoutStatus());
+    }
+
+    @Override
+    public void jump2DataSetting(Context context) {
+        context.startActivity(ContainerActivity.getJumpIntent(context, DataSettingFragment.class));
     }
 }

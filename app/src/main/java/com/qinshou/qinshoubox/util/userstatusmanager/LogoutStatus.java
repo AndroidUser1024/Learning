@@ -3,10 +3,12 @@ package com.qinshou.qinshoubox.util.userstatusmanager;
 import android.content.Context;
 import android.content.Intent;
 
+import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.me.bean.UserBean;
+import com.qinshou.qinshoubox.me.ui.fragment.LoginOrRegisterFragment;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -33,5 +35,10 @@ public class LogoutStatus implements IUserStatus {
 
     @Override
     public void logout(Context context) {
+    }
+
+    @Override
+    public void jump2DataSetting(Context context) {
+        context.startActivity(ContainerActivity.getJumpIntent(context, LoginOrRegisterFragment.class));
     }
 }

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/set_name_dialog_name_is_empty_bg"
+    android:orientation="vertical"
+    tools:context="com.qinshou.qinshoubox.me.ui.dialog.NameIsEmptyDialog">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px106"
+        android:gravity="center"
+        android:text="@string/set_name_tv_name_is_empty_prompt_text"
+        android:textColor="#FF999999"
+        android:textSize="@dimen/px24" />
+
+    <include layout="@layout/layout_divider" />
+
+    <TextView
+        android:id="@+id/tv_i_know"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px123"
+        android:gravity="center"
+        android:text="@string/set_name_tv_i_know_text"
+        android:textColor="#FF03A9F4"
+        android:textSize="@dimen/px30" />
+</LinearLayout>

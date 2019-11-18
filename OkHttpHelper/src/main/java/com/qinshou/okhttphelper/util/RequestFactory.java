@@ -4,6 +4,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.LongSerializationPolicy;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Map;
 
 import okhttp3.FormBody;
@@ -71,13 +72,12 @@ public class RequestFactory {
      * @return 用于发起请求的对象
      */
     public static Request newPostRequest(String url, Map<String, String> headerMap, Map<String, Object> parameterMap) {
-        FormBody.Builder formBodyBuilder = new FormBody.Builder();
+        StringBuilder parameterStringBuilder = new StringBuilder();
         for (String key : parameterMap.keySet()) {
-            Object value = parameterMap.get(key);
-            if (value == null) {
-                continue;
-            }
-            formBodyBuilder.add(key, value.toString());
+            parameterStringBuilder.append(key).append("=").append(parameterMap.get(key)).append("&");
+        }
+        if (parameterStringBuilder.lastIndexOf("&") != -1) {
+            parameterStringBuilder.deleteCharAt(parameterStringBuilder.lastIndexOf("&"));
         }
         // 添加请求头
         Request.Builder requestBuilder = new Request.Builder();
@@ -90,7 +90,7 @@ public class RequestFactory {
         }
         return requestBuilder
                 .url(url)
-                .post(formBodyBuilder.build())
+                .post(RequestBody.create(MediaType.parse("application/x-www-form-urlencoded;charset=utf-8"), parameterStringBuilder.toString()))
                 .build();
     }
 

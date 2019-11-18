@@ -17,4 +17,6 @@ public interface IUserStatus {
     void login(Context context, UserBean userBean);
 
     void logout(Context context);
+
+    void jump2DataSetting(Context context);
 }

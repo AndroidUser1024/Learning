@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFECEDF1"
+    android:orientation="vertical"
+    tools:context="com.qinshou.qinshoubox.me.ui.fragment.MyQRCodeFragment">
+
+    <com.jeejio.commonmodule.widget.TitleBar
+        android:id="@+id/title_bar"
+        style="@style/TitleBarBaseStyle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:leftText="@string/common_tv_left_text"
+        app:rightImageResource="@drawable/common_iv_more_src"
+        app:titleText="@string/my_qr_code_tv_title_text">
+
+    </com.jeejio.commonmodule.widget.TitleBar>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/cl_qr_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/px48"
+        android:layout_marginLeft="@dimen/px48"
+        android:layout_marginTop="@dimen/px22"
+        android:layout_marginEnd="@dimen/px48"
+        android:layout_marginRight="@dimen/px48"
+        android:background="@drawable/my_qr_code_cl_qr_code_bg"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title_bar">
+
+        <ImageView
+            android:id="@+id/iv_qr_code"
+            android:layout_width="@dimen/px449"
+            android:layout_height="@dimen/px449"
+            android:layout_marginTop="@dimen/px37"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/tv_scan_qr_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/px19"
+            android:text="@string/my_qr_code_tv_scan_qr_code_to_add_me_text"
+            android:textColor="#FF999999"
+            android:textSize="@dimen/px20"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_qr_code" />
+
+        <ImageView
+            android:id="@+id/iv_head_img"
+            android:layout_width="@dimen/px112"
+            android:layout_height="@dimen/px112"
+            android:layout_marginStart="@dimen/px31"
+            android:layout_marginLeft="@dimen/px31"
+            android:layout_marginTop="@dimen/px40"
+            android:layout_marginBottom="@dimen/px22"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_scan_qr_code"
+            tools:src="@mipmap/ic_launcher" />
+
+        <View
+            android:id="@+id/reference"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/px1"
+            app:layout_constraintBottom_toBottomOf="@id/iv_head_img"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/iv_head_img" />
+
+        <TextView
+            android:id="@+id/tv_nickname"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/px30"
+            android:layout_marginLeft="@dimen/px30"
+            android:ellipsize="end"
+            android:maxLength="15"
+            android:textColor="#FF333333"
+            android:textSize="@dimen/px34"
+            app:layout_constraintBottom_toBottomOf="@id/reference"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintLeft_toRightOf="@id/iv_head_img"
+            app:layout_constraintTop_toTopOf="@id/iv_head_img"
+            tools:text="doreen.duan(段雯)" />
+
+        <ImageView
+            android:id="@+id/iv_gender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/px12"
+            android:layout_marginLeft="@dimen/px12"
+            app:layout_constraintBottom_toBottomOf="@id/tv_nickname"
+            app:layout_constraintLeft_toRightOf="@id/tv_nickname"
+            app:layout_constraintStart_toEndOf="@id/tv_nickname"
+            app:layout_constraintTop_toTopOf="@id/tv_nickname"
+            tools:src="@drawable/user_detail_iv_gender_src" />
+
+        <TextView
+            android:id="@+id/tv_area"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/px30"
+            android:layout_marginLeft="@dimen/px30"
+            android:textColor="#FF999999"
+            android:textSize="@dimen/px30"
+            app:layout_constraintBottom_toBottomOf="@id/iv_head_img"
+            app:layout_constraintLeft_toRightOf="@id/iv_head_img"
+            app:layout_constraintTop_toTopOf="@id/reference"
+            tools:text="北京 海淀" />
+    </android.support.constraint.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tv_qr_code_validity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/px51"
+        android:textColor="#FF999999"
+        android:textSize="@dimen/px20"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="该二维码7天之内(4月3日前)有效,重新进入将更新" />
+</android.support.constraint.ConstraintLayout>

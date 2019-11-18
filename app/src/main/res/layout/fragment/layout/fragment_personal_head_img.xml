@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FF000000"
+    tools:context="com.qinshou.qinshoubox.me.ui.fragment.PersonalHeadImgFragment">
+
+    <com.qinshou.commonmodule.widget.TitleBar
+        style="@style/TitleBarBaseStyle"
+        android:background="#00000000"
+        app:leftImageResource="@drawable/personal_head_img_iv_back_src"
+        app:rightImageResource="@drawable/personal_head_img_iv_more_src"
+        app:titleText="@string/personal_head_img_tv_title_text"
+        app:titleTextColor="#FFFFFFFF">
+
+    </com.qinshou.commonmodule.widget.TitleBar>
+
+    <ImageView
+        android:id="@+id/iv_head_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:scaleType="centerCrop"
+        tools:src="@mipmap/ic_launcher" />
+</RelativeLayout>

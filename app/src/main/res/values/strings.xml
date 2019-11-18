@@ -1,5 +1,10 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">禽兽盒子</string>
+    <!-- 通用 -->
+    <string name="common_tv_left_text">返回</string>
+    <string name="common_tv_cancel_text">取消</string>
+    <string name="common_get_camera_permission_failure">获取照相机权限失败</string>
+    <string name="common_get_external_storage_permission_failure">获取SD卡权限失败</string>
 
     <!-- 首页界面 start -->
     <string name="str_author">作者</string>
@@ -13,7 +18,6 @@
     <string name="str_common_web_sites">常用网站</string>
     <!-- 知识体系界面 end -->
 
-    <!-- 我界面 start -->
     <string name="me_tv_click_2_login_text">点击登录</string>
     <string name="me_tv_login_2_have_more_function_text">登录后，体验更多功能</string>
     <string name="me_my_collection">我的收藏</string>
@@ -29,7 +33,6 @@
     <string name="me_pei_qi">啥是佩奇</string>
     <string name="me_test">测试界面</string>
     <string name="me_btn_chat_text">聊天</string>
-    <!-- 我界面 end -->
 
     <!-- 登录界面 -->
     <string name="login_tv_login_text">Login</string>
@@ -50,5 +53,39 @@
     <string name="chat_tv_send_file_text">文件</string>
     <string name="chat_tv_send_img_text">图片</string>
     <string name="chat_et_content_hint">请输入命令</string>
-    <!-- 我界面 end -->
+
+    <!-- 资料设置界面 -->
+    <string name="data_setting_tv_title_text">资料设置</string>
+    <string name="data_setting_tv_head_img_prompt_text">头像</string>
+    <string name="data_setting_tv_nickname_prompt_text">名字</string>
+    <string name="data_setting_tv_username_prompt_text">帐号</string>
+    <string name="data_setting_tv_qr_code_prompt_text">我的二维码</string>
+
+    <!-- 个人头像界面 -->
+    <string name="personal_head_img_tv_title_text">个人头像</string>
+    <string name="personal_head_img_tv_take_photo_text">拍照</string>
+    <string name="personal_head_img_tv_pick_photo_text">从手机相册选择</string>
+    <string name="personal_head_img_tv_save_image_text">保存图片</string>
+    <string name="personal_head_img_toast_take_photo_failure_text">拍照失败，请重新选择一张</string>
+    <string name="personal_head_img_toast_pick_photo_failure_text">选择图片失败，请重新选择一张</string>
+    <string name="personal_head_img_toast_save_image_success_text">已保存图片到<xliff:g id="filePath">%1$s</xliff:g></string>
+    <string name="personal_head_img_toast_save_image_failure_text">保存图片失败了</string>
+
+    <!-- 设置名字界面 -->
+    <string name="set_name_tv_cancel_text">取消</string>
+    <string name="set_name_tv_title_text">设置名字</string>
+    <string name="set_name_tv_finish_text">完成</string>
+    <string name="set_name_tv_name_is_empty_prompt_text">没有输入名字，请重新填写</string>
+    <string name="set_name_tv_i_know_text">我知道了</string>
+
+    <!-- 我的二维码界面 -->
+    <string name="my_qr_code_tv_title_text">我的二维码</string>
+    <string name="my_qr_code_tv_scan_qr_code_to_add_me_text">扫一扫上面的二维码图案,加我好友</string>
+    <string name="my_qr_code_tv_qr_code_validity_text_prefix">该二维码7天之内(</string>
+    <string name="my_qr_code_tv_qr_code_validity_text_suffix">前)有效,重新进入将更新</string>
+    <string name="my_qr_code_tv_save_qr_code_text">保存图片</string>
+    <string name="my_qr_code_tv_scan_qr_code_text">扫描二维码</string>
+    <string name="my_qr_code_tv_reset_qr_code_text">重置二维码</string>
+    <string name="my_qr_code_toast_save_success_text_prefix">已保存二维码名片到</string>
+    <string name="my_qr_code_toast_save_failure_text">保存二维码名片失败了</string>
 </resources>
