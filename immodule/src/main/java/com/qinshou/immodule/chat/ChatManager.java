@@ -1,9 +1,8 @@
 package com.qinshou.immodule.chat;
 
-import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -18,28 +17,26 @@ import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;
 
-public class ChatService extends Service {
-    private static final String TAG = "ChatService";
+public enum ChatManager {
+    SINGLETON;
+    private static final String TAG = "ChatManager";
     private WebSocket mWebSocket;
+    private final OkHttpClient mOkHttpClient;
+    private final Request mRequest;
 
-    public ChatService() {
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+    ChatManager() {
+        mOkHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(15 * 1000, TimeUnit.MILLISECONDS)
                 .readTimeout(15 * 1000, TimeUnit.MILLISECONDS)
                 .writeTimeout(15 * 1000, TimeUnit.MILLISECONDS)
                 .build();
-        Request request = new Request.Builder().url("http://172.16.60.231").build();
-        okHttpClient.newWebSocket(request, new WebSocketListener() {
+        mRequest = new Request.Builder().url("http://172.16.60.231").build();
+    }
+
+    private static final String USERNAME = "Username";
+
+    public void connect(String username) {
+        mWebSocket = mOkHttpClient.newWebSocket(mRequest, new WebSocketListener() {
             @Override
             public void onOpen(WebSocket webSocket, Response response) {
                 super.onOpen(webSocket, response);
@@ -79,9 +76,11 @@ public class ChatService extends Service {
         });
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void disconnect() {
+        if (mWebSocket == null) {
+            return;
+        }
+        mWebSocket.close(1000, "normal close");
     }
 
     private void sendMessage(MessageBean messageBean) {

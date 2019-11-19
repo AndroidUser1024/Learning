@@ -4,11 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.qinshou.commonmodule.ContainerActivity;
-import com.qinshou.commonmodule.util.ShowLogUtil;
+import com.qinshou.immodule.chat.ChatManager;
 import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.me.bean.UserBean;
 import com.qinshou.qinshoubox.me.ui.fragment.DataSettingFragment;
-import com.qinshou.qinshoubox.me.ui.fragment.LoginOrRegisterFragment;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -39,6 +38,8 @@ public class LoginStatus implements IUserStatus {
     public void logout(Context context) {
         context.startActivity(new Intent(context, MainActivity.class));
         EventBus.getDefault().post(new UserBean());
+        // 连接聊天服务
+        ChatManager.SINGLETON.disconnect();
         UserStatusManager.SINGLETON.setUserStatus(new LogoutStatus());
     }
 
