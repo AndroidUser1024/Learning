@@ -119,6 +119,8 @@ public class MeFragment extends QSFragment<MePresenter> implements IMeContract.I
             }
         }
     };
+    private TextView mTvNickname;
+    private TextView mTvUsername;
 
     @Override
     public int initStatusBarColor() {
@@ -141,6 +143,8 @@ public class MeFragment extends QSFragment<MePresenter> implements IMeContract.I
     public void initView() {
         EventBus.getDefault().register(this);
         mIvHeadImg = findViewByID(R.id.iv_head_img);
+        mTvNickname = findViewByID(R.id.tv_click_2_login);
+        mTvUsername = findViewByID(R.id.tv_login_2_have_more_function);
 //        ibLoginByUsernamePassword = findViewByID(R.id.ib_login_by_username_password);
 //        ibLoginByQq = findViewByID(R.id.ib_login_by_qq);
 //        ibLoginByWechat = findViewByID(R.id.ib_login_by_wechat);
@@ -179,28 +183,20 @@ public class MeFragment extends QSFragment<MePresenter> implements IMeContract.I
 
     @Override
     public void initData() {
-        ShowLogUtil.logi("initData");
         UserBean userBean = UserStatusManager.SINGLETON.getUserBean();
         if (userBean == null) {
-            return;
-        }
-        ShowLogUtil.logi("设置用户信息");
-        TextView tvNickname = findViewByID(R.id.tv_click_2_login);
-        TextView tvUsername = findViewByID(R.id.tv_login_2_have_more_function);
-        if (TextUtils.isEmpty(userBean.getHeadImgSmall())) {
             ImageLoadUtil.SINGLETON.loadImage(getContext(), R.drawable.default_head_img, mIvHeadImg);
-            tvNickname.setText(getString(R.string.me_tv_click_2_login_text));
-            tvUsername.setText(getString(R.string.me_tv_login_2_have_more_function_text));
+            mTvNickname.setText(getString(R.string.me_tv_click_2_login_text));
+            mTvUsername.setText(getString(R.string.me_tv_login_2_have_more_function_text));
         } else {
             ImageLoadUtil.SINGLETON.loadImage(getContext(), userBean.getHeadImgSmall(), mIvHeadImg);
-            tvNickname.setText(userBean.getNickname());
-            tvUsername.setText(userBean.getUsername());
+            mTvNickname.setText(userBean.getNickname());
+            mTvUsername.setText(userBean.getUsername());
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void updateUserBean(UserBean userBean) {
-        ShowLogUtil.logi("updateUserBean");
         initData();
     }
 }

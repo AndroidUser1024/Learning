@@ -31,11 +31,12 @@ public class LogoutStatus implements IUserStatus {
         // 存储最后一次登录成功的用户名
         SharedPreferencesHelper.SINGLETON.putString(IConstant.SP_KEY_LAST_LOGIN_USERNAME, userBean.getUsername());
         context.startActivity(new Intent(context, MainActivity.class));
-        // 发送事件,更新 UI
-        EventBus.getDefault().post(userBean);
         // 连接聊天服务
         ChatManager.SINGLETON.connect(userBean.getUsername());
+        // 设置为登录状态
         UserStatusManager.SINGLETON.setUserStatus(new LoginStatus(userBean));
+        // 发送事件,用于更新 UI 等
+        EventBus.getDefault().post(userBean);
     }
 
     @Override

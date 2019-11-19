@@ -107,10 +107,16 @@ public class DataSettingFragment extends QSFragment<DataSettingPresenter> implem
 
     @Override
     public void initData() {
-        final UserBean userBean = UserStatusManager.SINGLETON.getUserBean();
-        ImageLoadUtil.SINGLETON.loadImage(getContext(), userBean.getHeadImgSmall(), mIvHeadImg);
-        mTvUsername.setText(userBean.getUsername());
-        mTvNickname.setText(userBean.getNickname());
+        UserBean userBean = UserStatusManager.SINGLETON.getUserBean();
+        if (userBean == null) {
+            ImageLoadUtil.SINGLETON.loadImage(getContext(), R.drawable.default_head_img, mIvHeadImg);
+            mTvNickname.setText(getString(R.string.me_tv_click_2_login_text));
+            mTvUsername.setText(getString(R.string.me_tv_login_2_have_more_function_text));
+        } else {
+            ImageLoadUtil.SINGLETON.loadImage(getContext(), userBean.getHeadImgSmall(), mIvHeadImg);
+            mTvNickname.setText(userBean.getNickname());
+            mTvUsername.setText(userBean.getUsername());
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
