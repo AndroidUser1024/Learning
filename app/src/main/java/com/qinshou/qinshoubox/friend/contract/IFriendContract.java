@@ -1,8 +1,8 @@
-package com.qinshou.qinshoubox.contact.contract;
+package com.qinshou.qinshoubox.friend.contract;
 
 import com.qinshou.commonmodule.base.IBaseModel;
 import com.qinshou.commonmodule.base.IBaseView;
-import com.qinshou.qinshoubox.contact.view.FriendFragment;
+import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
 
 /**
  * Author: QinHao

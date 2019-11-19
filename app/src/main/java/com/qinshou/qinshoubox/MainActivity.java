@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.qinshou.commonmodule.util.FragmentUtil;
 import com.qinshou.qinshoubox.base.QSActivity;
-import com.qinshou.qinshoubox.contact.view.FriendFragment;
+import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
 import com.qinshou.qinshoubox.homepage.ui.fragment.HomepageFragment;
 import com.qinshou.qinshoubox.me.ui.fragment.MeFragment;
 

@@ -1,7 +1,7 @@
-package com.qinshou.qinshoubox.contact.model;
+package com.qinshou.qinshoubox.friend.model;
 
-import com.qinshou.qinshoubox.contact.contract.IFriendContract;
-import com.qinshou.qinshoubox.contact.view.FriendFragment;
+import com.qinshou.qinshoubox.friend.contract.IFriendContract;
+import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
 
 /**
  * Author: QinHao

@@ -8,7 +8,7 @@
 
     <!-- 主界面 -->
     <string name="main_tv_tab_text_chat">首页</string>
-    <string name="main_tv_tab_text_contact">联系人</string>
+    <string name="main_tv_tab_text_contact">好友</string>
     <string name="main_tv_tab_text_mine">我的</string>
 
     <!-- 首页界面 start -->
@@ -63,6 +63,18 @@
     <string name="chat_tv_send_file_text">文件</string>
     <string name="chat_tv_send_img_text">图片</string>
     <string name="chat_et_content_hint">请输入命令</string>
+
+    <!-- 好友申请历史界面 -->
+    <string name="friend_history_tv_title_text">新增朋友</string>
+    <string name="friend_history_tv_right_text">添加</string>
+    <string name="friend_history_btn_view_text">查看</string>
+    <string name="friend_history_btn_view_text2">已添加</string>
+
+    <!-- 新增朋友界面 -->
+    <string name="add_friend_tv_title_text">新的朋友</string>
+    <string name="add_friend_btn_search_text">搜索</string>
+    <string name="add_friend_et_keyword_hint">请输入帐号、手机号、邮箱</string>
+    <string name="add_friend_tv_no_data_text">没有此用户~</string>
 
     <!-- 资料设置界面 -->
     <string name="data_setting_tv_title_text">资料设置</string>

@@ -67,7 +67,7 @@ public class LoginOrRegisterFragment extends QSFragment<LoginOrRegisterPresenter
         mLlInput = findViewByID(R.id.ll_input);
         mBtnLoginOrRegister = findViewByID(R.id.btn_login_or_register);
         mEtUsername = findViewByID(R.id.et_username);
-        mEtUsername.setText(SharedPreferencesHelper.SINGLETON.getString(IConstant.SP_KEY_LAST_LOGIN_USERNANE));
+        mEtUsername.setText(SharedPreferencesHelper.SINGLETON.getString(IConstant.SP_KEY_LAST_LOGIN_USERNAME));
         mEtPassword = findViewByID(R.id.et_password);
     }
 

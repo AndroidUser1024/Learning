@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/activity_background_color"
+    android:orientation="vertical"
+    tools:context="com.qinshou.qinshoubox.friend.view.fragment.AddFriendFragment">
+
+    <com.qinshou.commonmodule.widget.TitleBar
+        android:id="@+id/title_bar"
+        style="@style/TitleBarBaseStyle"
+        app:leftText="@string/common_tv_left_text"
+        app:titleText="@string/add_friend_tv_title_text">
+
+    </com.qinshou.commonmodule.widget.TitleBar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/rl_search"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/px54"
+            android:layout_marginStart="@dimen/px31"
+            android:layout_marginLeft="@dimen/px31"
+            android:layout_weight="1"
+            android:background="@drawable/add_rl_search_bg">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/et_keyword"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/px25"
+                    android:layout_marginLeft="@dimen/px25"
+                    android:layout_marginEnd="@dimen/px25"
+                    android:layout_marginRight="@dimen/px25"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:letterSpacing="0.01"
+                    tools:targetApi="lollipop"
+                    tools:text="妈妈" />
+
+                <ImageView
+                    android:id="@+id/iv_clear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/px9"
+                    android:layout_marginRight="@dimen/px9"
+                    android:src="@drawable/common_iv_clear_src"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_hint"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/px24"
+                    android:layout_height="@dimen/px24"
+                    android:layout_marginStart="@dimen/px27"
+                    android:layout_marginLeft="@dimen/px27"
+                    android:layout_marginEnd="@dimen/px3"
+                    android:layout_marginRight="@dimen/px3"
+                    android:src="@drawable/common_iv_search_src" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/px3"
+                    android:layout_marginLeft="@dimen/px3"
+                    android:text="@string/add_friend_et_keyword_hint"
+                    android:textColor="#FFCCCCCC"
+                    android:textSize="@dimen/px26" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/btn_search"
+            android:layout_width="@dimen/px115"
+            android:layout_height="@dimen/px58"
+            android:layout_marginStart="@dimen/px16"
+            android:layout_marginLeft="@dimen/px16"
+            android:layout_marginEnd="@dimen/px33"
+            android:layout_marginRight="@dimen/px33"
+            android:background="@drawable/add_friend_btn_search_bg"
+            android:enabled="false"
+            android:text="@string/add_friend_btn_search_text"
+            android:textColor="#FFFFFFFF"
+            android:textSize="@dimen/px30" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/px220"
+            android:src="@drawable/add_friend_iv_empty_src" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/px23"
+            android:text="@string/add_friend_tv_no_data_text"
+            android:textColor="#FF999999"
+            android:textSize="@dimen/px28" />
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

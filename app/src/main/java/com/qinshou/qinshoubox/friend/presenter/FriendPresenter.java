@@ -1,9 +1,9 @@
-package com.qinshou.qinshoubox.contact.presenter;
+package com.qinshou.qinshoubox.friend.presenter;
 
 import com.qinshou.commonmodule.base.AbsPresenter;
-import com.qinshou.qinshoubox.contact.contract.IFriendContract;
-import com.qinshou.qinshoubox.contact.model.FriendModel;
-import com.qinshou.qinshoubox.contact.view.FriendFragment;
+import com.qinshou.qinshoubox.friend.contract.IFriendContract;
+import com.qinshou.qinshoubox.friend.model.FriendModel;
+import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
 
 /**
  * Author: QinHao

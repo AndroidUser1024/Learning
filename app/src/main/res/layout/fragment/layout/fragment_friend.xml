@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/activity_background_color"
     android:orientation="vertical"
-    tools:context="com.qinshou.qinshoubox.contact.view.FriendFragment">
+    tools:context="com.qinshou.qinshoubox.friend.view.fragment.FriendFragment">
 
     <com.qinshou.commonmodule.widget.TitleBar
         style="@style/TitleBarBaseStyle"
@@ -60,13 +60,26 @@
                             android:src="@drawable/contact_iv_new_friend_src" />
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/px32"
                             android:layout_marginLeft="@dimen/px32"
+                            android:layout_weight="1"
                             android:text="@string/friend_tv_new_friend_text"
                             android:textColor="#FF333333"
                             android:textSize="@dimen/px28" />
+
+                        <TextView
+                            android:id="@+id/tv_unread_count"
+                            android:layout_width="@dimen/px40"
+                            android:layout_height="@dimen/px40"
+                            android:background="@drawable/main_tv_unread_count_bg"
+                            android:gravity="center"
+                            android:textColor="#FFFFFFFF"
+                            android:textSize="@dimen/px30"
+                            android:visibility="gone"
+                            tools:text="1"
+                            tools:visibility="visible" />
                     </LinearLayout>
 
                     <View
@@ -133,23 +146,23 @@
         </android.support.design.widget.AppBarLayout>
 
         <android.support.v4.view.ViewPager
-        android:id="@+id/vp_contact"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#FFFFFFFF"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            android:id="@+id/vp_contact"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FFFFFFFF"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         </android.support.v4.view.ViewPager>
         <!--<android.support.v7.widget.RecyclerView-->
-            <!--android:id="@+id/rcv_friend"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:background="#FFFFFFFF"-->
-            <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
-            <!--tools:itemCount="10"-->
-            <!--tools:layoutManager="LinearLayoutManager"-->
-            <!--tools:listitem="@layout/item_rcv_friend"-->
-            <!--tools:orientation="vertical">-->
+        <!--android:id="@+id/rcv_friend"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:background="#FFFFFFFF"-->
+        <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
+        <!--tools:itemCount="10"-->
+        <!--tools:layoutManager="LinearLayoutManager"-->
+        <!--tools:listitem="@layout/item_rcv_friend"-->
+        <!--tools:orientation="vertical">-->
 
         <!--</android.support.v7.widget.RecyclerView>-->
     </android.support.design.widget.CoordinatorLayout>

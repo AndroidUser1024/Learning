@@ -29,7 +29,7 @@ public class LogoutStatus implements IUserStatus {
     @Override
     public void login(Context context, UserBean userBean) {
         // 存储最后一次登录成功的用户名
-        SharedPreferencesHelper.SINGLETON.putString(IConstant.SP_KEY_LAST_LOGIN_USERNANE, userBean.getUsername());
+        SharedPreferencesHelper.SINGLETON.putString(IConstant.SP_KEY_LAST_LOGIN_USERNAME, userBean.getUsername());
         context.startActivity(new Intent(context, MainActivity.class));
         // 发送事件,更新 UI
         EventBus.getDefault().post(userBean);

@@ -13,7 +13,11 @@ public interface IConstant {
     /**
      * 最后一次登录成功的用户名存储在 SharedPreferences 中的 key
      */
-    String SP_KEY_LAST_LOGIN_USERNANE = "lastLoginUsername";
+    String SP_KEY_LAST_LOGIN_USERNAME = "lastLoginUsername";
+    /**
+     * 添加好友请求的数量在 SharedPreferences 中的 key
+     */
+    String SP_KEY_SUBSCRIBE_COUNT = "subscribeCount";
     String DATABASE_NAME = "QinshouBox.db";
     int DATABASE_VERSION = 1;
     //天气界面
