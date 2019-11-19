@@ -2,13 +2,11 @@ package com.qinshou.qinshoubox.friend.view.fragment;
 
 import android.view.View;
 
-import com.qinshou.commonmodule.ContainerActivity;
-import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
-import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.friend.contract.IFriendContract;
 import com.qinshou.qinshoubox.friend.presenter.FriendPresenter;
+import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 /**
  * Author: QinHao
@@ -27,8 +25,8 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
         findViewByID(R.id.ll_new_friend).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferencesHelper.SINGLETON.remove(IConstant.SP_KEY_SUBSCRIBE_COUNT);
-                startActivity(ContainerActivity.getJumpIntent(getContext(), FriendHistoryFragment.class));
+//                SharedPreferencesHelper.SINGLETON.remove(IConstant.SP_KEY_SUBSCRIBE_COUNT);
+                UserStatusManager.SINGLETON.jump2FriendHistory(getContext());
             }
         });
         findViewByID(R.id.ll_create_group_chat).setOnClickListener(new View.OnClickListener() {

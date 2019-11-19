@@ -32,9 +32,12 @@ public interface QSBoxApi {
     Call<QinshouResultBean<UserBean>> logout(@Field(name = "username") String username);
 
     @Post("user/setInfo/")
-    Call<QinshouResultBean<UserBean>> setInfo(@Field(name = "username") String username, @Field(name = "nickname") String nickname);
+    Call<QinshouResultBean<UserBean>> setInfo(@Field(name = "userId") int userId, @Field(name = "nickname") String nickname);
 
     @Multipart
     @Post("user/setHeadImg/")
-    Call<QinshouResultBean<UserBean>> setHeadImg(@Field(name = "username") String username, @Field(name = "headImg") File headImg);
+    Call<QinshouResultBean<UserBean>> setHeadImg(@Field(name = "userId") int userId, @Field(name = "headImg") File headImg);
+
+    @Post("user/getUserDetail/")
+    Call<QinshouResultBean<UserBean>> getUserDetail(@Field(name = "userId") int userId, @Field(name = "keyword") String keyword);
 }

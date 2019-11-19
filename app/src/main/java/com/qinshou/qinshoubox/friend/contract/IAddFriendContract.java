@@ -21,10 +21,11 @@ public interface IAddFriendContract {
          * Date:2019/9/6 9:34
          * Description:获取用户信息
          *
+         * @param userId   用户 id
          * @param keyword  系统账号/手机号/邮箱
          * @param callback 回调接口
          */
-        void getUser(String keyword, Callback<UserBean> callback);
+        void getUserDetail(int userId, String keyword, Callback<UserBean> callback);
     }
 
     interface IView extends IBaseView {
@@ -36,7 +37,7 @@ public interface IAddFriendContract {
          *
          * @param userBean 用户信息实体类
          */
-        void getUserSuccess(UserBean userBean);
+        void getUserDetailSuccess(UserBean userBean);
 
         /**
          * Author: QinHao
@@ -46,7 +47,7 @@ public interface IAddFriendContract {
          *
          * @param e 错误信息
          */
-        void getUserFailure(Exception e);
+        void getUserDetailFailure(Exception e);
     }
 
     interface IPresenter {
@@ -56,8 +57,9 @@ public interface IAddFriendContract {
          * Date:2019/9/6 9:34
          * Description:获取用户信息
          *
+         * @param userId  用户 id
          * @param keyword 系统账号/手机号/邮箱
          */
-        void getUser(String keyword);
+        void getUserDetail(int userId, String keyword);
     }
 }

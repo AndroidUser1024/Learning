@@ -21,14 +21,14 @@ public class AddFriendPresenter extends AbsPresenter<IAddFriendContract.IView, I
     }
 
     @Override
-    public void getUser(String keyword) {
-        getModel().getUser(keyword, new Callback<UserBean>() {
+    public void getUserDetail(int userId,String keyword) {
+        getModel().getUserDetail(userId,keyword, new Callback<UserBean>() {
             @Override
             public void onSuccess(UserBean userBean) {
                 if (!isViewAttached()) {
                     return;
                 }
-                getView().getUserSuccess(userBean);
+                getView().getUserDetailSuccess(userBean);
             }
 
             @Override
@@ -36,7 +36,7 @@ public class AddFriendPresenter extends AbsPresenter<IAddFriendContract.IView, I
                 if (!isViewAttached()) {
                     return;
                 }
-                getView().getUserFailure(e);
+                getView().getUserDetailFailure(e);
             }
         });
     }

@@ -76,6 +76,9 @@
     <string name="add_friend_et_keyword_hint">请输入帐号、手机号、邮箱</string>
     <string name="add_friend_tv_no_data_text">没有此用户~</string>
 
+    <!-- 用户详情界面 -->
+    <string name="user_detail_tv_username_prompt">帐号：</string>
+
     <!-- 资料设置界面 -->
     <string name="data_setting_tv_title_text">资料设置</string>
     <string name="data_setting_tv_head_img_prompt_text">头像</string>
@@ -111,4 +114,5 @@
     <string name="my_qr_code_tv_reset_qr_code_text">重置二维码</string>
     <string name="my_qr_code_toast_save_success_text_prefix">已保存二维码名片到</string>
     <string name="my_qr_code_toast_save_failure_text">保存二维码名片失败了</string>
+
 </resources>

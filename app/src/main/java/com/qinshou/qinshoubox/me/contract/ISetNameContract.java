@@ -20,11 +20,11 @@ public interface ISetNameContract {
          * Date:2019/11/13 15:36
          * Description:设置昵称
          *
-         * @param username 用户名
+         * @param userId   用户 id
          * @param nickname 新昵称
          * @param callback 回调接口
          */
-        void setUserInfo(String username, String nickname, Callback<UserBean> callback);
+        void setUserInfo(int userId, String nickname, Callback<UserBean> callback);
     }
 
     interface IView extends IBaseView {
@@ -56,9 +56,9 @@ public interface ISetNameContract {
          * Date:2019/11/13 15:37
          * Description:设置昵称
          *
-         * @param username 用户名
+         * @param userId   用户 id
          * @param nickname 新昵称
          */
-        void setUserInfo(String username, String nickname);
+        void setUserInfo(int userId, String nickname);
     }
 }

@@ -39,6 +39,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:divider="@drawable/divider_2"
                     android:orientation="vertical"
                     android:showDividers="middle|end">
 
@@ -81,13 +82,6 @@
                             tools:text="1"
                             tools:visibility="visible" />
                     </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/px1"
-                        android:layout_marginStart="@dimen/px143"
-                        android:layout_marginLeft="@dimen/px143"
-                        android:background="#FFF2F2F2" />
 
                     <LinearLayout
                         android:id="@+id/ll_create_group_chat"

@@ -6,7 +6,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.qinshou.commonmodule.widget.TitleBar;
 import com.qinshou.qinshoubox.R;
@@ -15,6 +14,7 @@ import com.qinshou.qinshoubox.friend.contract.IAddFriendContract;
 import com.qinshou.qinshoubox.friend.presenter.AddFriendPresenter;
 import com.qinshou.qinshoubox.listener.ClearErrorInfoTextWatcher;
 import com.qinshou.qinshoubox.me.bean.UserBean;
+import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 /**
  * Author: QinHao
@@ -28,7 +28,6 @@ public class AddFriendFragment extends QSFragment<AddFriendPresenter> implements
      * 帐号/手机号/邮箱输入框
      */
     private EditText mEtKeyword;
-    private TextView mTvFailureInfo;
     /**
      * 输入框提示
      */
@@ -76,7 +75,7 @@ public class AddFriendFragment extends QSFragment<AddFriendPresenter> implements
                 if (TextUtils.isEmpty(keyword)) {
                     return;
                 }
-                getPresenter().getUser(keyword);
+                getPresenter().getUserDetail(UserStatusManager.SINGLETON.getUserBean().getId(), keyword);
             }
         });
         mEtKeyword.addTextChangedListener(new ClearErrorInfoTextWatcher(null) {
@@ -104,12 +103,12 @@ public class AddFriendFragment extends QSFragment<AddFriendPresenter> implements
     }
 
     @Override
-    public void getUserSuccess(UserBean userBean) {
-//        UserDetailSearchResultFragment.start(getContext(), userBean);
+    public void getUserDetailSuccess(UserBean userBean) {
+        UserDetailFragment.start(getContext(), mEtKeyword.getText().toString().trim());
     }
 
     @Override
-    public void getUserFailure(Exception e) {
-//        mLlEmptyView.setVisibility(View.VISIBLE);
+    public void getUserDetailFailure(Exception e) {
+        mLlEmptyView.setVisibility(View.VISIBLE);
     }
 }

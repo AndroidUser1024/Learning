@@ -274,7 +274,7 @@ public class PersonalHeadImgFragment extends QSFragment<PersonalHeadImgPresenter
                 }
                 // 上传头像
                 File file = new File(path);
-                getPresenter().setHeadImg(UserStatusManager.SINGLETON.getUserBean().getUsername(), file);
+                getPresenter().setHeadImg(UserStatusManager.SINGLETON.getUserBean().getId(), file);
             }
         });
     }
@@ -353,7 +353,7 @@ public class PersonalHeadImgFragment extends QSFragment<PersonalHeadImgPresenter
                                     @Override
                                     public void onSuccess(File file) {
                                         // 压缩成功后调用，返回压缩后的图片文件
-                                        getPresenter().setHeadImg(UserStatusManager.SINGLETON.getUserBean().getUsername(), file);
+                                        getPresenter().setHeadImg(UserStatusManager.SINGLETON.getUserBean().getId(), file);
                                         // TODO
                                     }
 

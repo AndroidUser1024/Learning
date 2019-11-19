@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qinshou.commonmodule.ContainerActivity;
+import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
@@ -178,10 +179,12 @@ public class MeFragment extends QSFragment<MePresenter> implements IMeContract.I
 
     @Override
     public void initData() {
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void updateUserBean(UserBean userBean) {
+        ShowLogUtil.logi("initData");
+        UserBean userBean = UserStatusManager.SINGLETON.getUserBean();
+        if (userBean == null) {
+            return;
+        }
+        ShowLogUtil.logi("设置用户信息");
         TextView tvNickname = findViewByID(R.id.tv_click_2_login);
         TextView tvUsername = findViewByID(R.id.tv_login_2_have_more_function);
         if (TextUtils.isEmpty(userBean.getHeadImgSmall())) {
@@ -193,5 +196,11 @@ public class MeFragment extends QSFragment<MePresenter> implements IMeContract.I
             tvNickname.setText(userBean.getNickname());
             tvUsername.setText(userBean.getUsername());
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateUserBean(UserBean userBean) {
+        ShowLogUtil.logi("updateUserBean");
+        initData();
     }
 }

@@ -23,11 +23,11 @@ public interface IPersonalHeadImgContract {
          * Date:2019/11/18 16:05
          * Description:设置头像
          *
-         * @param username 用户名
+         * @param userId       用户 id
          * @param file     头像文件
          * @param callback 回调接口
          */
-        void setHeadImg(String username, File file, Callback<UserBean> callback);
+        void setHeadImg(int userId, File file, Callback<UserBean> callback);
     }
 
     interface IView extends IBaseView {
@@ -59,9 +59,9 @@ public interface IPersonalHeadImgContract {
          * Date:2019/11/18 16:06
          * Description:设置头像
          *
-         * @param username 用户名
-         * @param file     头像文件
+         * @param userId   用户 id
+         * @param file 头像文件
          */
-        void setHeadImg(String username, File file);
+        void setHeadImg(int userId, File file);
     }
 }

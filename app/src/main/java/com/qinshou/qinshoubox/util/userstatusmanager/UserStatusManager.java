@@ -40,4 +40,8 @@ public enum UserStatusManager {
     public void jump2DataSetting(Context context) {
         mUserStatus.jump2DataSetting(context);
     }
+
+    public void jump2FriendHistory(Context context) {
+        mUserStatus.jump2FriendHistory(context);
+    }
 }
