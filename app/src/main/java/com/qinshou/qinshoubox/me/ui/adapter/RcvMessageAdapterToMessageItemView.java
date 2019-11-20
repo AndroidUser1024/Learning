@@ -6,9 +6,11 @@ import android.widget.TextView;
 
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.commonmodule.rcvbaseadapter.itemview.BaseItemView;
+import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.immodule.bean.MessageBean;
 import com.qinshou.immodule.chat.ChatManager;
 import com.qinshou.qinshoubox.R;
+import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -39,8 +41,7 @@ public class RcvMessageAdapterToMessageItemView extends BaseItemView<MessageBean
     public void bindViewHolder(final BaseViewHolder baseViewHolder, final MessageBean messageBean, final int i) {
         setTime(baseViewHolder, messageBean, i);
         // 头像
-
-//        JeejioUtil.loadHeadImg(getContext(), JMClient.SINGLETON.getUserBean().getImgUrl(), baseViewHolder.getImageView(R.id.iv_head_img));
+        ImageLoadUtil.SINGLETON.loadImage(getContext(), UserStatusManager.SINGLETON.getUserBean().getHeadImgSmall(), baseViewHolder.getImageView(R.id.iv_head_img));
 //        // 单聊不显示昵称,群聊才显示昵称
 //        baseViewHolder.setVisibility(R.id.tv_nickname, messageBean.getType() == MessageType.CHAT.getValue()
 //                ? View.GONE

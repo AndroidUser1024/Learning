@@ -16,6 +16,7 @@ import com.qinshou.commonmodule.util.activityresultutil.OnActivityResultCallBack
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
+import com.qinshou.qinshoubox.database.DatabaseManager;
 import com.qinshou.qinshoubox.friend.contract.IUserDetailContract;
 import com.qinshou.qinshoubox.friend.presenter.UserDetailPresenter;
 import com.qinshou.qinshoubox.friend.view.activity.SetRemarkActivity;
@@ -149,6 +150,7 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
     }
 
     private void setData(UserBean userBean) {
+        DatabaseManager.SINGLETON.insertUser(userBean);
         // 头像
         ImageLoadUtil.SINGLETON.loadImage(getContext(), userBean.getHeadImgSmall(), mIvHeadImg);
         // 备注

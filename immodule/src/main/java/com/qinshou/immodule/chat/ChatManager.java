@@ -1,5 +1,6 @@
 package com.qinshou.immodule.chat;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -41,7 +42,7 @@ public enum ChatManager {
         return mUserId;
     }
 
-    public void connect(int userId, String username) {
+    public void connect(final Context context, int userId, final String username) {
         mUserId = userId;
         mWebSocket = mOkHttpClient.newWebSocket(mRequest, new WebSocketListener() {
             @Override

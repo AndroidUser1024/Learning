@@ -8,6 +8,7 @@ import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.immodule.chat.ChatManager;
 import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.constant.IConstant;
+import com.qinshou.qinshoubox.database.DatabaseManager;
 import com.qinshou.qinshoubox.me.bean.UserBean;
 import com.qinshou.qinshoubox.me.ui.fragment.LoginOrRegisterFragment;
 
@@ -28,11 +29,13 @@ public class LogoutStatus implements IUserStatus {
 
     @Override
     public void login(Context context, UserBean userBean) {
+        DatabaseManager.SINGLETON.init(context, userBean.getUsername()
+                , 1);
         // 存储最后一次登录成功的用户名
         SharedPreferencesHelper.SINGLETON.putString(IConstant.SP_KEY_LAST_LOGIN_USERNAME, userBean.getUsername());
         context.startActivity(new Intent(context, MainActivity.class));
         // 连接聊天服务
-        ChatManager.SINGLETON.connect(userBean.getId(), userBean.getUsername());
+        ChatManager.SINGLETON.connect(context, userBean.getId(), userBean.getUsername());
         // 设置为登录状态
         UserStatusManager.SINGLETON.setUserStatus(new LoginStatus(userBean));
         // 发送事件,用于更新 UI 等
