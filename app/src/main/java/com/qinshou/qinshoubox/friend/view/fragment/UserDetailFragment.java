@@ -1,6 +1,7 @@
 package com.qinshou.qinshoubox.friend.view.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -10,13 +11,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.qinshou.commonmodule.ContainerActivity;
-import com.qinshou.commonmodule.util.ShowLogUtil;
+import com.qinshou.commonmodule.util.activityresultutil.ActivityResultUtil;
+import com.qinshou.commonmodule.util.activityresultutil.OnActivityResultCallBack;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.friend.contract.IUserDetailContract;
 import com.qinshou.qinshoubox.friend.presenter.UserDetailPresenter;
+import com.qinshou.qinshoubox.friend.view.activity.SetRemarkActivity;
 import com.qinshou.qinshoubox.me.bean.UserBean;
+import com.qinshou.qinshoubox.me.ui.activity.ChatActivity;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 /**
@@ -66,13 +70,31 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
 
     @Override
     public void setListener() {
-
+        findViewByID(R.id.ll_set_remark).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = SetRemarkActivity.getJumpIntent(getContext(), mTvRemark.getText().toString().trim());
+                ActivityResultUtil.startActivityForResult(getActivity(), intent, SetRemarkActivity.REQUEST_CODE, new OnActivityResultCallBack() {
+                    @Override
+                    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+                        // 验证请求码和返回码
+                        if (requestCode != SetRemarkActivity.REQUEST_CODE || resultCode != SetRemarkActivity.RESULT_CODE) {
+                            return;
+                        }
+                        String remark = data.getStringExtra(SetRemarkActivity.NEW_REMARK);
+                        if (!TextUtils.isEmpty(remark)) {
+                            mTvRemark.setText(remark);
+                            mTvRemark2.setText(remark);
+                        }
+                    }
+                });
+            }
+        });
     }
 
     @Override
     public void initData() {
         Bundle bundle = getArguments();
-
         if (bundle == null) {
             return;
         }
@@ -84,22 +106,44 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
     }
 
     @Override
-    public void showFriendUI(UserBean userBean) {
+    public void showFriendUI(final UserBean userBean) {
         setData(userBean);
         mBtnAddFriend.setText("发送消息");
+        mBtnAddFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChatActivity.start(getContext(), userBean.getUsername());
+            }
+        });
     }
 
     @Override
-    public void showNotFriendUI(UserBean userBean) {
+    public void showNotFriendUI(final UserBean userBean) {
         setData(userBean);
         mBtnAddFriend.setText("添加到通讯录");
+        mBtnAddFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SetAdditionalMessageFragment.start(getContext()
+                        , userBean.getId()
+                        , mTvRemark.getText().toString().trim()
+                        , userBean.getSource()
+                );
+            }
+        });
     }
 
     @Override
-    public void showWaitAcceptUI(UserBean userBean) {
+    public void showWaitAcceptUI(final UserBean userBean) {
         setData(userBean);
         mLlAdditionalMessage.setVisibility(View.VISIBLE);
         mBtnAddFriend.setText("接受请求");
+        mBtnAddFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getPresenter().agreeAddFriend(UserStatusManager.SINGLETON.getUserBean().getId(), userBean.getId(), mTvRemark.getText().toString().trim());
+            }
+        });
     }
 
     private void setData(UserBean userBean) {
@@ -165,6 +209,22 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
 
     @Override
     public void getUserDetailFailure(Exception e) {
+
+    }
+
+    @Override
+    public void agreeAddFriendSuccess(final UserBean userBean) {
+        mBtnAddFriend.setText("发送消息");
+        mBtnAddFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChatActivity.start(getContext(), userBean.getUsername());
+            }
+        });
+    }
+
+    @Override
+    public void agreeAddFriendFailure(Exception e) {
 
     }
 

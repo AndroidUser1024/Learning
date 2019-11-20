@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/activity_background_color"
+    android:orientation="vertical">
+
+    <com.qinshou.commonmodule.widget.TitleBar
+        android:id="@+id/title_bar"
+        style="@style/TitleBarBaseStyle"
+        app:leftText="@string/common_tv_left_text"
+        app:rightText="@string/set_remark_tv_right_text"
+        app:titleText="@string/set_remark_tv_title_text">
+
+    </com.qinshou.commonmodule.widget.TitleBar>
+
+    <EditText
+        android:id="@+id/et_remark"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="50dp"
+        android:layout_margin="25dp"
+        android:hint="@string/set_remark_et_remark_hint"
+        android:maxLength="20" />
+</LinearLayout>

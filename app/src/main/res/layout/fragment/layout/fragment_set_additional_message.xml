@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/activity_background_color"
+    android:orientation="vertical">
+
+    <com.qinshou.commonmodule.widget.TitleBar
+        android:id="@+id/title_bar"
+        style="@style/TitleBarBaseStyle"
+        app:leftText="@string/common_tv_left_text"
+        app:rightText="@string/set_additional_message_tv_right_text"
+        app:titleText="@string/set_additional_message_tv_title_text">
+
+    </com.qinshou.commonmodule.widget.TitleBar>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:text="@string/set_additional_message_tv_info_text"
+        android:textSize="15sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFFFF"
+        android:gravity="center_vertical"
+        android:padding="15dp">
+
+        <EditText
+            android:id="@+id/et_additional_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@null"
+            android:inputType="text" />
+
+        <ImageButton
+            android:id="@+id/ib_clear_input"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"
+            android:background="@null"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/ic_launcher"
+            android:visibility="invisible"
+            tools:visibility="visible" />
+    </LinearLayout>
+</LinearLayout>

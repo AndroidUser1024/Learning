@@ -79,6 +79,17 @@
     <!-- 用户详情界面 -->
     <string name="user_detail_tv_username_prompt">帐号：</string>
 
+    <!-- 设置备注界面 -->
+    <string name="set_remark_tv_title_text">修改备注</string>
+    <string name="set_remark_tv_right_text">完成</string>
+    <string name="set_remark_et_remark_hint">请输入备注</string>
+
+    <!-- 输入好友验证信息界面 -->
+    <string name="set_additional_message_tv_title_text">朋友验证</string>
+    <string name="set_additional_message_tv_right_text">发送</string>
+    <string name="set_additional_message_tv_info_text">你需要发送验证申请,等对方通过</string>
+    <string name="set_additional_message_default_additional_message">我是<xliff:g id="nickname">%1$s</xliff:g></string>
+
     <!-- 资料设置界面 -->
     <string name="data_setting_tv_title_text">资料设置</string>
     <string name="data_setting_tv_head_img_prompt_text">头像</string>

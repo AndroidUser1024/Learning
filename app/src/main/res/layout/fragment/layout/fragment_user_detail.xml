@@ -172,6 +172,7 @@
 
         <!-- 设置备注 -->
         <LinearLayout
+            android:id="@+id/ll_set_remark"
             android:layout_width="match_parent"
             android:layout_height="@dimen/px112"
             android:layout_marginBottom="@dimen/px16"

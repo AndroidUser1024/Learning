@@ -96,6 +96,11 @@
             android:name=".me.ui.activity.ChatActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
+        <!-- 修改备注界面 -->
+        <activity
+            android:name=".friend.view.activity.SetRemarkActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

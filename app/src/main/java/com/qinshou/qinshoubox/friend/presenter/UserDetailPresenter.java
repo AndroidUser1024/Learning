@@ -46,4 +46,25 @@ public class UserDetailPresenter extends AbsPresenter<IUserDetailContract.IView,
             }
         });
     }
+
+    @Override
+    public void agreeAddFriend(int fromUserId, int toUserId, String remark) {
+        getModel().agreeAddFriend(fromUserId, toUserId, remark, new Callback<UserBean>() {
+            @Override
+            public void onSuccess(UserBean data) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().agreeAddFriendSuccess(data);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().agreeAddFriendFailure(e);
+            }
+        });
+    }
 }

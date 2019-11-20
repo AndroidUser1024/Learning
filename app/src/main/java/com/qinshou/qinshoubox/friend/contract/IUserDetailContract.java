@@ -16,6 +16,8 @@ import com.qinshou.qinshoubox.me.bean.UserBean;
 public interface IUserDetailContract {
     interface IModel extends IBaseModel {
         void getUserDetail(int userId, String keyword, Callback<UserBean> callback);
+
+        void agreeAddFriend(int fromUserId, int toUserId, String remark, Callback<UserBean> callback);
     }
 
     interface IView extends IBaseView {
@@ -26,9 +28,15 @@ public interface IUserDetailContract {
         void showWaitAcceptUI(UserBean userBean);
 
         void getUserDetailFailure(Exception e);
+
+        void agreeAddFriendSuccess(UserBean userBean);
+
+        void agreeAddFriendFailure(Exception e);
     }
 
     interface IPresenter {
         void getUserDetail(int userId, String keyword);
+
+        void agreeAddFriend(int fromUserId, int toUserId, String remark);
     }
 }
