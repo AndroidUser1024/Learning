@@ -8,9 +8,10 @@ package com.qinshou.immodule.bean;
  */
 public enum MessageType {
     HANDSHAKE(1001),
-    HEART(1002),
-    CLIENT_RECEIPT(1003),
-    SERVER_RECEIPT(1004),
+    HANDSHAKE_SUCCESS(1002),
+    HEART(1003),
+    CLIENT_RECEIPT(1004),
+    SERVER_RECEIPT(1005),
     CHAT(2001),
     GROUP_CHAT(3001);
 

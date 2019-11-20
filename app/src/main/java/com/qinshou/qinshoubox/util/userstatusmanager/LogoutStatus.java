@@ -32,7 +32,7 @@ public class LogoutStatus implements IUserStatus {
         SharedPreferencesHelper.SINGLETON.putString(IConstant.SP_KEY_LAST_LOGIN_USERNAME, userBean.getUsername());
         context.startActivity(new Intent(context, MainActivity.class));
         // 连接聊天服务
-        ChatManager.SINGLETON.connect(userBean.getUsername());
+        ChatManager.SINGLETON.connect(userBean.getId(), userBean.getUsername());
         // 设置为登录状态
         UserStatusManager.SINGLETON.setUserStatus(new LoginStatus(userBean));
         // 发送事件,用于更新 UI 等

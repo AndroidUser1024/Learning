@@ -2,14 +2,11 @@ package com.qinshou.qinshoubox.me.ui.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -33,16 +30,18 @@ import com.qinshou.commonmodule.widget.RefreshLayout;
 import com.qinshou.commonmodule.widget.TitleBar;
 import com.qinshou.immodule.bean.MessageBean;
 import com.qinshou.immodule.bean.MessageContentType;
+import com.qinshou.immodule.chat.ChatManager;
+import com.qinshou.immodule.listener.IOnMessageListener;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.constant.IConstant;
+import com.qinshou.qinshoubox.listener.ClearErrorInfoTextWatcher;
 import com.qinshou.qinshoubox.me.bean.UserBean;
 import com.qinshou.qinshoubox.me.contract.IChatContract;
 import com.qinshou.qinshoubox.me.presenter.ChatPresenter;
 import com.qinshou.qinshoubox.me.ui.adapter.RcvMessageAdapter;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +53,7 @@ import java.util.Map;
  * Description:聊天界面
  */
 public class ChatActivity extends QSActivity<ChatPresenter> implements IChatContract.IView {
-    private static final String TO_USERNAME = "ToUsername";
+    private static final String TO_USER_ID = "ToUserId";
     private final int VOICE_MAX_TIME = 1000 * 60;
     private final int MESSAGE_WHAT_VOLUME_LEVEL = 1;
     private final int MESSAGE_WHAT_SEND_VOICE = 2;
@@ -65,7 +64,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
     /**
      * 接收消息方的用户名
      */
-    private String mToUsername;
+    private int mToUserId;
     /**
      * 标题栏
      */
@@ -168,7 +167,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
                 if (file == null) {
                     return true;
                 }
-//                MessageBean message = MessageBean.createVoiceMessage(mToUsername, recordTime, file.getAbsolutePath());
+//                MessageBean message = MessageBean.createVoiceMessage(mToUserId, recordTime, file.getAbsolutePath());
 //                JMClient.SINGLETON.getChatManager().sendVoiceMessage(message, file, recordTime, new JMCallback<Void>() {
 //                    @Override
 //                    public void onSuccess(Void aVoid) {
@@ -313,10 +312,24 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
             return false;
         }
     };
+    private IOnMessageListener mOnMessageListener = new IOnMessageListener() {
+        @Override
+        public void onMessage(MessageBean messageBean) {
+            // 不是当前会话的对方用户发过来的消息,不添加到列表中
+            if (mToUserId != messageBean.getFromUserId()) {
+                return;
+            }
+            mRcvMessageAdapter.getDataList().add(messageBean);
+            mRcvMessageAdapter.notifyItemInserted(mRcvMessageAdapter.getDataList().size() - 1);
+            // 消息列表滚动到底部
+            mRcvMessage.scrollToPosition(mRcvMessageAdapter.getItemCount() - 1);
+        }
+    };
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        ChatManager.SINGLETON.removeOnMessageListener(mOnMessageListener);
         MediaPlayerHelper.SINGLETON.stop();
         MediaRecorderHelper.SINGLETON.stopRecord();
     }
@@ -366,7 +379,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void setListener() {
-        addChatListener();
+        ChatManager.SINGLETON.addOnMessageListener(mOnMessageListener);
         mTitleBar.setLeftImageOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -376,7 +389,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
 //        mTitleBar.setRightImageOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
-//                ChatSettingFragment.start(getContext(), mToUsername);
+//                ChatSettingFragment.start(getContext(), mToUserId);
 //            }
 //        });
 
@@ -425,6 +438,20 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
                 }
             }
         });
+        // 监听软键盘右下角按键
+        mEtContent.addTextChangedListener(new ClearErrorInfoTextWatcher(null) {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                super.onTextChanged(s, start, before, count);
+                if (TextUtils.isEmpty(mEtContent.getText().toString().trim())) {
+                    mBtnSend.setVisibility(View.GONE);
+                    mIvMore.setVisibility(View.VISIBLE);
+                } else {
+                    mBtnSend.setVisibility(View.VISIBLE);
+                    mIvMore.setVisibility(View.GONE);
+                }
+            }
+        });
         mIvMore.setOnClickListener(mOnClickListener);
         mBtnSend.setOnClickListener(mOnClickListener);
         findViewByID(R.id.ll_send_img).setOnClickListener(mOnClickListener);
@@ -436,12 +463,12 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
         if (intent == null) {
             return;
         }
-        mToUsername = intent.getStringExtra(TO_USERNAME);
-        if (mToUsername == null) {
+        mToUserId = intent.getIntExtra(TO_USER_ID, 0);
+        if (mToUserId == 0) {
             return;
         }
-        getPresenter().getUserInfo(mToUsername);
-//        mConversationBean = JMClient.SINGLETON.getConversationManager().getByToUsername(mToUsername);
+//        getPresenter().getUserInfo(mToUserId);
+//        mConversationBean = JMClient.SINGLETON.getConversationManager().getByToUsername(mToUserId);
 //        // 重置未读数
 //        if (mConversationBean != null) {
 //            JMClient.SINGLETON.getConversationManager().resetUnreadCount(mConversationBean.getId());
@@ -461,16 +488,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
     @Override
     public void getUserInfoFailure(Exception e) {
         ShowLogUtil.logi(e.getMessage());
-        mTitleBar.setTitleText(mToUsername);
-    }
-
-    /**
-     * Author: QinHao
-     * Email:qinhao@jeejio.com
-     * Date:2019/7/12 15:26
-     * Description:设置聊天监听器,该方法在连接成功后调用
-     */
-    private void addChatListener() {
+        mTitleBar.setTitleText(mToUserId);
     }
 
     /**
@@ -512,8 +530,8 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
         }
         MessageBean messageBean = null;
         if (mMessageContentType == MessageContentType.TEXT) {
-//            messageBean = MessageBean.createTextMessage(mToUsername, content);
-//            JMClient.SINGLETON.getChatManager().sendTextMessage(messageBean, new SendMessageCallback(messageBean));
+            messageBean = MessageBean.createTextMessage(mToUserId, content);
+            ChatManager.SINGLETON.sendMessage(messageBean);
         }
         mRcvMessageAdapter.getDataList().add(messageBean);
         mRcvMessageAdapter.notifyItemInserted(mRcvMessageAdapter.getDataList().size() - 1);
@@ -607,12 +625,12 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
      * Date:2019/9/3 15:09
      * Description:获取跳转到该界面的 Intent
      *
-     * @param context    上下文
-     * @param toUsername 对方的用户名
+     * @param context  上下文
+     * @param toUserId 对方的用户 Id
      */
-    public static void start(Context context, String toUsername) {
+    public static void start(Context context, int toUserId) {
         Intent intent = new Intent(context, ChatActivity.class);
-        intent.putExtra(TO_USERNAME, toUsername);
+        intent.putExtra(TO_USER_ID, toUserId);
         context.startActivity(intent);
     }
 }

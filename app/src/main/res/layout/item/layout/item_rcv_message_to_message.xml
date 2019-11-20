@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:paddingTop="@dimen/px19"
     android:paddingBottom="@dimen/px19"
-    tools:context=".chat.view.adapter.RcvMessageAdapterToMessageItemView">
+    tools:context="com.qinshou.qinshoubox.me.ui.adapter.RcvMessageAdapterToMessageItemView">
 
     <!-- 消息发送时间 -->
     <TextView
@@ -81,16 +81,6 @@
                         android:textColor="#FFFFFFFF"
                         android:textSize="@dimen/px28"
                         tools:text="一二三四" />
-
-                    <ImageView
-                        android:id="@+id/iv_voice_to"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/px11"
-                        android:layout_marginLeft="@dimen/px11"
-                        android:visibility="gone"
-                        tools:src="@drawable/chat_iv_voice_to_1"
-                        tools:visibility="visible" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

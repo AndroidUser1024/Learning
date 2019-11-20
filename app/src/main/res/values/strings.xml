@@ -42,7 +42,6 @@
     <string name="me_qr_code_scan">二维码扫描</string>
     <string name="me_pei_qi">啥是佩奇</string>
     <string name="me_test">测试界面</string>
-    <string name="me_btn_chat_text">聊天</string>
 
     <!-- 登录界面 -->
     <string name="login_tv_login_text">Login</string>
@@ -51,6 +50,16 @@
     <string name="et_login_password_hint">请输入密码</string>
     <string name="login_btn_login_or_register_text">登录</string>
     <string name="login_btn_login_or_register_text2">注册</string>
+
+    <string-array name="conversation_tv_last_msg_time_text">
+        <item>星期日</item>
+        <item>星期一</item>
+        <item>星期二</item>
+        <item>星期三</item>
+        <item>星期四</item>
+        <item>星期五</item>
+        <item>星期六</item>
+    </string-array>
 
     <!-- 聊天界面 -->
     <string name="chat_btn_press_to_speech_text">按住说话</string>

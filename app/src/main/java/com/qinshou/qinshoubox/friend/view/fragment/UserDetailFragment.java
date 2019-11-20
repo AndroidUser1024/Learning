@@ -108,11 +108,12 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
     @Override
     public void showFriendUI(final UserBean userBean) {
         setData(userBean);
+        mLlAdditionalMessage.setVisibility(View.GONE);
         mBtnAddFriend.setText("发送消息");
         mBtnAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ChatActivity.start(getContext(), userBean.getUsername());
+                ChatActivity.start(getContext(), userBean.getId());
             }
         });
     }
@@ -120,6 +121,7 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
     @Override
     public void showNotFriendUI(final UserBean userBean) {
         setData(userBean);
+        mLlAdditionalMessage.setVisibility(View.GONE);
         mBtnAddFriend.setText("添加到通讯录");
         mBtnAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -218,7 +220,7 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
         mBtnAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ChatActivity.start(getContext(), userBean.getUsername());
+                ChatActivity.start(getContext(), userBean.getId());
             }
         });
     }

@@ -9,6 +9,7 @@ import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemClickListener;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.bean.UserBean;
+import com.qinshou.qinshoubox.me.ui.activity.ChatActivity;
 
 /**
  * Author: QinHao
@@ -22,18 +23,21 @@ public class RcvFriendAdapter extends RcvBaseAdapter<UserBean> {
         super(context, R.layout.item_rcv_friend);
         setOnItemClickListener(new IOnItemClickListener<UserBean>() {
             @Override
-            public void onItemClick(BaseViewHolder baseViewHolder, UserBean userBean, int i) {
+            public void onItemClick(BaseViewHolder holder, UserBean itemData, int position) {
+                ChatActivity.start(getContext(), itemData.getId());
             }
         });
     }
 
     @Override
-    public void bindViewHolder(final BaseViewHolder baseViewHolder, UserBean userBean, int i) {
+    public void bindViewHolder(final BaseViewHolder baseViewHolder, UserBean itemData, int position) {
         // 头像
-        ImageLoadUtil.SINGLETON.loadImage(getContext(), userBean.getHeadImgSmall(), baseViewHolder.getImageView(R.id.iv_head_img));
+        ImageLoadUtil.SINGLETON.loadImage(getContext(), itemData.getHeadImgSmall(), baseViewHolder.getImageView(R.id.iv_head_img));
         // 昵称
-        baseViewHolder.setTvText(R.id.tv_name, TextUtils.isEmpty(userBean.getRemark())
-                ? userBean.getNickname()
-                : userBean.getRemark());
+        baseViewHolder.setTvText(R.id.tv_name, TextUtils.isEmpty(itemData.getRemark())
+                ? itemData.getNickname()
+                : itemData.getRemark());
+        // 个性签名
+        baseViewHolder.setTvText(R.id.tv_signature, itemData.getSignature());
     }
 }
