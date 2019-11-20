@@ -4,6 +4,7 @@ import com.qinshou.commonmodule.base.IBaseModel;
 import com.qinshou.commonmodule.base.IBaseView;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.friend.bean.FriendHistoryBean;
+import com.qinshou.qinshoubox.friend.view.fragment.FriendHistoryFragment;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * Author: QinHao
  * Email:qinhao@jeejio.com
  * Date: 2019/08/21 14:03
- * Description:{@link RequestHistoryFragment} 的契约类
+ * Description:{@link FriendHistoryFragment} 的契约类
  */
 public interface IFriendHistoryContract {
     interface IModel extends IBaseModel {
@@ -24,7 +25,7 @@ public interface IFriendHistoryContract {
          *
          * @param callback 回调接口
          */
-        void getFriendHistory(Callback<List<FriendHistoryBean>> callback);
+        void getFriendHistory(int page, int pageSize, int toUserId, Callback<List<FriendHistoryBean>> callback);
     }
 
     interface IView extends IBaseView {
@@ -56,6 +57,6 @@ public interface IFriendHistoryContract {
          * Date:2019/9/5 14:17
          * Description:获取好友申请历史列表
          */
-        void getFriendHistory();
+        void getFriendHistory(int page, int pageSize, int toUserId);
     }
 }

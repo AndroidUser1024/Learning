@@ -17,15 +17,20 @@
 
     </com.qinshou.commonmodule.widget.TitleBar>
 
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rcv_request_history"
+    <com.qinshou.commonmodule.widget.RefreshLayout
+        android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:itemCount="10"
-        tools:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/item_rcv_friend_history"
-        tools:orientation="vertical">
+        android:layout_height="match_parent">
 
-    </android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rcv_request_history"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:itemCount="10"
+            tools:layoutManager="LinearLayoutManager"
+            tools:listitem="@layout/item_rcv_friend_history"
+            tools:orientation="vertical">
+
+        </android.support.v7.widget.RecyclerView>
+    </com.qinshou.commonmodule.widget.RefreshLayout>
 </LinearLayout>

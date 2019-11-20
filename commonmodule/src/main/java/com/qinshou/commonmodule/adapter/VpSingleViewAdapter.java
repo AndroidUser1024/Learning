@@ -13,10 +13,10 @@ import java.util.List;
  */
 
 public class VpSingleViewAdapter extends PagerAdapter {
-    private List<View> viewList;
+    private List<? extends View> viewList;
     private List<String> titleList;
 
-    public VpSingleViewAdapter(List<View> viewList, List<String> titleList) {
+    public VpSingleViewAdapter(List<? extends View> viewList, List<String> titleList) {
         this.viewList = viewList;
         this.titleList = titleList;
     }

@@ -68,7 +68,7 @@
     <string name="friend_history_tv_title_text">新增朋友</string>
     <string name="friend_history_tv_right_text">添加</string>
     <string name="friend_history_btn_view_text">查看</string>
-    <string name="friend_history_btn_view_text2">已添加</string>
+    <string name="friend_history_btn_view_text_2">已添加</string>
 
     <!-- 新增朋友界面 -->
     <string name="add_friend_tv_title_text">新的朋友</string>

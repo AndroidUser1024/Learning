@@ -2,7 +2,11 @@ package com.qinshou.qinshoubox.friend.contract;
 
 import com.qinshou.commonmodule.base.IBaseModel;
 import com.qinshou.commonmodule.base.IBaseView;
+import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
+import com.qinshou.qinshoubox.me.bean.UserBean;
+
+import java.util.List;
 
 /**
  * Author: QinHao
@@ -12,14 +16,16 @@ import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
  */
 public interface IFriendContract {
     interface IModel extends IBaseModel {
-
+        void getFriendList(int fromUserId, Callback<List<UserBean>> callback);
     }
 
     interface IView extends IBaseView {
+        void getFriendListSuccess(List<UserBean> userBeanList);
 
+        void getFriendListFailure(Exception e);
     }
 
     interface IPresenter {
-
+        void getFriendList(int fromUserId);
     }
 }

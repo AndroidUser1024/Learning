@@ -11,6 +11,10 @@ public interface IConstant {
      */
     int PAGE_START = 0;
     /**
+     * 分页加载数据每页的条数
+     */
+    int PAGE_SIZE = 20;
+    /**
      * 最后一次登录成功的用户名存储在 SharedPreferences 中的 key
      */
     String SP_KEY_LAST_LOGIN_USERNAME = "lastLoginUsername";
