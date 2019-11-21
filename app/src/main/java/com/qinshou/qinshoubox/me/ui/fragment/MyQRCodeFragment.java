@@ -1,34 +1,14 @@
 package com.qinshou.qinshoubox.me.ui.fragment;
 
-import android.Manifest;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.os.Environment;
-import android.support.constraint.ConstraintLayout;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.qinshou.commonmodule.util.permissionutil.IOnRequestPermissionResultCallBack;
-import com.qinshou.commonmodule.util.permissionutil.PermissionUtil;
 import com.qinshou.commonmodule.widget.TitleBar;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
-import com.qinshou.qinshoubox.me.bean.UserBean;
 import com.qinshou.qinshoubox.me.contract.IMyQRCodeContract;
 import com.qinshou.qinshoubox.me.presenter.MyQRCodePresenter;
-import com.qinshou.qrcodemodule.encode.CodeCreator;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Author: QinHao

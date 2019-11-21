@@ -1,4 +1,4 @@
-package com.qinshou.qinshoubox.database;
+package com.qinshou.qinshoubox.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

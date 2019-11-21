@@ -1,7 +1,6 @@
 package com.qinshou.qinshoubox.me.ui.fragment;
 
 import android.content.Intent;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -9,14 +8,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qinshou.commonmodule.ContainerActivity;
-import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.me.bean.UserBean;
 import com.qinshou.qinshoubox.me.contract.IMeContract;
 import com.qinshou.qinshoubox.me.presenter.MePresenter;
-import com.qinshou.qinshoubox.me.ui.activity.ChatActivity;
 import com.qinshou.qinshoubox.me.ui.activity.ContactListActivity;
 import com.qinshou.qinshoubox.me.ui.activity.PeiQiActivity;
 import com.qinshou.qinshoubox.me.ui.activity.PuzzleActivity;

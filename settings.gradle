@@ -1,1 +1,1 @@
-include ':app', ':commonmodule', ':imagemodule', ':immodule', ':pushmodule', ':sharemodule', ':qrcodemodule', ':OkHttpHelperProcessor', ':OkHttpHelper'
+include ':app', ':commonmodule', ':imagemodule', ':immodule', ':pushmodule', ':sharemodule', ':qrcodemodule', ':OkHttpHelperProcessor', ':OkHttpHelper', ':DatabaseHelper', ':DatabaseHelperProcessor'

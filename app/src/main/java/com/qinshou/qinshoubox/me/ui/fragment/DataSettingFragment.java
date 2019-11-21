@@ -3,7 +3,6 @@ package com.qinshou.qinshoubox.me.ui.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qinshou.commonmodule.ContainerActivity;
-import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.widget.TitleBar;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.R;

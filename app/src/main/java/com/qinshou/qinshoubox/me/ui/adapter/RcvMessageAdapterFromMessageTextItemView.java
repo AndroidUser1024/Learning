@@ -8,7 +8,8 @@ import com.qinshou.immodule.bean.MessageBean;
 import com.qinshou.immodule.enums.MessageContentType;
 import com.qinshou.immodule.chat.ChatManager;
 import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.database.DatabaseManager;
+import com.qinshou.qinshoubox.db.dao.IUserDao;
+import com.qinshou.qinshoubox.db.dao.impl.UserDaoImpl;
 import com.qinshou.qinshoubox.me.bean.UserBean;
 
 
@@ -19,8 +20,11 @@ import com.qinshou.qinshoubox.me.bean.UserBean;
  * Description:收到的消息,消息类型为普通文本
  */
 public class RcvMessageAdapterFromMessageTextItemView extends AbsRcvMessageAdapterFromMessageItemView {
+    private IUserDao mUserDao;
+
     public RcvMessageAdapterFromMessageTextItemView(Context context) {
         super(context, R.layout.item_rcv_message_from_message_text);
+        mUserDao = new UserDaoImpl();
     }
 
     @Override
@@ -34,7 +38,7 @@ public class RcvMessageAdapterFromMessageTextItemView extends AbsRcvMessageAdapt
     public void bindViewHolder(final BaseViewHolder baseViewHolder, final MessageBean messageBean, int i) {
         super.bindViewHolder(baseViewHolder, messageBean, i);
         // 头像
-        UserBean userBean = DatabaseManager.SINGLETON.getUser(messageBean.getFromUserId());
+        UserBean userBean = mUserDao.getById(messageBean.getFromUserId());
         if (userBean != null) {
             ImageLoadUtil.SINGLETON.loadImage(getContext(), userBean.getHeadImgSmall(), baseViewHolder.getImageView(R.id.iv_head_img));
         }

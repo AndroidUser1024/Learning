@@ -73,9 +73,14 @@ dependencies {
     implementation project(':immodule')
     implementation project(':OkHttpHelper')
     annotationProcessor project(':OkHttpHelperProcessor')
+    implementation project(':DatabaseHelper')
+    annotationProcessor project(':DatabaseHelperProcessor')
 
     //仿 iOS 的 PickerView 控件，有时间选择器和选项选择器
     implementation 'com.contrarywind:Android-PickerView:4.1.6'
     // Eventbus
     implementation 'org.greenrobot:eventbus:3.0.0'
+    // ORMLite 数据库
+    implementation 'com.j256.ormlite:ormlite-android:4.48'
+    implementation 'com.j256.ormlite:ormlite-core:4.48'
 }

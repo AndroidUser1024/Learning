@@ -28,12 +28,14 @@ public class UserDetailPresenter extends AbsPresenter<IUserDetailContract.IView,
                 if (!isViewAttached()) {
                     return;
                 }
-                if (data.getFriendStatus() == 3) {
+                if (data.getFriendStatus() == 1) {
                     getView().showFriendUI(data);
-                } else if (data.getReceive() == 1) {
-                    getView().showWaitAcceptUI(data);
                 } else {
-                    getView().showNotFriendUI(data);
+                    if (data.getReceive() == 1) {
+                        getView().showWaitAcceptUI(data);
+                    } else {
+                        getView().showNotFriendUI(data);
+                    }
                 }
             }
 

@@ -1,7 +1,6 @@
 package com.qinshou.qinshoubox.me.ui.adapter;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,7 +11,6 @@ import com.qinshou.commonmodule.rcvbaseadapter.itemview.BaseItemView;
 import com.qinshou.immodule.bean.MessageBean;
 import com.qinshou.immodule.chat.ChatManager;
 import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.me.bean.UserBean;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

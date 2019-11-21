@@ -35,6 +35,7 @@ import com.qinshou.immodule.listener.IOnMessageListener;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.constant.IConstant;
+import com.qinshou.qinshoubox.db.dao.impl.UserDaoImpl;
 import com.qinshou.qinshoubox.listener.ClearErrorInfoTextWatcher;
 import com.qinshou.qinshoubox.me.bean.UserBean;
 import com.qinshou.qinshoubox.me.contract.IChatContract;
@@ -467,6 +468,11 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
         if (mToUserId == 0) {
             return;
         }
+        UserBean userBean = new UserDaoImpl().getById(mToUserId);
+        // 对方的昵称
+        mTitleBar.setTitleText(TextUtils.isEmpty(userBean.getRemark())
+                ? userBean.getNickname()
+                : userBean.getRemark());
 //        getPresenter().getUserInfo(mToUserId);
 //        mConversationBean = JMClient.SINGLETON.getConversationManager().getByToUsername(mToUserId);
 //        // 重置未读数
@@ -479,10 +485,6 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
 
     @Override
     public void getUserInfoSuccess(UserBean userBean) {
-        // 对方的昵称
-//        mTitleBar.setTitleText(TextUtils.isEmpty(userBean.getRemarkName())
-//                ? userBean.getUserName()
-//                : userBean.getRemarkName());
     }
 
     @Override

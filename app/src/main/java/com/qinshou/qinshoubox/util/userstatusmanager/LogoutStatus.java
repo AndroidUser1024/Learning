@@ -8,7 +8,8 @@ import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.immodule.chat.ChatManager;
 import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.constant.IConstant;
-import com.qinshou.qinshoubox.database.DatabaseManager;
+import com.qinshou.qinshoubox.db.DBHelper;
+import com.qinshou.qinshoubox.db.DatabaseManager;
 import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
 import com.qinshou.qinshoubox.me.bean.UserBean;
 import com.qinshou.qinshoubox.me.ui.fragment.LoginOrRegisterFragment;
@@ -30,8 +31,7 @@ public class LogoutStatus implements IUserStatus {
 
     @Override
     public void login(Context context, UserBean userBean) {
-        DatabaseManager.SINGLETON.init(context, userBean.getUsername()
-                , 1);
+        DBHelper.init(context, userBean.getUsername());
         // 存储最后一次登录成功的用户名
         SharedPreferencesHelper.SINGLETON.putString(IConstant.SP_KEY_LAST_LOGIN_USERNAME, userBean.getUsername());
         context.startActivity(new Intent(context, MainActivity.class));

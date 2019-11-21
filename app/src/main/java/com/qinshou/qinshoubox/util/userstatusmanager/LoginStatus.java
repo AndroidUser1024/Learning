@@ -5,7 +5,6 @@ import android.content.Intent;
 
 import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
-import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.immodule.chat.ChatManager;
 import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.constant.IConstant;

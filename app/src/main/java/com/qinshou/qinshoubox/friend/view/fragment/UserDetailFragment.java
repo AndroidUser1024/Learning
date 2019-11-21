@@ -11,12 +11,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.qinshou.commonmodule.ContainerActivity;
+import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.util.activityresultutil.ActivityResultUtil;
 import com.qinshou.commonmodule.util.activityresultutil.OnActivityResultCallBack;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
-import com.qinshou.qinshoubox.database.DatabaseManager;
+import com.qinshou.qinshoubox.db.dao.impl.UserDaoImpl;
 import com.qinshou.qinshoubox.friend.contract.IUserDetailContract;
 import com.qinshou.qinshoubox.friend.presenter.UserDetailPresenter;
 import com.qinshou.qinshoubox.friend.view.activity.SetRemarkActivity;
@@ -117,6 +118,30 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
                 ChatActivity.start(getContext(), userBean.getId());
             }
         });
+        // 用户来源
+        String source = "";
+        if (userBean.getSource() == 1) {
+            source = "通过用户名添加";
+        } else if (userBean.getSource() == 2) {
+            source = "通过手机号添加";
+        } else if (userBean.getSource() == 3) {
+            source = "通过邮箱添加";
+        } else if (userBean.getSource() == 4) {
+            source = "通过扫一扫添加";
+        } else if (userBean.getSource() == 5) {
+            source = "通过群聊添加";
+        } else if (userBean.getSource() == -1) {
+            source = "对方通过用户名添加";
+        } else if (userBean.getSource() == -2) {
+            source = "对方通过手机号添加";
+        } else if (userBean.getSource() == -3) {
+            source = "对方通过邮箱添加";
+        } else if (userBean.getSource() == -4) {
+            source = "对方通过扫一扫添加";
+        } else if (userBean.getSource() == -5) {
+            source = "对方通过群聊添加";
+        }
+        mTvSource.setText(source);
     }
 
     @Override
@@ -134,6 +159,15 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
                 );
             }
         });
+        String source = "";
+        if (userBean.getSource() == 1) {
+            source = "通过用户名搜索";
+        } else if (userBean.getSource() == 2) {
+            source = "通过手机号搜索";
+        } else if (userBean.getSource() == 3) {
+            source = "通过邮箱搜索";
+        }
+        mTvSource.setText(source);
     }
 
     @Override
@@ -146,11 +180,34 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
             public void onClick(View v) {
                 getPresenter().agreeAddFriend(UserStatusManager.SINGLETON.getUserBean().getId(), userBean.getId(), mTvRemark.getText().toString().trim());
             }
-        });
+        });   // 用户来源
+        String source = "";
+        if (userBean.getSource() == 1) {
+            source = "通过用户名添加";
+        } else if (userBean.getSource() == 2) {
+            source = "通过手机号添加";
+        } else if (userBean.getSource() == 3) {
+            source = "通过邮箱添加";
+        } else if (userBean.getSource() == 4) {
+            source = "通过扫一扫添加";
+        } else if (userBean.getSource() == 5) {
+            source = "通过群聊添加";
+        } else if (userBean.getSource() == -1) {
+            source = "对方通过用户名添加";
+        } else if (userBean.getSource() == -2) {
+            source = "对方通过手机号添加";
+        } else if (userBean.getSource() == -3) {
+            source = "对方通过邮箱添加";
+        } else if (userBean.getSource() == -4) {
+            source = "对方通过扫一扫添加";
+        } else if (userBean.getSource() == -5) {
+            source = "对方通过群聊添加";
+        }
+        mTvSource.setText(source);
     }
 
     private void setData(UserBean userBean) {
-        DatabaseManager.SINGLETON.insertUser(userBean);
+        new UserDaoImpl().insertOrUpdate(userBean);
         // 头像
         ImageLoadUtil.SINGLETON.loadImage(getContext(), userBean.getHeadImgSmall(), mIvHeadImg);
         // 备注
@@ -175,40 +232,6 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
         mTvEmail.setText(userBean.getEmail());
         // 个性签名
         mTvSignature.setText(userBean.getSignature());
-        // 用户来源
-        String source = "";
-        if (userBean.getFriendStatus() == 3) {
-            if (userBean.getSource() == 1) {
-                source = "通过用户名添加";
-            } else if (userBean.getSource() == 2) {
-                source = "通过手机号添加";
-            } else if (userBean.getSource() == 3) {
-                source = "通过邮箱添加";
-            } else if (userBean.getSource() == 4) {
-                source = "通过扫一扫添加";
-            } else if (userBean.getSource() == 5) {
-                source = "通过群聊添加";
-            } else if (userBean.getSource() == -1) {
-                source = "对方通过用户名添加";
-            } else if (userBean.getSource() == -2) {
-                source = "对方通过手机号添加";
-            } else if (userBean.getSource() == -3) {
-                source = "对方通过邮箱添加";
-            } else if (userBean.getSource() == -4) {
-                source = "对方通过扫一扫添加";
-            } else if (userBean.getSource() == -5) {
-                source = "对方通过群聊添加";
-            }
-        } else {
-            if (userBean.getSource() == 1) {
-                source = "通过用户名搜索";
-            } else if (userBean.getSource() == 2) {
-                source = "通过手机号搜索";
-            } else if (userBean.getSource() == 3) {
-                source = "通过邮箱搜索";
-            }
-        }
-        mTvSource.setText(source);
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.qinshou.qinshoubox;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -96,6 +98,18 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
     protected void onDestroy() {
         super.onDestroy();
         ChatManager.SINGLETON.removeOnFriendStatusListener(mOnFriendStatusListener);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            startActivity(intent);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
