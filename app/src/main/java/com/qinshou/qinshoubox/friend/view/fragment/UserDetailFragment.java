@@ -38,8 +38,8 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
     private ImageView mIvGender;
     private TextView mTvUsername;
     private TextView mTvNickname;
-    private LinearLayout mLlAdditionalMessage;
-    private TextView mTvAdditionalMessage;
+    private LinearLayout mLlAdditionalMsg;
+    private TextView mTvAdditionalMsg;
     private TextView mTvRemark2;
     private TextView mTvPhoneNumber;
     private TextView mTvEmail;
@@ -59,8 +59,8 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
         mIvGender = findViewByID(R.id.iv_gender);
         mTvUsername = findViewByID(R.id.tv_username);
         mTvNickname = findViewByID(R.id.tv_nickname);
-        mLlAdditionalMessage = findViewByID(R.id.ll_additional_message);
-        mTvAdditionalMessage = findViewByID(R.id.tv_additional_message);
+        mLlAdditionalMsg = findViewByID(R.id.ll_additional_msg);
+        mTvAdditionalMsg = findViewByID(R.id.tv_additional_msg);
         mTvRemark2 = findViewByID(R.id.tv_remark_2);
         mTvPhoneNumber = findViewByID(R.id.tv_phone_number);
         mTvEmail = findViewByID(R.id.tv_email);
@@ -109,7 +109,7 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
     @Override
     public void showFriendUI(final UserBean userBean) {
         setData(userBean);
-        mLlAdditionalMessage.setVisibility(View.GONE);
+        mLlAdditionalMsg.setVisibility(View.GONE);
         mBtnAddFriend.setText("发送消息");
         mBtnAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,12 +122,12 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
     @Override
     public void showNotFriendUI(final UserBean userBean) {
         setData(userBean);
-        mLlAdditionalMessage.setVisibility(View.GONE);
+        mLlAdditionalMsg.setVisibility(View.GONE);
         mBtnAddFriend.setText("添加到通讯录");
         mBtnAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SetAdditionalMessageFragment.start(getContext()
+                SetAdditionalMsgFragment.start(getContext()
                         , userBean.getId()
                         , mTvRemark.getText().toString().trim()
                         , userBean.getSource()
@@ -139,7 +139,7 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
     @Override
     public void showWaitAcceptUI(final UserBean userBean) {
         setData(userBean);
-        mLlAdditionalMessage.setVisibility(View.VISIBLE);
+        mLlAdditionalMsg.setVisibility(View.VISIBLE);
         mBtnAddFriend.setText("接受请求");
         mBtnAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,7 +166,7 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
         // 昵称
         mTvNickname.setText(userBean.getNickname());
         // 附加消息
-        mTvAdditionalMessage.setText(userBean.getAdditionalMessage());
+        mTvAdditionalMsg.setText(userBean.getAdditionalMsg());
         // 功能栏的备注
         mTvRemark2.setText(TextUtils.isEmpty(userBean.getRemark()) ? "" : userBean.getRemark());
         // 手机号

@@ -4,17 +4,17 @@ package com.qinshou.qinshoubox.friend.contract;
 import com.qinshou.commonmodule.base.IBaseModel;
 import com.qinshou.commonmodule.base.IBaseView;
 import com.qinshou.okhttphelper.callback.Callback;
-import com.qinshou.qinshoubox.friend.view.fragment.SetAdditionalMessageFragment;
+import com.qinshou.qinshoubox.friend.view.fragment.SetAdditionalMsgFragment;
 
 /**
  * Author: QinHao
  * Email:qinhao@jeejio.com
  * Date: 2019/09/12 10:01
- * Description:{@link SetAdditionalMessageFragment} 的契约类
+ * Description:{@link SetAdditionalMsgFragment} 的契约类
  */
-public interface ISetAdditionalMessageContract {
+public interface ISetAdditionalMsgContract {
     interface IModel extends IBaseModel {
-        void addFriend(int fromUserId, int toUserId, String remark, String additionalMessage, int source, Callback<Object> callback);
+        void addFriend(int fromUserId, int toUserId, String remark, String additionalMsg, int source, Callback<Object> callback);
     }
 
     interface IView extends IBaseView {
@@ -24,7 +24,6 @@ public interface ISetAdditionalMessageContract {
     }
 
     interface IPresenter {
-
-        void addFriend(int fromUserId, int toUserId, String remark, String additionalMessage, int source);
+        void addFriend(int fromUserId, int toUserId, String remark, String additionalMsg, int source);
     }
 }

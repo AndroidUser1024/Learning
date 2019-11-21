@@ -84,7 +84,7 @@ public class UserBean {
     /**
      * 好友申请的附加信息
      */
-    private String additionalMessage;
+    private String additionalMsg;
 
     public UserBean() {
     }
@@ -111,7 +111,7 @@ public class UserBean {
                 ", source=" + source +
                 ", receive=" + receive +
                 ", remark='" + remark + '\'' +
-                ", additionalMessage='" + additionalMessage + '\'' +
+                ", additionalMsg='" + additionalMsg + '\'' +
                 '}';
     }
 
@@ -228,11 +228,11 @@ public class UserBean {
         this.remark = remark;
     }
 
-    public String getAdditionalMessage() {
-        return additionalMessage;
+    public String getAdditionalMsg() {
+        return additionalMsg;
     }
 
-    public void setAdditionalMessage(String additionalMessage) {
-        this.additionalMessage = additionalMessage;
+    public void setAdditionalMsg(String additionalMsg) {
+        this.additionalMsg = additionalMsg;
     }
 }

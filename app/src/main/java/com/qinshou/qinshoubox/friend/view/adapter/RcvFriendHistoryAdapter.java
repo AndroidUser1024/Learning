@@ -32,7 +32,7 @@ public class RcvFriendHistoryAdapter extends RcvSingleBaseAdapter<FriendHistoryB
                 , baseViewHolder.getImageView(R.id.iv_head_img));
         baseViewHolder.setTvText(R.id.tv_nickname, friendHistoryBean.getNickname());
         // 附加消息
-        baseViewHolder.setTvText(R.id.tv_status, friendHistoryBean.getAdditionalMessage());
+        baseViewHolder.setTvText(R.id.tv_status, friendHistoryBean.getAdditionalMsg());
         Button btnView = baseViewHolder.findViewById(R.id.btn_view);
         // 根据申请结果,查看按钮显示不同文字
         if (friendHistoryBean.getStatus() == 0) {

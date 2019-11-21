@@ -10,7 +10,7 @@ public class FriendHistoryBean {
     /**
      * 附加消息
      */
-    private String additionalMessage;
+    private String additionalMsg;
     /**
      * 好友关系状态
      */
@@ -42,7 +42,7 @@ public class FriendHistoryBean {
     @Override
     public String toString() {
         return "FriendHistoryBean{" +
-                "additionalMessage='" + additionalMessage + '\'' +
+                "additionalMsg='" + additionalMsg + '\'' +
                 ", status=" + status +
                 ", fromUserId=" + fromUserId +
                 ", username='" + username + '\'' +
@@ -52,12 +52,12 @@ public class FriendHistoryBean {
                 '}';
     }
 
-    public String getAdditionalMessage() {
-        return additionalMessage;
+    public String getAdditionalMsg() {
+        return additionalMsg;
     }
 
-    public void setAdditionalMessage(String additionalMessage) {
-        this.additionalMessage = additionalMessage;
+    public void setAdditionalMsg(String additionalMsg) {
+        this.additionalMsg = additionalMsg;
     }
 
     public int getStatus() {

@@ -3,7 +3,6 @@ package com.qinshou.qinshoubox.friend.view.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
@@ -14,8 +13,8 @@ import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.widget.TitleBar;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
-import com.qinshou.qinshoubox.friend.contract.ISetAdditionalMessageContract;
-import com.qinshou.qinshoubox.friend.presenter.SetAdditionalMessagePresenter;
+import com.qinshou.qinshoubox.friend.contract.ISetAdditionalMsgContract;
+import com.qinshou.qinshoubox.friend.presenter.SetAdditionalMsgPresenter;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 
@@ -25,7 +24,7 @@ import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
  * Date: 2019/09/12 10:01
  * Description:输入朋友验证消息界面
  */
-public class SetAdditionalMessageFragment extends QSFragment<SetAdditionalMessagePresenter> implements ISetAdditionalMessageContract.IView {
+public class SetAdditionalMsgFragment extends QSFragment<SetAdditionalMsgPresenter> implements ISetAdditionalMsgContract.IView {
     private static final String TO_USER_ID = "ToUserId";
     private static final String REMARK = "Remark";
     private static final String SOURCE = "Source";
@@ -40,7 +39,7 @@ public class SetAdditionalMessageFragment extends QSFragment<SetAdditionalMessag
     /**
      * 朋友验证消息输入框
      */
-    private EditText mEtAdditionalMessage;
+    private EditText mEtAdditionalMsg;
     /**
      * 清空输入框的按钮
      */
@@ -49,13 +48,13 @@ public class SetAdditionalMessageFragment extends QSFragment<SetAdditionalMessag
 
     @Override
     public int getLayoutId() {
-        return R.layout.fragment_set_additional_message;
+        return R.layout.fragment_set_additional_msg;
     }
 
     @Override
     public void initView() {
-        mEtAdditionalMessage = findViewByID(R.id.et_additional_message);
-        mEtAdditionalMessage.setText(getString(R.string.set_additional_message_default_additional_message, UserStatusManager.SINGLETON.getUserBean().getNickname()));
+        mEtAdditionalMsg = findViewByID(R.id.et_additional_msg);
+        mEtAdditionalMsg.setText(getString(R.string.set_additional_msg_default_additional_msg, UserStatusManager.SINGLETON.getUserBean().getNickname()));
         mIbClearInput = findViewByID(R.id.ib_clear_input);
     }
 
@@ -77,11 +76,11 @@ public class SetAdditionalMessageFragment extends QSFragment<SetAdditionalMessag
                 getPresenter().addFriend(UserStatusManager.SINGLETON.getUserBean().getId()
                         , mToUserId
                         , mRemark
-                        , mEtAdditionalMessage.getText().toString().trim()
+                        , mEtAdditionalMsg.getText().toString().trim()
                         , mSource);
             }
         });
-        mEtAdditionalMessage.addTextChangedListener(new TextWatcher() {
+        mEtAdditionalMsg.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -104,7 +103,7 @@ public class SetAdditionalMessageFragment extends QSFragment<SetAdditionalMessag
         mIbClearInput.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mEtAdditionalMessage.setText("");
+                mEtAdditionalMsg.setText("");
             }
         });
     }
@@ -149,7 +148,7 @@ public class SetAdditionalMessageFragment extends QSFragment<SetAdditionalMessag
         bundle.putString(REMARK, remark);
         bundle.putInt(SOURCE, source);
         context.startActivity(ContainerActivity.getJumpIntent(context
-                , SetAdditionalMessageFragment.class
+                , SetAdditionalMsgFragment.class
                 , bundle));
     }
 }

@@ -11,8 +11,8 @@
         android:id="@+id/title_bar"
         style="@style/TitleBarBaseStyle"
         app:leftText="@string/common_tv_left_text"
-        app:rightText="@string/set_additional_message_tv_right_text"
-        app:titleText="@string/set_additional_message_tv_title_text">
+        app:rightText="@string/set_additional_msg_tv_right_text"
+        app:titleText="@string/set_additional_msg_tv_title_text">
 
     </com.qinshou.commonmodule.widget.TitleBar>
 
@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
-        android:text="@string/set_additional_message_tv_info_text"
+        android:text="@string/set_additional_msg_tv_info_text"
         android:textSize="15sp" />
 
     <LinearLayout
@@ -31,7 +31,7 @@
         android:padding="15dp">
 
         <EditText
-            android:id="@+id/et_additional_message"
+            android:id="@+id/et_additional_msg"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

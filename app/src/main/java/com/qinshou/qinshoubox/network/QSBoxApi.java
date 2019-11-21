@@ -52,7 +52,7 @@ public interface QSBoxApi {
     Call<QinshouResultBean<Object>> addFriend(@Field(name = "fromUserId") int fromUserId
             , @Field(name = "toUserId") int toUserId
             , @Field(name = "remark") String remark
-            , @Field(name = "additionalMessage") String additionalMessage
+            , @Field(name = "additionalMsg") String additionalMsg
             , @Field(name = "source") int source);
 
     @Post("friend/agreeAddFriend/")
