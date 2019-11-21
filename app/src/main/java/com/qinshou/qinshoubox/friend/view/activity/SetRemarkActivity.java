@@ -39,13 +39,13 @@ public class SetRemarkActivity extends QSActivity<SetRemarkPresenter> implements
 
     @Override
     public void setListener() {
-        ((TitleBar) findViewByID(R.id.title_bar)).setLeftTextOnClickListener(new View.OnClickListener() {
+        findViewByID(R.id.tv_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-        ((TitleBar) findViewByID(R.id.title_bar)).setRightTextOnClickListener(new View.OnClickListener() {
+        findViewByID(R.id.tv_finish).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String remark = mEtRemark.getText().toString().trim();
@@ -69,7 +69,7 @@ public class SetRemarkActivity extends QSActivity<SetRemarkPresenter> implements
      * Date:2019/10/21 19:38
      * Description:跳转到该界面
      *
-     * @param context       description
+     * @param context   description
      * @param oldRemark 旧的备注
      */
     public static Intent getJumpIntent(Context context, String oldRemark) {
