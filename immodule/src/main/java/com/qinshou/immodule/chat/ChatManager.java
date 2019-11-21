@@ -6,12 +6,18 @@ import android.os.Looper;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.qinshou.immodule.bean.FriendStatusBean;
 import com.qinshou.immodule.bean.MessageBean;
-import com.qinshou.immodule.bean.MessageType;
+import com.qinshou.immodule.enums.FriendStatus;
+import com.qinshou.immodule.enums.MessageType;
+import com.qinshou.immodule.listener.IOnFriendStatusListener;
 import com.qinshou.immodule.listener.IOnMessageListener;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -33,6 +39,7 @@ public enum ChatManager {
     private final Request mRequest = new Request.Builder().url("http://172.16.60.231:10086/websocket").build();
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private List<IOnMessageListener> mOnMessageListenerList = new ArrayList<>();
+    private List<IOnFriendStatusListener> mOnFriendStatusListenerList = new ArrayList<>();
     private int mUserId;
 
     ChatManager() {
@@ -58,16 +65,43 @@ public enum ChatManager {
                 super.onMessage(webSocket, text);
                 Log.i(TAG, "onMessage: text--->" + text);
                 final MessageBean messageBean = new Gson().fromJson(text, MessageBean.class);
-                if (messageBean.getType() == MessageType.CHAT.getValue()) {
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (messageBean.getType() == MessageType.CHAT.getValue()) {
                             for (IOnMessageListener onMessageListener : mOnMessageListenerList) {
                                 onMessageListener.onMessage(messageBean);
                             }
+                        } else if (messageBean.getType() == MessageType.FRIEND.getValue()) {
+                            FriendStatusBean friendStatusBean = new Gson().fromJson(messageBean.getExtend(), FriendStatusBean.class);
+                            if (friendStatusBean.getStatus() == FriendStatus.ADD.getValue()) {
+                                for (IOnFriendStatusListener onFriendStatusListener : mOnFriendStatusListenerList) {
+                                    onFriendStatusListener.add(friendStatusBean.getFromUserId(), friendStatusBean.getAdditionalMsg());
+                                }
+                            } else if (friendStatusBean.getStatus() == FriendStatus.AGREE_ADD.getValue()) {
+                                for (IOnFriendStatusListener onFriendStatusListener : mOnFriendStatusListenerList) {
+                                    onFriendStatusListener.agreeAdd(friendStatusBean.getFromUserId());
+                                }
+                            } else if (friendStatusBean.getStatus() == FriendStatus.REFUSE_ADD.getValue()) {
+                                for (IOnFriendStatusListener onFriendStatusListener : mOnFriendStatusListenerList) {
+                                    onFriendStatusListener.refuseAdd(friendStatusBean.getFromUserId());
+                                }
+                            } else if (friendStatusBean.getStatus() == FriendStatus.DELETE.getValue()) {
+                                for (IOnFriendStatusListener onFriendStatusListener : mOnFriendStatusListenerList) {
+                                    onFriendStatusListener.delete(friendStatusBean.getFromUserId());
+                                }
+                            } else if (friendStatusBean.getStatus() == FriendStatus.ONLINE.getValue()) {
+                                for (IOnFriendStatusListener onFriendStatusListener : mOnFriendStatusListenerList) {
+                                    onFriendStatusListener.online(friendStatusBean.getFromUserId());
+                                }
+                            } else if (friendStatusBean.getStatus() == FriendStatus.OFFLINE.getValue()) {
+                                for (IOnFriendStatusListener onFriendStatusListener : mOnFriendStatusListenerList) {
+                                    onFriendStatusListener.offline(friendStatusBean.getFromUserId());
+                                }
+                            }
                         }
-                    });
-                }
+                    }
+                });
 
             }
 
@@ -118,5 +152,13 @@ public enum ChatManager {
 
     public void removeOnMessageListener(IOnMessageListener onMessageListener) {
         mOnMessageListenerList.remove(onMessageListener);
+    }
+
+    public void addOnFriendStatusListener(IOnFriendStatusListener onFriendStatusListener) {
+        mOnFriendStatusListenerList.add(onFriendStatusListener);
+    }
+
+    public void removeOnFriendStatusListener(IOnFriendStatusListener onFriendStatusListener) {
+        mOnFriendStatusListenerList.remove(onFriendStatusListener);
     }
 }

@@ -19,9 +19,9 @@ public interface IConstant {
      */
     String SP_KEY_LAST_LOGIN_USERNAME = "lastLoginUsername";
     /**
-     * 添加好友请求的数量在 SharedPreferences 中的 key
+     * 好友申请历史未读数在 SharedPreferences 中的 key
      */
-    String SP_KEY_SUBSCRIBE_COUNT = "subscribeCount";
+    String SP_KEY_FRIEND_HISTORY_UNREAD_COUNT = "friendHistoryUnreadCount";
     String DATABASE_NAME = "QinshouBox.db";
     int DATABASE_VERSION = 1;
     //天气界面

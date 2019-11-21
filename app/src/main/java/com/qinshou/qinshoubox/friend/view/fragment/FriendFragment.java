@@ -6,11 +6,14 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.qinshou.commonmodule.adapter.VpSingleViewAdapter;
+import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
+import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.friend.contract.IFriendContract;
 import com.qinshou.qinshoubox.friend.presenter.FriendPresenter;
 import com.qinshou.qinshoubox.friend.view.adapter.RcvFriendAdapter;
@@ -32,8 +35,16 @@ import java.util.List;
  */
 public class FriendFragment extends QSFragment<FriendPresenter> implements IFriendContract.IView {
 
-    private TabLayout mTabLayout;
+    private TabLayout mTlFriend;
     private ViewPager mViewPager;
+    /**
+     * 好友申请历史未读数
+     */
+    private TextView mTvUnreadCount;
+    /**
+     * 主界面 TabLayout 的好友申请历史未读数
+     */
+    private TextView mTvUnreadCountInTlMain;
     private List<RecyclerView> mRecyclerViewList = new ArrayList<>();
 
     @Override
@@ -50,8 +61,22 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
     @Override
     public void initView() {
         EventBus.getDefault().register(this);
-        mTabLayout = findViewByID(R.id.tab_layout);
+        mTlFriend = findViewByID(R.id.tl_friend);
         mViewPager = findViewByID(R.id.view_pager);
+        mTvUnreadCount = findViewByID(R.id.tv_unread_count);
+        TabLayout tlMain = getActivity().findViewById(R.id.tl_main);
+        if (tlMain == null) {
+            return;
+        }
+        TabLayout.Tab tab = tlMain.getTabAt(1);
+        if (tab == null) {
+            return;
+        }
+        View view = tab.getCustomView();
+        if (view == null) {
+            return;
+        }
+        mTvUnreadCountInTlMain = view.findViewById(R.id.tv_unread_count);
     }
 
     @Override
@@ -59,7 +84,7 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
         findViewByID(R.id.ll_new_friend).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UserStatusManager.SINGLETON.jump2FriendHistory(getContext());
+                UserStatusManager.SINGLETON.jump2FriendHistory(FriendFragment.this);
             }
         });
         findViewByID(R.id.ll_create_group_chat).setOnClickListener(new View.OnClickListener() {
@@ -68,7 +93,7 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
 //                startActivity(ContainerActivity.getJumpIntent(getContext(), CreateGroupChatFragment.class));
             }
         });
-        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        mTlFriend.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 int position = tab.getPosition();
@@ -99,7 +124,7 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
 
             @Override
             public void onPageSelected(int i) {
-                TabLayout.Tab tab = mTabLayout.getTabAt(i);
+                TabLayout.Tab tab = mTlFriend.getTabAt(i);
                 if (tab == null) {
                     return;
                 }
@@ -117,14 +142,14 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
     public void initData() {
         // TabLayout 与 ViewPager 关联
         List<String> titleList = new ArrayList<>();
-        for (int i = 0; i < mTabLayout.getTabCount(); i++) {
+        for (int i = 0; i < mTlFriend.getTabCount(); i++) {
             RecyclerView recyclerView = new RecyclerView(getContext());
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
             RcvFriendAdapter rcvFriendAdapter = new RcvFriendAdapter(getContext());
             recyclerView.setAdapter(rcvFriendAdapter);
             mRecyclerViewList.add(recyclerView);
-            TabLayout.Tab tab = mTabLayout.getTabAt(i);
+            TabLayout.Tab tab = mTlFriend.getTabAt(i);
             if (tab == null) {
                 continue;
             }
@@ -135,12 +160,12 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
             titleList.add(text.toString());
         }
         mViewPager.setAdapter(new VpSingleViewAdapter(mRecyclerViewList, titleList));
-        mTabLayout.setupWithViewPager(mViewPager);
+        mTlFriend.setupWithViewPager(mViewPager);
     }
 
     @Override
     public void getFriendListSuccess(List<UserBean> userBeanList) {
-        RecyclerView.Adapter adapter = mRecyclerViewList.get(mTabLayout.getSelectedTabPosition()).getAdapter();
+        RecyclerView.Adapter adapter = mRecyclerViewList.get(mTlFriend.getSelectedTabPosition()).getAdapter();
         if (adapter instanceof RcvFriendAdapter) {
             ((RcvFriendAdapter) adapter).setDataList(userBeanList);
         }
@@ -153,7 +178,7 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void updateUserBean(UserBean userBean) {
-        mTabLayout.getTabAt(mTabLayout.getSelectedTabPosition()).select();
+        mTlFriend.getTabAt(mTlFriend.getSelectedTabPosition()).select();
     }
 
     private void getFriendList() {
@@ -161,5 +186,13 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
             return;
         }
         getPresenter().getFriendList(UserStatusManager.SINGLETON.getUserBean().getId());
+    }
+
+    public void showFriendHistoryUnreadCount() {
+        int friendHistoryUnreadCount = SharedPreferencesHelper.SINGLETON.getInt(IConstant.SP_KEY_FRIEND_HISTORY_UNREAD_COUNT);
+        mTvUnreadCount.setVisibility(friendHistoryUnreadCount > 0 ? View.VISIBLE : View.GONE);
+        mTvUnreadCount.setText(friendHistoryUnreadCount + "");
+        mTvUnreadCountInTlMain.setVisibility(friendHistoryUnreadCount > 0 ? View.VISIBLE : View.GONE);
+        mTvUnreadCountInTlMain.setText(friendHistoryUnreadCount + "");
     }
 }

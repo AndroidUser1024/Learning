@@ -1,4 +1,4 @@
-package com.qinshou.immodule.bean;
+package com.qinshou.immodule.enums;
 
 /**
  * Author: QinHao
@@ -12,6 +12,7 @@ public enum MessageType {
     HEART(1003),
     CLIENT_RECEIPT(1004),
     SERVER_RECEIPT(1005),
+    FRIEND(1006),
     CHAT(2001),
     GROUP_CHAT(3001);
 

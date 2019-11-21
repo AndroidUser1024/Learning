@@ -7,10 +7,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qinshou.commonmodule.util.FragmentUtil;
+import com.qinshou.commonmodule.util.SharedPreferencesHelper;
+import com.qinshou.commonmodule.util.ShowLogUtil;
+import com.qinshou.commonmodule.util.SystemUtil;
+import com.qinshou.immodule.chat.ChatManager;
+import com.qinshou.immodule.listener.IOnFriendStatusListener;
 import com.qinshou.qinshoubox.base.QSActivity;
+import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
 import com.qinshou.qinshoubox.homepage.ui.fragment.HomepageFragment;
 import com.qinshou.qinshoubox.me.ui.fragment.MeFragment;
+import com.qinshou.qinshoubox.util.QSUtil;
 
 /**
  * Description:主 Activity
@@ -32,6 +39,64 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
     private int[] mTabIvResourceArray = new int[]{R.drawable.main_iv_tab_conversation_src, R.drawable.main_iv_tab_conversation_src_selected
             , R.drawable.main_iv_tab_friend_src, R.drawable.main_iv_tab_friend_src_selected
             , R.drawable.main_iv_tab_me_src, R.drawable.main_iv_tab_me_src_selected};
+    private IOnFriendStatusListener mOnFriendStatusListener = new IOnFriendStatusListener() {
+        @Override
+        public void add(int fromUserId, String additionalMsg) {
+            if (mFriendFragment == null) {
+                return;
+            }
+            try {
+                if (SystemUtil.isBackground(getContext())) {
+                    // 如果应用在后台显示通知
+                } else {
+                    // 震动
+                    QSUtil.playVibration(getContext());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            // 红点提示
+            int friendHistoryUnreadCount = SharedPreferencesHelper.SINGLETON.getInt(IConstant.SP_KEY_FRIEND_HISTORY_UNREAD_COUNT);
+            if (friendHistoryUnreadCount == -1) {
+                friendHistoryUnreadCount = 0;
+            }
+            friendHistoryUnreadCount++;
+            SharedPreferencesHelper.SINGLETON.putInt(IConstant.SP_KEY_FRIEND_HISTORY_UNREAD_COUNT, friendHistoryUnreadCount);
+            mFriendFragment.showFriendHistoryUnreadCount();
+        }
+
+        @Override
+        public void agreeAdd(int fromUserId) {
+
+        }
+
+        @Override
+        public void refuseAdd(int fromUserId) {
+
+        }
+
+        @Override
+        public void delete(int fromUserId) {
+
+        }
+
+        @Override
+        public void online(int fromUserId) {
+
+        }
+
+        @Override
+        public void offline(int fromUserId) {
+
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ChatManager.SINGLETON.removeOnFriendStatusListener(mOnFriendStatusListener);
+    }
 
     @Override
     public int getLayoutId() {
@@ -48,6 +113,7 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
 
     @Override
     public void setListener() {
+        ChatManager.SINGLETON.addOnFriendStatusListener(mOnFriendStatusListener);
         mTlMain.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

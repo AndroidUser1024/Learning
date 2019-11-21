@@ -1,17 +1,15 @@
 package com.qinshou.qinshoubox.me.ui.adapter;
 
 import android.content.Context;
-import android.text.TextUtils;
 
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.immodule.bean.MessageBean;
-import com.qinshou.immodule.bean.MessageContentType;
+import com.qinshou.immodule.enums.MessageContentType;
 import com.qinshou.immodule.chat.ChatManager;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.database.DatabaseManager;
 import com.qinshou.qinshoubox.me.bean.UserBean;
-import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 
 /**

@@ -8,6 +8,7 @@ import android.view.View;
 import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.rcvdecoration.DividerDecoration;
 import com.qinshou.commonmodule.rcvdecoration.StickyDecoration;
+import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.commonmodule.widget.TitleBar;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;

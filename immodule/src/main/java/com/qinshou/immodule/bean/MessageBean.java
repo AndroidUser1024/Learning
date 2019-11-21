@@ -2,6 +2,8 @@ package com.qinshou.immodule.bean;
 
 
 import com.qinshou.immodule.chat.ChatManager;
+import com.qinshou.immodule.enums.MessageContentType;
+import com.qinshou.immodule.enums.MessageType;
 
 /**
  * Author: QinHao

@@ -9,6 +9,7 @@ import com.qinshou.immodule.chat.ChatManager;
 import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.database.DatabaseManager;
+import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
 import com.qinshou.qinshoubox.me.bean.UserBean;
 import com.qinshou.qinshoubox.me.ui.fragment.LoginOrRegisterFragment;
 
@@ -52,7 +53,7 @@ public class LogoutStatus implements IUserStatus {
     }
 
     @Override
-    public void jump2FriendHistory(Context context) {
-        context.startActivity(ContainerActivity.getJumpIntent(context, LoginOrRegisterFragment.class));
+    public void jump2FriendHistory(FriendFragment friendFragment) {
+        friendFragment.getContext().startActivity(ContainerActivity.getJumpIntent(friendFragment.getContext(), LoginOrRegisterFragment.class));
     }
 }

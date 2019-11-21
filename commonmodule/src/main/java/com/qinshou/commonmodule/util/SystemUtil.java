@@ -3,6 +3,7 @@ package com.qinshou.commonmodule.util;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -30,6 +31,7 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -394,5 +396,28 @@ public class SystemUtil {
                 ((ip >> 8) & 0xFF) + "." +
                 ((ip >> 16) & 0xFF) + "." +
                 (ip >> 24 & 0xFF);
+    }
+
+    /**
+     * Author: QinHao
+     * Email:qinhao@jeejio.com
+     * Date:2019/8/13 9:29
+     * Description:判断应用是否在后台
+     *
+     * @param context 上下文
+     * @return true 表示在后台,false 表示在前台
+     */
+    public static boolean isBackground(Context context) throws Exception {
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        if (activityManager == null) {
+            throw new Exception("ActivityManager is null");
+        }
+        List<ActivityManager.RunningAppProcessInfo> runningAppProcessInfoList = activityManager.getRunningAppProcesses();
+        for (ActivityManager.RunningAppProcessInfo runningAppProcessInfo : runningAppProcessInfoList) {
+            if (runningAppProcessInfo.processName.equals(context.getPackageName())) {
+                return runningAppProcessInfo.importance != ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND;
+            }
+        }
+        throw new Exception("Your app is running?");
     }
 }

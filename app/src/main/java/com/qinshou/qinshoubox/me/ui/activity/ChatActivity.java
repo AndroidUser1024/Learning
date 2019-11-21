@@ -29,7 +29,7 @@ import com.qinshou.commonmodule.util.permissionutil.PermissionUtil;
 import com.qinshou.commonmodule.widget.RefreshLayout;
 import com.qinshou.commonmodule.widget.TitleBar;
 import com.qinshou.immodule.bean.MessageBean;
-import com.qinshou.immodule.bean.MessageContentType;
+import com.qinshou.immodule.enums.MessageContentType;
 import com.qinshou.immodule.chat.ChatManager;
 import com.qinshou.immodule.listener.IOnMessageListener;
 import com.qinshou.qinshoubox.R;

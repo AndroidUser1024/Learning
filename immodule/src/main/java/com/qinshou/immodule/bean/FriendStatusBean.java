@@ -1,0 +1,49 @@
+package com.qinshou.immodule.bean;
+
+/**
+ * Author: QinHao
+ * Email:qinhao@jeejio.com
+ * Date: 2019/11/21 12:52
+ * Description:好友状态事件监听的映射类
+ */
+public class FriendStatusBean {
+    private int status;
+    private int fromUserId;
+    private String additionalMsg;
+
+    public FriendStatusBean() {
+    }
+
+    @Override
+    public String toString() {
+        return "FriendStatusBean{" +
+                "status=" + status +
+                ", fromUserId=" + fromUserId +
+                ", additionalMsg='" + additionalMsg + '\'' +
+                '}';
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public int getFromUserId() {
+        return fromUserId;
+    }
+
+    public void setFromUserId(int fromUserId) {
+        this.fromUserId = fromUserId;
+    }
+
+    public String getAdditionalMsg() {
+        return additionalMsg;
+    }
+
+    public void setAdditionalMsg(String additionalMsg) {
+        this.additionalMsg = additionalMsg;
+    }
+}

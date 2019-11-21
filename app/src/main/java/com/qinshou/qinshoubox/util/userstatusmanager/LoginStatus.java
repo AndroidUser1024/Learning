@@ -4,8 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.qinshou.commonmodule.ContainerActivity;
+import com.qinshou.commonmodule.util.SharedPreferencesHelper;
+import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.immodule.chat.ChatManager;
 import com.qinshou.qinshoubox.MainActivity;
+import com.qinshou.qinshoubox.constant.IConstant;
+import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
 import com.qinshou.qinshoubox.friend.view.fragment.FriendHistoryFragment;
 import com.qinshou.qinshoubox.me.bean.UserBean;
 import com.qinshou.qinshoubox.me.ui.fragment.DataSettingFragment;
@@ -52,7 +56,9 @@ public class LoginStatus implements IUserStatus {
     }
 
     @Override
-    public void jump2FriendHistory(Context context) {
-        context.startActivity(ContainerActivity.getJumpIntent(context, FriendHistoryFragment.class));
+    public void jump2FriendHistory(FriendFragment friendFragment) {
+        SharedPreferencesHelper.SINGLETON.remove(IConstant.SP_KEY_FRIEND_HISTORY_UNREAD_COUNT);
+        friendFragment.showFriendHistoryUnreadCount();
+        friendFragment.getContext().startActivity(ContainerActivity.getJumpIntent(friendFragment.getContext(), FriendHistoryFragment.class));
     }
 }

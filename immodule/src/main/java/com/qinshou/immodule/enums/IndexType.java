@@ -1,4 +1,4 @@
-package com.qinshou.immodule.bean;
+package com.qinshou.immodule.enums;
 
 /**
  * Description:类描述
