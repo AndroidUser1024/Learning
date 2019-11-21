@@ -41,8 +41,8 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
             , R.drawable.main_iv_tab_me_src, R.drawable.main_iv_tab_me_src_selected};
     private IOnFriendStatusListener mOnFriendStatusListener = new IOnFriendStatusListener() {
         @Override
-        public void add(int fromUserId, String additionalMsg) {
-            if (mFriendFragment == null) {
+        public void add(int fromUserId, String additionalMsg, boolean newFriend) {
+            if (mFriendFragment == null || !newFriend) {
                 return;
             }
             try {

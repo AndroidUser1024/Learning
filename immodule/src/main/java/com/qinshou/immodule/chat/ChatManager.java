@@ -76,7 +76,7 @@ public enum ChatManager {
                             FriendStatusBean friendStatusBean = new Gson().fromJson(messageBean.getExtend(), FriendStatusBean.class);
                             if (friendStatusBean.getStatus() == FriendStatus.ADD.getValue()) {
                                 for (IOnFriendStatusListener onFriendStatusListener : mOnFriendStatusListenerList) {
-                                    onFriendStatusListener.add(friendStatusBean.getFromUserId(), friendStatusBean.getAdditionalMsg());
+                                    onFriendStatusListener.add(friendStatusBean.getFromUserId(), friendStatusBean.getAdditionalMsg(), friendStatusBean.isNewFriend());
                                 }
                             } else if (friendStatusBean.getStatus() == FriendStatus.AGREE_ADD.getValue()) {
                                 for (IOnFriendStatusListener onFriendStatusListener : mOnFriendStatusListenerList) {

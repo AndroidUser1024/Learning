@@ -7,7 +7,7 @@ package com.qinshou.immodule.listener;
  * Description:好友状态监听器
  */
 public interface IOnFriendStatusListener {
-    void add(int fromUserId, String additionalMsg);
+    void add(int fromUserId, String additionalMsg, boolean newFriend);
 
     void agreeAdd(int fromUserId);
 

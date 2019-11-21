@@ -10,6 +10,7 @@ public class FriendStatusBean {
     private int status;
     private int fromUserId;
     private String additionalMsg;
+    private boolean newFriend;
 
     public FriendStatusBean() {
     }
@@ -20,6 +21,7 @@ public class FriendStatusBean {
                 "status=" + status +
                 ", fromUserId=" + fromUserId +
                 ", additionalMsg='" + additionalMsg + '\'' +
+                ", newFriend=" + newFriend +
                 '}';
     }
 
@@ -45,5 +47,13 @@ public class FriendStatusBean {
 
     public void setAdditionalMsg(String additionalMsg) {
         this.additionalMsg = additionalMsg;
+    }
+
+    public boolean isNewFriend() {
+        return newFriend;
+    }
+
+    public void setNewFriend(boolean newFriend) {
+        this.newFriend = newFriend;
     }
 }
