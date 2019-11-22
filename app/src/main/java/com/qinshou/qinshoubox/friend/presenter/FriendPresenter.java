@@ -2,6 +2,7 @@ package com.qinshou.qinshoubox.friend.presenter;
 
 import com.qinshou.commonmodule.base.AbsPresenter;
 import com.qinshou.okhttphelper.callback.Callback;
+import com.qinshou.qinshoubox.db.dao.impl.GroupChatDaoImpl;
 import com.qinshou.qinshoubox.friend.contract.IFriendContract;
 import com.qinshou.qinshoubox.friend.model.FriendModel;
 import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
@@ -29,6 +30,9 @@ public class FriendPresenter extends AbsPresenter<IFriendContract.IView, IFriend
             public void onSuccess(List<GroupChatBean> data) {
                 if (!isViewAttached()) {
                     return;
+                }
+                for (GroupChatBean groupChatBean : data) {
+                    new GroupChatDaoImpl().insertOrUpdate(groupChatBean);
                 }
                 getView().getMyGroupChatListSuccess(data);
             }

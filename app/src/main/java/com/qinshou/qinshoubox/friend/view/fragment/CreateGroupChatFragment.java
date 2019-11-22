@@ -13,6 +13,7 @@ import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemClickListener;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
+import com.qinshou.qinshoubox.db.dao.impl.GroupChatDaoImpl;
 import com.qinshou.qinshoubox.friend.bean.GroupChatMemberForCreateBean;
 import com.qinshou.qinshoubox.friend.contract.ICreateGroupChatContract;
 import com.qinshou.qinshoubox.friend.presenter.CreateGroupChatPresenter;
@@ -153,6 +154,7 @@ public class CreateGroupChatFragment extends QSFragment<CreateGroupChatPresenter
 
     @Override
     public void createGroupChatSuccess(GroupChatBean groupChatBean) {
+        new GroupChatDaoImpl().insertOrUpdate(groupChatBean);
         finish();
     }
 

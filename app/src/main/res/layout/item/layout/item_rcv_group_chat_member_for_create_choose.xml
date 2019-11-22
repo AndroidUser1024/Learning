@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_marginStart="@dimen/px13"
-    android:layout_marginLeft="@dimen/px13"
-    android:layout_marginEnd="@dimen/px13"
-    tools:context="com.qinshou.qinshoubox.friend.view.adapter.RcvGroupChatMemberForCreateChooseAdapter"
-    android:layout_marginRight="@dimen/px13">
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/px90"
+    android:layout_marginStart="@dimen/px10"
+    android:layout_marginLeft="@dimen/px10"
+    android:layout_marginEnd="@dimen/px10"
+    android:layout_marginRight="@dimen/px10"
+    android:gravity="center_vertical"
+    tools:context="com.qinshou.qinshoubox.friend.view.adapter.RcvGroupChatMemberForCreateChooseAdapter">
 
     <ImageView
         android:id="@+id/iv_head_img"

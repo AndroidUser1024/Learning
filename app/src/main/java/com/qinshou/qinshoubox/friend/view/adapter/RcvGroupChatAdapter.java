@@ -11,6 +11,7 @@ import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.friend.view.fragment.UserDetailFragment;
 import com.qinshou.qinshoubox.me.bean.GroupChatBean;
 import com.qinshou.qinshoubox.me.bean.UserBean;
+import com.qinshou.qinshoubox.me.ui.activity.GroupChatActivity;
 
 /**
  * Author: QinHao
@@ -25,6 +26,7 @@ public class RcvGroupChatAdapter extends RcvBaseAdapter<GroupChatBean> {
         setOnItemClickListener(new IOnItemClickListener<GroupChatBean>() {
             @Override
             public void onItemClick(BaseViewHolder holder, GroupChatBean itemData, int position) {
+                GroupChatActivity.start(getContext(), itemData.getId());
             }
         });
     }

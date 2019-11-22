@@ -68,7 +68,8 @@ public enum ChatManager {
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (messageBean.getType() == MessageType.CHAT.getValue()) {
+                        if (messageBean.getType() == MessageType.CHAT.getValue()
+                                || messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
                             for (IOnMessageListener onMessageListener : mOnMessageListenerList) {
                                 onMessageListener.onMessage(messageBean);
                             }
