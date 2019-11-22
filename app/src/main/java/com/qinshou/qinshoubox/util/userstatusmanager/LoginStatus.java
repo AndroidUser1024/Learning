@@ -8,6 +8,7 @@ import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.immodule.chat.ChatManager;
 import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.constant.IConstant;
+import com.qinshou.qinshoubox.friend.view.fragment.CreateGroupChatFragment;
 import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
 import com.qinshou.qinshoubox.friend.view.fragment.FriendHistoryFragment;
 import com.qinshou.qinshoubox.me.bean.UserBean;
@@ -59,5 +60,10 @@ public class LoginStatus implements IUserStatus {
         SharedPreferencesHelper.SINGLETON.remove(IConstant.SP_KEY_FRIEND_HISTORY_UNREAD_COUNT);
         friendFragment.showFriendHistoryUnreadCount();
         friendFragment.getContext().startActivity(ContainerActivity.getJumpIntent(friendFragment.getContext(), FriendHistoryFragment.class));
+    }
+
+    @Override
+    public void jump2CreateGroupChat(Context context) {
+        context.startActivity(ContainerActivity.getJumpIntent(context, CreateGroupChatFragment.class));
     }
 }

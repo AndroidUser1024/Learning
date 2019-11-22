@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.adapter.VpSingleViewAdapter;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.commonmodule.util.ShowLogUtil;
@@ -94,7 +95,7 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
         findViewByID(R.id.ll_create_group_chat).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                startActivity(ContainerActivity.getJumpIntent(getContext(), CreateGroupChatFragment.class));
+                UserStatusManager.SINGLETON.jump2CreateGroupChat(getContext());
             }
         });
         mTlFriend.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

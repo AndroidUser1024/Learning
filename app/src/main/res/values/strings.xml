@@ -3,6 +3,7 @@
     <!-- 通用 -->
     <string name="common_tv_left_text">返回</string>
     <string name="common_tv_cancel_text">取消</string>
+    <string name="common_tv_finish_text">完成</string>
     <string name="common_get_camera_permission_failure">获取照相机权限失败</string>
     <string name="common_get_external_storage_permission_failure">获取SD卡权限失败</string>
 
@@ -87,10 +88,20 @@
 
     <!-- 用户详情界面 -->
     <string name="user_detail_tv_username_prompt">帐号：</string>
+    <string name="user_detail_tv_nickname_prompt">昵称：</string>
+    <string name="user_detail_tv_additional_msg_prompt">附加消息</string>
+    <string name="user_detail_tv_set_remark_prompt">设置备注</string>
+    <string name="user_detail_tv_area_prompt">所在地区</string>
+    <string name="user_detail_tv_phone_number_prompt">手机号码</string>
+    <string name="user_detail_tv_email_prompt">邮箱地址</string>
+    <string name="user_detail_tv_signature_prompt">个性签名</string>
+    <string name="user_detail_tv_source_prompt">用户来源</string>
+    <string name="user_detail_btn_add_friend_text">添加到通讯录</string>
+    <string name="user_detail_btn_add_friend_text_2">发送消息</string>
+    <string name="user_detail_btn_add_friend_text_3">接受请求</string>
 
     <!-- 设置备注界面 -->
     <string name="set_remark_tv_title_text">修改备注</string>
-    <string name="set_remark_tv_right_text">完成</string>
     <string name="set_remark_et_remark_hint">请输入备注</string>
 
     <!-- 输入好友验证信息界面 -->
@@ -98,6 +109,32 @@
     <string name="set_additional_msg_tv_right_text">发送</string>
     <string name="set_additional_msg_tv_info_text">你需要发送验证申请,等对方通过</string>
     <string name="set_additional_msg_default_additional_msg">我是<xliff:g id="nickname">%1$s</xliff:g></string>
+
+
+    <!-- 创建群聊界面 -->
+    <string name="create_group_chat_tv_title_text">创建群聊</string>
+    <string name="create_group_chat_dialog_text">创建中 请稍后…</string>
+    <string name="create_group_chat_tv_group_chat_name_prompt_text">群聊名称</string>
+    <string name="create_group_chat_et_group_chat_name_hint">请输入群聊名称</string>
+    <string name="create_group_chat_tv_label_prompt_text">标签</string>
+    <string name="create_group_chat_btn_add_label_text">添加</string>
+    <string name="create_group_chat_tv_group_chat_head_img_prompt_text">群名片</string>
+    <string name="create_group_chat_btn_upload_group_chat_head_img_text">上传</string>
+    <string name="create_group_chat_tv_group_chat_member_list_prompt_text">群成员列表</string>
+    <string name="create_group_chat_btn_add_group_chat_member_text">添加群成员</string>
+    <string name="create_group_chat_btn_add_group_chat_member_count_text">添加群成员(%1$s)</string>
+    <string name="create_group_chat_dialog_title_text">请选择群成员的类型</string>
+    <string name="create_group_chat_btn_recent_contact_text">最近联系人</string>
+    <string name="create_group_chat_btn_my_friend_text">我的好友</string>
+    <string name="create_group_chat_btn_my_device_text">我的设备</string>
+    <string name="create_group_chat_btn_my_application_text">我的应用</string>
+    <string name="create_group_chat_btn_cancel_text">取消</string>
+    <string name="create_group_chat_tv_username_text_me">自己</string>
+    <string name="create_group_chat_tv_user_type_text_user">用户</string>
+    <string name="create_group_chat_tv_user_type_text_device">设备</string>
+    <string name="create_group_chat_tv_user_type_text_application">应用</string>
+    <string name="create_group_chat_btn_take_photo">拍照</string>
+    <string name="create_group_chat_btn_select_from_pictures">从手机相册选择</string>
 
     <!-- 资料设置界面 -->
     <string name="data_setting_tv_title_text">资料设置</string>
@@ -120,7 +157,6 @@
     <!-- 设置名字界面 -->
     <string name="set_name_tv_cancel_text">取消</string>
     <string name="set_name_tv_title_text">设置名字</string>
-    <string name="set_name_tv_finish_text">完成</string>
     <string name="set_name_tv_name_is_empty_prompt_text">没有输入名字，请重新填写</string>
     <string name="set_name_tv_i_know_text">我知道了</string>
 

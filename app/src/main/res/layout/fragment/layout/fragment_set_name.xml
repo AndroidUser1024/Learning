@@ -42,7 +42,7 @@
             android:background="@drawable/set_name_tv_finish_bg"
             android:enabled="false"
             android:gravity="center"
-            android:text="@string/set_name_tv_finish_text"
+            android:text="@string/common_tv_finish_text"
             android:textColor="#FFFFFFFF"
             android:textSize="@dimen/px30" />
 

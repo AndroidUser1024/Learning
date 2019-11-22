@@ -111,7 +111,7 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
     public void showFriendUI(final UserBean userBean) {
         setData(userBean);
         mLlAdditionalMsg.setVisibility(View.GONE);
-        mBtnAddFriend.setText("发送消息");
+        mBtnAddFriend.setText(getString(R.string.user_detail_btn_add_friend_text_2));
         mBtnAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,7 +148,7 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
     public void showNotFriendUI(final UserBean userBean) {
         setData(userBean);
         mLlAdditionalMsg.setVisibility(View.GONE);
-        mBtnAddFriend.setText("添加到通讯录");
+        mBtnAddFriend.setText(getString(R.string.user_detail_btn_add_friend_text));
         mBtnAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -174,7 +174,7 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
     public void showWaitAcceptUI(final UserBean userBean) {
         setData(userBean);
         mLlAdditionalMsg.setVisibility(View.VISIBLE);
-        mBtnAddFriend.setText("接受请求");
+        mBtnAddFriend.setText(getString(R.string.user_detail_btn_add_friend_text_3));
         mBtnAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -241,7 +241,7 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
 
     @Override
     public void agreeAddFriendSuccess(final UserBean userBean) {
-        mBtnAddFriend.setText("发送消息");
+        mBtnAddFriend.setText(getString(R.string.user_detail_btn_add_friend_text_2));
         mBtnAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

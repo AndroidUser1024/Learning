@@ -22,4 +22,6 @@ public interface IUserStatus {
     void jump2DataSetting(Context context);
 
     void jump2FriendHistory(FriendFragment friendFragment);
+
+    void jump2CreateGroupChat(Context context);
 }

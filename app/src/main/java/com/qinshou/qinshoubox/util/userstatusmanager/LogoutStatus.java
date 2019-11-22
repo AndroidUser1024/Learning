@@ -56,4 +56,9 @@ public class LogoutStatus implements IUserStatus {
     public void jump2FriendHistory(FriendFragment friendFragment) {
         friendFragment.getContext().startActivity(ContainerActivity.getJumpIntent(friendFragment.getContext(), LoginOrRegisterFragment.class));
     }
+
+    @Override
+    public void jump2CreateGroupChat(Context context) {
+        context.startActivity(ContainerActivity.getJumpIntent(context, LoginOrRegisterFragment.class));
+    }
 }

@@ -43,4 +43,7 @@ public enum UserStatusManager {
     public void jump2FriendHistory(FriendFragment friendFragment) {
         mUserStatus.jump2FriendHistory(friendFragment);
     }
-}
+
+    public void jump2CreateGroupChat(Context context) {
+        mUserStatus.jump2CreateGroupChat(context);
+    }}
