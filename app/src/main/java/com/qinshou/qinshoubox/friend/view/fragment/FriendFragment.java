@@ -17,6 +17,7 @@ import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.friend.contract.IFriendContract;
 import com.qinshou.qinshoubox.friend.presenter.FriendPresenter;
 import com.qinshou.qinshoubox.friend.view.adapter.RcvFriendAdapter;
+import com.qinshou.qinshoubox.friend.view.adapter.RcvGroupChatAdapter;
 import com.qinshou.qinshoubox.me.bean.GroupChatBean;
 import com.qinshou.qinshoubox.me.bean.UserBean;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
@@ -141,25 +142,36 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
     public void initData() {
         // TabLayout 与 ViewPager 关联
         List<String> titleList = new ArrayList<>();
-        for (int i = 0; i < mTlFriend.getTabCount(); i++) {
-            RecyclerView recyclerView = new RecyclerView(getContext());
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-            RcvFriendAdapter rcvFriendAdapter = new RcvFriendAdapter(getContext());
-            recyclerView.setAdapter(rcvFriendAdapter);
-            mRecyclerViewList.add(recyclerView);
-            TabLayout.Tab tab = mTlFriend.getTabAt(i);
-            if (tab == null) {
-                continue;
-            }
-            CharSequence text = tab.getText();
-            if (text == null) {
-                continue;
-            }
-            titleList.add(text.toString());
-        }
+        RecyclerView rcvGroupChat = new RecyclerView(getContext());
+        rcvGroupChat.setLayoutManager(new LinearLayoutManager(getContext()));
+        rcvGroupChat.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        RcvGroupChatAdapter rcvGroupChatAdapter = new RcvGroupChatAdapter(getContext());
+        rcvGroupChat.setAdapter(rcvGroupChatAdapter);
+        mRecyclerViewList.add(rcvGroupChat);
+        titleList.add(getString(R.string.friend_ti_group_chat_text));
+
+        RecyclerView rcvFriend = new RecyclerView(getContext());
+        rcvFriend.setLayoutManager(new LinearLayoutManager(getContext()));
+        rcvFriend.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        RcvFriendAdapter rcvFriendAdapter = new RcvFriendAdapter(getContext());
+        rcvFriend.setAdapter(rcvFriendAdapter);
+        mRecyclerViewList.add(rcvFriend);
+        titleList.add(getString(R.string.friend_ti_friend_text));
+
         mViewPager.setAdapter(new VpSingleViewAdapter(mRecyclerViewList, titleList));
         mTlFriend.setupWithViewPager(mViewPager);
+    }
+
+    @Override
+    public void getMyGroupChatListSuccess(List<GroupChatBean> groupChatBeanList) {
+        RecyclerView.Adapter adapter = mRecyclerViewList.get(mTlFriend.getSelectedTabPosition()).getAdapter();
+        if (adapter instanceof RcvGroupChatAdapter) {
+            ((RcvGroupChatAdapter) adapter).setDataList(groupChatBeanList);
+        }
+    }
+
+    @Override
+    public void getMyGroupChatListFailure(Exception e) {
     }
 
     @Override
@@ -173,16 +185,6 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
     @Override
     public void getFriendListFailure(Exception e) {
         ShowLogUtil.logi("e--->" + e.getMessage());
-    }
-
-    @Override
-    public void getMyGroupChatListSuccess(List<GroupChatBean> groupChatBeanList) {
-        ShowLogUtil.logi("getMyGroupChatListSuccess: groupChatBeanList--->" + groupChatBeanList);
-    }
-
-    @Override
-    public void getMyGroupChatListFailure(Exception e) {
-        ShowLogUtil.logi("getMyGroupChatListFailure: e--->" + e.getMessage());
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

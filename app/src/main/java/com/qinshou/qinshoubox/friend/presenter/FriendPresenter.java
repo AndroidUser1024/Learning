@@ -23,27 +23,6 @@ public class FriendPresenter extends AbsPresenter<IFriendContract.IView, IFriend
     }
 
     @Override
-    public void getFriendList(int fromUserId) {
-        getModel().getFriendList(fromUserId, new Callback<List<UserBean>>() {
-            @Override
-            public void onSuccess(List<UserBean> data) {
-                if (!isViewAttached()) {
-                    return;
-                }
-                getView().getFriendListSuccess(data);
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                if (!isViewAttached()) {
-                    return;
-                }
-                getView().getFriendListFailure(e);
-            }
-        });
-    }
-
-    @Override
     public void getMyGroupChatList(int userId) {
         getModel().getMyGroupChatList(userId, new Callback<List<GroupChatBean>>() {
             @Override
@@ -60,6 +39,27 @@ public class FriendPresenter extends AbsPresenter<IFriendContract.IView, IFriend
                     return;
                 }
                 getView().getMyGroupChatListFailure(e);
+            }
+        });
+    }
+
+    @Override
+    public void getFriendList(int fromUserId) {
+        getModel().getFriendList(fromUserId, new Callback<List<UserBean>>() {
+            @Override
+            public void onSuccess(List<UserBean> data) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().getFriendListSuccess(data);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().getFriendListFailure(e);
             }
         });
     }

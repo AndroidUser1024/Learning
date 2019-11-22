@@ -19,16 +19,16 @@ import java.util.List;
  */
 public class FriendModel implements IFriendContract.IModel {
     @Override
-    public void getFriendList(int fromUserId, Callback<List<UserBean>> callback) {
-        OkHttpHelperForQSBoxApi.SINGLETON.getFriendList(fromUserId)
-                .transform(new QSApiTransformer<List<UserBean>>())
+    public void getMyGroupChatList(int userId, Callback<List<GroupChatBean>> callback) {
+        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.getMyGroupChatList(userId)
+                .transform(new QSApiTransformer<List<GroupChatBean>>())
                 .enqueue(callback);
     }
 
     @Override
-    public void getMyGroupChatList(int userId, Callback<List<GroupChatBean>> callback) {
-        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.getMyGroupChatList(userId)
-                .transform(new QSApiTransformer<List<GroupChatBean>>())
+    public void getFriendList(int fromUserId, Callback<List<UserBean>> callback) {
+        OkHttpHelperForQSBoxApi.SINGLETON.getFriendList(fromUserId)
+                .transform(new QSApiTransformer<List<UserBean>>())
                 .enqueue(callback);
     }
 }

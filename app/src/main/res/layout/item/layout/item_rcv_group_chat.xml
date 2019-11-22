@@ -8,7 +8,7 @@
     android:paddingStart="@dimen/px30"
     android:paddingLeft="@dimen/px30"
     android:paddingEnd="@dimen/px30"
-    tools:context="com.qinshou.qinshoubox.friend.view.adapter.RcvFriendAdapter"
+    tools:context="com.qinshou.qinshoubox.friend.view.adapter.RcvGroupChatAdapter"
     android:paddingRight="@dimen/px30">
 
     <ImageView
@@ -34,28 +34,15 @@
             tools:text="物栖用户" />
 
         <TextView
-            android:id="@+id/tv_signature"
+            android:id="@+id/tv_notice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/px10"
             android:ellipsize="end"
             android:maxLines="1"
+            android:visibility="gone"
             android:textColor="#999999"
             android:textSize="@dimen/px24"
-            tools:text="个性签名个性签名个性签名个性签名个性签名" />
+            tools:text="群公告群公告群公告群公告群公告群公告群公告群公告" />
     </LinearLayout>
-
-    <!--<TextView-->
-    <!--android:id="@+id/tv_status"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_gravity="center_vertical"-->
-    <!--android:textColor="@color/contact_tv_status_text_color"-->
-    <!--android:textSize="@dimen/px20"-->
-    <!--android:background="@drawable/contact_tv_status_bg"-->
-    <!--android:paddingLeft="@dimen/px7"-->
-    <!--android:paddingRight="@dimen/px7"-->
-    <!--android:paddingTop="@dimen/px2"-->
-    <!--android:paddingBottom="@dimen/px2"-->
-    <!--tools:text="离线" />-->
 </LinearLayout>

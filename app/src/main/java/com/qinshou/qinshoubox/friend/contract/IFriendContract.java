@@ -17,24 +17,24 @@ import java.util.List;
  */
 public interface IFriendContract {
     interface IModel extends IBaseModel {
-        void getFriendList(int fromUserId, Callback<List<UserBean>> callback);
-
         void getMyGroupChatList(int userId, Callback<List<GroupChatBean>> callback);
+
+        void getFriendList(int fromUserId, Callback<List<UserBean>> callback);
     }
 
     interface IView extends IBaseView {
-        void getFriendListSuccess(List<UserBean> userBeanList);
-
-        void getFriendListFailure(Exception e);
-
         void getMyGroupChatListSuccess(List<GroupChatBean> groupChatBeanList);
 
         void getMyGroupChatListFailure(Exception e);
+
+        void getFriendListSuccess(List<UserBean> userBeanList);
+
+        void getFriendListFailure(Exception e);
     }
 
     interface IPresenter {
-        void getFriendList(int fromUserId);
-
         void getMyGroupChatList(int userId);
+
+        void getFriendList(int fromUserId);
     }
 }
