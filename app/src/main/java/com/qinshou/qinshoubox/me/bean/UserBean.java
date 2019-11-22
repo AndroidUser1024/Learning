@@ -2,7 +2,6 @@ package com.qinshou.qinshoubox.me.bean;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-import com.qinshou.databasehelper.annotation.Id;
 
 /**
  * Author: QinHao

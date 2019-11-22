@@ -2,12 +2,13 @@ package com.qinshou.okhttphelperprocessor;
 
 
 import com.google.auto.service.AutoService;
+import com.google.gson.reflect.TypeToken;
 import com.qinshou.okhttphelper.util.RequestFactory;
 import com.qinshou.okhttphelper.util.TypeUtil;
 import com.qinshou.okhttphelper.annotation.Api;
 import com.qinshou.okhttphelper.annotation.CommonParameter;
-import com.qinshou.okhttphelper.annotation.DefaultDomain;
-import com.qinshou.okhttphelper.annotation.Domain;
+import com.qinshou.okhttphelper.annotation.DefaultHost;
+import com.qinshou.okhttphelper.annotation.Host;
 import com.qinshou.okhttphelper.annotation.Field;
 import com.qinshou.okhttphelper.annotation.Get;
 import com.qinshou.okhttphelper.annotation.Header;
@@ -80,8 +81,8 @@ public class OkHttpHelperProcessor extends AbstractProcessor {
         Set<String> types = new LinkedHashSet<>();
         types.add(Api.class.getCanonicalName());
         types.add(CommonParameter.class.getCanonicalName());
-        types.add(DefaultDomain.class.getCanonicalName());
-        types.add(Domain.class.getCanonicalName());
+        types.add(DefaultHost.class.getCanonicalName());
+        types.add(Host.class.getCanonicalName());
         types.add(Field.class.getCanonicalName());
         types.add(Get.class.getCanonicalName());
         types.add(Header.class.getCanonicalName());
@@ -126,7 +127,7 @@ public class OkHttpHelperProcessor extends AbstractProcessor {
                     // 写入超时时间
                     .addStatement("okHttpClientBuilder.writeTimeout($L,$T.$L)", 15 * 1000, TimeUnit.class, TimeUnit.MILLISECONDS)
                     // 请求日志拦截器
-                    .addStatement("okHttpClientBuilder.addInterceptor(new $T($T.Level.BASIC, new $T.Logger() {\n" +
+                    .addStatement("okHttpClientBuilder.addInterceptor(new $T($T.Level.BODY, new $T.Logger() {\n" +
                             "@Override" +
                             "\n" +
                             "public void log(String message) {" +
@@ -138,14 +139,14 @@ public class OkHttpHelperProcessor extends AbstractProcessor {
                             "}))", LogInterceptor.class, LogInterceptor.class, LogInterceptor.class)
                     // 创建一个 Map 集合,存放公共参数
                     .addStatement("$T<String,Object> commonParameterMap = new $T<>()", Map.class, HashMap.class);
-            // defaultDomainElement
-            VariableElement defaultDomainElement = null;
+            // defaultHostElement
+            VariableElement defaultHostElement = null;
             // 获取类中所有元素,类似获取 DOM 树
             List<? extends Element> enclosedElements = apiElement.getEnclosedElements();
             for (Element element : enclosedElements) {
-                if (element.getKind() == ElementKind.FIELD && element.getAnnotation(DefaultDomain.class) != null && element instanceof VariableElement) {
-                    // DefaultDomain,默认域名,如果有多个,则会覆盖
-                    defaultDomainElement = (VariableElement) element;
+                if (element.getKind() == ElementKind.FIELD && element.getAnnotation(DefaultHost.class) != null && element instanceof VariableElement) {
+                    // DefaultHost,默认域名,如果有多个,则会覆盖
+                    defaultHostElement = (VariableElement) element;
                 } else if (element.getKind() == ElementKind.FIELD && element.getAnnotation(CommonParameter.class) != null && element instanceof VariableElement) {
                     // 添加公共参数
                     constructorBuilder.addStatement("commonParameterMap.put($S,$S)", element.getAnnotation(CommonParameter.class).name(), ((VariableElement) element).getConstantValue());
@@ -154,10 +155,10 @@ public class OkHttpHelperProcessor extends AbstractProcessor {
                     MethodSpec methodSpec = null;
                     if (element.getAnnotation(Get.class) != null) {
                         // Get 请求
-                        methodSpec = createGetRequestMethod(element.getSimpleName().toString(), (ExecutableElement) element, defaultDomainElement);
+                        methodSpec = createGetRequestMethod(element.getSimpleName().toString(), (ExecutableElement) element, defaultHostElement);
                     } else if (element.getAnnotation(Post.class) != null) {
                         // Post 请求
-                        methodSpec = createPostRequestMethod(element.getSimpleName().toString(), (ExecutableElement) element, defaultDomainElement);
+                        methodSpec = createPostRequestMethod(element.getSimpleName().toString(), (ExecutableElement) element, defaultHostElement);
                     }
                     if (methodSpec != null) {
                         typeSpecBuilder.addMethod(methodSpec);
@@ -219,8 +220,6 @@ public class OkHttpHelperProcessor extends AbstractProcessor {
         }
         // 创建一个 map 来保存请求参数
         builder.addStatement("$T<String, Object> parameterMap = new $T<>()", Map.class, HashMap.class);
-        // 创建一个 StringBuilder 来保存参数类型列表
-        StringBuilder parameterTypesStringBuilder = new StringBuilder();
         // 获取 url
         String url = element.getAnnotation(Get.class).value();
         // 将 url 按 "/" 分开,拿到每一个 path 部分组成的数组,后面会判断这个数组中是否有 "{","}" 占位符
@@ -231,11 +230,6 @@ public class OkHttpHelperProcessor extends AbstractProcessor {
             Name parameterName = variableElement.getSimpleName();
             // 方法模版构造器添加参数
             builder.addParameter(TypeName.get(variableElement.asType()), parameterName.toString());
-            // 保存参数类型列表的 StringBuilder 增加该参数的类型
-            parameterTypesStringBuilder
-                    .append(",")
-                    .append(variableElement.asType().toString())
-                    .append(".class");
             if (variableElement.getAnnotation(Path.class) != null) {
                 // 如果有 Path 注解,则遍历 pathArray
                 for (String string : pathArray) {
@@ -260,20 +254,23 @@ public class OkHttpHelperProcessor extends AbstractProcessor {
         if (url.contains("{") || url.contains("}")) {
             throw new IllegalStateException("The url is invalid");
         }
-        // 如果没有 Domain 注解也没有 defaultDomain,抛出异常
-        if (element.getAnnotation(Domain.class) == null && defaultDomain == null) {
+        // 如果没有 Host 注解也没有 defaultDomain,抛出异常
+        if (element.getAnnotation(Host.class) == null && defaultDomain == null) {
             throw new NullPointerException("There is neither defaultDomain nor domain");
         }
-        if (element.getAnnotation(Domain.class) != null) {
-            // 如果方法上有 Domain 注解优先使用 Domain 的值
-            url = "\"" + element.getAnnotation(Domain.class).value() + url + "\"";
+        if (element.getAnnotation(Host.class) != null) {
+            // 如果方法上有 Host 注解优先使用 Host 的值
+            url = "\"" + element.getAnnotation(Host.class).value() + url + "\"";
         } else {
             // 否则使用 defaultDomain 拼接
             url = "\"" + defaultDomain.getConstantValue().toString() + url + "\"";
         }
         builder.addStatement("$T request = $T.newGetRequest($L,headerMap,parameterMap)", Request.class, RequestFactory.class, url);
-        // 获取泛型,参数类型的字符串 parameterTypesStringBuilder 每一个参数前都会加一个 ",",所以 $S$T 之间不用加逗号
-        builder.addStatement("$T type = $T.getReturnType(getClass(),$S$L)", Type.class, TypeUtil.class, methodName, parameterTypesStringBuilder);
+        // 获取泛型
+        String resultType = element.getReturnType().toString();
+        resultType = resultType.replace("com.qinshou.okhttphelper.call.Call<", "");
+        resultType = resultType.substring(0, resultType.length() - 1);
+        builder.addStatement("$T type = new com.google.gson.reflect.TypeToken<" + resultType + ">(){}.getType()", Type.class);
         // 创建 Call 对象
         builder.addStatement(element.getReturnType().toString() + " call = new " + element.getReturnType().toString() + "(mOkHttpClient,request,type)");
         builder.addStatement("return call");
@@ -311,8 +308,6 @@ public class OkHttpHelperProcessor extends AbstractProcessor {
         }
         // 创建一个 map 来保存请求参数
         builder.addStatement("$T<String, Object> parameterMap = new $T<>()", Map.class, HashMap.class);
-        // 创建一个 StringBuilder 来保存参数类型列表
-        StringBuilder parameterTypesStringBuilder = new StringBuilder();
         // 获取 url
         String url = element.getAnnotation(Post.class).value();
         // 遍历参数列表
@@ -321,11 +316,6 @@ public class OkHttpHelperProcessor extends AbstractProcessor {
             Name parameterName = variableElement.getSimpleName();
             // 方法模版构造器添加参数
             builder.addParameter(TypeName.get(variableElement.asType()), parameterName.toString());
-            // 保存参数类型列表的 StringBuilder 增加该参数的类型
-            parameterTypesStringBuilder
-                    .append(",")
-                    .append(variableElement.asType().toString())
-                    .append(".class");
             if (variableElement.getAnnotation(Field.class) != null) {
                 // 如果有 Field 注解则使用 Field 注解的值作为请求参数的参数名
                 builder.addStatement("parameterMap.put($S,$L)", variableElement.getAnnotation(Field.class).name(), parameterName.toString());
@@ -334,13 +324,13 @@ public class OkHttpHelperProcessor extends AbstractProcessor {
                 builder.addStatement("parameterMap.put($S,$L)", parameterName, parameterName.toString());
             }
         }
-        // 如果没有 Domain 注解也没有 defaultDomain,抛出异常
-        if (element.getAnnotation(Domain.class) == null && defaultDomain == null) {
+        // 如果没有 Host 注解也没有 defaultDomain,抛出异常
+        if (element.getAnnotation(Host.class) == null && defaultDomain == null) {
             throw new NullPointerException("There is neither defaultDomain nor domain");
         }
-        if (element.getAnnotation(Domain.class) != null) {
-            // 如果方法上有 Domain 注解优先使用 Domain 的值
-            url = "\"" + element.getAnnotation(Domain.class).value() + url + "\"";
+        if (element.getAnnotation(Host.class) != null) {
+            // 如果方法上有 Host 注解优先使用 Host 的值
+            url = "\"" + element.getAnnotation(Host.class).value() + url + "\"";
         } else {
             // 否则使用 defaultDomain 拼接
             url = "\"" + defaultDomain.getConstantValue().toString() + url + "\"";
@@ -352,8 +342,11 @@ public class OkHttpHelperProcessor extends AbstractProcessor {
         } else {
             builder.addStatement("$T request=$T.newPostRequest($L,headerMap,parameterMap)", Request.class, RequestFactory.class, url);
         }
-        // 获取泛型,参数类型的字符串 parameterTypesStringBuilder 每一个参数前都会加一个 ",",所以 $S$T 之间不用加逗号
-        builder.addStatement("$T type = $T.getReturnType(getClass(),$S$L)", Type.class, TypeUtil.class, methodName, parameterTypesStringBuilder);
+        // 获取泛型
+        String resultType = element.getReturnType().toString();
+        resultType = resultType.replace("com.qinshou.okhttphelper.call.Call<", "");
+        resultType = resultType.substring(0, resultType.length() - 1);
+        builder.addStatement("$T type = new com.google.gson.reflect.TypeToken<" + resultType + ">(){}.getType()", Type.class);
         // 创建 Call 对象
         builder.addStatement(element.getReturnType().toString() + " call = new " + element.getReturnType().toString() + "(mOkHttpClient,request,type)");
         builder.addStatement("return call");

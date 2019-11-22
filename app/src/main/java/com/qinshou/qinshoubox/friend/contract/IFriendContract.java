@@ -4,6 +4,7 @@ import com.qinshou.commonmodule.base.IBaseModel;
 import com.qinshou.commonmodule.base.IBaseView;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
+import com.qinshou.qinshoubox.me.bean.GroupChatBean;
 import com.qinshou.qinshoubox.me.bean.UserBean;
 
 import java.util.List;
@@ -17,15 +18,23 @@ import java.util.List;
 public interface IFriendContract {
     interface IModel extends IBaseModel {
         void getFriendList(int fromUserId, Callback<List<UserBean>> callback);
+
+        void getMyGroupChatList(int userId, Callback<List<GroupChatBean>> callback);
     }
 
     interface IView extends IBaseView {
         void getFriendListSuccess(List<UserBean> userBeanList);
 
         void getFriendListFailure(Exception e);
+
+        void getMyGroupChatListSuccess(List<GroupChatBean> groupChatBeanList);
+
+        void getMyGroupChatListFailure(Exception e);
     }
 
     interface IPresenter {
         void getFriendList(int fromUserId);
+
+        void getMyGroupChatList(int userId);
     }
 }

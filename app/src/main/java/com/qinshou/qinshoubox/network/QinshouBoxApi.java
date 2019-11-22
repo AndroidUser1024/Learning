@@ -1,7 +1,7 @@
 package com.qinshou.qinshoubox.network;
 
 import com.qinshou.okhttphelper.annotation.Api;
-import com.qinshou.okhttphelper.annotation.DefaultDomain;
+import com.qinshou.okhttphelper.annotation.DefaultHost;
 import com.qinshou.okhttphelper.annotation.Get;
 import com.qinshou.okhttphelper.annotation.Query;
 import com.qinshou.okhttphelper.call.Call;
@@ -18,7 +18,7 @@ import java.util.List;
  */
 @Api
 public interface QinshouBoxApi {
-    @DefaultDomain
+    @DefaultHost
     String DEFAULT_DOMAIN = "http://www.mrqinshou.com:7000/";
 
     @Get("wallpaper/getList/")

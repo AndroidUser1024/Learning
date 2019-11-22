@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
+import com.qinshou.qinshoubox.me.bean.GroupChatBean;
 import com.qinshou.qinshoubox.me.bean.UserBean;
 
 import java.sql.SQLException;
@@ -29,6 +30,7 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
     public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
         try {
             TableUtils.createTable(connectionSource, UserBean.class);
+            TableUtils.createTable(connectionSource, GroupChatBean.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }

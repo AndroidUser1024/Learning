@@ -1,7 +1,7 @@
 package com.qinshou.qinshoubox.network;
 
 import com.qinshou.okhttphelper.annotation.Api;
-import com.qinshou.okhttphelper.annotation.DefaultDomain;
+import com.qinshou.okhttphelper.annotation.DefaultHost;
 import com.qinshou.okhttphelper.annotation.Field;
 import com.qinshou.okhttphelper.annotation.Multipart;
 import com.qinshou.okhttphelper.annotation.Post;
@@ -21,8 +21,8 @@ import java.util.List;
  */
 @Api
 public interface QSBoxApi {
-    @DefaultDomain
-    String DEFAULT_DOMAIN = "http://172.16.60.231:8080/";
+    @DefaultHost
+    String DEFAULT_HOST = "http://172.16.60.231:8080/";
 
     @Post("user/register/")
     Call<QinshouResultBean<UserBean>> register(@Field(name = "username") String username
@@ -67,4 +67,6 @@ public interface QSBoxApi {
 
     @Post("friend/getFriendList/")
     Call<QinshouResultBean<List<UserBean>>> getFriendList(@Field(name = "fromUserId") int fromUserId);
+
+
 }

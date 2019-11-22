@@ -17,6 +17,7 @@ import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.friend.contract.IFriendContract;
 import com.qinshou.qinshoubox.friend.presenter.FriendPresenter;
 import com.qinshou.qinshoubox.friend.view.adapter.RcvFriendAdapter;
+import com.qinshou.qinshoubox.me.bean.GroupChatBean;
 import com.qinshou.qinshoubox.me.bean.UserBean;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
@@ -34,6 +35,8 @@ import java.util.List;
  * Description:联系人界面
  */
 public class FriendFragment extends QSFragment<FriendPresenter> implements IFriendContract.IView {
+    private final int TAB_INDEX_GROUP_CHAT = 0;
+    private final int TAB_INDEX_FRIEND = 1;
 
     private TabLayout mTlFriend;
     private ViewPager mViewPager;
@@ -99,9 +102,7 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
                 int position = tab.getPosition();
                 // 切换 ViewPager
                 mViewPager.setCurrentItem(position);
-                if (position == 0) {
-                    getFriendList();
-                }
+                loadData(position);
             }
 
             @Override
@@ -111,9 +112,7 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                if (tab.getPosition() == 0) {
-                    getFriendList();
-                }
+                loadData(tab.getPosition());
             }
         });
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -176,16 +175,30 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
         ShowLogUtil.logi("e--->" + e.getMessage());
     }
 
+    @Override
+    public void getMyGroupChatListSuccess(List<GroupChatBean> groupChatBeanList) {
+        ShowLogUtil.logi("getMyGroupChatListSuccess: groupChatBeanList--->" + groupChatBeanList);
+    }
+
+    @Override
+    public void getMyGroupChatListFailure(Exception e) {
+        ShowLogUtil.logi("getMyGroupChatListFailure: e--->" + e.getMessage());
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void updateUserBean(UserBean userBean) {
         mTlFriend.getTabAt(mTlFriend.getSelectedTabPosition()).select();
     }
 
-    private void getFriendList() {
+    private void loadData(int position) {
         if (!UserStatusManager.SINGLETON.isLogin()) {
             return;
         }
-        getPresenter().getFriendList(UserStatusManager.SINGLETON.getUserBean().getId());
+        if (position == TAB_INDEX_GROUP_CHAT) {
+            getPresenter().getMyGroupChatList(UserStatusManager.SINGLETON.getUserBean().getId());
+        } else if (position == TAB_INDEX_FRIEND) {
+            getPresenter().getFriendList(UserStatusManager.SINGLETON.getUserBean().getId());
+        }
     }
 
     public void showFriendHistoryUnreadCount() {

@@ -5,6 +5,7 @@ import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.friend.contract.IFriendContract;
 import com.qinshou.qinshoubox.friend.model.FriendModel;
 import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
+import com.qinshou.qinshoubox.me.bean.GroupChatBean;
 import com.qinshou.qinshoubox.me.bean.UserBean;
 
 import java.util.List;
@@ -38,6 +39,27 @@ public class FriendPresenter extends AbsPresenter<IFriendContract.IView, IFriend
                     return;
                 }
                 getView().getFriendListFailure(e);
+            }
+        });
+    }
+
+    @Override
+    public void getMyGroupChatList(int userId) {
+        getModel().getMyGroupChatList(userId, new Callback<List<GroupChatBean>>() {
+            @Override
+            public void onSuccess(List<GroupChatBean> data) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().getMyGroupChatListSuccess(data);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().getMyGroupChatListFailure(e);
             }
         });
     }
