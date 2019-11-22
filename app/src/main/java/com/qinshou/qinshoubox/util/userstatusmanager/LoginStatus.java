@@ -5,13 +5,13 @@ import android.content.Intent;
 
 import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
-import com.qinshou.immodule.chat.ChatManager;
+import com.qinshou.immodule.manager.ChatManager;
 import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.friend.view.fragment.CreateGroupChatFragment;
 import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
 import com.qinshou.qinshoubox.friend.view.fragment.FriendHistoryFragment;
-import com.qinshou.qinshoubox.me.bean.UserBean;
+import com.qinshou.immodule.bean.UserBean;
 import com.qinshou.qinshoubox.me.ui.fragment.DataSettingFragment;
 
 import org.greenrobot.eventbus.EventBus;

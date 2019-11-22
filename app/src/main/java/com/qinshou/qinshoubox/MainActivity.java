@@ -10,9 +10,8 @@ import android.widget.TextView;
 
 import com.qinshou.commonmodule.util.FragmentUtil;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
-import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.util.SystemUtil;
-import com.qinshou.immodule.chat.ChatManager;
+import com.qinshou.immodule.manager.ChatManager;
 import com.qinshou.immodule.listener.IOnFriendStatusListener;
 import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.constant.IConstant;

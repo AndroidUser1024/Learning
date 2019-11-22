@@ -1,10 +1,8 @@
-package com.qinshou.qinshoubox.me.bean;
+package com.qinshou.immodule.bean;
 
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-import com.qinshou.databasehelper.annotation.Column;
-import com.qinshou.databasehelper.annotation.Id;
 
 /**
  * Description:群实体类
@@ -16,7 +14,7 @@ public class GroupChatBean {
     /**
      * Id
      */
-    @DatabaseField(columnName = "id",id = true)
+    @DatabaseField(columnName = "id", id = true)
     private int id;
     /**
      * 群主 Id

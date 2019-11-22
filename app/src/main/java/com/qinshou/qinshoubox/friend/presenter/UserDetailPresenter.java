@@ -6,7 +6,7 @@ import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.friend.contract.IUserDetailContract;
 import com.qinshou.qinshoubox.friend.model.UserDetailModel;
 import com.qinshou.qinshoubox.friend.view.fragment.UserDetailFragment;
-import com.qinshou.qinshoubox.me.bean.UserBean;
+import com.qinshou.immodule.bean.UserBean;
 
 /**
  * Author: QinHao

@@ -2,7 +2,7 @@ package com.qinshou.qinshoubox.me.model;
 
 
 import com.qinshou.okhttphelper.callback.Callback;
-import com.qinshou.qinshoubox.me.bean.UserBean;
+import com.qinshou.immodule.bean.UserBean;
 import com.qinshou.qinshoubox.me.contract.IChatContract;
 import com.qinshou.qinshoubox.me.ui.activity.ChatActivity;
 

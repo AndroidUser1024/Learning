@@ -3,7 +3,7 @@ package com.qinshou.qinshoubox.util.userstatusmanager;
 import android.content.Context;
 
 import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
-import com.qinshou.qinshoubox.me.bean.UserBean;
+import com.qinshou.immodule.bean.UserBean;
 
 
 /**

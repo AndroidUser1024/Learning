@@ -6,11 +6,11 @@ import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.immodule.bean.MessageBean;
 import com.qinshou.immodule.enums.MessageContentType;
-import com.qinshou.immodule.chat.ChatManager;
+import com.qinshou.immodule.manager.ChatManager;
 import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.db.dao.IUserDao;
-import com.qinshou.qinshoubox.db.dao.impl.UserDaoImpl;
-import com.qinshou.qinshoubox.me.bean.UserBean;
+import com.qinshou.immodule.db.dao.IUserDao;
+import com.qinshou.immodule.db.dao.impl.UserDaoImpl;
+import com.qinshou.immodule.bean.UserBean;
 
 
 /**

@@ -1,7 +1,9 @@
 package com.qinshou.immodule.bean;
 
 
-import com.qinshou.immodule.chat.ChatManager;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+import com.qinshou.immodule.manager.ChatManager;
 import com.qinshou.immodule.enums.MessageContentType;
 import com.qinshou.immodule.enums.MessageType;
 
@@ -11,46 +13,59 @@ import com.qinshou.immodule.enums.MessageType;
  * Date: 2019/8/29 9:38
  * Description:消息实体类
  */
+@DatabaseTable(tableName = "message")
 public class MessageBean {
+    @DatabaseField(columnName = "pid",generatedId = true)
+    private int pid;
     /**
      * 自增长 Id
      */
+    @DatabaseField(persisted = false)
     private long id;
     /**
      * 发送者的 id
      */
+    @DatabaseField(columnName = "fromUserId")
     private int fromUserId;
     /**
      * 接收者的 id
      */
+    @DatabaseField(columnName = "toUserId")
     private int toUserId;
     /**
      * 消息类型
      */
+    @DatabaseField(columnName = "type")
     private int type;
     /**
      * 消息内容类型
      */
+    @DatabaseField(columnName = "contentType")
     private int contentType;
     /**
      * 消息内容
      */
+    @DatabaseField(columnName = "content")
     private String content;
     /**
      * 发送时间戳
      */
+    @DatabaseField(columnName = "sendTimestamp")
     private long sendTimestamp;
     /**
      * 发送时间戳
      */
+    @DatabaseField(columnName = "receiveTimestamp")
     private long receiveTimestamp;
     /**
      * 消息状态
      */
+    @DatabaseField(columnName = "status")
     private int status;
     /**
      * 扩展字段
      */
+    @DatabaseField(columnName = "extend")
     private String extend;
 
     private MessageBean() {

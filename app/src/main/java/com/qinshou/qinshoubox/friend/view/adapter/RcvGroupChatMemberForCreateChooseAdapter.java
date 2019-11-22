@@ -7,7 +7,6 @@ import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.friend.bean.GroupChatMemberForCreateBean;
-import com.qinshou.qinshoubox.me.bean.UserBean;
 
 
 /**

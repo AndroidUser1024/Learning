@@ -7,8 +7,7 @@ import com.qinshou.okhttphelper.annotation.Json;
 import com.qinshou.okhttphelper.annotation.Post;
 import com.qinshou.okhttphelper.call.Call;
 import com.qinshou.qinshoubox.homepage.bean.QinshouResultBean;
-import com.qinshou.qinshoubox.me.bean.GroupChatBean;
-import com.qinshou.qinshoubox.me.bean.UserBean;
+import com.qinshou.immodule.bean.GroupChatBean;
 
 import java.util.List;
 

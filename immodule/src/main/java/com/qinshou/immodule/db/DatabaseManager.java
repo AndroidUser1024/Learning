@@ -1,4 +1,4 @@
-package com.qinshou.qinshoubox.db;
+package com.qinshou.immodule.db;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -6,8 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
 
-import com.qinshou.commonmodule.util.ShowLogUtil;
-import com.qinshou.qinshoubox.me.bean.UserBean;
+import com.qinshou.immodule.bean.UserBean;
 
 /**
  * Description:数据库管理者类
@@ -15,8 +14,7 @@ import com.qinshou.qinshoubox.me.bean.UserBean;
  * Created on 2017/6/26
  */
 
-public enum DatabaseManager {
-    SINGLETON;
+public class DatabaseManager {
 
     private static final String TAG = "DatabaseManager";
     private SQLiteDatabase mSqLiteDatabase;
@@ -43,7 +41,6 @@ public enum DatabaseManager {
     }
 
     public void insertUser(UserBean userBean) {
-        ShowLogUtil.logi("insertUser: userBean--->" + userBean);
         String sql = "INSERT INTO user(id"
                 + ",username"
                 + ",nickname"
@@ -63,7 +60,6 @@ public enum DatabaseManager {
     }
 
     public void updateUser(UserBean userBean) {
-        ShowLogUtil.logi("updateUser: userBean--->" + userBean);
         String sql = "UPDATE user SET(id=" + "\"" + userBean.getId() + "\""
                 + ",username=" + "\"" + userBean.getUsername() + "\""
                 + ",nickname=" + "\"" + userBean.getNickname() + "\""
@@ -76,7 +72,6 @@ public enum DatabaseManager {
     }
 
     public UserBean getUser(int id) {
-        ShowLogUtil.logi("getUser: id--->" + id);
         String sql = "SELECT * FROM user WHERE id=" + "\"" + id + "\"" + ";";
         Cursor cursor = mSqLiteDatabase.rawQuery(sql, new String[]{});
         if (cursor.moveToNext()) {

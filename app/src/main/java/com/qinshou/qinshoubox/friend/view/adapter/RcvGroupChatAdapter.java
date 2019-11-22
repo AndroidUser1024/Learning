@@ -8,9 +8,7 @@ import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemClickListener;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.friend.view.fragment.UserDetailFragment;
-import com.qinshou.qinshoubox.me.bean.GroupChatBean;
-import com.qinshou.qinshoubox.me.bean.UserBean;
+import com.qinshou.immodule.bean.GroupChatBean;
 import com.qinshou.qinshoubox.me.ui.activity.GroupChatActivity;
 
 /**

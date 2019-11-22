@@ -11,17 +11,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.qinshou.commonmodule.ContainerActivity;
-import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.util.activityresultutil.ActivityResultUtil;
 import com.qinshou.commonmodule.util.activityresultutil.OnActivityResultCallBack;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
-import com.qinshou.qinshoubox.db.dao.impl.UserDaoImpl;
+import com.qinshou.immodule.db.dao.impl.UserDaoImpl;
 import com.qinshou.qinshoubox.friend.contract.IUserDetailContract;
 import com.qinshou.qinshoubox.friend.presenter.UserDetailPresenter;
 import com.qinshou.qinshoubox.friend.view.activity.SetRemarkActivity;
-import com.qinshou.qinshoubox.me.bean.UserBean;
+import com.qinshou.immodule.bean.UserBean;
 import com.qinshou.qinshoubox.me.ui.activity.ChatActivity;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 

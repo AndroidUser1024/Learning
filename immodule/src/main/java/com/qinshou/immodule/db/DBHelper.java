@@ -1,4 +1,4 @@
-package com.qinshou.qinshoubox.db;
+package com.qinshou.immodule.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -6,8 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
-import com.qinshou.qinshoubox.me.bean.GroupChatBean;
-import com.qinshou.qinshoubox.me.bean.UserBean;
+import com.qinshou.immodule.bean.GroupChatBean;
+import com.qinshou.immodule.bean.UserBean;
 
 import java.sql.SQLException;
 

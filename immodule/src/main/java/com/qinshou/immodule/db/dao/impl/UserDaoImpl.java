@@ -1,9 +1,9 @@
-package com.qinshou.qinshoubox.db.dao.impl;
+package com.qinshou.immodule.db.dao.impl;
 
 import com.j256.ormlite.dao.Dao;
-import com.qinshou.qinshoubox.db.DBHelper;
-import com.qinshou.qinshoubox.db.dao.IUserDao;
-import com.qinshou.qinshoubox.me.bean.UserBean;
+import com.qinshou.immodule.db.DBHelper;
+import com.qinshou.immodule.db.dao.IUserDao;
+import com.qinshou.immodule.bean.UserBean;
 
 import java.sql.SQLException;
 

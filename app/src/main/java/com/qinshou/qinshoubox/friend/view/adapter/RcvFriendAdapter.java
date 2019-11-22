@@ -9,8 +9,7 @@ import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemClickListener;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.friend.view.fragment.UserDetailFragment;
-import com.qinshou.qinshoubox.me.bean.UserBean;
-import com.qinshou.qinshoubox.me.ui.activity.ChatActivity;
+import com.qinshou.immodule.bean.UserBean;
 
 /**
  * Author: QinHao

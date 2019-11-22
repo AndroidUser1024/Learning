@@ -19,7 +19,7 @@ import com.qinshou.commonmodule.util.SoftKeyboardUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.constant.IConstant;
-import com.qinshou.qinshoubox.me.bean.UserBean;
+import com.qinshou.immodule.bean.UserBean;
 import com.qinshou.qinshoubox.me.contract.ILoginOrRegisterContract;
 import com.qinshou.qinshoubox.me.presenter.LoginOrRegisterPresenter;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;

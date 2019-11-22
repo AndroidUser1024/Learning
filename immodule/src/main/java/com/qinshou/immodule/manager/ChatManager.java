@@ -1,4 +1,4 @@
-package com.qinshou.immodule.chat;
+package com.qinshou.immodule.manager;
 
 import android.content.Context;
 import android.os.Handler;
@@ -9,6 +9,12 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.qinshou.immodule.bean.FriendStatusBean;
 import com.qinshou.immodule.bean.MessageBean;
+import com.qinshou.immodule.db.dao.IConversationDao;
+import com.qinshou.immodule.db.dao.IConversationMessageRelDao;
+import com.qinshou.immodule.db.dao.IMessageDao;
+import com.qinshou.immodule.db.dao.impl.ConversationDaoImpl;
+import com.qinshou.immodule.db.dao.impl.ConversationMessageRelDaoImpl;
+import com.qinshou.immodule.db.dao.impl.MessageDaoImpl;
 import com.qinshou.immodule.enums.FriendStatus;
 import com.qinshou.immodule.enums.MessageType;
 import com.qinshou.immodule.listener.IOnFriendStatusListener;
@@ -41,8 +47,14 @@ public enum ChatManager {
     private List<IOnMessageListener> mOnMessageListenerList = new ArrayList<>();
     private List<IOnFriendStatusListener> mOnFriendStatusListenerList = new ArrayList<>();
     private int mUserId;
+    private IConversationDao mConversationDao;
+    private IConversationMessageRelDao mConversationMessageRelDao;
+    private IMessageDao mMessageDao;
 
     ChatManager() {
+        mConversationDao = new ConversationDaoImpl();
+        mConversationMessageRelDao = new ConversationMessageRelDaoImpl();
+        mMessageDao = new MessageDaoImpl();
     }
 
     public int getUserId() {
@@ -65,6 +77,10 @@ public enum ChatManager {
                 super.onMessage(webSocket, text);
                 Log.i(TAG, "onMessage: text--->" + text);
                 final MessageBean messageBean = new Gson().fromJson(text, MessageBean.class);
+                messageBean.setReceiveTimestamp(System.currentTimeMillis());
+
+                MessageManager.SINGLETON.insertOrUpdate(false, messageBean);
+
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {

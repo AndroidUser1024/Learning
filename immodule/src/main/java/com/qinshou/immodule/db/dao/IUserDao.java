@@ -1,7 +1,7 @@
 
-package com.qinshou.qinshoubox.db.dao;
+package com.qinshou.immodule.db.dao;
 
-import com.qinshou.qinshoubox.me.bean.UserBean;
+import com.qinshou.immodule.bean.UserBean;
 
 /**
  * Author: QinHao

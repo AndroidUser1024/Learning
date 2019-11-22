@@ -1,4 +1,4 @@
-package com.qinshou.qinshoubox.me.bean;
+package com.qinshou.immodule.bean;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;

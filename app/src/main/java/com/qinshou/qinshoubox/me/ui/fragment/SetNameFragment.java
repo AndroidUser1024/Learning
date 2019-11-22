@@ -12,7 +12,7 @@ import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.listener.ClearErrorInfoTextWatcher;
-import com.qinshou.qinshoubox.me.bean.UserBean;
+import com.qinshou.immodule.bean.UserBean;
 import com.qinshou.qinshoubox.me.contract.ISetNameContract;
 import com.qinshou.qinshoubox.me.presenter.SetNamePresenter;
 import com.qinshou.qinshoubox.me.ui.dialog.NameIsEmptyDialog;

@@ -1,10 +1,10 @@
-package com.qinshou.qinshoubox.db.dao.impl;
+package com.qinshou.immodule.db.dao.impl;
+
 
 import com.j256.ormlite.dao.Dao;
-import com.qinshou.qinshoubox.db.DBHelper;
-import com.qinshou.qinshoubox.db.dao.IGroupChatDao;
-import com.qinshou.qinshoubox.me.bean.GroupChatBean;
-import com.qinshou.qinshoubox.me.bean.UserBean;
+import com.qinshou.immodule.bean.GroupChatBean;
+import com.qinshou.immodule.db.DBHelper;
+import com.qinshou.immodule.db.dao.IGroupChatDao;
 
 import java.sql.SQLException;
 

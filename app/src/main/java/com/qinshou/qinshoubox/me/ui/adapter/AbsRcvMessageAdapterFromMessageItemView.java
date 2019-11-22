@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.commonmodule.rcvbaseadapter.itemview.BaseItemView;
 import com.qinshou.immodule.bean.MessageBean;
-import com.qinshou.immodule.chat.ChatManager;
+import com.qinshou.immodule.manager.ChatManager;
 import com.qinshou.qinshoubox.R;
 
 import java.text.SimpleDateFormat;
@@ -192,7 +192,7 @@ public abstract class AbsRcvMessageAdapterFromMessageItemView extends BaseItemVi
 //                    }
 //
 //                } else if (messageBean.getType() == MessageBean.Type.GROUP_CHAT.getValue()) {
-//                    JMClient.SINGLETON.getGroupChatManager().getOccupantName(messageBean.getToUsername(), messageBean.getFromUsername(), new JMCallback<String>() {
+//                    JMClient.SINGLETON.getGroupChatManager().getOccupantName(messageBean.getToUserId(), messageBean.getFromUsername(), new JMCallback<String>() {
 //                        @Override
 //                        public void onSuccess(String occupantName) {
 //                            if (!TextUtils.isEmpty(occupantName)) {
