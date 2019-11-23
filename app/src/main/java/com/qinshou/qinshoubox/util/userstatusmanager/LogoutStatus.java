@@ -38,8 +38,10 @@ public class LogoutStatus implements IUserStatus {
         ChatManager.SINGLETON.connect(context, userBean.getId(), userBean.getUsername());
         // 设置为登录状态
         UserStatusManager.SINGLETON.setUserStatus(new LoginStatus(userBean));
-        // 发送事件,用于更新 UI 等
+        // 发送事件更新用户信息
         EventBus.getDefault().post(userBean);
+        // 更新好友申请历史数
+        EventBus.getDefault().post(0);
     }
 
     @Override
@@ -52,8 +54,8 @@ public class LogoutStatus implements IUserStatus {
     }
 
     @Override
-    public void jump2FriendHistory(FriendFragment friendFragment) {
-        friendFragment.getContext().startActivity(ContainerActivity.getJumpIntent(friendFragment.getContext(), LoginOrRegisterFragment.class));
+    public void jump2FriendHistory(Context context) {
+        context.startActivity(ContainerActivity.getJumpIntent(context, LoginOrRegisterFragment.class));
     }
 
     @Override

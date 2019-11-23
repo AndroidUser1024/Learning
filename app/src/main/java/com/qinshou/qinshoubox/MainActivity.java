@@ -11,10 +11,12 @@ import android.widget.TextView;
 import com.qinshou.commonmodule.util.FragmentUtil;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.commonmodule.util.SystemUtil;
+import com.qinshou.immodule.db.DBHelper;
 import com.qinshou.immodule.manager.ChatManager;
 import com.qinshou.immodule.listener.IOnFriendStatusListener;
 import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.constant.IConstant;
+import com.qinshou.qinshoubox.conversation.view.fragment.ConversationFragment;
 import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
 import com.qinshou.qinshoubox.homepage.ui.fragment.HomepageFragment;
 import com.qinshou.qinshoubox.me.ui.fragment.MeFragment;
@@ -25,78 +27,27 @@ import com.qinshou.qinshoubox.util.QSUtil;
  * Date:2018/4/9
  */
 public class MainActivity extends QSActivity<MainPresenter> implements IMainContract.IView {
-
+    public static final int TAB_INDEX_HOMEPAGE = 0;
+    public static final int TAB_INDEX_CONVERSATION = 1;
+    public static final int TAB_INDEX_FRIEND = 2;
+    public static final int TAB_INDEX_ME = 3;
     /**
      * 底部导航栏
      */
     private TabLayout mTlMain;
     private HomepageFragment mHomepageFragment;
-    //    private KnowledgeSystemFragment mKnowledgeSystemFragment;
+    private ConversationFragment mConversationFragment;
     private FriendFragment mFriendFragment;
     private MeFragment mMeFragment;
-    private int[] mTabTvTextResourceArray = new int[]{R.string.main_tv_tab_text_chat
-            , R.string.main_tv_tab_text_contact
-            , R.string.main_tv_tab_text_mine};
     private int[] mTabIvResourceArray = new int[]{R.drawable.main_iv_tab_conversation_src, R.drawable.main_iv_tab_conversation_src_selected
+            , R.drawable.main_iv_tab_conversation_src, R.drawable.main_iv_tab_conversation_src_selected
             , R.drawable.main_iv_tab_friend_src, R.drawable.main_iv_tab_friend_src_selected
             , R.drawable.main_iv_tab_me_src, R.drawable.main_iv_tab_me_src_selected};
-    private IOnFriendStatusListener mOnFriendStatusListener = new IOnFriendStatusListener() {
-        @Override
-        public void add(int fromUserId, String additionalMsg, boolean newFriend) {
-            if (mFriendFragment == null || !newFriend) {
-                return;
-            }
-            try {
-                if (SystemUtil.isBackground(getContext())) {
-                    // 如果应用在后台显示通知
-                } else {
-                    // 震动
-                    QSUtil.playVibration(getContext());
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
 
-            // 红点提示
-            int friendHistoryUnreadCount = SharedPreferencesHelper.SINGLETON.getInt(IConstant.SP_KEY_FRIEND_HISTORY_UNREAD_COUNT);
-            if (friendHistoryUnreadCount == -1) {
-                friendHistoryUnreadCount = 0;
-            }
-            friendHistoryUnreadCount++;
-            SharedPreferencesHelper.SINGLETON.putInt(IConstant.SP_KEY_FRIEND_HISTORY_UNREAD_COUNT, friendHistoryUnreadCount);
-            mFriendFragment.showFriendHistoryUnreadCount();
-        }
-
-        @Override
-        public void agreeAdd(int fromUserId) {
-
-        }
-
-        @Override
-        public void refuseAdd(int fromUserId) {
-
-        }
-
-        @Override
-        public void delete(int fromUserId) {
-
-        }
-
-        @Override
-        public void online(int fromUserId) {
-
-        }
-
-        @Override
-        public void offline(int fromUserId) {
-
-        }
-    };
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ChatManager.SINGLETON.removeOnFriendStatusListener(mOnFriendStatusListener);
     }
 
     @Override
@@ -118,6 +69,7 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
 
     @Override
     public void initView() {
+        DBHelper.init(getContext(), "test1");
 //        View flutterView = Flutter.createView(this, this.getLifecycle(), "HomePage");
 
 //        unbindSlideBackActivity();
@@ -126,17 +78,18 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
 
     @Override
     public void setListener() {
-        ChatManager.SINGLETON.addOnFriendStatusListener(mOnFriendStatusListener);
         mTlMain.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 int position = tab.getPosition();
                 changeTabState(position);
-                if (position == 0) {
+                if (position == TAB_INDEX_HOMEPAGE) {
                     FragmentUtil.showFragment(getActivity(), R.id.fl_fragment_container, mHomepageFragment);
-                } else if (position == 1) {
+                } else if (position == TAB_INDEX_CONVERSATION) {
+                    FragmentUtil.showFragment(getActivity(), R.id.fl_fragment_container, mConversationFragment);
+                } else if (position == TAB_INDEX_FRIEND) {
                     FragmentUtil.showFragment(getActivity(), R.id.fl_fragment_container, mFriendFragment);
-                } else if (position == 2) {
+                } else if (position == TAB_INDEX_ME) {
                     FragmentUtil.showFragment(getActivity(), R.id.fl_fragment_container, mMeFragment);
                 }
             }
@@ -161,10 +114,12 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
 //                ShowLogUtil.logi(content);
 //            }
 //        });
-        mHomepageFragment = new HomepageFragment();
-        mFriendFragment = new FriendFragment();
-        mMeFragment = new MeFragment();
-        for (int i = 0; i < 3; i++) {
+        String[] mainTvTabTextArray = getResources().getStringArray(R.array.main_tv_tab_text);
+        FragmentUtil.addFragment(getActivity(), R.id.fl_fragment_container, mConversationFragment = new ConversationFragment());
+        FragmentUtil.addFragment(getActivity(), R.id.fl_fragment_container, mFriendFragment = new FriendFragment());
+        FragmentUtil.addFragment(getActivity(), R.id.fl_fragment_container, mMeFragment = new MeFragment());
+        FragmentUtil.addFragment(getActivity(), R.id.fl_fragment_container, mHomepageFragment = new HomepageFragment());
+        for (int i = 0; i < mainTvTabTextArray.length; i++) {
             TabLayout.Tab tab = mTlMain.newTab();
             View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_tab_main, null);
             ImageView ivTab = view.findViewById(R.id.iv_tab);
@@ -173,7 +128,7 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
 //                tvTab.setTextAppearance(R.style.TextViewUnread);
 //            }
             ivTab.setImageResource(mTabIvResourceArray[i * 2]);
-            tvTab.setText(mTabTvTextResourceArray[i]);
+            tvTab.setText(mainTvTabTextArray[i]);
             // 设置视图
             tab.setCustomView(view);
             mTlMain.addTab(tab, i == 0);

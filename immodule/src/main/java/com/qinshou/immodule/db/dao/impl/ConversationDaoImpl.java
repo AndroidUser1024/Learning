@@ -1,11 +1,17 @@
 package com.qinshou.immodule.db.dao.impl;
 
+import android.util.Log;
+
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.dao.GenericRawResults;
+import com.j256.ormlite.stmt.QueryBuilder;
 import com.qinshou.immodule.bean.ConversationBean;
 import com.qinshou.immodule.db.DBHelper;
 import com.qinshou.immodule.db.dao.IConversationDao;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Author: QinHao
@@ -45,5 +51,22 @@ public class ConversationDaoImpl implements IConversationDao {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public List<ConversationBean> getList() {
+        try {
+            QueryBuilder leftOuterJoinQueryBuilder = mDao.queryBuilder();
+            leftOuterJoinQueryBuilder.where().eq("conversation.toUserId", "user.id");
+            GenericRawResults<String[]> genericRawResults = mDao.queryBuilder().leftJoin(leftOuterJoinQueryBuilder).queryRaw();
+            List<String[]> results = genericRawResults.getResults();
+            for (String[] result : results) {
+                Log.i("daolema", "result--->" + result);
+            }
+            return new ArrayList<>();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
     }
 }

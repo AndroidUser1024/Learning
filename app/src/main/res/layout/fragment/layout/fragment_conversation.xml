@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/activity_background_color"
+    android:orientation="vertical"
+    tools:context="com.qinshou.qinshoubox.conversation.view.fragment.ConversationFragment">
+
+    <com.qinshou.commonmodule.widget.TitleBar
+        style="@style/TitleBarBaseStyle"
+        app:rightImageResource="@drawable/conversation_iv_right_src"
+        app:titleText="@string/conversation_tv_title_text"
+        app:titleTextSize="@dimen/px36">
+
+    </com.qinshou.commonmodule.widget.TitleBar>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/abl_status"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/activity_background_color"
+            app:elevation="0dp"
+            tools:ignore="UnusedAttribute">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_collapseMode="pin"
+                app:layout_scrollFlags="scroll">
+
+                <LinearLayout
+                    android:id="@+id/ll_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/px56"
+                    android:layout_marginStart="@dimen/px32"
+                    android:layout_marginLeft="@dimen/px32"
+                    android:layout_marginTop="@dimen/px17"
+                    android:layout_marginEnd="@dimen/px32"
+                    android:layout_marginRight="@dimen/px32"
+                    android:background="@drawable/conversation_ll_search_bg"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="@dimen/px24"
+                        android:layout_height="@dimen/px24"
+                        android:layout_marginEnd="@dimen/px3"
+                        android:layout_marginRight="@dimen/px3"
+                        android:src="@drawable/conversation_iv_search_src" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/px3"
+                        android:layout_marginLeft="@dimen/px3"
+                        android:letterSpacing="0.1"
+                        android:text="@string/conversation_tv_search_text"
+                        android:textColor="#FF999999"
+                        android:textSize="@dimen/px26" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/px1"
+                    android:layout_marginTop="@dimen/px16"
+                    android:background="#FFECECEC" />
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rcv_conversation"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimary"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        </android.support.design.widget.AppBarLayout>
+    </android.support.design.widget.CoordinatorLayout>
+
+</LinearLayout>

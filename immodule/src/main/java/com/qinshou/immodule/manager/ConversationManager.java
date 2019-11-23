@@ -7,6 +7,8 @@ import com.qinshou.immodule.db.dao.IMessageDao;
 import com.qinshou.immodule.db.dao.impl.ConversationDaoImpl;
 import com.qinshou.immodule.db.dao.impl.MessageDaoImpl;
 
+import java.util.List;
+
 /**
  * Author: QinHao
  * Email:qinhao@jeejio.com
@@ -29,7 +31,7 @@ public enum ConversationManager {
         mMessageDao = new MessageDaoImpl();
     }
 
-    public int insertOrUpdate(ConversationBean conversationBean) {
-        return mConversationDao.insertOrUpdate(conversationBean);
+    public List<ConversationBean> getList() {
+        return mConversationDao.getList();
     }
 }

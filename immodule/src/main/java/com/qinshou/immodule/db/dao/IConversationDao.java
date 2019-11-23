@@ -3,6 +3,8 @@ package com.qinshou.immodule.db.dao;
 
 import com.qinshou.immodule.bean.ConversationBean;
 
+import java.util.List;
+
 /**
  * Author: QinHao
  * Email:qinhao@jeejio.com
@@ -13,4 +15,6 @@ public interface IConversationDao {
     int insertOrUpdate(ConversationBean conversationBean);
 
     ConversationBean getByToUserId(int toUserId);
+
+    List<ConversationBean> getList();
 }

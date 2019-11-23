@@ -11,6 +11,10 @@ import android.widget.TextView;
 import com.qinshou.commonmodule.adapter.VpSingleViewAdapter;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.commonmodule.util.ShowLogUtil;
+import com.qinshou.commonmodule.util.SystemUtil;
+import com.qinshou.immodule.listener.IOnFriendStatusListener;
+import com.qinshou.immodule.manager.ChatManager;
+import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.constant.IConstant;
@@ -20,6 +24,7 @@ import com.qinshou.qinshoubox.friend.view.adapter.RcvFriendAdapter;
 import com.qinshou.qinshoubox.friend.view.adapter.RcvGroupChatAdapter;
 import com.qinshou.immodule.bean.GroupChatBean;
 import com.qinshou.immodule.bean.UserBean;
+import com.qinshou.qinshoubox.util.QSUtil;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 import org.greenrobot.eventbus.EventBus;
@@ -51,10 +56,64 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
     private TextView mTvUnreadCountInTlMain;
     private List<RecyclerView> mRecyclerViewList = new ArrayList<>();
 
+    private IOnFriendStatusListener mOnFriendStatusListener = new IOnFriendStatusListener() {
+        @Override
+        public void add(int fromUserId, String additionalMsg, boolean newFriend) {
+            if (!newFriend) {
+                return;
+            }
+            try {
+                if (SystemUtil.isBackground(getContext())) {
+                    // 如果应用在后台显示通知
+                } else {
+                    // 震动
+                    QSUtil.playVibration(getContext());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            // 红点提示
+            int friendHistoryUnreadCount = SharedPreferencesHelper.SINGLETON.getInt(IConstant.SP_KEY_FRIEND_HISTORY_UNREAD_COUNT);
+            if (friendHistoryUnreadCount == -1) {
+                friendHistoryUnreadCount = 0;
+            }
+            friendHistoryUnreadCount++;
+            SharedPreferencesHelper.SINGLETON.putInt(IConstant.SP_KEY_FRIEND_HISTORY_UNREAD_COUNT, friendHistoryUnreadCount);
+            showFriendHistoryUnreadCount();
+        }
+
+        @Override
+        public void agreeAdd(int fromUserId) {
+
+        }
+
+        @Override
+        public void refuseAdd(int fromUserId) {
+
+        }
+
+        @Override
+        public void delete(int fromUserId) {
+
+        }
+
+        @Override
+        public void online(int fromUserId) {
+
+        }
+
+        @Override
+        public void offline(int fromUserId) {
+
+        }
+    };
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         EventBus.getDefault().unregister(this);
+        ChatManager.SINGLETON.removeOnFriendStatusListener(mOnFriendStatusListener);
     }
 
     @Override
@@ -64,6 +123,7 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
 
     @Override
     public void initView() {
+        ShowLogUtil.logi("initView");
         EventBus.getDefault().register(this);
         mTlFriend = findViewByID(R.id.tl_friend);
         mViewPager = findViewByID(R.id.view_pager);
@@ -72,7 +132,7 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
         if (tlMain == null) {
             return;
         }
-        TabLayout.Tab tab = tlMain.getTabAt(1);
+        TabLayout.Tab tab = tlMain.getTabAt(MainActivity.TAB_INDEX_FRIEND);
         if (tab == null) {
             return;
         }
@@ -85,10 +145,11 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
 
     @Override
     public void setListener() {
+        ChatManager.SINGLETON.addOnFriendStatusListener(mOnFriendStatusListener);
         findViewByID(R.id.ll_new_friend).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UserStatusManager.SINGLETON.jump2FriendHistory(FriendFragment.this);
+                UserStatusManager.SINGLETON.jump2FriendHistory(getContext());
             }
         });
         findViewByID(R.id.ll_create_group_chat).setOnClickListener(new View.OnClickListener() {
@@ -188,9 +249,20 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void updateUserBean(UserBean userBean) {
-        mTlFriend.getTabAt(mTlFriend.getSelectedTabPosition()).select();
+    public void receiveEvent(Object object) {
+        ShowLogUtil.logi("收到事件--->" + object);
+        if (object instanceof UserBean) {
+            if (UserStatusManager.SINGLETON.isLogin()) {
+                mTlFriend.getTabAt(mTlFriend.getSelectedTabPosition()).select();
+            } else {
+                mTvUnreadCount.setVisibility(View.GONE);
+                mTvUnreadCountInTlMain.setVisibility(View.GONE);
+            }
+        } else if (object instanceof Integer) {
+            showFriendHistoryUnreadCount();
+        }
     }
+
 
     private void loadData(int position) {
         if (!UserStatusManager.SINGLETON.isLogin()) {
@@ -203,7 +275,7 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
         }
     }
 
-    public void showFriendHistoryUnreadCount() {
+    private void showFriendHistoryUnreadCount() {
         int friendHistoryUnreadCount = SharedPreferencesHelper.SINGLETON.getInt(IConstant.SP_KEY_FRIEND_HISTORY_UNREAD_COUNT);
         mTvUnreadCount.setVisibility(friendHistoryUnreadCount > 0 ? View.VISIBLE : View.GONE);
         mTvUnreadCount.setText(friendHistoryUnreadCount + "");
