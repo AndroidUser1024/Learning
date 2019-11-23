@@ -5,12 +5,12 @@ import android.content.Context;
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.immodule.bean.MessageBean;
-import com.qinshou.immodule.enums.MessageContentType;
-import com.qinshou.immodule.manager.ChatManager;
-import com.qinshou.qinshoubox.R;
+import com.qinshou.immodule.bean.UserBean;
 import com.qinshou.immodule.db.dao.IUserDao;
 import com.qinshou.immodule.db.dao.impl.UserDaoImpl;
-import com.qinshou.immodule.bean.UserBean;
+import com.qinshou.immodule.enums.MessageContentType;
+import com.qinshou.qinshoubox.R;
+import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 
 /**
@@ -30,7 +30,7 @@ public class RcvMessageAdapterFromMessageTextItemView extends AbsRcvMessageAdapt
     @Override
     public boolean isForViewType(MessageBean item, int position) {
         // 消息来源与当前登录的用户名不同,则是收到的消息
-        return item.getFromUserId() != ChatManager.SINGLETON.getUserId()
+        return item.getFromUserId() != UserStatusManager.SINGLETON.getUserBean().getId()
                 && item.getContentType() == MessageContentType.TEXT.getValue();
     }
 

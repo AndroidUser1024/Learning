@@ -8,7 +8,6 @@ import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.commonmodule.rcvbaseadapter.itemview.BaseItemView;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.immodule.bean.MessageBean;
-import com.qinshou.immodule.manager.ChatManager;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
@@ -34,7 +33,7 @@ public class RcvMessageAdapterToMessageItemView extends BaseItemView<MessageBean
     @Override
     public boolean isForViewType(MessageBean item, int position) {
         // 消息来源与当前登录的用户 id 相同,则是发送的消息
-        return item.getFromUserId() == ChatManager.SINGLETON.getUserId();
+        return item.getFromUserId() == UserStatusManager.SINGLETON.getUserBean().getId();
     }
 
     @Override
@@ -115,7 +114,7 @@ public class RcvMessageAdapterToMessageItemView extends BaseItemView<MessageBean
         MessageBean previousMessageBean = getRcvBaseAdapter().getDataList().get(i - 1);
         // 与前一条消息的时间间隔
         long timeDiff;
-        if (previousMessageBean.getFromUserId() == ChatManager.SINGLETON.getUserId()) {
+        if (previousMessageBean.getFromUserId() == UserStatusManager.SINGLETON.getUserBean().getId()) {
             // 上一条消息是发送的,就和发送时间比较
             timeDiff = messageBean.getSendTimestamp() - previousMessageBean.getSendTimestamp();
         } else {

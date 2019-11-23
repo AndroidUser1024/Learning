@@ -5,12 +5,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.commonmodule.rcvbaseadapter.itemview.BaseItemView;
 import com.qinshou.immodule.bean.MessageBean;
-import com.qinshou.immodule.manager.ChatManager;
 import com.qinshou.qinshoubox.R;
+import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -104,7 +103,7 @@ public abstract class AbsRcvMessageAdapterFromMessageItemView extends BaseItemVi
         MessageBean previousMessageBean = getRcvBaseAdapter().getDataList().get(i - 1);
         // 与前一条消息的时间间隔
         long timeDiff;
-        if (previousMessageBean.getFromUserId() == ChatManager.SINGLETON.getUserId()) {
+        if (previousMessageBean.getFromUserId() == UserStatusManager.SINGLETON.getUserBean().getId()) {
             // 上一条消息是发送的,就和发送时间比较
             timeDiff = messageBean.getReceiveTimestamp() - previousMessageBean.getSendTimestamp();
         } else {
