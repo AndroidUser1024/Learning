@@ -123,7 +123,6 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
 
     @Override
     public void initView() {
-        ShowLogUtil.logi("initView");
         EventBus.getDefault().register(this);
         mTlFriend = findViewByID(R.id.tl_friend);
         mViewPager = findViewByID(R.id.view_pager);
@@ -250,7 +249,6 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void receiveEvent(Object object) {
-        ShowLogUtil.logi("收到事件--->" + object);
         if (object instanceof UserBean) {
             if (UserStatusManager.SINGLETON.isLogin()) {
                 mTlFriend.getTabAt(mTlFriend.getSelectedTabPosition()).select();

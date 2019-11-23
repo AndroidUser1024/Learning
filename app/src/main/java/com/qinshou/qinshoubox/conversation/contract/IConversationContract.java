@@ -3,7 +3,11 @@ package com.qinshou.qinshoubox.conversation.contract;
 
 import com.qinshou.commonmodule.base.IBaseModel;
 import com.qinshou.commonmodule.base.IBaseView;
+import com.qinshou.immodule.bean.ConversationBean;
+import com.qinshou.immodule.listener.QSCallback;
 import com.qinshou.qinshoubox.conversation.view.fragment.ConversationFragment;
+
+import java.util.List;
 
 /**
  * Author: QinHao
@@ -13,13 +17,13 @@ import com.qinshou.qinshoubox.conversation.view.fragment.ConversationFragment;
  */
 public interface IConversationContract {
     interface IModel extends IBaseModel {
-        void getConversationList();
+        void getConversationList(QSCallback<List<ConversationBean>> qsCallback);
     }
 
     interface IView extends IBaseView {
-        void getConversationListSuccess();
+        void getConversationListSuccess(List<ConversationBean> conversationBeanList);
 
-        void getConversationListFailure();
+        void getConversationListFailure(Exception e);
     }
 
     interface IPresenter {

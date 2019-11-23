@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.qinshou.commonmodule.rcvbaseadapter.RcvSingleBaseAdapter;
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
+import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.immodule.bean.ConversationBean;
 import com.qinshou.qinshoubox.R;
 
@@ -23,5 +24,8 @@ public class RcvConversationAdapter extends RcvSingleBaseAdapter<ConversationBea
 
     @Override
     public void bindViewHolder(final BaseViewHolder baseViewHolder, final ConversationBean conversationBean, final int i) {
+        ImageLoadUtil.SINGLETON.loadImage(getContext(), conversationBean.getHeadImgSmall(), baseViewHolder.getImageView(R.id.iv_head_img));
+        baseViewHolder.setTvText(R.id.tv_title, conversationBean.getTitle());
+        baseViewHolder.setTvText(R.id.tv_last_msg_content, conversationBean.getLastMsgContent());
     }
 }

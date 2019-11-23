@@ -36,19 +36,19 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    sourceSets {
-        main {
-            res.srcDirs = [
-                    '/src/main/res/',
-                    '/src/main/res/layout/activity',
-                    '/src/main/res/layout/fragment',
-                    '/src/main/res/layout/include',
-                    '/src/main/res/layout/item',
-                    '/src/main/res/layout/popupwindow',
-                    '/src/main/res/layout/dialog'
-            ]
-        }
-    }
+//    sourceSets {
+//        main {
+//            res.srcDirs = [
+//                    '/src/main/res/',
+//                    '/src/main/res/layout/activity',
+//                    '/src/main/res/layout/fragment',
+//                    '/src/main/res/layout/include',
+//                    '/src/main/res/layout/item',
+//                    '/src/main/res/layout/popupwindow',
+//                    '/src/main/res/layout/dialog'
+//            ]
+//        }
+//    }
     dataBinding {
         enabled = true
     }

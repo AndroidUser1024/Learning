@@ -22,7 +22,8 @@ import java.util.List;
 @Api
 public interface QSBoxApi {
     @DefaultHost
-    String DEFAULT_HOST = "http://172.16.60.231:8080/";
+//    String DEFAULT_HOST = "http://172.16.60.231:8080/";
+    String DEFAULT_HOST = "http://192.168.1.109:8080/";
 
     @Post("user/register/")
     Call<QinshouResultBean<UserBean>> register(@Field(name = "username") String username

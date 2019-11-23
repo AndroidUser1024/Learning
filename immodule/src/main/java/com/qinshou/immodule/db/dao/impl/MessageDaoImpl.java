@@ -1,8 +1,6 @@
 package com.qinshou.immodule.db.dao.impl;
 
 
-import android.util.Log;
-
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.misc.TransactionManager;
 import com.qinshou.immodule.bean.ConversationBean;
@@ -67,7 +65,7 @@ public class MessageDaoImpl implements IMessageDao {
                     conversationBean.setType(messageBean.getType());
                     conversationBean.setLastMsgContent(messageBean.getContent());
                     conversationBean.setLastMsgContentType(messageBean.getContentType());
-                    conversationBean.setLastMsgTime(lastMsgTime);
+                    conversationBean.setLastMsgTimestamp(lastMsgTime);
                     conversationBean.setUnreadCount(conversationBean.getUnreadCount() + 1);
                     mConversationDao.insertOrUpdate(conversationBean);
 

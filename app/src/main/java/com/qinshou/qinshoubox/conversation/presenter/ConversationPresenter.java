@@ -2,9 +2,13 @@ package com.qinshou.qinshoubox.conversation.presenter;
 
 
 import com.qinshou.commonmodule.base.AbsPresenter;
+import com.qinshou.immodule.bean.ConversationBean;
+import com.qinshou.immodule.listener.QSCallback;
 import com.qinshou.qinshoubox.conversation.contract.IConversationContract;
 import com.qinshou.qinshoubox.conversation.model.ConversationModel;
 import com.qinshou.qinshoubox.conversation.view.fragment.ConversationFragment;
+
+import java.util.List;
 
 /**
  * Author: QinHao
@@ -20,6 +24,22 @@ public class ConversationPresenter extends AbsPresenter<IConversationContract.IV
 
     @Override
     public void getConversationList() {
-        getModel().getConversationList();
+        getModel().getConversationList(new QSCallback<List<ConversationBean>>() {
+            @Override
+            public void onSuccess(List<ConversationBean> data) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().getConversationListSuccess(data);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().getConversationListFailure(e);
+            }
+        });
     }
 }

@@ -69,9 +69,6 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
 
     @Override
     public void initView() {
-        DBHelper.init(getContext(), "test1");
-//        View flutterView = Flutter.createView(this, this.getLifecycle(), "HomePage");
-
 //        unbindSlideBackActivity();
         mTlMain = findViewByID(R.id.tl_main);
     }

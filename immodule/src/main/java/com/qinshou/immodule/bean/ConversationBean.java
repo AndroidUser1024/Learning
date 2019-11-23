@@ -1,10 +1,7 @@
 package com.qinshou.immodule.bean;
 
-import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
-import com.qinshou.immodule.bean.MessageBean;
 
 /**
  * Author: QinHao
@@ -42,23 +39,33 @@ public class ConversationBean {
     /**
      * 最后一条消息的时间
      */
-    @DatabaseField(columnName = "lastMsgTime")
-    private long lastMsgTime;
+    @DatabaseField(columnName = "lastMsgTimestamp")
+    private long lastMsgTimestamp;
     /**
      * 未读数
      */
     @DatabaseField(columnName = "unreadCount")
     private int unreadCount;
+    /**
+     * 对方的小头像
+     */
+    @DatabaseField(persisted = false)
+    private String headImgSmall;
+    /**
+     * 会话标题
+     */
+    @DatabaseField(persisted = false)
+    private String title;
 
     public ConversationBean() {
     }
 
-    public ConversationBean(int toUserId, int type, String lastMsgContent, int lastMsgContentType, long lastMsgTime, int unreadCount) {
+    public ConversationBean(int toUserId, int type, String lastMsgContent, int lastMsgContentType, long lastMsgTimestamp, int unreadCount) {
         this.toUserId = toUserId;
         this.type = type;
         this.lastMsgContent = lastMsgContent;
         this.lastMsgContentType = lastMsgContentType;
-        this.lastMsgTime = lastMsgTime;
+        this.lastMsgTimestamp = lastMsgTimestamp;
         this.unreadCount = unreadCount;
     }
 
@@ -70,8 +77,10 @@ public class ConversationBean {
                 ", type=" + type +
                 ", lastMsgContent='" + lastMsgContent + '\'' +
                 ", lastMsgContentType=" + lastMsgContentType +
-                ", lastMsgTime=" + lastMsgTime +
+                ", lastMsgTimestamp=" + lastMsgTimestamp +
                 ", unreadCount=" + unreadCount +
+                ", headImgSmall='" + headImgSmall + '\'' +
+                ", title='" + title + '\'' +
                 '}';
     }
 
@@ -115,12 +124,12 @@ public class ConversationBean {
         this.lastMsgContentType = lastMsgContentType;
     }
 
-    public long getLastMsgTime() {
-        return lastMsgTime;
+    public long getLastMsgTimestamp() {
+        return lastMsgTimestamp;
     }
 
-    public void setLastMsgTime(long lastMsgTime) {
-        this.lastMsgTime = lastMsgTime;
+    public void setLastMsgTimestamp(long lastMsgTimestamp) {
+        this.lastMsgTimestamp = lastMsgTimestamp;
     }
 
 
@@ -129,6 +138,23 @@ public class ConversationBean {
     }
 
     public void setUnreadCount(int unreadCount) {
+
         this.unreadCount = unreadCount;
+    }
+
+    public String getHeadImgSmall() {
+        return headImgSmall;
+    }
+
+    public void setHeadImgSmall(String headImgSmall) {
+        this.headImgSmall = headImgSmall;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

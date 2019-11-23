@@ -35,7 +35,7 @@ public class TestFragment extends AbsMVPFragment<TestPresenter> implements ITest
 //        mRcvTestAdapter = new RcvTestAdapter(getContext());
 //        rcvTest.setAdapter(mRcvTestAdapter);
 //
-//        final ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
+//        final ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.QSCallback() {
 //            @Override
 //            public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
 //                int dragFlags = 0;

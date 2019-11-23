@@ -36,13 +36,15 @@ import okio.ByteString;
 public enum ChatManager {
     SINGLETON;
     private static final String TAG = "ChatManager";
+//    private static final String URL="http://172.16.60.231:10086/websocket";
+    private static final String URL = "http://192.168.1.109:10086/websocket";
     private WebSocket mWebSocket;
     private final OkHttpClient mOkHttpClient = new OkHttpClient.Builder()
             .connectTimeout(15 * 1000, TimeUnit.MILLISECONDS)
             .readTimeout(15 * 1000, TimeUnit.MILLISECONDS)
             .writeTimeout(15 * 1000, TimeUnit.MILLISECONDS)
             .build();
-    private final Request mRequest = new Request.Builder().url("http://172.16.60.231:10086/websocket").build();
+    private final Request mRequest = new Request.Builder().url(URL).build();
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private List<IOnMessageListener> mOnMessageListenerList = new ArrayList<>();
     private List<IOnFriendStatusListener> mOnFriendStatusListenerList = new ArrayList<>();
