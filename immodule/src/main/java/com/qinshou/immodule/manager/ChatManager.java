@@ -47,14 +47,8 @@ public enum ChatManager {
     private List<IOnMessageListener> mOnMessageListenerList = new ArrayList<>();
     private List<IOnFriendStatusListener> mOnFriendStatusListenerList = new ArrayList<>();
     private int mUserId;
-    private IConversationDao mConversationDao;
-    private IConversationMessageRelDao mConversationMessageRelDao;
-    private IMessageDao mMessageDao;
 
     ChatManager() {
-        mConversationDao = new ConversationDaoImpl();
-        mConversationMessageRelDao = new ConversationMessageRelDaoImpl();
-        mMessageDao = new MessageDaoImpl();
     }
 
     public int getUserId() {
@@ -79,13 +73,12 @@ public enum ChatManager {
                 final MessageBean messageBean = new Gson().fromJson(text, MessageBean.class);
                 messageBean.setReceiveTimestamp(System.currentTimeMillis());
 
-                MessageManager.SINGLETON.insertOrUpdate(false, messageBean);
-
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
                         if (messageBean.getType() == MessageType.CHAT.getValue()
                                 || messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
+                            MessageManager.SINGLETON.insertOrUpdate(false, messageBean);
                             for (IOnMessageListener onMessageListener : mOnMessageListenerList) {
                                 onMessageListener.onMessage(messageBean);
                             }
@@ -159,6 +152,10 @@ public enum ChatManager {
     public void sendMessage(MessageBean messageBean) {
         if (mWebSocket == null) {
             return;
+        }
+        if (messageBean.getType() == MessageType.CHAT.getValue()
+                || messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
+            MessageManager.SINGLETON.insertOrUpdate(true, messageBean);
         }
         mWebSocket.send(new Gson().toJson(messageBean));
     }

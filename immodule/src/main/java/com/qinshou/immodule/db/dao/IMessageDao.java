@@ -10,5 +10,5 @@ import com.qinshou.immodule.bean.MessageBean;
  * Description:MessageBean 的 Dao 层
  */
 public interface IMessageDao {
-    int insertOrUpdate(MessageBean messageBean);
+    int insertOrUpdate(boolean send, MessageBean messageBean);
 }

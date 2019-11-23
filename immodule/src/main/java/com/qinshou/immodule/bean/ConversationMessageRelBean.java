@@ -11,14 +11,27 @@ import com.j256.ormlite.table.DatabaseTable;
  */
 @DatabaseTable(tableName = "conversation_message_rel")
 public class ConversationMessageRelBean {
+    @DatabaseField(columnName = "id", generatedId = true)
+    private int id;
     @DatabaseField(columnName = "conversationId")
     private int conversationId;
     @DatabaseField(columnName = "messageId")
     private int messageId;
 
+    public ConversationMessageRelBean() {
+    }
+
     public ConversationMessageRelBean(int conversationId, int messageId) {
         this.conversationId = conversationId;
         this.messageId = messageId;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getConversationId() {

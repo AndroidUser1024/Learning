@@ -71,8 +71,7 @@ public class MessageBean {
     private MessageBean() {
     }
 
-    private MessageBean(long id, int fromUserId, int toUserId, Integer type, Integer contentType, String content, Long sendTimestamp, Long receiveTimestamp, Integer status, String extend) {
-        this.id = id;
+    private MessageBean(int fromUserId, int toUserId, Integer type, Integer contentType, String content, Long sendTimestamp, Long receiveTimestamp, Integer status, String extend) {
         this.fromUserId = fromUserId;
         this.toUserId = toUserId;
         this.type = type;
@@ -98,6 +97,14 @@ public class MessageBean {
                 ", status=" + status +
                 ", extend='" + extend + '\'' +
                 '}';
+    }
+
+    public int getPid() {
+        return pid;
+    }
+
+    public void setPid(int pid) {
+        this.pid = pid;
     }
 
     public long getId() {
