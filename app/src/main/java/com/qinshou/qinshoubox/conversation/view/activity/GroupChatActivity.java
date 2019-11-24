@@ -1,4 +1,4 @@
-package com.qinshou.qinshoubox.me.ui.activity;
+package com.qinshou.qinshoubox.conversation.view.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -18,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-
 import com.qinshou.commonmodule.util.MediaPlayerHelper;
 import com.qinshou.commonmodule.util.MediaRecorderHelper;
 import com.qinshou.commonmodule.util.ShowLogUtil;
@@ -28,18 +27,19 @@ import com.qinshou.commonmodule.util.permissionutil.IOnRequestPermissionResultCa
 import com.qinshou.commonmodule.util.permissionutil.PermissionUtil;
 import com.qinshou.commonmodule.widget.RefreshLayout;
 import com.qinshou.commonmodule.widget.TitleBar;
+import com.qinshou.immodule.bean.GroupChatBean;
 import com.qinshou.immodule.bean.MessageBean;
+import com.qinshou.immodule.db.dao.impl.GroupChatDaoImpl;
 import com.qinshou.immodule.enums.MessageContentType;
-import com.qinshou.immodule.manager.ChatManager;
+import com.qinshou.immodule.enums.MessageType;
 import com.qinshou.immodule.listener.IOnMessageListener;
+import com.qinshou.immodule.manager.ChatManager;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.constant.IConstant;
-import com.qinshou.immodule.db.dao.impl.UserDaoImpl;
+import com.qinshou.qinshoubox.conversation.contract.IGroupChatContract;
+import com.qinshou.qinshoubox.conversation.presenter.GroupChatPresenter;
 import com.qinshou.qinshoubox.listener.ClearErrorInfoTextWatcher;
-import com.qinshou.immodule.bean.UserBean;
-import com.qinshou.qinshoubox.me.contract.IChatContract;
-import com.qinshou.qinshoubox.me.presenter.ChatPresenter;
 import com.qinshou.qinshoubox.me.ui.adapter.RcvMessageAdapter;
 
 import java.io.File;
@@ -51,9 +51,9 @@ import java.util.Map;
  * Author: QinHao
  * Email:qinhao@jeejio.com
  * Date: 2019/06/20 10:26
- * Description:聊天界面
+ * Description:群聊界面
  */
-public class ChatActivity extends QSActivity<ChatPresenter> implements IChatContract.IView {
+public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements IGroupChatContract.IView {
     private static final String TO_USER_ID = "ToUserId";
     private final int VOICE_MAX_TIME = 1000 * 60;
     private final int MESSAGE_WHAT_VOLUME_LEVEL = 1;
@@ -316,8 +316,8 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
     private IOnMessageListener mOnMessageListener = new IOnMessageListener() {
         @Override
         public void onMessage(MessageBean messageBean) {
-            // 不是当前会话的对方用户发过来的消息,不添加到列表中
-            if (mToUserId != messageBean.getFromUserId()) {
+            // 不是当前群聊的消息,不添加到列表中
+            if (messageBean.getType() != MessageType.GROUP_CHAT.getValue() || mToUserId != messageBean.getToUserId()) {
                 return;
             }
             mRcvMessageAdapter.getDataList().add(messageBean);
@@ -337,7 +337,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
 
     @Override
     public int getLayoutId() {
-        return R.layout.activity_chat;
+        return R.layout.activity_group_chat;
     }
 
     @Override
@@ -400,7 +400,8 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
             @Override
             public void onRefresh(RefreshLayout refreshLayout) {
                 mPage++;
-                getMessageList();
+                // 加载消息列表
+                getPresenter().getMessageList(MessageType.GROUP_CHAT.getValue(), mToUserId, mPage, IConstant.PAGE_SIZE);
             }
 
             @Override
@@ -468,58 +469,22 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
         if (mToUserId == 0) {
             return;
         }
-        UserBean userBean = new UserDaoImpl().getById(mToUserId);
-        if (userBean != null) {
-            // 对方的昵称
-            mTitleBar.setTitleText(TextUtils.isEmpty(userBean.getRemark())
-                    ? userBean.getNickname()
-                    : userBean.getRemark());
+        GroupChatBean groupChatBean = new GroupChatDaoImpl().getById(mToUserId);
+        if (groupChatBean != null) {
+            // 群昵称
+            mTitleBar.setTitleText(TextUtils.isEmpty(groupChatBean.getNickname())
+                    ? groupChatBean.getNicknameDefault()
+                    : groupChatBean.getNickname());
         }
-
-//        getPresenter().getUserInfo(mToUserId);
 //        mConversationBean = JMClient.SINGLETON.getConversationManager().getByToUsername(mToUserId);
 //        // 重置未读数
 //        if (mConversationBean != null) {
 //            JMClient.SINGLETON.getConversationManager().resetUnreadCount(mConversationBean.getId());
 //        }
         // 加载消息列表
-        getMessageList();
+        getPresenter().getMessageList(MessageType.GROUP_CHAT.getValue(), mToUserId, mPage, IConstant.PAGE_SIZE);
     }
 
-    @Override
-    public void getUserInfoSuccess(UserBean userBean) {
-    }
-
-    @Override
-    public void getUserInfoFailure(Exception e) {
-        ShowLogUtil.logi(e.getMessage());
-        mTitleBar.setTitleText(mToUserId);
-    }
-
-    /**
-     * Author: QinHao
-     * Email:qinhao@jeejio.com
-     * Date:2019/8/8 9:20
-     * Description:加载消息列表
-     */
-    private void getMessageList() {
-//        if (mConversationBean == null) {
-//            return;
-//        }
-//        List<MessageBean> messageBeanList = JMClient.SINGLETON.getConversationManager().getMessageList(mConversationBean.getId(), mPage, IConstant.PAGE_SIZE);
-//        mRcvMessageAdapter.getDataList().addAll(0, messageBeanList);
-//        mRcvMessageAdapter.notifyItemRangeInserted(0, messageBeanList.size());
-//        if (mPage == 0) {
-//            // 消息列表滚动到底部
-//            mRcvMessage.scrollToPosition(mRcvMessageAdapter.getItemCount() - 1);
-//        } else {
-//            if (messageBeanList.size() == 0) {
-//                toastShort(getString(R.string.chat_toast_no_more_message_text));
-//            }
-//        }
-//        // 停止下拉刷新和上拉加载
-//        mRefreshLayout.stopRefreshAndLoadMore();
-    }
 
     /**
      * Author: QinHao
@@ -536,6 +501,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
         MessageBean messageBean = null;
         if (mMessageContentType == MessageContentType.TEXT) {
             messageBean = MessageBean.createTextMessage(mToUserId, content);
+            messageBean.setType(MessageType.GROUP_CHAT.getValue());
             ChatManager.SINGLETON.sendMessage(messageBean);
         }
         mRcvMessageAdapter.getDataList().add(messageBean);
@@ -634,8 +600,29 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
      * @param toUserId 对方的用户 Id
      */
     public static void start(Context context, int toUserId) {
-        Intent intent = new Intent(context, ChatActivity.class);
+        Intent intent = new Intent(context, GroupChatActivity.class);
         intent.putExtra(TO_USER_ID, toUserId);
         context.startActivity(intent);
+    }
+
+    @Override
+    public void getMessageListSuccess(List<MessageBean> messageBeanList) {
+        mRcvMessageAdapter.getDataList().addAll(0, messageBeanList);
+        mRcvMessageAdapter.notifyItemRangeInserted(0, messageBeanList.size());
+        if (mPage == 0) {
+            // 消息列表滚动到底部
+            mRcvMessage.scrollToPosition(mRcvMessageAdapter.getItemCount() - 1);
+        } else {
+            if (messageBeanList.size() == 0) {
+                toastShort(getString(R.string.chat_toast_no_more_message_text));
+            }
+        }
+        // 停止下拉刷新和上拉加载
+        mRefreshLayout.stopRefreshAndLoadMore();
+    }
+
+    @Override
+    public void getMessageListFailure(Exception e) {
+
     }
 }

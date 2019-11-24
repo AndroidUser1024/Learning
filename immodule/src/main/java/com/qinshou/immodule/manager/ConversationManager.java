@@ -31,6 +31,14 @@ public enum ConversationManager {
         mMessageDao = new MessageDaoImpl();
     }
 
+    public ConversationBean getByTypeAndToUserId(int type, int toUserId) {
+        return mConversationDao.getByTypeAndToUserId(type, toUserId);
+    }
+
+    public int insertOrUpdate(ConversationBean conversationBean) {
+        return mConversationDao.insertOrUpdate(conversationBean);
+    }
+
     public List<ConversationBean> getList() {
         return mConversationDao.getList();
     }

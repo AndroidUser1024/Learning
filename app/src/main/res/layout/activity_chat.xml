@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/activity_background_color"
     android:orientation="vertical"
-    tools:context="com.qinshou.qinshoubox.me.ui.activity.ChatActivity">
+    tools:context="com.qinshou.qinshoubox.conversation.view.activity.ChatActivity">
 
     <com.qinshou.commonmodule.widget.TitleBar
         android:id="@+id/title_bar"

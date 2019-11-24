@@ -68,20 +68,9 @@ public class MessageBean {
     @DatabaseField(columnName = "extend")
     private String extend;
 
-    private MessageBean() {
+    public MessageBean() {
     }
 
-    private MessageBean(int fromUserId, int toUserId, Integer type, Integer contentType, String content, Long sendTimestamp, Long receiveTimestamp, Integer status, String extend) {
-        this.fromUserId = fromUserId;
-        this.toUserId = toUserId;
-        this.type = type;
-        this.contentType = contentType;
-        this.content = content;
-        this.sendTimestamp = sendTimestamp;
-        this.receiveTimestamp = receiveTimestamp;
-        this.status = status;
-        this.extend = extend;
-    }
 
     @Override
     public String toString() {

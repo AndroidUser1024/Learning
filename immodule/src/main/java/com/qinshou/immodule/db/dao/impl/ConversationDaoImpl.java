@@ -47,10 +47,12 @@ public class ConversationDaoImpl implements IConversationDao {
     }
 
     @Override
-    public ConversationBean getByToUserId(int toUserId) {
+    public ConversationBean getByTypeAndToUserId(int type, int toUserId) {
         try {
             return mDao.queryBuilder()
                     .where()
+                    .eq("type", type)
+                    .and()
                     .eq("toUserId", toUserId)
                     .queryForFirst();
         } catch (SQLException e) {
@@ -85,12 +87,11 @@ public class ConversationDaoImpl implements IConversationDao {
                     " LEFT OUTER JOIN" +
                     " group_chat" +
                     " ON conversation.type=3001 AND conversation.toUserId=group_chat.id");
-            String[] columnNames = genericRawResults.getColumnNames();
-            for (String columnName : columnNames) {
-                Log.i("daolema", "columnName--->" + columnName);
-            }
+//            String[] columnNames = genericRawResults.getColumnNames();
+//            for (String columnName : columnNames) {
+//                Log.i("daolema", "columnName--->" + columnName);
+//            }
             List<String[]> results = genericRawResults.getResults();
-
             for (int i = 0; i < results.size(); i++) {
                 String[] strings = results.get(i);
                 ConversationBean conversationBean = new ConversationBean();

@@ -93,12 +93,12 @@
             android:screenOrientation="portrait" />
         <!-- 聊天界面 -->
         <activity
-            android:name=".me.ui.activity.ChatActivity"
+            android:name=".conversation.view.activity.ChatActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <!-- 聊天界面 -->
         <activity
-            android:name=".me.ui.activity.GroupChatActivity"
+            android:name=".conversation.view.activity.GroupChatActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <!-- 修改备注界面 -->

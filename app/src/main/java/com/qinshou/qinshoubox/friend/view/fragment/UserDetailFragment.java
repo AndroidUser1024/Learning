@@ -21,7 +21,7 @@ import com.qinshou.qinshoubox.friend.contract.IUserDetailContract;
 import com.qinshou.qinshoubox.friend.presenter.UserDetailPresenter;
 import com.qinshou.qinshoubox.friend.view.activity.SetRemarkActivity;
 import com.qinshou.immodule.bean.UserBean;
-import com.qinshou.qinshoubox.me.ui.activity.ChatActivity;
+import com.qinshou.qinshoubox.conversation.view.activity.ChatActivity;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 /**

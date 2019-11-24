@@ -3,6 +3,8 @@ package com.qinshou.immodule.db.dao;
 
 import com.qinshou.immodule.bean.MessageBean;
 
+import java.util.List;
+
 /**
  * Author: QinHao
  * Email:qinhao@jeejio.com
@@ -11,4 +13,6 @@ import com.qinshou.immodule.bean.MessageBean;
  */
 public interface IMessageDao {
     int insertOrUpdate(boolean send, MessageBean messageBean);
+
+    List<MessageBean> getList(int conversationId, int page, int pageSize);
 }

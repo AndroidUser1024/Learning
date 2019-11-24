@@ -4,13 +4,16 @@ import com.qinshou.immodule.bean.MessageBean;
 import com.qinshou.immodule.db.dao.IMessageDao;
 import com.qinshou.immodule.db.dao.impl.MessageDaoImpl;
 
+import java.util.List;
+
 /**
  * Author: QinHao
  * Email:qinhao@jeejio.com
  * Date: 2019/11/22 20:15
  * Description:消息管理者
  */
-public enum MessageManager {SINGLETON;
+public enum MessageManager {
+    SINGLETON;
     /**
      * 消息 Dao
      */
@@ -21,6 +24,10 @@ public enum MessageManager {SINGLETON;
     }
 
     public int insertOrUpdate(boolean send, MessageBean messageBean) {
-        return mMessageDao.insertOrUpdate(send,messageBean);
+        return mMessageDao.insertOrUpdate(send, messageBean);
+    }
+
+    public List<MessageBean> getList(int conversationId, int page, int pageSize) {
+        return mMessageDao.getList(conversationId, page, pageSize);
     }
 }
