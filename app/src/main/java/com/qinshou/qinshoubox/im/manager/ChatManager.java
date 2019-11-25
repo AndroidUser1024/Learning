@@ -161,10 +161,15 @@ public enum ChatManager {
                     @Override
                     public void onSuccess(List<MessageBean> data) {
                         for (MessageBean messageBean : data) {
+                            // 插入到数据库
+                            mMessageManager.insertOrUpdate(false, messageBean);
                             for (IOnMessageListener onMessageListener : mOnMessageListenerList) {
                                 onMessageListener.onMessage(messageBean);
                             }
                         }
+                        // 通知后台删除离线消息
+                        OkHttpHelperForQSBoxOfflineApi.SINGLETON.deleteOfflineMessageList(userId)
+                                .enqueue(null);
                     }
 
                     @Override

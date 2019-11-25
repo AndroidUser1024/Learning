@@ -113,7 +113,8 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        EventBus.getDefault().unregister(this);
+        mTvUnreadCount.setVisibility(View.GONE);
+        mTvUnreadCountInTlMain.setVisibility(View.GONE);
         ChatManager.SINGLETON.removeOnFriendStatusListener(mOnFriendStatusListener);
     }
 
@@ -124,7 +125,6 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
 
     @Override
     public void initView() {
-        EventBus.getDefault().register(this);
         mTlFriend = findViewByID(R.id.tl_friend);
         mViewPager = findViewByID(R.id.view_pager);
         mTvUnreadCount = findViewByID(R.id.tv_unread_count);
@@ -221,6 +221,9 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
 
         mViewPager.setAdapter(new VpSingleViewAdapter(mRecyclerViewList, titleList));
         mTlFriend.setupWithViewPager(mViewPager);
+
+        loadData(mTlFriend.getSelectedTabPosition());
+        showFriendHistoryUnreadCount();
     }
 
     @Override
@@ -248,32 +251,11 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
         ShowLogUtil.logi("e--->" + e.getMessage());
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void receiveEvent(Object object) {
-        if (object instanceof Boolean) {
-            if ((boolean) object) {
-                mTlFriend.getTabAt(mTlFriend.getSelectedTabPosition()).select();
-            } else {
-                mTvUnreadCount.setVisibility(View.GONE);
-                mTvUnreadCountInTlMain.setVisibility(View.GONE);
-                for (RecyclerView recyclerView : mRecyclerViewList) {
-                    ((RcvBaseAdapter) recyclerView.getAdapter()).setDataList(new ArrayList());
-                    recyclerView.getAdapter().notifyDataSetChanged();
-                }
-            }
-        } else if (object instanceof Integer) {
-            showFriendHistoryUnreadCount();
-        }
-    }
-
-
     private void loadData(int position) {
         if (position == TAB_INDEX_GROUP_CHAT) {
             getPresenter().getMyGroupChatList();
         } else if (position == TAB_INDEX_FRIEND) {
-            getPresenter().getFriendList(
-
-            );
+            getPresenter().getFriendList();
         }
     }
 

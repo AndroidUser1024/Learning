@@ -1,6 +1,7 @@
 package com.qinshou.qinshoubox.im.db.dao.impl;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.GenericRawResults;
@@ -12,6 +13,7 @@ import com.qinshou.qinshoubox.im.enums.MessageType;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -181,6 +183,21 @@ public class ConversationDaoImpl implements IConversationDao {
             UpdateBuilder<ConversationBean, Integer> updateBuilder = mDao.updateBuilder();
             updateBuilder.updateColumnValue("unreadCount", 0).where().eq("id", id);
             return updateBuilder.update();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    @Override
+    public int getTotalUnreadCount() {
+        try {
+            GenericRawResults<String[]> genericRawResults = mDao.queryRaw("SELECT SUM(unreadCount) FROM conversation");
+            String[] firstResult = genericRawResults.getFirstResult();
+            if (firstResult == null || firstResult.length == 0 || TextUtils.isEmpty(firstResult[0])) {
+                return 0;
+            }
+            return Integer.valueOf(firstResult[0]);
         } catch (SQLException e) {
             e.printStackTrace();
         }

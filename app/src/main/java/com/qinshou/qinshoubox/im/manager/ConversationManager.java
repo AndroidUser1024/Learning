@@ -45,4 +45,8 @@ public class ConversationManager {
     public int resetUnreadCount(int id) {
         return mConversationDao.resetUnreadCount(id);
     }
+
+    public int getTotalUnreadCount() {
+        return mConversationDao.getTotalUnreadCount();
+    }
 }

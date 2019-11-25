@@ -19,4 +19,6 @@ public interface IConversationDao {
     List<ConversationBean> getList();
 
     int resetUnreadCount(int id);
+
+    int getTotalUnreadCount();
 }

@@ -21,10 +21,14 @@ import java.util.List;
 @Api
 public interface QSBoxOfflineApi {
     @DefaultHost
-    String DEFAULT_HOST = "http://172.16.60.231:8080/offline/";
+    String DEFAULT_HOST = "http://172.16.60.231:8080/offline";
 //    String DEFAULT_HOST = "http://192.168.1.109:8080/offline";
 
     @Json
     @Post("/getOfflineMessageList")
-    Call<QinshouResultBean<List<MessageBean>>> getOfflineMessageList(@Field(name = "toUserId") int toUserId);
+    Call<QinshouResultBean<List<MessageBean>>> getOfflineMessageList(@Field(name = "userId") int userId);
+
+    @Json
+    @Post("/deleteOfflineMessageList")
+    Call<QinshouResultBean<Object>> deleteOfflineMessageList(@Field(name = "userId") int userId);
 }

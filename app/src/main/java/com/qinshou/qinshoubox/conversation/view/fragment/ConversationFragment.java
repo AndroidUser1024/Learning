@@ -1,11 +1,19 @@
 package com.qinshou.qinshoubox.conversation.view.fragment;
 
+import android.support.design.widget.TabLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.TextView;
 
+import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
+import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemClickListener;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.util.SystemUtil;
+import com.qinshou.qinshoubox.MainActivity;
+import com.qinshou.qinshoubox.conversation.view.activity.ChatActivity;
+import com.qinshou.qinshoubox.conversation.view.activity.GroupChatActivity;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.enums.MessageType;
@@ -31,6 +39,10 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
 
 
     private RcvConversationAdapter mRcvConversationAdapter;
+    /**
+     * 主界面 TabLayout 的未读消息总数
+     */
+    private TextView mTvUnreadCountInTlMain;
     /**
      * 聊天消息监听器
      */
@@ -71,6 +83,7 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
                 conversationBeanList.add(0, conversationBean);
                 mRcvConversationAdapter.notifyItemChanged(0);
             }
+            showMessageUnreadCount();
             try {
                 if (SystemUtil.isBackground(getContext())) {
                     // 如果应用在后台显示通知
@@ -94,13 +107,6 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ShowLogUtil.logi("onDestroyView");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        ShowLogUtil.logi("onDestroy");
         ChatManager.SINGLETON.removeOnMessageListener(mOnMessageListener);
     }
 
@@ -115,6 +121,20 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
         rcvConversation.setLayoutManager(new LinearLayoutManager(getContext()));
         rcvConversation.setAdapter(mRcvConversationAdapter = new RcvConversationAdapter(getContext()));
         ((DefaultItemAnimator) rcvConversation.getItemAnimator()).setSupportsChangeAnimations(false);
+
+        TabLayout tlMain = getActivity().findViewById(R.id.tl_main);
+        if (tlMain == null) {
+            return;
+        }
+        TabLayout.Tab tab = tlMain.getTabAt(MainActivity.TAB_INDEX_CONVERSATION);
+        if (tab == null) {
+            return;
+        }
+        View view = tab.getCustomView();
+        if (view == null) {
+            return;
+        }
+        mTvUnreadCountInTlMain = view.findViewById(R.id.tv_unread_count);
     }
 
 
@@ -122,10 +142,27 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
     public void setListener() {
         // 设置聊天监听器,监听收到的消息
         ChatManager.SINGLETON.addOnMessageListener(mOnMessageListener);
+        mRcvConversationAdapter.setOnItemClickListener(new IOnItemClickListener<ConversationBean>() {
+            @Override
+            public void onItemClick(BaseViewHolder holder, ConversationBean itemData, int position) {
+                if (itemData.getType() == MessageType.CHAT.getValue()) {
+                    ChatActivity.start(getContext(), itemData.getToUserId());
+                } else if (itemData.getType() == MessageType.GROUP_CHAT.getValue()) {
+                    GroupChatActivity.start(getContext(), itemData.getToUserId());
+                }
+                // 重置未读数
+                ChatManager.SINGLETON.getConversationManager().resetUnreadCount(itemData.getId());
+                itemData.setUnreadCount(0);
+                mRcvConversationAdapter.notifyItemChanged(position);
+                showMessageUnreadCount();
+            }
+        });
     }
 
     @Override
     public void initData() {
+        getPresenter().getConversationList();
+        showMessageUnreadCount();
     }
 
 
@@ -137,5 +174,16 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
     @Override
     public void getConversationListFailure(Exception e) {
 
+    }
+
+    private void showMessageUnreadCount() {
+        int totalUnreadCount = ChatManager.SINGLETON.getConversationManager().getTotalUnreadCount();
+        ShowLogUtil.logi("totalUnreadCount--->" + totalUnreadCount);
+        if (totalUnreadCount > 0) {
+            mTvUnreadCountInTlMain.setVisibility(View.VISIBLE);
+            mTvUnreadCountInTlMain.setText("" + totalUnreadCount);
+        } else {
+            mTvUnreadCountInTlMain.setVisibility(View.GONE);
+        }
     }
 }

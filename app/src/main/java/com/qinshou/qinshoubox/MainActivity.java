@@ -177,7 +177,6 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void receiveEvent(Boolean login) {
-        ShowLogUtil.logi("receiveEvent--->" + login);
         FragmentUtil.removeFragment(getActivity(), mConversationFragment);
         FragmentUtil.removeFragment(getActivity(), mFriendFragment);
         if (login) {

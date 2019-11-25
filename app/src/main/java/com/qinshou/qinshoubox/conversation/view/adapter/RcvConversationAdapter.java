@@ -26,20 +26,6 @@ public class RcvConversationAdapter extends RcvSingleBaseAdapter<ConversationBea
     public RcvConversationAdapter(Context context) {
         super(context, R.layout.item_rcv_conversation);
         mWeekArray = context.getResources().getStringArray(R.array.conversation_tv_last_msg_time_text);
-        setOnItemClickListener(new IOnItemClickListener<ConversationBean>() {
-            @Override
-            public void onItemClick(BaseViewHolder holder, ConversationBean itemData, int position) {
-                if (itemData.getType() == MessageType.CHAT.getValue()) {
-                    ChatActivity.start(getContext(), itemData.getToUserId());
-                } else if (itemData.getType() == MessageType.GROUP_CHAT.getValue()) {
-                    GroupChatActivity.start(getContext(), itemData.getToUserId());
-                }
-                // 重置未读数
-                ChatManager.SINGLETON.getConversationManager().resetUnreadCount(itemData.getId());
-                itemData.setUnreadCount(0);
-                notifyItemChanged(position);
-            }
-        });
     }
 
     @Override
