@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/px120"
+    android:background="#FFFFFFFF"
+    android:paddingStart="@dimen/px30"
+    android:paddingLeft="@dimen/px30"
+    android:paddingEnd="@dimen/px30"
+    android:paddingRight="@dimen/px30">
+
+    <TextView
+        android:id="@+id/tv_index"
+        android:layout_width="@dimen/px50"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="#FF666666"
+        android:textSize="@dimen/sp14"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="1" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guide_line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/px30"
+        android:layout_marginLeft="@dimen/px30"
+        android:layout_marginBottom="@dimen/px5"
+        android:textColor="#FF000000"
+        android:textSize="@dimen/sp16"
+        app:layout_constraintBottom_toTopOf="@id/guide_line"
+        app:layout_constraintLeft_toRightOf="@id/tv_index"
+        app:layout_constraintStart_toEndOf="@id/tv_index"
+        tools:text="大哥" />
+
+    <TextView
+        android:id="@+id/tv_artist_and_album"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/px30"
+        android:layout_marginLeft="@dimen/px30"
+        android:layout_marginTop="@dimen/px5"
+        android:textColor="#FF999999"
+        android:textSize="@dimen/sp12"
+        app:layout_constraintLeft_toRightOf="@id/tv_index"
+        app:layout_constraintStart_toEndOf="@id/tv_index"
+        app:layout_constraintTop_toBottomOf="@id/guide_line"
+        tools:text="卫兰-My.Love" />
+</android.support.constraint.ConstraintLayout>

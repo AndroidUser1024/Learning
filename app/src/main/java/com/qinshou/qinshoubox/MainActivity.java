@@ -9,6 +9,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qinshou.commonmodule.util.FragmentUtil;
+import com.qinshou.commonmodule.util.ShowLogUtil;
+import com.qinshou.imagemodule.util.ImageLoadUtil;
+import com.qinshou.qinshoubox.base.QSFragment;
+import com.qinshou.qinshoubox.demo.view.fragment.DemoFragment;
+import com.qinshou.qinshoubox.im.bean.UserBean;
 import com.qinshou.qinshoubox.im.db.DBHelper;
 import com.qinshou.qinshoubox.im.manager.ChatManager;
 import com.qinshou.qinshoubox.im.listener.IOnFriendStatusListener;
@@ -17,6 +22,12 @@ import com.qinshou.qinshoubox.conversation.view.fragment.ConversationFragment;
 import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
 import com.qinshou.qinshoubox.homepage.ui.fragment.HomepageFragment;
 import com.qinshou.qinshoubox.me.ui.fragment.MeFragment;
+import com.qinshou.qinshoubox.music.view.fragment.MusicListFragment;
+import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * Description:主 Activity
@@ -24,18 +35,21 @@ import com.qinshou.qinshoubox.me.ui.fragment.MeFragment;
  */
 public class MainActivity extends QSActivity<MainPresenter> implements IMainContract.IView {
     public static final int TAB_INDEX_HOMEPAGE = 0;
-    public static final int TAB_INDEX_CONVERSATION = 1;
-    public static final int TAB_INDEX_FRIEND = 2;
-    public static final int TAB_INDEX_ME = 3;
+    public static final int TAB_INDEX_MUSIC = 1;
+    public static final int TAB_INDEX_CONVERSATION = 2;
+    public static final int TAB_INDEX_FRIEND = 3;
+    public static final int TAB_INDEX_ME = 4;
     /**
      * 底部导航栏
      */
     private TabLayout mTlMain;
     private HomepageFragment mHomepageFragment;
-    private ConversationFragment mConversationFragment;
-    private FriendFragment mFriendFragment;
+    private MusicListFragment mMusicListFragment;
+    private QSFragment mConversationFragment;
+    private QSFragment mFriendFragment;
     private MeFragment mMeFragment;
     private int[] mTabIvResourceArray = new int[]{R.drawable.main_iv_tab_conversation_src, R.drawable.main_iv_tab_conversation_src_selected
+            , R.drawable.main_iv_tab_conversation_src, R.drawable.main_iv_tab_conversation_src_selected
             , R.drawable.main_iv_tab_conversation_src, R.drawable.main_iv_tab_conversation_src_selected
             , R.drawable.main_iv_tab_friend_src, R.drawable.main_iv_tab_friend_src_selected
             , R.drawable.main_iv_tab_me_src, R.drawable.main_iv_tab_me_src_selected};
@@ -44,6 +58,7 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -60,6 +75,7 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
 
     @Override
     public int getLayoutId() {
+        EventBus.getDefault().register(this);
         return R.layout.activity_main;
     }
 
@@ -78,6 +94,8 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
                 changeTabState(position);
                 if (position == TAB_INDEX_HOMEPAGE) {
                     FragmentUtil.showFragment(getActivity(), R.id.fl_fragment_container, mHomepageFragment);
+                } else if (position == TAB_INDEX_MUSIC) {
+                    FragmentUtil.showFragment(getActivity(), R.id.fl_fragment_container, mMusicListFragment);
                 } else if (position == TAB_INDEX_CONVERSATION) {
                     FragmentUtil.showFragment(getActivity(), R.id.fl_fragment_container, mConversationFragment);
                 } else if (position == TAB_INDEX_FRIEND) {
@@ -108,8 +126,9 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
 //            }
 //        });
         String[] mainTvTabTextArray = getResources().getStringArray(R.array.main_tv_tab_text);
-        FragmentUtil.addFragment(getActivity(), R.id.fl_fragment_container, mConversationFragment = new ConversationFragment());
-        FragmentUtil.addFragment(getActivity(), R.id.fl_fragment_container, mFriendFragment = new FriendFragment());
+        FragmentUtil.addFragment(getActivity(), R.id.fl_fragment_container, mMusicListFragment = new MusicListFragment());
+        FragmentUtil.addFragment(getActivity(), R.id.fl_fragment_container, mConversationFragment = new DemoFragment());
+        FragmentUtil.addFragment(getActivity(), R.id.fl_fragment_container, mFriendFragment = new DemoFragment());
         FragmentUtil.addFragment(getActivity(), R.id.fl_fragment_container, mMeFragment = new MeFragment());
         FragmentUtil.addFragment(getActivity(), R.id.fl_fragment_container, mHomepageFragment = new HomepageFragment());
         for (int i = 0; i < mainTvTabTextArray.length; i++) {
@@ -154,5 +173,21 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
             ivTab.setImageResource(i == position ? mTabIvResourceArray[i * 2 + 1] : mTabIvResourceArray[i * 2]);
             tvTab.setTextColor(i == position ? 0xFF03A9F4 : 0xFF666666);
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void receiveEvent(Boolean login) {
+        ShowLogUtil.logi("receiveEvent--->" + login);
+        FragmentUtil.removeFragment(getActivity(), mConversationFragment);
+        FragmentUtil.removeFragment(getActivity(), mFriendFragment);
+        if (login) {
+            mConversationFragment = new ConversationFragment();
+            mFriendFragment = new FriendFragment();
+        } else {
+            mConversationFragment = new DemoFragment();
+            mFriendFragment = new DemoFragment();
+        }
+        FragmentUtil.addFragment(getActivity(), R.id.fl_fragment_container, mConversationFragment);
+        FragmentUtil.addFragment(getActivity(), R.id.fl_fragment_container, mFriendFragment);
     }
 }

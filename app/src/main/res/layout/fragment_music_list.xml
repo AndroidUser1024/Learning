@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/activity_background_color"
+    android:orientation="vertical"
+    tools:context=".music.view.fragment.MusicListFragment">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rcv_music"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:itemCount="20"
+        tools:layoutManager="LinearLayoutManager"
+        tools:listitem="@layout/item_rcv_music">
+
+    </android.support.v7.widget.RecyclerView>
+</FrameLayout>
