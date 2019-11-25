@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.adapter.VpSingleViewAdapter;
 import com.qinshou.commonmodule.rcvbaseadapter.RcvBaseAdapter;
+import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
+import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemLongClickListener;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.util.SystemUtil;
@@ -111,6 +113,8 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
 
         }
     };
+    private RcvFriendAdapter mRcvFriendAdapter;
+    private RcvGroupChatAdapter mRcvGroupChatAdapter;
 
     @Override
     public void onDestroyView() {
@@ -143,6 +147,8 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
             return;
         }
         mTvUnreadCountInTlMain = view.findViewById(R.id.tv_unread_count);
+        mRcvGroupChatAdapter = new RcvGroupChatAdapter(getContext());
+        mRcvFriendAdapter = new RcvFriendAdapter(getContext());
     }
 
     @Override
@@ -201,6 +207,12 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
 
             }
         });
+        mRcvFriendAdapter.setOnItemLongClickListener(new IOnItemLongClickListener<UserBean>() {
+            @Override
+            public void onItemLongClick(BaseViewHolder holder, UserBean itemData, int position) {
+                getPresenter().delete(itemData.getId());
+            }
+        });
     }
 
     @Override
@@ -210,16 +222,14 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
         RecyclerView rcvGroupChat = new RecyclerView(getContext());
         rcvGroupChat.setLayoutManager(new LinearLayoutManager(getContext()));
         rcvGroupChat.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        RcvGroupChatAdapter rcvGroupChatAdapter = new RcvGroupChatAdapter(getContext());
-        rcvGroupChat.setAdapter(rcvGroupChatAdapter);
+        rcvGroupChat.setAdapter(mRcvGroupChatAdapter);
         mRecyclerViewList.add(rcvGroupChat);
         titleList.add(getString(R.string.friend_ti_group_chat_text));
 
         RecyclerView rcvFriend = new RecyclerView(getContext());
         rcvFriend.setLayoutManager(new LinearLayoutManager(getContext()));
         rcvFriend.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        RcvFriendAdapter rcvFriendAdapter = new RcvFriendAdapter(getContext());
-        rcvFriend.setAdapter(rcvFriendAdapter);
+        rcvFriend.setAdapter(mRcvFriendAdapter);
         mRecyclerViewList.add(rcvFriend);
         titleList.add(getString(R.string.friend_ti_friend_text));
 
@@ -232,10 +242,7 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
 
     @Override
     public void getMyGroupChatListSuccess(List<GroupChatBean> groupChatBeanList) {
-        RecyclerView.Adapter adapter = mRecyclerViewList.get(mTlFriend.getSelectedTabPosition()).getAdapter();
-        if (adapter instanceof RcvGroupChatAdapter) {
-            ((RcvGroupChatAdapter) adapter).setDataList(groupChatBeanList);
-        }
+        mRcvGroupChatAdapter.setDataList(groupChatBeanList);
     }
 
     @Override
@@ -244,15 +251,22 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
 
     @Override
     public void getFriendListSuccess(List<UserBean> userBeanList) {
-        RecyclerView.Adapter adapter = mRecyclerViewList.get(mTlFriend.getSelectedTabPosition()).getAdapter();
-        if (adapter instanceof RcvFriendAdapter) {
-            ((RcvFriendAdapter) adapter).setDataList(userBeanList);
-        }
+        mRcvFriendAdapter.setDataList(userBeanList);
     }
 
     @Override
     public void getFriendListFailure(Exception e) {
         ShowLogUtil.logi("e--->" + e.getMessage());
+    }
+
+    @Override
+    public void deleteSuccess() {
+        getPresenter().getFriendList();
+    }
+
+    @Override
+    public void deleteFailure(Exception e) {
+
     }
 
     private void loadData(int position) {

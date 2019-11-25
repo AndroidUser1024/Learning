@@ -5,7 +5,7 @@ import com.qinshou.qinshoubox.friend.contract.IFriendContract;
 import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 import com.qinshou.qinshoubox.im.bean.UserBean;
-import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxApi;
+import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxFriendApi;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxGroupChatApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
@@ -34,8 +34,18 @@ public class FriendModel implements IFriendContract.IModel {
         if (!UserStatusManager.SINGLETON.isLogin()) {
             return;
         }
-        OkHttpHelperForQSBoxApi.SINGLETON.getFriendList(UserStatusManager.SINGLETON.getUserBean().getId())
+        OkHttpHelperForQSBoxFriendApi.SINGLETON.getList(UserStatusManager.SINGLETON.getUserBean().getId())
                 .transform(new QSApiTransformer<List<UserBean>>())
+                .enqueue(callback);
+    }
+
+    @Override
+    public void delete(int toUserId, Callback<Object> callback) {
+        if (!UserStatusManager.SINGLETON.isLogin()) {
+            return;
+        }
+        OkHttpHelperForQSBoxFriendApi.SINGLETON.delete(UserStatusManager.SINGLETON.getUserBean().getId(), toUserId)
+                .transform(new QSApiTransformer<Object>())
                 .enqueue(callback);
     }
 }

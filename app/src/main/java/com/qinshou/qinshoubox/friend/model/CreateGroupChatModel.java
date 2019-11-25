@@ -5,7 +5,7 @@ import com.qinshou.qinshoubox.friend.contract.ICreateGroupChatContract;
 import com.qinshou.qinshoubox.friend.view.fragment.CreateGroupChatFragment;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 import com.qinshou.qinshoubox.im.bean.UserBean;
-import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxApi;
+import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxFriendApi;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxGroupChatApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 
@@ -21,7 +21,7 @@ public class CreateGroupChatModel implements ICreateGroupChatContract.IModel {
 
     @Override
     public void getFriendList(int fromUserId, Callback<List<UserBean>> callback) {
-        OkHttpHelperForQSBoxApi.SINGLETON.getFriendList(fromUserId)
+        OkHttpHelperForQSBoxFriendApi.SINGLETON.getList(fromUserId)
                 .transform(new QSApiTransformer<List<UserBean>>())
                 .enqueue(callback);
     }

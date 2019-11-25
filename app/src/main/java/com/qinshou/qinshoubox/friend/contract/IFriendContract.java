@@ -20,6 +20,8 @@ public interface IFriendContract {
         void getMyGroupChatList(Callback<List<GroupChatBean>> callback);
 
         void getFriendList(Callback<List<UserBean>> callback);
+
+        void delete(int toUserId, Callback<Object> callback);
     }
 
     interface IView extends IBaseView {
@@ -30,11 +32,17 @@ public interface IFriendContract {
         void getFriendListSuccess(List<UserBean> userBeanList);
 
         void getFriendListFailure(Exception e);
+
+        void deleteSuccess();
+
+        void deleteFailure(Exception e);
     }
 
     interface IPresenter {
         void getMyGroupChatList();
 
         void getFriendList();
+
+        void delete(int toUserId);
     }
 }

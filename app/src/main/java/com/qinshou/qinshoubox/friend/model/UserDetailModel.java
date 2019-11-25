@@ -6,6 +6,7 @@ import com.qinshou.qinshoubox.friend.contract.IUserDetailContract;
 import com.qinshou.qinshoubox.friend.view.fragment.UserDetailFragment;
 import com.qinshou.qinshoubox.im.bean.UserBean;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxApi;
+import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxFriendApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 
 /**
@@ -24,7 +25,7 @@ public class UserDetailModel implements IUserDetailContract.IModel {
 
     @Override
     public void agreeAddFriend(int fromUserId, int toUserId, String remark, Callback<UserBean> callback) {
-        OkHttpHelperForQSBoxApi.SINGLETON.agreeAddFriend(fromUserId, toUserId, remark)
+        OkHttpHelperForQSBoxFriendApi.SINGLETON.agreeAdd(fromUserId, toUserId, remark)
                 .transform(new QSApiTransformer<UserBean>())
                 .enqueue(callback);
     }
