@@ -55,16 +55,4 @@ public class LoginStatus implements IUserStatus {
     public void jump2DataSetting(Context context) {
         context.startActivity(ContainerActivity.getJumpIntent(context, DataSettingFragment.class));
     }
-
-    @Override
-    public void jump2FriendHistory(Context context) {
-        SharedPreferencesHelper.SINGLETON.remove(IConstant.SP_KEY_FRIEND_HISTORY_UNREAD_COUNT);
-        EventBus.getDefault().post(0);
-        context.startActivity(ContainerActivity.getJumpIntent(context, FriendHistoryFragment.class));
-    }
-
-    @Override
-    public void jump2CreateGroupChat(Context context) {
-        context.startActivity(ContainerActivity.getJumpIntent(context, CreateGroupChatFragment.class));
-    }
 }

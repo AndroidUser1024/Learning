@@ -39,10 +39,4 @@ public enum UserStatusManager {
         mUserStatus.jump2DataSetting(context);
     }
 
-    public void jump2FriendHistory(Context context) {
-        mUserStatus.jump2FriendHistory(context);
-    }
-
-    public void jump2CreateGroupChat(Context context) {
-        mUserStatus.jump2CreateGroupChat(context);
-    }}
+}

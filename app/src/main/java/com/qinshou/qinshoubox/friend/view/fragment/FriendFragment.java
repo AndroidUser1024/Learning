@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.adapter.VpSingleViewAdapter;
 import com.qinshou.commonmodule.rcvbaseadapter.RcvBaseAdapter;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
@@ -25,6 +26,7 @@ import com.qinshou.qinshoubox.friend.view.adapter.RcvFriendAdapter;
 import com.qinshou.qinshoubox.friend.view.adapter.RcvGroupChatAdapter;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 import com.qinshou.qinshoubox.im.bean.UserBean;
+import com.qinshou.qinshoubox.me.ui.fragment.LoginOrRegisterFragment;
 import com.qinshou.qinshoubox.util.QSUtil;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
@@ -149,13 +151,15 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
         findViewByID(R.id.ll_new_friend).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UserStatusManager.SINGLETON.jump2FriendHistory(getContext());
+                startActivity(ContainerActivity.getJumpIntent(getContext(), FriendHistoryFragment.class));
+                SharedPreferencesHelper.SINGLETON.remove(IConstant.SP_KEY_FRIEND_HISTORY_UNREAD_COUNT);
+                showFriendHistoryUnreadCount();
             }
         });
         findViewByID(R.id.ll_create_group_chat).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UserStatusManager.SINGLETON.jump2CreateGroupChat(getContext());
+                startActivity(ContainerActivity.getJumpIntent(getContext(), LoginOrRegisterFragment.class));
             }
         });
         mTlFriend.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

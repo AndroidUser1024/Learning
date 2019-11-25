@@ -5,12 +5,9 @@ import android.content.Intent;
 
 import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
-import com.qinshou.qinshoubox.im.bean.MessageBean;
-import com.qinshou.qinshoubox.im.bean.UserBean;
-import com.qinshou.qinshoubox.im.db.DBHelper;
-import com.qinshou.qinshoubox.im.manager.ChatManager;
 import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.constant.IConstant;
+import com.qinshou.qinshoubox.im.bean.UserBean;
 import com.qinshou.qinshoubox.me.ui.fragment.LoginOrRegisterFragment;
 
 import org.greenrobot.eventbus.EventBus;
@@ -47,16 +44,6 @@ public class LogoutStatus implements IUserStatus {
 
     @Override
     public void jump2DataSetting(Context context) {
-        context.startActivity(ContainerActivity.getJumpIntent(context, LoginOrRegisterFragment.class));
-    }
-
-    @Override
-    public void jump2FriendHistory(Context context) {
-        context.startActivity(ContainerActivity.getJumpIntent(context, LoginOrRegisterFragment.class));
-    }
-
-    @Override
-    public void jump2CreateGroupChat(Context context) {
         context.startActivity(ContainerActivity.getJumpIntent(context, LoginOrRegisterFragment.class));
     }
 }

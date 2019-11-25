@@ -19,8 +19,4 @@ public interface IUserStatus {
     void logout(Context context);
 
     void jump2DataSetting(Context context);
-
-    void jump2FriendHistory(Context context);
-
-    void jump2CreateGroupChat(Context context);
 }
