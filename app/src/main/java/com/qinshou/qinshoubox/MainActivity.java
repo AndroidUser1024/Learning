@@ -9,18 +9,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qinshou.commonmodule.util.FragmentUtil;
-import com.qinshou.commonmodule.util.SharedPreferencesHelper;
-import com.qinshou.commonmodule.util.SystemUtil;
-import com.qinshou.immodule.db.DBHelper;
-import com.qinshou.immodule.manager.ChatManager;
-import com.qinshou.immodule.listener.IOnFriendStatusListener;
+import com.qinshou.qinshoubox.im.db.DBHelper;
+import com.qinshou.qinshoubox.im.manager.ChatManager;
+import com.qinshou.qinshoubox.im.listener.IOnFriendStatusListener;
 import com.qinshou.qinshoubox.base.QSActivity;
-import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.conversation.view.fragment.ConversationFragment;
 import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
 import com.qinshou.qinshoubox.homepage.ui.fragment.HomepageFragment;
 import com.qinshou.qinshoubox.me.ui.fragment.MeFragment;
-import com.qinshou.qinshoubox.util.QSUtil;
 
 /**
  * Description:主 Activity

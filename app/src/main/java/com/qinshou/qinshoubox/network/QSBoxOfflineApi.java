@@ -1,7 +1,7 @@
 package com.qinshou.qinshoubox.network;
 
-import com.qinshou.immodule.bean.GroupChatBean;
-import com.qinshou.immodule.bean.MessageBean;
+import com.qinshou.qinshoubox.im.bean.GroupChatBean;
+import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.okhttphelper.annotation.Api;
 import com.qinshou.okhttphelper.annotation.DefaultHost;
 import com.qinshou.okhttphelper.annotation.Field;

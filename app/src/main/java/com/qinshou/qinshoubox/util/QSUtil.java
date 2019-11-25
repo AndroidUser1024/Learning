@@ -6,13 +6,9 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Vibrator;
-import android.text.TextUtils;
 
-import com.qinshou.commonmodule.util.SharedPreferencesHelper;
-import com.qinshou.immodule.bean.MessageBean;
-import com.qinshou.immodule.bean.UserBean;
-import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.constant.IConstant;
+import com.qinshou.qinshoubox.im.bean.MessageBean;
+import com.qinshou.qinshoubox.im.bean.UserBean;
 
 import java.io.File;
 

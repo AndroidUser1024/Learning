@@ -6,11 +6,11 @@ import android.support.v7.widget.RecyclerView;
 
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.util.SystemUtil;
-import com.qinshou.immodule.bean.ConversationBean;
-import com.qinshou.immodule.bean.MessageBean;
-import com.qinshou.immodule.enums.MessageType;
-import com.qinshou.immodule.listener.IOnMessageListener;
-import com.qinshou.immodule.manager.ChatManager;
+import com.qinshou.qinshoubox.im.bean.ConversationBean;
+import com.qinshou.qinshoubox.im.bean.MessageBean;
+import com.qinshou.qinshoubox.im.enums.MessageType;
+import com.qinshou.qinshoubox.im.listener.IOnMessageListener;
+import com.qinshou.qinshoubox.im.manager.ChatManager;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.conversation.contract.IConversationContract;
@@ -18,11 +18,6 @@ import com.qinshou.qinshoubox.conversation.presenter.ConversationPresenter;
 import com.qinshou.qinshoubox.conversation.view.adapter.RcvConversationAdapter;
 import com.qinshou.qinshoubox.util.QSUtil;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.ArrayList;
 import java.util.List;
 
 

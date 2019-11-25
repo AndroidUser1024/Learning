@@ -5,21 +5,15 @@ import android.content.Intent;
 
 import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
-import com.qinshou.commonmodule.util.ShowLogUtil;
-import com.qinshou.immodule.bean.MessageBean;
-import com.qinshou.immodule.bean.UserBean;
-import com.qinshou.immodule.db.DBHelper;
-import com.qinshou.immodule.manager.ChatManager;
-import com.qinshou.okhttphelper.callback.Callback;
+import com.qinshou.qinshoubox.im.bean.MessageBean;
+import com.qinshou.qinshoubox.im.bean.UserBean;
+import com.qinshou.qinshoubox.im.db.DBHelper;
+import com.qinshou.qinshoubox.im.manager.ChatManager;
 import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.me.ui.fragment.LoginOrRegisterFragment;
-import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxOfflineApi;
-import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 
 import org.greenrobot.eventbus.EventBus;
-
-import java.util.List;
 
 
 /**
@@ -45,19 +39,6 @@ public class LogoutStatus implements IUserStatus {
         EventBus.getDefault().post(true);
         // 更新好友申请历史数
         EventBus.getDefault().post(0);
-        OkHttpHelperForQSBoxOfflineApi.SINGLETON.getOfflineMessageList(userBean.getId())
-                .transform(new QSApiTransformer<List<MessageBean>>())
-                .enqueue(new Callback<List<MessageBean>>() {
-                    @Override
-                    public void onSuccess(List<MessageBean> data) {
-                        ShowLogUtil.logi(data);
-                    }
-
-                    @Override
-                    public void onFailure(Exception e) {
-                        ShowLogUtil.logi("onFailure: e--->" + e.getMessage());
-                    }
-                });
     }
 
     @Override

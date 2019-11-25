@@ -16,11 +16,11 @@ import com.qinshou.commonmodule.util.activityresultutil.OnActivityResultCallBack
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
-import com.qinshou.immodule.db.dao.impl.UserDaoImpl;
+import com.qinshou.qinshoubox.im.db.dao.impl.UserDaoImpl;
 import com.qinshou.qinshoubox.friend.contract.IUserDetailContract;
 import com.qinshou.qinshoubox.friend.presenter.UserDetailPresenter;
 import com.qinshou.qinshoubox.friend.view.activity.SetRemarkActivity;
-import com.qinshou.immodule.bean.UserBean;
+import com.qinshou.qinshoubox.im.bean.UserBean;
 import com.qinshou.qinshoubox.conversation.view.activity.ChatActivity;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 

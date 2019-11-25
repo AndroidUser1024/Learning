@@ -2,7 +2,7 @@ package com.qinshou.qinshoubox.me.presenter;
 
 import com.qinshou.commonmodule.base.AbsPresenter;
 import com.qinshou.okhttphelper.callback.Callback;
-import com.qinshou.immodule.bean.UserBean;
+import com.qinshou.qinshoubox.im.bean.UserBean;
 import com.qinshou.qinshoubox.me.contract.IPersonalHeadImgContract;
 import com.qinshou.qinshoubox.me.model.PersonalHeadImgModel;
 import com.qinshou.qinshoubox.me.ui.fragment.PersonalHeadImgFragment;
