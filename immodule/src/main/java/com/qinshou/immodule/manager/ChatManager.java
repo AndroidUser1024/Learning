@@ -36,8 +36,8 @@ import okio.ByteString;
 public enum ChatManager {
     SINGLETON;
     private static final String TAG = "ChatManager";
-//    private static final String URL="http://172.16.60.231:10086/websocket";
-    private static final String URL = "http://192.168.1.109:10086/websocket";
+    private static final String URL="http://172.16.60.231:10086/websocket";
+//    private static final String URL = "http://192.168.1.109:10086/websocket";
     private WebSocket mWebSocket;
     private final OkHttpClient mOkHttpClient = new OkHttpClient.Builder()
             .connectTimeout(15 * 1000, TimeUnit.MILLISECONDS)

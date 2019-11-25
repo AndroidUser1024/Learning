@@ -7,6 +7,7 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.GenericRawResults;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.RawRowMapperImpl;
+import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.table.TableInfo;
 import com.qinshou.immodule.bean.ConversationBean;
 import com.qinshou.immodule.db.DBHelper;
@@ -123,5 +124,18 @@ public class ConversationDaoImpl implements IConversationDao {
             e.printStackTrace();
         }
         return conversationBeanList;
+    }
+
+
+    @Override
+    public int resetUnreadCount(int id) {
+        try {
+            UpdateBuilder<ConversationBean, Integer> updateBuilder = mDao.updateBuilder();
+            updateBuilder.updateColumnValue("unreadCount", 0).where().eq("id", id);
+            return updateBuilder.update();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 }

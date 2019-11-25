@@ -1,5 +1,7 @@
 package com.qinshou.immodule.manager;
 
+import android.util.Log;
+
 import com.qinshou.immodule.bean.MessageBean;
 import com.qinshou.immodule.db.dao.IMessageDao;
 import com.qinshou.immodule.db.dao.impl.MessageDaoImpl;
@@ -24,6 +26,7 @@ public enum MessageManager {
     }
 
     public int insertOrUpdate(boolean send, MessageBean messageBean) {
+        Log.i("daolema", "messageBean--->" + messageBean);
         return mMessageDao.insertOrUpdate(send, messageBean);
     }
 

@@ -5,6 +5,7 @@ import android.content.Intent;
 
 import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
+import com.qinshou.immodule.db.DBHelper;
 import com.qinshou.immodule.manager.ChatManager;
 import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.constant.IConstant;
@@ -41,13 +42,14 @@ public class LoginStatus implements IUserStatus {
 
     @Override
     public void logout(Context context) {
+        DBHelper.getInstance().close();
         context.startActivity(new Intent(context, MainActivity.class));
         // 连接聊天服务
         ChatManager.SINGLETON.disconnect();
         // 设置为注销状态
         UserStatusManager.SINGLETON.setUserStatus(new LogoutStatus());
-        // 发送事件,用于更新 UI 等
-        EventBus.getDefault().post(new UserBean());
+        // 发送事件更新登录状态
+        EventBus.getDefault().post(false);
     }
 
     @Override

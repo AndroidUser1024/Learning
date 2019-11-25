@@ -1,8 +1,6 @@
 package com.qinshou.immodule.db.dao.impl;
 
 
-import android.util.Log;
-
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.GenericRawResults;
 import com.j256.ormlite.misc.TransactionManager;
@@ -10,15 +8,12 @@ import com.qinshou.immodule.bean.ConversationBean;
 import com.qinshou.immodule.bean.ConversationMessageRelBean;
 import com.qinshou.immodule.bean.MessageBean;
 import com.qinshou.immodule.db.DBHelper;
-import com.qinshou.immodule.db.dao.IConversationDao;
 import com.qinshou.immodule.db.dao.IConversationMessageRelDao;
 import com.qinshou.immodule.db.dao.IMessageDao;
 import com.qinshou.immodule.manager.ConversationManager;
 
-import java.sql.Array;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -69,7 +64,9 @@ public class MessageDaoImpl implements IMessageDao {
                     conversationBean.setLastMsgContent(messageBean.getContent());
                     conversationBean.setLastMsgContentType(messageBean.getContentType());
                     conversationBean.setLastMsgTimestamp(lastMsgTime);
-                    conversationBean.setUnreadCount(conversationBean.getUnreadCount() + 1);
+                    if (!send) {
+                        conversationBean.setUnreadCount(conversationBean.getUnreadCount() + 1);
+                    }
                     ConversationManager.SINGLETON.insertOrUpdate(conversationBean);
 
                     mDao.createOrUpdate(messageBean);

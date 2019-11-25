@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qinshou.commonmodule.ContainerActivity;
+import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.widget.TitleBar;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.R;
@@ -118,7 +119,16 @@ public class DataSettingFragment extends QSFragment<DataSettingPresenter> implem
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void updateUserBean(UserBean userBean) {
-        initData();
+    public void receiveEvent(Boolean login) {
+        if (login) {
+            UserBean userBean = UserStatusManager.SINGLETON.getUserBean();
+            ImageLoadUtil.SINGLETON.loadImage(getContext(), userBean.getHeadImgSmall(), mIvHeadImg);
+            mTvNickname.setText(userBean.getNickname());
+            mTvUsername.setText(userBean.getUsername());
+        } else {
+            ImageLoadUtil.SINGLETON.loadImage(getContext(), R.drawable.default_head_img, mIvHeadImg);
+            mTvNickname.setText(getString(R.string.me_tv_click_2_login_text));
+            mTvUsername.setText(getString(R.string.me_tv_login_2_have_more_function_text));
+        }
     }
 }

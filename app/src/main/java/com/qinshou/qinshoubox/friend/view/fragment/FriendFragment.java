@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.qinshou.commonmodule.adapter.VpSingleViewAdapter;
+import com.qinshou.commonmodule.rcvbaseadapter.RcvBaseAdapter;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.util.SystemUtil;
@@ -249,12 +250,16 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void receiveEvent(Object object) {
-        if (object instanceof UserBean) {
-            if (UserStatusManager.SINGLETON.isLogin()) {
+        if (object instanceof Boolean) {
+            if ((boolean)object) {
                 mTlFriend.getTabAt(mTlFriend.getSelectedTabPosition()).select();
             } else {
                 mTvUnreadCount.setVisibility(View.GONE);
                 mTvUnreadCountInTlMain.setVisibility(View.GONE);
+                for (RecyclerView recyclerView : mRecyclerViewList) {
+                    ((RcvBaseAdapter) recyclerView.getAdapter()).setDataList(new ArrayList());
+                    recyclerView.getAdapter().notifyDataSetChanged();
+                }
             }
         } else if (object instanceof Integer) {
             showFriendHistoryUnreadCount();

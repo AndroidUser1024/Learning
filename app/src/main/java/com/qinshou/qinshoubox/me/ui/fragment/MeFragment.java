@@ -9,15 +9,15 @@ import android.widget.TextView;
 
 import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
+import com.qinshou.immodule.bean.UserBean;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
-import com.qinshou.immodule.bean.UserBean;
 import com.qinshou.qinshoubox.me.contract.IMeContract;
 import com.qinshou.qinshoubox.me.presenter.MePresenter;
+import com.qinshou.qinshoubox.me.ui.activity.ChartActivity;
 import com.qinshou.qinshoubox.me.ui.activity.ContactListActivity;
 import com.qinshou.qinshoubox.me.ui.activity.PeiQiActivity;
 import com.qinshou.qinshoubox.me.ui.activity.PuzzleActivity;
-import com.qinshou.qinshoubox.me.ui.activity.ChartActivity;
 import com.qinshou.qinshoubox.me.ui.activity.TurningRobotActivity;
 import com.qinshou.qinshoubox.me.ui.activity.WeatherActivity;
 import com.qinshou.qinshoubox.me.ui.activity.WheelOfFortuneActivity;
@@ -167,20 +167,20 @@ public class MeFragment extends QSFragment<MePresenter> implements IMeContract.I
 
     @Override
     public void initData() {
-        UserBean userBean = UserStatusManager.SINGLETON.getUserBean();
-        if (userBean == null) {
-            ImageLoadUtil.SINGLETON.loadImage(getContext(), R.drawable.default_head_img, mIvHeadImg);
-            mTvNickname.setText(getString(R.string.me_tv_click_2_login_text));
-            mTvUsername.setText(getString(R.string.me_tv_login_2_have_more_function_text));
-        } else {
-            ImageLoadUtil.SINGLETON.loadImage(getContext(), userBean.getHeadImgSmall(), mIvHeadImg);
-            mTvNickname.setText(userBean.getNickname());
-            mTvUsername.setText(userBean.getUsername());
-        }
+
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void updateUserBean(UserBean userBean) {
-        initData();
+    public void receiveEvent(Boolean login) {
+        if (login) {
+            UserBean userBean = UserStatusManager.SINGLETON.getUserBean();
+            ImageLoadUtil.SINGLETON.loadImage(getContext(), userBean.getHeadImgSmall(), mIvHeadImg);
+            mTvNickname.setText(userBean.getNickname());
+            mTvUsername.setText(userBean.getUsername());
+        } else {
+            ImageLoadUtil.SINGLETON.loadImage(getContext(), R.drawable.default_head_img, mIvHeadImg);
+            mTvNickname.setText(getString(R.string.me_tv_click_2_login_text));
+            mTvUsername.setText(getString(R.string.me_tv_login_2_have_more_function_text));
+        }
     }
 }

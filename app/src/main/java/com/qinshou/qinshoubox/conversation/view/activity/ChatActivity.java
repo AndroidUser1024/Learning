@@ -477,11 +477,6 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
                     ? userBean.getNickname()
                     : userBean.getRemark());
         }
-//        mConversationBean = JMClient.SINGLETON.getConversationManager().getByToUsername(mToUserId);
-//        // 重置未读数
-//        if (mConversationBean != null) {
-//            JMClient.SINGLETON.getConversationManager().resetUnreadCount(mConversationBean.getId());
-//        }
         // 加载消息列表
         getPresenter().getMessageList(MessageType.CHAT.getValue(), mToUserId, mPage, IConstant.PAGE_SIZE);
     }

@@ -7,13 +7,12 @@ import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.immodule.bean.MessageBean;
+import com.qinshou.immodule.bean.UserBean;
+import com.qinshou.immodule.db.DBHelper;
 import com.qinshou.immodule.manager.ChatManager;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.constant.IConstant;
-import com.qinshou.immodule.db.DBHelper;
-import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
-import com.qinshou.immodule.bean.UserBean;
 import com.qinshou.qinshoubox.me.ui.fragment.LoginOrRegisterFragment;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxOfflineApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
@@ -45,8 +44,8 @@ public class LogoutStatus implements IUserStatus {
         ChatManager.SINGLETON.connect(context, userBean.getId(), userBean.getUsername());
         // 设置为登录状态
         UserStatusManager.SINGLETON.setUserStatus(new LoginStatus(userBean));
-        // 发送事件更新用户信息
-        EventBus.getDefault().post(userBean);
+        // 发送事件更新登录状态
+        EventBus.getDefault().post(true);
         // 更新好友申请历史数
         EventBus.getDefault().post(0);
         OkHttpHelperForQSBoxOfflineApi.SINGLETON.getOfflineMessageList(userBean.getId())

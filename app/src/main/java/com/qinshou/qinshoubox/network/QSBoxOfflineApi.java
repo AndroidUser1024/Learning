@@ -21,8 +21,8 @@ import java.util.List;
 @Api
 public interface QSBoxOfflineApi {
     @DefaultHost
-//    String DEFAULT_HOST = "http://172.16.60.231:8080/groupChat/";
-    String DEFAULT_HOST = "http://192.168.1.109:8080/offline";
+    String DEFAULT_HOST = "http://172.16.60.231:8080/offline/";
+//    String DEFAULT_HOST = "http://192.168.1.109:8080/offline";
 
     @Json
     @Post("/getOfflineMessageList")

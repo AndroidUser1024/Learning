@@ -42,4 +42,8 @@ public enum ConversationManager {
     public List<ConversationBean> getList() {
         return mConversationDao.getList();
     }
+
+    public int resetUnreadCount(int id) {
+        return mConversationDao.resetUnreadCount(id);
+    }
 }

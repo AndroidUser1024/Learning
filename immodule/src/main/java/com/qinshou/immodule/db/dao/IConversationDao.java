@@ -14,7 +14,9 @@ import java.util.List;
 public interface IConversationDao {
     int insertOrUpdate(ConversationBean conversationBean);
 
-    ConversationBean getByTypeAndToUserId(int type,int toUserId);
+    ConversationBean getByTypeAndToUserId(int type, int toUserId);
 
     List<ConversationBean> getList();
+
+    int resetUnreadCount(int id);
 }
