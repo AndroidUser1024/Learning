@@ -24,8 +24,8 @@ public class FriendPresenter extends AbsPresenter<IFriendContract.IView, IFriend
     }
 
     @Override
-    public void getMyGroupChatList(int userId) {
-        getModel().getMyGroupChatList(userId, new Callback<List<GroupChatBean>>() {
+    public void getMyGroupChatList() {
+        getModel().getMyGroupChatList(new Callback<List<GroupChatBean>>() {
             @Override
             public void onSuccess(List<GroupChatBean> data) {
                 if (!isViewAttached()) {
@@ -48,8 +48,8 @@ public class FriendPresenter extends AbsPresenter<IFriendContract.IView, IFriend
     }
 
     @Override
-    public void getFriendList(int fromUserId) {
-        getModel().getFriendList(fromUserId, new Callback<List<UserBean>>() {
+    public void getFriendList() {
+        getModel().getFriendList(new Callback<List<UserBean>>() {
             @Override
             public void onSuccess(List<UserBean> data) {
                 if (!isViewAttached()) {

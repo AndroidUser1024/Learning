@@ -15,8 +15,7 @@ import java.util.List;
  * Date: 2019/10/23 8:58
  * Description:会话管理者
  */
-public enum ConversationManager {
-    SINGLETON;
+public class ConversationManager {
     /**
      * 会话 Dao
      */

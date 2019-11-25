@@ -87,7 +87,10 @@ public class ConversationDaoImpl implements IConversationDao {
                     " ON conversation.type=2001 AND conversation.toUserId=user.id" +
                     " LEFT OUTER JOIN" +
                     " group_chat" +
-                    " ON conversation.type=3001 AND conversation.toUserId=group_chat.id");
+                    " ON conversation.type=3001 AND conversation.toUserId=group_chat.id" +
+                    " ORDER BY " +
+                    " conversation.lastMsgTimestamp DESC"
+            );
 //            String[] columnNames = genericRawResults.getColumnNames();
 //            for (String columnName : columnNames) {
 //                Log.i("daolema", "columnName--->" + columnName);

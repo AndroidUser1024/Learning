@@ -6,24 +6,18 @@ import android.os.Looper;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.qinshou.immodule.bean.FriendStatusBean;
 import com.qinshou.immodule.bean.MessageBean;
-import com.qinshou.immodule.db.dao.IConversationDao;
-import com.qinshou.immodule.db.dao.IConversationMessageRelDao;
-import com.qinshou.immodule.db.dao.IMessageDao;
-import com.qinshou.immodule.db.dao.impl.ConversationDaoImpl;
-import com.qinshou.immodule.db.dao.impl.ConversationMessageRelDaoImpl;
-import com.qinshou.immodule.db.dao.impl.MessageDaoImpl;
+import com.qinshou.immodule.bean.UserBean;
+import com.qinshou.immodule.db.DBHelper;
 import com.qinshou.immodule.enums.FriendStatus;
 import com.qinshou.immodule.enums.MessageType;
 import com.qinshou.immodule.listener.IOnFriendStatusListener;
 import com.qinshou.immodule.listener.IOnMessageListener;
+import com.qinshou.immodule.listener.QSCallback;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -36,8 +30,8 @@ import okio.ByteString;
 public enum ChatManager {
     SINGLETON;
     private static final String TAG = "ChatManager";
-    private static final String URL="http://172.16.60.231:10086/websocket";
-//    private static final String URL = "http://192.168.1.109:10086/websocket";
+    private static final String URL = "http://172.16.60.231:10086/websocket";
+    //    private static final String URL = "http://192.168.1.109:10086/websocket";
     private WebSocket mWebSocket;
     private final OkHttpClient mOkHttpClient = new OkHttpClient.Builder()
             .connectTimeout(15 * 1000, TimeUnit.MILLISECONDS)
@@ -49,23 +43,20 @@ public enum ChatManager {
     private List<IOnMessageListener> mOnMessageListenerList = new ArrayList<>();
     private List<IOnFriendStatusListener> mOnFriendStatusListenerList = new ArrayList<>();
     private int mUserId;
+    private ConversationManager mConversationManager;
+    private MessageManager mMessageManager;
 
     ChatManager() {
     }
 
-    public int getUserId() {
-        return mUserId;
-    }
-
-    public void connect(final Context context, int userId, final String username) {
-        mUserId = userId;
+    public void connect(final Context context, final int userId, final QSCallback<Void> qsCallback) {
         mWebSocket = mOkHttpClient.newWebSocket(mRequest, new WebSocketListener() {
             @Override
             public void onOpen(WebSocket webSocket, Response response) {
                 super.onOpen(webSocket, response);
                 Log.i(TAG, "onOpen: ");
                 mWebSocket = webSocket;
-                sendMessage(MessageBean.createHandshakeMessage());
+                sendMessage(MessageBean.createHandshakeMessage(userId));
             }
 
             @Override
@@ -74,13 +65,17 @@ public enum ChatManager {
                 Log.i(TAG, "onMessage: text--->" + text);
                 final MessageBean messageBean = new Gson().fromJson(text, MessageBean.class);
                 messageBean.setReceiveTimestamp(System.currentTimeMillis());
-
+                if (messageBean.getType() == MessageType.HANDSHAKE_SUCCESS.getValue()) {
+//                    UserBean userBean = new Gson().fromJson(messageBean.getExtend(), UserBean.class);
+                    connectSuccess(context, userId, qsCallback);
+                    return;
+                }
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
                         if (messageBean.getType() == MessageType.CHAT.getValue()
                                 || messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
-                            MessageManager.SINGLETON.insertOrUpdate(false, messageBean);
+                            mMessageManager.insertOrUpdate(false, messageBean);
                             for (IOnMessageListener onMessageListener : mOnMessageListenerList) {
                                 onMessageListener.onMessage(messageBean);
                             }
@@ -143,12 +138,31 @@ public enum ChatManager {
         });
     }
 
+    private void connectSuccess(Context context, final int userId, final QSCallback<Void> qsCallback) {
+        mUserId = userId;
+        // 初始化数据库
+        DBHelper.init(context, "" + userId);
+        // 创建会话管理者
+        mConversationManager = new ConversationManager();
+        // 创建消息管理者
+        mMessageManager = new MessageManager();
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                qsCallback.onSuccess(null);
+            }
+        });
+    }
+
+
     public void disconnect() {
         if (mWebSocket == null) {
             return;
         }
         mWebSocket.close(1000, "normal close");
         mUserId = 0;
+        mConversationManager = null;
+        mMessageManager = null;
     }
 
     public void sendMessage(MessageBean messageBean) {
@@ -157,9 +171,21 @@ public enum ChatManager {
         }
         if (messageBean.getType() == MessageType.CHAT.getValue()
                 || messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
-            MessageManager.SINGLETON.insertOrUpdate(true, messageBean);
+            mMessageManager.insertOrUpdate(true, messageBean);
         }
         mWebSocket.send(new Gson().toJson(messageBean));
+    }
+
+    public int getUserId() {
+        return mUserId;
+    }
+
+    public ConversationManager getConversationManager() {
+        return mConversationManager;
+    }
+
+    public MessageManager getMessageManager() {
+        return mMessageManager;
     }
 
     public void addOnMessageListener(IOnMessageListener onMessageListener) {

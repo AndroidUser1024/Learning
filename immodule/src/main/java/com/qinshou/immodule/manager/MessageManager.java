@@ -14,8 +14,7 @@ import java.util.List;
  * Date: 2019/11/22 20:15
  * Description:消息管理者
  */
-public enum MessageManager {
-    SINGLETON;
+public class MessageManager {
     /**
      * 消息 Dao
      */

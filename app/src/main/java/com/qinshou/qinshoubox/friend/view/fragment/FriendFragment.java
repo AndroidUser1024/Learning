@@ -251,7 +251,7 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void receiveEvent(Object object) {
         if (object instanceof Boolean) {
-            if ((boolean)object) {
+            if ((boolean) object) {
                 mTlFriend.getTabAt(mTlFriend.getSelectedTabPosition()).select();
             } else {
                 mTvUnreadCount.setVisibility(View.GONE);
@@ -268,13 +268,12 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
 
 
     private void loadData(int position) {
-        if (!UserStatusManager.SINGLETON.isLogin()) {
-            return;
-        }
         if (position == TAB_INDEX_GROUP_CHAT) {
-            getPresenter().getMyGroupChatList(UserStatusManager.SINGLETON.getUserBean().getId());
+            getPresenter().getMyGroupChatList();
         } else if (position == TAB_INDEX_FRIEND) {
-            getPresenter().getFriendList(UserStatusManager.SINGLETON.getUserBean().getId());
+            getPresenter().getFriendList(
+
+            );
         }
     }
 

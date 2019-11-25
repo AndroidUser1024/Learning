@@ -9,7 +9,7 @@ import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemClickListener;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.immodule.bean.ConversationBean;
 import com.qinshou.immodule.enums.MessageType;
-import com.qinshou.immodule.manager.ConversationManager;
+import com.qinshou.immodule.manager.ChatManager;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.conversation.view.activity.ChatActivity;
 import com.qinshou.qinshoubox.conversation.view.activity.GroupChatActivity;
@@ -35,7 +35,7 @@ public class RcvConversationAdapter extends RcvSingleBaseAdapter<ConversationBea
                     GroupChatActivity.start(getContext(), itemData.getToUserId());
                 }
                 // 重置未读数
-                ConversationManager.SINGLETON.resetUnreadCount(itemData.getId());
+                ChatManager.SINGLETON.getConversationManager().resetUnreadCount(itemData.getId());
                 itemData.setUnreadCount(0);
                 notifyItemChanged(position);
             }

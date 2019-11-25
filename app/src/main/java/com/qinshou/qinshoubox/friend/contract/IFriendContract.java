@@ -17,9 +17,9 @@ import java.util.List;
  */
 public interface IFriendContract {
     interface IModel extends IBaseModel {
-        void getMyGroupChatList(int userId, Callback<List<GroupChatBean>> callback);
+        void getMyGroupChatList(Callback<List<GroupChatBean>> callback);
 
-        void getFriendList(int fromUserId, Callback<List<UserBean>> callback);
+        void getFriendList(Callback<List<UserBean>> callback);
     }
 
     interface IView extends IBaseView {
@@ -33,8 +33,8 @@ public interface IFriendContract {
     }
 
     interface IPresenter {
-        void getMyGroupChatList(int userId);
+        void getMyGroupChatList();
 
-        void getFriendList(int fromUserId);
+        void getFriendList();
     }
 }

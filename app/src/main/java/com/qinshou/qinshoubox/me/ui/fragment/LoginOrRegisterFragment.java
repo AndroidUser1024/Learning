@@ -16,6 +16,8 @@ import android.widget.TextView;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.util.SoftKeyboardUtil;
+import com.qinshou.immodule.listener.QSCallback;
+import com.qinshou.immodule.manager.ChatManager;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.constant.IConstant;
@@ -99,9 +101,20 @@ public class LoginOrRegisterFragment extends QSFragment<LoginOrRegisterPresenter
     }
 
     @Override
-    public void loginSuccess(UserBean userBean) {
+    public void loginSuccess(final UserBean userBean) {
         ShowLogUtil.logi("loginSuccess" + " : " + "userBean--->" + userBean);
-        UserStatusManager.SINGLETON.login(getContext(), userBean);
+        // 连接聊天服务
+        ChatManager.SINGLETON.connect(getContext(), userBean.getId(), new QSCallback<Void>() {
+            @Override
+            public void onSuccess(Void data) {
+                UserStatusManager.SINGLETON.login(getContext(), userBean);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        });
     }
 
     @Override

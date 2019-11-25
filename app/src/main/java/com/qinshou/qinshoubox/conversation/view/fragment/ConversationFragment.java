@@ -3,28 +3,20 @@ package com.qinshou.qinshoubox.conversation.view.fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
-import android.view.View;
 
-import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.util.SystemUtil;
 import com.qinshou.immodule.bean.ConversationBean;
 import com.qinshou.immodule.bean.MessageBean;
-import com.qinshou.immodule.bean.UserBean;
-import com.qinshou.immodule.db.DBHelper;
 import com.qinshou.immodule.enums.MessageType;
 import com.qinshou.immodule.listener.IOnMessageListener;
 import com.qinshou.immodule.manager.ChatManager;
-import com.qinshou.immodule.manager.ConversationManager;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
-import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.conversation.contract.IConversationContract;
 import com.qinshou.qinshoubox.conversation.presenter.ConversationPresenter;
 import com.qinshou.qinshoubox.conversation.view.adapter.RcvConversationAdapter;
 import com.qinshou.qinshoubox.util.QSUtil;
-import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -57,7 +49,7 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
             } else if (messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
                 toUserId = messageBean.getToUserId();
             }
-            ConversationBean conversationBean = ConversationManager.SINGLETON.getByTypeAndToUserId(messageBean.getType(), toUserId);
+            ConversationBean conversationBean = ChatManager.SINGLETON.getConversationManager().getByTypeAndToUserId(messageBean.getType(), toUserId);
             List<ConversationBean> conversationBeanList = mRcvConversationAdapter.getDataList();
             boolean contains = false;
             int index = 0;
@@ -99,9 +91,14 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
     };
 
     @Override
+    public void onResume() {
+        super.onResume();
+        getPresenter().getConversationList();
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
         ChatManager.SINGLETON.removeOnMessageListener(mOnMessageListener);
     }
 
@@ -112,7 +109,6 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
 
     @Override
     public void initView() {
-        EventBus.getDefault().register(this);
         RecyclerView rcvConversation = findViewByID(R.id.rcv_conversation);
         rcvConversation.setLayoutManager(new LinearLayoutManager(getContext()));
         rcvConversation.setAdapter(mRcvConversationAdapter = new RcvConversationAdapter(getContext()));
@@ -128,7 +124,6 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
 
     @Override
     public void initData() {
-        getPresenter().getConversationList();
     }
 
 
@@ -140,15 +135,5 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
     @Override
     public void getConversationListFailure(Exception e) {
 
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void receiveEvent(Boolean login) {
-        if (login) {
-            getPresenter().getConversationList();
-        } else {
-            mRcvConversationAdapter.setDataList(new ArrayList<ConversationBean>());
-            mRcvConversationAdapter.notifyDataSetChanged();
-        }
     }
 }

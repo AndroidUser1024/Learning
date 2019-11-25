@@ -10,7 +10,7 @@ import com.qinshou.immodule.bean.MessageBean;
 import com.qinshou.immodule.db.DBHelper;
 import com.qinshou.immodule.db.dao.IConversationMessageRelDao;
 import com.qinshou.immodule.db.dao.IMessageDao;
-import com.qinshou.immodule.manager.ConversationManager;
+import com.qinshou.immodule.manager.ChatManager;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -55,7 +55,7 @@ public class MessageDaoImpl implements IMessageDao {
                         toUserId = messageBean.getFromUserId();
                         lastMsgTime = messageBean.getReceiveTimestamp();
                     }
-                    ConversationBean conversationBean = ConversationManager.SINGLETON.getByTypeAndToUserId(messageBean.getType(), toUserId);
+                    ConversationBean conversationBean = ChatManager.SINGLETON.getConversationManager().getByTypeAndToUserId(messageBean.getType(), toUserId);
                     if (conversationBean == null) {
                         conversationBean = new ConversationBean();
                     }
@@ -67,7 +67,7 @@ public class MessageDaoImpl implements IMessageDao {
                     if (!send) {
                         conversationBean.setUnreadCount(conversationBean.getUnreadCount() + 1);
                     }
-                    ConversationManager.SINGLETON.insertOrUpdate(conversationBean);
+                    ChatManager.SINGLETON.getConversationManager().insertOrUpdate(conversationBean);
 
                     mDao.createOrUpdate(messageBean);
                     mConversationMessageRelDao.insertOrUpdate(new ConversationMessageRelBean(conversationBean.getId(), messageBean.getPid()));

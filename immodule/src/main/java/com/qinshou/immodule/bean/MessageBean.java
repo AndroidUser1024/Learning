@@ -184,10 +184,10 @@ public class MessageBean {
      *
      * @return 类型为握手消息的消息对象
      */
-    public static MessageBean createHandshakeMessage() {
+    public static MessageBean createHandshakeMessage(int fromUserId) {
         MessageBean messageBean = new MessageBean();
         messageBean.sendTimestamp = System.currentTimeMillis();
-        messageBean.fromUserId = ChatManager.SINGLETON.getUserId();
+        messageBean.fromUserId = fromUserId;
         messageBean.type = MessageType.HANDSHAKE.getValue();
         return messageBean;
     }
