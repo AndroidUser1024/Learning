@@ -68,6 +68,8 @@ public class ConversationDaoImpl implements IConversationDao {
                     " LEFT OUTER JOIN" +
                     " group_chat" +
                     " ON conversation.type=3001 AND conversation.toUserId=group_chat.id" +
+                    " WHERE" +
+                    " conversation.toUserId=" + toUserId +
                     " ORDER BY " +
                     " conversation.lastMsgTimestamp DESC"
             );

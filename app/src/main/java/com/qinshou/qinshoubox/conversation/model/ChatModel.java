@@ -1,6 +1,7 @@
 package com.qinshou.qinshoubox.conversation.model;
 
 
+import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
@@ -19,7 +20,9 @@ import java.util.List;
 public class ChatModel implements IChatContract.IModel {
     @Override
     public void getMessageList(int type, int toUserId, int page, int pageSize, QSCallback<List<MessageBean>> qsCallback) {
+        ShowLogUtil.logi("toUserId--->" + toUserId);
         ConversationBean conversationBean = ChatManager.SINGLETON.getConversationManager().getByTypeAndToUserId(type, toUserId);
+        ShowLogUtil.logi("conversationBean--->" + conversationBean);
         if (conversationBean == null) {
             return;
         }
