@@ -24,13 +24,13 @@ public interface QSBoxGroupChatApi {
     String DEFAULT_HOST = IUrlConstant.DEFAULT_HOST;
 
     @Json
-    @Post("/create")
+    @Post("/groupChat/create")
     Call<QinshouResultBean<GroupChatBean>> create(@Field(name = "ownerId") int ownerId
             , @Field(name = "memberIdList") List<Integer> memberIdList
             , @Field(name = "nickname") String nickname
             , @Field(name = "headImg") String headImg);
 
     @Json
-    @Post("/getMyGroupChatList")
+    @Post("/groupChat/getMyGroupChatList")
     Call<QinshouResultBean<List<GroupChatBean>>> getMyGroupChatList(@Field(name = "userId") int userId);
 }

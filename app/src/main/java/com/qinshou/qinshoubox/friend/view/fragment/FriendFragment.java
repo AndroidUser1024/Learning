@@ -64,6 +64,7 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
     private IOnFriendStatusListener mOnFriendStatusListener = new IOnFriendStatusListener() {
         @Override
         public void add(int fromUserId, String additionalMsg, boolean newFriend) {
+            ShowLogUtil.logi("add: fromUserId--->" + fromUserId + ",additionalMsg--->" + additionalMsg + ",newFriend--->" + newFriend);
             if (!newFriend) {
                 return;
             }
@@ -90,27 +91,27 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
 
         @Override
         public void agreeAdd(int fromUserId) {
-
+            ShowLogUtil.logi("agreeAdd: fromUserId--->" + fromUserId);
         }
 
         @Override
         public void refuseAdd(int fromUserId) {
-
+            ShowLogUtil.logi("refuseAdd: fromUserId--->" + fromUserId);
         }
 
         @Override
         public void delete(int fromUserId) {
-
+            ShowLogUtil.logi("delete: fromUserId--->" + fromUserId);
         }
 
         @Override
         public void online(int fromUserId) {
-
+            ShowLogUtil.logi("online: fromUserId--->" + fromUserId);
         }
 
         @Override
         public void offline(int fromUserId) {
-
+            ShowLogUtil.logi("offline: fromUserId--->" + fromUserId);
         }
     };
     private RcvFriendAdapter mRcvFriendAdapter;

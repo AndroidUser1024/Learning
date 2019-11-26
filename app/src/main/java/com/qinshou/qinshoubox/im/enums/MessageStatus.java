@@ -7,10 +7,9 @@ package com.qinshou.qinshoubox.im.enums;
  * Description:消息状态
  */
 public enum MessageStatus {
-    SENDING(1),
-    SENDED(2),
-    RECEIVING(3),
-    RECEIVED(4);
+    SENDED(1),
+    RECEIVED(2),
+    READED(3);
 
     private int value;
 

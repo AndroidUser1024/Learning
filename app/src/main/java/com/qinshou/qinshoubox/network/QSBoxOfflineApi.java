@@ -1,15 +1,14 @@
 package com.qinshou.qinshoubox.network;
 
-import com.qinshou.qinshoubox.constant.IUrlConstant;
-import com.qinshou.qinshoubox.im.bean.GroupChatBean;
-import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.okhttphelper.annotation.Api;
 import com.qinshou.okhttphelper.annotation.DefaultHost;
 import com.qinshou.okhttphelper.annotation.Field;
 import com.qinshou.okhttphelper.annotation.Json;
 import com.qinshou.okhttphelper.annotation.Post;
 import com.qinshou.okhttphelper.call.Call;
+import com.qinshou.qinshoubox.constant.IUrlConstant;
 import com.qinshou.qinshoubox.homepage.bean.QinshouResultBean;
+import com.qinshou.qinshoubox.im.bean.MessageBean;
 
 import java.util.List;
 
@@ -25,10 +24,10 @@ public interface QSBoxOfflineApi {
     String DEFAULT_HOST = IUrlConstant.DEFAULT_HOST;
 
     @Json
-    @Post("/getOfflineMessageList")
+    @Post("/offline/getOfflineMessageList")
     Call<QinshouResultBean<List<MessageBean>>> getOfflineMessageList(@Field(name = "userId") int userId);
 
     @Json
-    @Post("/deleteOfflineMessageList")
+    @Post("/offline/deleteOfflineMessageList")
     Call<QinshouResultBean<Object>> deleteOfflineMessageList(@Field(name = "userId") int userId);
 }
