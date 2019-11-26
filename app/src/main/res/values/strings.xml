@@ -3,6 +3,7 @@
     <!-- 通用 -->
     <string name="common_tv_left_text">返回</string>
     <string name="common_tv_cancel_text">取消</string>
+    <string name="common_tv_delete_text">删除</string>
     <string name="common_tv_finish_text">完成</string>
     <string name="common_get_camera_permission_failure">获取照相机权限失败</string>
     <string name="common_get_external_storage_permission_failure">获取SD卡权限失败</string>
@@ -106,6 +107,10 @@
     <string name="user_detail_btn_add_friend_text">添加到通讯录</string>
     <string name="user_detail_btn_add_friend_text_2">发送消息</string>
     <string name="user_detail_btn_add_friend_text_3">接受请求</string>
+    <string name="user_detail_tv_delete_contact_text">删除联系人</string>
+    <string name="user_detail_tv_delete_contact_prompt_text">确定要删除和当前用户的好友关系？</string>
+    <string name="user_detail_added_dialog_delete_btn_negative_text">取消</string>
+    <string name="user_detail_added_dialog_delete_btn_positive_text">删除</string>
 
     <!-- 设置备注界面 -->
     <string name="set_remark_tv_title_text">修改备注</string>

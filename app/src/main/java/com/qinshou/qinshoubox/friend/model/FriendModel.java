@@ -38,14 +38,4 @@ public class FriendModel implements IFriendContract.IModel {
                 .transform(new QSApiTransformer<List<UserBean>>())
                 .enqueue(callback);
     }
-
-    @Override
-    public void delete(int toUserId, Callback<Object> callback) {
-        if (!UserStatusManager.SINGLETON.isLogin()) {
-            return;
-        }
-        OkHttpHelperForQSBoxFriendApi.SINGLETON.delete(UserStatusManager.SINGLETON.getUserBean().getId(), toUserId)
-                .transform(new QSApiTransformer<Object>())
-                .enqueue(callback);
-    }
 }

@@ -8,6 +8,7 @@ import com.qinshou.qinshoubox.im.bean.UserBean;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxApi;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxFriendApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
+import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 /**
  * Author: QinHao
@@ -27,6 +28,16 @@ public class UserDetailModel implements IUserDetailContract.IModel {
     public void agreeAddFriend(int fromUserId, int toUserId, String remark, Callback<UserBean> callback) {
         OkHttpHelperForQSBoxFriendApi.SINGLETON.agreeAdd(fromUserId, toUserId, remark)
                 .transform(new QSApiTransformer<UserBean>())
+                .enqueue(callback);
+    }
+
+    @Override
+    public void deleteFriend(int toUserId, Callback<Object> callback) {
+        if (!UserStatusManager.SINGLETON.isLogin()) {
+            return;
+        }
+        OkHttpHelperForQSBoxFriendApi.SINGLETON.delete(UserStatusManager.SINGLETON.getUserBean().getId(), toUserId)
+                .transform(new QSApiTransformer<Object>())
                 .enqueue(callback);
     }
 }

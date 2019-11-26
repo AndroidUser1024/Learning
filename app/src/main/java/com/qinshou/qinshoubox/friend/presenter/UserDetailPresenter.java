@@ -69,4 +69,25 @@ public class UserDetailPresenter extends AbsPresenter<IUserDetailContract.IView,
             }
         });
     }
+
+    @Override
+    public void deleteFriend(int toUserId) {
+        getModel().deleteFriend(toUserId, new Callback<Object>() {
+            @Override
+            public void onSuccess(Object data) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().deleteFriendSuccess();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().deleteFriendFailure(e);
+            }
+        });
+    }
 }

@@ -208,12 +208,6 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
 
             }
         });
-        mRcvFriendAdapter.setOnItemLongClickListener(new IOnItemLongClickListener<UserBean>() {
-            @Override
-            public void onItemLongClick(BaseViewHolder holder, UserBean itemData, int position) {
-                getPresenter().delete(itemData.getId());
-            }
-        });
     }
 
     @Override
@@ -258,16 +252,6 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
     @Override
     public void getFriendListFailure(Exception e) {
         ShowLogUtil.logi("e--->" + e.getMessage());
-    }
-
-    @Override
-    public void deleteSuccess() {
-        getPresenter().getFriendList();
-    }
-
-    @Override
-    public void deleteFailure(Exception e) {
-
     }
 
     private void loadData(int position) {

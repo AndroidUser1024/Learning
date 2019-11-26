@@ -1,21 +1,29 @@
 package com.qinshou.qinshoubox.friend.view.fragment;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.util.activityresultutil.ActivityResultUtil;
 import com.qinshou.commonmodule.util.activityresultutil.OnActivityResultCallBack;
+import com.qinshou.commonmodule.widget.TitleBar;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
+import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
+import com.qinshou.qinshoubox.friend.view.dialog.DeleteContactDialog;
 import com.qinshou.qinshoubox.im.db.dao.impl.UserDaoImpl;
 import com.qinshou.qinshoubox.friend.contract.IUserDetailContract;
 import com.qinshou.qinshoubox.friend.presenter.UserDetailPresenter;
@@ -31,8 +39,9 @@ import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
  * Description:用户详情界面
  */
 public class UserDetailFragment extends QSFragment<UserDetailPresenter> implements IUserDetailContract.IView {
-
     private static final String KEYWORD = "Keyword";
+
+    private TitleBar mTitleBar;
     private ImageView mIvHeadImg;
     private TextView mTvRemark;
     private ImageView mIvGender;
@@ -54,6 +63,7 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
 
     @Override
     public void initView() {
+        mTitleBar = findViewByID(R.id.title_bar);
         mIvHeadImg = findViewByID(R.id.iv_head_img);
         mTvRemark = findViewByID(R.id.tv_remark);
         mIvGender = findViewByID(R.id.iv_gender);
@@ -71,6 +81,12 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
 
     @Override
     public void setListener() {
+        ((TitleBar) findViewByID(R.id.title_bar)).setLeftImageOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         findViewByID(R.id.ll_set_remark).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,6 +124,12 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
 
     @Override
     public void showFriendUI(final UserBean userBean) {
+        mTitleBar.setRightImageOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopupWindow(userBean);
+            }
+        });
         setData(userBean);
         mLlAdditionalMsg.setVisibility(View.GONE);
         mBtnAddFriend.setText(getString(R.string.user_detail_btn_add_friend_text_2));
@@ -251,7 +273,49 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
 
     @Override
     public void agreeAddFriendFailure(Exception e) {
+        toastShort(e.getMessage());
+    }
 
+    @Override
+    public void deleteFriendSuccess() {
+        startActivity(new Intent(getContext(), MainActivity.class));
+    }
+
+    @Override
+    public void deleteFriendFailure(Exception e) {
+        toastShort(e.getMessage());
+    }
+
+    private void showPopupWindow(final UserBean userBean) {
+        final PopupWindow popupWindow = new PopupWindow();
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.ppw_user_detail_more, null);
+        LinearLayout llDeleteContact = view.findViewById(R.id.ll_delete_contact);
+        llDeleteContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DeleteContactDialog deleteContactDialog = new DeleteContactDialog();
+                deleteContactDialog.setTvDeleteOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        getPresenter().deleteFriend(userBean.getId());
+                    }
+                });
+                deleteContactDialog.show(getChildFragmentManager(), "DeleteContactDialog");
+                popupWindow.dismiss();
+            }
+        });
+        // PopupWindow 设置内容布局
+        popupWindow.setContentView(view);
+        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        // PopupWindow 设置宽高
+        popupWindow.setWidth(view.getMeasuredWidth());
+        popupWindow.setHeight(view.getMeasuredHeight());
+        // PopupWindow 获取焦点
+        popupWindow.setFocusable(true);
+        // PopupWindow 点击外部消失
+        popupWindow.setOutsideTouchable(true);
+        ImageView ivRight = mTitleBar.findViewById(R.id.iv_right);
+        popupWindow.showAsDropDown(ivRight);
     }
 
     /**

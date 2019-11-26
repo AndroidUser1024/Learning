@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/user_detail_dialog_delete_contact_bg_"
+    android:orientation="vertical"
+    tools:context="com.qinshou.qinshoubox.friend.view.dialog.DeleteContactDialog">
+
+    <TextView
+        android:id="@+id/tv_clear_chat_history_prompt"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px84"
+        android:gravity="center"
+        android:text="@string/user_detail_tv_delete_contact_prompt_text"
+        android:textColor="#FF999999"
+        android:textSize="@dimen/px24" />
+
+    <include
+        layout="@layout/layout_divider_2"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px1"
+        android:layout_marginStart="@dimen/px32"
+        android:layout_marginLeft="@dimen/px32"
+        android:layout_marginEnd="@dimen/px32"
+        android:layout_marginRight="@dimen/px32"
+        android:background="#FFF2F2F2" />
+
+    <TextView
+        android:id="@+id/tv_delete"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px86"
+        android:gravity="center"
+        android:text="@string/common_tv_delete_text"
+        android:textColor="#FF03A9F4"
+        android:textSize="@dimen/px30" />
+
+
+    <include layout="@layout/layout_divider" />
+
+    <TextView
+        android:id="@+id/tv_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px123"
+        android:gravity="center"
+        android:text="@string/common_tv_cancel_text"
+        android:textColor="#FF333333"
+        android:textSize="@dimen/px30" />
+</LinearLayout>

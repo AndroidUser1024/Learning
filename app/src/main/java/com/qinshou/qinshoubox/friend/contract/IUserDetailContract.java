@@ -18,6 +18,8 @@ public interface IUserDetailContract {
         void getUserDetail(int userId, String keyword, Callback<UserBean> callback);
 
         void agreeAddFriend(int fromUserId, int toUserId, String remark, Callback<UserBean> callback);
+
+        void deleteFriend(int toUserId, Callback<Object> callback);
     }
 
     interface IView extends IBaseView {
@@ -32,11 +34,17 @@ public interface IUserDetailContract {
         void agreeAddFriendSuccess(UserBean userBean);
 
         void agreeAddFriendFailure(Exception e);
+
+        void deleteFriendSuccess();
+
+        void deleteFriendFailure(Exception e);
     }
 
     interface IPresenter {
         void getUserDetail(int userId, String keyword);
 
         void agreeAddFriend(int fromUserId, int toUserId, String remark);
+
+        void deleteFriend(int toUserId);
     }
 }
