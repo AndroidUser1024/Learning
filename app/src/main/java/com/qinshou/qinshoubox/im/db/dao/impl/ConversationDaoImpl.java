@@ -183,7 +183,8 @@ public class ConversationDaoImpl implements IConversationDao {
     public int resetUnreadCount(int id) {
         try {
             UpdateBuilder<ConversationBean, Integer> updateBuilder = mDao.updateBuilder();
-            updateBuilder.updateColumnValue("unreadCount", 0).where().eq("id", id);
+            updateBuilder.updateColumnValue("unreadCount", 0)
+                    .where().eq("id", id);
             return updateBuilder.update();
         } catch (SQLException e) {
             e.printStackTrace();

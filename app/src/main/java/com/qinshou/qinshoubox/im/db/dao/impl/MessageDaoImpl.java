@@ -4,12 +4,14 @@ package com.qinshou.qinshoubox.im.db.dao.impl;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.GenericRawResults;
 import com.j256.ormlite.misc.TransactionManager;
+import com.j256.ormlite.stmt.UpdateBuilder;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.bean.ConversationMessageRelBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.db.DBHelper;
 import com.qinshou.qinshoubox.im.db.dao.IConversationMessageRelDao;
 import com.qinshou.qinshoubox.im.db.dao.IMessageDao;
+import com.qinshou.qinshoubox.im.enums.MessageStatus;
 import com.qinshou.qinshoubox.im.manager.ChatManager;
 
 import java.sql.SQLException;
@@ -128,5 +130,23 @@ public class MessageDaoImpl implements IMessageDao {
             e.printStackTrace();
         }
         return messageBeanList;
+    }
+
+    @Override
+    public int setStatusSended(int fromUserId, int toUserId, long sendTimestamp) {
+        try {
+            UpdateBuilder<MessageBean, Integer> updateBuilder = mDao.updateBuilder();
+            updateBuilder.updateColumnValue("status", MessageStatus.SENDED)
+                    .where()
+                    .eq("fromUserId", fromUserId)
+                    .and()
+                    .eq("toUserId", toUserId)
+                    .and()
+                    .eq("sendTimestamp", sendTimestamp);
+            return updateBuilder.update();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 }

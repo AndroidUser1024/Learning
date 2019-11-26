@@ -3,9 +3,11 @@ package com.qinshou.qinshoubox.im.manager;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Base64;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.im.bean.FriendStatusBean;
@@ -20,8 +22,11 @@ import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxOfflineApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -37,12 +42,6 @@ public enum ChatManager {
     private static final String URL = "http://172.16.60.231:10086/websocket";
     //    private static final String URL = "http://192.168.1.109:10086/websocket";
     private WebSocket mWebSocket;
-    private final OkHttpClient mOkHttpClient = new OkHttpClient.Builder()
-            .connectTimeout(15 * 1000, TimeUnit.MILLISECONDS)
-            .readTimeout(15 * 1000, TimeUnit.MILLISECONDS)
-            .writeTimeout(15 * 1000, TimeUnit.MILLISECONDS)
-            .build();
-    private final Request mRequest = new Request.Builder().url(URL).build();
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private List<IOnMessageListener> mOnMessageListenerList = new ArrayList<>();
     private List<IOnFriendStatusListener> mOnFriendStatusListenerList = new ArrayList<>();
@@ -51,58 +50,63 @@ public enum ChatManager {
     private MessageManager mMessageManager;
     private UserManager mUserManager;
     private GroupChatManager mGroupChatManager;
+    private Map<String, MessageBean> mAckMessageMap = new HashMap<>();
 
     ChatManager() {
     }
 
     public void connect(final Context context, final int userId, final QSCallback<Void> qsCallback) {
-        mWebSocket = mOkHttpClient.newWebSocket(mRequest, new WebSocketListener() {
-            @Override
-            public void onOpen(WebSocket webSocket, Response response) {
-                super.onOpen(webSocket, response);
-                Log.i(TAG, "onOpen: ");
-                mWebSocket = webSocket;
-                sendMessage(MessageBean.createHandshakeMessage(userId));
-            }
+        mWebSocket = new OkHttpClient.Builder()
+                .connectTimeout(15 * 1000, TimeUnit.MILLISECONDS)
+                .readTimeout(15 * 1000, TimeUnit.MILLISECONDS)
+                .writeTimeout(15 * 1000, TimeUnit.MILLISECONDS)
+                .build().newWebSocket(new Request.Builder().url(URL).build(), new WebSocketListener() {
+                    @Override
+                    public void onOpen(WebSocket webSocket, Response response) {
+                        super.onOpen(webSocket, response);
+                        Log.i(TAG, "onOpen: ");
+                        mWebSocket = webSocket;
+                        sendMessage(MessageBean.createHandshakeMessage(userId));
+                    }
 
-            @Override
-            public void onMessage(WebSocket webSocket, String text) {
-                super.onMessage(webSocket, text);
-                Log.i(TAG, "onMessage: text--->" + text);
-                final MessageBean messageBean = new Gson().fromJson(text, MessageBean.class);
-                if (messageBean.getType() == MessageType.HANDSHAKE_SUCCESS.getValue()) {
+                    @Override
+                    public void onMessage(WebSocket webSocket, String text) {
+                        super.onMessage(webSocket, text);
+                        Log.i(TAG, "onMessage: text--->" + text);
+                        final MessageBean messageBean = new Gson().fromJson(text, MessageBean.class);
+                        if (messageBean.getType() == MessageType.HANDSHAKE_SUCCESS.getValue()) {
 //                    UserBean userBean = new Gson().fromJson(messageBean.getExtend(), UserBean.class);
-                    connectSuccess(context, userId, qsCallback);
-                    return;
-                }
-                handleMessage(messageBean);
+                            connectSuccess(context, userId, qsCallback);
+                            return;
+                        }
+                        handleMessage(messageBean);
 
-            }
+                    }
 
-            @Override
-            public void onMessage(WebSocket webSocket, ByteString bytes) {
-                super.onMessage(webSocket, bytes);
-                Log.i(TAG, "onMessage: bytes--->" + bytes);
-            }
+                    @Override
+                    public void onMessage(WebSocket webSocket, ByteString bytes) {
+                        super.onMessage(webSocket, bytes);
+                        Log.i(TAG, "onMessage: bytes--->" + bytes);
+                    }
 
-            @Override
-            public void onClosing(WebSocket webSocket, int code, String reason) {
-                super.onClosing(webSocket, code, reason);
-                Log.i(TAG, "onClosing: ");
-            }
+                    @Override
+                    public void onClosing(WebSocket webSocket, int code, String reason) {
+                        super.onClosing(webSocket, code, reason);
+                        Log.i(TAG, "onClosing: ");
+                    }
 
-            @Override
-            public void onClosed(WebSocket webSocket, int code, String reason) {
-                super.onClosed(webSocket, code, reason);
-                Log.i(TAG, "onClosed: ");
-            }
+                    @Override
+                    public void onClosed(WebSocket webSocket, int code, String reason) {
+                        super.onClosed(webSocket, code, reason);
+                        Log.i(TAG, "onClosed: ");
+                    }
 
-            @Override
-            public void onFailure(WebSocket webSocket, Throwable t, Response response) {
-                super.onFailure(webSocket, t, response);
-                Log.i(TAG, "onFailure: t--->" + t.getMessage());
-            }
-        });
+                    @Override
+                    public void onFailure(WebSocket webSocket, Throwable t, Response response) {
+                        super.onFailure(webSocket, t, response);
+                        Log.i(TAG, "onFailure: t--->" + t.getMessage());
+                    }
+                });
     }
 
     private void connectSuccess(Context context, final int userId, final QSCallback<Void> qsCallback) {
@@ -163,6 +167,12 @@ public enum ChatManager {
         if (messageBean.getType() == MessageType.CHAT.getValue()
                 || messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
             mMessageManager.insertOrUpdate(true, messageBean);
+            String key = messageBean.getFromUserId() + "-" + messageBean.getToUserId() + "-" + messageBean.getSendTimestamp();
+            ShowLogUtil.logi("key--->" + key);
+            key = new String(Base64.encode(key.getBytes(), Base64.DEFAULT));
+            ShowLogUtil.logi("messageBean--->" + messageBean.getToUserId());
+            mAckMessageMap.put(key, messageBean);
+
         }
         mWebSocket.send(new Gson().toJson(messageBean));
     }
@@ -212,6 +222,16 @@ public enum ChatManager {
                         for (IOnFriendStatusListener onFriendStatusListener : mOnFriendStatusListenerList) {
                             onFriendStatusListener.offline(friendStatusBean.getFromUserId());
                         }
+                    }
+                } else if (messageBean.getType() == MessageType.SERVER_RECEIPT.getValue()) {
+                    Type type = new TypeToken<Map<String, String>>() {
+                    }.getType();
+                    Map<String, String> map = new Gson().fromJson(messageBean.getExtend(), type);
+                    String key = map.get("key");
+                    MessageBean ackMessageBean = mAckMessageMap.get(key);
+                    ShowLogUtil.logi("key--->" + key);
+                    if (ackMessageBean != null) {
+                        mMessageManager.setStatusSended(ackMessageBean.getFromUserId(), ackMessageBean.getToUserId(), messageBean.getSendTimestamp());
                     }
                 }
             }

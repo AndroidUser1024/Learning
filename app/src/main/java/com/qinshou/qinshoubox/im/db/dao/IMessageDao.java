@@ -15,4 +15,6 @@ public interface IMessageDao {
     int insertOrUpdate(boolean send, MessageBean messageBean);
 
     List<MessageBean> getList(int conversationId, int page, int pageSize);
+
+    int setStatusSended(int fromUserId, int toUserId, long sendTimestamp);
 }

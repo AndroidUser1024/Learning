@@ -32,4 +32,8 @@ public class MessageManager {
     public List<MessageBean> getList(int conversationId, int page, int pageSize) {
         return mMessageDao.getList(conversationId, page, pageSize);
     }
+
+    public int setStatusSended(int fromUserId, int toUserId, long sendTimestamp) {
+        return mMessageDao.setStatusSended(fromUserId, toUserId, sendTimestamp);
+    }
 }

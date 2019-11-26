@@ -20,9 +20,7 @@ import java.util.List;
 public class ChatModel implements IChatContract.IModel {
     @Override
     public void getMessageList(int type, int toUserId, int page, int pageSize, QSCallback<List<MessageBean>> qsCallback) {
-        ShowLogUtil.logi("toUserId--->" + toUserId);
         ConversationBean conversationBean = ChatManager.SINGLETON.getConversationManager().getByTypeAndToUserId(type, toUserId);
-        ShowLogUtil.logi("conversationBean--->" + conversationBean);
         if (conversationBean == null) {
             return;
         }
