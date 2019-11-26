@@ -122,7 +122,7 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
         if (TextUtils.isEmpty(keyword)) {
             return;
         }
-        getPresenter().getUserDetail(UserStatusManager.SINGLETON.getUserBean().getId(), keyword);
+        getPresenter().getUserDetail(keyword);
     }
 
     @Override
@@ -231,7 +231,6 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
     }
 
     private void setData(UserBean userBean) {
-        new UserDaoImpl().insertOrUpdate(userBean);
         // 头像
         ImageLoadUtil.SINGLETON.loadImage(getContext(), userBean.getHeadImgSmall(), mIvHeadImg);
         // 备注

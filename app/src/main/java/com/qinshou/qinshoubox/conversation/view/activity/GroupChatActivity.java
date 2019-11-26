@@ -469,7 +469,7 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
         if (mToUserId == 0) {
             return;
         }
-        GroupChatBean groupChatBean = new GroupChatDaoImpl().getById(mToUserId);
+        GroupChatBean groupChatBean = ChatManager.SINGLETON.getGroupChatManager().getById(mToUserId);
         if (groupChatBean != null) {
             // 群昵称
             mTitleBar.setTitleText(TextUtils.isEmpty(groupChatBean.getNickname())

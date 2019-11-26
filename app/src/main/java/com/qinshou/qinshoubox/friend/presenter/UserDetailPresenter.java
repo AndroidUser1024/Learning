@@ -7,6 +7,7 @@ import com.qinshou.qinshoubox.friend.contract.IUserDetailContract;
 import com.qinshou.qinshoubox.friend.model.UserDetailModel;
 import com.qinshou.qinshoubox.friend.view.fragment.UserDetailFragment;
 import com.qinshou.qinshoubox.im.bean.UserBean;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 /**
  * Author: QinHao
@@ -21,8 +22,8 @@ public class UserDetailPresenter extends AbsPresenter<IUserDetailContract.IView,
     }
 
     @Override
-    public void getUserDetail(final int userId, String keyword) {
-        getModel().getUserDetail(userId, keyword, new Callback<UserBean>() {
+    public void getUserDetail(String keyword) {
+        getModel().getUserDetail(keyword, new QSCallback<UserBean>() {
             @Override
             public void onSuccess(UserBean data) {
                 if (!isViewAttached()) {

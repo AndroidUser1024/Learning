@@ -20,6 +20,8 @@ import com.qinshou.qinshoubox.friend.view.adapter.RcvGroupChatMemberForCreateAda
 import com.qinshou.qinshoubox.friend.view.adapter.RcvGroupChatMemberForCreateChooseAdapter;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 import com.qinshou.qinshoubox.im.bean.UserBean;
+import com.qinshou.qinshoubox.im.manager.ChatManager;
+import com.qinshou.qinshoubox.im.manager.GroupChatManager;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 import java.util.ArrayList;
@@ -153,7 +155,7 @@ public class CreateGroupChatFragment extends QSFragment<CreateGroupChatPresenter
 
     @Override
     public void createGroupChatSuccess(GroupChatBean groupChatBean) {
-        new GroupChatDaoImpl().insertOrUpdate(groupChatBean);
+        ChatManager.SINGLETON.getGroupChatManager().insertOrUpdate(groupChatBean);
         finish();
     }
 

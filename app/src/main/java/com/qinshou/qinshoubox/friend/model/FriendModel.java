@@ -5,6 +5,9 @@ import com.qinshou.qinshoubox.friend.contract.IFriendContract;
 import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 import com.qinshou.qinshoubox.im.bean.UserBean;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
+import com.qinshou.qinshoubox.im.manager.ChatManager;
+import com.qinshou.qinshoubox.im.manager.GroupChatManager;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxFriendApi;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxGroupChatApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
@@ -20,22 +23,18 @@ import java.util.List;
  */
 public class FriendModel implements IFriendContract.IModel {
     @Override
-    public void getMyGroupChatList(Callback<List<GroupChatBean>> callback) {
+    public void getMyGroupChatList(final QSCallback<List<GroupChatBean>> qsCallback) {
         if (!UserStatusManager.SINGLETON.isLogin()) {
             return;
         }
-        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.getMyGroupChatList(UserStatusManager.SINGLETON.getUserBean().getId())
-                .transform(new QSApiTransformer<List<GroupChatBean>>())
-                .enqueue(callback);
+        ChatManager.SINGLETON.getGroupChatManager().getGroupChatList(qsCallback);
     }
 
     @Override
-    public void getFriendList(Callback<List<UserBean>> callback) {
+    public void getFriendList(final QSCallback<List<UserBean>> qsCallback) {
         if (!UserStatusManager.SINGLETON.isLogin()) {
             return;
         }
-        OkHttpHelperForQSBoxFriendApi.SINGLETON.getList(UserStatusManager.SINGLETON.getUserBean().getId())
-                .transform(new QSApiTransformer<List<UserBean>>())
-                .enqueue(callback);
+        ChatManager.SINGLETON.getUserManager().getFriendList(qsCallback);
     }
 }

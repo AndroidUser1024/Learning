@@ -33,8 +33,8 @@ import okio.ByteString;
 public enum ChatManager {
     SINGLETON;
     private static final String TAG = "ChatManager";
-        private static final String URL = "http://172.16.60.231:10086/websocket";
-//    private static final String URL = "http://192.168.1.109:10086/websocket";
+    private static final String URL = "http://172.16.60.231:10086/websocket";
+    //    private static final String URL = "http://192.168.1.109:10086/websocket";
     private WebSocket mWebSocket;
     private final OkHttpClient mOkHttpClient = new OkHttpClient.Builder()
             .connectTimeout(15 * 1000, TimeUnit.MILLISECONDS)
@@ -48,6 +48,8 @@ public enum ChatManager {
     private int mUserId;
     private ConversationManager mConversationManager;
     private MessageManager mMessageManager;
+    private UserManager mUserManager;
+    private GroupChatManager mGroupChatManager;
 
     ChatManager() {
     }
@@ -110,6 +112,10 @@ public enum ChatManager {
         mConversationManager = new ConversationManager();
         // 创建消息管理者
         mMessageManager = new MessageManager();
+        // 创建用户管理者
+        mUserManager = new UserManager();
+        // 创建群组管理者
+        mGroupChatManager = new GroupChatManager();
         mHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -145,6 +151,8 @@ public enum ChatManager {
         mUserId = 0;
         mConversationManager = null;
         mMessageManager = null;
+        mUserManager = null;
+        mGroupChatManager = null;
     }
 
     public void sendMessage(MessageBean messageBean) {
@@ -219,6 +227,14 @@ public enum ChatManager {
 
     public MessageManager getMessageManager() {
         return mMessageManager;
+    }
+
+    public UserManager getUserManager() {
+        return mUserManager;
+    }
+
+    public GroupChatManager getGroupChatManager() {
+        return mGroupChatManager;
     }
 
     public void addOnMessageListener(IOnMessageListener onMessageListener) {

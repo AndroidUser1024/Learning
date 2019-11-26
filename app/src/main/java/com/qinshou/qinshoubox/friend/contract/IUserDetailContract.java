@@ -6,6 +6,7 @@ import com.qinshou.commonmodule.base.IBaseView;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.friend.view.fragment.UserDetailFragment;
 import com.qinshou.qinshoubox.im.bean.UserBean;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 /**
  * Author: QinHao
@@ -15,7 +16,7 @@ import com.qinshou.qinshoubox.im.bean.UserBean;
  */
 public interface IUserDetailContract {
     interface IModel extends IBaseModel {
-        void getUserDetail(int userId, String keyword, Callback<UserBean> callback);
+        void getUserDetail(String keyword, QSCallback<UserBean> qsCallback);
 
         void agreeAddFriend(int fromUserId, int toUserId, String remark, Callback<UserBean> callback);
 
@@ -41,7 +42,7 @@ public interface IUserDetailContract {
     }
 
     interface IPresenter {
-        void getUserDetail(int userId, String keyword);
+        void getUserDetail(String keyword);
 
         void agreeAddFriend(int fromUserId, int toUserId, String remark);
 
