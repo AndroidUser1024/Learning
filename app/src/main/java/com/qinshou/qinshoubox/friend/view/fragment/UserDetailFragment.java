@@ -24,6 +24,7 @@ import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.friend.view.dialog.DeleteContactDialog;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.db.dao.impl.UserDaoImpl;
 import com.qinshou.qinshoubox.friend.contract.IUserDetailContract;
 import com.qinshou.qinshoubox.friend.presenter.UserDetailPresenter;
@@ -31,6 +32,8 @@ import com.qinshou.qinshoubox.friend.view.activity.SetRemarkActivity;
 import com.qinshou.qinshoubox.im.bean.UserBean;
 import com.qinshou.qinshoubox.conversation.view.activity.ChatActivity;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Author: QinHao
@@ -278,6 +281,7 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
 
     @Override
     public void deleteFriendSuccess() {
+        EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.REFRESH_FRIEND_LIST, null));
         startActivity(new Intent(getContext(), MainActivity.class));
     }
 

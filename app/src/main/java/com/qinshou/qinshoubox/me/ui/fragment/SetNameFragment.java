@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.listener.ClearErrorInfoTextWatcher;
 import com.qinshou.qinshoubox.im.bean.UserBean;
 import com.qinshou.qinshoubox.me.contract.ISetNameContract;
@@ -102,7 +103,7 @@ public class SetNameFragment extends QSFragment<SetNamePresenter> implements ISe
     @Override
     public void setUserInfoSuccess(UserBean userBean) {
         UserStatusManager.SINGLETON.getUserBean().setNickname(userBean.getNickname());
-        EventBus.getDefault().post(UserStatusManager.SINGLETON.getUserBean());
+        EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.REFRESH_USER_BEAN, null));
         finish();
     }
 

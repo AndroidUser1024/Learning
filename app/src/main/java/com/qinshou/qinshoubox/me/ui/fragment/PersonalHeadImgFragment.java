@@ -32,6 +32,7 @@ import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.imagemodule.util.ImagePathUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.bean.UserBean;
 import com.qinshou.qinshoubox.me.contract.IPersonalHeadImgContract;
 import com.qinshou.qinshoubox.me.presenter.PersonalHeadImgPresenter;
@@ -171,7 +172,7 @@ public class PersonalHeadImgFragment extends QSFragment<PersonalHeadImgPresenter
         UserStatusManager.SINGLETON.getUserBean().setHeadImgSmall(userBean.getHeadImgSmall());
         // 设置头像
         ImageLoadUtil.SINGLETON.loadImage(getContext(), userBean.getHeadImg(), mIvHeadImg);
-        EventBus.getDefault().post(UserStatusManager.SINGLETON.getUserBean());
+        EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.REFRESH_USER_BEAN, null));
     }
 
     @Override

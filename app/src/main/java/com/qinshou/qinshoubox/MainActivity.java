@@ -9,21 +9,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qinshou.commonmodule.util.FragmentUtil;
-import com.qinshou.commonmodule.util.ShowLogUtil;
-import com.qinshou.imagemodule.util.ImageLoadUtil;
-import com.qinshou.qinshoubox.base.QSFragment;
-import com.qinshou.qinshoubox.demo.view.fragment.DemoFragment;
-import com.qinshou.qinshoubox.im.bean.UserBean;
-import com.qinshou.qinshoubox.im.db.DBHelper;
-import com.qinshou.qinshoubox.im.manager.ChatManager;
-import com.qinshou.qinshoubox.im.listener.IOnFriendStatusListener;
 import com.qinshou.qinshoubox.base.QSActivity;
+import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.conversation.view.fragment.ConversationFragment;
+import com.qinshou.qinshoubox.demo.view.fragment.DemoFragment;
 import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.homepage.ui.fragment.HomepageFragment;
 import com.qinshou.qinshoubox.me.ui.fragment.MeFragment;
 import com.qinshou.qinshoubox.music.view.fragment.MusicListFragment;
-import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -176,16 +170,18 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void receiveEvent(Boolean login) {
-        FragmentUtil.removeFragment(getActivity(), mConversationFragment);
-        FragmentUtil.removeFragment(getActivity(), mFriendFragment);
-        if (login) {
+    public void receiveEvent(EventBean<Object> eventBean) {
+        if (eventBean.getType() == EventBean.Type.LOGIN) {
             mConversationFragment = new ConversationFragment();
             mFriendFragment = new FriendFragment();
-        } else {
+        } else if (eventBean.getType() == EventBean.Type.LOGOUT) {
             mConversationFragment = new DemoFragment();
             mFriendFragment = new DemoFragment();
+        } else {
+            return;
         }
+        FragmentUtil.removeFragment(getActivity(), mConversationFragment);
+        FragmentUtil.removeFragment(getActivity(), mFriendFragment);
         FragmentUtil.addFragment(getActivity(), R.id.fl_fragment_container, mConversationFragment);
         FragmentUtil.addFragment(getActivity(), R.id.fl_fragment_container, mFriendFragment);
     }

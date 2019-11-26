@@ -14,6 +14,7 @@ import com.qinshou.commonmodule.widget.TitleBar;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.bean.UserBean;
 import com.qinshou.qinshoubox.me.contract.IDataSettingContract;
 import com.qinshou.qinshoubox.me.presenter.DataSettingPresenter;
@@ -70,15 +71,9 @@ public class DataSettingFragment extends QSFragment<DataSettingPresenter> implem
         EventBus.getDefault().unregister(this);
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        EventBus.getDefault().register(this);
-        return super.onCreateView(inflater, container, savedInstanceState);
-    }
-
     @Override
     public int getLayoutId() {
+        EventBus.getDefault().register(this);
         return R.layout.fragment_data_setting;
     }
 
@@ -118,16 +113,12 @@ public class DataSettingFragment extends QSFragment<DataSettingPresenter> implem
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void receiveEvent(Boolean login) {
-        if (login) {
+    public void receiveEvent(EventBean<Object> eventBean) {
+        if (eventBean.getType() == EventBean.Type.REFRESH_USER_BEAN) {
             UserBean userBean = UserStatusManager.SINGLETON.getUserBean();
             ImageLoadUtil.SINGLETON.loadImage(getContext(), userBean.getHeadImgSmall(), mIvHeadImg);
             mTvNickname.setText(userBean.getNickname());
             mTvUsername.setText(userBean.getUsername());
-        } else {
-            ImageLoadUtil.SINGLETON.loadImage(getContext(), R.drawable.default_head_img, mIvHeadImg);
-            mTvNickname.setText(getString(R.string.me_tv_click_2_login_text));
-            mTvUsername.setText(getString(R.string.me_tv_login_2_have_more_function_text));
         }
     }
 }

@@ -7,6 +7,7 @@ import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.constant.IConstant;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.bean.UserBean;
 import com.qinshou.qinshoubox.me.ui.fragment.LoginOrRegisterFragment;
 
@@ -33,9 +34,7 @@ public class LogoutStatus implements IUserStatus {
         // 设置为登录状态
         UserStatusManager.SINGLETON.setUserStatus(new LoginStatus(userBean));
         // 发送事件更新登录状态
-        EventBus.getDefault().post(true);
-        // 更新好友申请历史数
-        EventBus.getDefault().post(0);
+        EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.LOGIN,null));
     }
 
     @Override

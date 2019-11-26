@@ -10,14 +10,9 @@ import android.widget.TextView;
 
 import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.adapter.VpSingleViewAdapter;
-import com.qinshou.commonmodule.rcvbaseadapter.RcvBaseAdapter;
-import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
-import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemLongClickListener;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.util.SystemUtil;
-import com.qinshou.qinshoubox.im.listener.IOnFriendStatusListener;
-import com.qinshou.qinshoubox.im.manager.ChatManager;
 import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
@@ -26,11 +21,13 @@ import com.qinshou.qinshoubox.friend.contract.IFriendContract;
 import com.qinshou.qinshoubox.friend.presenter.FriendPresenter;
 import com.qinshou.qinshoubox.friend.view.adapter.RcvFriendAdapter;
 import com.qinshou.qinshoubox.friend.view.adapter.RcvGroupChatAdapter;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 import com.qinshou.qinshoubox.im.bean.UserBean;
+import com.qinshou.qinshoubox.im.listener.IOnFriendStatusListener;
+import com.qinshou.qinshoubox.im.manager.ChatManager;
 import com.qinshou.qinshoubox.me.ui.fragment.LoginOrRegisterFragment;
 import com.qinshou.qinshoubox.util.QSUtil;
-import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -120,6 +117,7 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        EventBus.getDefault().unregister(this);
         mTvUnreadCount.setVisibility(View.GONE);
         mTvUnreadCountInTlMain.setVisibility(View.GONE);
         ChatManager.SINGLETON.removeOnFriendStatusListener(mOnFriendStatusListener);
@@ -127,6 +125,7 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
 
     @Override
     public int getLayoutId() {
+        EventBus.getDefault().register(this);
         return R.layout.fragment_friend;
     }
 
@@ -172,10 +171,9 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
         mTlFriend.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                int position = tab.getPosition();
                 // 切换 ViewPager
-                mViewPager.setCurrentItem(position);
-                loadData(position);
+                mViewPager.setCurrentItem(tab.getPosition());
+                loadData(tab.getPosition());
             }
 
             @Override
@@ -251,7 +249,14 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
 
     @Override
     public void getFriendListFailure(Exception e) {
-        ShowLogUtil.logi("e--->" + e.getMessage());
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void receiveEvent(EventBean<Object> eventBean) {
+        if (eventBean.getType() != EventBean.Type.REFRESH_FRIEND_LIST) {
+            return;
+        }
+        getPresenter().getFriendList();
     }
 
     private void loadData(int position) {
