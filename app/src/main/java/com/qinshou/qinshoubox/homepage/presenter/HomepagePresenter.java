@@ -2,6 +2,7 @@ package com.qinshou.qinshoubox.homepage.presenter;
 
 import com.qinshou.commonmodule.base.AbsPresenter;
 import com.qinshou.okhttphelper.callback.Callback;
+import com.qinshou.qinshoubox.homepage.bean.NewsBean;
 import com.qinshou.qinshoubox.homepage.bean.WallpaperBean;
 import com.qinshou.qinshoubox.homepage.contract.IHomepageContract;
 import com.qinshou.qinshoubox.homepage.model.HomepageModel;
@@ -39,6 +40,28 @@ public class HomepagePresenter extends AbsPresenter<IHomepageContract.IView, IHo
                     return;
                 }
                 getView().getWallpaperListFailure(e);
+            }
+        });
+    }
+
+    @Override
+    public void getNewsList(int page, int pageSize) {
+        getModel().getNewsList(page, pageSize, new Callback<List<NewsBean>>() {
+            @Override
+            public void onSuccess(List<NewsBean> data) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().getNewsListSuccess(data);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().getNewsListFailure(e);
             }
         });
     }

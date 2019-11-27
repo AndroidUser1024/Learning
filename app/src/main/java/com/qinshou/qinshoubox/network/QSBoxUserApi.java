@@ -1,18 +1,15 @@
 package com.qinshou.qinshoubox.network;
 
 import com.qinshou.okhttphelper.annotation.Api;
-import com.qinshou.okhttphelper.annotation.DefaultHost;
 import com.qinshou.okhttphelper.annotation.Field;
 import com.qinshou.okhttphelper.annotation.Multipart;
 import com.qinshou.okhttphelper.annotation.Post;
 import com.qinshou.okhttphelper.call.Call;
 import com.qinshou.qinshoubox.constant.IUrlConstant;
-import com.qinshou.qinshoubox.friend.bean.FriendHistoryBean;
 import com.qinshou.qinshoubox.homepage.bean.QinshouResultBean;
 import com.qinshou.qinshoubox.im.bean.UserBean;
 
 import java.io.File;
-import java.util.List;
 
 /**
  * Author: QinHao
@@ -20,32 +17,31 @@ import java.util.List;
  * Date: 2019/11/16 13:27
  * Description:类描述
  */
-@Api
-public interface QSBoxApi {
-    @DefaultHost
+@Api(IUrlConstant.DEFAULT_HOST + "/user")
+public interface QSBoxUserApi {
     String DEFAULT_HOST = IUrlConstant.DEFAULT_HOST;
 
-    @Post("/user/register")
+    @Post("/register")
     Call<QinshouResultBean<UserBean>> register(@Field(name = "username") String username
             , @Field(name = "password") String password);
 
-    @Post("/user/login")
+    @Post("/login")
     Call<QinshouResultBean<UserBean>> login(@Field(name = "username") String username
             , @Field(name = "password") String password);
 
-    @Post("/user/logout")
+    @Post("/logout")
     Call<QinshouResultBean<UserBean>> logout(@Field(name = "username") String username);
 
-    @Post("/user/setInfo")
+    @Post("/setInfo")
     Call<QinshouResultBean<UserBean>> setInfo(@Field(name = "userId") int userId
             , @Field(name = "nickname") String nickname);
 
     @Multipart
-    @Post("/user/setHeadImg")
+    @Post("/setHeadImg")
     Call<QinshouResultBean<UserBean>> setHeadImg(@Field(name = "userId") int userId
             , @Field(name = "headImg") File headImg);
 
-    @Post("/user/getUserDetail")
+    @Post("/getUserDetail")
     Call<QinshouResultBean<UserBean>> getUserDetail(@Field(name = "userId") int userId
             , @Field(name = "keyword") String keyword);
 }

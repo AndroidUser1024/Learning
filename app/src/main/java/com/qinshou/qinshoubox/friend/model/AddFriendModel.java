@@ -5,7 +5,7 @@ import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.friend.contract.IAddFriendContract;
 import com.qinshou.qinshoubox.friend.view.fragment.AddFriendFragment;
 import com.qinshou.qinshoubox.im.bean.UserBean;
-import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxApi;
+import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxUserApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 
 /**
@@ -17,7 +17,7 @@ import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 public class AddFriendModel implements IAddFriendContract.IModel {
     @Override
     public void getUserDetail(int userId,String keyword, Callback<UserBean> callback) {
-        OkHttpHelperForQSBoxApi.SINGLETON.getUserDetail(userId, keyword)
+        OkHttpHelperForQSBoxUserApi.SINGLETON.getUserDetail(userId, keyword)
                 .transform(new QSApiTransformer<UserBean>())
                 .enqueue(callback);
     }

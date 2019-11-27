@@ -5,8 +5,8 @@ import com.qinshou.qinshoubox.im.bean.UserBean;
 import com.qinshou.qinshoubox.im.db.dao.IUserDao;
 import com.qinshou.qinshoubox.im.db.dao.impl.UserDaoImpl;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
-import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxApi;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxFriendApi;
+import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxUserApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
@@ -37,7 +37,7 @@ public class UserManager {
     }
 
     public void getUser(String keyword, final QSCallback<UserBean> qsCallback) {
-        OkHttpHelperForQSBoxApi.SINGLETON.getUserDetail(ChatManager.SINGLETON.getUserId(), keyword)
+        OkHttpHelperForQSBoxUserApi.SINGLETON.getUserDetail(ChatManager.SINGLETON.getUserId(), keyword)
                 .transform(new QSApiTransformer<UserBean>())
                 .enqueue(new Callback<UserBean>() {
                     @Override

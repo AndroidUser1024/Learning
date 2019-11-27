@@ -8,7 +8,7 @@
     tools:context="com.qinshou.qinshoubox.knowledgesystem.ui.activity.SearchActivity">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_article"
+        android:id="@+id/rv_news"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="never">

@@ -1,7 +1,6 @@
 package com.qinshou.qinshoubox.network;
 
 import com.qinshou.okhttphelper.annotation.Api;
-import com.qinshou.okhttphelper.annotation.DefaultHost;
 import com.qinshou.okhttphelper.annotation.Field;
 import com.qinshou.okhttphelper.annotation.Json;
 import com.qinshou.okhttphelper.annotation.Post;
@@ -18,19 +17,17 @@ import java.util.List;
  * Date: 2019/11/22 13:35
  * Description:QSBox 群聊模块的接口
  */
-@Api
+@Api(IUrlConstant.DEFAULT_HOST+"/groupChat")
 public interface QSBoxGroupChatApi {
-    @DefaultHost
-    String DEFAULT_HOST = IUrlConstant.DEFAULT_HOST;
 
     @Json
-    @Post("/groupChat/create")
+    @Post("/create")
     Call<QinshouResultBean<GroupChatBean>> create(@Field(name = "ownerId") int ownerId
             , @Field(name = "memberIdList") List<Integer> memberIdList
             , @Field(name = "nickname") String nickname
             , @Field(name = "headImg") String headImg);
 
     @Json
-    @Post("/groupChat/getMyGroupChatList")
+    @Post("/getMyGroupChatList")
     Call<QinshouResultBean<List<GroupChatBean>>> getMyGroupChatList(@Field(name = "userId") int userId);
 }

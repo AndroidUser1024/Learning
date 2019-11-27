@@ -5,7 +5,7 @@ import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.im.bean.UserBean;
 import com.qinshou.qinshoubox.me.contract.IDataSettingContract;
 import com.qinshou.qinshoubox.me.ui.fragment.DataSettingFragment;
-import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxApi;
+import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxUserApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 
 /**
@@ -17,7 +17,7 @@ import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 public class DataSettingModel implements IDataSettingContract.IModel {
     @Override
     public void logout(String username, Callback<UserBean> callback) {
-        OkHttpHelperForQSBoxApi.SINGLETON.logout(username)
+        OkHttpHelperForQSBoxUserApi.SINGLETON.logout(username)
                 .transform(new QSApiTransformer<UserBean>())
                 .enqueue(callback);
     }

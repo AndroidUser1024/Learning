@@ -1,11 +1,16 @@
 package com.qinshou.qinshoubox.homepage.ui.fragment;
 
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.qinshou.commonmodule.adapter.InfiniteCycleViewPagerAdapter;
+import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
+import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemClickListener;
+import com.qinshou.commonmodule.rcvdecoration.DividerDecoration;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.util.StatusBarUtil;
 import com.qinshou.commonmodule.widget.RefreshLayout;
@@ -13,10 +18,13 @@ import com.qinshou.commonmodule.widget.ViewPagerPoints;
 import com.qinshou.imagemodule.PhotoViewActivity;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.R;
+import com.qinshou.qinshoubox.WebActivity;
 import com.qinshou.qinshoubox.base.QSFragment;
+import com.qinshou.qinshoubox.constant.IConstant;
+import com.qinshou.qinshoubox.homepage.bean.NewsBean;
 import com.qinshou.qinshoubox.homepage.contract.IHomepageContract;
 import com.qinshou.qinshoubox.homepage.presenter.HomepagePresenter;
-import com.qinshou.qinshoubox.homepage.ui.adapter.RvArticleAdapter;
+import com.qinshou.qinshoubox.homepage.ui.adapter.RcvNewsAdapter;
 import com.qinshou.qinshoubox.homepage.bean.WallpaperBean;
 
 import java.util.ArrayList;
@@ -33,9 +41,9 @@ public class HomepageFragment extends QSFragment<HomepagePresenter> implements I
     private InfiniteCycleViewPagerAdapter mInfiniteViewPagerAdapter;
     private ViewPagerPoints mViewPagerPoints;
 
-    private int page = 0;
-    private RvArticleAdapter mRvArticleAdapter;
-    private RefreshLayout refreshLayout;
+    private int mPage = IConstant.PAGE_START;
+    private RcvNewsAdapter mRcvNewsAdapter;
+    private RefreshLayout mRefreshLayout;
 
     @Override
     public void onHiddenChanged(boolean hidden) {
@@ -89,31 +97,36 @@ public class HomepageFragment extends QSFragment<HomepagePresenter> implements I
         mViewPagerPoints = findViewByID(R.id.view_pager_points);
         mViewPagerPoints.setupWithViewPager(mVpWallpaper);
 
-        refreshLayout = findViewByID(R.id.refresh_layout);
-//        RecyclerView rvArticle = findViewByID(R.id.rv_article);
-//        //RecyclerView 去除焦点
-//        rvArticle.setFocusableInTouchMode(false);
-//        rvArticle.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-//        rvArticle.addItemDecoration(new DividerDecoration(getContext()));
-//        mRvArticleAdapter = new RvArticleAdapter(getContext());
-//        rvArticle.setAdapter(mRvArticleAdapter);
-//        rvArticle.setNestedScrollingEnabled(false);
-//
+        mRefreshLayout = findViewByID(R.id.refresh_layout);
+        RecyclerView rvNews = findViewByID(R.id.rv_news);
+        //RecyclerView 去除焦点
+        rvNews.setFocusableInTouchMode(false);
+        rvNews.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvNews.addItemDecoration(new DividerDecoration());
+        mRcvNewsAdapter = new RcvNewsAdapter(getContext());
+        rvNews.setAdapter(mRcvNewsAdapter);
+        rvNews.setNestedScrollingEnabled(false);
     }
 
     @Override
     public void setListener() {
-        refreshLayout.setOnRefreshLoadMoreListener(new RefreshLayout.IOnRefreshLoadMoreListener() {
+        mRefreshLayout.setOnRefreshLoadMoreListener(new RefreshLayout.IOnRefreshLoadMoreListener() {
             @Override
             public void onRefresh(RefreshLayout refreshLayout) {
-                page = 0;
-//                initData();
+                mPage = 0;
+                getPresenter().getNewsList(mPage, IConstant.PAGE_SIZE);
             }
 
             @Override
             public void onLoadMore(RefreshLayout refreshLayout) {
-                page++;
-//                loadHomePageArticles();
+                mPage++;
+                getPresenter().getNewsList(mPage, IConstant.PAGE_SIZE);
+            }
+        });
+        mRcvNewsAdapter.setOnItemClickListener(new IOnItemClickListener<NewsBean>() {
+            @Override
+            public void onItemClick(BaseViewHolder holder, NewsBean itemData, int position) {
+                getContext().startActivity(WebActivity.getJumpIntent(getContext(), itemData.getHref()));
             }
         });
     }
@@ -121,6 +134,7 @@ public class HomepageFragment extends QSFragment<HomepagePresenter> implements I
     @Override
     public void initData() {
         getPresenter().getWallpaperList();
+        getPresenter().getNewsList(mPage, IConstant.PAGE_SIZE);
     }
 
     @Override
@@ -150,4 +164,17 @@ public class HomepageFragment extends QSFragment<HomepagePresenter> implements I
     @Override
     public void getWallpaperListFailure(Exception e) {
     }
+
+    @Override
+    public void getNewsListSuccess(List<NewsBean> newsBeanList) {
+        ShowLogUtil.logi(newsBeanList.size());
+        mRcvNewsAdapter.addDataList(newsBeanList, mPage == IConstant.PAGE_START);
+        mRefreshLayout.stopRefreshAndLoadMore();
+    }
+
+    @Override
+    public void getNewsListFailure(Exception e) {
+        mRefreshLayout.stopRefreshAndLoadMore();
+    }
+
 }

@@ -5,7 +5,7 @@ import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.im.bean.UserBean;
 import com.qinshou.qinshoubox.me.contract.ILoginOrRegisterContract;
 import com.qinshou.qinshoubox.me.ui.fragment.LoginOrRegisterFragment;
-import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxApi;
+import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxUserApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 
 /**
@@ -16,14 +16,14 @@ import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 public class LoginOrRegisterModel implements ILoginOrRegisterContract.IModel {
     @Override
     public void register(String username, String password, Callback<UserBean> callback) {
-        OkHttpHelperForQSBoxApi.SINGLETON.register(username, password)
+        OkHttpHelperForQSBoxUserApi.SINGLETON.register(username, password)
                 .transform(new QSApiTransformer<UserBean>())
                 .enqueue(callback);
     }
 
     @Override
     public void login(String username, String password, Callback<UserBean> callback) {
-        OkHttpHelperForQSBoxApi.SINGLETON.login(username, password)
+        OkHttpHelperForQSBoxUserApi.SINGLETON.login(username, password)
                 .transform(new QSApiTransformer<UserBean>())
                 .enqueue(callback);
     }

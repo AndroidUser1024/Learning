@@ -71,7 +71,7 @@
                     android:gravity="start|center_vertical"
                     android:text="@string/me_puzzle"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/sp20" />
+                    android:textSize="@dimen/px40" />
 
                 <Button
                     android:id="@+id/btn_turning_robot"
@@ -81,7 +81,7 @@
                     android:gravity="start|center_vertical"
                     android:text="@string/me_turning_robot"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/sp20" />
+                    android:textSize="@dimen/px40" />
 
                 <Button
                     android:id="@+id/btn_magic_tower"
@@ -91,7 +91,7 @@
                     android:gravity="start|center_vertical"
                     android:text="@string/me_magic_tower"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/sp20" />
+                    android:textSize="@dimen/px40" />
 
                 <Button
                     android:id="@+id/btn_contact_list"
@@ -101,7 +101,7 @@
                     android:gravity="start|center_vertical"
                     android:text="@string/me_contact_list"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/sp20" />
+                    android:textSize="@dimen/px40" />
 
                 <Button
                     android:id="@+id/btn_weather"
@@ -111,7 +111,7 @@
                     android:gravity="start|center_vertical"
                     android:text="@string/me_weather"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/sp20" />
+                    android:textSize="@dimen/px40" />
 
                 <Button
                     android:id="@+id/btn_wheel_of_fortune"
@@ -121,7 +121,7 @@
                     android:gravity="start|center_vertical"
                     android:text="@string/me_wheel_of_fortune"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/sp20" />
+                    android:textSize="@dimen/px40" />
 
                 <Button
                     android:id="@+id/btn_chart"
@@ -131,7 +131,7 @@
                     android:gravity="start|center_vertical"
                     android:text="@string/me_chart"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/sp20" />
+                    android:textSize="@dimen/px40" />
 
                 <Button
                     android:id="@+id/btn_qr_code_scan"
@@ -141,7 +141,7 @@
                     android:gravity="start|center_vertical"
                     android:text="@string/me_qr_code_scan"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/sp20" />
+                    android:textSize="@dimen/px40" />
 
                 <Button
                     android:id="@+id/btn_pei_qi"
@@ -151,7 +151,7 @@
                     android:gravity="start|center_vertical"
                     android:text="@string/me_pei_qi"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/sp20" />
+                    android:textSize="@dimen/px40" />
 
                 <Button
                     android:id="@+id/btn_test"
@@ -161,7 +161,7 @@
                     android:gravity="start|center_vertical"
                     android:text="@string/me_test"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/sp20" />
+                    android:textSize="@dimen/px40" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

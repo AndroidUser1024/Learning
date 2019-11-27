@@ -23,7 +23,7 @@
         android:layout_marginTop="@dimen/px100"
         android:layout_marginEnd="@dimen/px50"
         android:layout_marginRight="@dimen/px50"
-        app:cdvTextSize="@dimen/sp15"
+        app:cdvTextSize="@dimen/px30"
         app:circleColor="#80808080"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"

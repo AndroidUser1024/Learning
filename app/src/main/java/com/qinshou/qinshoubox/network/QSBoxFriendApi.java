@@ -1,7 +1,6 @@
 package com.qinshou.qinshoubox.network;
 
 import com.qinshou.okhttphelper.annotation.Api;
-import com.qinshou.okhttphelper.annotation.DefaultHost;
 import com.qinshou.okhttphelper.annotation.Field;
 import com.qinshou.okhttphelper.annotation.Json;
 import com.qinshou.okhttphelper.annotation.Post;
@@ -19,33 +18,31 @@ import java.util.List;
  * Date: 19-11-25 下午10:20
  */
 
-@Api
+@Api(IUrlConstant.DEFAULT_HOST + "/friend")
 public interface QSBoxFriendApi {
-    @DefaultHost
-    String DEFAULT_HOST = IUrlConstant.DEFAULT_HOST;
 
-    @Post("/friend/add")
+    @Post("/add")
     Call<QinshouResultBean<Object>> add(@Field(name = "fromUserId") int fromUserId
             , @Field(name = "toUserId") int toUserId
             , @Field(name = "remark") String remark
             , @Field(name = "additionalMsg") String additionalMsg
             , @Field(name = "source") int source);
 
-    @Post("/friend/agreeAdd")
+    @Post("/agreeAdd")
     Call<QinshouResultBean<UserBean>> agreeAdd(@Field(name = "fromUserId") int fromUserId
             , @Field(name = "toUserId") int toUserId
             , @Field(name = "remark") String remark);
 
-    @Post("/friend/getHistory")
+    @Post("/getHistory")
     Call<QinshouResultBean<List<FriendHistoryBean>>> getHistory(@Field(name = "page") int page
             , @Field(name = "pageSize") int pageSize
             , @Field(name = "toUserId") int toUserId);
 
-    @Post("/friend/getList")
+    @Post("/getList")
     Call<QinshouResultBean<List<UserBean>>> getList(@Field(name = "fromUserId") int fromUserId);
 
     @Json
-    @Post("/friend/delete")
+    @Post("/delete")
     Call<QinshouResultBean<Object>> delete(@Field(name = "fromUserId") int fromUserId
             , @Field(name = "toUserId") int toUserId);
 }

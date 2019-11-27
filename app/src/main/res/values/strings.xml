@@ -18,10 +18,9 @@
     </string-array>
 
     <!-- 首页界面 -->
-    <string name="str_author">作者</string>
-    <string name="str_type">分类</string>
-    <string name="str_time">时间</string>
-    <string name="str_collection">收藏</string>
+    <string name="homepage_tv_source_prompt_text">作者</string>
+    <string name="homepage_tv_translator_prompt_text">翻译者</string>
+    <string name="homepage_tv_time_prompt_text">时间</string>
 
     <!-- 会话界面 -->
     <string name="conversation_tv_title_text">会话</string>
