@@ -137,10 +137,10 @@ public class MessageDaoImpl implements IMessageDao {
     }
 
     @Override
-    public int setStatusSended(int fromUserId, int toUserId, long sendTimestamp) {
+    public int setStatus(int status, int fromUserId, int toUserId, long sendTimestamp) {
         try {
             UpdateBuilder<MessageBean, Integer> updateBuilder = mDao.updateBuilder();
-            updateBuilder.updateColumnValue("status", MessageStatus.SENDED.getValue())
+            updateBuilder.updateColumnValue("status", status)
                     .where()
                     .eq("fromUserId", fromUserId)
                     .and()

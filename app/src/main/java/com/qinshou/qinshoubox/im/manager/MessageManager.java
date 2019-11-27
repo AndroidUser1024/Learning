@@ -32,7 +32,7 @@ public class MessageManager {
         return mMessageDao.getList(conversationId, page, pageSize);
     }
 
-    public int setStatusSended(int fromUserId, int toUserId, long sendTimestamp) {
-        return mMessageDao.setStatusSended(fromUserId, toUserId, sendTimestamp);
+    public int setStatus(int status,int fromUserId, int toUserId, long sendTimestamp) {
+        return mMessageDao.setStatus(status,fromUserId, toUserId, sendTimestamp);
     }
 }

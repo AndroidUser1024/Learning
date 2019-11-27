@@ -42,6 +42,7 @@ import okio.ByteString;
 public enum ChatManager {
     SINGLETON;
     private static final String TAG = "ChatManager";
+    private final int TIME_OUT = 30 * 1000;
     private static final String URL = "http://172.16.60.231:10086/websocket";
     //    private static final String URL = "http://192.168.1.109:10086/websocket";
     private WebSocket mWebSocket;
@@ -61,9 +62,9 @@ public enum ChatManager {
 
     public void connect(final Context context, final int userId, final QSCallback<Void> qsCallback) {
         mWebSocket = new OkHttpClient.Builder()
-                .connectTimeout(15 * 1000, TimeUnit.MILLISECONDS)
-                .readTimeout(15 * 1000, TimeUnit.MILLISECONDS)
-                .writeTimeout(15 * 1000, TimeUnit.MILLISECONDS)
+                .connectTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
+                .readTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
+                .writeTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
                 .build().newWebSocket(new Request.Builder().url(URL).build(), new WebSocketListener() {
                     @Override
                     public void onOpen(WebSocket webSocket, Response response) {
@@ -179,7 +180,7 @@ public enum ChatManager {
             String key = messageBean.getFromUserId() + "-" + messageBean.getToUserId() + "-" + messageBean.getType() + "-" + messageBean.getSendTimestamp();
             key = new String(Base64.encode(key.getBytes(), Base64.DEFAULT)).trim();
             mAckMessageMap.put(key, messageBean);
-            mHandler.postDelayed(new RetrySendRunnable(key), 15000);
+            mHandler.postDelayed(new RetrySendRunnable(key), TIME_OUT);
         }
         mWebSocket.send(new Gson().toJson(messageBean));
     }
@@ -235,9 +236,10 @@ public enum ChatManager {
                     }.getType();
                     Map<String, String> map = new Gson().fromJson(messageBean.getExtend(), type);
                     String key = map.get("key").trim();
+                    int status = Integer.valueOf(map.get("status"));
                     MessageBean ackMessageBean = mAckMessageMap.remove(key);
                     if (ackMessageBean != null) {
-                        mMessageManager.setStatusSended(ackMessageBean.getFromUserId(), ackMessageBean.getToUserId(), ackMessageBean.getSendTimestamp());
+                        mMessageManager.setStatus(status, ackMessageBean.getFromUserId(), ackMessageBean.getToUserId(), ackMessageBean.getSendTimestamp());
                     }
                 }
             }
