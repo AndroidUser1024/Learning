@@ -3,6 +3,7 @@ package com.qinshou.qinshoubox.im.manager;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
@@ -11,6 +12,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.okhttphelper.callback.Callback;
+import com.qinshou.qinshoubox.im.bean.AckKeyBean;
 import com.qinshou.qinshoubox.im.bean.FriendStatusBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.bean.UserBean;
@@ -20,6 +22,7 @@ import com.qinshou.qinshoubox.im.enums.MessageType;
 import com.qinshou.qinshoubox.im.listener.IOnFriendStatusListener;
 import com.qinshou.qinshoubox.im.listener.IOnMessageListener;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
+import com.qinshou.qinshoubox.im.util.EncryptUtil.CodeUtil;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxOfflineApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 
@@ -30,8 +33,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.DelayQueue;
+import java.util.concurrent.Delayed;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -44,7 +50,7 @@ import okio.ByteString;
 public enum ChatManager {
     SINGLETON;
     private static final String TAG = "ChatManager";
-    private final int TIME_OUT = 30 * 1000;
+    private final int TIME_OUT = 10 * 1000;
     private static final String URL = "http://172.16.60.231:10086/websocket";
     //    private static final String URL = "http://192.168.1.109:10086/websocket";
     private WebSocket mWebSocket;
@@ -163,6 +169,8 @@ public enum ChatManager {
         for (Timer timer : mRetrySendTimerMap.values()) {
             timer.cancel();
         }
+        mAckMessageMap.clear();
+        mRetrySendTimerMap.clear();
         mUserId = 0;
         mConversationManager = null;
         mMessageManager = null;
@@ -178,13 +186,19 @@ public enum ChatManager {
                 || messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
             mMessageManager.insertOrUpdate(true, messageBean);
 
-            // 根据 fromUserId,toUserId,type,sendTimeStamp 拼接成的字符串做 Base64 加密,得到的加密字符串作为 key
-            String key = messageBean.getFromUserId() + "-" + messageBean.getToUserId() + "-" + messageBean.getType() + "-" + messageBean.getSendTimestamp();
-            key = new String(Base64.encode(key.getBytes(), Base64.DEFAULT)).trim();
+            // 创建一个唯一索引作为 ACK Key,将其 json 串做 Base64 加密,得到的加密字符串作为 key
+            AckKeyBean ackKeyBean = new AckKeyBean(mUserId
+                    , messageBean.getFromUserId()
+                    , messageBean.getToUserId()
+                    , messageBean.getType()
+                    , messageBean.getSendTimestamp());
+            String key = CodeUtil.encode(new Gson().toJson(ackKeyBean));
             mAckMessageMap.put(key, messageBean);
+            // 设置一个定时任务,一定时间后如果还没有收到服务端回执,则重新发送
             Timer timer = new Timer();
             timer.schedule(new RetrySendTimerTask(key), TIME_OUT);
             mRetrySendTimerMap.put(key, timer);
+            ShowLogUtil.logi("待 ACK 消息: key--->" + key);
         }
         mWebSocket.send(new Gson().toJson(messageBean));
     }
@@ -239,14 +253,18 @@ public enum ChatManager {
                     Type type = new TypeToken<Map<String, String>>() {
                     }.getType();
                     Map<String, String> map = new Gson().fromJson(messageBean.getExtend(), type);
-                    String key = map.get("key").trim();
+                    String key = map.get("key");
+                    ShowLogUtil.logi("收到服务端回执: key--->" + key);
+                    ShowLogUtil.logi("解密: key--->" + CodeUtil.decode(key));
                     int status = Integer.valueOf(map.get("status"));
                     MessageBean ackMessageBean = mAckMessageMap.remove(key);
                     if (ackMessageBean != null) {
+                        ShowLogUtil.logi("修改消息状态: key--->" + key);
                         mMessageManager.setStatus(status, ackMessageBean.getFromUserId(), ackMessageBean.getToUserId(), ackMessageBean.getSendTimestamp());
                     }
                     Timer timer = mRetrySendTimerMap.remove(key);
                     if (timer != null) {
+                        ShowLogUtil.logi("取消延时任务: key--->" + key);
                         timer.cancel();
                     }
                 }
@@ -265,6 +283,7 @@ public enum ChatManager {
         public void run() {
             MessageBean ackMessageBean = mAckMessageMap.get(key);
             if (ackMessageBean != null) {
+                ShowLogUtil.logi("重新发送消息: key--->" + key + ",Thread--->" + Thread.currentThread().getName());
                 sendMessage(ackMessageBean);
             }
         }

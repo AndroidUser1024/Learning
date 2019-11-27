@@ -107,7 +107,6 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ShowLogUtil.logi("onDestroyView");
         mTvUnreadCountInTlMain.setVisibility(View.GONE);
         ChatManager.SINGLETON.removeOnMessageListener(mOnMessageListener);
     }
