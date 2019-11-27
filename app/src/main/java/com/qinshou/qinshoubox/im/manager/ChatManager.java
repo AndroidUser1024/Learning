@@ -261,11 +261,12 @@ public enum ChatManager {
                     if (ackMessageBean != null) {
                         ShowLogUtil.logi("修改消息状态: key--->" + key);
                         mMessageManager.setStatus(status, ackMessageBean.getFromUserId(), ackMessageBean.getToUserId(), ackMessageBean.getSendTimestamp());
-                    }
-                    Timer timer = mRetrySendTimerMap.remove(key);
-                    if (timer != null) {
-                        ShowLogUtil.logi("取消延时任务: key--->" + key);
-                        timer.cancel();
+                        // 取消定时任务
+                        Timer timer = mRetrySendTimerMap.remove(key);
+                        if (timer != null) {
+                            ShowLogUtil.logi("取消延时任务: key--->" + key);
+                            timer.cancel();
+                        }
                     }
                 }
             }
@@ -273,18 +274,19 @@ public enum ChatManager {
     }
 
     private class RetrySendTimerTask extends TimerTask {
-        private String key;
+        private String mKey;
 
         public RetrySendTimerTask(String key) {
-            this.key = key;
+            mKey = key;
         }
 
         @Override
         public void run() {
-            MessageBean ackMessageBean = mAckMessageMap.get(key);
+            MessageBean ackMessageBean = mAckMessageMap.get(mKey);
             if (ackMessageBean != null) {
-                ShowLogUtil.logi("重新发送消息: key--->" + key + ",Thread--->" + Thread.currentThread().getName());
-                sendMessage(ackMessageBean);
+                ShowLogUtil.logi("重新发送消息: key--->" + mKey + ",Thread--->" + Thread.currentThread().getName());
+                mWebSocket.send(new Gson().toJson(ackMessageBean));
+                mRetrySendTimerMap.get(mKey).schedule(new RetrySendTimerTask(mKey), TIME_OUT);
             }
         }
     }
