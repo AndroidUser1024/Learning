@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -55,7 +57,7 @@ public enum ChatManager {
     private UserManager mUserManager;
     private GroupChatManager mGroupChatManager;
     private Map<String, MessageBean> mAckMessageMap = new HashMap<>();
-    private List<Runnable> mRetrySendRunnableList = new ArrayList<>();
+    private Map<String, Timer> mRetrySendTimerMap = new HashMap<>();
 
     ChatManager() {
     }
@@ -158,8 +160,8 @@ public enum ChatManager {
             return;
         }
         mWebSocket.close(1000, "normal close");
-        for (Runnable runnable : mRetrySendRunnableList) {
-            mHandler.removeCallbacks(runnable);
+        for (Timer timer : mRetrySendTimerMap.values()) {
+            timer.cancel();
         }
         mUserId = 0;
         mConversationManager = null;
@@ -180,7 +182,9 @@ public enum ChatManager {
             String key = messageBean.getFromUserId() + "-" + messageBean.getToUserId() + "-" + messageBean.getType() + "-" + messageBean.getSendTimestamp();
             key = new String(Base64.encode(key.getBytes(), Base64.DEFAULT)).trim();
             mAckMessageMap.put(key, messageBean);
-            mHandler.postDelayed(new RetrySendRunnable(key), TIME_OUT);
+            Timer timer = new Timer();
+            timer.schedule(new RetrySendTimerTask(key), TIME_OUT);
+            mRetrySendTimerMap.put(key, timer);
         }
         mWebSocket.send(new Gson().toJson(messageBean));
     }
@@ -241,15 +245,19 @@ public enum ChatManager {
                     if (ackMessageBean != null) {
                         mMessageManager.setStatus(status, ackMessageBean.getFromUserId(), ackMessageBean.getToUserId(), ackMessageBean.getSendTimestamp());
                     }
+                    Timer timer = mRetrySendTimerMap.remove(key);
+                    if (timer != null) {
+                        timer.cancel();
+                    }
                 }
             }
         });
     }
 
-    private class RetrySendRunnable implements Runnable {
+    private class RetrySendTimerTask extends TimerTask {
         private String key;
 
-        public RetrySendRunnable(String key) {
+        public RetrySendTimerTask(String key) {
             this.key = key;
         }
 
@@ -259,7 +267,6 @@ public enum ChatManager {
             if (ackMessageBean != null) {
                 sendMessage(ackMessageBean);
             }
-            mRetrySendRunnableList.remove(this);
         }
     }
 
