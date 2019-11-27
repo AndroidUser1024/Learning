@@ -5,6 +5,7 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.GenericRawResults;
 import com.j256.ormlite.misc.TransactionManager;
 import com.j256.ormlite.stmt.UpdateBuilder;
+import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.bean.ConversationMessageRelBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
@@ -44,6 +45,9 @@ public class MessageDaoImpl implements IMessageDao {
     @Override
     public int insertOrUpdate(final boolean send, final MessageBean messageBean) {
         try {
+            if (mDao.idExists(messageBean.getPid())) {
+                return 0;
+            }
             TransactionManager transactionManager = new TransactionManager(mDao.getConnectionSource());
             return transactionManager.callInTransaction(new Callable<Integer>() {
                 @Override
@@ -136,7 +140,7 @@ public class MessageDaoImpl implements IMessageDao {
     public int setStatusSended(int fromUserId, int toUserId, long sendTimestamp) {
         try {
             UpdateBuilder<MessageBean, Integer> updateBuilder = mDao.updateBuilder();
-            updateBuilder.updateColumnValue("status", MessageStatus.SENDED)
+            updateBuilder.updateColumnValue("status", MessageStatus.SENDED.getValue())
                     .where()
                     .eq("fromUserId", fromUserId)
                     .and()

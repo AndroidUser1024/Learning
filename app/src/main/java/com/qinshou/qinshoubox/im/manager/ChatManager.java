@@ -3,6 +3,7 @@ package com.qinshou.qinshoubox.im.manager;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 
@@ -27,6 +28,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -51,6 +54,7 @@ public enum ChatManager {
     private UserManager mUserManager;
     private GroupChatManager mGroupChatManager;
     private Map<String, MessageBean> mAckMessageMap = new HashMap<>();
+    private List<Runnable> mRetrySendRunnableList = new ArrayList<>();
 
     ChatManager() {
     }
@@ -153,6 +157,9 @@ public enum ChatManager {
             return;
         }
         mWebSocket.close(1000, "normal close");
+        for (Runnable runnable : mRetrySendRunnableList) {
+            mHandler.removeCallbacks(runnable);
+        }
         mUserId = 0;
         mConversationManager = null;
         mMessageManager = null;
@@ -167,12 +174,12 @@ public enum ChatManager {
         if (messageBean.getType() == MessageType.CHAT.getValue()
                 || messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
             mMessageManager.insertOrUpdate(true, messageBean);
-            String key = messageBean.getFromUserId() + "-" + messageBean.getToUserId() + "-" + messageBean.getSendTimestamp();
-            ShowLogUtil.logi("key--->" + key);
-            key = new String(Base64.encode(key.getBytes(), Base64.DEFAULT));
-            ShowLogUtil.logi("messageBean--->" + messageBean.getToUserId());
-            mAckMessageMap.put(key, messageBean);
 
+            // 根据 fromUserId,toUserId,type,sendTimeStamp 拼接成的字符串做 Base64 加密,得到的加密字符串作为 key
+            String key = messageBean.getFromUserId() + "-" + messageBean.getToUserId() + "-" + messageBean.getType() + "-" + messageBean.getSendTimestamp();
+            key = new String(Base64.encode(key.getBytes(), Base64.DEFAULT)).trim();
+            mAckMessageMap.put(key, messageBean);
+            mHandler.postDelayed(new RetrySendRunnable(key), 15000);
         }
         mWebSocket.send(new Gson().toJson(messageBean));
     }
@@ -227,15 +234,31 @@ public enum ChatManager {
                     Type type = new TypeToken<Map<String, String>>() {
                     }.getType();
                     Map<String, String> map = new Gson().fromJson(messageBean.getExtend(), type);
-                    String key = map.get("key");
-                    MessageBean ackMessageBean = mAckMessageMap.get(key);
-                    ShowLogUtil.logi("key--->" + key);
+                    String key = map.get("key").trim();
+                    MessageBean ackMessageBean = mAckMessageMap.remove(key);
                     if (ackMessageBean != null) {
-                        mMessageManager.setStatusSended(ackMessageBean.getFromUserId(), ackMessageBean.getToUserId(), messageBean.getSendTimestamp());
+                        mMessageManager.setStatusSended(ackMessageBean.getFromUserId(), ackMessageBean.getToUserId(), ackMessageBean.getSendTimestamp());
                     }
                 }
             }
         });
+    }
+
+    private class RetrySendRunnable implements Runnable {
+        private String key;
+
+        public RetrySendRunnable(String key) {
+            this.key = key;
+        }
+
+        @Override
+        public void run() {
+            MessageBean ackMessageBean = mAckMessageMap.get(key);
+            if (ackMessageBean != null) {
+                sendMessage(ackMessageBean);
+            }
+            mRetrySendRunnableList.remove(this);
+        }
     }
 
     public int getUserId() {

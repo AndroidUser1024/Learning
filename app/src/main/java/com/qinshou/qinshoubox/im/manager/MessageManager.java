@@ -25,7 +25,6 @@ public class MessageManager {
     }
 
     public int insertOrUpdate(boolean send, MessageBean messageBean) {
-        Log.i("daolema", "messageBean--->" + messageBean);
         return mMessageDao.insertOrUpdate(send, messageBean);
     }
 
