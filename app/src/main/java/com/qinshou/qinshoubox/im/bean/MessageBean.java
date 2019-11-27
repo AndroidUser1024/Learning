@@ -15,7 +15,7 @@ import com.qinshou.qinshoubox.im.enums.MessageType;
  */
 @DatabaseTable(tableName = "message")
 public class MessageBean {
-    @DatabaseField(columnName = "pid",generatedId = true)
+    @DatabaseField(columnName = "pid", generatedId = true)
     private int pid;
     /**
      * 自增长 Id
@@ -210,6 +210,14 @@ public class MessageBean {
         messageBean.fromUserId = ChatManager.SINGLETON.getUserId();
         messageBean.contentType = MessageContentType.TEXT.getValue();
         messageBean.type = MessageType.CHAT.getValue();
+        return messageBean;
+    }
+
+    public static MessageBean createClientReceiptMessage(int fromUserId) {
+        MessageBean messageBean = new MessageBean();
+        messageBean.sendTimestamp = System.currentTimeMillis();
+        messageBean.fromUserId = fromUserId;
+        messageBean.type = MessageType.CLIENT_RECEIPT.getValue();
         return messageBean;
     }
 }

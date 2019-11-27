@@ -1,10 +1,9 @@
 package com.qinshou.qinshoubox.im.manager;
 
-import android.util.Log;
-
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.db.dao.IMessageDao;
 import com.qinshou.qinshoubox.im.db.dao.impl.MessageDaoImpl;
+import com.qinshou.qinshoubox.im.enums.MessageType;
 
 import java.util.List;
 
@@ -32,7 +31,11 @@ public class MessageManager {
         return mMessageDao.getList(conversationId, page, pageSize);
     }
 
-    public int setStatus(int status,int fromUserId, int toUserId, long sendTimestamp) {
-        return mMessageDao.setStatus(status,fromUserId, toUserId, sendTimestamp);
+    public int setStatus(int status, int fromUserId, int toUserId, long sendTimestamp) {
+        return mMessageDao.setStatus(status, fromUserId, toUserId, sendTimestamp);
+    }
+
+    public MessageBean getByFromUserIdAndToUserIdAndTypeAndSendTimestamp(int fromUserId, int toUserId, int type, long sendTimestamp) {
+        return mMessageDao.getByFromUserIdAndToUserIdAndTypeAndSendTimestamp(fromUserId, toUserId, type, sendTimestamp);
     }
 }

@@ -153,4 +153,21 @@ public class MessageDaoImpl implements IMessageDao {
         }
         return 0;
     }
+
+    @Override
+    public MessageBean getByFromUserIdAndToUserIdAndTypeAndSendTimestamp(int fromUserId, int toUserId, int type, long sendTimestamp) {
+        try {
+            return mDao.queryBuilder().where().eq("fromUserId", fromUserId)
+                    .and()
+                    .eq("toUserId", toUserId)
+                    .and()
+                    .eq("type", type)
+                    .and()
+                    .eq("sendTimestamp", sendTimestamp)
+                    .queryForFirst();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
