@@ -41,7 +41,7 @@ import okio.ByteString;
 public enum ChatManager {
     SINGLETON;
     private static final String TAG = "ChatManager";
-    private final int TIME_OUT = 10 * 1000;
+    private final int TIME_OUT = 30 * 1000;
     private static final String URL = "http://172.16.60.231:10086/websocket";
     //    private static final String URL = "http://192.168.1.109:10086/websocket";
     private WebSocket mWebSocket;
