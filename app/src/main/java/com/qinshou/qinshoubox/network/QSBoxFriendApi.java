@@ -8,6 +8,7 @@ import com.qinshou.okhttphelper.call.Call;
 import com.qinshou.qinshoubox.constant.IUrlConstant;
 import com.qinshou.qinshoubox.friend.bean.FriendHistoryBean;
 import com.qinshou.qinshoubox.homepage.bean.QinshouResultBean;
+import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.UserBean;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public interface QSBoxFriendApi {
             , @Field(name = "source") int source);
 
     @Post("/agreeAdd")
-    Call<QinshouResultBean<UserBean>> agreeAdd(@Field(name = "fromUserId") int fromUserId
+    Call<QinshouResultBean<Object>> agreeAdd(@Field(name = "fromUserId") int fromUserId
             , @Field(name = "toUserId") int toUserId
             , @Field(name = "remark") String remark);
 
@@ -39,7 +40,7 @@ public interface QSBoxFriendApi {
             , @Field(name = "toUserId") int toUserId);
 
     @Post("/getList")
-    Call<QinshouResultBean<List<UserBean>>> getList(@Field(name = "fromUserId") int fromUserId);
+    Call<QinshouResultBean<List<FriendBean>>> getList(@Field(name = "fromUserId") int fromUserId);
 
     @Json
     @Post("/delete")

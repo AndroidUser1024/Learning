@@ -52,13 +52,13 @@ public class UserDetailPresenter extends AbsPresenter<IUserDetailContract.IView,
 
     @Override
     public void agreeAddFriend(int fromUserId, int toUserId, String remark) {
-        getModel().agreeAddFriend(fromUserId, toUserId, remark, new Callback<UserBean>() {
+        getModel().agreeAddFriend(fromUserId, toUserId, remark, new Callback<Object>() {
             @Override
-            public void onSuccess(UserBean data) {
+            public void onSuccess(Object data) {
                 if (!isViewAttached()) {
                     return;
                 }
-                getView().agreeAddFriendSuccess(data);
+                getView().agreeAddFriendSuccess();
             }
 
             @Override

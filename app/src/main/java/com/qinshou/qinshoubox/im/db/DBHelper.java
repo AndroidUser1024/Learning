@@ -8,6 +8,7 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.bean.ConversationMessageRelBean;
+import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.bean.UserBean;
@@ -32,7 +33,7 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
         try {
-            TableUtils.createTable(connectionSource, UserBean.class);
+            TableUtils.createTable(connectionSource, FriendBean.class);
             TableUtils.createTable(connectionSource, GroupChatBean.class);
             TableUtils.createTable(connectionSource, ConversationBean.class);
             TableUtils.createTable(connectionSource, ConversationMessageRelBean.class);

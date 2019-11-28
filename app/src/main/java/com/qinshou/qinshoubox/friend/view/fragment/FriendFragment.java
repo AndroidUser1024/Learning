@@ -22,6 +22,7 @@ import com.qinshou.qinshoubox.friend.presenter.FriendPresenter;
 import com.qinshou.qinshoubox.friend.view.adapter.RcvFriendAdapter;
 import com.qinshou.qinshoubox.friend.view.adapter.RcvGroupChatAdapter;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
+import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 import com.qinshou.qinshoubox.im.bean.UserBean;
 import com.qinshou.qinshoubox.im.listener.IOnFriendStatusListener;
@@ -243,8 +244,8 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
     }
 
     @Override
-    public void getFriendListSuccess(List<UserBean> userBeanList) {
-        mRcvFriendAdapter.setDataList(userBeanList);
+    public void getFriendListSuccess(List<FriendBean> friendBeanList) {
+        mRcvFriendAdapter.setDataList(friendBeanList);
     }
 
     @Override

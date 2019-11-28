@@ -9,6 +9,7 @@ import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemClickListener;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.friend.view.fragment.UserDetailFragment;
+import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.UserBean;
 
 /**
@@ -17,20 +18,20 @@ import com.qinshou.qinshoubox.im.bean.UserBean;
  * Date: 2019/7/22 17:44
  * Description:联系人列表的适配器
  */
-public class RcvFriendAdapter extends RcvBaseAdapter<UserBean> {
+public class RcvFriendAdapter extends RcvBaseAdapter<FriendBean> {
 
     public RcvFriendAdapter(Context context) {
         super(context, R.layout.item_rcv_friend);
-        setOnItemClickListener(new IOnItemClickListener<UserBean>() {
+        setOnItemClickListener(new IOnItemClickListener<FriendBean>() {
             @Override
-            public void onItemClick(BaseViewHolder holder, UserBean itemData, int position) {
+            public void onItemClick(BaseViewHolder holder, FriendBean itemData, int position) {
                 UserDetailFragment.start(getContext(), itemData.getUsername());
             }
         });
     }
 
     @Override
-    public void bindViewHolder(final BaseViewHolder baseViewHolder, UserBean itemData, int position) {
+    public void bindViewHolder(final BaseViewHolder baseViewHolder, FriendBean itemData, int position) {
         // 头像
         ImageLoadUtil.SINGLETON.loadImage(getContext(), itemData.getHeadImgSmall(), baseViewHolder.getImageView(R.id.iv_head_img));
         // 昵称

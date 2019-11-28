@@ -18,7 +18,7 @@ import com.qinshou.qinshoubox.base.QSActivity;
 import java.util.ArrayList;
 
 
-public class WebActivity extends QSActivity {
+public class WebActivity extends QSActivity<WebPresenter> implements IWebContract.IView {
     private static final String URL = "url";
     private WebView webView;
     private ProgressBar pbLoadProgress;
@@ -40,12 +40,12 @@ public class WebActivity extends QSActivity {
 //                StatusBarUtil.appendStatusBarPadding(rootView, rootView.getMeasuredHeight());
 //            }
 //        });
-        mRefreshLayout = (RefreshLayout) findViewByID(R.id.refresh_layout);
+        mRefreshLayout = findViewByID(R.id.refresh_layout);
         mRefreshLayout.canLoadMore(false);
 //        mRefreshLayout.setRefreshHeader(new ClassicsHeader(getContext()));
 //
-        webView = (WebView) findViewByID(R.id.web_view);
-        pbLoadProgress = (ProgressBar) findViewByID(R.id.pb_load_progress);
+        webView = findViewByID(R.id.web_view);
+        pbLoadProgress = findViewByID(R.id.pb_load_progress);
         WebSettings webSettings = webView.getSettings();
         //设置自适应屏幕，两者合用
         webSettings.setUseWideViewPort(true); //将图片调整到适合webview的大小

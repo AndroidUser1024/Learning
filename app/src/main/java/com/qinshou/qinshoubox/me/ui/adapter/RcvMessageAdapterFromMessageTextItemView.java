@@ -4,12 +4,14 @@ import android.content.Context;
 
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
+import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.bean.UserBean;
-import com.qinshou.qinshoubox.im.db.dao.IUserDao;
-import com.qinshou.qinshoubox.im.db.dao.impl.UserDaoImpl;
+import com.qinshou.qinshoubox.im.db.dao.IFriendDao;
+import com.qinshou.qinshoubox.im.db.dao.impl.FriendDaoImpl;
 import com.qinshou.qinshoubox.im.enums.MessageContentType;
 import com.qinshou.qinshoubox.R;
+import com.qinshou.qinshoubox.im.manager.ChatManager;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 
@@ -20,11 +22,9 @@ import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
  * Description:收到的消息,消息类型为普通文本
  */
 public class RcvMessageAdapterFromMessageTextItemView extends AbsRcvMessageAdapterFromMessageItemView {
-    private IUserDao mUserDao;
 
     public RcvMessageAdapterFromMessageTextItemView(Context context) {
         super(context, R.layout.item_rcv_message_from_message_text);
-        mUserDao = new UserDaoImpl();
     }
 
     @Override
@@ -38,9 +38,9 @@ public class RcvMessageAdapterFromMessageTextItemView extends AbsRcvMessageAdapt
     public void bindViewHolder(final BaseViewHolder baseViewHolder, final MessageBean messageBean, int i) {
         super.bindViewHolder(baseViewHolder, messageBean, i);
         // 头像
-        UserBean userBean = mUserDao.getById(messageBean.getFromUserId());
-        if (userBean != null) {
-            ImageLoadUtil.SINGLETON.loadImage(getContext(), userBean.getHeadImgSmall(), baseViewHolder.getImageView(R.id.iv_head_img));
+        FriendBean friendBean = ChatManager.SINGLETON.getFriendManager().getUser(messageBean.getFromUserId());
+        if (friendBean != null) {
+            ImageLoadUtil.SINGLETON.loadImage(getContext(), friendBean.getHeadImgSmall(), baseViewHolder.getImageView(R.id.iv_head_img));
         }
         // 消息内容
         baseViewHolder.setTvText(R.id.tv_content, messageBean.getContent());

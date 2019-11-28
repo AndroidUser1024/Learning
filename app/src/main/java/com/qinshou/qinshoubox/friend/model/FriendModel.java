@@ -3,6 +3,7 @@ package com.qinshou.qinshoubox.friend.model;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.friend.contract.IFriendContract;
 import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
+import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 import com.qinshou.qinshoubox.im.bean.UserBean;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
@@ -31,10 +32,10 @@ public class FriendModel implements IFriendContract.IModel {
     }
 
     @Override
-    public void getFriendList(final QSCallback<List<UserBean>> qsCallback) {
+    public void getFriendList(final QSCallback<List<FriendBean>> qsCallback) {
         if (!UserStatusManager.SINGLETON.isLogin()) {
             return;
         }
-        ChatManager.SINGLETON.getUserManager().getFriendList(qsCallback);
+        ChatManager.SINGLETON.getFriendManager().getFriendList(qsCallback);
     }
 }

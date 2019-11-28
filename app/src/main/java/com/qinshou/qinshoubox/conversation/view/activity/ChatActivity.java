@@ -28,6 +28,7 @@ import com.qinshou.commonmodule.util.permissionutil.IOnRequestPermissionResultCa
 import com.qinshou.commonmodule.util.permissionutil.PermissionUtil;
 import com.qinshou.commonmodule.widget.RefreshLayout;
 import com.qinshou.commonmodule.widget.TitleBar;
+import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.enums.MessageContentType;
 import com.qinshou.qinshoubox.im.enums.MessageType;
@@ -36,7 +37,7 @@ import com.qinshou.qinshoubox.im.listener.IOnMessageListener;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.constant.IConstant;
-import com.qinshou.qinshoubox.im.db.dao.impl.UserDaoImpl;
+import com.qinshou.qinshoubox.im.db.dao.impl.FriendDaoImpl;
 import com.qinshou.qinshoubox.listener.ClearErrorInfoTextWatcher;
 import com.qinshou.qinshoubox.im.bean.UserBean;
 import com.qinshou.qinshoubox.conversation.contract.IChatContract;
@@ -470,12 +471,12 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
         if (mToUserId == 0) {
             return;
         }
-        UserBean userBean = new UserDaoImpl().getById(mToUserId);
-        if (userBean != null) {
+        FriendBean friendBean = ChatManager.SINGLETON.getFriendManager().getUser(mToUserId);
+        if (friendBean != null) {
             // 对方的昵称
-            mTitleBar.setTitleText(TextUtils.isEmpty(userBean.getRemark())
-                    ? userBean.getNickname()
-                    : userBean.getRemark());
+            mTitleBar.setTitleText(TextUtils.isEmpty(friendBean.getRemark())
+                    ? friendBean.getNickname()
+                    : friendBean.getRemark());
         }
         // 加载消息列表
         getPresenter().getMessageList(MessageType.CHAT.getValue(), mToUserId, mPage, IConstant.PAGE_SIZE);

@@ -2,11 +2,8 @@ package com.qinshou.qinshoubox.im.manager;
 
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
-import com.qinshou.qinshoubox.im.bean.UserBean;
 import com.qinshou.qinshoubox.im.db.dao.IGroupChatDao;
-import com.qinshou.qinshoubox.im.db.dao.IUserDao;
 import com.qinshou.qinshoubox.im.db.dao.impl.GroupChatDaoImpl;
-import com.qinshou.qinshoubox.im.db.dao.impl.UserDaoImpl;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxGroupChatApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;

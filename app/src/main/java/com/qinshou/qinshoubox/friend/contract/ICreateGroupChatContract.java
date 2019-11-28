@@ -5,8 +5,10 @@ import com.qinshou.commonmodule.base.IBaseModel;
 import com.qinshou.commonmodule.base.IBaseView;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.friend.view.fragment.CreateGroupChatFragment;
+import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 import com.qinshou.qinshoubox.im.bean.UserBean;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 import java.util.List;
 
@@ -18,13 +20,13 @@ import java.util.List;
  */
 public interface ICreateGroupChatContract {
     interface IModel extends IBaseModel {
-        void getFriendList(int fromUserId, Callback<List<UserBean>> callback);
+        void getFriendList(int fromUserId, QSCallback<List<FriendBean>> qsCallback);
 
         void createGroupChat(int ownerId, List<Integer> memberIdList, String nickname, String headImg, Callback<GroupChatBean> callback);
     }
 
     interface IView extends IBaseView {
-        void getFriendListSuccess(List<UserBean> userBeanList);
+        void getFriendListSuccess(List<FriendBean> userBeanList);
 
         void getFriendListFailure(Exception e);
 

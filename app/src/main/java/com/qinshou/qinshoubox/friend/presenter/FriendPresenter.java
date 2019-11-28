@@ -2,6 +2,7 @@ package com.qinshou.qinshoubox.friend.presenter;
 
 import com.qinshou.commonmodule.base.AbsPresenter;
 import com.qinshou.okhttphelper.callback.Callback;
+import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.db.dao.impl.GroupChatDaoImpl;
 import com.qinshou.qinshoubox.friend.contract.IFriendContract;
 import com.qinshou.qinshoubox.friend.model.FriendModel;
@@ -47,9 +48,9 @@ public class FriendPresenter extends AbsPresenter<IFriendContract.IView, IFriend
 
     @Override
     public void getFriendList() {
-        getModel().getFriendList(new QSCallback<List<UserBean>>() {
+        getModel().getFriendList(new QSCallback<List<FriendBean>>() {
             @Override
-            public void onSuccess(List<UserBean> data) {
+            public void onSuccess(List<FriendBean> data) {
                 if (!isViewAttached()) {
                     return;
                 }

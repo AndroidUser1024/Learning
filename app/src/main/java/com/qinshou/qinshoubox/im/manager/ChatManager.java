@@ -53,6 +53,7 @@ public enum ChatManager {
     private MessageManager mMessageManager;
     private UserManager mUserManager;
     private GroupChatManager mGroupChatManager;
+    private FriendManager mFriendManager;
     private Map<String, MessageBean> mAckMessageMap = new HashMap<>();
     private Map<String, Timer> mRetrySendTimerMap = new HashMap<>();
 
@@ -125,6 +126,8 @@ public enum ChatManager {
         mUserManager = new UserManager();
         // 创建群组管理者
         mGroupChatManager = new GroupChatManager();
+        // 创建好友管理者
+        mFriendManager = new FriendManager();
         mHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -167,6 +170,7 @@ public enum ChatManager {
         mMessageManager = null;
         mUserManager = null;
         mGroupChatManager = null;
+        mFriendManager = null;
     }
 
     public void sendMessage(MessageBean messageBean) {
@@ -320,6 +324,10 @@ public enum ChatManager {
 
     public GroupChatManager getGroupChatManager() {
         return mGroupChatManager;
+    }
+
+    public FriendManager getFriendManager() {
+        return mFriendManager;
     }
 
     public void addOnMessageListener(IOnMessageListener onMessageListener) {

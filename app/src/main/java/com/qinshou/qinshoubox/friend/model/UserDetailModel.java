@@ -24,9 +24,9 @@ public class UserDetailModel implements IUserDetailContract.IModel {
     }
 
     @Override
-    public void agreeAddFriend(int fromUserId, int toUserId, String remark, Callback<UserBean> callback) {
+    public void agreeAddFriend(int fromUserId, int toUserId, String remark, Callback<Object> callback) {
         OkHttpHelperForQSBoxFriendApi.SINGLETON.agreeAdd(fromUserId, toUserId, remark)
-                .transform(new QSApiTransformer<UserBean>())
+                .transform(new QSApiTransformer<Object>())
                 .enqueue(callback);
     }
 

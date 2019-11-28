@@ -1,12 +1,9 @@
 package com.qinshou.qinshoubox.friend.view.fragment;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -25,7 +22,6 @@ import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.friend.view.dialog.DeleteContactDialog;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
-import com.qinshou.qinshoubox.im.db.dao.impl.UserDaoImpl;
 import com.qinshou.qinshoubox.friend.contract.IUserDetailContract;
 import com.qinshou.qinshoubox.friend.presenter.UserDetailPresenter;
 import com.qinshou.qinshoubox.friend.view.activity.SetRemarkActivity;
@@ -58,6 +54,7 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
     private TextView mTvSignature;
     private TextView mTvSource;
     private Button mBtnAddFriend;
+    private UserBean mUserBean;
 
     @Override
     public int getLayoutId() {
@@ -196,6 +193,7 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
 
     @Override
     public void showWaitAcceptUI(final UserBean userBean) {
+        mUserBean = userBean;
         setData(userBean);
         mLlAdditionalMsg.setVisibility(View.VISIBLE);
         mBtnAddFriend.setText(getString(R.string.user_detail_btn_add_friend_text_3));
@@ -263,12 +261,12 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
     }
 
     @Override
-    public void agreeAddFriendSuccess(final UserBean userBean) {
+    public void agreeAddFriendSuccess() {
         mBtnAddFriend.setText(getString(R.string.user_detail_btn_add_friend_text_2));
         mBtnAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ChatActivity.start(getContext(), userBean.getId());
+                ChatActivity.start(getContext(), mUserBean.getId());
             }
         });
     }

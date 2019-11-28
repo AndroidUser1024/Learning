@@ -18,7 +18,7 @@ public interface IUserDetailContract {
     interface IModel extends IBaseModel {
         void getUserDetail(String keyword, QSCallback<UserBean> qsCallback);
 
-        void agreeAddFriend(int fromUserId, int toUserId, String remark, Callback<UserBean> callback);
+        void agreeAddFriend(int fromUserId, int toUserId, String remark, Callback<Object> callback);
 
         void deleteFriend(int toUserId, Callback<Object> callback);
     }
@@ -32,7 +32,7 @@ public interface IUserDetailContract {
 
         void getUserDetailFailure(Exception e);
 
-        void agreeAddFriendSuccess(UserBean userBean);
+        void agreeAddFriendSuccess();
 
         void agreeAddFriendFailure(Exception e);
 

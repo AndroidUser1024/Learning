@@ -99,7 +99,7 @@ public class HomepageFragment extends QSFragment<HomepagePresenter> implements I
 
         mRefreshLayout = findViewByID(R.id.refresh_layout);
         RecyclerView rvNews = findViewByID(R.id.rv_news);
-        //RecyclerView 去除焦点
+        // RecyclerView 去除焦点
         rvNews.setFocusableInTouchMode(false);
         rvNews.setLayoutManager(new LinearLayoutManager(getContext()));
         rvNews.addItemDecoration(new DividerDecoration());

@@ -9,17 +9,14 @@ import com.j256.ormlite.table.DatabaseTable;
  * Date: 2019/8/26 9:33
  * Description:用户实体类
  */
-@DatabaseTable(tableName = "user")
 public class UserBean {
     /**
      * Id
      */
-    @DatabaseField(columnName = "id", id = true)
     private int id;
     /**
      * 用户名
      */
-    @DatabaseField(columnName = "username")
     private String username;
     /**
      * 密码
@@ -28,17 +25,14 @@ public class UserBean {
     /**
      * 昵称
      */
-    @DatabaseField(columnName = "nickname")
     private String nickname;
     /**
      * 头像
      */
-    @DatabaseField(columnName = "headImg")
     private String headImg;
     /**
      * 头像,缩略图
      */
-    @DatabaseField(columnName = "headImgSmall")
     private String headImgSmall;
     /**
      * 手机号
@@ -89,7 +83,6 @@ public class UserBean {
     /**
      * 备注
      */
-    @DatabaseField(columnName = "remark")
     private String remark;
     /**
      * 好友申请的附加信息
