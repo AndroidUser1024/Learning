@@ -46,4 +46,10 @@ public interface QSBoxFriendApi {
     @Post("/delete")
     Call<QinshouResultBean<Object>> delete(@Field(name = "fromUserId") int fromUserId
             , @Field(name = "toUserId") int toUserId);
+
+    @Json
+    @Post("/setRemark")
+    Call<QinshouResultBean<Object>> setRemark(@Field(name = "fromUserId") int fromUserId
+            , @Field(name = "toUserId") int toUserId
+            , @Field(name = "remark") String remark);
 }

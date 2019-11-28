@@ -15,7 +15,7 @@ import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 public class UserManager {
 
     public void getUser(String keyword, final QSCallback<UserBean> qsCallback) {
-        OkHttpHelperForQSBoxUserApi.SINGLETON.getUserDetail(ChatManager.SINGLETON.getUserId(), keyword)
+        OkHttpHelperForQSBoxUserApi.SINGLETON.getUserDetail(IMClient.SINGLETON.getUserId(), keyword)
                 .transform(new QSApiTransformer<UserBean>())
                 .enqueue(new Callback<UserBean>() {
                     @Override

@@ -17,7 +17,7 @@ import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.util.SoftKeyboardUtil;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
-import com.qinshou.qinshoubox.im.manager.ChatManager;
+import com.qinshou.qinshoubox.im.manager.IMClient;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.constant.IConstant;
@@ -104,7 +104,7 @@ public class LoginOrRegisterFragment extends QSFragment<LoginOrRegisterPresenter
     public void loginSuccess(final UserBean userBean) {
         ShowLogUtil.logi("loginSuccess" + " : " + "userBean--->" + userBean);
         // 连接聊天服务
-        ChatManager.SINGLETON.connect(getContext(), userBean.getId(), new QSCallback<Void>() {
+        IMClient.SINGLETON.connect(getContext(), userBean.getId(), new QSCallback<Void>() {
             @Override
             public void onSuccess(Void data) {
                 UserStatusManager.SINGLETON.login(getContext(), userBean);

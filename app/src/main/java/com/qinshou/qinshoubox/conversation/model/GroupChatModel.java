@@ -4,7 +4,7 @@ package com.qinshou.qinshoubox.conversation.model;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
-import com.qinshou.qinshoubox.im.manager.ChatManager;
+import com.qinshou.qinshoubox.im.manager.IMClient;
 import com.qinshou.qinshoubox.conversation.contract.IGroupChatContract;
 import com.qinshou.qinshoubox.conversation.view.activity.GroupChatActivity;
 
@@ -20,11 +20,11 @@ import java.util.List;
 public class GroupChatModel implements IGroupChatContract.IModel {
     @Override
     public void getMessageList(int type, int toUserId, int page, int pageSize, QSCallback<List<MessageBean>> qsCallback) {
-        ConversationBean conversationBean = ChatManager.SINGLETON.getConversationManager().getByTypeAndToUserId(type, toUserId);
+        ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().getByTypeAndToUserId(type, toUserId);
         if (conversationBean == null) {
             return;
         }
-        List<MessageBean> messageBeanList = ChatManager.SINGLETON.getMessageManager().getList(conversationBean.getId(), page, pageSize);
+        List<MessageBean> messageBeanList = IMClient.SINGLETON.getMessageManager().getList(conversationBean.getId(), page, pageSize);
         qsCallback.onSuccess(messageBeanList);
     }
 }

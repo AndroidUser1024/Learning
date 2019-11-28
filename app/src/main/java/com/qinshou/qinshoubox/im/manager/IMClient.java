@@ -38,9 +38,9 @@ import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;
 
-public enum ChatManager {
+public enum IMClient {
     SINGLETON;
-    private static final String TAG = "ChatManager";
+    private static final String TAG = "IMClient";
     private final int TIME_OUT = 30 * 1000;
     private static final String URL = "http://172.16.60.231:10086/websocket";
     //    private static final String URL = "http://192.168.1.109:10086/websocket";
@@ -54,10 +54,50 @@ public enum ChatManager {
     private UserManager mUserManager;
     private GroupChatManager mGroupChatManager;
     private FriendManager mFriendManager;
-    private Map<String, MessageBean> mAckMessageMap = new HashMap<>();
-    private Map<String, Timer> mRetrySendTimerMap = new HashMap<>();
+//    private Map<String, MessageBean> mAckMessageMap = new HashMap<>();
+//    private Map<String, Timer> mRetrySendTimerMap = new HashMap<>();
 
-    ChatManager() {
+    IMClient() {
+    }
+
+    private void connectSuccess(Context context, final int userId, final QSCallback<Void> qsCallback) {
+        mUserId = userId;
+        // 初始化数据库
+        DBHelper.init(context, "" + userId);
+        // 创建会话管理者
+        mConversationManager = new ConversationManager();
+        // 创建消息管理者
+        mMessageManager = new MessageManager();
+        // 创建用户管理者
+        mUserManager = new UserManager();
+        // 创建群组管理者
+        mGroupChatManager = new GroupChatManager();
+        // 创建好友管理者
+        mFriendManager = new FriendManager();
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                qsCallback.onSuccess(null);
+            }
+        });
+        OkHttpHelperForQSBoxOfflineApi.SINGLETON.getOfflineMessageList(userId)
+                .transform(new QSApiTransformer<List<MessageBean>>())
+                .enqueue(new Callback<List<MessageBean>>() {
+                    @Override
+                    public void onSuccess(List<MessageBean> data) {
+                        for (MessageBean messageBean : data) {
+                            handleMessage(messageBean);
+                        }
+                        // 通知后台删除离线消息
+                        OkHttpHelperForQSBoxOfflineApi.SINGLETON.deleteOfflineMessageList(userId)
+                                .enqueue(null);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+
+                    }
+                });
     }
 
     public void connect(final Context context, final int userId, final QSCallback<Void> qsCallback) {
@@ -114,57 +154,17 @@ public enum ChatManager {
                 });
     }
 
-    private void connectSuccess(Context context, final int userId, final QSCallback<Void> qsCallback) {
-        mUserId = userId;
-        // 初始化数据库
-        DBHelper.init(context, "" + userId);
-        // 创建会话管理者
-        mConversationManager = new ConversationManager();
-        // 创建消息管理者
-        mMessageManager = new MessageManager();
-        // 创建用户管理者
-        mUserManager = new UserManager();
-        // 创建群组管理者
-        mGroupChatManager = new GroupChatManager();
-        // 创建好友管理者
-        mFriendManager = new FriendManager();
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                qsCallback.onSuccess(null);
-            }
-        });
-        OkHttpHelperForQSBoxOfflineApi.SINGLETON.getOfflineMessageList(userId)
-                .transform(new QSApiTransformer<List<MessageBean>>())
-                .enqueue(new Callback<List<MessageBean>>() {
-                    @Override
-                    public void onSuccess(List<MessageBean> data) {
-                        for (MessageBean messageBean : data) {
-                            handleMessage(messageBean);
-                        }
-                        // 通知后台删除离线消息
-                        OkHttpHelperForQSBoxOfflineApi.SINGLETON.deleteOfflineMessageList(userId)
-                                .enqueue(null);
-                    }
-
-                    @Override
-                    public void onFailure(Exception e) {
-
-                    }
-                });
-    }
-
 
     public void disconnect() {
         if (mWebSocket == null) {
             return;
         }
         mWebSocket.close(1000, "normal close");
-        for (Timer timer : mRetrySendTimerMap.values()) {
-            timer.cancel();
-        }
-        mAckMessageMap.clear();
-        mRetrySendTimerMap.clear();
+//        for (Timer timer : mRetrySendTimerMap.values()) {
+//            timer.cancel();
+//        }
+//        mAckMessageMap.clear();
+//        mRetrySendTimerMap.clear();
         mUserId = 0;
         mConversationManager = null;
         mMessageManager = null;
@@ -181,18 +181,18 @@ public enum ChatManager {
                 || messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
             mMessageManager.insertOrUpdate(true, messageBean);
 
-            // 创建一个唯一索引作为 ACK Key,将其 json 串做 Base64 加密,得到的加密字符串作为 key
-            AckKeyBean ackKeyBean = new AckKeyBean(mUserId
-                    , messageBean.getFromUserId()
-                    , messageBean.getToUserId()
-                    , messageBean.getType()
-                    , messageBean.getSendTimestamp());
-            String key = CodeUtil.encode(new Gson().toJson(ackKeyBean));
-            mAckMessageMap.put(key, messageBean);
-            // 设置一个定时任务,一定时间后如果还没有收到服务端回执,则重新发送
-            Timer timer = new Timer();
-            timer.schedule(new RetrySendTimerTask(key), TIME_OUT);
-            mRetrySendTimerMap.put(key, timer);
+//            // 创建一个唯一索引作为 ACK Key,将其 json 串做 Base64 加密,得到的加密字符串作为 key
+//            AckKeyBean ackKeyBean = new AckKeyBean(mUserId
+//                    , messageBean.getFromUserId()
+//                    , messageBean.getToUserId()
+//                    , messageBean.getType()
+//                    , messageBean.getSendTimestamp());
+//            String key = CodeUtil.encode(new Gson().toJson(ackKeyBean));
+//            mAckMessageMap.put(key, messageBean);
+//            // 设置一个定时任务,一定时间后如果还没有收到服务端回执,则重新发送
+//            Timer timer = new Timer();
+//            timer.schedule(new RetrySendTimerTask(key), TIME_OUT);
+//            mRetrySendTimerMap.put(key, timer);
         }
         mWebSocket.send(new Gson().toJson(messageBean));
     }
@@ -270,41 +270,41 @@ public enum ChatManager {
                         }
                     }
                 } else if (messageBean.getType() == MessageType.SERVER_RECEIPT.getValue()) {
-                    Type type = new TypeToken<Map<String, String>>() {
-                    }.getType();
-                    Map<String, String> map = new Gson().fromJson(messageBean.getExtend(), type);
-                    String key = map.get("key");
-                    int status = Integer.valueOf(map.get("status"));
-                    MessageBean ackMessageBean = mAckMessageMap.remove(key);
-                    if (ackMessageBean != null) {
-                        mMessageManager.setStatus(status, ackMessageBean.getFromUserId(), ackMessageBean.getToUserId(), ackMessageBean.getSendTimestamp());
-                        // 取消定时任务
-                        Timer timer = mRetrySendTimerMap.remove(key);
-                        if (timer != null) {
-                            timer.cancel();
-                        }
-                    }
+//                    Type type = new TypeToken<Map<String, String>>() {
+//                    }.getType();
+//                    Map<String, String> map = new Gson().fromJson(messageBean.getExtend(), type);
+//                    String key = map.get("key");
+//                    int status = Integer.valueOf(map.get("status"));
+//                    MessageBean ackMessageBean = mAckMessageMap.remove(key);
+//                    if (ackMessageBean != null) {
+//                        mMessageManager.setStatus(status, ackMessageBean.getFromUserId(), ackMessageBean.getToUserId(), ackMessageBean.getSendTimestamp());
+//                        // 取消定时任务
+//                        Timer timer = mRetrySendTimerMap.remove(key);
+//                        if (timer != null) {
+//                            timer.cancel();
+//                        }
+//                    }
                 }
             }
         });
     }
 
-    private class RetrySendTimerTask extends TimerTask {
-        private String mKey;
-
-        public RetrySendTimerTask(String key) {
-            mKey = key;
-        }
-
-        @Override
-        public void run() {
-            MessageBean ackMessageBean = mAckMessageMap.get(mKey);
-            if (ackMessageBean != null) {
-                mWebSocket.send(new Gson().toJson(ackMessageBean));
-                mRetrySendTimerMap.get(mKey).schedule(new RetrySendTimerTask(mKey), TIME_OUT);
-            }
-        }
-    }
+//    private class RetrySendTimerTask extends TimerTask {
+//        private String mKey;
+//
+//        public RetrySendTimerTask(String key) {
+//            mKey = key;
+//        }
+//
+//        @Override
+//        public void run() {
+//            MessageBean ackMessageBean = mAckMessageMap.get(mKey);
+//            if (ackMessageBean != null) {
+//                mWebSocket.send(new Gson().toJson(ackMessageBean));
+//                mRetrySendTimerMap.get(mKey).schedule(new RetrySendTimerTask(mKey), TIME_OUT);
+//            }
+//        }
+//    }
 
     public int getUserId() {
         return mUserId;

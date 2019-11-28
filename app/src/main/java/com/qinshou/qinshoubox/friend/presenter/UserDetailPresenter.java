@@ -29,15 +29,7 @@ public class UserDetailPresenter extends AbsPresenter<IUserDetailContract.IView,
                 if (!isViewAttached()) {
                     return;
                 }
-                if (data.getFriendStatus() == 1) {
-                    getView().showFriendUI(data);
-                } else {
-                    if (data.getReceive() == 1) {
-                        getView().showWaitAcceptUI(data);
-                    } else {
-                        getView().showNotFriendUI(data);
-                    }
-                }
+                getView().getUserDetailSuccess(data);
             }
 
             @Override
@@ -88,6 +80,27 @@ public class UserDetailPresenter extends AbsPresenter<IUserDetailContract.IView,
                     return;
                 }
                 getView().deleteFriendFailure(e);
+            }
+        });
+    }
+
+    @Override
+    public void setRemark(int toUserId, String remark) {
+        getModel().setRemark(toUserId, remark, new QSCallback<Object>() {
+            @Override
+            public void onSuccess(Object data) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().setRemarkSuccess();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().setRemarkFailure(e);
             }
         });
     }

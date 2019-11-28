@@ -18,7 +18,7 @@ import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.enums.MessageType;
 import com.qinshou.qinshoubox.im.listener.IOnMessageListener;
-import com.qinshou.qinshoubox.im.manager.ChatManager;
+import com.qinshou.qinshoubox.im.manager.IMClient;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.conversation.contract.IConversationContract;
@@ -56,7 +56,7 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
             } else if (messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
                 toUserId = messageBean.getToUserId();
             }
-            ConversationBean conversationBean = ChatManager.SINGLETON.getConversationManager().getByTypeAndToUserId(messageBean.getType(), toUserId);
+            ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().getByTypeAndToUserId(messageBean.getType(), toUserId);
             List<ConversationBean> conversationBeanList = mRcvConversationAdapter.getDataList();
             boolean contains = false;
             int index = 0;
@@ -108,7 +108,7 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
     public void onDestroyView() {
         super.onDestroyView();
         mTvUnreadCountInTlMain.setVisibility(View.GONE);
-        ChatManager.SINGLETON.removeOnMessageListener(mOnMessageListener);
+        IMClient.SINGLETON.removeOnMessageListener(mOnMessageListener);
     }
 
     @Override
@@ -142,7 +142,7 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
     @Override
     public void setListener() {
         // 设置聊天监听器,监听收到的消息
-        ChatManager.SINGLETON.addOnMessageListener(mOnMessageListener);
+        IMClient.SINGLETON.addOnMessageListener(mOnMessageListener);
         mRcvConversationAdapter.setOnItemClickListener(new IOnItemClickListener<ConversationBean>() {
             @Override
             public void onItemClick(BaseViewHolder holder, ConversationBean itemData, int position) {
@@ -152,7 +152,7 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
                     GroupChatActivity.start(getContext(), itemData.getToUserId());
                 }
                 // 重置未读数
-                ChatManager.SINGLETON.getConversationManager().resetUnreadCount(itemData.getId());
+                IMClient.SINGLETON.getConversationManager().resetUnreadCount(itemData.getId());
                 itemData.setUnreadCount(0);
                 mRcvConversationAdapter.notifyItemChanged(position);
                 showMessageUnreadCount();
@@ -178,7 +178,7 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
     }
 
     private void showMessageUnreadCount() {
-        int totalUnreadCount = ChatManager.SINGLETON.getConversationManager().getTotalUnreadCount();
+        int totalUnreadCount = IMClient.SINGLETON.getConversationManager().getTotalUnreadCount();
         if (totalUnreadCount > 0) {
             mTvUnreadCountInTlMain.setVisibility(View.VISIBLE);
             mTvUnreadCountInTlMain.setText("" + totalUnreadCount);

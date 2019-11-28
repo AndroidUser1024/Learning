@@ -5,15 +5,13 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.GenericRawResults;
 import com.j256.ormlite.misc.TransactionManager;
 import com.j256.ormlite.stmt.UpdateBuilder;
-import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.bean.ConversationMessageRelBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.db.DBHelper;
 import com.qinshou.qinshoubox.im.db.dao.IConversationMessageRelDao;
 import com.qinshou.qinshoubox.im.db.dao.IMessageDao;
-import com.qinshou.qinshoubox.im.enums.MessageStatus;
-import com.qinshou.qinshoubox.im.manager.ChatManager;
+import com.qinshou.qinshoubox.im.manager.IMClient;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -61,7 +59,7 @@ public class MessageDaoImpl implements IMessageDao {
                         toUserId = messageBean.getFromUserId();
                         lastMsgTime = messageBean.getReceiveTimestamp();
                     }
-                    ConversationBean conversationBean = ChatManager.SINGLETON.getConversationManager().getByTypeAndToUserId(messageBean.getType(), toUserId);
+                    ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().getByTypeAndToUserId(messageBean.getType(), toUserId);
                     if (conversationBean == null) {
                         conversationBean = new ConversationBean();
                     }
@@ -73,7 +71,7 @@ public class MessageDaoImpl implements IMessageDao {
                     if (!send) {
                         conversationBean.setUnreadCount(conversationBean.getUnreadCount() + 1);
                     }
-                    ChatManager.SINGLETON.getConversationManager().insertOrUpdate(conversationBean);
+                    IMClient.SINGLETON.getConversationManager().insertOrUpdate(conversationBean);
 
                     mDao.createOrUpdate(messageBean);
                     mConversationMessageRelDao.insertOrUpdate(new ConversationMessageRelBean(conversationBean.getId(), messageBean.getPid()));

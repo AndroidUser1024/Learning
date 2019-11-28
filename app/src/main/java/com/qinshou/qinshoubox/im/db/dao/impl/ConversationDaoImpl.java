@@ -54,17 +54,17 @@ public class ConversationDaoImpl implements IConversationDao {
                     " conversation.lastMsgContentType," +
                     " conversation.lastMsgTimestamp ," +
                     " conversation.unreadCount," +
-                    " user.headImgSmall," +
-                    " user.nickname," +
-                    " user.remark," +
+                    " friend.headImgSmall," +
+                    " friend.nickname," +
+                    " friend.remark," +
                     " group_chat.headImgSmall," +
                     " group_chat.nickname," +
                     " group_chat.nicknameDefault" +
                     " FROM" +
                     " conversation" +
                     " LEFT OUTER JOIN" +
-                    " user" +
-                    " ON conversation.type=2001 AND conversation.toUserId=user.id" +
+                    " friend" +
+                    " ON conversation.type=2001 AND conversation.toUserId=friend.id" +
                     " LEFT OUTER JOIN" +
                     " group_chat" +
                     " ON conversation.type=3001 AND conversation.toUserId=group_chat.id" +
@@ -123,17 +123,17 @@ public class ConversationDaoImpl implements IConversationDao {
                     " conversation.lastMsgContentType," +
                     " conversation.lastMsgTimestamp ," +
                     " conversation.unreadCount," +
-                    " user.headImgSmall," +
-                    " user.nickname," +
-                    " user.remark," +
+                    " friend.headImgSmall," +
+                    " friend.nickname," +
+                    " friend.remark," +
                     " group_chat.headImgSmall," +
                     " group_chat.nickname," +
                     " group_chat.nicknameDefault" +
                     " FROM" +
                     " conversation" +
                     " LEFT OUTER JOIN" +
-                    " user" +
-                    " ON conversation.type=2001 AND conversation.toUserId=user.id" +
+                    " friend" +
+                    " ON conversation.type=2001 AND conversation.toUserId=friend.id" +
                     " LEFT OUTER JOIN" +
                     " group_chat" +
                     " ON conversation.type=3001 AND conversation.toUserId=group_chat.id" +

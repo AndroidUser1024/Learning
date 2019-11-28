@@ -2,8 +2,12 @@ package com.qinshou.qinshoubox.friend.view.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.qinshou.commonmodule.widget.TitleBar;
 import com.qinshou.qinshoubox.R;
@@ -26,6 +30,10 @@ public class SetRemarkActivity extends QSActivity<SetRemarkPresenter> implements
      * 备注输入框
      */
     private EditText mEtRemark;
+    /**
+     * 完成按钮
+     */
+    private TextView mTvFinish;
 
     @Override
     public int getLayoutId() {
@@ -34,6 +42,7 @@ public class SetRemarkActivity extends QSActivity<SetRemarkPresenter> implements
 
     @Override
     public void initView() {
+        mTvFinish = findViewByID(R.id.tv_finish);
         mEtRemark = findViewByID(R.id.et_remark);
     }
 
@@ -45,7 +54,7 @@ public class SetRemarkActivity extends QSActivity<SetRemarkPresenter> implements
                 finish();
             }
         });
-        findViewByID(R.id.tv_finish).setOnClickListener(new View.OnClickListener() {
+        mTvFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String remark = mEtRemark.getText().toString().trim();
@@ -53,6 +62,22 @@ public class SetRemarkActivity extends QSActivity<SetRemarkPresenter> implements
                 intent.putExtra(NEW_REMARK, remark);
                 setResult(RESULT_CODE, intent);
                 finish();
+            }
+        });
+        mEtRemark.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mTvFinish.setEnabled(!TextUtils.isEmpty(mEtRemark.getText().toString().trim()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
     }

@@ -35,7 +35,7 @@ public class FriendManager {
     }
 
     public void getFriendList(final QSCallback<List<FriendBean>> qsCallback) {
-        OkHttpHelperForQSBoxFriendApi.SINGLETON.getList(ChatManager.SINGLETON.getUserId())
+        OkHttpHelperForQSBoxFriendApi.SINGLETON.getList(IMClient.SINGLETON.getUserId())
                 .transform(new QSApiTransformer<List<FriendBean>>())
                 .enqueue(new Callback<List<FriendBean>>() {
                     @Override
@@ -43,6 +43,22 @@ public class FriendManager {
                         for (FriendBean friendBean : data) {
                             mFriendDao.insertOrUpdate(friendBean);
                         }
+                        qsCallback.onSuccess(data);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        qsCallback.onFailure(e);
+                    }
+                });
+    }
+
+    public void setRemark(int toUserId, String remark, final QSCallback<Object> qsCallback) {
+        OkHttpHelperForQSBoxFriendApi.SINGLETON.setRemark(IMClient.SINGLETON.getUserId(), toUserId, remark)
+                .transform(new QSApiTransformer<Object>())
+                .enqueue(new Callback<Object>() {
+                    @Override
+                    public void onSuccess(Object data) {
                         qsCallback.onSuccess(data);
                     }
 

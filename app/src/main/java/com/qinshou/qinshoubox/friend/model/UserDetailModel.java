@@ -6,7 +6,7 @@ import com.qinshou.qinshoubox.friend.contract.IUserDetailContract;
 import com.qinshou.qinshoubox.friend.view.fragment.UserDetailFragment;
 import com.qinshou.qinshoubox.im.bean.UserBean;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
-import com.qinshou.qinshoubox.im.manager.ChatManager;
+import com.qinshou.qinshoubox.im.manager.IMClient;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxFriendApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
@@ -20,7 +20,7 @@ import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 public class UserDetailModel implements IUserDetailContract.IModel {
     @Override
     public void getUserDetail(String keyword, QSCallback<UserBean> qsCallback) {
-        ChatManager.SINGLETON.getUserManager().getUser(keyword, qsCallback);
+        IMClient.SINGLETON.getUserManager().getUser(keyword, qsCallback);
     }
 
     @Override
@@ -38,5 +38,10 @@ public class UserDetailModel implements IUserDetailContract.IModel {
         OkHttpHelperForQSBoxFriendApi.SINGLETON.delete(UserStatusManager.SINGLETON.getUserBean().getId(), toUserId)
                 .transform(new QSApiTransformer<Object>())
                 .enqueue(callback);
+    }
+
+    @Override
+    public void setRemark(int toUserId, String remark, QSCallback<Object> qsCallback) {
+        IMClient.SINGLETON.getFriendManager().setRemark(toUserId, remark, qsCallback);
     }
 }

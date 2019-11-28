@@ -24,9 +24,8 @@ import com.qinshou.qinshoubox.friend.view.adapter.RcvGroupChatAdapter;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
-import com.qinshou.qinshoubox.im.bean.UserBean;
 import com.qinshou.qinshoubox.im.listener.IOnFriendStatusListener;
-import com.qinshou.qinshoubox.im.manager.ChatManager;
+import com.qinshou.qinshoubox.im.manager.IMClient;
 import com.qinshou.qinshoubox.me.ui.fragment.LoginOrRegisterFragment;
 import com.qinshou.qinshoubox.util.QSUtil;
 
@@ -90,6 +89,7 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
         @Override
         public void agreeAdd(int fromUserId) {
             ShowLogUtil.logi("agreeAdd: fromUserId--->" + fromUserId);
+            getPresenter().getFriendList();
         }
 
         @Override
@@ -100,6 +100,7 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
         @Override
         public void delete(int fromUserId) {
             ShowLogUtil.logi("delete: fromUserId--->" + fromUserId);
+            getPresenter().getFriendList();
         }
 
         @Override
@@ -112,6 +113,7 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
             ShowLogUtil.logi("offline: fromUserId--->" + fromUserId);
         }
     };
+
     private RcvFriendAdapter mRcvFriendAdapter;
     private RcvGroupChatAdapter mRcvGroupChatAdapter;
 
@@ -121,7 +123,7 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
         EventBus.getDefault().unregister(this);
         mTvUnreadCount.setVisibility(View.GONE);
         mTvUnreadCountInTlMain.setVisibility(View.GONE);
-        ChatManager.SINGLETON.removeOnFriendStatusListener(mOnFriendStatusListener);
+        IMClient.SINGLETON.removeOnFriendStatusListener(mOnFriendStatusListener);
     }
 
     @Override
@@ -154,7 +156,7 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
 
     @Override
     public void setListener() {
-        ChatManager.SINGLETON.addOnFriendStatusListener(mOnFriendStatusListener);
+        IMClient.SINGLETON.addOnFriendStatusListener(mOnFriendStatusListener);
         findViewByID(R.id.ll_new_friend).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

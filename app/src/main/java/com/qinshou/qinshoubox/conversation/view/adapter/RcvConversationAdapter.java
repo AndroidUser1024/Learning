@@ -5,14 +5,9 @@ import android.view.View;
 
 import com.qinshou.commonmodule.rcvbaseadapter.RcvSingleBaseAdapter;
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
-import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemClickListener;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
-import com.qinshou.qinshoubox.im.enums.MessageType;
-import com.qinshou.qinshoubox.im.manager.ChatManager;
 import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.conversation.view.activity.ChatActivity;
-import com.qinshou.qinshoubox.conversation.view.activity.GroupChatActivity;
 
 /**
  * Author: QinHao

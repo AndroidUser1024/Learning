@@ -29,11 +29,10 @@ import com.qinshou.commonmodule.widget.RefreshLayout;
 import com.qinshou.commonmodule.widget.TitleBar;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
-import com.qinshou.qinshoubox.im.db.dao.impl.GroupChatDaoImpl;
 import com.qinshou.qinshoubox.im.enums.MessageContentType;
 import com.qinshou.qinshoubox.im.enums.MessageType;
 import com.qinshou.qinshoubox.im.listener.IOnMessageListener;
-import com.qinshou.qinshoubox.im.manager.ChatManager;
+import com.qinshou.qinshoubox.im.manager.IMClient;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.constant.IConstant;
@@ -330,7 +329,7 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
     @Override
     public void onDestroy() {
         super.onDestroy();
-        ChatManager.SINGLETON.removeOnMessageListener(mOnMessageListener);
+        IMClient.SINGLETON.removeOnMessageListener(mOnMessageListener);
         MediaPlayerHelper.SINGLETON.stop();
         MediaRecorderHelper.SINGLETON.stopRecord();
     }
@@ -380,7 +379,7 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void setListener() {
-        ChatManager.SINGLETON.addOnMessageListener(mOnMessageListener);
+        IMClient.SINGLETON.addOnMessageListener(mOnMessageListener);
         mTitleBar.setLeftImageOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -469,7 +468,7 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
         if (mToUserId == 0) {
             return;
         }
-        GroupChatBean groupChatBean = ChatManager.SINGLETON.getGroupChatManager().getById(mToUserId);
+        GroupChatBean groupChatBean = IMClient.SINGLETON.getGroupChatManager().getById(mToUserId);
         if (groupChatBean != null) {
             // 群昵称
             mTitleBar.setTitleText(TextUtils.isEmpty(groupChatBean.getNickname())
@@ -502,7 +501,7 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
         if (mMessageContentType == MessageContentType.TEXT) {
             messageBean = MessageBean.createTextMessage(mToUserId, content);
             messageBean.setType(MessageType.GROUP_CHAT.getValue());
-            ChatManager.SINGLETON.sendMessage(messageBean);
+            IMClient.SINGLETON.sendMessage(messageBean);
         }
         mRcvMessageAdapter.getDataList().add(messageBean);
         mRcvMessageAdapter.notifyItemInserted(mRcvMessageAdapter.getDataList().size() - 1);

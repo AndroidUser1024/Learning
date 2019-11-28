@@ -13,16 +13,13 @@ import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
-import com.qinshou.qinshoubox.im.db.dao.impl.GroupChatDaoImpl;
 import com.qinshou.qinshoubox.friend.bean.GroupChatMemberForCreateBean;
 import com.qinshou.qinshoubox.friend.contract.ICreateGroupChatContract;
 import com.qinshou.qinshoubox.friend.presenter.CreateGroupChatPresenter;
 import com.qinshou.qinshoubox.friend.view.adapter.RcvGroupChatMemberForCreateAdapter;
 import com.qinshou.qinshoubox.friend.view.adapter.RcvGroupChatMemberForCreateChooseAdapter;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
-import com.qinshou.qinshoubox.im.bean.UserBean;
-import com.qinshou.qinshoubox.im.manager.ChatManager;
-import com.qinshou.qinshoubox.im.manager.GroupChatManager;
+import com.qinshou.qinshoubox.im.manager.IMClient;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 import java.util.ArrayList;
@@ -156,7 +153,7 @@ public class CreateGroupChatFragment extends QSFragment<CreateGroupChatPresenter
 
     @Override
     public void createGroupChatSuccess(GroupChatBean groupChatBean) {
-        ChatManager.SINGLETON.getGroupChatManager().insertOrUpdate(groupChatBean);
+        IMClient.SINGLETON.getGroupChatManager().insertOrUpdate(groupChatBean);
         finish();
     }
 

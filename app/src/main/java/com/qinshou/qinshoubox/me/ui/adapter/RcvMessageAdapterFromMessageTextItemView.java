@@ -6,12 +6,9 @@ import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
-import com.qinshou.qinshoubox.im.bean.UserBean;
-import com.qinshou.qinshoubox.im.db.dao.IFriendDao;
-import com.qinshou.qinshoubox.im.db.dao.impl.FriendDaoImpl;
 import com.qinshou.qinshoubox.im.enums.MessageContentType;
 import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.im.manager.ChatManager;
+import com.qinshou.qinshoubox.im.manager.IMClient;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 
@@ -38,7 +35,7 @@ public class RcvMessageAdapterFromMessageTextItemView extends AbsRcvMessageAdapt
     public void bindViewHolder(final BaseViewHolder baseViewHolder, final MessageBean messageBean, int i) {
         super.bindViewHolder(baseViewHolder, messageBean, i);
         // 头像
-        FriendBean friendBean = ChatManager.SINGLETON.getFriendManager().getUser(messageBean.getFromUserId());
+        FriendBean friendBean = IMClient.SINGLETON.getFriendManager().getUser(messageBean.getFromUserId());
         if (friendBean != null) {
             ImageLoadUtil.SINGLETON.loadImage(getContext(), friendBean.getHeadImgSmall(), baseViewHolder.getImageView(R.id.iv_head_img));
         }

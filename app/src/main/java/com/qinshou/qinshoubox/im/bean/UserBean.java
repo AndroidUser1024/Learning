@@ -52,9 +52,8 @@ public class UserBean {
     private Integer gender;
     /**
      * 搜索目标用户与发起搜索的用户的关系
-     * 1 非好友
-     * 2 好友
-     * 3 等待接受对方的好友请求
+     * 0 互相不为好友或对方不是你好友
+     * 1 互为好友或对方是你好友
      */
     private int friendStatus;
     /**

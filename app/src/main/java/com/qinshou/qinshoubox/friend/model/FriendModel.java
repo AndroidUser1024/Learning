@@ -1,17 +1,11 @@
 package com.qinshou.qinshoubox.friend.model;
 
-import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.friend.contract.IFriendContract;
 import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
-import com.qinshou.qinshoubox.im.bean.UserBean;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
-import com.qinshou.qinshoubox.im.manager.ChatManager;
-import com.qinshou.qinshoubox.im.manager.GroupChatManager;
-import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxFriendApi;
-import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxGroupChatApi;
-import com.qinshou.qinshoubox.transformer.QSApiTransformer;
+import com.qinshou.qinshoubox.im.manager.IMClient;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 import java.util.List;
@@ -28,7 +22,7 @@ public class FriendModel implements IFriendContract.IModel {
         if (!UserStatusManager.SINGLETON.isLogin()) {
             return;
         }
-        ChatManager.SINGLETON.getGroupChatManager().getGroupChatList(qsCallback);
+        IMClient.SINGLETON.getGroupChatManager().getGroupChatList(qsCallback);
     }
 
     @Override
@@ -36,6 +30,6 @@ public class FriendModel implements IFriendContract.IModel {
         if (!UserStatusManager.SINGLETON.isLogin()) {
             return;
         }
-        ChatManager.SINGLETON.getFriendManager().getFriendList(qsCallback);
+        IMClient.SINGLETON.getFriendManager().getFriendList(qsCallback);
     }
 }

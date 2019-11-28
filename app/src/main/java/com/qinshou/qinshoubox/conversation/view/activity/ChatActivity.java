@@ -32,14 +32,12 @@ import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.enums.MessageContentType;
 import com.qinshou.qinshoubox.im.enums.MessageType;
-import com.qinshou.qinshoubox.im.manager.ChatManager;
+import com.qinshou.qinshoubox.im.manager.IMClient;
 import com.qinshou.qinshoubox.im.listener.IOnMessageListener;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.constant.IConstant;
-import com.qinshou.qinshoubox.im.db.dao.impl.FriendDaoImpl;
 import com.qinshou.qinshoubox.listener.ClearErrorInfoTextWatcher;
-import com.qinshou.qinshoubox.im.bean.UserBean;
 import com.qinshou.qinshoubox.conversation.contract.IChatContract;
 import com.qinshou.qinshoubox.conversation.presenter.ChatPresenter;
 import com.qinshou.qinshoubox.me.ui.adapter.RcvMessageAdapter;
@@ -332,7 +330,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
     @Override
     public void onDestroy() {
         super.onDestroy();
-        ChatManager.SINGLETON.removeOnMessageListener(mOnMessageListener);
+        IMClient.SINGLETON.removeOnMessageListener(mOnMessageListener);
         MediaPlayerHelper.SINGLETON.stop();
         MediaRecorderHelper.SINGLETON.stopRecord();
     }
@@ -382,7 +380,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void setListener() {
-        ChatManager.SINGLETON.addOnMessageListener(mOnMessageListener);
+        IMClient.SINGLETON.addOnMessageListener(mOnMessageListener);
         mTitleBar.setLeftImageOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -471,7 +469,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
         if (mToUserId == 0) {
             return;
         }
-        FriendBean friendBean = ChatManager.SINGLETON.getFriendManager().getUser(mToUserId);
+        FriendBean friendBean = IMClient.SINGLETON.getFriendManager().getUser(mToUserId);
         if (friendBean != null) {
             // 对方的昵称
             mTitleBar.setTitleText(TextUtils.isEmpty(friendBean.getRemark())
@@ -519,7 +517,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
         MessageBean messageBean = null;
         if (mMessageContentType == MessageContentType.TEXT) {
             messageBean = MessageBean.createTextMessage(mToUserId, content);
-            ChatManager.SINGLETON.sendMessage(messageBean);
+            IMClient.SINGLETON.sendMessage(messageBean);
         }
         mRcvMessageAdapter.getDataList().add(messageBean);
         mRcvMessageAdapter.notifyItemInserted(mRcvMessageAdapter.getDataList().size() - 1);

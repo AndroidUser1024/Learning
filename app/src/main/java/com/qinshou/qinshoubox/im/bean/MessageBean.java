@@ -3,7 +3,7 @@ package com.qinshou.qinshoubox.im.bean;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-import com.qinshou.qinshoubox.im.manager.ChatManager;
+import com.qinshou.qinshoubox.im.manager.IMClient;
 import com.qinshou.qinshoubox.im.enums.MessageContentType;
 import com.qinshou.qinshoubox.im.enums.MessageType;
 
@@ -207,7 +207,7 @@ public class MessageBean {
         messageBean.toUserId = toUserId;
         messageBean.content = content;
         messageBean.sendTimestamp = System.currentTimeMillis();
-        messageBean.fromUserId = ChatManager.SINGLETON.getUserId();
+        messageBean.fromUserId = IMClient.SINGLETON.getUserId();
         messageBean.contentType = MessageContentType.TEXT.getValue();
         messageBean.type = MessageType.CHAT.getValue();
         return messageBean;

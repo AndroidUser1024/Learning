@@ -21,14 +21,12 @@ public interface IUserDetailContract {
         void agreeAddFriend(int fromUserId, int toUserId, String remark, Callback<Object> callback);
 
         void deleteFriend(int toUserId, Callback<Object> callback);
+
+        void setRemark(int toUserId, String remark, QSCallback<Object> qsCallback);
     }
 
     interface IView extends IBaseView {
-        void showFriendUI(UserBean userBean);
-
-        void showNotFriendUI(UserBean userBean);
-
-        void showWaitAcceptUI(UserBean userBean);
+        void getUserDetailSuccess(UserBean userBean);
 
         void getUserDetailFailure(Exception e);
 
@@ -39,6 +37,10 @@ public interface IUserDetailContract {
         void deleteFriendSuccess();
 
         void deleteFriendFailure(Exception e);
+
+        void setRemarkSuccess();
+
+        void setRemarkFailure(Exception e);
     }
 
     interface IPresenter {
@@ -47,5 +49,7 @@ public interface IUserDetailContract {
         void agreeAddFriend(int fromUserId, int toUserId, String remark);
 
         void deleteFriend(int toUserId);
+
+        void setRemark(int toUserId, String remark);
     }
 }

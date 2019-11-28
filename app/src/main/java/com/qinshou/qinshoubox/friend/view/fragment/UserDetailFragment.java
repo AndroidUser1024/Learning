@@ -103,6 +103,9 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
                             mTvRemark.setText(remark);
                             mTvRemark2.setText(remark);
                         }
+                        if (mUserBean.getFriendStatus() == 1) {
+                            getPresenter().setRemark(mUserBean.getId(), mTvRemark.getText().toString().trim());
+                        }
                     }
                 });
             }
@@ -123,7 +126,62 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
     }
 
     @Override
-    public void showFriendUI(final UserBean userBean) {
+    public void getUserDetailSuccess(UserBean userBean) {
+        mUserBean = userBean;
+        if (userBean.getFriendStatus() == 1) {
+            showFriendUI(userBean);
+        } else {
+            if (userBean.getReceive() == 1) {
+                showWaitAcceptUI(userBean);
+            } else {
+                showNotFriendUI(userBean);
+            }
+        }
+    }
+
+    @Override
+    public void getUserDetailFailure(Exception e) {
+
+    }
+
+    @Override
+    public void agreeAddFriendSuccess() {
+        mBtnAddFriend.setText(getString(R.string.user_detail_btn_add_friend_text_2));
+        mBtnAddFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChatActivity.start(getContext(), mUserBean.getId());
+            }
+        });
+    }
+
+    @Override
+    public void agreeAddFriendFailure(Exception e) {
+        toastShort(e.getMessage());
+    }
+
+    @Override
+    public void deleteFriendSuccess() {
+        EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.REFRESH_FRIEND_LIST, null));
+        startActivity(new Intent(getContext(), MainActivity.class));
+    }
+
+    @Override
+    public void deleteFriendFailure(Exception e) {
+        toastShort(e.getMessage());
+    }
+
+    @Override
+    public void setRemarkSuccess() {
+        EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.REFRESH_FRIEND_LIST, null));
+    }
+
+    @Override
+    public void setRemarkFailure(Exception e) {
+
+    }
+
+    private void showFriendUI(final UserBean userBean) {
         mTitleBar.setRightImageOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -165,8 +223,7 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
         mTvSource.setText(source);
     }
 
-    @Override
-    public void showNotFriendUI(final UserBean userBean) {
+    private void showNotFriendUI(final UserBean userBean) {
         setData(userBean);
         mLlAdditionalMsg.setVisibility(View.GONE);
         mBtnAddFriend.setText(getString(R.string.user_detail_btn_add_friend_text));
@@ -191,9 +248,7 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
         mTvSource.setText(source);
     }
 
-    @Override
-    public void showWaitAcceptUI(final UserBean userBean) {
-        mUserBean = userBean;
+    private void showWaitAcceptUI(final UserBean userBean) {
         setData(userBean);
         mLlAdditionalMsg.setVisibility(View.VISIBLE);
         mBtnAddFriend.setText(getString(R.string.user_detail_btn_add_friend_text_3));
@@ -253,38 +308,6 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
         mTvEmail.setText(userBean.getEmail());
         // 个性签名
         mTvSignature.setText(userBean.getSignature());
-    }
-
-    @Override
-    public void getUserDetailFailure(Exception e) {
-
-    }
-
-    @Override
-    public void agreeAddFriendSuccess() {
-        mBtnAddFriend.setText(getString(R.string.user_detail_btn_add_friend_text_2));
-        mBtnAddFriend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ChatActivity.start(getContext(), mUserBean.getId());
-            }
-        });
-    }
-
-    @Override
-    public void agreeAddFriendFailure(Exception e) {
-        toastShort(e.getMessage());
-    }
-
-    @Override
-    public void deleteFriendSuccess() {
-        EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.REFRESH_FRIEND_LIST, null));
-        startActivity(new Intent(getContext(), MainActivity.class));
-    }
-
-    @Override
-    public void deleteFriendFailure(Exception e) {
-        toastShort(e.getMessage());
     }
 
     private void showPopupWindow(final UserBean userBean) {

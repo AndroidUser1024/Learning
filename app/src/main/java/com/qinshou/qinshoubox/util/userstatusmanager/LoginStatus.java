@@ -4,14 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.qinshou.commonmodule.ContainerActivity;
-import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.db.DBHelper;
-import com.qinshou.qinshoubox.im.manager.ChatManager;
+import com.qinshou.qinshoubox.im.manager.IMClient;
 import com.qinshou.qinshoubox.MainActivity;
-import com.qinshou.qinshoubox.constant.IConstant;
-import com.qinshou.qinshoubox.friend.view.fragment.CreateGroupChatFragment;
-import com.qinshou.qinshoubox.friend.view.fragment.FriendHistoryFragment;
 import com.qinshou.qinshoubox.im.bean.UserBean;
 import com.qinshou.qinshoubox.me.ui.fragment.DataSettingFragment;
 
@@ -45,7 +41,7 @@ public class LoginStatus implements IUserStatus {
         DBHelper.getInstance().close();
         context.startActivity(new Intent(context, MainActivity.class));
         // 连接聊天服务
-        ChatManager.SINGLETON.disconnect();
+        IMClient.SINGLETON.disconnect();
         // 设置为注销状态
         UserStatusManager.SINGLETON.setUserStatus(new LogoutStatus());
         // 发送事件更新登录状态
