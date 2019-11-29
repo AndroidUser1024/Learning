@@ -28,6 +28,7 @@ import com.qinshou.commonmodule.util.permissionutil.IOnRequestPermissionResultCa
 import com.qinshou.commonmodule.util.permissionutil.PermissionUtil;
 import com.qinshou.commonmodule.widget.RefreshLayout;
 import com.qinshou.commonmodule.widget.TitleBar;
+import com.qinshou.qinshoubox.conversation.view.fragment.ChatSettingFragment;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.enums.MessageContentType;
@@ -387,12 +388,12 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
                 finish();
             }
         });
-//        mTitleBar.setRightImageOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                ChatSettingFragment.start(getContext(), mToUserId);
-//            }
-//        });
+        mTitleBar.setRightImageOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChatSettingFragment.start(getContext(), mToUserId);
+            }
+        });
 
         mIvContentType.setOnClickListener(mOnClickListener);
         mBtnPressToSpeech.setOnTouchListener(mOnTouchListener);
@@ -469,7 +470,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
         if (mToUserId == 0) {
             return;
         }
-        FriendBean friendBean = IMClient.SINGLETON.getFriendManager().getUser(mToUserId);
+        FriendBean friendBean = IMClient.SINGLETON.getFriendManager().getFriend(mToUserId);
         if (friendBean != null) {
             // 对方的昵称
             mTitleBar.setTitleText(TextUtils.isEmpty(friendBean.getRemark())

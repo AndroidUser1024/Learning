@@ -52,4 +52,22 @@ public interface QSBoxFriendApi {
     Call<QinshouResultBean<Object>> setRemark(@Field(name = "fromUserId") int fromUserId
             , @Field(name = "toUserId") int toUserId
             , @Field(name = "remark") String remark);
+
+    @Json
+    @Post("/setTop")
+    Call<QinshouResultBean<FriendBean>> setTop(@Field(name = "fromUserId") int fromUserId
+            , @Field(name = "toUserId") int toUserId
+            , @Field(name = "top") int top);
+
+    @Json
+    @Post("/setDoNotDisturb")
+    Call<QinshouResultBean<FriendBean>> setDoNotDisturb(@Field(name = "fromUserId") int fromUserId
+            , @Field(name = "toUserId") int toUserId
+            , @Field(name = "doNotDisturb") int doNotDisturb);
+
+    @Json
+    @Post("/setBlackList")
+    Call<QinshouResultBean<FriendBean>> setBlackList(@Field(name = "fromUserId") int fromUserId
+            , @Field(name = "toUserId") int toUserId
+            , @Field(name = "blackList") int blackList);
 }

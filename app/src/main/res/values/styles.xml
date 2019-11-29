@@ -26,14 +26,14 @@
 
     <style name="DataSettingLlHeadImgBaseStyle">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/px112</item>
+        <item name="android:layout_height">@dimen/px110</item>
         <item name="android:background">#FFFFFFFF</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:orientation">horizontal</item>
-        <item name="android:paddingStart">@dimen/px32</item>
-        <item name="android:paddingLeft">@dimen/px32</item>
-        <item name="android:paddingEnd">@dimen/px32</item>
-        <item name="android:paddingRight">@dimen/px32</item>
+        <item name="android:paddingStart">@dimen/px30</item>
+        <item name="android:paddingLeft">@dimen/px30</item>
+        <item name="android:paddingEnd">@dimen/px30</item>
+        <item name="android:paddingRight">@dimen/px30</item>
     </style>
 
     <style name="DataSettingTvHeadImgPromptBaseStyle">

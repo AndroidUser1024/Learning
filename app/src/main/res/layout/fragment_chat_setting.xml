@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/activity_background_color"
+    android:orientation="vertical"
+    tools:context="com.qinshou.qinshoubox.conversation.view.fragment.ChatSettingFragment">
+
+    <com.qinshou.commonmodule.widget.TitleBar
+        android:id="@+id/title_bar"
+        style="@style/TitleBarBaseStyle"
+        app:leftImageResource="@drawable/common_iv_back_src"
+        app:titleText="@string/chat_setting_tv_title_text">
+
+    </com.qinshou.commonmodule.widget.TitleBar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px168"
+        android:background="#FFFFFFFF"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iv_head_img"
+            android:layout_width="@dimen/px81"
+            android:layout_height="@dimen/px81"
+            android:layout_marginStart="@dimen/px32"
+            android:layout_marginLeft="@dimen/px32"
+            tools:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/tv_nickname"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/px18"
+            android:layout_marginLeft="@dimen/px18"
+            android:layout_weight="1"
+            android:textColor="#FF333333"
+            android:textSize="@dimen/px32"
+            tools:text="段雯" />
+
+        <Button
+            android:id="@+id/btn_join_group_chat"
+            android:layout_width="@dimen/px150"
+            android:layout_height="@dimen/px48"
+            android:layout_marginEnd="@dimen/px34"
+            android:layout_marginRight="@dimen/px34"
+            android:background="@drawable/chat_setting_btn_create_group_chat_bg"
+            android:text="@string/chat_setting_btn_create_group_chat_text"
+            android:textColor="#FFFFFFFF"
+            android:textSize="@dimen/px26" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_chat_history"
+        style="@style/DataSettingLlHeadImgBaseStyle"
+        android:layout_marginTop="@dimen/px16">
+
+        <TextView
+            style="@style/DataSettingTvHeadImgPromptBaseStyle"
+            android:text="@string/chat_setting_tv_chat_history_text" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/common_iv_arrow_right_src" />
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/DataSettingLlHeadImgBaseStyle"
+        android:layout_marginTop="@dimen/px16">
+
+        <TextView
+            style="@style/DataSettingTvHeadImgPromptBaseStyle"
+            android:text="@string/chat_setting_tv_top_text" />
+
+        <com.qinshou.qinshoubox.me.ui.widget.SwitchButton
+            android:id="@+id/swt_top"
+            android:layout_width="@dimen/px88"
+            android:layout_height="@dimen/px48"
+            app:buttonColor="#FFFFFFFF"
+            app:buttonMargin="@dimen/px4"
+            app:buttonRadius="@dimen/px20"
+            app:colorChecked="#FF4FC3F7"
+            app:colorUnchecked="#FFECECEC" />
+    </LinearLayout>
+
+    <include layout="@layout/layout_divider_2" />
+
+    <LinearLayout style="@style/DataSettingLlHeadImgBaseStyle">
+
+        <TextView
+            style="@style/DataSettingTvHeadImgPromptBaseStyle"
+            android:text="@string/chat_setting_tv_do_not_disturb_text" />
+
+        <com.qinshou.qinshoubox.me.ui.widget.SwitchButton
+            android:id="@+id/swt_do_not_disturb"
+            android:layout_width="@dimen/px88"
+            android:layout_height="@dimen/px48"
+            app:buttonColor="#FFFFFFFF"
+            app:buttonMargin="@dimen/px4"
+            app:buttonRadius="@dimen/px20"
+            app:colorChecked="#FF4FC3F7"
+            app:colorUnchecked="#FFECECEC" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_clear_chat_history"
+        style="@style/DataSettingLlHeadImgBaseStyle"
+        android:layout_marginTop="@dimen/px16">
+
+        <TextView
+            style="@style/DataSettingTvHeadImgPromptBaseStyle"
+            android:text="@string/chat_setting_tv_clear_chat_history_text" />
+    </LinearLayout>
+
+    <include
+        layout="@layout/layout_divider_2"
+        android:visibility="gone" />
+
+    <LinearLayout style="@style/DataSettingLlHeadImgBaseStyle">
+
+        <TextView
+            style="@style/DataSettingTvHeadImgPromptBaseStyle"
+            android:text="@string/chat_setting_tv_join_to_blacklist_text" />
+
+        <com.qinshou.qinshoubox.me.ui.widget.SwitchButton
+            android:id="@+id/swt_black_list"
+            android:layout_width="@dimen/px88"
+            android:layout_height="@dimen/px48"
+            app:buttonColor="#FFFFFFFF"
+            app:buttonMargin="@dimen/px4"
+            app:buttonRadius="@dimen/px20"
+            app:colorChecked="#FF4FC3F7"
+            app:colorUnchecked="#FFECECEC" />
+    </LinearLayout>
+</LinearLayout>

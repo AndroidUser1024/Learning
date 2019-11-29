@@ -35,7 +35,7 @@ public class RcvMessageAdapterFromMessageTextItemView extends AbsRcvMessageAdapt
     public void bindViewHolder(final BaseViewHolder baseViewHolder, final MessageBean messageBean, int i) {
         super.bindViewHolder(baseViewHolder, messageBean, i);
         // 头像
-        FriendBean friendBean = IMClient.SINGLETON.getFriendManager().getUser(messageBean.getFromUserId());
+        FriendBean friendBean = IMClient.SINGLETON.getFriendManager().getFriend(messageBean.getFromUserId());
         if (friendBean != null) {
             ImageLoadUtil.SINGLETON.loadImage(getContext(), friendBean.getHeadImgSmall(), baseViewHolder.getImageView(R.id.iv_head_img));
         }

@@ -167,7 +167,6 @@ public class HomepageFragment extends QSFragment<HomepagePresenter> implements I
 
     @Override
     public void getNewsListSuccess(List<NewsBean> newsBeanList) {
-        ShowLogUtil.logi(newsBeanList.size());
         mRcvNewsAdapter.addDataList(newsBeanList, mPage == IConstant.PAGE_START);
         mRefreshLayout.stopRefreshAndLoadMore();
     }

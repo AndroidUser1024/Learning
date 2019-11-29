@@ -136,27 +136,27 @@ public class FriendBean {
         this.remark = remark;
     }
 
-    public Integer getTop() {
+    public int getTop() {
         return top;
     }
 
-    public void setTop(Integer top) {
+    public void setTop(int top) {
         this.top = top;
     }
 
-    public Integer getDoNotDisturb() {
+    public int getDoNotDisturb() {
         return doNotDisturb;
     }
 
-    public void setDoNotDisturb(Integer doNotDisturb) {
+    public void setDoNotDisturb(int doNotDisturb) {
         this.doNotDisturb = doNotDisturb;
     }
 
-    public Integer getBlackList() {
+    public int getBlackList() {
         return blackList;
     }
 
-    public void setBlackList(Integer blackList) {
+    public void setBlackList(int blackList) {
         this.blackList = blackList;
     }
 }

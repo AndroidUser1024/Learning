@@ -81,6 +81,18 @@
     <string name="chat_tv_send_img_text">图片</string>
     <string name="chat_et_content_hint">请输入命令</string>
 
+    <!-- 聊天设置界面 -->
+    <string name="chat_setting_tv_title_text">聊天设置</string>
+    <string name="chat_setting_btn_create_group_chat_text">发起群聊</string>
+    <string name="chat_setting_tv_chat_history_text">聊天记录</string>
+    <string name="chat_setting_tv_top_text">消息置顶</string>
+    <string name="chat_setting_tv_do_not_disturb_text">消息免打扰</string>
+    <string name="chat_setting_tv_clear_chat_history_text">清空聊天记录</string>
+    <string name="chat_setting_tv_join_to_blacklist_text">加入黑名单</string>
+    <string name="chat_setting_tv_clear_chat_history_prompt_text">确定要清空与“<xliff:g id="nickname">%1$s</xliff:g>”的聊天记录\n记录清空后将无法恢复</string>
+    <string name="chat_setting_tv_cancel_text">取消</string>
+    <string name="chat_setting_toast_clear_chat_history_success_text">聊天记录已清空</string>
+
     <!-- 好友申请历史界面 -->
     <string name="friend_history_tv_title_text">新增朋友</string>
     <string name="friend_history_tv_right_text">添加</string>
@@ -120,7 +132,6 @@
     <string name="set_additional_msg_tv_right_text">发送</string>
     <string name="set_additional_msg_tv_info_text">你需要发送验证申请,等对方通过</string>
     <string name="set_additional_msg_default_additional_msg">我是<xliff:g id="nickname">%1$s</xliff:g></string>
-
 
     <!-- 创建群聊界面 -->
     <string name="create_group_chat_tv_title_text">创建群聊</string>
