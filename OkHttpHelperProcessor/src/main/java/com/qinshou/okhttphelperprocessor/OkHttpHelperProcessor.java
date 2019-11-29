@@ -195,7 +195,6 @@ public class OkHttpHelperProcessor extends AbstractProcessor {
      * @return 方法模版
      */
     private MethodSpec createGetRequestMethod(String methodName, ExecutableElement element, String defaultHost) {
-        info("createGetRequestMethod");
         // 创建一个方法模版构造器
         // 设置方法名和 public 修饰符
         MethodSpec.Builder builder = MethodSpec.methodBuilder(methodName)
@@ -284,7 +283,6 @@ public class OkHttpHelperProcessor extends AbstractProcessor {
      * @return 方法模版
      */
     private MethodSpec createPostRequestMethod(String methodName, ExecutableElement element, String defaultHost) {
-        info("createPostRequestMethod");
         // 创建一个方法模版构造器
         // 设置方法名和 public 修饰符
         MethodSpec.Builder builder = MethodSpec.methodBuilder(methodName)
@@ -342,7 +340,6 @@ public class OkHttpHelperProcessor extends AbstractProcessor {
         resultType = resultType.replace(Call.class.getName(), "")
                 .replaceFirst("<", "")
                 .replaceFirst(">", "");
-        info("resultType--->" + resultType);
         builder.addStatement("$T type = new com.google.gson.reflect.TypeToken<" + resultType + ">(){}.getType()", Type.class);
         // 创建 Call 对象
         builder.addStatement(element.getReturnType().toString() + " call = new " + element.getReturnType().toString() + "(mOkHttpClient,request,type)");

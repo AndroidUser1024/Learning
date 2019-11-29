@@ -19,4 +19,8 @@ public @interface Column {
     String name() default "";
 
     ColumnType columnType() default ColumnType.TEXT;
+
+    boolean id() default false;
+
+    boolean generateId() default false;
 }

@@ -8,7 +8,7 @@ package com.qinshou.databasehelper.enums;
  */
 public enum ColumnType {
     NULL,
-    INTEGET,
+    INTEGER,
     REAL,
     TEXT,
     BLOG,
