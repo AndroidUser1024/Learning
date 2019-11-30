@@ -87,22 +87,11 @@ public class DatabaseHelperProcessor extends AbstractProcessor {
         // 获取所有使用了 Repository 注解的类
         Set<? extends Element> elementAnnotatedWithTable = roundEnvironment.getElementsAnnotatedWith(Table.class);
         for (Element tableElement : elementAnnotatedWithTable) {
-            Table table = tableElement.getAnnotation(Table.class);
-            String tableName = "";
-            if (TextUtil.isEmpty(table.name())) {
-                tableName = tableElement.getSimpleName().toString();
-            } else {
-                tableName = table.name();
+            if (tableElement.getKind() != ElementKind.CLASS
+                    || !(tableElement instanceof TypeElement)) {
+                continue;
             }
-            StringBuilder createTableSql = new StringBuilder();
-            createTableSql.append("CREATE TABLE IF NOT EXIST ")
-                    .append(tableName)
-                    .append(" (");
-
-            StringBuilder insertSql = new StringBuilder();
-            insertSql.append(" INSERT INTO ")
-                    .append(tableName)
-                    .append(" (");
+            info("tableElement--->" + tableElement.getSimpleName());
             List<String> columnNameList = new ArrayList<>();
             List<String> columnTypeList = new ArrayList<>();
             int idIndex = -1;
@@ -125,10 +114,20 @@ public class DatabaseHelperProcessor extends AbstractProcessor {
                     }
                 }
 
-                // Insert 语句
-                insertSql.append(columnName)
-                        .append(",");
             }
+
+            Table table = tableElement.getAnnotation(Table.class);
+            String tableName = "";
+            if (TextUtil.isEmpty(table.name())) {
+                tableName = tableElement.getSimpleName().toString();
+            } else {
+                tableName = table.name();
+            }
+            // Create 建表语句
+            StringBuilder createTableSql = new StringBuilder();
+            createTableSql.append("CREATE TABLE IF NOT EXIST ")
+                    .append(tableName)
+                    .append(" (");
             for (int i = 0; i < columnNameList.size(); i++) {
                 createTableSql.append(columnNameList.get(i))
                         .append(" ")
@@ -143,9 +142,37 @@ public class DatabaseHelperProcessor extends AbstractProcessor {
                     createTableSql.append(",");
                 }
             }
-            // 删除最后一个 ","
             createTableSql.append(");");
             info("createTableSql--->" + createTableSql);
+
+            // Insert 语句
+            StringBuilder insertSql = new StringBuilder();
+            insertSql.append(" INSERT INTO ")
+                    .append(tableName)
+                    .append(" (");
+            for (int i = 0; i < columnNameList.size(); i++) {
+                if (generateId && i == idIndex) {
+                    continue;
+                }
+                insertSql.append(columnNameList.get(i));
+                if (i != columnNameList.size() - 1) {
+                    insertSql.append(",");
+                }
+            }
+            insertSql.append(") VALUES (");
+            for (int i = 0; i < columnNameList.size(); i++) {
+                if (generateId && i == idIndex) {
+                    continue;
+                }
+                insertSql.append("'")
+                        .append(columnNameList.get(i))
+                        .append("'");
+                if (i != columnNameList.size() - 1) {
+                    insertSql.append(",");
+                }
+            }
+            insertSql.append(");");
+            info("insertSql--->" + insertSql);
 //            String packageName = mElementUtils.getPackageOf(tableElement).getQualifiedName().toString();
 //            ClassName className = ClassName.get(packageName, tableElement.getSimpleName() + "Impl");
 //            TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(className)
