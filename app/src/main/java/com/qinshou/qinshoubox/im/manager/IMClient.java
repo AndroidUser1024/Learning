@@ -42,6 +42,10 @@ public enum IMClient {
     SINGLETON;
     private static final String TAG = "IMClient";
     private final int TIME_OUT = 30 * 1000;
+    /**
+     * 发送心跳间隔
+     */
+    private final long HEART_BEAT_INTERVAL = 60 * 1000;
     private static final String URL = "http://172.16.60.231:10086/websocket";
     //    private static final String URL = "http://192.168.1.109:10086/websocket";
     private WebSocket mWebSocket;
@@ -54,8 +58,21 @@ public enum IMClient {
     private UserManager mUserManager;
     private GroupChatManager mGroupChatManager;
     private FriendManager mFriendManager;
-//    private Map<String, MessageBean> mAckMessageMap = new HashMap<>();
+    //    private Map<String, MessageBean> mAckMessageMap = new HashMap<>();
 //    private Map<String, Timer> mRetrySendTimerMap = new HashMap<>();
+    /**
+     * 发送心跳任务
+     */
+    private Runnable mHeartBeatRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (mWebSocket == null) {
+                return;
+            }
+            mWebSocket.send(new Gson().toJson(MessageBean.createHeartBeatMessage(mUserId)));
+            mHandler.postDelayed(this, HEART_BEAT_INTERVAL);
+        }
+    };
 
     IMClient() {
     }
@@ -98,6 +115,8 @@ public enum IMClient {
 
                     }
                 });
+        // 一定时间后发送心跳
+        mHandler.postDelayed(mHeartBeatRunnable, HEART_BEAT_INTERVAL);
     }
 
     public void connect(final Context context, final int userId, final QSCallback<Void> qsCallback) {
@@ -156,10 +175,6 @@ public enum IMClient {
 
 
     public void disconnect() {
-        if (mWebSocket == null) {
-            return;
-        }
-        mWebSocket.close(1000, "normal close");
 //        for (Timer timer : mRetrySendTimerMap.values()) {
 //            timer.cancel();
 //        }
@@ -171,6 +186,11 @@ public enum IMClient {
         mUserManager = null;
         mGroupChatManager = null;
         mFriendManager = null;
+        mHandler.removeCallbacks(mHeartBeatRunnable);
+        if (mWebSocket == null) {
+            return;
+        }
+        mWebSocket.close(1000, "normal close");
     }
 
     public void sendMessage(MessageBean messageBean) {
