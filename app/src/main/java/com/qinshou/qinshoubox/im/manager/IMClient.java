@@ -6,7 +6,6 @@ import android.os.Looper;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.im.bean.AckKeyBean;
 import com.qinshou.qinshoubox.im.bean.FriendStatusBean;
@@ -22,13 +21,10 @@ import com.qinshou.qinshoubox.im.util.EncryptUtil.CodeUtil;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxOfflineApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -41,7 +37,19 @@ import okio.ByteString;
 public enum IMClient {
     SINGLETON;
     private static final String TAG = "IMClient";
-    private final int TIME_OUT = 30 * 1000;
+    private final int TIME_OUT = 15 * 1000;
+    /**
+     * 发送心跳间隔
+     */
+    private final long HEART_BEAT_INTERVAL = 60 * 1000;
+    /**
+     * 重连间隔
+     */
+    private final long RECONNECT_INTERVAL = 15 * 1000;
+    /**
+     * 重连间隔
+     */
+    private final int MAX_RECONNECT_COUNT = 5;
     private static final String URL = "http://172.16.60.231:10086/websocket";
     //    private static final String URL = "http://192.168.1.109:10086/websocket";
     private WebSocket mWebSocket;
@@ -54,13 +62,88 @@ public enum IMClient {
     private UserManager mUserManager;
     private GroupChatManager mGroupChatManager;
     private FriendManager mFriendManager;
-//    private Map<String, MessageBean> mAckMessageMap = new HashMap<>();
+    //    private Map<String, MessageBean> mAckMessageMap = new HashMap<>();
 //    private Map<String, Timer> mRetrySendTimerMap = new HashMap<>();
+    /**
+     * 重连次数计数器
+     */
+    private int mReconnectCount;
+    /**
+     * 发送心跳任务
+     */
+    private Runnable mHeartBeatRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (mWebSocket == null) {
+                return;
+            }
+            mWebSocket.send(new Gson().toJson(MessageBean.createHeartBeatMessage(mUserId)));
+            mHandler.postDelayed(mHeartBeatRunnable, HEART_BEAT_INTERVAL);
+        }
+    };
+    /**
+     * 重连任务
+     */
+    private Runnable mReconnectRunnable = new Runnable() {
+        @Override
+        public void run() {
+            mReconnectCount++;
+            Log.i(TAG, "开始第 " + mReconnectCount + " 次重连");
+            new OkHttpClient.Builder()
+                    .connectTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
+                    .readTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
+                    .writeTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
+                    .build().newWebSocket(new Request.Builder().url(URL).build(), new WebSocketListener() {
+                @Override
+                public void onOpen(WebSocket webSocket, Response response) {
+                    super.onOpen(webSocket, response);
+                    Log.i(TAG, "onOpen: ");
+                    mWebSocket = webSocket;
+                    mReconnectCount = 0;
+                }
+
+                @Override
+                public void onMessage(WebSocket webSocket, String text) {
+                    super.onMessage(webSocket, text);
+                    Log.i(TAG, "onMessage: text--->" + text);
+                    final MessageBean messageBean = new Gson().fromJson(text, MessageBean.class);
+                    handleMessage(messageBean);
+                }
+
+                @Override
+                public void onMessage(WebSocket webSocket, ByteString bytes) {
+                    super.onMessage(webSocket, bytes);
+                    Log.i(TAG, "onMessage: bytes--->" + bytes);
+                }
+
+                @Override
+                public void onClosing(WebSocket webSocket, int code, String reason) {
+                    super.onClosing(webSocket, code, reason);
+                    Log.i(TAG, "onClosing: ");
+                }
+
+                @Override
+                public void onClosed(WebSocket webSocket, int code, String reason) {
+                    super.onClosed(webSocket, code, reason);
+                    Log.i(TAG, "onClosed: ");
+                }
+
+                @Override
+                public void onFailure(WebSocket webSocket, Throwable t, Response response) {
+                    super.onFailure(webSocket, t, response);
+                    Log.i(TAG, "onFailure: t--->" + t.getMessage());
+                    if (mReconnectCount < MAX_RECONNECT_COUNT) {
+                        mHandler.postDelayed(mReconnectRunnable, RECONNECT_INTERVAL);
+                    }
+                }
+            });
+        }
+    };
 
     IMClient() {
     }
 
-    private void connectSuccess(Context context, final int userId, final QSCallback<Void> qsCallback) {
+    private void connectSuccess(Context context, final int userId, final QSCallback<Object> qsCallback) {
         mUserId = userId;
         // 初始化数据库
         DBHelper.init(context, "" + userId);
@@ -98,68 +181,72 @@ public enum IMClient {
 
                     }
                 });
+        // 一定时间后发送心跳
+        mHandler.postDelayed(mHeartBeatRunnable, HEART_BEAT_INTERVAL);
     }
 
-    public void connect(final Context context, final int userId, final QSCallback<Void> qsCallback) {
-        mWebSocket = new OkHttpClient.Builder()
+    public void connect(final Context context, final int userId, final QSCallback<Object> qsCallback) {
+        new OkHttpClient.Builder()
                 .connectTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
                 .readTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
                 .writeTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
                 .build().newWebSocket(new Request.Builder().url(URL).build(), new WebSocketListener() {
-                    @Override
-                    public void onOpen(WebSocket webSocket, Response response) {
-                        super.onOpen(webSocket, response);
-                        Log.i(TAG, "onOpen: ");
-                        mWebSocket = webSocket;
-                        sendMessage(MessageBean.createHandshakeMessage(userId));
-                    }
+            @Override
+            public void onOpen(WebSocket webSocket, Response response) {
+                super.onOpen(webSocket, response);
+                Log.i(TAG, "onOpen: ");
+                mWebSocket = webSocket;
+                sendMessage(MessageBean.createHandshakeMessage(userId));
+            }
 
-                    @Override
-                    public void onMessage(WebSocket webSocket, String text) {
-                        super.onMessage(webSocket, text);
-                        Log.i(TAG, "onMessage: text--->" + text);
-                        final MessageBean messageBean = new Gson().fromJson(text, MessageBean.class);
-                        if (messageBean.getType() == MessageType.HANDSHAKE_SUCCESS.getValue()) {
+            @Override
+            public void onMessage(WebSocket webSocket, String text) {
+                super.onMessage(webSocket, text);
+                Log.i(TAG, "onMessage: text--->" + text);
+                final MessageBean messageBean = new Gson().fromJson(text, MessageBean.class);
+                if (messageBean.getType() == MessageType.HANDSHAKE_SUCCESS.getValue()) {
 //                    UserBean userBean = new Gson().fromJson(messageBean.getExtend(), UserBean.class);
-                            connectSuccess(context, userId, qsCallback);
-                            return;
-                        }
-                        handleMessage(messageBean);
+                    connectSuccess(context, userId, qsCallback);
+                    return;
+                }
+                handleMessage(messageBean);
+            }
 
-                    }
+            @Override
+            public void onMessage(WebSocket webSocket, ByteString bytes) {
+                super.onMessage(webSocket, bytes);
+                Log.i(TAG, "onMessage: bytes--->" + bytes);
+            }
 
-                    @Override
-                    public void onMessage(WebSocket webSocket, ByteString bytes) {
-                        super.onMessage(webSocket, bytes);
-                        Log.i(TAG, "onMessage: bytes--->" + bytes);
-                    }
+            @Override
+            public void onClosing(WebSocket webSocket, int code, String reason) {
+                super.onClosing(webSocket, code, reason);
+                Log.i(TAG, "onClosing: ");
+            }
 
-                    @Override
-                    public void onClosing(WebSocket webSocket, int code, String reason) {
-                        super.onClosing(webSocket, code, reason);
-                        Log.i(TAG, "onClosing: ");
-                    }
+            @Override
+            public void onClosed(WebSocket webSocket, int code, String reason) {
+                super.onClosed(webSocket, code, reason);
+                Log.i(TAG, "onClosed: ");
+            }
 
-                    @Override
-                    public void onClosed(WebSocket webSocket, int code, String reason) {
-                        super.onClosed(webSocket, code, reason);
-                        Log.i(TAG, "onClosed: ");
-                    }
-
-                    @Override
-                    public void onFailure(WebSocket webSocket, Throwable t, Response response) {
-                        super.onFailure(webSocket, t, response);
-                        Log.i(TAG, "onFailure: t--->" + t.getMessage());
-                    }
-                });
+            @Override
+            public void onFailure(WebSocket webSocket, Throwable t, Response response) {
+                super.onFailure(webSocket, t, response);
+                Log.i(TAG, "onFailure: t--->" + t.getMessage());
+                if (mWebSocket == null) {
+                    // mWebSocket 为空说明是正常登录
+                    qsCallback.onFailure(new Exception(t));
+                } else {
+                    // 异常断开,开始重连
+                    mHandler.post(mReconnectRunnable);
+                }
+            }
+        });
     }
 
 
     public void disconnect() {
-        if (mWebSocket == null) {
-            return;
-        }
-        mWebSocket.close(1000, "normal close");
 //        for (Timer timer : mRetrySendTimerMap.values()) {
 //            timer.cancel();
 //        }
@@ -171,6 +258,11 @@ public enum IMClient {
         mUserManager = null;
         mGroupChatManager = null;
         mFriendManager = null;
+        mHandler.removeCallbacks(mHeartBeatRunnable);
+        if (mWebSocket == null) {
+            return;
+        }
+        mWebSocket.close(1000, "normal close");
     }
 
     public void sendMessage(MessageBean messageBean) {

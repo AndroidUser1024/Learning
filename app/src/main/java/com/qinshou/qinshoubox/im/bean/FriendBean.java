@@ -14,7 +14,7 @@ import com.qinshou.databasehelper.enums.ColumnType;
 @Table(name = "friend")
 @DatabaseTable(tableName = "friend")
 public class FriendBean {
-    /**
+    /**I
      * 好友的 id
      */
     @Column(columnType = ColumnType.INTEGER, id = true, generateId = true)

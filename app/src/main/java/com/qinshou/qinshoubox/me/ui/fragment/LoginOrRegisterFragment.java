@@ -104,9 +104,9 @@ public class LoginOrRegisterFragment extends QSFragment<LoginOrRegisterPresenter
     public void loginSuccess(final UserBean userBean) {
         ShowLogUtil.logi("loginSuccess" + " : " + "userBean--->" + userBean);
         // 连接聊天服务
-        IMClient.SINGLETON.connect(getContext(), userBean.getId(), new QSCallback<Void>() {
+        IMClient.SINGLETON.connect(getContext(), userBean.getId(), new QSCallback<Object>() {
             @Override
-            public void onSuccess(Void data) {
+            public void onSuccess(Object data) {
                 UserStatusManager.SINGLETON.login(getContext(), userBean);
             }
 

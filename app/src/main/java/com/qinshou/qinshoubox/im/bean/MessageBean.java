@@ -220,4 +220,21 @@ public class MessageBean {
         messageBean.type = MessageType.CLIENT_RECEIPT.getValue();
         return messageBean;
     }
+
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2019/12/1 10:37
+     * Description:创建一个心跳消息
+     *
+     * @param fromUserId 发送者的 id
+     * @return 类型为心跳的消息
+     */
+    public static MessageBean createHeartBeatMessage(int fromUserId) {
+        MessageBean messageBean = new MessageBean();
+        messageBean.sendTimestamp = System.currentTimeMillis();
+        messageBean.fromUserId = fromUserId;
+        messageBean.type = MessageType.HEART_BEAT.getValue();
+        return messageBean;
+    }
 }
