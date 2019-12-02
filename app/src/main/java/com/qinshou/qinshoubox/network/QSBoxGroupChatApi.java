@@ -17,7 +17,7 @@ import java.util.List;
  * Date: 2019/11/22 13:35
  * Description:QSBox 群聊模块的接口
  */
-@Api(IUrlConstant.DEFAULT_HOST+"/groupChat")
+@Api(IUrlConstant.DEFAULT_HOST + "/groupChat")
 public interface QSBoxGroupChatApi {
 
     @Json
@@ -30,4 +30,9 @@ public interface QSBoxGroupChatApi {
     @Json
     @Post("/getMyGroupChatList")
     Call<QinshouResultBean<List<GroupChatBean>>> getMyGroupChatList(@Field(name = "userId") int userId);
+
+    @Json
+    @Post("/getGroupChat")
+    Call<QinshouResultBean<GroupChatBean>> getGroupChat(@Field(name = "groupChatId") int groupChatId
+            , @Field(name = "userId") int userId);
 }

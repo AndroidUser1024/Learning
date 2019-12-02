@@ -4,6 +4,8 @@ package com.qinshou.qinshoubox.im.bean;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.util.List;
+
 /**
  * Description:群实体类
  * Author: QinHao
@@ -15,12 +17,12 @@ public class GroupChatBean {
      * Id
      */
     @DatabaseField(columnName = "id", id = true)
-    private int id;
+    private Integer id;
     /**
      * 群主 Id
      */
     @DatabaseField(columnName = "ownerId")
-    private int ownerId;
+    private Integer ownerId;
     /**
      * 昵称
      */
@@ -41,6 +43,11 @@ public class GroupChatBean {
      */
     @DatabaseField(columnName = "headImgSmall")
     private String headImgSmall;
+    /**
+     * 群成员,前 15 个
+     */
+    @DatabaseField(persisted = false)
+    private List<UserBean> memberList;
 
     public GroupChatBean() {
     }
@@ -54,6 +61,7 @@ public class GroupChatBean {
                 ", nicknameDefault='" + nicknameDefault + '\'' +
                 ", headImg='" + headImg + '\'' +
                 ", headImgSmall='" + headImgSmall + '\'' +
+                ", memberList='" + memberList + '\'' +
                 '}';
     }
 
@@ -103,5 +111,13 @@ public class GroupChatBean {
 
     public void setHeadImgSmall(String headImgSmall) {
         this.headImgSmall = headImgSmall;
+    }
+
+    public List<UserBean> getMemberList() {
+        return memberList;
+    }
+
+    public void setMemberList(List<UserBean> memberList) {
+        this.memberList = memberList;
     }
 }

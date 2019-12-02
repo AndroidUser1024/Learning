@@ -96,16 +96,15 @@
 
 
     <!-- 群聊设置界面 -->
-    <string name="group_chat_setting_title">聊天设置</string>
-    <string name="group_chat_setting_title_with_occupant_count">聊天设置(<xliff:g id="account">%1$s</xliff:g>)</string>
-    <string name="group_chat_setting_show_more">查看更多群成员</string>
-    <string name="group_chat_setting_show_partial">收起</string>
+    <string name="group_chat_setting_title">聊天设置(<xliff:g id="memberCount">%1$s</xliff:g>)</string>
+    <string name="group_chat_setting_show_more_group_chat_member">查看更多群成员</string>
+    <string name="group_chat_setting_show_fold">收起</string>
     <string name="group_chat_setting_invite">邀请</string>
     <string name="group_chat_setting_remove">删除</string>
-    <string name="group_chat_setting_unnamed">未命名</string>
-    <string name="group_chat_setting_name">群聊名称</string>
+    <string name="group_chat_setting_tv_nickname_prompt_text">群聊名称</string>
+    <string name="group_chat_setting_tv_nickname_text">未命名</string>
     <string name="group_chat_setting_tv_qr_code_text">群聊二维码</string>
-    <string name="group_chat_setting_tv_manage">群管理</string>
+    <string name="group_chat_setting_tv_manage_text">群管理</string>
     <string name="group_chat_setting_top">消息置顶</string>
     <string name="group_chat_setting_disturb">消息免打扰</string>
     <string name="group_chat_setting_nickname">我在本群的昵称</string>

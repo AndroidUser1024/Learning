@@ -53,4 +53,20 @@ public class GroupChatManager {
                     }
                 });
     }
+
+    public void getGroupChat(int groupChatId, final QSCallback<GroupChatBean> qsCallback) {
+        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.getGroupChat(groupChatId, UserStatusManager.SINGLETON.getUserBean().getId())
+                .transform(new QSApiTransformer<GroupChatBean>())
+                .enqueue(new Callback<GroupChatBean>() {
+                    @Override
+                    public void onSuccess(GroupChatBean data) {
+                        qsCallback.onSuccess(data);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        qsCallback.onFailure(e);
+                    }
+                });
+    }
 }

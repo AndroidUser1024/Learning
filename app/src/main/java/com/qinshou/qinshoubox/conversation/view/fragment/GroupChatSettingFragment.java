@@ -2,13 +2,27 @@ package com.qinshou.qinshoubox.conversation.view.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.widget.TextView;
 
 import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.util.ShowLogUtil;
+import com.qinshou.commonmodule.widget.TitleBar;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
+import com.qinshou.qinshoubox.conversation.bean.GroupChatMemberFunction;
 import com.qinshou.qinshoubox.conversation.contract.IGroupChatSettingContract;
 import com.qinshou.qinshoubox.conversation.presenter.GroupChatSettingPresenter;
+import com.qinshou.qinshoubox.conversation.view.adapter.RcvGroupChatMemberAdapter;
+import com.qinshou.qinshoubox.im.bean.GroupChatBean;
+import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 
 /**
@@ -19,6 +33,12 @@ import com.qinshou.qinshoubox.conversation.presenter.GroupChatSettingPresenter;
  */
 public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresenter> implements IGroupChatSettingContract.IView {
     public static final String GROUP_CHAT_ID = "GroupChatId";
+    private TitleBar mTitleBar;
+    private RcvGroupChatMemberAdapter mRcvGroupChatMemberAdapter;
+    /**
+     * 群昵称
+     */
+    private TextView mTvNickname;
 
     @Override
     public int getLayoutId() {
@@ -27,7 +47,11 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
 
     @Override
     public void initView() {
-
+        mTitleBar = findViewByID(R.id.title_bar);
+        RecyclerView rcvGroupChatMember = findViewByID(R.id.rcv_group_chat_member);
+        rcvGroupChatMember.setLayoutManager(new GridLayoutManager(getContext(), 5));
+        rcvGroupChatMember.setAdapter(mRcvGroupChatMemberAdapter = new RcvGroupChatMemberAdapter(getContext()));
+        mTvNickname = findViewByID(R.id.tv_nickname);
     }
 
     @Override
@@ -46,6 +70,26 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
             return;
         }
         ShowLogUtil.logi("groupChatId--->" + groupChatId);
+        getPresenter().getGroupChat(groupChatId);
+    }
+
+    @Override
+    public void getGroupChatSuccess(GroupChatBean groupChatBean) {
+        mTitleBar.setTitleText(getString(R.string.group_chat_setting_title, "" + groupChatBean.getMemberList().size()));
+        List list = new ArrayList(groupChatBean.getMemberList());
+        list.add(GroupChatMemberFunction.ADD);
+        if (groupChatBean.getOwnerId() == UserStatusManager.SINGLETON.getUserBean().getId()) {
+            list.add(GroupChatMemberFunction.DELETE);
+        }
+        mRcvGroupChatMemberAdapter.setDataList(list);
+        mTvNickname.setText(TextUtils.isEmpty(groupChatBean.getNickname())
+                ? getString(R.string.group_chat_setting_tv_nickname_text)
+                : groupChatBean.getNickname());
+    }
+
+    @Override
+    public void getGroupChatFailure(Exception e) {
+
     }
 
     /**

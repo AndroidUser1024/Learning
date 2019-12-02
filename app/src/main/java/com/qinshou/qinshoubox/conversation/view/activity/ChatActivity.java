@@ -41,7 +41,7 @@ import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.listener.ClearErrorInfoTextWatcher;
 import com.qinshou.qinshoubox.conversation.contract.IChatContract;
 import com.qinshou.qinshoubox.conversation.presenter.ChatPresenter;
-import com.qinshou.qinshoubox.me.ui.adapter.RcvMessageAdapter;
+import com.qinshou.qinshoubox.conversation.view.adapter.RcvMessageAdapter;
 
 import java.io.File;
 import java.util.HashMap;

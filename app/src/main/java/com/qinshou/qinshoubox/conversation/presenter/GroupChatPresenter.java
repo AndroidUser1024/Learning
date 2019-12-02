@@ -35,6 +35,8 @@ public class GroupChatPresenter extends AbsPresenter<IGroupChatContract.IView, I
 
             @Override
             public void onFailure(Exception e) {
+
+
                 if (!isViewAttached()) {
                     return;
                 }

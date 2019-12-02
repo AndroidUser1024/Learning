@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:paddingTop="@dimen/px19"
     android:paddingBottom="@dimen/px19"
-    tools:context="com.qinshou.qinshoubox.me.ui.adapter.RcvMessageAdapterFromMessageTextItemView">
+    tools:context="com.qinshou.qinshoubox.conversation.view.adapter.RcvMessageAdapterFromMessageTextItemView">
 
     <!-- 消息接收时间 -->
     <TextView

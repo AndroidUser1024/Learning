@@ -5,6 +5,7 @@ import com.qinshou.qinshoubox.conversation.contract.IGroupChatSettingContract;
 import com.qinshou.qinshoubox.conversation.model.GroupChatSettingModel;
 import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatSettingFragment;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 
 /**
@@ -17,5 +18,26 @@ public class GroupChatSettingPresenter extends AbsPresenter<IGroupChatSettingCon
     @Override
     public IGroupChatSettingContract.IModel initModel() {
         return new GroupChatSettingModel();
+    }
+
+    @Override
+    public void getGroupChat(int groupChatId) {
+        getModel().getGroupChat(groupChatId, new QSCallback<GroupChatBean>() {
+            @Override
+            public void onSuccess(GroupChatBean data) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().getGroupChatSuccess(data);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().getGroupChatFailure(e);
+            }
+        });
     }
 }
