@@ -10,9 +10,9 @@ public enum GroupChatMemberFunction {
     /**
      * 添加人到群聊中
      */
-    ADD,
+    ADD_MEMBER,
     /**
      * 从群聊中删除人
      */
-    DELETE,
+    DELETE_MEMBER,
 }

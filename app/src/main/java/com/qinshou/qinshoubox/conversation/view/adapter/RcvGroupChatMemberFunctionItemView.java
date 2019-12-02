@@ -1,12 +1,13 @@
 package com.qinshou.qinshoubox.conversation.view.adapter;
 
 import android.content.Context;
+import android.view.View;
 
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.commonmodule.rcvbaseadapter.itemview.BaseItemView;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.conversation.bean.GroupChatMemberFunction;
-import com.qinshou.qinshoubox.im.bean.UserBean;
+import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatAddMemberFragment;
 
 /**
  * Author: QinHao
@@ -21,10 +22,12 @@ public class RcvGroupChatMemberFunctionItemView extends BaseItemView<GroupChatMe
 
     @Override
     public void bindViewHolder(BaseViewHolder holder, GroupChatMemberFunction itemData, int position) {
-        if (itemData == GroupChatMemberFunction.ADD) {
-            holder.setIvImage(R.id.iv_function, R.drawable.group_chat_setting_iv_function_src_add);
-        } else if (itemData == GroupChatMemberFunction.DELETE) {
-            holder.setIvImage(R.id.iv_function, R.drawable.group_chat_setting_iv_function_src_delete);
+        if (itemData == GroupChatMemberFunction.ADD_MEMBER) {
+            holder.setIvImage(R.id.iv_function, R.drawable.group_chat_setting_iv_function_src_add_member);
+            holder.setTvText(R.id.tv_function, R.string.group_chat_setting_tv_function_text_add_member);
+        } else if (itemData == GroupChatMemberFunction.DELETE_MEMBER) {
+            holder.setIvImage(R.id.iv_function, R.drawable.group_chat_setting_iv_function_src_delete_member);
+            holder.setTvText(R.id.tv_function, R.string.group_chat_setting_tv_function_text_delete_member);
         }
     }
 }

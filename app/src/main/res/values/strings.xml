@@ -99,8 +99,8 @@
     <string name="group_chat_setting_title">聊天设置(<xliff:g id="memberCount">%1$s</xliff:g>)</string>
     <string name="group_chat_setting_show_more_group_chat_member">查看更多群成员</string>
     <string name="group_chat_setting_show_fold">收起</string>
-    <string name="group_chat_setting_invite">邀请</string>
-    <string name="group_chat_setting_remove">删除</string>
+    <string name="group_chat_setting_tv_function_text_add_member">邀请</string>
+    <string name="group_chat_setting_tv_function_text_delete_member">删除</string>
     <string name="group_chat_setting_tv_nickname_prompt_text">群聊名称</string>
     <string name="group_chat_setting_tv_nickname_text">未命名</string>
     <string name="group_chat_setting_tv_qr_code_text">群聊二维码</string>
@@ -114,6 +114,12 @@
     <string name="group_chat_setting_delete_leave">删除并退出</string>
     <string name="group_chat_setting_clear_chat_history_warning">确定要清空该群的聊天记录\n记录清空后将无法恢复</string>
     <string name="group_chat_setting_leave_notification">退出后不会通知群聊中其他成员,退出后将删除所有聊天记录</string>
+
+    <!-- 添加群成员界面 -->
+    <string name="group_chat_add_member_tv_title_text">添加群成员</string>
+
+    <!-- 删除群成员界面 -->
+    <string name="group_chat_delete_member_tv_title_text">删除群成员</string>
 
     <!-- 好友申请历史界面 -->
     <string name="friend_history_tv_title_text">新增朋友</string>

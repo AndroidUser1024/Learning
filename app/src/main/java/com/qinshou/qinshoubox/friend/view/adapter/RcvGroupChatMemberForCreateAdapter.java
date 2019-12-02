@@ -30,5 +30,6 @@ public class RcvGroupChatMemberForCreateAdapter extends RcvSingleBaseAdapter<Gro
         holder.setTvText(R.id.tv_nickname, TextUtils.isEmpty(itemData.getRemark())
                 ? itemData.getNickname() :
                 itemData.getRemark());
+        holder.getItemView().setEnabled(itemData.isEnable());
     }
 }

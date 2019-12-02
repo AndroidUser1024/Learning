@@ -8,7 +8,7 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
-    tools:context="com.qinshou.qinshoubox.friend.view.fragment.CreateGroupChatFragment">
+    tools:context="com.qinshou.qinshoubox.conversation.view.fragment.GroupChatAddMemberFragment">
 
     <!-- 标题栏 -->
     <LinearLayout
@@ -32,7 +32,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/create_group_chat_tv_title_text"
+            android:text="@string/group_chat_add_member_tv_title_text"
             android:textColor="#FF333333"
             android:textSize="@dimen/px36" />
 
@@ -51,58 +51,12 @@
 
     </LinearLayout>
 
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rcv_group_chat_member_choose"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/px90"
-        app:spanCount="5"
-        tools:itemCount="20"
-        tools:layoutManager="GridLayoutManager"
-        tools:listitem="@layout/item_rcv_group_chat_member_for_create_choose"
-        tools:orientation="vertical" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/px30"
-        android:layout_marginLeft="@dimen/px30"
-        android:layout_marginTop="@dimen/px40"
-        android:layout_marginEnd="@dimen/px30"
-        android:layout_marginRight="@dimen/px30"
-        android:layout_marginBottom="@dimen/px40"
-        android:orientation="horizontal"
-        android:showDividers="middle|end">
-
-        <ImageView
-            android:id="@+id/iv_head_img"
-            android:layout_width="@dimen/px80"
-            android:layout_height="@dimen/px80"
-            android:layout_marginEnd="@dimen/px20"
-            android:layout_marginRight="@dimen/px20"
-            android:scaleType="centerCrop"
-            android:src="@drawable/create_group_iv_head_img_src" />
-
-        <EditText
-            android:id="@+id/et_nickname"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/create_group_et_nickname_bg"
-            android:hint="@string/create_group_chat_et_group_chat_name_hint"
-            android:inputType="text"
-            android:paddingLeft="@dimen/px22"
-            android:paddingTop="@dimen/px18"
-            android:paddingRight="@dimen/px22"
-            android:paddingBottom="@dimen/px18"
-            android:textSize="@dimen/px28" />
-    </LinearLayout>
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/px30"
         android:layout_marginLeft="@dimen/px30"
+        android:layout_marginTop="@dimen/px40"
         android:layout_marginEnd="@dimen/px30"
         android:layout_marginRight="@dimen/px30"
         android:layout_marginBottom="@dimen/px40"

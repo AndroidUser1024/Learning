@@ -8,6 +8,7 @@ import com.qinshou.okhttphelper.call.Call;
 import com.qinshou.qinshoubox.constant.IUrlConstant;
 import com.qinshou.qinshoubox.homepage.bean.QinshouResultBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
+import com.qinshou.qinshoubox.im.bean.UserBean;
 
 import java.util.List;
 
@@ -35,4 +36,21 @@ public interface QSBoxGroupChatApi {
     @Post("/getGroupChat")
     Call<QinshouResultBean<GroupChatBean>> getGroupChat(@Field(name = "groupChatId") int groupChatId
             , @Field(name = "userId") int userId);
+
+    @Json
+    @Post("/getMemberList")
+    Call<QinshouResultBean<List<UserBean>>> getMemberList(@Field(name = "groupChatId") int groupChatId
+            , @Field(name = "userId") int userId);
+
+    @Json
+    @Post("/addMember")
+    Call<QinshouResultBean<Object>> addMember(@Field(name = "groupChatId") int groupChatId
+            , @Field(name = "userId") int userId
+            , @Field(name = "toUserIdList") List<Integer> toUserIdList);
+
+    @Json
+    @Post("/deleteMember")
+    Call<QinshouResultBean<Object>> deleteMember(@Field(name = "groupChatId") int groupChatId
+            , @Field(name = "userId") int userId
+            , @Field(name = "toUserIdList") List<Integer> toUserIdList);
 }
