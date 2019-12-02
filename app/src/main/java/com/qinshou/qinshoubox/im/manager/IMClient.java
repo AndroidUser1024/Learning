@@ -45,13 +45,10 @@ public enum IMClient {
     /**
      * 重连间隔
      */
-    private final long RECONNECT_INTERVAL = 15 * 1000;
-    /**
-     * 重连间隔
-     */
     private final int MAX_RECONNECT_COUNT = 5;
     private static final String URL = "http://172.16.60.231:10086/websocket";
     //    private static final String URL = "http://192.168.1.109:10086/websocket";
+    private Context mContext;
     private WebSocket mWebSocket;
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private List<IOnMessageListener> mOnMessageListenerList = new ArrayList<>();
@@ -87,66 +84,20 @@ public enum IMClient {
     private Runnable mReconnectRunnable = new Runnable() {
         @Override
         public void run() {
-            mReconnectCount++;
             Log.i(TAG, "开始第 " + mReconnectCount + " 次重连");
-            new OkHttpClient.Builder()
-                    .connectTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
-                    .readTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
-                    .writeTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
-                    .build().newWebSocket(new Request.Builder().url(URL).build(), new WebSocketListener() {
-                @Override
-                public void onOpen(WebSocket webSocket, Response response) {
-                    super.onOpen(webSocket, response);
-                    Log.i(TAG, "onOpen: ");
-                    mWebSocket = webSocket;
-                    mReconnectCount = 0;
-                }
-
-                @Override
-                public void onMessage(WebSocket webSocket, String text) {
-                    super.onMessage(webSocket, text);
-                    Log.i(TAG, "onMessage: text--->" + text);
-                    final MessageBean messageBean = new Gson().fromJson(text, MessageBean.class);
-                    handleMessage(messageBean);
-                }
-
-                @Override
-                public void onMessage(WebSocket webSocket, ByteString bytes) {
-                    super.onMessage(webSocket, bytes);
-                    Log.i(TAG, "onMessage: bytes--->" + bytes);
-                }
-
-                @Override
-                public void onClosing(WebSocket webSocket, int code, String reason) {
-                    super.onClosing(webSocket, code, reason);
-                    Log.i(TAG, "onClosing: ");
-                }
-
-                @Override
-                public void onClosed(WebSocket webSocket, int code, String reason) {
-                    super.onClosed(webSocket, code, reason);
-                    Log.i(TAG, "onClosed: ");
-                }
-
-                @Override
-                public void onFailure(WebSocket webSocket, Throwable t, Response response) {
-                    super.onFailure(webSocket, t, response);
-                    Log.i(TAG, "onFailure: t--->" + t.getMessage());
-                    if (mReconnectCount < MAX_RECONNECT_COUNT) {
-                        mHandler.postDelayed(mReconnectRunnable, RECONNECT_INTERVAL);
-                    }
-                }
-            });
+            connect(mUserId, null);
         }
     };
 
     IMClient() {
     }
 
-    private void connectSuccess(Context context, final int userId, final QSCallback<Object> qsCallback) {
+    private void connectSuccess(WebSocket webSocket, int userId) {
+        mWebSocket = webSocket;
         mUserId = userId;
+        mReconnectCount = 0;
         // 初始化数据库
-        DBHelper.init(context, "" + userId);
+        DBHelper.init(mContext, "" + userId);
         // 创建会话管理者
         mConversationManager = new ConversationManager();
         // 创建消息管理者
@@ -157,12 +108,7 @@ public enum IMClient {
         mGroupChatManager = new GroupChatManager();
         // 创建好友管理者
         mFriendManager = new FriendManager();
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                qsCallback.onSuccess(null);
-            }
-        });
+        // 拉取离线消息
         OkHttpHelperForQSBoxOfflineApi.SINGLETON.getOfflineMessageList(userId)
                 .transform(new QSApiTransformer<List<MessageBean>>())
                 .enqueue(new Callback<List<MessageBean>>() {
@@ -172,7 +118,7 @@ public enum IMClient {
                             handleMessage(messageBean);
                         }
                         // 通知后台删除离线消息
-                        OkHttpHelperForQSBoxOfflineApi.SINGLETON.deleteOfflineMessageList(userId)
+                        OkHttpHelperForQSBoxOfflineApi.SINGLETON.deleteOfflineMessageList(mUserId)
                                 .enqueue(null);
                     }
 
@@ -182,114 +128,9 @@ public enum IMClient {
                     }
                 });
         // 一定时间后发送心跳
+        mHandler.removeCallbacks(mHeartBeatRunnable);
         mHandler.postDelayed(mHeartBeatRunnable, HEART_BEAT_INTERVAL);
     }
-
-    public void connect(final Context context, final int userId, final QSCallback<Object> qsCallback) {
-        new OkHttpClient.Builder()
-                .connectTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
-                .readTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
-                .writeTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
-                .build().newWebSocket(new Request.Builder().url(URL).build(), new WebSocketListener() {
-            @Override
-            public void onOpen(WebSocket webSocket, Response response) {
-                super.onOpen(webSocket, response);
-                Log.i(TAG, "onOpen: ");
-                mWebSocket = webSocket;
-                sendMessage(MessageBean.createHandshakeMessage(userId));
-            }
-
-            @Override
-            public void onMessage(WebSocket webSocket, String text) {
-                super.onMessage(webSocket, text);
-                Log.i(TAG, "onMessage: text--->" + text);
-                final MessageBean messageBean = new Gson().fromJson(text, MessageBean.class);
-                if (messageBean.getType() == MessageType.HANDSHAKE_SUCCESS.getValue()) {
-//                    UserBean userBean = new Gson().fromJson(messageBean.getExtend(), UserBean.class);
-                    connectSuccess(context, userId, qsCallback);
-                    return;
-                }
-                handleMessage(messageBean);
-            }
-
-            @Override
-            public void onMessage(WebSocket webSocket, ByteString bytes) {
-                super.onMessage(webSocket, bytes);
-                Log.i(TAG, "onMessage: bytes--->" + bytes);
-            }
-
-            @Override
-            public void onClosing(WebSocket webSocket, int code, String reason) {
-                super.onClosing(webSocket, code, reason);
-                Log.i(TAG, "onClosing: ");
-            }
-
-            @Override
-            public void onClosed(WebSocket webSocket, int code, String reason) {
-                super.onClosed(webSocket, code, reason);
-                Log.i(TAG, "onClosed: ");
-            }
-
-            @Override
-            public void onFailure(WebSocket webSocket, Throwable t, Response response) {
-                super.onFailure(webSocket, t, response);
-                Log.i(TAG, "onFailure: t--->" + t.getMessage());
-                if (mWebSocket == null) {
-                    // mWebSocket 为空说明是正常登录
-                    qsCallback.onFailure(new Exception(t));
-                } else {
-                    // 异常断开,开始重连
-                    mHandler.post(mReconnectRunnable);
-                }
-            }
-        });
-    }
-
-
-    public void disconnect() {
-//        for (Timer timer : mRetrySendTimerMap.values()) {
-//            timer.cancel();
-//        }
-//        mAckMessageMap.clear();
-//        mRetrySendTimerMap.clear();
-        mUserId = 0;
-        mConversationManager = null;
-        mMessageManager = null;
-        mUserManager = null;
-        mGroupChatManager = null;
-        mFriendManager = null;
-        mHandler.removeCallbacks(mHeartBeatRunnable);
-        if (mWebSocket == null) {
-            return;
-        }
-        mWebSocket.close(1000, "normal close");
-    }
-
-    public void sendMessage(MessageBean messageBean) {
-        if (mWebSocket == null) {
-            return;
-        }
-        if (messageBean.getType() == MessageType.CHAT.getValue()
-                || messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
-            mMessageManager.insertOrUpdate(true, messageBean);
-
-//            // 创建一个唯一索引作为 ACK Key,将其 json 串做 Base64 加密,得到的加密字符串作为 key
-//            AckKeyBean ackKeyBean = new AckKeyBean(mUserId
-//                    , messageBean.getFromUserId()
-//                    , messageBean.getToUserId()
-//                    , messageBean.getType()
-//                    , messageBean.getSendTimestamp());
-//            String key = CodeUtil.encode(new Gson().toJson(ackKeyBean));
-//            mAckMessageMap.put(key, messageBean);
-//            // 设置一个定时任务,一定时间后如果还没有收到服务端回执,则重新发送
-//            Timer timer = new Timer();
-//            timer.schedule(new RetrySendTimerTask(key), TIME_OUT);
-//            mRetrySendTimerMap.put(key, timer);
-        }
-        mWebSocket.send(new Gson().toJson(messageBean));
-    }
-
-    private int i = 0;
 
     /**
      * Author: QinHao
@@ -319,21 +160,21 @@ public enum IMClient {
                     for (IOnMessageListener onMessageListener : mOnMessageListenerList) {
                         onMessageListener.onMessage(messageBean);
                     }
-                    // 创建一个唯一索引作为 ACK Key,将其 json 串做 Base64 加密,得到的加密字符串作为 key
-                    AckKeyBean ackKeyBean = new AckKeyBean(mUserId
-                            , messageBean.getFromUserId()
-                            , messageBean.getToUserId()
-                            , messageBean.getType()
-                            , messageBean.getSendTimestamp());
-                    String key = CodeUtil.encode(new Gson().toJson(ackKeyBean));
-                    Map<String, String> map = new HashMap<>();
-                    map.put("key", key);
-                    map.put("status", "" + MessageStatus.RECEIVED.getValue());
-                    // 发送回执消息,通知客户端本条消息已成功发送
-                    MessageBean clientReceiptMessage = MessageBean.createClientReceiptMessage(mUserId);
-                    clientReceiptMessage.setExtend(new Gson().toJson(map));
+//                    // 创建一个唯一索引作为 ACK Key,将其 json 串做 Base64 加密,得到的加密字符串作为 key
+//                    AckKeyBean ackKeyBean = new AckKeyBean(mUserId
+//                            , messageBean.getFromUserId()
+//                            , messageBean.getToUserId()
+//                            , messageBean.getType()
+//                            , messageBean.getSendTimestamp());
+//                    String key = CodeUtil.encode(new Gson().toJson(ackKeyBean));
+//                    Map<String, String> map = new HashMap<>();
+//                    map.put("key", key);
+//                    map.put("status", "" + MessageStatus.RECEIVED.getValue());
+//                    // 发送回执消息,通知客户端本条消息已成功发送
+//                    MessageBean clientReceiptMessage = MessageBean.createClientReceiptMessage(mUserId);
+//                    clientReceiptMessage.setExtend(new Gson().toJson(map));
+//                    mWebSocket.send(new Gson().toJson(clientReceiptMessage));
 
-                    mWebSocket.send(new Gson().toJson(clientReceiptMessage));
                 } else if (messageBean.getType() == MessageType.FRIEND.getValue()) {
                     FriendStatusBean friendStatusBean = new Gson().fromJson(messageBean.getExtend(), FriendStatusBean.class);
                     if (friendStatusBean.getStatus() == FriendStatus.ADD.getValue()) {
@@ -379,6 +220,130 @@ public enum IMClient {
                 }
             }
         });
+    }
+
+    public void init(Context context) {
+        mContext = context;
+    }
+
+    public void connect(final int userId, final QSCallback<Object> qsCallback) {
+        new OkHttpClient.Builder()
+                .connectTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
+                .readTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
+                .writeTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
+                .build().newWebSocket(new Request.Builder().url(URL).build(), new WebSocketListener() {
+            @Override
+            public void onOpen(WebSocket webSocket, Response response) {
+                super.onOpen(webSocket, response);
+                Log.i(TAG, "onOpen: ");
+                webSocket.send(new Gson().toJson(MessageBean.createHandshakeMessage(userId)));
+            }
+
+            @Override
+            public void onMessage(WebSocket webSocket, String text) {
+                super.onMessage(webSocket, text);
+                Log.i(TAG, "onMessage: text--->" + text);
+                final MessageBean messageBean = new Gson().fromJson(text, MessageBean.class);
+                if (messageBean.getType() == MessageType.HANDSHAKE_SUCCESS.getValue()) {
+//                    UserBean userBean = new Gson().fromJson(messageBean.getExtend(), UserBean.class);
+                    connectSuccess(webSocket, userId);
+                    // 成功回调
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (qsCallback != null) {
+                                qsCallback.onSuccess(null);
+                            }
+                        }
+                    });
+                    return;
+                }
+                handleMessage(messageBean);
+            }
+
+            @Override
+            public void onMessage(WebSocket webSocket, ByteString bytes) {
+                super.onMessage(webSocket, bytes);
+                Log.i(TAG, "onMessage: bytes--->" + bytes);
+            }
+
+            @Override
+            public void onClosing(WebSocket webSocket, int code, String reason) {
+                super.onClosing(webSocket, code, reason);
+                Log.i(TAG, "onClosing: ");
+            }
+
+            @Override
+            public void onClosed(WebSocket webSocket, int code, String reason) {
+                super.onClosed(webSocket, code, reason);
+                Log.i(TAG, "onClosed: ");
+            }
+
+            @Override
+            public void onFailure(WebSocket webSocket, final Throwable t, Response response) {
+                super.onFailure(webSocket, t, response);
+                Log.i(TAG, "onFailure: t--->" + t.getMessage());
+                if (mWebSocket != null && mReconnectCount < MAX_RECONNECT_COUNT) {
+                    // 异常断开,开始重连
+                    mReconnectCount++;
+                    mHandler.post(mReconnectRunnable);
+                }
+                // 失败回调
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (qsCallback != null) {
+                            qsCallback.onFailure(new Exception(t));
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+
+    public void disconnect() {
+//        for (Timer timer : mRetrySendTimerMap.values()) {
+//            timer.cancel();
+//        }
+//        mAckMessageMap.clear();
+//        mRetrySendTimerMap.clear();
+        mUserId = 0;
+        mConversationManager = null;
+        mMessageManager = null;
+        mUserManager = null;
+        mGroupChatManager = null;
+        mFriendManager = null;
+        mHandler.removeCallbacks(mHeartBeatRunnable);
+        mHandler.removeCallbacks(mReconnectRunnable);
+        if (mWebSocket == null) {
+            return;
+        }
+        mWebSocket.close(1000, "normal close");
+    }
+
+    public void sendMessage(MessageBean messageBean) {
+        if (mWebSocket == null) {
+            return;
+        }
+        if (messageBean.getType() == MessageType.CHAT.getValue()
+                || messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
+            mMessageManager.insertOrUpdate(true, messageBean);
+
+//            // 创建一个唯一索引作为 ACK Key,将其 json 串做 Base64 加密,得到的加密字符串作为 key
+//            AckKeyBean ackKeyBean = new AckKeyBean(mUserId
+//                    , messageBean.getFromUserId()
+//                    , messageBean.getToUserId()
+//                    , messageBean.getType()
+//                    , messageBean.getSendTimestamp());
+//            String key = CodeUtil.encode(new Gson().toJson(ackKeyBean));
+//            mAckMessageMap.put(key, messageBean);
+//            // 设置一个定时任务,一定时间后如果还没有收到服务端回执,则重新发送
+//            Timer timer = new Timer();
+//            timer.schedule(new RetrySendTimerTask(key), TIME_OUT);
+//            mRetrySendTimerMap.put(key, timer);
+        }
+        mWebSocket.send(new Gson().toJson(messageBean));
     }
 
 //    private class RetrySendTimerTask extends TimerTask {

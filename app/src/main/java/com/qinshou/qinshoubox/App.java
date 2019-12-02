@@ -2,6 +2,7 @@ package com.qinshou.qinshoubox;
 
 import com.qinshou.commonmodule.base.BaseApplication;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
+import com.qinshou.qinshoubox.im.manager.IMClient;
 
 /**
  * Description:
@@ -22,5 +23,6 @@ public class App extends BaseApplication {
 //        ShareUtil.init(this);
         // 初始化共享参数帮助者类
         SharedPreferencesHelper.SINGLETON.init(this);
+        IMClient.SINGLETON.init(this);
     }
 }
