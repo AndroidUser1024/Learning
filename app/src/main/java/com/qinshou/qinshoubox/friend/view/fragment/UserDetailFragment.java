@@ -150,6 +150,7 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
         mBtnAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.REFRESH_FRIEND_LIST, null));
                 ChatActivity.start(getContext(), mUserBean.getId());
             }
         });

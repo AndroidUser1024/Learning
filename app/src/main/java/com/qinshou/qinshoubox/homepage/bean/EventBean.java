@@ -43,6 +43,7 @@ public class EventBean<T> {
         LOGIN,
         LOGOUT,
         REFRESH_USER_BEAN,
+        REFRESH_GROUP_CHAT_LIST,
         REFRESH_FRIEND_LIST,
     }
 }

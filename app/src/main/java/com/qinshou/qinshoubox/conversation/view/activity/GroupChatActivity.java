@@ -27,6 +27,7 @@ import com.qinshou.commonmodule.util.permissionutil.IOnRequestPermissionResultCa
 import com.qinshou.commonmodule.util.permissionutil.PermissionUtil;
 import com.qinshou.commonmodule.widget.RefreshLayout;
 import com.qinshou.commonmodule.widget.TitleBar;
+import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatSettingFragment;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.enums.MessageContentType;
@@ -53,7 +54,7 @@ import java.util.Map;
  * Description:群聊界面
  */
 public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements IGroupChatContract.IView {
-    private static final String TO_USER_ID = "ToUserId";
+    private static final String GROUP_CHAT_ID = "GroupChatId";
     private final int VOICE_MAX_TIME = 1000 * 60;
     private final int MESSAGE_WHAT_VOLUME_LEVEL = 1;
     private final int MESSAGE_WHAT_SEND_VOICE = 2;
@@ -64,7 +65,7 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
     /**
      * 接收消息方的用户名
      */
-    private int mToUserId;
+    private int mGroupChatId;
     /**
      * 标题栏
      */
@@ -167,7 +168,7 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
                 if (file == null) {
                     return true;
                 }
-//                MessageBean message = MessageBean.createVoiceMessage(mToUserId, recordTime, file.getAbsolutePath());
+//                MessageBean message = MessageBean.createVoiceMessage(mGroupChatId, recordTime, file.getAbsolutePath());
 //                JMClient.SINGLETON.getChatManager().sendVoiceMessage(message, file, recordTime, new JMCallback<Void>() {
 //                    @Override
 //                    public void onSuccess(Void aVoid) {
@@ -316,7 +317,7 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
         @Override
         public void onMessage(MessageBean messageBean) {
             // 不是当前群聊的消息,不添加到列表中
-            if (messageBean.getType() != MessageType.GROUP_CHAT.getValue() || mToUserId != messageBean.getToUserId()) {
+            if (messageBean.getType() != MessageType.GROUP_CHAT.getValue() || mGroupChatId != messageBean.getToUserId()) {
                 return;
             }
             mRcvMessageAdapter.getDataList().add(messageBean);
@@ -386,12 +387,12 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
                 finish();
             }
         });
-//        mTitleBar.setRightImageOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                ChatSettingFragment.start(getContext(), mToUserId);
-//            }
-//        });
+        mTitleBar.setRightImageOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GroupChatSettingFragment.start(getContext(), mGroupChatId);
+            }
+        });
 
         mIvContentType.setOnClickListener(mOnClickListener);
         mBtnPressToSpeech.setOnTouchListener(mOnTouchListener);
@@ -400,7 +401,7 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
             public void onRefresh(RefreshLayout refreshLayout) {
                 mPage++;
                 // 加载消息列表
-                getPresenter().getMessageList(MessageType.GROUP_CHAT.getValue(), mToUserId, mPage, IConstant.PAGE_SIZE);
+                getPresenter().getMessageList(MessageType.GROUP_CHAT.getValue(), mGroupChatId, mPage, IConstant.PAGE_SIZE);
             }
 
             @Override
@@ -464,24 +465,24 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
         if (intent == null) {
             return;
         }
-        mToUserId = intent.getIntExtra(TO_USER_ID, 0);
-        if (mToUserId == 0) {
+        mGroupChatId = intent.getIntExtra(GROUP_CHAT_ID, 0);
+        if (mGroupChatId == 0) {
             return;
         }
-        GroupChatBean groupChatBean = IMClient.SINGLETON.getGroupChatManager().getById(mToUserId);
+        GroupChatBean groupChatBean = IMClient.SINGLETON.getGroupChatManager().getById(mGroupChatId);
         if (groupChatBean != null) {
             // 群昵称
             mTitleBar.setTitleText(TextUtils.isEmpty(groupChatBean.getNickname())
                     ? groupChatBean.getNicknameDefault()
                     : groupChatBean.getNickname());
         }
-//        mConversationBean = JMClient.SINGLETON.getConversationManager().getByToUsername(mToUserId);
+//        mConversationBean = JMClient.SINGLETON.getConversationManager().getByToUsername(mGroupChatId);
 //        // 重置未读数
 //        if (mConversationBean != null) {
 //            JMClient.SINGLETON.getConversationManager().resetUnreadCount(mConversationBean.getId());
 //        }
         // 加载消息列表
-        getPresenter().getMessageList(MessageType.GROUP_CHAT.getValue(), mToUserId, mPage, IConstant.PAGE_SIZE);
+        getPresenter().getMessageList(MessageType.GROUP_CHAT.getValue(), mGroupChatId, mPage, IConstant.PAGE_SIZE);
     }
 
 
@@ -499,7 +500,7 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
         }
         MessageBean messageBean = null;
         if (mMessageContentType == MessageContentType.TEXT) {
-            messageBean = MessageBean.createTextMessage(mToUserId, content);
+            messageBean = MessageBean.createTextMessage(mGroupChatId, content);
             messageBean.setType(MessageType.GROUP_CHAT.getValue());
             IMClient.SINGLETON.sendMessage(messageBean);
         }
@@ -600,7 +601,7 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
      */
     public static void start(Context context, int toUserId) {
         Intent intent = new Intent(context, GroupChatActivity.class);
-        intent.putExtra(TO_USER_ID, toUserId);
+        intent.putExtra(GROUP_CHAT_ID, toUserId);
         context.startActivity(intent);
     }
 

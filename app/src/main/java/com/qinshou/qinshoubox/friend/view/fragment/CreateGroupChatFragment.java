@@ -12,6 +12,7 @@ import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemClickListener;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.friend.bean.GroupChatMemberForCreateBean;
 import com.qinshou.qinshoubox.friend.contract.ICreateGroupChatContract;
@@ -19,8 +20,11 @@ import com.qinshou.qinshoubox.friend.presenter.CreateGroupChatPresenter;
 import com.qinshou.qinshoubox.friend.view.adapter.RcvGroupChatMemberForCreateAdapter;
 import com.qinshou.qinshoubox.friend.view.adapter.RcvGroupChatMemberForCreateChooseAdapter;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
+import com.qinshou.qinshoubox.im.bean.UserBean;
 import com.qinshou.qinshoubox.im.manager.IMClient;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,6 +119,10 @@ public class CreateGroupChatFragment extends QSFragment<CreateGroupChatPresenter
         mRcvGroupChatMemberForCreateChooseAdapter.setOnItemClickListener(new IOnItemClickListener<GroupChatMemberForCreateBean>() {
             @Override
             public void onItemClick(BaseViewHolder holder, GroupChatMemberForCreateBean itemData, int position) {
+                if (itemData.getId() == UserStatusManager.SINGLETON.getUserBean().getId()) {
+                    // 不能移除自己
+                    return;
+                }
                 // 已选择的群聊成员列表中移除这一个
                 mRcvGroupChatMemberForCreateChooseAdapter.getDataList().remove(itemData);
                 mRcvGroupChatMemberForCreateChooseAdapter.notifyItemRemoved(position);
@@ -130,6 +138,13 @@ public class CreateGroupChatFragment extends QSFragment<CreateGroupChatPresenter
     @Override
     public void initData() {
         getPresenter().getFriendList(UserStatusManager.SINGLETON.getUserBean().getId());
+        GroupChatMemberForCreateBean groupChatMemberForCreateBean = new GroupChatMemberForCreateBean();
+        UserBean userBean = UserStatusManager.SINGLETON.getUserBean();
+        groupChatMemberForCreateBean.setId(userBean.getId());
+        groupChatMemberForCreateBean.setHeadImgSmall(userBean.getHeadImgSmall());
+        groupChatMemberForCreateBean.setNickname("我");
+        mRcvGroupChatMemberForCreateChooseAdapter.getDataList().add(groupChatMemberForCreateBean);
+        mRcvGroupChatMemberForCreateChooseAdapter.notifyItemInserted(mRcvGroupChatMemberForCreateChooseAdapter.getDataList().size() - 1);
     }
 
     @Override
@@ -153,6 +168,7 @@ public class CreateGroupChatFragment extends QSFragment<CreateGroupChatPresenter
 
     @Override
     public void createGroupChatSuccess(GroupChatBean groupChatBean) {
+        EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.REFRESH_GROUP_CHAT_LIST, null));
         IMClient.SINGLETON.getGroupChatManager().insertOrUpdate(groupChatBean);
         finish();
     }

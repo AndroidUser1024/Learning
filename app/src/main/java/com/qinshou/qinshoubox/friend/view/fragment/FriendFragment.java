@@ -168,7 +168,7 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
         findViewByID(R.id.ll_create_group_chat).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(ContainerActivity.getJumpIntent(getContext(), LoginOrRegisterFragment.class));
+                startActivity(ContainerActivity.getJumpIntent(getContext(), CreateGroupChatFragment.class));
             }
         });
         mTlFriend.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -256,10 +256,12 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void receiveEvent(EventBean<Object> eventBean) {
-        if (eventBean.getType() != EventBean.Type.REFRESH_FRIEND_LIST) {
-            return;
+
+        if (eventBean.getType() == EventBean.Type.REFRESH_GROUP_CHAT_LIST) {
+            getPresenter().getMyGroupChatList();
+        } else if (eventBean.getType() == EventBean.Type.REFRESH_FRIEND_LIST) {
+            getPresenter().getFriendList();
         }
-        getPresenter().getFriendList();
     }
 
     private void loadData(int position) {
