@@ -26,7 +26,6 @@ import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 import com.qinshou.qinshoubox.im.listener.IOnFriendStatusListener;
 import com.qinshou.qinshoubox.im.manager.IMClient;
-import com.qinshou.qinshoubox.me.ui.fragment.LoginOrRegisterFragment;
 import com.qinshou.qinshoubox.util.QSUtil;
 
 import org.greenrobot.eventbus.EventBus;

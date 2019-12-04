@@ -75,7 +75,7 @@ public class AddFriendFragment extends QSFragment<AddFriendPresenter> implements
                 if (TextUtils.isEmpty(keyword)) {
                     return;
                 }
-                getPresenter().getUserDetail(UserStatusManager.SINGLETON.getUserBean().getId(), keyword);
+//                getPresenter().getUserDetail(UserStatusManager.SINGLETON.getUserBean().getId(), keyword);
             }
         });
         mEtKeyword.addTextChangedListener(new ClearErrorInfoTextWatcher(null) {

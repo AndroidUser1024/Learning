@@ -102,14 +102,14 @@ public abstract class AbsRcvMessageAdapterFromMessageItemView extends BaseItemVi
         // 前一条消息
         MessageBean previousMessageBean = getRcvBaseAdapter().getDataList().get(i - 1);
         // 与前一条消息的时间间隔
-        long timeDiff;
-        if (previousMessageBean.getFromUserId() == UserStatusManager.SINGLETON.getUserBean().getId()) {
-            // 上一条消息是发送的,就和发送时间比较
-            timeDiff = messageBean.getReceiveTimestamp() - previousMessageBean.getSendTimestamp();
-        } else {
-            // 上一条消息是收到的,就和接收时间比较
-            timeDiff = messageBean.getReceiveTimestamp() - previousMessageBean.getReceiveTimestamp();
-        }
+        long timeDiff = 0;
+//        if (previousMessageBean.getFromUserId() == UserStatusManager.SINGLETON.getUserBean().getId()) {
+//            // 上一条消息是发送的,就和发送时间比较
+//            timeDiff = messageBean.getReceiveTimestamp() - previousMessageBean.getSendTimestamp();
+//        } else {
+//            // 上一条消息是收到的,就和接收时间比较
+//            timeDiff = messageBean.getReceiveTimestamp() - previousMessageBean.getReceiveTimestamp();
+//        }
         if (timeDiff <= 1000 * 60 * 5) {
             baseViewHolder.setVisibility(R.id.tv_time, View.GONE);
             return;

@@ -2,6 +2,7 @@ package com.qinshou.qinshoubox.network;
 
 import com.qinshou.okhttphelper.annotation.Api;
 import com.qinshou.okhttphelper.annotation.Field;
+import com.qinshou.okhttphelper.annotation.Json;
 import com.qinshou.okhttphelper.annotation.Multipart;
 import com.qinshou.okhttphelper.annotation.Post;
 import com.qinshou.okhttphelper.call.Call;
@@ -21,27 +22,33 @@ import java.io.File;
 public interface QSBoxUserApi {
     String DEFAULT_HOST = IUrlConstant.DEFAULT_HOST;
 
+    @Json
     @Post("/register")
     Call<QinshouResultBean<UserBean>> register(@Field(name = "username") String username
             , @Field(name = "password") String password);
 
+    @Json
     @Post("/login")
     Call<QinshouResultBean<UserBean>> login(@Field(name = "username") String username
             , @Field(name = "password") String password);
 
+    @Json
     @Post("/logout")
     Call<QinshouResultBean<UserBean>> logout(@Field(name = "username") String username);
 
+    @Json
     @Post("/setInfo")
-    Call<QinshouResultBean<UserBean>> setInfo(@Field(name = "userId") int userId
+    Call<QinshouResultBean<UserBean>> setInfo(@Field(name = "userId") String userId
             , @Field(name = "nickname") String nickname);
 
+    @Json
     @Multipart
     @Post("/setHeadImg")
-    Call<QinshouResultBean<UserBean>> setHeadImg(@Field(name = "userId") int userId
+    Call<QinshouResultBean<UserBean>> setHeadImg(@Field(name = "userId") String userId
             , @Field(name = "headImg") File headImg);
 
+    @Json
     @Post("/getUserDetail")
-    Call<QinshouResultBean<UserBean>> getUserDetail(@Field(name = "userId") int userId
+    Call<QinshouResultBean<UserBean>> getUserDetail(@Field(name = "userId") String userId
             , @Field(name = "keyword") String keyword);
 }

@@ -1,4 +1,4 @@
-package com.qinshou.qinshoubox.me.ui.fragment;
+package com.qinshou.qinshoubox.login.view.fragment;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -22,8 +22,8 @@ import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.im.bean.UserBean;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.im.manager.IMClient;
-import com.qinshou.qinshoubox.me.contract.ILoginOrRegisterContract;
-import com.qinshou.qinshoubox.me.presenter.LoginOrRegisterPresenter;
+import com.qinshou.qinshoubox.login.contract.ILoginOrRegisterContract;
+import com.qinshou.qinshoubox.login.presenter.LoginOrRegisterPresenter;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 /**
@@ -103,18 +103,18 @@ public class LoginOrRegisterFragment extends QSFragment<LoginOrRegisterPresenter
     @Override
     public void loginSuccess(final UserBean userBean) {
         ShowLogUtil.logi("loginSuccess" + " : " + "userBean--->" + userBean);
-        // 连接聊天服务
-        IMClient.SINGLETON.connect(userBean.getId(), new QSCallback<Object>() {
-            @Override
-            public void onSuccess(Object data) {
-                UserStatusManager.SINGLETON.login(getContext(), userBean);
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-
-            }
-        });
+        UserStatusManager.SINGLETON.login(getContext(), userBean);
+//        // 连接聊天服务
+//        IMClient.SINGLETON.connect(userBean.getId(), new QSCallback<Object>() {
+//            @Override
+//            public void onSuccess(Object data) {
+//            }
+//
+//            @Override
+//            public void onFailure(Exception e) {
+//
+//            }
+//        });
     }
 
     @Override

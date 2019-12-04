@@ -22,7 +22,7 @@ public class FriendModel implements IFriendContract.IModel {
         if (!UserStatusManager.SINGLETON.isLogin()) {
             return;
         }
-        IMClient.SINGLETON.getGroupChatManager().getGroupChatList(qsCallback);
+//        IMClient.SINGLETON.getGroupChatManager().getGroupChatList(qsCallback);
     }
 
     @Override
@@ -30,6 +30,6 @@ public class FriendModel implements IFriendContract.IModel {
         if (!UserStatusManager.SINGLETON.isLogin()) {
             return;
         }
-        IMClient.SINGLETON.getFriendManager().getFriendList(qsCallback);
+//        IMClient.SINGLETON.getFriendManager().getFriendList(qsCallback);
     }
 }

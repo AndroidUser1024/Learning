@@ -17,7 +17,7 @@ import java.io.File;
  */
 public class PersonalHeadImgModel implements IPersonalHeadImgContract.IModel {
     @Override
-    public void setHeadImg(int userId, File file, Callback<UserBean> callback) {
+    public void setHeadImg(String userId, File file, Callback<UserBean> callback) {
         OkHttpHelperForQSBoxUserApi.SINGLETON.setHeadImg(userId, file)
                 .transform(new QSApiTransformer<UserBean>())
                 .enqueue(callback);

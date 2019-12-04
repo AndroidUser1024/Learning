@@ -9,7 +9,7 @@ import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.bean.UserBean;
-import com.qinshou.qinshoubox.me.ui.fragment.LoginOrRegisterFragment;
+import com.qinshou.qinshoubox.login.view.fragment.LoginOrRegisterFragment;
 
 import org.greenrobot.eventbus.EventBus;
 

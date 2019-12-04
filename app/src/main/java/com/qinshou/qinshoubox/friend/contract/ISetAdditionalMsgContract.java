@@ -14,7 +14,7 @@ import com.qinshou.qinshoubox.friend.view.fragment.SetAdditionalMsgFragment;
  */
 public interface ISetAdditionalMsgContract {
     interface IModel extends IBaseModel {
-        void addFriend(int fromUserId, int toUserId, String remark, String additionalMsg, int source, Callback<Object> callback);
+        void addFriend(String fromUserId, String toUserId, String remark, String additionalMsg, int source, Callback<Object> callback);
     }
 
     interface IView extends IBaseView {
@@ -24,6 +24,6 @@ public interface ISetAdditionalMsgContract {
     }
 
     interface IPresenter {
-        void addFriend(int fromUserId, int toUserId, String remark, String additionalMsg, int source);
+        void addFriend(String fromUserId, String toUserId, String remark, String additionalMsg, int source);
     }
 }

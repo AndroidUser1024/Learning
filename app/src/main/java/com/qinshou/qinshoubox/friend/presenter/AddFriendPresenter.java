@@ -21,7 +21,7 @@ public class AddFriendPresenter extends AbsPresenter<IAddFriendContract.IView, I
     }
 
     @Override
-    public void getUserDetail(int userId,String keyword) {
+    public void getUserDetail(String userId,String keyword) {
         getModel().getUserDetail(userId,keyword, new Callback<UserBean>() {
             @Override
             public void onSuccess(UserBean userBean) {

@@ -86,13 +86,13 @@ public class CreateGroupChatFragment extends QSFragment<CreateGroupChatPresenter
             public void onClick(View v) {
                 List<Integer> memberIdList = new ArrayList<>();
                 for (GroupChatMemberForCreateBean groupChatMemberForCreateBean : mRcvGroupChatMemberForCreateChooseAdapter.getDataList()) {
-                    memberIdList.add(groupChatMemberForCreateBean.getId());
+//                    memberIdList.add(groupChatMemberForCreateBean.getId());
                 }
-                getPresenter().createGroupChat(UserStatusManager.SINGLETON.getUserBean().getId()
-                        , memberIdList
-                        , mEtNickname.getText().toString().trim()
-                        , "" +
-                                "");
+//                getPresenter().createGroupChat(UserStatusManager.SINGLETON.getUserBean().getId()
+//                        , memberIdList
+//                        , mEtNickname.getText().toString().trim()
+//                        , "" +
+//                                "");
             }
         });
         mRcvGroupChatMemberForCreateAdapter.setOnItemClickListener(new IOnItemClickListener<GroupChatMemberForCreateBean>() {
@@ -137,7 +137,7 @@ public class CreateGroupChatFragment extends QSFragment<CreateGroupChatPresenter
 
     @Override
     public void initData() {
-        getPresenter().getFriendList(UserStatusManager.SINGLETON.getUserBean().getId());
+//        getPresenter().getFriendList(UserStatusManager.SINGLETON.getUserBean().getId());
         GroupChatMemberForCreateBean groupChatMemberForCreateBean = new GroupChatMemberForCreateBean();
         UserBean userBean = UserStatusManager.SINGLETON.getUserBean();
         groupChatMemberForCreateBean.setId(userBean.getId());
@@ -151,12 +151,12 @@ public class CreateGroupChatFragment extends QSFragment<CreateGroupChatPresenter
     public void getFriendListSuccess(List<FriendBean> friendBeanList) {
         List<GroupChatMemberForCreateBean> groupChatMemberForCreateBeanList = new ArrayList<>();
         for (FriendBean friendBean : friendBeanList) {
-            GroupChatMemberForCreateBean groupChatMemberForCreateBean = new GroupChatMemberForCreateBean();
-            groupChatMemberForCreateBean.setId(friendBean.getId());
-            groupChatMemberForCreateBean.setHeadImgSmall(friendBean.getHeadImgSmall());
-            groupChatMemberForCreateBean.setRemark(friendBean.getRemark());
-            groupChatMemberForCreateBean.setNickname(friendBean.getNickname());
-            groupChatMemberForCreateBeanList.add(groupChatMemberForCreateBean);
+//            GroupChatMemberForCreateBean groupChatMemberForCreateBean = new GroupChatMemberForCreateBean();
+//            groupChatMemberForCreateBean.setId(friendBean.getId());
+//            groupChatMemberForCreateBean.setHeadImgSmall(friendBean.getHeadImgSmall());
+//            groupChatMemberForCreateBean.setRemark(friendBean.getRemark());
+//            groupChatMemberForCreateBean.setNickname(friendBean.getNickname());
+//            groupChatMemberForCreateBeanList.add(groupChatMemberForCreateBean);
         }
         mRcvGroupChatMemberForCreateAdapter.setDataList(groupChatMemberForCreateBeanList);
     }

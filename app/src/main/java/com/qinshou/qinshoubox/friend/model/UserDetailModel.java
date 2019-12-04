@@ -25,9 +25,9 @@ public class UserDetailModel implements IUserDetailContract.IModel {
 
     @Override
     public void agreeAddFriend(int fromUserId, int toUserId, String remark, Callback<Object> callback) {
-        OkHttpHelperForQSBoxFriendApi.SINGLETON.agreeAdd(fromUserId, toUserId, remark)
-                .transform(new QSApiTransformer<Object>())
-                .enqueue(callback);
+//        OkHttpHelperForQSBoxFriendApi.SINGLETON.agreeAdd(fromUserId, toUserId, remark)
+//                .transform(new QSApiTransformer<Object>())
+//                .enqueue(callback);
     }
 
     @Override
@@ -35,9 +35,9 @@ public class UserDetailModel implements IUserDetailContract.IModel {
         if (!UserStatusManager.SINGLETON.isLogin()) {
             return;
         }
-        OkHttpHelperForQSBoxFriendApi.SINGLETON.delete(UserStatusManager.SINGLETON.getUserBean().getId(), toUserId)
-                .transform(new QSApiTransformer<Object>())
-                .enqueue(callback);
+//        OkHttpHelperForQSBoxFriendApi.SINGLETON.delete(UserStatusManager.SINGLETON.getUserBean().getId(), toUserId)
+//                .transform(new QSApiTransformer<Object>())
+//                .enqueue(callback);
     }
 
     @Override

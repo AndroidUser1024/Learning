@@ -24,7 +24,7 @@ public interface ISetNameContract {
          * @param nickname 新昵称
          * @param callback 回调接口
          */
-        void setUserInfo(int userId, String nickname, Callback<UserBean> callback);
+        void setUserInfo(String userId, String nickname, Callback<UserBean> callback);
     }
 
     interface IView extends IBaseView {
@@ -59,6 +59,6 @@ public interface ISetNameContract {
          * @param userId   用户 id
          * @param nickname 新昵称
          */
-        void setUserInfo(int userId, String nickname);
+        void setUserInfo(String userId, String nickname);
     }
 }

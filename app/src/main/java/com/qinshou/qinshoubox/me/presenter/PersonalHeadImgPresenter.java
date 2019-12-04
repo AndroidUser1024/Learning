@@ -22,7 +22,7 @@ public class PersonalHeadImgPresenter extends AbsPresenter<IPersonalHeadImgContr
     }
 
     @Override
-    public void setHeadImg(int userId, File file) {
+    public void setHeadImg(String userId, File file) {
         getModel().setHeadImg(userId, file, new Callback<UserBean>() {
             @Override
             public void onSuccess(UserBean data) {

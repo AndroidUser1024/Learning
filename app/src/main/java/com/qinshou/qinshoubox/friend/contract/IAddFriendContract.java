@@ -25,7 +25,7 @@ public interface IAddFriendContract {
          * @param keyword  系统账号/手机号/邮箱
          * @param callback 回调接口
          */
-        void getUserDetail(int userId, String keyword, Callback<UserBean> callback);
+        void getUserDetail(String userId, String keyword, Callback<UserBean> callback);
     }
 
     interface IView extends IBaseView {
@@ -60,6 +60,6 @@ public interface IAddFriendContract {
          * @param userId  用户 id
          * @param keyword 系统账号/手机号/邮箱
          */
-        void getUserDetail(int userId, String keyword);
+        void getUserDetail(String userId, String keyword);
     }
 }

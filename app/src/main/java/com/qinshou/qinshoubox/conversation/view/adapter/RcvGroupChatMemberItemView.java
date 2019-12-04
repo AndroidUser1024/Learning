@@ -23,8 +23,8 @@ public class RcvGroupChatMemberItemView extends BaseItemView<UserBean> {
     @Override
     public void bindViewHolder(BaseViewHolder holder, UserBean itemData, int position) {
         ImageLoadUtil.SINGLETON.loadImage(getContext(), itemData.getHeadImgSmall(), holder.getImageView(R.id.iv_head_img));
-        holder.setTvText(R.id.tv_nickname, TextUtils.isEmpty(itemData.getRemark())
-                ? itemData.getNickname()
-                : itemData.getRemark());
+//        holder.setTvText(R.id.tv_nickname, TextUtils.isEmpty(itemData.getRemark())
+//                ? itemData.getNickname()
+//                : itemData.getRemark());
     }
 }

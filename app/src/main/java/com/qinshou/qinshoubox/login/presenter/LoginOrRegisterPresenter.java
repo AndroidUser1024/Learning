@@ -1,11 +1,11 @@
-package com.qinshou.qinshoubox.me.presenter;
+package com.qinshou.qinshoubox.login.presenter;
 
 import com.qinshou.commonmodule.base.AbsPresenter;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.im.bean.UserBean;
-import com.qinshou.qinshoubox.me.contract.ILoginOrRegisterContract;
-import com.qinshou.qinshoubox.me.model.LoginOrRegisterModel;
-import com.qinshou.qinshoubox.me.ui.fragment.LoginOrRegisterFragment;
+import com.qinshou.qinshoubox.login.contract.ILoginOrRegisterContract;
+import com.qinshou.qinshoubox.login.model.LoginOrRegisterModel;
+import com.qinshou.qinshoubox.login.view.fragment.LoginOrRegisterFragment;
 
 /**
  * Description:{@link LoginOrRegisterFragment} 的 Presenter 层

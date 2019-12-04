@@ -22,6 +22,6 @@ public class ConversationModel implements IConversationContract.IModel {
         if (!UserStatusManager.SINGLETON.isLogin()) {
             return;
         }
-        qsCallback.onSuccess(IMClient.SINGLETON.getConversationManager().getList());
+//        qsCallback.onSuccess(IMClient.SINGLETON.getConversationManager().getList());
     }
 }

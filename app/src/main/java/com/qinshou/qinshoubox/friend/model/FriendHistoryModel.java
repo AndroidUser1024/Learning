@@ -18,8 +18,8 @@ import java.util.List;
 public class FriendHistoryModel implements IFriendHistoryContract.IModel {
     @Override
     public void getFriendHistory(int page, int pageSize, int toUserId, Callback<List<FriendHistoryBean>> callback) {
-        OkHttpHelperForQSBoxFriendApi.SINGLETON.getHistory(page, pageSize, toUserId)
-                .transform(new QSApiTransformer<List<FriendHistoryBean>>())
-                .enqueue(callback);
+//        OkHttpHelperForQSBoxFriendApi.SINGLETON.getHistory(page, pageSize, toUserId)
+//                .transform(new QSApiTransformer<List<FriendHistoryBean>>())
+//                .enqueue(callback);
     }
 }

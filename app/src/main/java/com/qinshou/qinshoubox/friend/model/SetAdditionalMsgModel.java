@@ -15,7 +15,7 @@ import com.qinshou.qinshoubox.transformer.QSApiTransformer;
  */
 public class SetAdditionalMsgModel implements ISetAdditionalMsgContract.IModel {
     @Override
-    public void addFriend(int fromUserId, int toUserId, String remark, String additionalMsg, int source, Callback<Object> callback) {
+    public void addFriend(String fromUserId, String toUserId, String remark, String additionalMsg, int source, Callback<Object> callback) {
         OkHttpHelperForQSBoxFriendApi.SINGLETON.add(fromUserId, toUserId, remark, additionalMsg, source)
                 .transform(new QSApiTransformer<Object>())
                 .enqueue(callback);

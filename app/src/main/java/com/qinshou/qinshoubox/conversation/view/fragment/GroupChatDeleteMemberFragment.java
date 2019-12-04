@@ -66,9 +66,9 @@ public class GroupChatDeleteMemberFragment extends QSFragment<GroupChatDeleteMem
             public void onClick(View v) {
                 List<Integer> deleteMemberIdList = new ArrayList<>();
                 for (GroupChatMemberForCreateBean groupChatMemberForCreateBean : mRcvGroupChatMemberForCreateAdapter.getDataList()) {
-                    if (groupChatMemberForCreateBean.isChoose()) {
-                        deleteMemberIdList.add(groupChatMemberForCreateBean.getId());
-                    }
+//                    if (groupChatMemberForCreateBean.isChoose()) {
+//                        deleteMemberIdList.add(groupChatMemberForCreateBean.getId());
+//                    }
                 }
                 getPresenter().deleteMember(mGroupChatId, deleteMemberIdList);
             }
@@ -108,15 +108,15 @@ public class GroupChatDeleteMemberFragment extends QSFragment<GroupChatDeleteMem
     public void getMemberListSuccess(List<UserBean> userBeanList) {
         List<GroupChatMemberForCreateBean> groupChatMemberForCreateBeanList = new ArrayList<>();
         for (UserBean userBean : userBeanList) {
-            if (userBean.getId() == UserStatusManager.SINGLETON.getUserBean().getId()) {
-                continue;
-            }
-            GroupChatMemberForCreateBean groupChatMemberForCreateBean = new GroupChatMemberForCreateBean();
-            groupChatMemberForCreateBean.setId(userBean.getId());
-            groupChatMemberForCreateBean.setHeadImgSmall(userBean.getHeadImgSmall());
-            groupChatMemberForCreateBean.setRemark(userBean.getRemark());
-            groupChatMemberForCreateBean.setNickname(userBean.getNickname());
-            groupChatMemberForCreateBeanList.add(groupChatMemberForCreateBean);
+//            if (userBean.getId() == UserStatusManager.SINGLETON.getUserBean().getId()) {
+//                continue;
+//            }
+//            GroupChatMemberForCreateBean groupChatMemberForCreateBean = new GroupChatMemberForCreateBean();
+//            groupChatMemberForCreateBean.setId(userBean.getId());
+//            groupChatMemberForCreateBean.setHeadImgSmall(userBean.getHeadImgSmall());
+//            groupChatMemberForCreateBean.setRemark(userBean.getRemark());
+//            groupChatMemberForCreateBean.setNickname(userBean.getNickname());
+//            groupChatMemberForCreateBeanList.add(groupChatMemberForCreateBean);
         }
         mRcvGroupChatMemberForCreateAdapter.setDataList(groupChatMemberForCreateBeanList);
     }

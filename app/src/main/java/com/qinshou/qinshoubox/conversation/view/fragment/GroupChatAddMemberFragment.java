@@ -71,7 +71,7 @@ public class GroupChatAddMemberFragment extends QSFragment<GroupChatAddMemberPre
                 List<Integer> deleteMemberIdList = new ArrayList<>();
                 for (GroupChatMemberForCreateBean groupChatMemberForCreateBean : mRcvGroupChatMemberForCreateAdapter.getDataList()) {
                     if (groupChatMemberForCreateBean.isChoose()) {
-                        deleteMemberIdList.add(groupChatMemberForCreateBean.getId());
+//                        deleteMemberIdList.add(groupChatMemberForCreateBean.getId());
                     }
                 }
                 getPresenter().addMember(mGroupChatId, deleteMemberIdList);
@@ -130,15 +130,15 @@ public class GroupChatAddMemberFragment extends QSFragment<GroupChatAddMemberPre
     public void getFriendListSuccess(List<FriendBean> friendBeanList) {
         List<GroupChatMemberForCreateBean> groupChatMemberForCreateBeanList = new ArrayList<>();
         for (FriendBean friendBean : friendBeanList) {
-            if (friendBean.getId() == UserStatusManager.SINGLETON.getUserBean().getId()) {
-                continue;
-            }
-            GroupChatMemberForCreateBean groupChatMemberForCreateBean = new GroupChatMemberForCreateBean();
-            groupChatMemberForCreateBean.setId(friendBean.getId());
-            groupChatMemberForCreateBean.setHeadImgSmall(friendBean.getHeadImgSmall());
-            groupChatMemberForCreateBean.setRemark(friendBean.getRemark());
-            groupChatMemberForCreateBean.setNickname(friendBean.getNickname());
-            groupChatMemberForCreateBeanList.add(groupChatMemberForCreateBean);
+//            if (friendBean.getId() == UserStatusManager.SINGLETON.getUserBean().getId()) {
+//                continue;
+//            }
+//            GroupChatMemberForCreateBean groupChatMemberForCreateBean = new GroupChatMemberForCreateBean();
+//            groupChatMemberForCreateBean.setId(friendBean.getId());
+//            groupChatMemberForCreateBean.setHeadImgSmall(friendBean.getHeadImgSmall());
+//            groupChatMemberForCreateBean.setRemark(friendBean.getRemark());
+//            groupChatMemberForCreateBean.setNickname(friendBean.getNickname());
+//            groupChatMemberForCreateBeanList.add(groupChatMemberForCreateBean);
         }
         mRcvGroupChatMemberForCreateAdapter.setDataList(groupChatMemberForCreateBeanList);
         getPresenter().getMemberList(mGroupChatId);

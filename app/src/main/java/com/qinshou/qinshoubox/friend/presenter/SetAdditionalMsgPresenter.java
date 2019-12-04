@@ -20,7 +20,7 @@ public class SetAdditionalMsgPresenter extends AbsPresenter<ISetAdditionalMsgCon
     }
 
     @Override
-    public void addFriend(int fromUserId, int toUserId, String remark, String additionalMsg, int source) {
+    public void addFriend(String fromUserId, String toUserId, String remark, String additionalMsg, int source) {
         getModel().addFriend(fromUserId, toUserId, remark, additionalMsg, source, new Callback<Object>() {
             @Override
             public void onSuccess(Object data) {

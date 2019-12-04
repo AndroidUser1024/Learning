@@ -27,9 +27,9 @@ public class RcvGroupChatMemberForCreateAdapter extends RcvSingleBaseAdapter<Gro
                 ? R.drawable.create_group_chat_iv_choose_src_2 :
                 R.drawable.create_group_chat_iv_choose_src);
         ImageLoadUtil.SINGLETON.loadImage(getContext(), itemData.getHeadImgSmall(), holder.getImageView(R.id.iv_head_img));
-        holder.setTvText(R.id.tv_nickname, TextUtils.isEmpty(itemData.getRemark())
-                ? itemData.getNickname() :
-                itemData.getRemark());
+//        holder.setTvText(R.id.tv_nickname, TextUtils.isEmpty(itemData.getRemark())
+//                ? itemData.getNickname() :
+//                itemData.getRemark());
         holder.getItemView().setEnabled(itemData.isEnable());
     }
 }

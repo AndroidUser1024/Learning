@@ -16,7 +16,7 @@ import com.qinshou.qinshoubox.transformer.QSApiTransformer;
  */
 public class AddFriendModel implements IAddFriendContract.IModel {
     @Override
-    public void getUserDetail(int userId,String keyword, Callback<UserBean> callback) {
+    public void getUserDetail(String userId,String keyword, Callback<UserBean> callback) {
         OkHttpHelperForQSBoxUserApi.SINGLETON.getUserDetail(userId, keyword)
                 .transform(new QSApiTransformer<UserBean>())
                 .enqueue(callback);

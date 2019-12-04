@@ -71,7 +71,7 @@ public class SetNameFragment extends QSFragment<SetNamePresenter> implements ISe
                     nameIsEmptyDialog.show(getChildFragmentManager(), "NameIsEmptyDialog");
                     return;
                 }
-                getPresenter().setUserInfo(UserStatusManager.SINGLETON.getUserBean().getId(), nickname);
+//                getPresenter().setUserInfo(UserStatusManager.SINGLETON.getUserBean().getId(), nickname);
             }
         });
         mEtNickname.addTextChangedListener(new ClearErrorInfoTextWatcher(null) {

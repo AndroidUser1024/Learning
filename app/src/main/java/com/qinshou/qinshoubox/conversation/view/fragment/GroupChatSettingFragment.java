@@ -92,9 +92,9 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
         mTitleBar.setTitleText(getString(R.string.group_chat_setting_title, "" + groupChatBean.getMemberList().size()));
         List list = new ArrayList(groupChatBean.getMemberList());
         list.add(GroupChatMemberFunction.ADD_MEMBER);
-        if (groupChatBean.getOwnerId() == UserStatusManager.SINGLETON.getUserBean().getId()) {
-            list.add(GroupChatMemberFunction.DELETE_MEMBER);
-        }
+//        if (groupChatBean.getOwnerId() == UserStatusManager.SINGLETON.getUserBean().getId()) {
+//            list.add(GroupChatMemberFunction.DELETE_MEMBER);
+//        }
         mRcvGroupChatMemberAdapter.setDataList(list);
         mTvNickname.setText(TextUtils.isEmpty(groupChatBean.getNickname())
                 ? getString(R.string.group_chat_setting_tv_nickname_text)

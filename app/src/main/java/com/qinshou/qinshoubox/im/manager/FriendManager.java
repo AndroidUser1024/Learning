@@ -35,94 +35,94 @@ public class FriendManager {
     }
 
     public void getFriendList(final QSCallback<List<FriendBean>> qsCallback) {
-        OkHttpHelperForQSBoxFriendApi.SINGLETON.getList(IMClient.SINGLETON.getUserId())
-                .transform(new QSApiTransformer<List<FriendBean>>())
-                .enqueue(new Callback<List<FriendBean>>() {
-                    @Override
-                    public void onSuccess(List<FriendBean> data) {
-                        for (FriendBean friendBean : data) {
-                            mFriendDao.insertOrUpdate(friendBean);
-                        }
-                        qsCallback.onSuccess(data);
-                    }
-
-                    @Override
-                    public void onFailure(Exception e) {
-                        qsCallback.onFailure(e);
-                    }
-                });
+//        OkHttpHelperForQSBoxFriendApi.SINGLETON.getList(IMClient.SINGLETON.getUserId())
+//                .transform(new QSApiTransformer<List<FriendBean>>())
+//                .enqueue(new Callback<List<FriendBean>>() {
+//                    @Override
+//                    public void onSuccess(List<FriendBean> data) {
+//                        for (FriendBean friendBean : data) {
+//                            mFriendDao.insertOrUpdate(friendBean);
+//                        }
+//                        qsCallback.onSuccess(data);
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Exception e) {
+//                        qsCallback.onFailure(e);
+//                    }
+//                });
     }
 
     public void setRemark(final int toUserId, String remark, final QSCallback<Object> qsCallback) {
-        OkHttpHelperForQSBoxFriendApi.SINGLETON.setRemark(IMClient.SINGLETON.getUserId(), toUserId, remark)
-                .transform(new QSApiTransformer<Object>())
-                .enqueue(new Callback<Object>() {
-                    @Override
-                    public void onSuccess(Object data) {
-                        qsCallback.onSuccess(data);
-                    }
-
-                    @Override
-                    public void onFailure(Exception e) {
-                        qsCallback.onFailure(e);
-                    }
-                });
+//        OkHttpHelperForQSBoxFriendApi.SINGLETON.setRemark(IMClient.SINGLETON.getUserId(), toUserId, remark)
+//                .transform(new QSApiTransformer<Object>())
+//                .enqueue(new Callback<Object>() {
+//                    @Override
+//                    public void onSuccess(Object data) {
+//                        qsCallback.onSuccess(data);
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Exception e) {
+//                        qsCallback.onFailure(e);
+//                    }
+//                });
     }
 
     public void setTop(final int toUserId, final int top, final QSCallback<FriendBean> qsCallback) {
-        OkHttpHelperForQSBoxFriendApi.SINGLETON.setTop(IMClient.SINGLETON.getUserId(), toUserId, top)
-                .transform(new QSApiTransformer<FriendBean>())
-                .enqueue(new Callback<FriendBean>() {
-                    @Override
-                    public void onSuccess(FriendBean data) {
-                        FriendBean friendBean = getFriend(toUserId);
-                        friendBean.setTop(top);
-                        insertOrUpdate(friendBean);
-                        qsCallback.onSuccess(data);
-                    }
-
-                    @Override
-                    public void onFailure(Exception e) {
-                        qsCallback.onFailure(e);
-                    }
-                });
+//        OkHttpHelperForQSBoxFriendApi.SINGLETON.setTop(IMClient.SINGLETON.getUserId(), toUserId, top)
+//                .transform(new QSApiTransformer<FriendBean>())
+//                .enqueue(new Callback<FriendBean>() {
+//                    @Override
+//                    public void onSuccess(FriendBean data) {
+//                        FriendBean friendBean = getFriend(toUserId);
+//                        friendBean.setTop(top);
+//                        insertOrUpdate(friendBean);
+//                        qsCallback.onSuccess(data);
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Exception e) {
+//                        qsCallback.onFailure(e);
+//                    }
+//                });
     }
 
     public void setDoNotDisturb(final int toUserId, final int doNotDisturb, final QSCallback<FriendBean> qsCallback) {
-        OkHttpHelperForQSBoxFriendApi.SINGLETON.setDoNotDisturb(IMClient.SINGLETON.getUserId(), toUserId, doNotDisturb)
-                .transform(new QSApiTransformer<FriendBean>())
-                .enqueue(new Callback<FriendBean>() {
-                    @Override
-                    public void onSuccess(FriendBean data) {
-                        FriendBean friendBean = getFriend(toUserId);
-                        friendBean.setDoNotDisturb(doNotDisturb);
-                        insertOrUpdate(friendBean);
-                        qsCallback.onSuccess(data);
-                    }
-
-                    @Override
-                    public void onFailure(Exception e) {
-                        qsCallback.onFailure(e);
-                    }
-                });
+//        OkHttpHelperForQSBoxFriendApi.SINGLETON.setDoNotDisturb(IMClient.SINGLETON.getUserId(), toUserId, doNotDisturb)
+//                .transform(new QSApiTransformer<FriendBean>())
+//                .enqueue(new Callback<FriendBean>() {
+//                    @Override
+//                    public void onSuccess(FriendBean data) {
+//                        FriendBean friendBean = getFriend(toUserId);
+//                        friendBean.setDoNotDisturb(doNotDisturb);
+//                        insertOrUpdate(friendBean);
+//                        qsCallback.onSuccess(data);
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Exception e) {
+//                        qsCallback.onFailure(e);
+//                    }
+//                });
     }
 
     public void setBlackList(final int toUserId, final int blackList, final QSCallback<FriendBean> qsCallback) {
-        OkHttpHelperForQSBoxFriendApi.SINGLETON.setBlackList(IMClient.SINGLETON.getUserId(), toUserId, blackList)
-                .transform(new QSApiTransformer<FriendBean>())
-                .enqueue(new Callback<FriendBean>() {
-                    @Override
-                    public void onSuccess(FriendBean data) {
-                        FriendBean friendBean = getFriend(toUserId);
-                        friendBean.setBlackList(blackList);
-                        insertOrUpdate(friendBean);
-                        qsCallback.onSuccess(data);
-                    }
-
-                    @Override
-                    public void onFailure(Exception e) {
-                        qsCallback.onFailure(e);
-                    }
-                });
+//        OkHttpHelperForQSBoxFriendApi.SINGLETON.setBlackList(IMClient.SINGLETON.getUserId(), toUserId, blackList)
+//                .transform(new QSApiTransformer<FriendBean>())
+//                .enqueue(new Callback<FriendBean>() {
+//                    @Override
+//                    public void onSuccess(FriendBean data) {
+//                        FriendBean friendBean = getFriend(toUserId);
+//                        friendBean.setBlackList(blackList);
+//                        insertOrUpdate(friendBean);
+//                        qsCallback.onSuccess(data);
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Exception e) {
+//                        qsCallback.onFailure(e);
+//                    }
+//                });
     }
 }

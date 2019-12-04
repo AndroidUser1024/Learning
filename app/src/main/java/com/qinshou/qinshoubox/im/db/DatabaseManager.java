@@ -54,46 +54,46 @@ public class DatabaseManager {
                 + "," + "\"" + userBean.getNickname() + "\""
                 + "," + "\"" + userBean.getHeadImg() + "\""
                 + "," + "\"" + userBean.getHeadImgSmall() + "\""
-                + "," + "\"" + userBean.getRemark() + "\""
+//                + "," + "\"" + userBean.getRemark() + "\""
                 + ");";
         mSqLiteDatabase.execSQL(sql);
     }
 
     public void updateUser(UserBean userBean) {
-        String sql = "UPDATE user SET(id=" + "\"" + userBean.getId() + "\""
-                + ",username=" + "\"" + userBean.getUsername() + "\""
-                + ",nickname=" + "\"" + userBean.getNickname() + "\""
-                + ",headImg=" + "\"" + userBean.getHeadImg() + "\""
-                + ",headImgSmall=" + "\"" + userBean.getHeadImgSmall() + "\""
-                + ",remark=" + "\"" + userBean.getRemark() + "\""
-                + ");"
-                + "WHERE id=" + "\"" + userBean.getId() + "\"";
-        mSqLiteDatabase.execSQL(sql);
+//        String sql = "UPDATE user SET(id=" + "\"" + userBean.getId() + "\""
+//                + ",username=" + "\"" + userBean.getUsername() + "\""
+//                + ",nickname=" + "\"" + userBean.getNickname() + "\""
+//                + ",headImg=" + "\"" + userBean.getHeadImg() + "\""
+//                + ",headImgSmall=" + "\"" + userBean.getHeadImgSmall() + "\""
+//                + ",remark=" + "\"" + userBean.getRemark() + "\""
+//                + ");"
+//                + "WHERE id=" + "\"" + userBean.getId() + "\"";
+//        mSqLiteDatabase.execSQL(sql);
     }
 
     public UserBean getUser(int id) {
         String sql = "SELECT * FROM user WHERE id=" + "\"" + id + "\"" + ";";
         Cursor cursor = mSqLiteDatabase.rawQuery(sql, new String[]{});
-        if (cursor.moveToNext()) {
-            UserBean userBean = new UserBean();
-            String[] columnNames = cursor.getColumnNames();
-            for (String columnName : columnNames) {
-                if (TextUtils.equals(columnName, "id")) {
-                    userBean.setId(cursor.getInt(cursor.getColumnIndex(columnName)));
-                } else if (TextUtils.equals(columnName, "username")) {
-                    userBean.setUsername(cursor.getString(cursor.getColumnIndex(columnName)));
-                } else if (TextUtils.equals(columnName, "nickname")) {
-                    userBean.setNickname(cursor.getString(cursor.getColumnIndex(columnName)));
-                } else if (TextUtils.equals(columnName, "headImg")) {
-                    userBean.setHeadImg(cursor.getString(cursor.getColumnIndex(columnName)));
-                } else if (TextUtils.equals(columnName, "headImgSmall")) {
-                    userBean.setHeadImgSmall(cursor.getString(cursor.getColumnIndex(columnName)));
-                } else if (TextUtils.equals(columnName, "remark")) {
-                    userBean.setRemark(cursor.getString(cursor.getColumnIndex(columnName)));
-                }
-            }
-            return userBean;
-        }
+//        if (cursor.moveToNext()) {
+//            UserBean userBean = new UserBean();
+//            String[] columnNames = cursor.getColumnNames();
+//            for (String columnName : columnNames) {
+//                if (TextUtils.equals(columnName, "id")) {
+//                    userBean.setId(cursor.getInt(cursor.getColumnIndex(columnName)));
+//                } else if (TextUtils.equals(columnName, "username")) {
+//                    userBean.setUsername(cursor.getString(cursor.getColumnIndex(columnName)));
+//                } else if (TextUtils.equals(columnName, "nickname")) {
+//                    userBean.setNickname(cursor.getString(cursor.getColumnIndex(columnName)));
+//                } else if (TextUtils.equals(columnName, "headImg")) {
+//                    userBean.setHeadImg(cursor.getString(cursor.getColumnIndex(columnName)));
+//                } else if (TextUtils.equals(columnName, "headImgSmall")) {
+//                    userBean.setHeadImgSmall(cursor.getString(cursor.getColumnIndex(columnName)));
+//                } else if (TextUtils.equals(columnName, "remark")) {
+//                    userBean.setRemark(cursor.getString(cursor.getColumnIndex(columnName)));
+//                }
+//            }
+//            return userBean;
+//        }
         return null;
     }
 }

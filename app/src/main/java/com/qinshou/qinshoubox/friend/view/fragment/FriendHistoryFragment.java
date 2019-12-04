@@ -70,7 +70,7 @@ public class FriendHistoryFragment extends QSFragment<FriendHistoryPresenter> im
 
     @Override
     public void initData() {
-        getPresenter().getFriendHistory(mPage, IConstant.PAGE_SIZE, UserStatusManager.SINGLETON.getUserBean().getId());
+//        getPresenter().getFriendHistory(mPage, IConstant.PAGE_SIZE, UserStatusManager.SINGLETON.getUserBean().getId());
     }
 
     @Override

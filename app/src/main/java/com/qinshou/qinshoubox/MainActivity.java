@@ -172,19 +172,19 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void receiveEvent(EventBean<Object> eventBean) {
         if (eventBean.getType() == EventBean.Type.LOGIN) {
-            FragmentUtil.removeFragment(getActivity(), mConversationFragment);
-            FragmentUtil.removeFragment(getActivity(), mFriendFragment);
-            mConversationFragment = new ConversationFragment();
-            mFriendFragment = new FriendFragment();
-            FragmentUtil.addFragment(getActivity(), R.id.fl_fragment_container, mConversationFragment);
-            FragmentUtil.addFragment(getActivity(), R.id.fl_fragment_container, mFriendFragment);
+//            FragmentUtil.removeFragment(getActivity(), mConversationFragment);
+//            FragmentUtil.removeFragment(getActivity(), mFriendFragment);
+//            mConversationFragment = new ConversationFragment();
+//            mFriendFragment = new FriendFragment();
+//            FragmentUtil.addFragment(getActivity(), R.id.fl_fragment_container, mConversationFragment);
+//            FragmentUtil.addFragment(getActivity(), R.id.fl_fragment_container, mFriendFragment);
         } else if (eventBean.getType() == EventBean.Type.LOGOUT) {
-            FragmentUtil.removeFragment(getActivity(), mConversationFragment);
-            FragmentUtil.removeFragment(getActivity(), mFriendFragment);
-            mConversationFragment = new DemoFragment();
-            mFriendFragment = new DemoFragment();
-            FragmentUtil.addFragment(getActivity(), R.id.fl_fragment_container, mConversationFragment);
-            FragmentUtil.addFragment(getActivity(), R.id.fl_fragment_container, mFriendFragment);
+//            FragmentUtil.removeFragment(getActivity(), mConversationFragment);
+//            FragmentUtil.removeFragment(getActivity(), mFriendFragment);
+//            mConversationFragment = new DemoFragment();
+//            mFriendFragment = new DemoFragment();
+//            FragmentUtil.addFragment(getActivity(), R.id.fl_fragment_container, mConversationFragment);
+//            FragmentUtil.addFragment(getActivity(), R.id.fl_fragment_container, mFriendFragment);
         }
     }
 }
