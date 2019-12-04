@@ -13,7 +13,7 @@ import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.listener.ClearErrorInfoTextWatcher;
-import com.qinshou.qinshoubox.im.bean.UserBean;
+import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.me.contract.ISetNameContract;
 import com.qinshou.qinshoubox.me.presenter.SetNamePresenter;
 import com.qinshou.qinshoubox.me.ui.dialog.NameIsEmptyDialog;
@@ -71,7 +71,7 @@ public class SetNameFragment extends QSFragment<SetNamePresenter> implements ISe
                     nameIsEmptyDialog.show(getChildFragmentManager(), "NameIsEmptyDialog");
                     return;
                 }
-//                getPresenter().setUserInfo(UserStatusManager.SINGLETON.getUserBean().getId(), nickname);
+                getPresenter().setUserInfo(UserStatusManager.SINGLETON.getUserBean().getId(), nickname);
             }
         });
         mEtNickname.addTextChangedListener(new ClearErrorInfoTextWatcher(null) {

@@ -1,15 +1,12 @@
 package com.qinshou.qinshoubox.friend.presenter;
 
 import com.qinshou.commonmodule.base.AbsPresenter;
-import com.qinshou.okhttphelper.callback.Callback;
-import com.qinshou.qinshoubox.im.bean.FriendBean;
-import com.qinshou.qinshoubox.im.db.dao.impl.GroupChatDaoImpl;
+import com.qinshou.immodule.bean.FriendBean;
 import com.qinshou.qinshoubox.friend.contract.IFriendContract;
 import com.qinshou.qinshoubox.friend.model.FriendModel;
 import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
-import com.qinshou.qinshoubox.im.bean.GroupChatBean;
-import com.qinshou.qinshoubox.im.bean.UserBean;
-import com.qinshou.qinshoubox.im.listener.QSCallback;
+import com.qinshou.immodule.bean.GroupChatBean;
+import com.qinshou.immodule.listener.QSCallback;
 
 import java.util.List;
 

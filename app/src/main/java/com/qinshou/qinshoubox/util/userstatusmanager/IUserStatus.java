@@ -2,7 +2,7 @@ package com.qinshou.qinshoubox.util.userstatusmanager;
 
 import android.content.Context;
 
-import com.qinshou.qinshoubox.im.bean.UserBean;
+import com.qinshou.qinshoubox.login.bean.UserBean;
 
 
 /**

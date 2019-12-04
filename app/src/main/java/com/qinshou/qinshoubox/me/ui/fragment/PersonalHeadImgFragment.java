@@ -33,7 +33,7 @@ import com.qinshou.imagemodule.util.ImagePathUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
-import com.qinshou.qinshoubox.im.bean.UserBean;
+import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.me.contract.IPersonalHeadImgContract;
 import com.qinshou.qinshoubox.me.presenter.PersonalHeadImgPresenter;
 import com.qinshou.qinshoubox.me.ui.dialog.PersonalHeadImgDialog;
@@ -354,7 +354,6 @@ public class PersonalHeadImgFragment extends QSFragment<PersonalHeadImgPresenter
                                     public void onSuccess(File file) {
                                         // 压缩成功后调用，返回压缩后的图片文件
                                         getPresenter().setHeadImg(UserStatusManager.SINGLETON.getUserBean().getId(), file);
-                                        // TODO
                                     }
 
                                     @Override

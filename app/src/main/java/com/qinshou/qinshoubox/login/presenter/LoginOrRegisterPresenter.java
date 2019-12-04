@@ -2,7 +2,7 @@ package com.qinshou.qinshoubox.login.presenter;
 
 import com.qinshou.commonmodule.base.AbsPresenter;
 import com.qinshou.okhttphelper.callback.Callback;
-import com.qinshou.qinshoubox.im.bean.UserBean;
+import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.login.contract.ILoginOrRegisterContract;
 import com.qinshou.qinshoubox.login.model.LoginOrRegisterModel;
 import com.qinshou.qinshoubox.login.view.fragment.LoginOrRegisterFragment;

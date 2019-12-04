@@ -2,7 +2,7 @@ package com.qinshou.qinshoubox;
 
 import com.qinshou.commonmodule.base.BaseApplication;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
-import com.qinshou.qinshoubox.im.manager.IMClient;
+import com.qinshou.immodule.manager.IMClient;
 
 /**
  * Description:

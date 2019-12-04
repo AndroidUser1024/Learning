@@ -11,18 +11,14 @@ import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemClickListener;
 import com.qinshou.commonmodule.widget.TitleBar;
+import com.qinshou.immodule.bean.GroupChatBean;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.conversation.bean.GroupChatMemberFunction;
 import com.qinshou.qinshoubox.conversation.contract.IGroupChatSettingContract;
 import com.qinshou.qinshoubox.conversation.presenter.GroupChatSettingPresenter;
 import com.qinshou.qinshoubox.conversation.view.adapter.RcvGroupChatMemberAdapter;
-import com.qinshou.qinshoubox.im.bean.GroupChatBean;
-import com.qinshou.qinshoubox.im.bean.UserBean;
-import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.qinshou.qinshoubox.login.bean.UserBean;
 
 
 /**
@@ -89,13 +85,13 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
     @Override
     public void getGroupChatSuccess(GroupChatBean groupChatBean) {
         mGroupChatBean = groupChatBean;
-        mTitleBar.setTitleText(getString(R.string.group_chat_setting_title, "" + groupChatBean.getMemberList().size()));
-        List list = new ArrayList(groupChatBean.getMemberList());
-        list.add(GroupChatMemberFunction.ADD_MEMBER);
+//        mTitleBar.setTitleText(getString(R.string.group_chat_setting_title, "" + groupChatBean.getMemberList().size()));
+//        List list = new ArrayList(groupChatBean.getMemberList());
+//        list.add(GroupChatMemberFunction.ADD_MEMBER);
 //        if (groupChatBean.getOwnerId() == UserStatusManager.SINGLETON.getUserBean().getId()) {
 //            list.add(GroupChatMemberFunction.DELETE_MEMBER);
 //        }
-        mRcvGroupChatMemberAdapter.setDataList(list);
+//        mRcvGroupChatMemberAdapter.setDataList(list);
         mTvNickname.setText(TextUtils.isEmpty(groupChatBean.getNickname())
                 ? getString(R.string.group_chat_setting_tv_nickname_text)
                 : groupChatBean.getNickname());

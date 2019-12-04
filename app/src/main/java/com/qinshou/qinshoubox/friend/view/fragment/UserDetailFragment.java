@@ -25,9 +25,7 @@ import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.friend.contract.IUserDetailContract;
 import com.qinshou.qinshoubox.friend.presenter.UserDetailPresenter;
 import com.qinshou.qinshoubox.friend.view.activity.SetRemarkActivity;
-import com.qinshou.qinshoubox.im.bean.UserBean;
-import com.qinshou.qinshoubox.conversation.view.activity.ChatActivity;
-import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
+import com.qinshou.qinshoubox.login.bean.UserBean;
 
 import org.greenrobot.eventbus.EventBus;
 

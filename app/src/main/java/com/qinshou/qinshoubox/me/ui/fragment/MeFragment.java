@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
-import com.qinshou.qinshoubox.im.bean.UserBean;
+import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.me.contract.IMeContract;

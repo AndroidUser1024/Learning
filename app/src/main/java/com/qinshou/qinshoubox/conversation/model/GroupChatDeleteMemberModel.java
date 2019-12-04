@@ -2,9 +2,9 @@ package com.qinshou.qinshoubox.conversation.model;
 
 import com.qinshou.qinshoubox.conversation.contract.IGroupChatDeleteMemberContract;
 import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatDeleteMemberFragment;
-import com.qinshou.qinshoubox.im.bean.UserBean;
-import com.qinshou.qinshoubox.im.listener.QSCallback;
-import com.qinshou.qinshoubox.im.manager.IMClient;
+import com.qinshou.qinshoubox.login.bean.UserBean;
+import com.qinshou.immodule.listener.QSCallback;
+import com.qinshou.immodule.manager.IMClient;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import java.util.List;
 public class GroupChatDeleteMemberModel implements IGroupChatDeleteMemberContract.IModel {
     @Override
     public void getMemberList(int groupChatId, QSCallback<List<UserBean>> qsCallback) {
-        IMClient.SINGLETON.getGroupChatManager().getMemberList(groupChatId, qsCallback);
+//        IMClient.SINGLETON.getGroupChatManager().getMemberList(groupChatId, qsCallback);
     }
 
     @Override

@@ -6,7 +6,7 @@ import android.view.View;
 import com.qinshou.commonmodule.rcvbaseadapter.RcvSingleBaseAdapter;
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
-import com.qinshou.qinshoubox.im.bean.ConversationBean;
+import com.qinshou.immodule.bean.ConversationBean;
 import com.qinshou.qinshoubox.R;
 
 /**

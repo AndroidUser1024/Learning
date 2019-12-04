@@ -5,10 +5,10 @@ import android.content.Intent;
 
 import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
-import com.qinshou.qinshoubox.im.db.DBHelper;
-import com.qinshou.qinshoubox.im.manager.IMClient;
+import com.qinshou.immodule.db.DBHelper;
+import com.qinshou.immodule.manager.IMClient;
 import com.qinshou.qinshoubox.MainActivity;
-import com.qinshou.qinshoubox.im.bean.UserBean;
+import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.me.ui.fragment.DataSettingFragment;
 
 import org.greenrobot.eventbus.EventBus;
@@ -38,7 +38,7 @@ public class LoginStatus implements IUserStatus {
 
     @Override
     public void logout(Context context) {
-        DBHelper.getInstance().close();
+//        DBHelper.getInstance().close();
         context.startActivity(new Intent(context, MainActivity.class));
         // 连接聊天服务
         IMClient.SINGLETON.disconnect();

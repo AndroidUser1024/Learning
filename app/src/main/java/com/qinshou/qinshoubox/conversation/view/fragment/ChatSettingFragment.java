@@ -1,7 +1,6 @@
 package com.qinshou.qinshoubox.conversation.view.fragment;
 
 import android.content.Context;
-import android.media.Image;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -15,8 +14,7 @@ import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.conversation.contract.IChatSettingContract;
 import com.qinshou.qinshoubox.conversation.presenter.ChatSettingPresenter;
-import com.qinshou.qinshoubox.im.bean.FriendBean;
-import com.qinshou.qinshoubox.im.bean.UserBean;
+import com.qinshou.immodule.bean.FriendBean;
 import com.qinshou.qinshoubox.me.ui.widget.SwitchButton;
 
 

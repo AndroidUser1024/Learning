@@ -2,10 +2,9 @@ package com.qinshou.qinshoubox.friend.model;
 
 import com.qinshou.qinshoubox.friend.contract.IFriendContract;
 import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
-import com.qinshou.qinshoubox.im.bean.FriendBean;
-import com.qinshou.qinshoubox.im.bean.GroupChatBean;
-import com.qinshou.qinshoubox.im.listener.QSCallback;
-import com.qinshou.qinshoubox.im.manager.IMClient;
+import com.qinshou.immodule.bean.FriendBean;
+import com.qinshou.immodule.bean.GroupChatBean;
+import com.qinshou.immodule.listener.QSCallback;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 import java.util.List;

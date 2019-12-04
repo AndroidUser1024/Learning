@@ -8,8 +8,7 @@ import com.qinshou.okhttphelper.call.Call;
 import com.qinshou.qinshoubox.constant.IUrlConstant;
 import com.qinshou.qinshoubox.friend.bean.FriendHistoryBean;
 import com.qinshou.qinshoubox.homepage.bean.QinshouResultBean;
-import com.qinshou.qinshoubox.im.bean.FriendBean;
-import com.qinshou.qinshoubox.im.bean.UserBean;
+import com.qinshou.immodule.bean.FriendBean;
 
 import java.util.List;
 

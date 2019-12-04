@@ -8,7 +8,7 @@ import com.qinshou.okhttphelper.annotation.Post;
 import com.qinshou.okhttphelper.call.Call;
 import com.qinshou.qinshoubox.constant.IUrlConstant;
 import com.qinshou.qinshoubox.homepage.bean.QinshouResultBean;
-import com.qinshou.qinshoubox.im.bean.UserBean;
+import com.qinshou.qinshoubox.login.bean.UserBean;
 
 import java.io.File;
 
@@ -38,13 +38,12 @@ public interface QSBoxUserApi {
 
     @Json
     @Post("/setInfo")
-    Call<QinshouResultBean<UserBean>> setInfo(@Field(name = "userId") String userId
+    Call<QinshouResultBean<UserBean>> setInfo(@Field(name = "id") String userId
             , @Field(name = "nickname") String nickname);
 
-    @Json
     @Multipart
     @Post("/setHeadImg")
-    Call<QinshouResultBean<UserBean>> setHeadImg(@Field(name = "userId") String userId
+    Call<QinshouResultBean<UserBean>> setHeadImg(@Field(name = "id") String userId
             , @Field(name = "headImg") File headImg);
 
     @Json

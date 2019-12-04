@@ -11,16 +11,13 @@ import android.widget.TextView;
 import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemClickListener;
-import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.conversation.contract.IGroupChatDeleteMemberContract;
 import com.qinshou.qinshoubox.conversation.presenter.GroupChatDeleteMemberPresenter;
 import com.qinshou.qinshoubox.friend.bean.GroupChatMemberForCreateBean;
 import com.qinshou.qinshoubox.friend.view.adapter.RcvGroupChatMemberForCreateAdapter;
-import com.qinshou.qinshoubox.im.bean.FriendBean;
-import com.qinshou.qinshoubox.im.bean.UserBean;
-import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
+import com.qinshou.qinshoubox.login.bean.UserBean;
 
 import java.util.ArrayList;
 import java.util.List;

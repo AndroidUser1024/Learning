@@ -1,13 +1,12 @@
 package com.qinshou.qinshoubox.conversation.view.adapter;
 
 import android.content.Context;
-import android.text.TextUtils;
 
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.commonmodule.rcvbaseadapter.itemview.BaseItemView;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.im.bean.UserBean;
+import com.qinshou.qinshoubox.login.bean.UserBean;
 
 /**
  * Author: QinHao

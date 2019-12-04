@@ -7,7 +7,7 @@ import com.qinshou.okhttphelper.annotation.Post;
 import com.qinshou.okhttphelper.call.Call;
 import com.qinshou.qinshoubox.constant.IUrlConstant;
 import com.qinshou.qinshoubox.homepage.bean.QinshouResultBean;
-import com.qinshou.qinshoubox.im.bean.MessageBean;
+import com.qinshou.immodule.bean.MessageBean;
 
 import java.util.List;
 

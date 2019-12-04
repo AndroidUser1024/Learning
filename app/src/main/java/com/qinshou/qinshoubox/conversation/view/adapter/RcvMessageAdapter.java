@@ -3,7 +3,7 @@ package com.qinshou.qinshoubox.conversation.view.adapter;
 import android.content.Context;
 
 import com.qinshou.commonmodule.rcvbaseadapter.RcvMultipleBaseAdapter;
-import com.qinshou.qinshoubox.im.bean.MessageBean;
+import com.qinshou.immodule.bean.MessageBean;
 
 /**
  * Author: QinHao

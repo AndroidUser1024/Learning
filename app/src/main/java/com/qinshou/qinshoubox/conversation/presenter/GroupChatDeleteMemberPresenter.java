@@ -4,8 +4,8 @@ import com.qinshou.commonmodule.base.AbsPresenter;
 import com.qinshou.qinshoubox.conversation.contract.IGroupChatDeleteMemberContract;
 import com.qinshou.qinshoubox.conversation.model.GroupChatDeleteMemberModel;
 import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatDeleteMemberFragment;
-import com.qinshou.qinshoubox.im.bean.UserBean;
-import com.qinshou.qinshoubox.im.listener.QSCallback;
+import com.qinshou.qinshoubox.login.bean.UserBean;
+import com.qinshou.immodule.listener.QSCallback;
 
 import java.util.List;
 

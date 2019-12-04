@@ -4,12 +4,10 @@ import android.content.Context;
 
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
-import com.qinshou.qinshoubox.im.bean.FriendBean;
-import com.qinshou.qinshoubox.im.bean.MessageBean;
-import com.qinshou.qinshoubox.im.enums.MessageContentType;
+import com.qinshou.immodule.bean.FriendBean;
+import com.qinshou.immodule.bean.MessageBean;
 import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.im.manager.IMClient;
-import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
+import com.qinshou.immodule.manager.IMClient;
 
 
 /**

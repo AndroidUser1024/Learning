@@ -4,8 +4,8 @@ package com.qinshou.qinshoubox.conversation.contract;
 import com.qinshou.commonmodule.base.IBaseModel;
 import com.qinshou.commonmodule.base.IBaseView;
 import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatSettingFragment;
-import com.qinshou.qinshoubox.im.bean.GroupChatBean;
-import com.qinshou.qinshoubox.im.listener.QSCallback;
+import com.qinshou.immodule.bean.GroupChatBean;
+import com.qinshou.immodule.listener.QSCallback;
 
 
 /**

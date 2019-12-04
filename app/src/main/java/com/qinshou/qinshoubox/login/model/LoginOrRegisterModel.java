@@ -1,7 +1,7 @@
 package com.qinshou.qinshoubox.login.model;
 
 import com.qinshou.okhttphelper.callback.Callback;
-import com.qinshou.qinshoubox.im.bean.UserBean;
+import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.login.contract.ILoginOrRegisterContract;
 import com.qinshou.qinshoubox.login.view.fragment.LoginOrRegisterFragment;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxUserApi;

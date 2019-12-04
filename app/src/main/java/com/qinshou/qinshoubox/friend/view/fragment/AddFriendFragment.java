@@ -13,8 +13,7 @@ import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.friend.contract.IAddFriendContract;
 import com.qinshou.qinshoubox.friend.presenter.AddFriendPresenter;
 import com.qinshou.qinshoubox.listener.ClearErrorInfoTextWatcher;
-import com.qinshou.qinshoubox.im.bean.UserBean;
-import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
+import com.qinshou.qinshoubox.login.bean.UserBean;
 
 /**
  * Author: QinHao

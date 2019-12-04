@@ -7,8 +7,8 @@ import com.qinshou.okhttphelper.annotation.Post;
 import com.qinshou.okhttphelper.call.Call;
 import com.qinshou.qinshoubox.constant.IUrlConstant;
 import com.qinshou.qinshoubox.homepage.bean.QinshouResultBean;
-import com.qinshou.qinshoubox.im.bean.GroupChatBean;
-import com.qinshou.qinshoubox.im.bean.UserBean;
+import com.qinshou.immodule.bean.GroupChatBean;
+import com.qinshou.qinshoubox.login.bean.UserBean;
 
 import java.util.List;
 

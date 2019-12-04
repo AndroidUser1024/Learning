@@ -22,10 +22,10 @@ import com.qinshou.qinshoubox.friend.presenter.FriendPresenter;
 import com.qinshou.qinshoubox.friend.view.adapter.RcvFriendAdapter;
 import com.qinshou.qinshoubox.friend.view.adapter.RcvGroupChatAdapter;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
-import com.qinshou.qinshoubox.im.bean.FriendBean;
-import com.qinshou.qinshoubox.im.bean.GroupChatBean;
-import com.qinshou.qinshoubox.im.listener.IOnFriendStatusListener;
-import com.qinshou.qinshoubox.im.manager.IMClient;
+import com.qinshou.immodule.bean.FriendBean;
+import com.qinshou.immodule.bean.GroupChatBean;
+import com.qinshou.immodule.listener.IOnFriendStatusListener;
+import com.qinshou.immodule.manager.IMClient;
 import com.qinshou.qinshoubox.util.QSUtil;
 
 import org.greenrobot.eventbus.EventBus;
