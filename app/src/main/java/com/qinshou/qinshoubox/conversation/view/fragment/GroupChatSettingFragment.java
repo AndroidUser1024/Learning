@@ -111,9 +111,9 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
      * @param context     上下文
      * @param groupChatId 群 Id
      */
-    public static void start(Context context, int groupChatId) {
+    public static void start(Context context, String groupChatId) {
         Bundle bundle = new Bundle();
-        bundle.putInt(GROUP_CHAT_ID, groupChatId);
+        bundle.putString(GROUP_CHAT_ID, groupChatId);
         context.startActivity(ContainerActivity.getJumpIntent(context
                 , GroupChatSettingFragment.class
                 , bundle));

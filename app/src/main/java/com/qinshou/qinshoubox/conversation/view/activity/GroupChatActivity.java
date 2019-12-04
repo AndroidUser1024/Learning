@@ -65,7 +65,7 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
     /**
      * 接收消息方的用户名
      */
-    private int mGroupChatId;
+    private String mGroupChatId;
     /**
      * 标题栏
      */
@@ -317,7 +317,7 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
         @Override
         public void onMessage(MessageBean messageBean) {
             // 不是当前群聊的消息,不添加到列表中
-            if (messageBean.getType() != MessageType.GROUP_CHAT.getValue() || mGroupChatId != messageBean.getToUserId()) {
+            if (messageBean.getType() != MessageType.GROUP_CHAT.getValue() || TextUtils.equals(mGroupChatId, messageBean.getToUserId())) {
                 return;
             }
             mRcvMessageAdapter.getDataList().add(messageBean);
@@ -401,7 +401,7 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
             public void onRefresh(RefreshLayout refreshLayout) {
                 mPage++;
                 // 加载消息列表
-                getPresenter().getMessageList(MessageType.GROUP_CHAT.getValue(), mGroupChatId, mPage, IConstant.PAGE_SIZE);
+//                getPresenter().getMessageList(MessageType.GROUP_CHAT.getValue(), mGroupChatId, mPage, IConstant.PAGE_SIZE);
             }
 
             @Override
@@ -465,24 +465,24 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
         if (intent == null) {
             return;
         }
-        mGroupChatId = intent.getIntExtra(GROUP_CHAT_ID, 0);
-        if (mGroupChatId == 0) {
-            return;
-        }
-        GroupChatBean groupChatBean = IMClient.SINGLETON.getGroupChatManager().getById(mGroupChatId);
-        if (groupChatBean != null) {
-            // 群昵称
-            mTitleBar.setTitleText(TextUtils.isEmpty(groupChatBean.getNickname())
-                    ? groupChatBean.getNicknameDefault()
-                    : groupChatBean.getNickname());
-        }
+//        mGroupChatId = intent.getIntExtra(GROUP_CHAT_ID, 0);
+//        if (mGroupChatId == 0) {
+//            return;
+//        }
+//        GroupChatBean groupChatBean = IMClient.SINGLETON.getGroupChatManager().getById(mGroupChatId);
+//        if (groupChatBean != null) {
+//            // 群昵称
+//            mTitleBar.setTitleText(TextUtils.isEmpty(groupChatBean.getNickname())
+//                    ? groupChatBean.getNicknameDefault()
+//                    : groupChatBean.getNickname());
+//        }
 //        mConversationBean = JMClient.SINGLETON.getConversationManager().getByToUsername(mGroupChatId);
 //        // 重置未读数
 //        if (mConversationBean != null) {
 //            JMClient.SINGLETON.getConversationManager().resetUnreadCount(mConversationBean.getId());
 //        }
         // 加载消息列表
-        getPresenter().getMessageList(MessageType.GROUP_CHAT.getValue(), mGroupChatId, mPage, IConstant.PAGE_SIZE);
+//        getPresenter().getMessageList(MessageType.GROUP_CHAT.getValue(), mGroupChatId, mPage, IConstant.PAGE_SIZE);
     }
 
 
@@ -599,7 +599,7 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
      * @param context  上下文
      * @param toUserId 对方的用户 Id
      */
-    public static void start(Context context, int toUserId) {
+    public static void start(Context context, String toUserId) {
         Intent intent = new Intent(context, GroupChatActivity.class);
         intent.putExtra(GROUP_CHAT_ID, toUserId);
         context.startActivity(intent);

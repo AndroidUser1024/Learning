@@ -66,7 +66,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
     /**
      * 接收消息方的用户名
      */
-    private int mToUserId;
+    private String mToUserId;
     /**
      * 标题栏
      */
@@ -318,7 +318,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
         @Override
         public void onMessage(MessageBean messageBean) {
             // 不是当前会话的对方用户发过来的消息,不添加到列表中
-            if (mToUserId != messageBean.getFromUserId()) {
+            if (TextUtils.equals(mToUserId, messageBean.getFromUserId())) {
                 return;
             }
             mRcvMessageAdapter.getDataList().add(messageBean);
@@ -402,7 +402,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
             public void onRefresh(RefreshLayout refreshLayout) {
                 mPage++;
                 // 加载消息列表
-                getPresenter().getMessageList(MessageType.CHAT.getValue(), mToUserId, mPage, IConstant.PAGE_SIZE);
+//                getPresenter().getMessageList(MessageType.CHAT.getValue(), mToUserId, mPage, IConstant.PAGE_SIZE);
             }
 
             @Override
@@ -466,19 +466,19 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
         if (intent == null) {
             return;
         }
-        mToUserId = intent.getIntExtra(TO_USER_ID, 0);
-        if (mToUserId == 0) {
+        mToUserId = intent.getStringExtra(TO_USER_ID);
+        if (TextUtils.isEmpty(mToUserId)) {
             return;
         }
-        FriendBean friendBean = IMClient.SINGLETON.getFriendManager().getFriend(mToUserId);
-        if (friendBean != null) {
-            // 对方的昵称
-            mTitleBar.setTitleText(TextUtils.isEmpty(friendBean.getRemark())
-                    ? friendBean.getNickname()
-                    : friendBean.getRemark());
-        }
+//        FriendBean friendBean = IMClient.SINGLETON.getFriendManager().getFriend(mToUserId);
+//        if (friendBean != null) {
+//            // 对方的昵称
+//            mTitleBar.setTitleText(TextUtils.isEmpty(friendBean.getRemark())
+//                    ? friendBean.getNickname()
+//                    : friendBean.getRemark());
+//        }
         // 加载消息列表
-        getPresenter().getMessageList(MessageType.CHAT.getValue(), mToUserId, mPage, IConstant.PAGE_SIZE);
+//        getPresenter().getMessageList(MessageType.CHAT.getValue(), mToUserId, mPage, IConstant.PAGE_SIZE);
     }
 
 
@@ -615,7 +615,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
      * @param context  上下文
      * @param toUserId 对方的用户 Id
      */
-    public static void start(Context context, int toUserId) {
+    public static void start(Context context, String toUserId) {
         Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtra(TO_USER_ID, toUserId);
         context.startActivity(intent);

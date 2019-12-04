@@ -1,4 +1,4 @@
-package com.qinshou.immodule.util.EncryptUtil;
+package com.qinshou.immodule.util;
 
 import java.nio.charset.Charset;
 

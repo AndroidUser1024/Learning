@@ -5,6 +5,7 @@ import android.content.Intent;
 
 import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
+import com.qinshou.immodule.manager.IMClient;
 import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
@@ -34,7 +35,9 @@ public class LogoutStatus implements IUserStatus {
         // 设置为登录状态
         UserStatusManager.SINGLETON.setUserStatus(new LoginStatus(userBean));
         // 发送事件更新登录状态
-        EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.LOGIN,null));
+        EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.LOGIN, null));
+        // 连接 IM 服务
+        IMClient.SINGLETON.connect(userBean.getId());
     }
 
     @Override

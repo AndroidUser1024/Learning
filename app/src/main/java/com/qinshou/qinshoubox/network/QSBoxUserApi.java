@@ -20,8 +20,6 @@ import java.io.File;
  */
 @Api(IUrlConstant.DEFAULT_HOST + "/user")
 public interface QSBoxUserApi {
-    String DEFAULT_HOST = IUrlConstant.DEFAULT_HOST;
-
     @Json
     @Post("/register")
     Call<QinshouResultBean<UserBean>> register(@Field(name = "username") String username

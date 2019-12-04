@@ -189,11 +189,11 @@ public class ChatSettingFragment extends QSFragment<ChatSettingPresenter> implem
      * Description:获取跳转到该界面需要传递的 Bundle
      *
      * @param context 上下文
-     * @param id      好友 Id
+     * @param toUserId      好友 Id
      */
-    public static void start(Context context, int id) {
+    public static void start(Context context, String toUserId) {
         Bundle bundle = new Bundle();
-        bundle.putInt(TO_USER_ID, id);
+        bundle.putString(TO_USER_ID, toUserId);
         context.startActivity(ContainerActivity.getJumpIntent(context
                 , ChatSettingFragment.class
                 , bundle));

@@ -70,11 +70,11 @@ public class QSUtil {
      * @param messageBean 消息实体类
      */
     public static void showNotification(Context context, final MessageBean messageBean) {
-        String content = messageBean.getContent();
-        NotificationUtil.showNotification(context
-                , messageBean.getPid()
-                , messageBean.getFromUserId()
-                , "先随便传一个"
-                , content);
+//        String content = messageBean.getContent();
+//        NotificationUtil.showNotification(context
+//                , messageBean.getPid()
+//                , messageBean.getFromUserId()
+//                , "先随便传一个"
+//                , content);
     }
 }

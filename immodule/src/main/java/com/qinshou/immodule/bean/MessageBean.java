@@ -12,27 +12,26 @@ import com.qinshou.immodule.enums.MessageType;
  * Description:消息实体类
  */
 public class MessageBean {
-    private int pid;
     /**
-     * 自增长 Id
+     * Id
      */
-    private long id;
+    private String id;
     /**
      * 发送者的 id
      */
-    private int fromUserId;
+    private String fromUserId;
     /**
      * 接收者的 id
      */
-    private int toUserId;
+    private String toUserId;
     /**
      * 消息类型
      */
-    private int type;
+    private Integer type;
     /**
      * 消息内容类型
      */
-    private int contentType;
+    private Integer contentType;
     /**
      * 消息内容
      */
@@ -40,15 +39,15 @@ public class MessageBean {
     /**
      * 发送时间戳
      */
-    private long sendTimestamp;
+    private Long sendTimestamp;
     /**
      * 发送时间戳
      */
-    private long receiveTimestamp;
+    private Long receiveTimestamp;
     /**
      * 消息状态
      */
-    private int status;
+    private Integer status;
     /**
      * 扩展字段
      */
@@ -56,7 +55,6 @@ public class MessageBean {
 
     public MessageBean() {
     }
-
 
     @Override
     public String toString() {
@@ -74,51 +72,43 @@ public class MessageBean {
                 '}';
     }
 
-    public int getPid() {
-        return pid;
-    }
-
-    public void setPid(int pid) {
-        this.pid = pid;
-    }
-
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public int getFromUserId() {
+    public String getFromUserId() {
         return fromUserId;
     }
 
-    public void setFromUserId(int fromUserId) {
+    public void setFromUserId(String fromUserId) {
         this.fromUserId = fromUserId;
     }
 
-    public int getToUserId() {
+    public String getToUserId() {
         return toUserId;
     }
 
-    public void setToUserId(int toUserId) {
+    public void setToUserId(String toUserId) {
         this.toUserId = toUserId;
     }
 
-    public int getType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(Integer type) {
         this.type = type;
     }
 
-    public int getContentType() {
+    public Integer getContentType() {
         return contentType;
     }
 
-    public void setContentType(int contentType) {
+    public void setContentType(Integer contentType) {
         this.contentType = contentType;
     }
 
@@ -130,27 +120,27 @@ public class MessageBean {
         this.content = content;
     }
 
-    public long getSendTimestamp() {
+    public Long getSendTimestamp() {
         return sendTimestamp;
     }
 
-    public void setSendTimestamp(long sendTimestamp) {
+    public void setSendTimestamp(Long sendTimestamp) {
         this.sendTimestamp = sendTimestamp;
     }
 
-    public long getReceiveTimestamp() {
+    public Long getReceiveTimestamp() {
         return receiveTimestamp;
     }
 
-    public void setReceiveTimestamp(long receiveTimestamp) {
+    public void setReceiveTimestamp(Long receiveTimestamp) {
         this.receiveTimestamp = receiveTimestamp;
     }
 
-    public int getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
@@ -170,7 +160,7 @@ public class MessageBean {
      *
      * @return 类型为握手消息的消息对象
      */
-    public static MessageBean createHandshakeMessage(int fromUserId) {
+    public static MessageBean createHandshakeMessage(String fromUserId) {
         MessageBean messageBean = new MessageBean();
         messageBean.sendTimestamp = System.currentTimeMillis();
         messageBean.fromUserId = fromUserId;
@@ -188,7 +178,7 @@ public class MessageBean {
      * @param content  消息内容
      * @return 类型为普通文本的消息对象
      */
-    public static MessageBean createTextMessage(int toUserId, String content) {
+    public static MessageBean createTextMessage(String toUserId, String content) {
         MessageBean messageBean = new MessageBean();
         messageBean.toUserId = toUserId;
         messageBean.content = content;
@@ -199,7 +189,7 @@ public class MessageBean {
         return messageBean;
     }
 
-    public static MessageBean createClientReceiptMessage(int fromUserId) {
+    public static MessageBean createClientReceiptMessage(String fromUserId) {
         MessageBean messageBean = new MessageBean();
         messageBean.sendTimestamp = System.currentTimeMillis();
         messageBean.fromUserId = fromUserId;
@@ -216,7 +206,7 @@ public class MessageBean {
      * @param fromUserId 发送者的 id
      * @return 类型为心跳的消息
      */
-    public static MessageBean createHeartBeatMessage(int fromUserId) {
+    public static MessageBean createHeartBeatMessage(String fromUserId) {
         MessageBean messageBean = new MessageBean();
         messageBean.sendTimestamp = System.currentTimeMillis();
         messageBean.fromUserId = fromUserId;

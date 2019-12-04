@@ -24,7 +24,7 @@ public class RcvGroupChatAdapter extends RcvBaseAdapter<GroupChatBean> {
         setOnItemClickListener(new IOnItemClickListener<GroupChatBean>() {
             @Override
             public void onItemClick(BaseViewHolder holder, GroupChatBean itemData, int position) {
-                GroupChatActivity.start(getContext(), itemData.getId());
+//                GroupChatActivity.start(getContext(), itemData.getId());
             }
         });
     }

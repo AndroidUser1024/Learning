@@ -11,6 +11,7 @@ import com.qinshou.immodule.bean.MessageBean;
 import com.qinshou.immodule.enums.FriendStatus;
 import com.qinshou.immodule.enums.MessageStatus;
 import com.qinshou.immodule.enums.MessageType;
+import com.qinshou.immodule.listener.IOnConnectListener;
 import com.qinshou.immodule.listener.IOnFriendStatusListener;
 import com.qinshou.immodule.listener.IOnMessageListener;
 import com.qinshou.immodule.listener.QSCallback;
@@ -43,9 +44,10 @@ public enum IMClient {
     private Context mContext;
     private WebSocket mWebSocket;
     private Handler mHandler = new Handler(Looper.getMainLooper());
+    private List<IOnConnectListener> mOnConnectListenerList = new ArrayList<>();
     private List<IOnMessageListener> mOnMessageListenerList = new ArrayList<>();
     private List<IOnFriendStatusListener> mOnFriendStatusListenerList = new ArrayList<>();
-    private int mUserId;
+    private String mUserId;
     private ConversationManager mConversationManager;
     private MessageManager mMessageManager;
     private UserManager mUserManager;
@@ -77,14 +79,14 @@ public enum IMClient {
         @Override
         public void run() {
             Log.i(TAG, "开始第 " + mReconnectCount + " 次重连");
-            connect(mUserId, null);
+            connect(mUserId);
         }
     };
 
     IMClient() {
     }
 
-    private void connectSuccess(WebSocket webSocket, int userId) {
+    private void connectSuccess(WebSocket webSocket, String userId) {
         mWebSocket = webSocket;
         mUserId = userId;
         mReconnectCount = 0;
@@ -139,16 +141,16 @@ public enum IMClient {
                 messageBean.setReceiveTimestamp(System.currentTimeMillis());
                 if (messageBean.getType() == MessageType.CHAT.getValue()
                         || messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
-                    boolean exist = mMessageManager.getByFromUserIdAndToUserIdAndTypeAndSendTimestamp(messageBean.getFromUserId()
-                            , messageBean.getToUserId()
-                            , messageBean.getType()
-                            , messageBean.getSendTimestamp()) != null;
+//                    boolean exist = mMessageManager.getByFromUserIdAndToUserIdAndTypeAndSendTimestamp(messageBean.getFromUserId()
+//                            , messageBean.getToUserId()
+//                            , messageBean.getType()
+//                            , messageBean.getSendTimestamp()) != null;
                     // 去重
-                    if (exist) {
-                        return;
-                    }
-                    messageBean.setStatus(MessageStatus.RECEIVED.getValue());
-                    mMessageManager.insertOrUpdate(false, messageBean);
+//                    if (exist) {
+//                        return;
+//                    }
+//                    messageBean.setStatus(MessageStatus.RECEIVED.getValue());
+//                    mMessageManager.insertOrUpdate(false, messageBean);
                     for (IOnMessageListener onMessageListener : mOnMessageListenerList) {
                         onMessageListener.onMessage(messageBean);
                     }
@@ -218,7 +220,7 @@ public enum IMClient {
         mContext = context;
     }
 
-    public void connect(final int userId, final QSCallback<Object> qsCallback) {
+    public void connect(final String userId) {
         new OkHttpClient.Builder()
                 .connectTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
                 .readTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
@@ -228,6 +230,9 @@ public enum IMClient {
             public void onOpen(WebSocket webSocket, Response response) {
                 super.onOpen(webSocket, response);
                 Log.i(TAG, "onOpen: ");
+                for (IOnConnectListener onConnectListener : mOnConnectListenerList) {
+                    onConnectListener.onConnected();
+                }
                 webSocket.send(new Gson().toJson(MessageBean.createHandshakeMessage(userId)));
             }
 
@@ -239,15 +244,9 @@ public enum IMClient {
                 if (messageBean.getType() == MessageType.HANDSHAKE_SUCCESS.getValue()) {
 //                    UserBean userBean = new Gson().fromJson(messageBean.getExtend(), UserBean.class);
                     connectSuccess(webSocket, userId);
-                    // 成功回调
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (qsCallback != null) {
-                                qsCallback.onSuccess(null);
-                            }
-                        }
-                    });
+                    for (IOnConnectListener onConnectListener : mOnConnectListenerList) {
+                        onConnectListener.onAuthenticated();
+                    }
                     return;
                 }
                 handleMessage(messageBean);
@@ -279,16 +278,11 @@ public enum IMClient {
                     // 异常断开,开始重连
                     mReconnectCount++;
                     mHandler.post(mReconnectRunnable);
-                }
-                // 失败回调
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (qsCallback != null) {
-                            qsCallback.onFailure(new Exception(t));
-                        }
+                } else {
+                    for (IOnConnectListener onConnectListener : mOnConnectListenerList) {
+                        onConnectListener.onConnectFailure(new Exception(t));
                     }
-                });
+                }
             }
         });
     }
@@ -300,7 +294,7 @@ public enum IMClient {
 //        }
 //        mAckMessageMap.clear();
 //        mRetrySendTimerMap.clear();
-        mUserId = 0;
+        mUserId = null;
         mConversationManager = null;
         mMessageManager = null;
         mUserManager = null;
@@ -355,7 +349,7 @@ public enum IMClient {
 //        }
 //    }
 
-    public int getUserId() {
+    public String getUserId() {
         return mUserId;
     }
 
@@ -377,6 +371,14 @@ public enum IMClient {
 
     public FriendManager getFriendManager() {
         return mFriendManager;
+    }
+
+    public void addOnConnectListener(IOnConnectListener onConnectListener) {
+        mOnConnectListenerList.add(onConnectListener);
+    }
+
+    public void removeOnConnectListener(IOnConnectListener onConnectListener) {
+        mOnMessageListenerList.remove(onConnectListener);
     }
 
     public void addOnMessageListener(IOnMessageListener onMessageListener) {
