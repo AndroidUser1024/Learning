@@ -39,4 +39,7 @@ public enum UserStatusManager {
         mUserStatus.jump2DataSetting(context);
     }
 
+    public void jump2IM(Context context) {
+        mUserStatus.jump2IM(context);
+    }
 }

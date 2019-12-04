@@ -64,6 +64,9 @@ public class MeFragment extends QSFragment<MePresenter> implements IMeContract.I
                 case R.id.tv_login_2_have_more_function:
                     UserStatusManager.SINGLETON.jump2DataSetting(getContext());
                     break;
+                case R.id.iv_im:
+                    UserStatusManager.SINGLETON.jump2IM(getContext());
+                    break;
 //                case R.id.ib_login_by_qq:
 //                    break;
 //                case R.id.ib_login_by_wechat:
@@ -151,6 +154,7 @@ public class MeFragment extends QSFragment<MePresenter> implements IMeContract.I
         mIvHeadImg.setOnClickListener(mOnClickListener);
         findViewByID(R.id.tv_click_2_login).setOnClickListener(mOnClickListener);
         findViewByID(R.id.tv_login_2_have_more_function).setOnClickListener(mOnClickListener);
+        findViewByID(R.id.iv_im).setOnClickListener(mOnClickListener);
 //        ibLoginByQq.setOnClickListener(mOnClickListener);
 //        ibLoginByWechat.setOnClickListener(mOnClickListener);
 //        ibLoginByWeibo.setOnClickListener(mOnClickListener);

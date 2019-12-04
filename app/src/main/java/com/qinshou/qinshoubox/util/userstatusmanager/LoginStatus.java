@@ -8,6 +8,7 @@ import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.immodule.db.DBHelper;
 import com.qinshou.immodule.manager.IMClient;
 import com.qinshou.qinshoubox.MainActivity;
+import com.qinshou.qinshoubox.im.view.fragment.IMFragment;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.me.ui.fragment.DataSettingFragment;
 
@@ -45,11 +46,16 @@ public class LoginStatus implements IUserStatus {
         // 设置为注销状态
         UserStatusManager.SINGLETON.setUserStatus(new LogoutStatus());
         // 发送事件更新登录状态
-        EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.LOGOUT,null));
+        EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.LOGOUT, null));
     }
 
     @Override
     public void jump2DataSetting(Context context) {
         context.startActivity(ContainerActivity.getJumpIntent(context, DataSettingFragment.class));
+    }
+
+    @Override
+    public void jump2IM(Context context) {
+        context.startActivity(ContainerActivity.getJumpIntent(context, IMFragment.class));
     }
 }

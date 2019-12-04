@@ -10,13 +10,8 @@ import android.widget.TextView;
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemClickListener;
 import com.qinshou.commonmodule.util.ShowLogUtil;
-import com.qinshou.commonmodule.util.SystemUtil;
-import com.qinshou.qinshoubox.MainActivity;
-import com.qinshou.qinshoubox.conversation.view.activity.ChatActivity;
-import com.qinshou.qinshoubox.conversation.view.activity.GroupChatActivity;
 import com.qinshou.immodule.bean.ConversationBean;
 import com.qinshou.immodule.bean.MessageBean;
-import com.qinshou.immodule.enums.MessageType;
 import com.qinshou.immodule.listener.IOnMessageListener;
 import com.qinshou.immodule.manager.IMClient;
 import com.qinshou.qinshoubox.R;
@@ -24,7 +19,7 @@ import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.conversation.contract.IConversationContract;
 import com.qinshou.qinshoubox.conversation.presenter.ConversationPresenter;
 import com.qinshou.qinshoubox.conversation.view.adapter.RcvConversationAdapter;
-import com.qinshou.qinshoubox.util.QSUtil;
+import com.qinshou.qinshoubox.im.view.fragment.IMFragment;
 
 import java.util.List;
 
@@ -123,11 +118,11 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
         rcvConversation.setAdapter(mRcvConversationAdapter = new RcvConversationAdapter(getContext()));
         ((DefaultItemAnimator) rcvConversation.getItemAnimator()).setSupportsChangeAnimations(false);
 
-        TabLayout tlMain = getActivity().findViewById(R.id.tl_main);
-        if (tlMain == null) {
+        TabLayout tlIM = getActivity().findViewById(R.id.tl_im);
+        if (tlIM == null) {
             return;
         }
-        TabLayout.Tab tab = tlMain.getTabAt(MainActivity.TAB_INDEX_CONVERSATION);
+        TabLayout.Tab tab = tlIM.getTabAt(IMFragment.TAB_INDEX_CONVERSATION);
         if (tab == null) {
             return;
         }

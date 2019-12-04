@@ -48,4 +48,9 @@ public class LogoutStatus implements IUserStatus {
     public void jump2DataSetting(Context context) {
         context.startActivity(ContainerActivity.getJumpIntent(context, LoginOrRegisterFragment.class));
     }
+
+    @Override
+    public void jump2IM(Context context) {
+        context.startActivity(ContainerActivity.getJumpIntent(context, LoginOrRegisterFragment.class));
+    }
 }

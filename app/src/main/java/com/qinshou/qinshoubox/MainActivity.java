@@ -30,22 +30,16 @@ import org.greenrobot.eventbus.ThreadMode;
 public class MainActivity extends QSActivity<MainPresenter> implements IMainContract.IView {
     public static final int TAB_INDEX_HOMEPAGE = 0;
     public static final int TAB_INDEX_MUSIC = 1;
-    public static final int TAB_INDEX_CONVERSATION = 2;
-    public static final int TAB_INDEX_FRIEND = 3;
-    public static final int TAB_INDEX_ME = 4;
+    public static final int TAB_INDEX_ME = 2;
     /**
      * 底部导航栏
      */
     private TabLayout mTlMain;
     private HomepageFragment mHomepageFragment;
     private MusicListFragment mMusicListFragment;
-    private QSFragment mConversationFragment;
-    private QSFragment mFriendFragment;
     private MeFragment mMeFragment;
     private int[] mTabIvResourceArray = new int[]{R.drawable.main_iv_tab_conversation_src, R.drawable.main_iv_tab_conversation_src_selected
             , R.drawable.main_iv_tab_conversation_src, R.drawable.main_iv_tab_conversation_src_selected
-            , R.drawable.main_iv_tab_conversation_src, R.drawable.main_iv_tab_conversation_src_selected
-            , R.drawable.main_iv_tab_friend_src, R.drawable.main_iv_tab_friend_src_selected
             , R.drawable.main_iv_tab_me_src, R.drawable.main_iv_tab_me_src_selected};
 
 
@@ -87,15 +81,11 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
                 int position = tab.getPosition();
                 changeTabState(position);
                 if (position == TAB_INDEX_HOMEPAGE) {
-                    FragmentUtil.showFragment(getActivity(), R.id.fl_fragment_container, mHomepageFragment);
+                    FragmentUtil.showFragment(getSupportFragmentManager(), R.id.fl_fragment_container, mHomepageFragment);
                 } else if (position == TAB_INDEX_MUSIC) {
-                    FragmentUtil.showFragment(getActivity(), R.id.fl_fragment_container, mMusicListFragment);
-                } else if (position == TAB_INDEX_CONVERSATION) {
-                    FragmentUtil.showFragment(getActivity(), R.id.fl_fragment_container, mConversationFragment);
-                } else if (position == TAB_INDEX_FRIEND) {
-                    FragmentUtil.showFragment(getActivity(), R.id.fl_fragment_container, mFriendFragment);
+                    FragmentUtil.showFragment(getSupportFragmentManager(), R.id.fl_fragment_container, mMusicListFragment);
                 } else if (position == TAB_INDEX_ME) {
-                    FragmentUtil.showFragment(getActivity(), R.id.fl_fragment_container, mMeFragment);
+                    FragmentUtil.showFragment(getSupportFragmentManager(), R.id.fl_fragment_container, mMeFragment);
                 }
             }
 
@@ -120,11 +110,9 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
 //            }
 //        });
         String[] mainTvTabTextArray = getResources().getStringArray(R.array.main_tv_tab_text);
-        FragmentUtil.addFragment(getActivity(), R.id.fl_fragment_container, mMusicListFragment = new MusicListFragment());
-        FragmentUtil.addFragment(getActivity(), R.id.fl_fragment_container, mConversationFragment = new DemoFragment());
-        FragmentUtil.addFragment(getActivity(), R.id.fl_fragment_container, mFriendFragment = new DemoFragment());
-        FragmentUtil.addFragment(getActivity(), R.id.fl_fragment_container, mMeFragment = new MeFragment());
-        FragmentUtil.addFragment(getActivity(), R.id.fl_fragment_container, mHomepageFragment = new HomepageFragment());
+        FragmentUtil.addFragment(getSupportFragmentManager(), R.id.fl_fragment_container, mMusicListFragment = new MusicListFragment());
+        FragmentUtil.addFragment(getSupportFragmentManager(), R.id.fl_fragment_container, mMeFragment = new MeFragment());
+        FragmentUtil.addFragment(getSupportFragmentManager(), R.id.fl_fragment_container, mHomepageFragment = new HomepageFragment());
         for (int i = 0; i < mainTvTabTextArray.length; i++) {
             TabLayout.Tab tab = mTlMain.newTab();
             View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_tab_main, null);
