@@ -22,5 +22,5 @@ public interface IMessageDao extends IBaseDao {
     // VALUES
     // (#{id},#{fromUserId},#{toUserId},#{type},#{contentType},#{content},#{sendTimestamp}
     // ,#{receiveTimestamp},#{status},#{extend})
-    int insert(boolean send, MessageBean messageBean);
+    MessageBean insert(MessageBean messageBean);
 }

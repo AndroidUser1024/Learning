@@ -7,6 +7,8 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.Vibrator;
 
+import com.qinshou.qinshoubox.im.bean.MessageBean;
+
 import java.io.File;
 
 /**

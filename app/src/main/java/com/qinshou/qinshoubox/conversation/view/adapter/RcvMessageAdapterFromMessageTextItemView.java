@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.qinshoubox.R;
+import com.qinshou.qinshoubox.im.bean.MessageBean;
 
 
 /**

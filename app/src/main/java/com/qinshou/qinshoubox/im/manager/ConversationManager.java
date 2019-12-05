@@ -1,12 +1,11 @@
 package com.qinshou.qinshoubox.im.manager;
 
 
-import com.qinshou.immodule.db.dao.IConversationDao;
-import com.qinshou.immodule.db.dao.IMessageDao;
-import com.qinshou.immodule.db.dao.impl.ConversationDaoImpl;
-import com.qinshou.immodule.db.dao.impl.MessageDaoImpl;
-
-import java.util.List;
+import com.qinshou.qinshoubox.im.bean.ConversationBean;
+import com.qinshou.qinshoubox.im.db.dao.IConversationDao;
+import com.qinshou.qinshoubox.im.db.dao.IMessageDao;
+import com.qinshou.qinshoubox.im.db.dao.impl.ConversationDaoImpl;
+import com.qinshou.qinshoubox.im.db.dao.impl.MessageDaoImpl;
 
 /**
  * Author: QinHao
@@ -25,27 +24,5 @@ public class ConversationManager {
     private IMessageDao mMessageDao;
 
     public ConversationManager() {
-        mConversationDao = new ConversationDaoImpl();
-        mMessageDao = new MessageDaoImpl();
-    }
-
-    public ConversationBean getByTypeAndToUserId(int type, int toUserId) {
-        return mConversationDao.getByTypeAndToUserId(type, toUserId);
-    }
-
-    public int insertOrUpdate(ConversationBean conversationBean) {
-        return mConversationDao.insertOrUpdate(conversationBean);
-    }
-
-    public List<ConversationBean> getList() {
-        return mConversationDao.getList();
-    }
-
-    public int resetUnreadCount(int id) {
-        return mConversationDao.resetUnreadCount(id);
-    }
-
-    public int getTotalUnreadCount() {
-        return mConversationDao.getTotalUnreadCount();
     }
 }

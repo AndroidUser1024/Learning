@@ -16,4 +16,14 @@ public class ConversationMessageRelDaoImpl extends AbsDaoImpl<ConversationMessag
     public ConversationMessageRelDaoImpl(SQLiteDatabase SQLiteDatabase) {
         super(SQLiteDatabase);
     }
+
+    @Override
+    public void insert(ConversationMessageRelBean conversationMessageRelBean) {
+         String sql="INSERT INTO conversation_message_rel" +
+                 " (conversationId,messagePid)" +
+                 " VALUES" +
+                 " ('%s','%s')";
+        sql = String.format(sql,conversationMessageRelBean.getConversationId(), conversationMessageRelBean.getMessagePid());
+        getSQLiteDatabase().execSQL(sql);
+    }
 }

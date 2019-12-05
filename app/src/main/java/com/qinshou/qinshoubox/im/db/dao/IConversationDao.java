@@ -25,15 +25,14 @@ public interface IConversationDao extends IBaseDao {
     // VALUES
     // (#{toUserId},#{type},#{lastMsgContent},#{lastMsgContentType}
     // ,#{lastMsgTimestamp},#{unreadCount});
-    int insert(ConversationBean conversationBean);
+    ConversationBean insert(ConversationBean conversationBean);
 
     // 修改语句
     // UPDATE conversation SET
     // toUserId=#{toUserId},type=#{type},lastMsgContent=#{lastMsgContent}
-    // ,lastMsgContentType#{lastMsgContentType},lastMsgTimestamp=#{lastMsgTimestamp}
+    // ,lastMsgContentType=#{lastMsgContentType},lastMsgTimestamp=#{lastMsgTimestamp}
     // ,unreadCount=#{unreadCount}
     // WHERE id=#{id};
-    int update(ConversationBean conversationBean);
 
     // 查询语句
     // SELECT
@@ -67,5 +66,5 @@ public interface IConversationDao extends IBaseDao {
     // LEFT OUTER JOIN friend AS f ON f.id=c.toUserId AND c.type=2001
     // LEFT OUTER JOIN group_chat AS gc ON gc.id=c.toUserId AND c.type=3001
     // WHERE c.toUserId=#{toUserId} AND c.type=#{type};
-    ConversationBean selectByToUserIdAndType(String toUserId, int type);
+//    ConversationBean selectByToUserIdAndType(String toUserId, int type);
 }

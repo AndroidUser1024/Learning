@@ -8,6 +8,7 @@ import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.commonmodule.rcvbaseadapter.itemview.BaseItemView;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.R;
+import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 import java.text.SimpleDateFormat;
@@ -113,7 +114,7 @@ public class RcvMessageAdapterToMessageItemView extends BaseItemView<MessageBean
         // 前一条消息
         MessageBean previousMessageBean = getRcvBaseAdapter().getDataList().get(i - 1);
         // 与前一条消息的时间间隔
-        long timeDiff=0;
+        long timeDiff = 0;
 //        if (previousMessageBean.getFromUserId() == UserStatusManager.SINGLETON.getUserBean().getId()) {
 //            // 上一条消息是发送的,就和发送时间比较
 //            timeDiff = messageBean.getSendTimestamp() - previousMessageBean.getSendTimestamp();

@@ -2,6 +2,7 @@ package com.qinshou.qinshoubox.conversation.presenter;
 
 
 import com.qinshou.commonmodule.base.AbsPresenter;
+import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.conversation.contract.IConversationContract;
 import com.qinshou.qinshoubox.conversation.model.ConversationModel;

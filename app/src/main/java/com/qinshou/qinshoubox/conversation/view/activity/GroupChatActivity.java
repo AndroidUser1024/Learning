@@ -30,6 +30,7 @@ import com.qinshou.commonmodule.widget.TitleBar;
 import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatSettingFragment;
 import com.qinshou.immodule.enums.MessageContentType;
 import com.qinshou.immodule.enums.MessageType;
+import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.listener.IOnMessageListener;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.R;

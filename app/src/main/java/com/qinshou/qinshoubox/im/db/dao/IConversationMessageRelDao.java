@@ -1,5 +1,7 @@
 package com.qinshou.qinshoubox.im.db.dao;
 
+import com.qinshou.qinshoubox.im.bean.ConversationMessageRelBean;
+
 /**
  * Author: QinHao
  * Email:cqflqinhao@126.com
@@ -12,4 +14,11 @@ public interface IConversationMessageRelDao  extends IBaseDao{
     // id INTEGER PRIMARY KEY AUTOINCREMENT
     // ,conversationId INTEGER,messagePid INTEGER
     // );
+
+    // 插入语句
+    // INSERT INTO conversation_message_rel
+    // (conversationId,messagePid)
+    // VALUES
+    // (#{conversationId},#{messagePid});
+    void insert(ConversationMessageRelBean conversationMessageRelBean);
 }

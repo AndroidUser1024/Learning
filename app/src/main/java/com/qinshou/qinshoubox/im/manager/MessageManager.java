@@ -3,8 +3,12 @@ package com.qinshou.qinshoubox.im.manager;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.qinshou.qinshoubox.im.bean.ConversationBean;
+import com.qinshou.qinshoubox.im.bean.ConversationMessageRelBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.db.DatabaseHelper;
+import com.qinshou.qinshoubox.im.db.dao.IConversationDao;
+import com.qinshou.qinshoubox.im.db.dao.IConversationMessageRelDao;
 import com.qinshou.qinshoubox.im.db.dao.IMessageDao;
 
 import java.util.concurrent.ExecutorService;
@@ -21,6 +25,14 @@ public class MessageManager {
      * 消息 Dao
      */
     private IMessageDao mMessageDao;
+    /**
+     * 会话 Dao
+     */
+    private IConversationDao mConversationDao;
+    /**
+     * 会话与消息关系 Dao
+     */
+    private IConversationMessageRelDao mIConversationMessageRelDao;
     private String mUserId;
     /**
      * 线程池,线程数量不定,适合执行大量耗时较少的任务
@@ -33,11 +45,30 @@ public class MessageManager {
 
     public MessageManager(DatabaseHelper databaseHelper, String userId) {
         mMessageDao = databaseHelper.getDao(IMessageDao.class);
+        mConversationDao = databaseHelper.getDao(IConversationDao.class);
+        mIConversationMessageRelDao = databaseHelper.getDao(IConversationMessageRelDao.class);
         mUserId = userId;
     }
 
     public int insert(boolean send, MessageBean messageBean) {
-        return mMessageDao.insert(send, messageBean);
+        // 插入消息
+        mMessageDao.insert(messageBean);
+        // 插入或更新会话
+        ConversationBean conversationBean = new ConversationBean();
+        if (send) {
+            conversationBean.setToUserId(messageBean.getToUserId());
+            conversationBean.setLastMsgTimestamp(messageBean.getSendTimestamp());
+        } else {
+            conversationBean.setToUserId(messageBean.getFromUserId());
+            conversationBean.setLastMsgTimestamp(messageBean.getReceiveTimestamp());
+        }
+        conversationBean.setLastMsgContent(messageBean.getContent());
+        conversationBean.setLastMsgContentType(messageBean.getContentType());
+        conversationBean.setType(messageBean.getType());
+        mConversationDao.insert(conversationBean);
+        // 插入会话与消息关系
+        mIConversationMessageRelDao.insert(new ConversationMessageRelBean(conversationBean.getId(), messageBean.getPid()));
+        return 1;
     }
 //
 //    public List<MessageBean> getList(int conversationId, int page, int pageSize) {
