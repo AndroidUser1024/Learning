@@ -4,7 +4,7 @@ import com.qinshou.qinshoubox.conversation.contract.IGroupChatDeleteMemberContra
 import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatDeleteMemberFragment;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.immodule.listener.QSCallback;
-import com.qinshou.immodule.manager.IMClient;
+import com.qinshou.qinshoubox.im.IMClient;
 
 import java.util.List;
 
@@ -22,6 +22,6 @@ public class GroupChatDeleteMemberModel implements IGroupChatDeleteMemberContrac
 
     @Override
     public void deleteMember(int groupChatId, List<Integer> deleteMemberIdList, QSCallback<Object> qsCallback) {
-        IMClient.SINGLETON.getGroupChatManager().deleteMember(groupChatId, deleteMemberIdList, qsCallback);
+//        IMClient.SINGLETON.getGroupChatManager().deleteMember(groupChatId, deleteMemberIdList, qsCallback);
     }
 }

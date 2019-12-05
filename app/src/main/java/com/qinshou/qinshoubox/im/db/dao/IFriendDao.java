@@ -6,7 +6,7 @@ package com.qinshou.qinshoubox.im.db.dao;
  * Date: 2019/12/04 22:08
  * Description:friend 表的 Dao
  */
-public interface IFriendDao {
+public interface IFriendDao extends IBaseDao{
     // 创建表语句
     // CREATE TABLE IF NOT EXISTS friend(id TEXT PRIMARY KEY
     // ,nickname TEXT,headImg TEXT,headImgSmall TEXT

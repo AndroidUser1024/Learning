@@ -5,8 +5,7 @@ import android.content.Intent;
 
 import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
-import com.qinshou.immodule.db.DBHelper;
-import com.qinshou.immodule.manager.IMClient;
+import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.im.view.fragment.IMFragment;
 import com.qinshou.qinshoubox.login.bean.UserBean;

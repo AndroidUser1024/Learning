@@ -6,7 +6,7 @@ import com.qinshou.qinshoubox.friend.contract.IUserDetailContract;
 import com.qinshou.qinshoubox.friend.view.fragment.UserDetailFragment;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.immodule.listener.QSCallback;
-import com.qinshou.immodule.manager.IMClient;
+import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 /**
@@ -40,6 +40,6 @@ public class UserDetailModel implements IUserDetailContract.IModel {
 
     @Override
     public void setRemark(int toUserId, String remark, QSCallback<Object> qsCallback) {
-        IMClient.SINGLETON.getFriendManager().setRemark(toUserId, remark, qsCallback);
+//        IMClient.SINGLETON.getFriendManager().setRemark(toUserId, remark, qsCallback);
     }
 }

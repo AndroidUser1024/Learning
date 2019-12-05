@@ -21,7 +21,7 @@ import com.qinshou.qinshoubox.friend.view.adapter.RcvGroupChatMemberForCreateAda
 import com.qinshou.qinshoubox.friend.view.adapter.RcvGroupChatMemberForCreateChooseAdapter;
 import com.qinshou.immodule.bean.GroupChatBean;
 import com.qinshou.qinshoubox.login.bean.UserBean;
-import com.qinshou.immodule.manager.IMClient;
+import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 import org.greenrobot.eventbus.EventBus;
@@ -169,7 +169,7 @@ public class CreateGroupChatFragment extends QSFragment<CreateGroupChatPresenter
     @Override
     public void createGroupChatSuccess(GroupChatBean groupChatBean) {
         EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.REFRESH_GROUP_CHAT_LIST, null));
-        IMClient.SINGLETON.getGroupChatManager().insertOrUpdate(groupChatBean);
+//        IMClient.SINGLETON.getGroupChatManager().insertOrUpdate(groupChatBean);
         finish();
     }
 

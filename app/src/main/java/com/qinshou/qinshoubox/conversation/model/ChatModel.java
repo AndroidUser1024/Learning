@@ -1,10 +1,8 @@
 package com.qinshou.qinshoubox.conversation.model;
 
 
-import com.qinshou.immodule.bean.ConversationBean;
 import com.qinshou.immodule.bean.MessageBean;
 import com.qinshou.immodule.listener.QSCallback;
-import com.qinshou.immodule.manager.IMClient;
 import com.qinshou.qinshoubox.conversation.contract.IChatContract;
 import com.qinshou.qinshoubox.conversation.view.activity.ChatActivity;
 
@@ -19,11 +17,11 @@ import java.util.List;
 public class ChatModel implements IChatContract.IModel {
     @Override
     public void getMessageList(int type, int toUserId, int page, int pageSize, QSCallback<List<MessageBean>> qsCallback) {
-        ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().getByTypeAndToUserId(type, toUserId);
-        if (conversationBean == null) {
-            return;
-        }
-        List<MessageBean> messageBeanList = IMClient.SINGLETON.getMessageManager().getList(conversationBean.getId(), page, pageSize);
-        qsCallback.onSuccess(messageBeanList);
+//        ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().getByTypeAndToUserId(type, toUserId);
+//        if (conversationBean == null) {
+//            return;
+//        }
+//        List<MessageBean> messageBeanList = IMClient.SINGLETON.getMessageManager().getList(conversationBean.getId(), page, pageSize);
+//        qsCallback.onSuccess(messageBeanList);
     }
 }

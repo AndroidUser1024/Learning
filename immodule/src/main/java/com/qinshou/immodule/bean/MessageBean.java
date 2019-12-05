@@ -1,7 +1,6 @@
 package com.qinshou.immodule.bean;
 
 
-import com.qinshou.immodule.manager.IMClient;
 import com.qinshou.immodule.enums.MessageContentType;
 import com.qinshou.immodule.enums.MessageType;
 
@@ -183,7 +182,7 @@ public class MessageBean {
         messageBean.toUserId = toUserId;
         messageBean.content = content;
         messageBean.sendTimestamp = System.currentTimeMillis();
-        messageBean.fromUserId = IMClient.SINGLETON.getUserId();
+//        messageBean.fromUserId = IMClient.SINGLETON.getUserId();
         messageBean.contentType = MessageContentType.TEXT.getValue();
         messageBean.type = MessageType.CHAT.getValue();
         return messageBean;

@@ -6,7 +6,7 @@ package com.qinshou.qinshoubox.im.db.dao;
  * Date: 2019/12/04 22:23
  * Description:group_chat 表的 Dao
  */
-public interface IGroupChatDao {
+public interface IGroupChatDao  extends IBaseDao{
     // 创建表语句
     // CREATE TABLE IF NOT EXISTS group_chat(id TEXT PRIMARY KEY
     // ,ownerId TEXT,nickname TEXT,headImg TEXT

@@ -6,9 +6,9 @@ package com.qinshou.qinshoubox.im.db.dao;
  * Date: 2019/12/04 23:06
  * Description:conversation 表的 Dao
  */
-public interface IConversationDao {
+public interface IConversationDao extends IBaseDao {
     // 创建表语句
-    // CREATE TABLE IF NOT EXISTS conversation(id INTEGER PRIMARY KEY AUTO INCREMENT
+    // CREATE TABLE IF NOT EXISTS conversation(id INTEGER PRIMARY KEY AUTOINCREMENT
     // ,toUserId TEXT,type INTEGER,lastMsgContent TEXT
     // ,lastMsgContentType INTEGER,lastMsgTimestamp INTEGER
     // ,unreadCount INTEGER

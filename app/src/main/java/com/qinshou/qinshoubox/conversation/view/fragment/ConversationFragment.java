@@ -13,7 +13,7 @@ import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.immodule.bean.ConversationBean;
 import com.qinshou.immodule.bean.MessageBean;
 import com.qinshou.immodule.listener.IOnMessageListener;
-import com.qinshou.immodule.manager.IMClient;
+import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.conversation.contract.IConversationContract;
@@ -173,12 +173,12 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
     }
 
     private void showMessageUnreadCount() {
-        int totalUnreadCount = IMClient.SINGLETON.getConversationManager().getTotalUnreadCount();
-        if (totalUnreadCount > 0) {
-            mTvUnreadCountInTlMain.setVisibility(View.VISIBLE);
-            mTvUnreadCountInTlMain.setText("" + totalUnreadCount);
-        } else {
-            mTvUnreadCountInTlMain.setVisibility(View.GONE);
-        }
+//        int totalUnreadCount = IMClient.SINGLETON.getConversationManager().getTotalUnreadCount();
+//        if (totalUnreadCount > 0) {
+//            mTvUnreadCountInTlMain.setVisibility(View.VISIBLE);
+//            mTvUnreadCountInTlMain.setText("" + totalUnreadCount);
+//        } else {
+//            mTvUnreadCountInTlMain.setVisibility(View.GONE);
+//        }
     }
 }

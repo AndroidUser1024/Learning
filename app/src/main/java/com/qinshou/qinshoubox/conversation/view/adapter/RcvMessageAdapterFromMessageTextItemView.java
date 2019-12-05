@@ -3,11 +3,8 @@ package com.qinshou.qinshoubox.conversation.view.adapter;
 import android.content.Context;
 
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
-import com.qinshou.imagemodule.util.ImageLoadUtil;
-import com.qinshou.immodule.bean.FriendBean;
 import com.qinshou.immodule.bean.MessageBean;
 import com.qinshou.qinshoubox.R;
-import com.qinshou.immodule.manager.IMClient;
 
 
 /**

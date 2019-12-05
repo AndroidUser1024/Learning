@@ -1,4 +1,4 @@
-package com.qinshou.immodule.manager;
+package com.qinshou.qinshoubox.im;
 
 import android.content.Context;
 import android.os.Handler;
@@ -9,12 +9,11 @@ import com.google.gson.Gson;
 import com.qinshou.immodule.bean.FriendStatusBean;
 import com.qinshou.immodule.bean.MessageBean;
 import com.qinshou.immodule.enums.FriendStatus;
-import com.qinshou.immodule.enums.MessageStatus;
 import com.qinshou.immodule.enums.MessageType;
 import com.qinshou.immodule.listener.IOnConnectListener;
 import com.qinshou.immodule.listener.IOnFriendStatusListener;
 import com.qinshou.immodule.listener.IOnMessageListener;
-import com.qinshou.immodule.listener.QSCallback;
+import com.qinshou.qinshoubox.im.db.DatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +26,12 @@ import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;
 
+/**
+ * Author: QinHao
+ * Email:cqflqinhao@126.com
+ * Date: 2019/12/05 10:43
+ * Description:IM 服务
+ */
 public enum IMClient {
     SINGLETON;
     private static final String TAG = "IMClient";
@@ -36,7 +41,7 @@ public enum IMClient {
      */
     private final long HEART_BEAT_INTERVAL = 60 * 1000;
     /**
-     * 重连间隔
+     * 重连次数
      */
     private final int MAX_RECONNECT_COUNT = 5;
     private static final String URL = "http://172.16.60.231:10086/websocket";
@@ -48,11 +53,6 @@ public enum IMClient {
     private List<IOnMessageListener> mOnMessageListenerList = new ArrayList<>();
     private List<IOnFriendStatusListener> mOnFriendStatusListenerList = new ArrayList<>();
     private String mUserId;
-    private ConversationManager mConversationManager;
-    private MessageManager mMessageManager;
-    private UserManager mUserManager;
-    private GroupChatManager mGroupChatManager;
-    private FriendManager mFriendManager;
     //    private Map<String, MessageBean> mAckMessageMap = new HashMap<>();
 //    private Map<String, Timer> mRetrySendTimerMap = new HashMap<>();
     /**
@@ -91,17 +91,7 @@ public enum IMClient {
         mUserId = userId;
         mReconnectCount = 0;
         // 初始化数据库
-//        DBHelper.init(mContext, "" + userId);
-        // 创建会话管理者
-        mConversationManager = new ConversationManager();
-        // 创建消息管理者
-        mMessageManager = new MessageManager();
-        // 创建用户管理者
-        mUserManager = new UserManager();
-        // 创建群组管理者
-        mGroupChatManager = new GroupChatManager();
-        // 创建好友管理者
-        mFriendManager = new FriendManager();
+        DatabaseHelper databaseHelper = new DatabaseHelper(mContext, userId);
         // 拉取离线消息
 //        OkHttpHelperForQSBoxOfflineApi.SINGLETON.getOfflineMessageList(userId)
 //                .transform(new QSApiTransformer<List<MessageBean>>())
@@ -216,6 +206,14 @@ public enum IMClient {
         });
     }
 
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2019/12/5 10:43
+     * Description:初始化 IM 服务,建议在 Application 中
+     *
+     * @param context 上下文
+     */
     public void init(Context context) {
         mContext = context;
     }
@@ -295,11 +293,6 @@ public enum IMClient {
 //        mAckMessageMap.clear();
 //        mRetrySendTimerMap.clear();
         mUserId = null;
-        mConversationManager = null;
-        mMessageManager = null;
-        mUserManager = null;
-        mGroupChatManager = null;
-        mFriendManager = null;
         mHandler.removeCallbacks(mHeartBeatRunnable);
         mHandler.removeCallbacks(mReconnectRunnable);
         if (mWebSocket == null) {
@@ -314,7 +307,7 @@ public enum IMClient {
         }
         if (messageBean.getType() == MessageType.CHAT.getValue()
                 || messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
-            mMessageManager.insertOrUpdate(true, messageBean);
+//            mMessageManager.insertOrUpdate(true, messageBean);
 
 //            // 创建一个唯一索引作为 ACK Key,将其 json 串做 Base64 加密,得到的加密字符串作为 key
 //            AckKeyBean ackKeyBean = new AckKeyBean(mUserId
@@ -351,26 +344,6 @@ public enum IMClient {
 
     public String getUserId() {
         return mUserId;
-    }
-
-    public ConversationManager getConversationManager() {
-        return mConversationManager;
-    }
-
-    public MessageManager getMessageManager() {
-        return mMessageManager;
-    }
-
-    public UserManager getUserManager() {
-        return mUserManager;
-    }
-
-    public GroupChatManager getGroupChatManager() {
-        return mGroupChatManager;
-    }
-
-    public FriendManager getFriendManager() {
-        return mFriendManager;
     }
 
     public void addOnConnectListener(IOnConnectListener onConnectListener) {

@@ -13,7 +13,6 @@ import com.qinshou.commonmodule.adapter.VpSingleViewAdapter;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.util.SystemUtil;
-import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.constant.IConstant;
@@ -25,7 +24,7 @@ import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.immodule.bean.FriendBean;
 import com.qinshou.immodule.bean.GroupChatBean;
 import com.qinshou.immodule.listener.IOnFriendStatusListener;
-import com.qinshou.immodule.manager.IMClient;
+import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.view.fragment.IMFragment;
 import com.qinshou.qinshoubox.util.QSUtil;
 

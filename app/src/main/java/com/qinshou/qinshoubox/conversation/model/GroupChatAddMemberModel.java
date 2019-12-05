@@ -5,7 +5,7 @@ import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatAddMemberFragm
 import com.qinshou.immodule.bean.FriendBean;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.immodule.listener.QSCallback;
-import com.qinshou.immodule.manager.IMClient;
+import com.qinshou.qinshoubox.im.IMClient;
 
 import java.util.List;
 
@@ -23,11 +23,11 @@ public class GroupChatAddMemberModel implements IGroupChatAddMemberContract.IMod
 
     @Override
     public void getFriendList(QSCallback<List<FriendBean>> qsCallback) {
-        IMClient.SINGLETON.getFriendManager().getFriendList(qsCallback);
+//        IMClient.SINGLETON.getFriendManager().getFriendList(qsCallback);
     }
 
     @Override
     public void addMember(int groupChatId, List<Integer> addMemberIdList, QSCallback<Object> qsCallback) {
-        IMClient.SINGLETON.getGroupChatManager().addMember(groupChatId, addMemberIdList, qsCallback);
+//        IMClient.SINGLETON.getGroupChatManager().addMember(groupChatId, addMemberIdList, qsCallback);
     }
 }
