@@ -1,5 +1,7 @@
 package com.qinshou.qinshoubox.im.db.dao;
 
+import com.qinshou.qinshoubox.im.bean.MessageBean;
+
 /**
  * Author: QinHao
  * Email:cqflqinhao@126.com
@@ -13,4 +15,12 @@ public interface IMessageDao extends IBaseDao {
     // ,contentType INTEGER,content TEXT,sendTimestamp INTEGER
     // ,receiveTimestamp INTEGER,status INTEGER,extend TEXT
     // )
+
+    // 插入语句
+    // INSERT INTO message
+    // (id,fromUserId,toUserId,type,contentType,content,sendTimestamp,receiveTimestamp,status,extend)
+    // VALUES
+    // (#{id},#{fromUserId},#{toUserId},#{type},#{contentType},#{content},#{sendTimestamp}
+    // ,#{receiveTimestamp},#{status},#{extend})
+    int insert(boolean send, MessageBean messageBean);
 }

@@ -1,4 +1,4 @@
-package com.qinshou.immodule.bean;
+package com.qinshou.qinshoubox.im.bean;
 
 /**
  * Author: QinHao

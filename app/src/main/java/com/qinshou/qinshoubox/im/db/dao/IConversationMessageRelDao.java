@@ -11,5 +11,5 @@ public interface IConversationMessageRelDao  extends IBaseDao{
     // CREATE TABLE IF NOT EXISTS conversation_message_rel(
     // id INTEGER PRIMARY KEY AUTOINCREMENT
     // ,conversationId INTEGER,messagePid INTEGER
-    // )
+    // );
 }

@@ -1,6 +1,6 @@
-package com.qinshou.immodule.listener;
+package com.qinshou.qinshoubox.im.listener;
 
-import com.qinshou.immodule.bean.MessageBean;
+import com.qinshou.qinshoubox.im.bean.MessageBean;
 
 /**
  * Author: QinHao

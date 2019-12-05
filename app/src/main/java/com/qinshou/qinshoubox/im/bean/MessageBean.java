@@ -1,6 +1,9 @@
 package com.qinshou.qinshoubox.im.bean;
 
 
+import com.qinshou.immodule.enums.MessageContentType;
+import com.qinshou.immodule.enums.MessageType;
+
 /**
  * Author: QinHao
  * Email:cqflqinhao@126.com
@@ -159,5 +162,67 @@ public class MessageBean {
 
     public void setExtend(String extend) {
         this.extend = extend;
+    }
+
+    /**
+     * Author: QinHao
+     * Email:qinhao@jeejio.com
+     * Date:2019/10/25 14:24
+     * Description:创建一个握手消息
+     *
+     * @return 类型为握手消息的消息对象
+     */
+    public static MessageBean createHandshakeMessage(String fromUserId) {
+        MessageBean messageBean = new MessageBean();
+        messageBean.sendTimestamp = System.currentTimeMillis();
+        messageBean.fromUserId = fromUserId;
+        messageBean.type = MessageType.HANDSHAKE.getValue();
+        return messageBean;
+    }
+
+    /**
+     * Author: QinHao
+     * Email:qinhao@jeejio.com
+     * Date:2019/10/25 14:24
+     * Description:创建一个语音消息
+     *
+     * @param toUserId 接收方用户 id
+     * @param content  消息内容
+     * @return 类型为普通文本的消息对象
+     */
+    public static MessageBean createTextMessage(String toUserId, String content) {
+        MessageBean messageBean = new MessageBean();
+        messageBean.toUserId = toUserId;
+        messageBean.content = content;
+        messageBean.sendTimestamp = System.currentTimeMillis();
+//        messageBean.fromUserId = IMClient.SINGLETON.getUserId();
+        messageBean.contentType = MessageContentType.TEXT.getValue();
+        messageBean.type = MessageType.CHAT.getValue();
+        return messageBean;
+    }
+
+    public static MessageBean createClientReceiptMessage(String fromUserId) {
+        MessageBean messageBean = new MessageBean();
+        messageBean.sendTimestamp = System.currentTimeMillis();
+        messageBean.fromUserId = fromUserId;
+        messageBean.type = MessageType.CLIENT_RECEIPT.getValue();
+        return messageBean;
+    }
+
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2019/12/1 10:37
+     * Description:创建一个心跳消息
+     *
+     * @param fromUserId 发送者的 id
+     * @return 类型为心跳的消息
+     */
+    public static MessageBean createHeartBeatMessage(String fromUserId) {
+        MessageBean messageBean = new MessageBean();
+        messageBean.sendTimestamp = System.currentTimeMillis();
+        messageBean.fromUserId = fromUserId;
+        messageBean.type = MessageType.HEART_BEAT.getValue();
+        return messageBean;
     }
 }

@@ -1,7 +1,6 @@
 package com.qinshou.qinshoubox.im.manager;
 
 
-import com.qinshou.immodule.bean.ConversationBean;
 import com.qinshou.immodule.db.dao.IConversationDao;
 import com.qinshou.immodule.db.dao.IMessageDao;
 import com.qinshou.immodule.db.dao.impl.ConversationDaoImpl;

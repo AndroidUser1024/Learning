@@ -1,8 +1,7 @@
 package com.qinshou.qinshoubox.conversation.model;
 
 
-import com.qinshou.immodule.bean.ConversationBean;
-import com.qinshou.immodule.listener.QSCallback;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.conversation.contract.IConversationContract;
 import com.qinshou.qinshoubox.conversation.view.fragment.ConversationFragment;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;

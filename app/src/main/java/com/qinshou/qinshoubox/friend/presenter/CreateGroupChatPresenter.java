@@ -5,7 +5,7 @@ import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.friend.contract.ICreateGroupChatContract;
 import com.qinshou.qinshoubox.friend.model.CreateGroupChatModel;
 import com.qinshou.qinshoubox.friend.view.fragment.CreateGroupChatFragment;
-import com.qinshou.immodule.listener.QSCallback;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 

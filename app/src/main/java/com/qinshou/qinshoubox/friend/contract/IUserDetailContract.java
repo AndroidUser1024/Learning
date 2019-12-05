@@ -6,7 +6,7 @@ import com.qinshou.commonmodule.base.IBaseView;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.friend.view.fragment.UserDetailFragment;
 import com.qinshou.qinshoubox.login.bean.UserBean;
-import com.qinshou.immodule.listener.QSCallback;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 /**
  * Author: QinHao

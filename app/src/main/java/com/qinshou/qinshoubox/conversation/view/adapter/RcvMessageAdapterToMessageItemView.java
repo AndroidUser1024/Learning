@@ -7,7 +7,6 @@ import android.widget.TextView;
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.commonmodule.rcvbaseadapter.itemview.BaseItemView;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
-import com.qinshou.immodule.bean.MessageBean;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 

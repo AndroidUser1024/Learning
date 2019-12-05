@@ -6,7 +6,7 @@ import com.qinshou.qinshoubox.conversation.model.GroupChatAddMemberModel;
 import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatAddMemberFragment;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.login.bean.UserBean;
-import com.qinshou.immodule.listener.QSCallback;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 import java.util.List;
 

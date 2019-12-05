@@ -44,6 +44,14 @@ public class ConversationBean {
      * 会话标题
      */
     private String title;
+    /**
+     * 是否置顶,0 是非置顶,1 是置顶
+     */
+    private int top;
+    /**
+     * 是否免打扰,0 是非免打扰,1 是免打扰
+     */
+    private int doNotDisturb;
 
     public ConversationBean() {
     }
@@ -52,7 +60,7 @@ public class ConversationBean {
     public String toString() {
         return "ConversationBean{" +
                 "id=" + id +
-                ", toUserId=" + toUserId +
+                ", toUserId='" + toUserId + '\'' +
                 ", type=" + type +
                 ", lastMsgContent='" + lastMsgContent + '\'' +
                 ", lastMsgContentType=" + lastMsgContentType +
@@ -60,6 +68,8 @@ public class ConversationBean {
                 ", unreadCount=" + unreadCount +
                 ", headImgSmall='" + headImgSmall + '\'' +
                 ", title='" + title + '\'' +
+                ", top=" + top +
+                ", doNotDisturb=" + doNotDisturb +
                 '}';
     }
 
@@ -135,5 +145,21 @@ public class ConversationBean {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public int getTop() {
+        return top;
+    }
+
+    public void setTop(int top) {
+        this.top = top;
+    }
+
+    public int getDoNotDisturb() {
+        return doNotDisturb;
+    }
+
+    public void setDoNotDisturb(int doNotDisturb) {
+        this.doNotDisturb = doNotDisturb;
     }
 }

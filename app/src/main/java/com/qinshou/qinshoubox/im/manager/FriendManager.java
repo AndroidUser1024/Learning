@@ -3,7 +3,7 @@ package com.qinshou.qinshoubox.im.manager;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.qinshou.immodule.listener.QSCallback;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.db.DatabaseHelper;

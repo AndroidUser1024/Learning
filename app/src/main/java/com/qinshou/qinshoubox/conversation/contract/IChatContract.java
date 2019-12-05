@@ -3,9 +3,9 @@ package com.qinshou.qinshoubox.conversation.contract;
 
 import com.qinshou.commonmodule.base.IBaseModel;
 import com.qinshou.commonmodule.base.IBaseView;
-import com.qinshou.immodule.bean.MessageBean;
-import com.qinshou.immodule.listener.QSCallback;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.conversation.view.activity.ChatActivity;
+import com.qinshou.qinshoubox.im.bean.MessageBean;
 
 import java.util.List;
 

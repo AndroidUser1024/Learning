@@ -3,8 +3,7 @@ package com.qinshou.qinshoubox.conversation.model;
 import com.qinshou.qinshoubox.conversation.contract.IGroupChatDeleteMemberContract;
 import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatDeleteMemberFragment;
 import com.qinshou.qinshoubox.login.bean.UserBean;
-import com.qinshou.immodule.listener.QSCallback;
-import com.qinshou.qinshoubox.im.IMClient;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 import java.util.List;
 

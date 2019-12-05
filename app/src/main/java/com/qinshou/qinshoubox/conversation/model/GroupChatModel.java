@@ -1,10 +1,7 @@
 package com.qinshou.qinshoubox.conversation.model;
 
 
-import com.qinshou.immodule.bean.ConversationBean;
-import com.qinshou.immodule.bean.MessageBean;
-import com.qinshou.immodule.listener.QSCallback;
-import com.qinshou.qinshoubox.im.IMClient;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.conversation.contract.IGroupChatContract;
 import com.qinshou.qinshoubox.conversation.view.activity.GroupChatActivity;
 

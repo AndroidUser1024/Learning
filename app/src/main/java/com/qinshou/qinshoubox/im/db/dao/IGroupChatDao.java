@@ -14,7 +14,7 @@ public interface IGroupChatDao extends IBaseDao {
     // ,ownerId TEXT,nickname TEXT,headImg TEXT
     // ,headImgSmall TEXT,nicknameDefault TEXT,nicknameInGroupChat TEXT
     // ,top INTEGER,doNotDisturb INTEGER,showGroupChatMemberNickname INTEGER
-    // )
+    // );
 
     // 插入语句
     // INSERT INTO group_chat

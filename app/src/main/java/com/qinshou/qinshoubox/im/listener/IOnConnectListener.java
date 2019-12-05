@@ -1,4 +1,4 @@
-package com.qinshou.immodule.listener;
+package com.qinshou.qinshoubox.im.listener;
 
 /**
  * Author: QinHao

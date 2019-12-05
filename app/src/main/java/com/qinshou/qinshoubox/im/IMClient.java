@@ -6,19 +6,18 @@ import android.os.Looper;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.qinshou.immodule.bean.FriendStatusBean;
-import com.qinshou.immodule.bean.MessageBean;
+import com.qinshou.qinshoubox.im.bean.FriendStatusBean;
 import com.qinshou.immodule.enums.FriendStatus;
 import com.qinshou.immodule.enums.MessageType;
-import com.qinshou.immodule.listener.IOnConnectListener;
-import com.qinshou.immodule.listener.IOnFriendStatusListener;
-import com.qinshou.immodule.listener.IOnMessageListener;
+import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.db.DatabaseHelper;
+import com.qinshou.qinshoubox.im.listener.IOnConnectListener;
+import com.qinshou.qinshoubox.im.listener.IOnFriendStatusListener;
+import com.qinshou.qinshoubox.im.listener.IOnMessageListener;
 import com.qinshou.qinshoubox.im.manager.ConversationManager;
 import com.qinshou.qinshoubox.im.manager.FriendManager;
 import com.qinshou.qinshoubox.im.manager.GroupChatManager;
 import com.qinshou.qinshoubox.im.manager.MessageManager;
-import com.qinshou.qinshoubox.im.manager.UserManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,11 +57,10 @@ public enum IMClient {
     private List<IOnMessageListener> mOnMessageListenerList = new ArrayList<>();
     private List<IOnFriendStatusListener> mOnFriendStatusListenerList = new ArrayList<>();
     private String mUserId;
-    private ConversationManager mConversationManager;
-    private MessageManager mMessageManager;
-    private UserManager mUserManager;
     private GroupChatManager mGroupChatManager;
     private FriendManager mFriendManager;
+    private MessageManager mMessageManager;
+    private ConversationManager mConversationManager;
     //    private Map<String, MessageBean> mAckMessageMap = new HashMap<>();
 //    private Map<String, Timer> mRetrySendTimerMap = new HashMap<>();
     /**
@@ -103,15 +101,13 @@ public enum IMClient {
         // 初始化数据库
         DatabaseHelper databaseHelper = new DatabaseHelper(mContext, userId);
         // 创建好友管理者
-        mFriendManager = new FriendManager(databaseHelper,userId);
+        mFriendManager = new FriendManager(databaseHelper, userId);
         // 创建群组管理者
-        mGroupChatManager = new GroupChatManager(databaseHelper,userId);
-//        // 创建会话管理者
-//        mConversationManager = new ConversationManager();
-//        // 创建消息管理者
-//        mMessageManager = new MessageManager();
-//        // 创建用户管理者
-//        mUserManager = new UserManager();
+        mGroupChatManager = new GroupChatManager(databaseHelper, userId);
+        // 创建消息管理者
+        mMessageManager = new MessageManager(databaseHelper, userId);
+        // 创建会话管理者
+        mConversationManager = new ConversationManager();
         // 拉取离线消息
 //        OkHttpHelperForQSBoxOfflineApi.SINGLETON.getOfflineMessageList(userId)
 //                .transform(new QSApiTransformer<List<MessageBean>>())
@@ -404,23 +400,19 @@ public enum IMClient {
         mOnFriendStatusListenerList.remove(onFriendStatusListener);
     }
 
-    public ConversationManager getConversationManager() {
-        return mConversationManager;
-    }
-
-    public MessageManager getMessageManager() {
-        return mMessageManager;
-    }
-
-    public UserManager getUserManager() {
-        return mUserManager;
-    }
-
     public GroupChatManager getGroupChatManager() {
         return mGroupChatManager;
     }
 
     public FriendManager getFriendManager() {
         return mFriendManager;
+    }
+
+    public MessageManager getMessageManager() {
+        return mMessageManager;
+    }
+
+    public ConversationManager getConversationManager() {
+        return mConversationManager;
     }
 }

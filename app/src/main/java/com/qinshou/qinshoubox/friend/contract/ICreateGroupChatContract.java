@@ -3,7 +3,7 @@ package com.qinshou.qinshoubox.friend.contract;
 
 import com.qinshou.commonmodule.base.IBaseModel;
 import com.qinshou.commonmodule.base.IBaseView;
-import com.qinshou.immodule.listener.QSCallback;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.friend.view.fragment.CreateGroupChatFragment;
 import com.qinshou.qinshoubox.im.bean.FriendBean;

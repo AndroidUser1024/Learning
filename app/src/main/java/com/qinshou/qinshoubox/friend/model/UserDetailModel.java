@@ -5,8 +5,7 @@ import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.friend.contract.IUserDetailContract;
 import com.qinshou.qinshoubox.friend.view.fragment.UserDetailFragment;
 import com.qinshou.qinshoubox.login.bean.UserBean;
-import com.qinshou.immodule.listener.QSCallback;
-import com.qinshou.qinshoubox.im.IMClient;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 /**

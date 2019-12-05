@@ -4,7 +4,7 @@ import com.qinshou.commonmodule.base.IBaseModel;
 import com.qinshou.commonmodule.base.IBaseView;
 import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatDeleteMemberFragment;
 import com.qinshou.qinshoubox.login.bean.UserBean;
-import com.qinshou.immodule.listener.QSCallback;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 import java.util.List;
 

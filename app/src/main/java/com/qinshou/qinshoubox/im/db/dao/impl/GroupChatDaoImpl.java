@@ -3,7 +3,6 @@ package com.qinshou.qinshoubox.im.db.dao.impl;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 import com.qinshou.qinshoubox.im.db.dao.IGroupChatDao;
 
