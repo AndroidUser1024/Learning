@@ -22,13 +22,17 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
 
     @Override
     public int insert(ConversationBean conversationBean) {
-        String sql = "INSERT INTO conversation" +
-                " (toUserId,type,lastMsgContent,lastMsgContentType,lastMsgTimestamp,unreadCount)" +
-                " VALUES" +
-                " ('%s','%s','%s','%s','%s','%s')";
-        sql = String.format(sql, conversationBean.getToUserId(), conversationBean.getType()
-                , conversationBean.getLastMsgContent(), conversationBean.getLastMsgContentType()
-                , conversationBean.getLastMsgTimestamp(), conversationBean.getUnreadCount());
+        String sql = "SELECT id FROM conversation WHERE toUserId='%s' AND type='%s'";
+        sql = String.format(sql, conversationBean.getToUserId(), conversationBean.getType());
+        Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
+        cursor.close();
+//        String sql = "INSERT INTO conversation" +
+//                " (toUserId,type,lastMsgContent,lastMsgContentType,lastMsgTimestamp,unreadCount)" +
+//                " VALUES" +
+//                " ('%s','%s','%s','%s','%s','%s')";
+//        sql = String.format(sql, conversationBean.getToUserId(), conversationBean.getType()
+//                , conversationBean.getLastMsgContent(), conversationBean.getLastMsgContentType()
+//                , conversationBean.getLastMsgTimestamp(), conversationBean.getUnreadCount());
         getSQLiteDatabase().execSQL(sql);
         return 0;
     }
