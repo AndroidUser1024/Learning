@@ -4,8 +4,8 @@ import com.qinshou.commonmodule.base.AbsPresenter;
 import com.qinshou.qinshoubox.conversation.contract.IChatSettingContract;
 import com.qinshou.qinshoubox.conversation.model.ChatSettingModel;
 import com.qinshou.qinshoubox.conversation.view.fragment.ChatSettingFragment;
-import com.qinshou.immodule.bean.FriendBean;
 import com.qinshou.immodule.listener.QSCallback;
+import com.qinshou.qinshoubox.im.bean.FriendBean;
 
 /**
  * Author: QinHao

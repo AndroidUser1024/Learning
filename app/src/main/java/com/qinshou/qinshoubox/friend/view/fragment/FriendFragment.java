@@ -21,10 +21,10 @@ import com.qinshou.qinshoubox.friend.presenter.FriendPresenter;
 import com.qinshou.qinshoubox.friend.view.adapter.RcvFriendAdapter;
 import com.qinshou.qinshoubox.friend.view.adapter.RcvGroupChatAdapter;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
-import com.qinshou.immodule.bean.GroupChatBean;
 import com.qinshou.immodule.listener.IOnFriendStatusListener;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
+import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 import com.qinshou.qinshoubox.im.view.fragment.IMFragment;
 import com.qinshou.qinshoubox.util.QSUtil;
 
@@ -260,7 +260,6 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
     }
 
     private void loadData(int position) {
-        ShowLogUtil.logi("loadData--->" + position);
         if (position == TAB_INDEX_GROUP_CHAT) {
             getPresenter().getMyGroupChatList();
         } else if (position == TAB_INDEX_FRIEND) {

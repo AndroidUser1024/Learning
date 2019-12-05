@@ -3,11 +3,11 @@ package com.qinshou.qinshoubox.friend.contract;
 
 import com.qinshou.commonmodule.base.IBaseModel;
 import com.qinshou.commonmodule.base.IBaseView;
+import com.qinshou.immodule.listener.QSCallback;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.friend.view.fragment.CreateGroupChatFragment;
-import com.qinshou.immodule.bean.FriendBean;
-import com.qinshou.immodule.bean.GroupChatBean;
-import com.qinshou.immodule.listener.QSCallback;
+import com.qinshou.qinshoubox.im.bean.FriendBean;
+import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 
 import java.util.List;
 

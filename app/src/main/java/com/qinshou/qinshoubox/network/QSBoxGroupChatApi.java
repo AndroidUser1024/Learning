@@ -7,7 +7,7 @@ import com.qinshou.okhttphelper.annotation.Post;
 import com.qinshou.okhttphelper.call.Call;
 import com.qinshou.qinshoubox.constant.IUrlConstant;
 import com.qinshou.qinshoubox.homepage.bean.QinshouResultBean;
-import com.qinshou.immodule.bean.GroupChatBean;
+import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 
 import java.util.List;
@@ -30,7 +30,7 @@ public interface QSBoxGroupChatApi {
 
     @Json
     @Post("/getMyGroupChatList")
-    Call<QinshouResultBean<List<GroupChatBean>>> getMyGroupChatList(@Field(name = "userId") int userId);
+    Call<QinshouResultBean<List<GroupChatBean>>> getMyGroupChatList(@Field(name = "userId") String userId);
 
     @Json
     @Post("/getGroupChat")

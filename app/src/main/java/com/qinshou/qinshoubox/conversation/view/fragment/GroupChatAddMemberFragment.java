@@ -17,7 +17,7 @@ import com.qinshou.qinshoubox.conversation.contract.IGroupChatAddMemberContract;
 import com.qinshou.qinshoubox.conversation.presenter.GroupChatAddMemberPresenter;
 import com.qinshou.qinshoubox.friend.bean.GroupChatMemberForCreateBean;
 import com.qinshou.qinshoubox.friend.view.adapter.RcvGroupChatMemberForCreateAdapter;
-import com.qinshou.immodule.bean.FriendBean;
+import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 
 import java.util.ArrayList;

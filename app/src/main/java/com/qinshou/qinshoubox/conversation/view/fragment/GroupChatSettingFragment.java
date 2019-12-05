@@ -11,13 +11,13 @@ import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemClickListener;
 import com.qinshou.commonmodule.widget.TitleBar;
-import com.qinshou.immodule.bean.GroupChatBean;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.conversation.bean.GroupChatMemberFunction;
 import com.qinshou.qinshoubox.conversation.contract.IGroupChatSettingContract;
 import com.qinshou.qinshoubox.conversation.presenter.GroupChatSettingPresenter;
 import com.qinshou.qinshoubox.conversation.view.adapter.RcvGroupChatMemberAdapter;
+import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 
 
@@ -60,9 +60,9 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
 
                 } else if (itemData instanceof GroupChatMemberFunction) {
                     if (itemData == GroupChatMemberFunction.ADD_MEMBER) {
-                        GroupChatAddMemberFragment.start(getContext(), mGroupChatBean.getId());
+//                        GroupChatAddMemberFragment.start(getContext(), mGroupChatBean.getId());
                     } else if (itemData == GroupChatMemberFunction.DELETE_MEMBER) {
-                        GroupChatDeleteMemberFragment.start(getContext(), mGroupChatBean.getId());
+//                        GroupChatDeleteMemberFragment.start(getContext(), mGroupChatBean.getId());
                     }
                 }
             }

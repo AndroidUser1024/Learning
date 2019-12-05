@@ -1,16 +1,5 @@
 package com.qinshou.immodule.db;
 
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-
-import com.qinshou.immodule.bean.ConversationBean;
-import com.qinshou.immodule.bean.ConversationMessageRelBean;
-import com.qinshou.immodule.bean.FriendBean;
-import com.qinshou.immodule.bean.GroupChatBean;
-import com.qinshou.immodule.bean.MessageBean;
-
-import java.sql.SQLException;
-
 /**
  * Author: QinHao
  * Email:qinhao@jeejio.com

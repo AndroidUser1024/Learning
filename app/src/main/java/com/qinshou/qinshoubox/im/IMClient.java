@@ -105,7 +105,7 @@ public enum IMClient {
         // 创建好友管理者
         mFriendManager = new FriendManager(databaseHelper,userId);
         // 创建群组管理者
-        mGroupChatManager = new GroupChatManager(databaseHelper);
+        mGroupChatManager = new GroupChatManager(databaseHelper,userId);
 //        // 创建会话管理者
 //        mConversationManager = new ConversationManager();
 //        // 创建消息管理者

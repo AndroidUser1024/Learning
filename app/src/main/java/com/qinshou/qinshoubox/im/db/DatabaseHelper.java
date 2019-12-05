@@ -48,7 +48,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             " ,nicknameInGroupChat TEXT" +
             " ,top INTEGER" +
             " ,doNotDisturb INTEGER" +
-            " ,blackList INTEGER" +
+            " ,showGroupChatMemberNickname INTEGER" +
             " )";
     private final String CREATE_MESSAGE_TABLE_SQL = "CREATE TABLE IF NOT EXISTS message(" +
             " pid INTEGER PRIMARY KEY AUTOINCREMENT" +
