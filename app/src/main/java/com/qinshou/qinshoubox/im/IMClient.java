@@ -14,6 +14,11 @@ import com.qinshou.immodule.listener.IOnConnectListener;
 import com.qinshou.immodule.listener.IOnFriendStatusListener;
 import com.qinshou.immodule.listener.IOnMessageListener;
 import com.qinshou.qinshoubox.im.db.DatabaseHelper;
+import com.qinshou.qinshoubox.im.manager.ConversationManager;
+import com.qinshou.qinshoubox.im.manager.FriendManager;
+import com.qinshou.qinshoubox.im.manager.GroupChatManager;
+import com.qinshou.qinshoubox.im.manager.MessageManager;
+import com.qinshou.qinshoubox.im.manager.UserManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +58,11 @@ public enum IMClient {
     private List<IOnMessageListener> mOnMessageListenerList = new ArrayList<>();
     private List<IOnFriendStatusListener> mOnFriendStatusListenerList = new ArrayList<>();
     private String mUserId;
+    private ConversationManager mConversationManager;
+    private MessageManager mMessageManager;
+    private UserManager mUserManager;
+    private GroupChatManager mGroupChatManager;
+    private FriendManager mFriendManager;
     //    private Map<String, MessageBean> mAckMessageMap = new HashMap<>();
 //    private Map<String, Timer> mRetrySendTimerMap = new HashMap<>();
     /**
@@ -92,6 +102,16 @@ public enum IMClient {
         mReconnectCount = 0;
         // 初始化数据库
         DatabaseHelper databaseHelper = new DatabaseHelper(mContext, userId);
+        // 创建好友管理者
+        mFriendManager = new FriendManager(databaseHelper,userId);
+        // 创建群组管理者
+        mGroupChatManager = new GroupChatManager(databaseHelper);
+//        // 创建会话管理者
+//        mConversationManager = new ConversationManager();
+//        // 创建消息管理者
+//        mMessageManager = new MessageManager();
+//        // 创建用户管理者
+//        mUserManager = new UserManager();
         // 拉取离线消息
 //        OkHttpHelperForQSBoxOfflineApi.SINGLETON.getOfflineMessageList(userId)
 //                .transform(new QSApiTransformer<List<MessageBean>>())
@@ -218,6 +238,14 @@ public enum IMClient {
         mContext = context;
     }
 
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2019/12/5 16:13
+     * Description:连接 IM 服务
+     *
+     * @param userId 用户 id
+     */
     public void connect(final String userId) {
         new OkHttpClient.Builder()
                 .connectTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
@@ -285,7 +313,12 @@ public enum IMClient {
         });
     }
 
-
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2019/12/5 16:13
+     * Description:断开 IM 连接
+     */
     public void disconnect() {
 //        for (Timer timer : mRetrySendTimerMap.values()) {
 //            timer.cancel();
@@ -305,6 +338,7 @@ public enum IMClient {
         if (mWebSocket == null) {
             return;
         }
+        messageBean.setFromUserId(mUserId);
         if (messageBean.getType() == MessageType.CHAT.getValue()
                 || messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
 //            mMessageManager.insertOrUpdate(true, messageBean);
@@ -368,5 +402,25 @@ public enum IMClient {
 
     public void removeOnFriendStatusListener(IOnFriendStatusListener onFriendStatusListener) {
         mOnFriendStatusListenerList.remove(onFriendStatusListener);
+    }
+
+    public ConversationManager getConversationManager() {
+        return mConversationManager;
+    }
+
+    public MessageManager getMessageManager() {
+        return mMessageManager;
+    }
+
+    public UserManager getUserManager() {
+        return mUserManager;
+    }
+
+    public GroupChatManager getGroupChatManager() {
+        return mGroupChatManager;
+    }
+
+    public FriendManager getFriendManager() {
+        return mFriendManager;
     }
 }

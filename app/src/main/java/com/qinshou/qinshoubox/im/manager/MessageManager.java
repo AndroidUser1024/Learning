@@ -1,4 +1,4 @@
-package com.qinshou.immodule.manager;
+package com.qinshou.qinshoubox.im.manager;
 
 import com.qinshou.immodule.bean.MessageBean;
 import com.qinshou.immodule.db.dao.IMessageDao;
@@ -18,7 +18,7 @@ public class MessageManager {
      */
     private IMessageDao mMessageDao;
 
-    MessageManager() {
+    public MessageManager() {
         mMessageDao = new MessageDaoImpl();
     }
 

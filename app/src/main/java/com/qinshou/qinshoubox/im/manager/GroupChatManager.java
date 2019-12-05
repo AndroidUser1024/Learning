@@ -1,9 +1,10 @@
-package com.qinshou.immodule.manager;
+package com.qinshou.qinshoubox.im.manager;
 
 import com.qinshou.immodule.bean.GroupChatBean;
 import com.qinshou.immodule.db.dao.IGroupChatDao;
 import com.qinshou.immodule.db.dao.impl.GroupChatDaoImpl;
 import com.qinshou.immodule.listener.QSCallback;
+import com.qinshou.qinshoubox.im.db.DatabaseHelper;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class GroupChatManager {
      */
     private IGroupChatDao mGroupChatDao;
 
-    public GroupChatManager() {
+    public GroupChatManager(DatabaseHelper databaseHelper) {
         mGroupChatDao = new GroupChatDaoImpl();
     }
 

@@ -1,12 +1,14 @@
 package com.qinshou.qinshoubox.im.db.dao;
 
+import com.qinshou.qinshoubox.im.bean.FriendBean;
+
 /**
  * Author: QinHao
  * Email:cqflqinhao@126.com
  * Date: 2019/12/04 22:08
  * Description:friend 表的 Dao
  */
-public interface IFriendDao extends IBaseDao{
+public interface IFriendDao extends IBaseDao {
     // 创建表语句
     // CREATE TABLE IF NOT EXISTS friend(id TEXT PRIMARY KEY
     // ,nickname TEXT,headImg TEXT,headImgSmall TEXT
@@ -20,12 +22,13 @@ public interface IFriendDao extends IBaseDao{
     // VALUES
     // (#{id},#{nickname},#{headImg},#{headImgSmall},#{signature},#{remark}
     // ,#{top},#{doNotDisturb},#{blackList});
+    int insert(FriendBean friendBean);
 
     // 修改语句
     // UPDATE friend SET
     // nickname=#{nickname},headImg=#{headImg},headImgSmall=#{headImgSmall}
-    // ,signature#{signature},remark=#{remark},top=#{top}
-    // ,doNotDisturb#{doNotDisturb},blackList=#{blackList}
+    // ,signature=#{signature},remark=#{remark},top=#{top}
+    // ,doNotDisturb=#{doNotDisturb},blackList=#{blackList}
     // WHERE id=#{id};
 
     // 查询语句
@@ -34,7 +37,8 @@ public interface IFriendDao extends IBaseDao{
     // ,f.doNotDisturb,f.blackList
     // FROM friend AS f
     // WHERE f.id=#{id};
+    FriendBean selectById(String id);
 
     // existsById
-    // SELECT COUNT(id) FROM friend WHERE id=#{id};
+    // SELECT COUNT(*) AS count FROM friend WHERE id=#{id};
 }

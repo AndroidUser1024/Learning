@@ -21,10 +21,10 @@ import com.qinshou.qinshoubox.friend.presenter.FriendPresenter;
 import com.qinshou.qinshoubox.friend.view.adapter.RcvFriendAdapter;
 import com.qinshou.qinshoubox.friend.view.adapter.RcvGroupChatAdapter;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
-import com.qinshou.immodule.bean.FriendBean;
 import com.qinshou.immodule.bean.GroupChatBean;
 import com.qinshou.immodule.listener.IOnFriendStatusListener;
 import com.qinshou.qinshoubox.im.IMClient;
+import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.view.fragment.IMFragment;
 import com.qinshou.qinshoubox.util.QSUtil;
 
@@ -56,6 +56,8 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
      */
     private TextView mTvUnreadCountInTlMain;
     private List<RecyclerView> mRecyclerViewList = new ArrayList<>();
+    private RcvFriendAdapter mRcvFriendAdapter;
+    private RcvGroupChatAdapter mRcvGroupChatAdapter;
 
     private IOnFriendStatusListener mOnFriendStatusListener = new IOnFriendStatusListener() {
         @Override
@@ -112,9 +114,6 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
             ShowLogUtil.logi("offline: fromUserId--->" + fromUserId);
         }
     };
-
-    private RcvFriendAdapter mRcvFriendAdapter;
-    private RcvGroupChatAdapter mRcvGroupChatAdapter;
 
     @Override
     public void onDestroyView() {
@@ -185,7 +184,6 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                loadData(tab.getPosition());
             }
         });
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -231,7 +229,6 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
         mViewPager.setAdapter(new VpSingleViewAdapter(mRecyclerViewList, titleList));
         mTlFriend.setupWithViewPager(mViewPager);
 
-        loadData(mTlFriend.getSelectedTabPosition());
         showFriendHistoryUnreadCount();
     }
 
@@ -255,7 +252,6 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void receiveEvent(EventBean<Object> eventBean) {
-
         if (eventBean.getType() == EventBean.Type.REFRESH_GROUP_CHAT_LIST) {
             getPresenter().getMyGroupChatList();
         } else if (eventBean.getType() == EventBean.Type.REFRESH_FRIEND_LIST) {
@@ -264,6 +260,7 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
     }
 
     private void loadData(int position) {
+        ShowLogUtil.logi("loadData--->" + position);
         if (position == TAB_INDEX_GROUP_CHAT) {
             getPresenter().getMyGroupChatList();
         } else if (position == TAB_INDEX_FRIEND) {

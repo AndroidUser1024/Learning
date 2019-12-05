@@ -130,4 +130,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     }
+
+    public <T extends IBaseDao> T getDao(Class<T> tClass) {
+        return (T) mDaoMap.get(tClass);
+    }
 }

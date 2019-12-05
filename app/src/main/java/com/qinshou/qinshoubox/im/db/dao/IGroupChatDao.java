@@ -40,5 +40,5 @@ public interface IGroupChatDao  extends IBaseDao{
     // WHERE id=#{id};
 
     // existsById
-    // SELECT COUNT(id) FROM group_chat WHERE id=#{id};
+    // SELECT COUNT(*) AS count FROM group_chat WHERE id=#{id};
 }

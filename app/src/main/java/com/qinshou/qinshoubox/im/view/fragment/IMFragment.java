@@ -9,7 +9,9 @@ import android.widget.TextView;
 import com.qinshou.commonmodule.util.FragmentUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
+import com.qinshou.qinshoubox.conversation.view.fragment.ConversationFragment;
 import com.qinshou.qinshoubox.demo.view.fragment.DemoFragment;
+import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
 import com.qinshou.qinshoubox.im.contract.IIMContract;
 import com.qinshou.qinshoubox.im.presenter.IMPresenter;
 
@@ -74,8 +76,8 @@ public class IMFragment extends QSFragment<IMPresenter> implements IIMContract.I
     @Override
     public void initData() {
         String[] mainTvTabTextArray = getResources().getStringArray(R.array.im_tv_tab_text);
-        FragmentUtil.addFragment(getChildFragmentManager(), R.id.fl_fragment_container, mConversationFragment = new DemoFragment());
-        FragmentUtil.addFragment(getChildFragmentManager(), R.id.fl_fragment_container, mFriendFragment = new DemoFragment());
+        FragmentUtil.addFragment(getChildFragmentManager(), R.id.fl_fragment_container, mConversationFragment = new ConversationFragment());
+        FragmentUtil.addFragment(getChildFragmentManager(), R.id.fl_fragment_container, mFriendFragment = new FriendFragment());
         for (int i = 0; i < mainTvTabTextArray.length; i++) {
             TabLayout.Tab tab = mTlIM.newTab();
             View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_tab_main, null);

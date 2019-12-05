@@ -1,4 +1,4 @@
-package com.qinshou.immodule.manager;
+package com.qinshou.qinshoubox.im.manager;
 
 
 /**

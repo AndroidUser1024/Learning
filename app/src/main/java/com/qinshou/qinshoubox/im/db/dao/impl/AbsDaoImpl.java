@@ -14,4 +14,8 @@ public abstract class AbsDaoImpl<T> {
     public AbsDaoImpl(SQLiteDatabase SQLiteDatabase) {
         mSQLiteDatabase = SQLiteDatabase;
     }
+
+    public SQLiteDatabase getSQLiteDatabase() {
+        return mSQLiteDatabase;
+    }
 }

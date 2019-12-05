@@ -8,7 +8,7 @@ import com.qinshou.okhttphelper.call.Call;
 import com.qinshou.qinshoubox.constant.IUrlConstant;
 import com.qinshou.qinshoubox.friend.bean.FriendHistoryBean;
 import com.qinshou.qinshoubox.homepage.bean.QinshouResultBean;
-import com.qinshou.immodule.bean.FriendBean;
+import com.qinshou.qinshoubox.im.bean.FriendBean;
 
 import java.util.List;
 
@@ -21,6 +21,7 @@ import java.util.List;
 @Api(IUrlConstant.DEFAULT_HOST + "/friend")
 public interface QSBoxFriendApi {
 
+    @Json
     @Post("/add")
     Call<QinshouResultBean<Object>> add(@Field(name = "fromUserId") String fromUserId
             , @Field(name = "toUserId") String toUserId
@@ -28,18 +29,21 @@ public interface QSBoxFriendApi {
             , @Field(name = "additionalMsg") String additionalMsg
             , @Field(name = "source") int source);
 
+    @Json
     @Post("/agreeAdd")
     Call<QinshouResultBean<Object>> agreeAdd(@Field(name = "fromUserId") String fromUserId
             , @Field(name = "toUserId") String toUserId
             , @Field(name = "remark") String remark);
 
+    @Json
     @Post("/getHistory")
     Call<QinshouResultBean<List<FriendHistoryBean>>> getHistory(@Field(name = "page") int page
             , @Field(name = "pageSize") int pageSize
-            , @Field(name = "toUserId") String toUserId);
+            , @Field(name = "id") String id);
 
+    @Json
     @Post("/getList")
-    Call<QinshouResultBean<List<FriendBean>>> getList(@Field(name = "fromUserId") String fromUserId);
+    Call<QinshouResultBean<List<FriendBean>>> getList(@Field(name = "id") String id);
 
     @Json
     @Post("/delete")

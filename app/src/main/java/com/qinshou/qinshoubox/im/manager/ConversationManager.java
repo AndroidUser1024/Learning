@@ -1,4 +1,4 @@
-package com.qinshou.immodule.manager;
+package com.qinshou.qinshoubox.im.manager;
 
 
 import com.qinshou.immodule.bean.ConversationBean;
@@ -25,7 +25,7 @@ public class ConversationManager {
      */
     private IMessageDao mMessageDao;
 
-    ConversationManager() {
+    public ConversationManager() {
         mConversationDao = new ConversationDaoImpl();
         mMessageDao = new MessageDaoImpl();
     }
