@@ -54,7 +54,7 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
             } else if (messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
                 toUserId = messageBean.getToUserId();
             }
-//            ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().selectByToUserIdAndType(toUserIdmessageBean.getType());
+//            ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().selectIdAndUnreadCountByTypeAndToUserId(toUserIdmessageBean.getType());
 //            List<ConversationBean> conversationBeanList = mRcvConversationAdapter.getDataList();
 //            boolean contains = false;
 //            int index = 0;

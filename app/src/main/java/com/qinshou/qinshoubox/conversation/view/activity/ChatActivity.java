@@ -118,10 +118,6 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
      * 更多功能
      */
     private LinearLayout mLlMore;
-    //    /**
-//     * 会话实体类
-//     */
-//    private ConversationBean mConversationBean;
     private int mPage = IConstant.PAGE_START;
     /**
      * 消息模式,默认文本模式
@@ -478,7 +474,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
                     : friendBean.getRemark());
         }
         // 加载消息列表
-//        getPresenter().getMessageList(MessageType.CHAT.getValue(), mToUserId, mPage, IConstant.PAGE_SIZE);
+        getPresenter().getMessageList(MessageType.CHAT.getValue(), mToUserId, mPage, IConstant.PAGE_SIZE);
     }
 
 

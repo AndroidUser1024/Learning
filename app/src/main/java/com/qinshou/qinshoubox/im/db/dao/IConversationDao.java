@@ -56,7 +56,11 @@ public interface IConversationDao extends IBaseDao {
     // ORDER BY c.lastMsgTimestamp DESC;
     List<ConversationBean> selectList();
 
-    // selectByToUserIdAndType
+    // selectIdAndUnreadCountByTypeAndToUserId
+    // SELECT id,unreadCount FROM conversation WHERE type=#{type} AND toUserId=#{toUserId};
+    ConversationBean selectIdAndUnreadCountByTypeAndToUserId(int type, String toUserId);
+
+    //
     // SELECT
     // c.id,c.toUserId,c.type,c.lastMsgContent,c.lastMsgContentType
     // ,c.lastMsgTimestamp,c.unreadCount
@@ -66,5 +70,4 @@ public interface IConversationDao extends IBaseDao {
     // LEFT OUTER JOIN friend AS f ON f.id=c.toUserId AND c.type=2001
     // LEFT OUTER JOIN group_chat AS gc ON gc.id=c.toUserId AND c.type=3001
     // WHERE c.toUserId=#{toUserId} AND c.type=#{type};
-    ConversationBean selectByToUserIdAndType(String toUserId, int type);
 }

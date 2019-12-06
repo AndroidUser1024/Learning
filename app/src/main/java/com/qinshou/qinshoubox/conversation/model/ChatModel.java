@@ -1,6 +1,7 @@
 package com.qinshou.qinshoubox.conversation.model;
 
 
+import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.conversation.contract.IChatContract;
@@ -21,7 +22,7 @@ public class ChatModel implements IChatContract.IModel {
 //        if (conversationBean == null) {
 //            return;
 //        }
-//        List<MessageBean> messageBeanList = IMClient.SINGLETON.getMessageManager().getList(conversationBean.getId(), page, pageSize);
-//        qsCallback.onSuccess(messageBeanList);
+        List<MessageBean> messageBeanList = IMClient.SINGLETON.getMessageManager().getList(type, toUserId, page, pageSize);
+        qsCallback.onSuccess(messageBeanList);
     }
 }

@@ -3,6 +3,7 @@ package com.qinshou.qinshoubox.im.manager;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.bean.ConversationMessageRelBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
@@ -11,6 +12,8 @@ import com.qinshou.qinshoubox.im.db.dao.IConversationDao;
 import com.qinshou.qinshoubox.im.db.dao.IConversationMessageRelDao;
 import com.qinshou.qinshoubox.im.db.dao.IMessageDao;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -69,6 +72,16 @@ public class MessageManager {
         // 插入会话与消息关系
         mIConversationMessageRelDao.insert(new ConversationMessageRelBean(conversationBean.getId(), messageBean.getPid()));
         return messageBean;
+    }
+
+    public List<MessageBean> getList(int type, String toUserId, int page, int pageSize) {
+        ConversationBean conversationBean = mConversationDao.selectIdAndUnreadCountByTypeAndToUserId(type, toUserId);
+        ShowLogUtil.logi("conversationBean--->" + conversationBean);
+        if (conversationBean == null) {
+            return new ArrayList<>();
+        }
+        ShowLogUtil.logi("到了吗");
+        return mMessageDao.selectList(conversationBean.getId(), page, pageSize);
     }
 //
 //    public List<MessageBean> getList(int conversationId, int page, int pageSize) {

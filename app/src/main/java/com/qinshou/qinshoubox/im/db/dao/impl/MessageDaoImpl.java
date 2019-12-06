@@ -7,6 +7,9 @@ import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.db.dao.IMessageDao;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Author: QinHao
  * Email:qinhao@jeejio.com
@@ -41,5 +44,51 @@ public class MessageDaoImpl extends AbsDaoImpl<MessageBean> implements IMessageD
             }
         }
         return messageBean;
+    }
+
+    @Override
+    public List<MessageBean> selectList(int conversationId, int page, int pageSize) {
+        String sql = "SELECT m.pid,\n" +
+                "m.id,\n" +
+                "m.fromUserId,\n" +
+                "m.toUserId,\n" +
+                "m.type,\n" +
+                "m.contentType,\n" +
+                "m.content,\n" +
+                "m.sendTimestamp,\n" +
+                "m.receiveTimestamp,\n" +
+                "m.status,\n" +
+                "m.extend\n" +
+                "FROM conversation_message_rel AS cmr\n" +
+                "LEFT OUTER JOIN\n" +
+                "message AS m ON m.pid = cmr.messagePid\n" +
+                "WHERE cmr.conversationId = '%s'\n" +
+                "LIMIT '%s','%s'";
+        sql = String.format(sql, conversationId, page * pageSize, (page + 1) * pageSize);
+        List<MessageBean> messageBeanList = new ArrayList<>();
+        Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
+        try {
+            while (cursor.moveToNext()) {
+                MessageBean messageBean = new MessageBean();
+                messageBean.setPid(cursor.getInt(cursor.getColumnIndex("pid")));
+                messageBean.setId(cursor.getString(cursor.getColumnIndex("id")));
+                messageBean.setFromUserId(cursor.getString(cursor.getColumnIndex("fromUserId")));
+                messageBean.setToUserId(cursor.getString(cursor.getColumnIndex("toUserId")));
+                messageBean.setType(cursor.getInt(cursor.getColumnIndex("type")));
+                messageBean.setContentType(cursor.getInt(cursor.getColumnIndex("contentType")));
+                messageBean.setContent(cursor.getString(cursor.getColumnIndex("content")));
+                messageBean.setSendTimestamp(cursor.getLong(cursor.getColumnIndex("sendTimestamp")));
+                messageBean.setReceiveTimestamp(cursor.getLong(cursor.getColumnIndex("receiveTimestamp")));
+                messageBean.setStatus(cursor.getInt(cursor.getColumnIndex("status")));
+                messageBean.setExtend(cursor.getString(cursor.getColumnIndex("extend")));
+                messageBeanList.add(messageBean);
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        ShowLogUtil.logi("messageBeanList--->"+messageBeanList.size());
+        return messageBeanList;
     }
 }

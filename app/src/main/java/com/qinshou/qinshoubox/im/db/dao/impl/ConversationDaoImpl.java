@@ -3,7 +3,6 @@ package com.qinshou.qinshoubox.im.db.dao.impl;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.db.dao.IConversationDao;
 import com.qinshou.qinshoubox.im.enums.MessageType;
@@ -24,7 +23,7 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
 
     @Override
     public ConversationBean insert(ConversationBean conversationBean) {
-        ConversationBean select = selectByToUserIdAndType(conversationBean.getToUserId(), conversationBean.getType());
+        ConversationBean select = selectIdAndUnreadCountByTypeAndToUserId(conversationBean.getType(), conversationBean.getToUserId());
         if (select == null) {
             conversationBean.setUnreadCount(0);
             String sql = "INSERT INTO conversation" +
@@ -73,7 +72,8 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
                 " ,gc.nicknameDefault AS gcNicknameDefault,gc.top AS gcTop,gc.doNotDisturb AS gcDoNotDisturb" +
                 " FROM conversation AS c" +
                 " LEFT OUTER JOIN friend AS f ON f.id=c.toUserId AND c.type=2001" +
-                " LEFT OUTER JOIN group_chat AS gc ON gc.id=c.toUserId AND c.type=3001";
+                " LEFT OUTER JOIN group_chat AS gc ON gc.id=c.toUserId AND c.type=3001" +
+                " ORDER BY c.lastMsgTimestamp DESC;";
         List<ConversationBean> conversationBeanList = new ArrayList<>();
         Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
         try {
@@ -117,7 +117,7 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
     }
 
     //    @Override
-//    public ConversationBean selectByToUserIdAndType(String toUserId, int type) {
+//    public ConversationBean selectIdAndUnreadCountByTypeAndToUserId(String toUserId, int type) {
 //        // SELECT
 //        // c.id,c.toUserId,c.type,c.lastMsgContent,c.lastMsgContentType
 //        // ,c.lastMsgTimestamp,c.unreadCount
@@ -169,9 +169,9 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
 //        return null;
 //    }
     @Override
-    public ConversationBean selectByToUserIdAndType(String toUserId, int type) {
-        String sql = "SELECT id,unreadCount FROM conversation WHERE toUserId='%s' AND type='%s'";
-        sql = String.format(sql, toUserId, type);
+    public ConversationBean selectIdAndUnreadCountByTypeAndToUserId(int type, String toUserId) {
+        String sql = "SELECT id,unreadCount FROM conversation WHERE type='%s' AND toUserId='%s'";
+        sql = String.format(sql, type, toUserId);
         Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
         try {
             if (cursor.moveToNext()) {
