@@ -54,45 +54,45 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
             } else if (messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
                 toUserId = messageBean.getToUserId();
             }
-//            ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().selectIdAndUnreadCountByTypeAndToUserId(toUserIdmessageBean.getType());
-//            List<ConversationBean> conversationBeanList = mRcvConversationAdapter.getDataList();
-//            boolean contains = false;
-//            int index = 0;
-//            for (int i = 0; i < conversationBeanList.size(); i++) {
-//                if (conversationBeanList.get(i).getId() == conversationBean.getId()) {
-//                    contains = true;
-//                    index = i;
-//                    break;
-//                }
-//            }
-//            if (contains) {
-//                if (index == 0) {
-//                    // 如果该会话本来就在第一个,直接修改
-//                    conversationBeanList.set(index, conversationBean);
-//                    mRcvConversationAdapter.notifyItemChanged(index);
-//                } else {
-//                    // 如果该会话不在第一个,放到第一个
-//                    conversationBeanList.remove(index);
-//                    conversationBeanList.add(0, conversationBean);
-//                    mRcvConversationAdapter.notifyItemMoved(index, 0);
-//                }
-//            } else {
-//                // 原来的会话列表中没有该会话,则添加到第一个
-//                conversationBeanList.add(0, conversationBean);
-//                mRcvConversationAdapter.notifyItemChanged(0);
-//            }
-//            showMessageUnreadCount();
-//            try {
-//                if (SystemUtil.isBackground(getContext())) {
-//                    // 如果应用在后台显示通知
-//                    QSUtil.showNotification(getContext(), messageBean);
-//                } else {
-//                    // 如果在前台则播放声音和震动
-//                    QSUtil.playRingtone(getContext());
-//                    QSUtil.playVibration(getContext());
-//                }
-//            } catch (Exception ignoreException) {
-//            }
+            ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().selectByTypeAndToUserId(messageBean.getType(), toUserId);
+            List<ConversationBean> conversationBeanList = mRcvConversationAdapter.getDataList();
+            boolean contains = false;
+            int index = 0;
+            for (int i = 0; i < conversationBeanList.size(); i++) {
+                if (conversationBeanList.get(i).getId() == conversationBean.getId()) {
+                    contains = true;
+                    index = i;
+                    break;
+                }
+            }
+            if (contains) {
+                if (index == 0) {
+                    // 如果该会话本来就在第一个,直接修改
+                    conversationBeanList.set(index, conversationBean);
+                    mRcvConversationAdapter.notifyItemChanged(index);
+                } else {
+                    // 如果该会话不在第一个,放到第一个
+                    conversationBeanList.remove(index);
+                    conversationBeanList.add(0, conversationBean);
+                    mRcvConversationAdapter.notifyItemMoved(index, 0);
+                }
+            } else {
+                // 原来的会话列表中没有该会话,则添加到第一个
+                conversationBeanList.add(0, conversationBean);
+                mRcvConversationAdapter.notifyItemInserted(0);
+            }
+            showMessageUnreadCount();
+            try {
+                if (SystemUtil.isBackground(getContext())) {
+                    // 如果应用在后台显示通知
+                    QSUtil.showNotification(getContext(), messageBean);
+                } else {
+                    // 如果在前台则播放声音和震动
+                    QSUtil.playRingtone(getContext());
+                    QSUtil.playVibration(getContext());
+                }
+            } catch (Exception ignoreException) {
+            }
         }
     };
 

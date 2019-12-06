@@ -33,4 +33,8 @@ public class ConversationManager {
     public List<ConversationBean> selectList() {
         return mConversationDao.selectList();
     }
+
+    public ConversationBean selectByTypeAndToUserId(int type, String toUserId) {
+       return mConversationDao.selectByTypeAndToUserId(type, toUserId);
+    }
 }
