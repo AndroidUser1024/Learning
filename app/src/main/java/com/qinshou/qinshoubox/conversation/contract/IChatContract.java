@@ -17,7 +17,7 @@ import java.util.List;
  */
 public interface IChatContract {
     interface IModel extends IBaseModel {
-        void getMessageList(int type, int toUserId, int page, int pageSize, QSCallback<List<MessageBean>> qsCallback);
+        void getMessageList(int type, String toUserId, int page, int pageSize, QSCallback<List<MessageBean>> qsCallback);
     }
 
     interface IView extends IBaseView {
@@ -27,6 +27,6 @@ public interface IChatContract {
     }
 
     interface IPresenter {
-        void getMessageList(int type, int toUserId, int page, int pageSize);
+        void getMessageList(int type, String toUserId, int page, int pageSize);
     }
 }

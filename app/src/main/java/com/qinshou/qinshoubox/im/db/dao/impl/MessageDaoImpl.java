@@ -29,9 +29,8 @@ public class MessageDaoImpl extends AbsDaoImpl<MessageBean> implements IMessageD
                 , messageBean.getSendTimestamp(), messageBean.getReceiveTimestamp(), messageBean.getStatus()
                 , messageBean.getExtend());
         getSQLiteDatabase().execSQL(sql);
-        Cursor cursor = null;
+        Cursor cursor = getSQLiteDatabase().rawQuery("SELECT last_insert_rowid() FROM message", new String[]{});
         try {
-            cursor = getSQLiteDatabase().rawQuery("SELECT last_insert_rowid() FROM message", new String[]{});
             if (cursor.moveToFirst()) {
                 int pid = cursor.getInt(0);
                 messageBean.setPid(pid);

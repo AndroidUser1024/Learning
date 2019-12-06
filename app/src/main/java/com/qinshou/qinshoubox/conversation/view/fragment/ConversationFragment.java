@@ -10,8 +10,10 @@ import android.widget.TextView;
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemClickListener;
 import com.qinshou.commonmodule.util.ShowLogUtil;
+import com.qinshou.commonmodule.util.SystemUtil;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
+import com.qinshou.qinshoubox.im.enums.MessageType;
 import com.qinshou.qinshoubox.im.listener.IOnMessageListener;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.R;
@@ -20,6 +22,7 @@ import com.qinshou.qinshoubox.conversation.contract.IConversationContract;
 import com.qinshou.qinshoubox.conversation.presenter.ConversationPresenter;
 import com.qinshou.qinshoubox.conversation.view.adapter.RcvConversationAdapter;
 import com.qinshou.qinshoubox.im.view.fragment.IMFragment;
+import com.qinshou.qinshoubox.util.QSUtil;
 
 import java.util.List;
 
@@ -45,13 +48,13 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
         @Override
         public void onMessage(MessageBean messageBean) {
             ShowLogUtil.logi("onReceive: messageBean--->" + messageBean);
-            int toUserId = 0;
-//            if (messageBean.getType() == MessageType.CHAT.getValue()) {
-//                toUserId = messageBean.getFromUserId();
-//            } else if (messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
-//                toUserId = messageBean.getToUserId();
-//            }
-//            ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().getByTypeAndToUserId(messageBean.getType(), toUserId);
+            String toUserId = null;
+            if (messageBean.getType() == MessageType.CHAT.getValue()) {
+                toUserId = messageBean.getFromUserId();
+            } else if (messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
+                toUserId = messageBean.getToUserId();
+            }
+//            ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().selectByToUserIdAndType(toUserIdmessageBean.getType());
 //            List<ConversationBean> conversationBeanList = mRcvConversationAdapter.getDataList();
 //            boolean contains = false;
 //            int index = 0;
@@ -96,7 +99,6 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
     @Override
     public void onResume() {
         super.onResume();
-        getPresenter().getConversationList();
     }
 
     @Override

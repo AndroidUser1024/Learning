@@ -108,7 +108,7 @@ public enum IMClient {
         // 创建消息管理者
         mMessageManager = new MessageManager(databaseHelper, userId);
         // 创建会话管理者
-        mConversationManager = new ConversationManager();
+        mConversationManager = new ConversationManager(databaseHelper, userId);
         // 拉取离线消息
 //        OkHttpHelperForQSBoxOfflineApi.SINGLETON.getOfflineMessageList(userId)
 //                .transform(new QSApiTransformer<List<MessageBean>>())

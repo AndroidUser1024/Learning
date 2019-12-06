@@ -1,6 +1,8 @@
 package com.qinshou.qinshoubox.conversation.model;
 
 
+import com.qinshou.okhttphelper.callback.Callback;
+import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.conversation.contract.IConversationContract;
@@ -17,10 +19,7 @@ import java.util.List;
  */
 public class ConversationModel implements IConversationContract.IModel {
     @Override
-    public void getConversationList(QSCallback<List<ConversationBean>> qsCallback) {
-        if (!UserStatusManager.SINGLETON.isLogin()) {
-            return;
-        }
-//        qsCallback.onSuccess(IMClient.SINGLETON.getConversationManager().getList());
+    public void getConversationList(Callback<List<ConversationBean>> callback) {
+        callback.onSuccess(IMClient.SINGLETON.getConversationManager().selectList());
     }
 }

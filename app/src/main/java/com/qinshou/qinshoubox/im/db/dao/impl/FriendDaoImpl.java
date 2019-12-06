@@ -26,10 +26,13 @@ public class FriendDaoImpl extends AbsDaoImpl<FriendBean> implements IFriendDao 
         sql = String.format(sql, friendBean.getId());
         Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
         int count = 0;
-        if (cursor.moveToNext()) {
-            count = cursor.getInt(cursor.getColumnIndex("count"));
+        try {
+            if (cursor.moveToNext()) {
+                count = cursor.getInt(cursor.getColumnIndex("count"));
+            }
+        } finally {
+            cursor.close();
         }
-        cursor.close();
 
         if (count == 0) {
             // 如果不存在,则新增
@@ -66,21 +69,24 @@ public class FriendDaoImpl extends AbsDaoImpl<FriendBean> implements IFriendDao 
                 " WHERE f.id='%s'";
         sql = String.format(sql, id);
         Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
-        if (cursor.moveToNext()) {
-            FriendBean friendBean = new FriendBean();
-            friendBean.setId(cursor.getString(cursor.getColumnIndex("id")));
-            friendBean.setNickname(cursor.getString(cursor.getColumnIndex("nickname")));
-            friendBean.setHeadImg(cursor.getString(cursor.getColumnIndex("headImg")));
-            friendBean.setHeadImgSmall(cursor.getString(cursor.getColumnIndex("headImgSmall")));
-            friendBean.setSignature(cursor.getString(cursor.getColumnIndex("signature")));
-            friendBean.setRemark(cursor.getString(cursor.getColumnIndex("remark")));
-            friendBean.setTop(cursor.getInt(cursor.getColumnIndex("top")));
-            friendBean.setDoNotDisturb(cursor.getInt(cursor.getColumnIndex("doNotDisturb")));
-            friendBean.setBlackList(cursor.getInt(cursor.getColumnIndex("blackList")));
+        try {
+            if (cursor.moveToNext()) {
+                FriendBean friendBean = new FriendBean();
+                friendBean.setId(cursor.getString(cursor.getColumnIndex("id")));
+                friendBean.setNickname(cursor.getString(cursor.getColumnIndex("nickname")));
+                friendBean.setHeadImg(cursor.getString(cursor.getColumnIndex("headImg")));
+                friendBean.setHeadImgSmall(cursor.getString(cursor.getColumnIndex("headImgSmall")));
+                friendBean.setSignature(cursor.getString(cursor.getColumnIndex("signature")));
+                friendBean.setRemark(cursor.getString(cursor.getColumnIndex("remark")));
+                friendBean.setTop(cursor.getInt(cursor.getColumnIndex("top")));
+                friendBean.setDoNotDisturb(cursor.getInt(cursor.getColumnIndex("doNotDisturb")));
+                friendBean.setBlackList(cursor.getInt(cursor.getColumnIndex("blackList")));
+                cursor.close();
+                return friendBean;
+            }
+        } finally {
             cursor.close();
-            return friendBean;
         }
-        cursor.close();
         return null;
     }
 }

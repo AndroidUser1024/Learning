@@ -25,10 +25,13 @@ public class GroupChatDaoImpl extends AbsDaoImpl<GroupChatBean> implements IGrou
         sql = String.format(sql, groupChatBean.getId());
         Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
         int count = 0;
-        if (cursor.moveToNext()) {
-            count = cursor.getInt(cursor.getColumnIndex("count"));
+        try {
+            if (cursor.moveToNext()) {
+                count = cursor.getInt(cursor.getColumnIndex("count"));
+            }
+        } finally {
+            cursor.close();
         }
-        cursor.close();
 
         if (count == 0) {
             // 如果不存在,则新增

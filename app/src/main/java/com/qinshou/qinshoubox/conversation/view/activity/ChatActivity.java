@@ -33,6 +33,7 @@ import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.enums.MessageContentType;
+import com.qinshou.qinshoubox.im.enums.MessageType;
 import com.qinshou.qinshoubox.im.listener.IOnMessageListener;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSActivity;
@@ -401,7 +402,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
             public void onRefresh(RefreshLayout refreshLayout) {
                 mPage++;
                 // 加载消息列表
-//                getPresenter().getMessageList(MessageType.CHAT.getValue(), mToUserId, mPage, IConstant.PAGE_SIZE);
+                getPresenter().getMessageList(MessageType.CHAT.getValue(), mToUserId, mPage, IConstant.PAGE_SIZE);
             }
 
             @Override

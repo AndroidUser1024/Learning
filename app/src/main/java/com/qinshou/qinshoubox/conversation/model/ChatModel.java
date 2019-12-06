@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class ChatModel implements IChatContract.IModel {
     @Override
-    public void getMessageList(int type, int toUserId, int page, int pageSize, QSCallback<List<MessageBean>> qsCallback) {
+    public void getMessageList(int type, String toUserId, int page, int pageSize, QSCallback<List<MessageBean>> qsCallback) {
 //        ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().getByTypeAndToUserId(type, toUserId);
 //        if (conversationBean == null) {
 //            return;

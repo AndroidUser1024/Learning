@@ -2,10 +2,13 @@ package com.qinshou.qinshoubox.im.manager;
 
 
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
+import com.qinshou.qinshoubox.im.db.DatabaseHelper;
 import com.qinshou.qinshoubox.im.db.dao.IConversationDao;
 import com.qinshou.qinshoubox.im.db.dao.IMessageDao;
 import com.qinshou.qinshoubox.im.db.dao.impl.ConversationDaoImpl;
 import com.qinshou.qinshoubox.im.db.dao.impl.MessageDaoImpl;
+
+import java.util.List;
 
 /**
  * Author: QinHao
@@ -23,6 +26,11 @@ public class ConversationManager {
      */
     private IMessageDao mMessageDao;
 
-    public ConversationManager() {
+    public ConversationManager(DatabaseHelper databaseHelper, String userId) {
+        mConversationDao = databaseHelper.getDao(IConversationDao.class);
+    }
+
+    public List<ConversationBean> selectList() {
+        return mConversationDao.selectList();
     }
 }

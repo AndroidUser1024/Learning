@@ -66,5 +66,5 @@ public interface IConversationDao extends IBaseDao {
     // LEFT OUTER JOIN friend AS f ON f.id=c.toUserId AND c.type=2001
     // LEFT OUTER JOIN group_chat AS gc ON gc.id=c.toUserId AND c.type=3001
     // WHERE c.toUserId=#{toUserId} AND c.type=#{type};
-//    ConversationBean selectByToUserIdAndType(String toUserId, int type);
+    ConversationBean selectByToUserIdAndType(String toUserId, int type);
 }
