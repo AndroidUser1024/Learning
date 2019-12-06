@@ -202,9 +202,9 @@ public class FriendManager {
      * @param page     分页加载当前页码
      * @param pageSize 分页加载每一页的条数
      */
-    public void getHistory(int page, int pageSize, Callback<PageResultBean<FriendHistoryBean>> callback) {
+    public void getHistory(int page, int pageSize, Callback<List<FriendHistoryBean>> callback) {
         OkHttpHelperForQSBoxFriendApi.SINGLETON.getHistory(mUserId, page, pageSize)
-                .transform(new QSApiTransformer<PageResultBean<FriendHistoryBean>>())
+                .transform(new QSApiTransformer<List<FriendHistoryBean>>())
                 .enqueue(callback);
     }
 }

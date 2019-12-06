@@ -26,7 +26,7 @@ public interface IFriendHistoryContract {
          *
          * @param callback 回调接口
          */
-        void getFriendHistory(int page, int pageSize, Callback<PageResultBean<FriendHistoryBean>> callback);
+        void getFriendHistory(int page, int pageSize, Callback<List<FriendHistoryBean>> callback);
     }
 
     interface IView extends IBaseView {
@@ -38,7 +38,7 @@ public interface IFriendHistoryContract {
          *
          * @param pageResultBean 好友申请历史列表
          */
-        void getFriendHistorySuccess(PageResultBean<FriendHistoryBean> pageResultBean);
+        void getFriendHistorySuccess(List<FriendHistoryBean> pageResultBean);
 
         /**
          * Author: QinHao

@@ -13,6 +13,9 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.qinshou.commonmodule.ContainerActivity;
+import com.qinshou.commonmodule.util.SharedPreferencesHelper;
+import com.qinshou.commonmodule.util.ShowLogUtil;
+import com.qinshou.commonmodule.util.SystemUtil;
 import com.qinshou.commonmodule.util.activityresultutil.ActivityResultUtil;
 import com.qinshou.commonmodule.util.activityresultutil.OnActivityResultCallBack;
 import com.qinshou.commonmodule.widget.TitleBar;
@@ -20,6 +23,7 @@ import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
+import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.conversation.view.activity.ChatActivity;
 import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.friend.view.dialog.DeleteContactDialog;
@@ -27,7 +31,10 @@ import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.friend.contract.IUserDetailContract;
 import com.qinshou.qinshoubox.friend.presenter.UserDetailPresenter;
 import com.qinshou.qinshoubox.friend.view.activity.SetRemarkActivity;
+import com.qinshou.qinshoubox.im.IMClient;
+import com.qinshou.qinshoubox.im.listener.IOnFriendStatusListener;
 import com.qinshou.qinshoubox.im.view.fragment.IMActivity;
+import com.qinshou.qinshoubox.util.QSUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -41,20 +48,100 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
     private static final String KEYWORD = "Keyword";
 
     private TitleBar mTitleBar;
+    /**
+     * 头像
+     */
     private ImageView mIvHeadImg;
+    /**
+     * 备注
+     */
     private TextView mTvRemark;
+    /**
+     * 性别
+     */
     private ImageView mIvGender;
+    /**
+     * 用户名
+     */
     private TextView mTvUsername;
+    /**
+     * 昵称
+     */
     private TextView mTvNickname;
     private LinearLayout mLlAdditionalMsg;
+    /**
+     * 附加验证信息
+     */
     private TextView mTvAdditionalMsg;
+    /**
+     * 备注
+     */
     private TextView mTvRemark2;
+    /**
+     * 手机号码
+     */
     private TextView mTvPhoneNumber;
+    /**
+     * 邮箱
+     */
     private TextView mTvEmail;
+    /**
+     * 个性签名
+     */
     private TextView mTvSignature;
+    /**
+     * 用户来源
+     */
     private TextView mTvSource;
+    /**
+     * 添加好友/接受请求/发送消息按钮
+     */
     private Button mBtnAddFriend;
+    /**
+     * 用户详情实体类
+     */
     private UserDetailBean mUserDetailBean;
+    private IOnFriendStatusListener mOnFriendStatusListener = new IOnFriendStatusListener() {
+        @Override
+        public void add(String fromUserId, String additionalMsg, boolean newFriend) {
+            ShowLogUtil.logi("add: fromUserId--->" + fromUserId + ",additionalMsg--->" + additionalMsg + ",newFriend--->" + newFriend);
+        }
+
+        @Override
+        public void agreeAdd(String fromUserId) {
+            ShowLogUtil.logi("agreeAdd: fromUserId--->" + fromUserId);
+            if (TextUtils.equals(fromUserId, mUserDetailBean.getId())) {
+                // 监听到发起的添加请求被同意了,更新 UI
+                showFriendUI(mUserDetailBean);
+            }
+        }
+
+        @Override
+        public void refuseAdd(String fromUserId) {
+            ShowLogUtil.logi("refuseAdd: fromUserId--->" + fromUserId);
+        }
+
+        @Override
+        public void delete(String fromUserId) {
+            ShowLogUtil.logi("delete: fromUserId--->" + fromUserId);
+        }
+
+        @Override
+        public void online(String fromUserId) {
+            ShowLogUtil.logi("online: fromUserId--->" + fromUserId);
+        }
+
+        @Override
+        public void offline(String fromUserId) {
+            ShowLogUtil.logi("offline: fromUserId--->" + fromUserId);
+        }
+    };
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        IMClient.SINGLETON.removeOnFriendStatusListener(mOnFriendStatusListener);
+    }
 
     @Override
     public int getLayoutId() {
@@ -81,6 +168,7 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
 
     @Override
     public void setListener() {
+        IMClient.SINGLETON.addOnFriendStatusListener(mOnFriendStatusListener);
         ((TitleBar) findViewByID(R.id.title_bar)).setLeftImageOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,14 +234,8 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
 
     @Override
     public void agreeAddFriendSuccess() {
-        mBtnAddFriend.setText(getString(R.string.user_detail_btn_add_friend_text_2));
-        mBtnAddFriend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.REFRESH_FRIEND_LIST, null));
-                ChatActivity.start(getContext(), mUserDetailBean.getId());
-            }
-        });
+        showFriendUI(mUserDetailBean);
+        EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.REFRESH_FRIEND_LIST, mUserDetailBean.getId()));
     }
 
     @Override

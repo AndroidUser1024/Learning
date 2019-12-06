@@ -38,7 +38,7 @@ public interface QSBoxFriendApi {
 
     @Json
     @Post("/getHistory")
-    Call<QinshouResultBean<PageResultBean<FriendHistoryBean>>> getHistory(@Field(name = "id") String id
+    Call<QinshouResultBean<List<FriendHistoryBean>>> getHistory(@Field(name = "id") String id
             , @Field(name = "page") int page
             , @Field(name = "pageSize") int pageSize);
 

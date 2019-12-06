@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class FriendHistoryModel implements IFriendHistoryContract.IModel {
     @Override
-    public void getFriendHistory(int page, int pageSize, Callback<PageResultBean<FriendHistoryBean>> callback) {
+    public void getFriendHistory(int page, int pageSize, Callback<List<FriendHistoryBean>> callback) {
         IMClient.SINGLETON.getFriendManager().getHistory(page, pageSize, callback);
     }
 }

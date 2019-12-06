@@ -147,7 +147,7 @@
     <string name="user_detail_tv_email_prompt">邮箱地址</string>
     <string name="user_detail_tv_signature_prompt">个性签名</string>
     <string name="user_detail_tv_source_prompt">用户来源</string>
-    <string name="user_detail_btn_add_friend_text">添加到通讯录</string>
+    <string name="user_detail_btn_add_friend_text">添加好友</string>
     <string name="user_detail_btn_add_friend_text_2">发送消息</string>
     <string name="user_detail_btn_add_friend_text_3">接受请求</string>
     <string name="user_detail_tv_delete_contact_text">删除联系人</string>

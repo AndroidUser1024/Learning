@@ -25,9 +25,9 @@ public class FriendHistoryPresenter extends AbsPresenter<IFriendHistoryContract.
 
     @Override
     public void getFriendHistory(int page, int pageSize) {
-        getModel().getFriendHistory(page, pageSize, new Callback<PageResultBean<FriendHistoryBean>>() {
+        getModel().getFriendHistory(page, pageSize, new Callback<List<FriendHistoryBean>>() {
             @Override
-            public void onSuccess(PageResultBean<FriendHistoryBean> data) {
+            public void onSuccess(List<FriendHistoryBean> data) {
                 if (!isViewAttached()) {
                     return;
                 }

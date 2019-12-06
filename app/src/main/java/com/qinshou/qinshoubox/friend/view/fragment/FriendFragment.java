@@ -119,14 +119,13 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
     public void onDestroyView() {
         super.onDestroyView();
         EventBus.getDefault().unregister(this);
+        IMClient.SINGLETON.removeOnFriendStatusListener(mOnFriendStatusListener);
         mTvUnreadCount.setVisibility(View.GONE);
         mTvUnreadCountInTlMain.setVisibility(View.GONE);
-        IMClient.SINGLETON.removeOnFriendStatusListener(mOnFriendStatusListener);
     }
 
     @Override
     public int getLayoutId() {
-        EventBus.getDefault().register(this);
         return R.layout.fragment_friend;
     }
 
@@ -154,6 +153,7 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
 
     @Override
     public void setListener() {
+        EventBus.getDefault().register(this);
         IMClient.SINGLETON.addOnFriendStatusListener(mOnFriendStatusListener);
         findViewByID(R.id.ll_new_friend).setOnClickListener(new View.OnClickListener() {
             @Override

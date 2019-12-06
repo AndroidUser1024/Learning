@@ -1,6 +1,7 @@
 package com.qinshou.qinshoubox.friend.view.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
@@ -30,7 +31,9 @@ public class RcvFriendHistoryAdapter extends RcvSingleBaseAdapter<FriendHistoryB
         ImageLoadUtil.SINGLETON.loadImage(getContext()
                 , friendHistoryBean.getHeadImgSmall()
                 , baseViewHolder.getImageView(R.id.iv_head_img));
-        baseViewHolder.setTvText(R.id.tv_nickname, friendHistoryBean.getNickname());
+        baseViewHolder.setTvText(R.id.tv_nickname, TextUtils.isEmpty(friendHistoryBean.getRemark())
+                ? friendHistoryBean.getNickname()
+                : friendHistoryBean.getRemark());
         // 附加消息
         baseViewHolder.setTvText(R.id.tv_status, friendHistoryBean.getAdditionalMsg());
         Button btnView = baseViewHolder.findViewById(R.id.btn_view);

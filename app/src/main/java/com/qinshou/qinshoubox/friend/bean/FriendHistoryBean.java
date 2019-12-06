@@ -20,6 +20,10 @@ public class FriendHistoryBean {
      */
     private String fromUserId;
     /**
+     * 发起申请的人的备注
+     */
+    private String remark;
+    /**
      * 发起申请的人的昵称
      */
     private String nickname;
@@ -41,6 +45,7 @@ public class FriendHistoryBean {
                 "additionalMsg='" + additionalMsg + '\'' +
                 ", status=" + status +
                 ", fromUserId=" + fromUserId +
+                ", remark=" + remark +
                 ", nickname='" + nickname + '\'' +
                 ", headImg='" + headImg + '\'' +
                 ", headImgSmall='" + headImgSmall + '\'' +
@@ -69,6 +74,14 @@ public class FriendHistoryBean {
 
     public void setFromUserId(String fromUserId) {
         this.fromUserId = fromUserId;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public String getNickname() {
