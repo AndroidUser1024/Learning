@@ -4,7 +4,6 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
-import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.im.IMClient;
@@ -37,7 +36,7 @@ public class RcvMessageAdapterFromMessageTextItemView extends AbsRcvMessageAdapt
     public void bindViewHolder(final BaseViewHolder baseViewHolder, final MessageBean messageBean, int i) {
         super.bindViewHolder(baseViewHolder, messageBean, i);
         // 头像
-        FriendBean friendBean = IMClient.SINGLETON.getFriendManager().selectById(messageBean.getFromUserId());
+        FriendBean friendBean = IMClient.SINGLETON.getFriendManager().getById(messageBean.getFromUserId());
         if (friendBean != null) {
             ImageLoadUtil.SINGLETON.loadImage(getContext(), friendBean.getHeadImgSmall(), baseViewHolder.getImageView(R.id.iv_head_img));
         }

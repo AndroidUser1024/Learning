@@ -39,7 +39,7 @@ public class FriendManager {
         mUserId = userId;
     }
 
-    public FriendBean selectById(String id) {
+    public FriendBean getById(String id) {
         return mFriendDao.selectById(id);
     }
 

@@ -16,61 +16,45 @@
 
     </com.qinshou.commonmodule.widget.TitleBar>
 
-    <android.support.design.widget.CoordinatorLayout
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/abl_status"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/activity_background_color"
-            app:elevation="0dp"
-            tools:ignore="UnusedAttribute">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/ll_search"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_collapseMode="pin"
-                app:layout_scrollFlags="scroll">
+                android:layout_height="@dimen/px56"
+                android:layout_marginStart="@dimen/px30"
+                android:layout_marginLeft="@dimen/px30"
+                android:layout_marginTop="@dimen/px15"
+                android:layout_marginEnd="@dimen/px30"
+                android:layout_marginRight="@dimen/px30"
+                android:layout_marginBottom="@dimen/px15"
+                android:background="@drawable/conversation_ll_search_bg"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-                <LinearLayout
-                    android:id="@+id/ll_search"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/px56"
-                    android:layout_marginStart="@dimen/px32"
-                    android:layout_marginLeft="@dimen/px32"
-                    android:layout_marginTop="@dimen/px17"
-                    android:layout_marginEnd="@dimen/px32"
-                    android:layout_marginRight="@dimen/px32"
-                    android:background="@drawable/conversation_ll_search_bg"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="@dimen/px24"
+                    android:layout_height="@dimen/px24"
+                    android:layout_marginEnd="@dimen/px3"
+                    android:layout_marginRight="@dimen/px3"
+                    android:src="@drawable/conversation_iv_search_src" />
 
-                    <ImageView
-                        android:layout_width="@dimen/px24"
-                        android:layout_height="@dimen/px24"
-                        android:layout_marginEnd="@dimen/px3"
-                        android:layout_marginRight="@dimen/px3"
-                        android:src="@drawable/conversation_iv_search_src" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/px3"
-                        android:layout_marginLeft="@dimen/px3"
-                        android:letterSpacing="0.1"
-                        android:text="@string/conversation_tv_search_text"
-                        android:textColor="#FF999999"
-                        android:textSize="@dimen/px26" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/px1"
-                    android:layout_marginTop="@dimen/px16"
-                    android:background="#FFECECEC" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/px3"
+                    android:layout_marginLeft="@dimen/px3"
+                    android:letterSpacing="0.1"
+                    android:text="@string/conversation_tv_search_text"
+                    android:textColor="#FF999999"
+                    android:textSize="@dimen/px26" />
             </LinearLayout>
 
             <android.support.v7.widget.RecyclerView
@@ -78,8 +62,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-        </android.support.design.widget.AppBarLayout>
-    </android.support.design.widget.CoordinatorLayout>
-
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

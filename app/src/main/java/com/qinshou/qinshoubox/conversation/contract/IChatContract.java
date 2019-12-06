@@ -17,16 +17,52 @@ import java.util.List;
  */
 public interface IChatContract {
     interface IModel extends IBaseModel {
-        void getMessageList(int type, String toUserId, int page, int pageSize, QSCallback<List<MessageBean>> qsCallback);
+        /**
+         * Author: QinHao
+         * Email:cqflqinhao@126.com
+         * Date:2019/12/6 11:29
+         * Description:获取消息列表
+         *
+         * @param toUserId 对方用户 id
+         * @param page     分页加载页码
+         * @param pageSize 分页加载每页条数
+         */
+        void getMessageList(String toUserId, int page, int pageSize, QSCallback<List<MessageBean>> qsCallback);
     }
 
     interface IView extends IBaseView {
+        /**
+         * Author: QinHao
+         * Email:cqflqinhao@126.com
+         * Date:2019/12/6 11:31
+         * Description:获取消息列表成功
+         *
+         * @param messageBeanList 消息列表
+         */
         void getMessageListSuccess(List<MessageBean> messageBeanList);
 
+        /**
+         * Author: QinHao
+         * Email:cqflqinhao@126.com
+         * Date:2019/12/6 11:31
+         * Description:获取消息列表失败
+         *
+         * @param e 错误信息
+         */
         void getMessageListFailure(Exception e);
     }
 
     interface IPresenter {
-        void getMessageList(int type, String toUserId, int page, int pageSize);
+        /**
+         * Author: QinHao
+         * Email:cqflqinhao@126.com
+         * Date:2019/12/6 11:31
+         * Description:获取消息列表
+         *
+         * @param toUserId 对方用户 id
+         * @param page     分页加载页码
+         * @param pageSize 分页加载每页条数
+         */
+        void getMessageList(String toUserId, int page, int pageSize);
     }
 }

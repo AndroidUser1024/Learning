@@ -28,6 +28,7 @@ import com.qinshou.commonmodule.util.permissionutil.PermissionUtil;
 import com.qinshou.commonmodule.widget.RefreshLayout;
 import com.qinshou.commonmodule.widget.TitleBar;
 import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatSettingFragment;
+import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.enums.MessageContentType;
 import com.qinshou.qinshoubox.im.enums.MessageType;
@@ -116,10 +117,6 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
      * 更多功能
      */
     private LinearLayout mLlMore;
-    //    /**
-//     * 会话实体类
-//     */
-//    private ConversationBean mConversationBean;
     private int mPage = IConstant.PAGE_START;
     /**
      * 消息模式,默认文本模式
@@ -316,7 +313,7 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
         @Override
         public void onMessage(MessageBean messageBean) {
             // 不是当前群聊的消息,不添加到列表中
-            if (messageBean.getType() != MessageType.GROUP_CHAT.getValue() || TextUtils.equals(mGroupChatId, messageBean.getToUserId())) {
+            if (messageBean.getType() != MessageType.GROUP_CHAT.getValue() || !TextUtils.equals(mGroupChatId, messageBean.getToUserId())) {
                 return;
             }
             mRcvMessageAdapter.getDataList().add(messageBean);
@@ -400,7 +397,7 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
             public void onRefresh(RefreshLayout refreshLayout) {
                 mPage++;
                 // 加载消息列表
-//                getPresenter().getMessageList(MessageType.GROUP_CHAT.getValue(), mGroupChatId, mPage, IConstant.PAGE_SIZE);
+                getPresenter().getMessageList(mGroupChatId, mPage, IConstant.PAGE_SIZE);
             }
 
             @Override
@@ -464,24 +461,19 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
         if (intent == null) {
             return;
         }
-//        mGroupChatId = intent.getIntExtra(GROUP_CHAT_ID, 0);
-//        if (mGroupChatId == 0) {
-//            return;
-//        }
-//        GroupChatBean groupChatBean = IMClient.SINGLETON.getGroupChatManager().getById(mGroupChatId);
-//        if (groupChatBean != null) {
-//            // 群昵称
-//            mTitleBar.setTitleText(TextUtils.isEmpty(groupChatBean.getNickname())
-//                    ? groupChatBean.getNicknameDefault()
-//                    : groupChatBean.getNickname());
-//        }
-//        mConversationBean = JMClient.SINGLETON.getConversationManager().getByToUsername(mGroupChatId);
-//        // 重置未读数
-//        if (mConversationBean != null) {
-//            JMClient.SINGLETON.getConversationManager().resetUnreadCount(mConversationBean.getId());
-//        }
+        mGroupChatId = intent.getStringExtra(GROUP_CHAT_ID);
+        if (TextUtils.isEmpty(mGroupChatId)) {
+            return;
+        }
+        GroupChatBean groupChatBean = IMClient.SINGLETON.getGroupChatManager().getById(mGroupChatId);
+        if (groupChatBean != null) {
+            // 群昵称
+            mTitleBar.setTitleText(TextUtils.isEmpty(groupChatBean.getNickname())
+                    ? groupChatBean.getNicknameDefault()
+                    : groupChatBean.getNickname());
+        }
         // 加载消息列表
-//        getPresenter().getMessageList(MessageType.GROUP_CHAT.getValue(), mGroupChatId, mPage, IConstant.PAGE_SIZE);
+        getPresenter().getMessageList(mGroupChatId, mPage, IConstant.PAGE_SIZE);
     }
 
 

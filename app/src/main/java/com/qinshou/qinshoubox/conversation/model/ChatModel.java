@@ -3,6 +3,7 @@ package com.qinshou.qinshoubox.conversation.model;
 
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
+import com.qinshou.qinshoubox.im.enums.MessageType;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.conversation.contract.IChatContract;
 import com.qinshou.qinshoubox.conversation.view.activity.ChatActivity;
@@ -17,12 +18,8 @@ import java.util.List;
  */
 public class ChatModel implements IChatContract.IModel {
     @Override
-    public void getMessageList(int type, String toUserId, int page, int pageSize, QSCallback<List<MessageBean>> qsCallback) {
-//        ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().getByTypeAndToUserId(type, toUserId);
-//        if (conversationBean == null) {
-//            return;
-//        }
-        List<MessageBean> messageBeanList = IMClient.SINGLETON.getMessageManager().getList(type, toUserId, page, pageSize);
+    public void getMessageList(String toUserId, int page, int pageSize, QSCallback<List<MessageBean>> qsCallback) {
+        List<MessageBean> messageBeanList = IMClient.SINGLETON.getMessageManager().getList(MessageType.CHAT.getValue(), toUserId, page, pageSize);
         qsCallback.onSuccess(messageBeanList);
     }
 }

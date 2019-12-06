@@ -64,6 +64,34 @@ public class GroupChatDaoImpl extends AbsDaoImpl<GroupChatBean> implements IGrou
 
     @Override
     public GroupChatBean selectById(String id) {
+        String sql = "SELECT" +
+                " gc.id,gc.ownerId,gc.nickname,gc.headImg,gc.headImgSmall" +
+                ",gc.nicknameDefault,gc.nicknameInGroupChat" +
+                ",gc.top,gc.doNotDisturb,gc.showGroupChatMemberNickname" +
+                "FROM group_chat AS gc" +
+                "WHERE id='%s'";
+        sql = String.format(sql, id);
+        Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
+        try {
+            if (cursor.moveToNext()) {
+                GroupChatBean groupChatBean = new GroupChatBean();
+                groupChatBean.setId(cursor.getString(cursor.getColumnIndex("id")));
+                groupChatBean.setOwnerId(cursor.getString(cursor.getColumnIndex("ownerId")));
+                groupChatBean.setNickname(cursor.getString(cursor.getColumnIndex("nickname")));
+                groupChatBean.setHeadImg(cursor.getString(cursor.getColumnIndex("headImg")));
+                groupChatBean.setHeadImgSmall(cursor.getString(cursor.getColumnIndex("headImgSmall")));
+                groupChatBean.setNicknameDefault(cursor.getString(cursor.getColumnIndex("nicknameDefault")));
+                groupChatBean.setNicknameInGroupChat(cursor.getString(cursor.getColumnIndex("nicknameInGroupChat")));
+                groupChatBean.setTop(cursor.getInt(cursor.getColumnIndex("top")));
+                groupChatBean.setDoNotDisturb(cursor.getInt(cursor.getColumnIndex("doNotDisturb")));
+                groupChatBean.setShowGroupChatMemberNickname(cursor.getInt(cursor.getColumnIndex("showGroupChatMemberNickname")));
+                return groupChatBean;
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
         return null;
     }
 }

@@ -23,8 +23,8 @@ public class ChatPresenter extends AbsPresenter<IChatContract.IView, IChatContra
     }
 
     @Override
-    public void getMessageList(int type, String toUserId, int page, int pageSize) {
-        getModel().getMessageList(type, toUserId, page, pageSize, new QSCallback<List<MessageBean>>() {
+    public void getMessageList(String toUserId, int page, int pageSize) {
+        getModel().getMessageList(toUserId, page, pageSize, new QSCallback<List<MessageBean>>() {
             @Override
             public void onSuccess(List<MessageBean> data) {
                 if (!isViewAttached()) {

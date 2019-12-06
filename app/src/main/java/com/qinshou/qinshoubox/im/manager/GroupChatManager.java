@@ -142,4 +142,8 @@ public class GroupChatManager {
 //                    }
 //                });
     }
+
+    public GroupChatBean getById(String groupChatId) {
+        return mGroupChatDao.selectById(groupChatId);
+    }
 }

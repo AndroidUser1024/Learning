@@ -398,7 +398,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
             public void onRefresh(RefreshLayout refreshLayout) {
                 mPage++;
                 // 加载消息列表
-                getPresenter().getMessageList(MessageType.CHAT.getValue(), mToUserId, mPage, IConstant.PAGE_SIZE);
+                getPresenter().getMessageList(mToUserId, mPage, IConstant.PAGE_SIZE);
             }
 
             @Override
@@ -466,7 +466,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
         if (TextUtils.isEmpty(mToUserId)) {
             return;
         }
-        FriendBean friendBean = IMClient.SINGLETON.getFriendManager().selectById(mToUserId);
+        FriendBean friendBean = IMClient.SINGLETON.getFriendManager().getById(mToUserId);
         if (friendBean != null) {
             // 对方的昵称
             mTitleBar.setTitleText(TextUtils.isEmpty(friendBean.getRemark())
@@ -474,7 +474,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
                     : friendBean.getRemark());
         }
         // 加载消息列表
-        getPresenter().getMessageList(MessageType.CHAT.getValue(), mToUserId, mPage, IConstant.PAGE_SIZE);
+        getPresenter().getMessageList(mToUserId, mPage, IConstant.PAGE_SIZE);
     }
 
 
