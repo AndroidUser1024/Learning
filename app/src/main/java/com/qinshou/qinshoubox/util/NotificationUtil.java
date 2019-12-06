@@ -34,7 +34,7 @@ public class NotificationUtil {
      * @param title    通知标题,通常传递对方昵称
      * @param content  通知内容,通常传递消息内容
      */
-    public static void showNotification(Context context, int id, int toUserId, String title, String content) {
+    public static void showNotification(Context context, int id, String toUserId, String title, String content) {
         // 创建NotificationManager对象，并发布和管理所要创建的Notification
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 //        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, null, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -43,7 +43,7 @@ public class NotificationUtil {
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher);
         // 点击跳转意图
         PendingIntent pendingIntent = null;
-        if (toUserId != 0) {
+        if (!TextUtils.isEmpty(toUserId)) {
             Intent intent = new Intent(context, ChatActivity.class);
             intent.putExtra("ToUserId", toUserId);
             pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
