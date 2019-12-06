@@ -37,7 +37,7 @@ import java.util.List;
  */
 public class FriendHistoryFragment extends QSFragment<FriendHistoryPresenter> implements IFriendHistoryContract.IView {
 
-    private RefreshLayout mRefreshLayout;
+//    private RefreshLayout mRefreshLayout;
     /**
      * 标题栏
      */
@@ -95,7 +95,7 @@ public class FriendHistoryFragment extends QSFragment<FriendHistoryPresenter> im
     @Override
     public void initView() {
         mTitleBar = findViewByID(R.id.title_bar);
-        mRefreshLayout = findViewByID(R.id.refresh_layout);
+//        mRefreshLayout = findViewByID(R.id.refresh_layout);
         RecyclerView rcvHistoryOfFriendRequest = findViewByID(R.id.rcv_request_history);
         rcvHistoryOfFriendRequest.setLayoutManager(new LinearLayoutManager(getContext()));
         mRcvFriendHistoryAdapter = new RcvFriendHistoryAdapter(getContext());
@@ -118,19 +118,19 @@ public class FriendHistoryFragment extends QSFragment<FriendHistoryPresenter> im
                 startActivity(ContainerActivity.getJumpIntent(getContext(), AddFriendFragment.class));
             }
         });
-        mRefreshLayout.setOnRefreshLoadMoreListener(new RefreshLayout.IOnRefreshLoadMoreListener() {
-            @Override
-            public void onRefresh(RefreshLayout refreshLayout) {
-                mPage = IConstant.PAGE_START;
-                getPresenter().getFriendHistory(mPage, IConstant.PAGE_SIZE);
-            }
-
-            @Override
-            public void onLoadMore(RefreshLayout refreshLayout) {
-                mPage++;
-                getPresenter().getFriendHistory(mPage, IConstant.PAGE_SIZE);
-            }
-        });
+//        mRefreshLayout.setOnRefreshLoadMoreListener(new RefreshLayout.IOnRefreshLoadMoreListener() {
+//            @Override
+//            public void onRefresh(RefreshLayout refreshLayout) {
+//                mPage = IConstant.PAGE_START;
+//                getPresenter().getFriendHistory(mPage, IConstant.PAGE_SIZE);
+//            }
+//
+//            @Override
+//            public void onLoadMore(RefreshLayout refreshLayout) {
+//                mPage++;
+//                getPresenter().getFriendHistory(mPage, IConstant.PAGE_SIZE);
+//            }
+//        });
     }
 
     @Override
@@ -141,7 +141,7 @@ public class FriendHistoryFragment extends QSFragment<FriendHistoryPresenter> im
     @Override
     public void getFriendHistorySuccess(List<FriendHistoryBean> friendHistoryBeanList) {
         mRcvFriendHistoryAdapter.addDataList(friendHistoryBeanList, mPage == IConstant.PAGE_START);
-        mRefreshLayout.stopRefreshAndLoadMore();
+//        mRefreshLayout.stopRefreshAndLoadMore();
     }
 
     @Override

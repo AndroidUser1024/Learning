@@ -17,10 +17,10 @@
 
     </com.qinshou.commonmodule.widget.TitleBar>
 
-    <com.qinshou.commonmodule.widget.RefreshLayout
-        android:id="@+id/refresh_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <!--<com.qinshou.commonmodule.widget.RefreshLayout-->
+        <!--android:id="@+id/refresh_layout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rcv_request_history"
@@ -32,5 +32,5 @@
             tools:orientation="vertical">
 
         </android.support.v7.widget.RecyclerView>
-    </com.qinshou.commonmodule.widget.RefreshLayout>
+    <!--</com.qinshou.commonmodule.widget.RefreshLayout>-->
 </LinearLayout>
