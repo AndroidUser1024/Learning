@@ -11,6 +11,8 @@ import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemClickListener;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.util.SystemUtil;
+import com.qinshou.qinshoubox.conversation.view.activity.ChatActivity;
+import com.qinshou.qinshoubox.conversation.view.activity.GroupChatActivity;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.enums.MessageType;
@@ -143,16 +145,16 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
         mRcvConversationAdapter.setOnItemClickListener(new IOnItemClickListener<ConversationBean>() {
             @Override
             public void onItemClick(BaseViewHolder holder, ConversationBean itemData, int position) {
-//                if (itemData.getType() == MessageType.CHAT.getValue()) {
-//                    ChatActivity.start(getContext(), itemData.getToUserId());
-//                } else if (itemData.getType() == MessageType.GROUP_CHAT.getValue()) {
-//                    GroupChatActivity.start(getContext(), itemData.getToUserId());
-//                }
-//                // 重置未读数
-//                IMClient.SINGLETON.getConversationManager().resetUnreadCount(itemData.getId());
-//                itemData.setUnreadCount(0);
-//                mRcvConversationAdapter.notifyItemChanged(position);
-//                showMessageUnreadCount();
+                if (itemData.getType() == MessageType.CHAT.getValue()) {
+                    ChatActivity.start(getContext(), itemData.getToUserId());
+                } else if (itemData.getType() == MessageType.GROUP_CHAT.getValue()) {
+                    GroupChatActivity.start(getContext(), itemData.getToUserId());
+                }
+                // 重置未读数
+                IMClient.SINGLETON.getConversationManager().resetUnreadCount(itemData.getId());
+                itemData.setUnreadCount(0);
+                mRcvConversationAdapter.notifyItemChanged(position);
+                showMessageUnreadCount();
             }
         });
     }
@@ -175,12 +177,12 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
     }
 
     private void showMessageUnreadCount() {
-//        int totalUnreadCount = IMClient.SINGLETON.getConversationManager().getTotalUnreadCount();
-//        if (totalUnreadCount > 0) {
-//            mTvUnreadCountInTlMain.setVisibility(View.VISIBLE);
-//            mTvUnreadCountInTlMain.setText("" + totalUnreadCount);
-//        } else {
-//            mTvUnreadCountInTlMain.setVisibility(View.GONE);
-//        }
+        int totalUnreadCount = IMClient.SINGLETON.getConversationManager().getTotalUnreadCount();
+        if (totalUnreadCount > 0) {
+            mTvUnreadCountInTlMain.setVisibility(View.VISIBLE);
+            mTvUnreadCountInTlMain.setText("" + totalUnreadCount);
+        } else {
+            mTvUnreadCountInTlMain.setVisibility(View.GONE);
+        }
     }
 }

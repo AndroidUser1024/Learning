@@ -68,7 +68,7 @@ public class MessageManager {
         conversationBean.setLastMsgContent(messageBean.getContent());
         conversationBean.setLastMsgContentType(messageBean.getContentType());
         conversationBean.setType(messageBean.getType());
-        mConversationDao.insert(conversationBean);
+        mConversationDao.insert(send,conversationBean);
         // 插入会话与消息关系
         mIConversationMessageRelDao.insert(new ConversationMessageRelBean(conversationBean.getId(), messageBean.getPid()));
         return messageBean;

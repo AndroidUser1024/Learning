@@ -25,7 +25,7 @@ public interface IConversationDao extends IBaseDao {
     // VALUES
     // (#{toUserId},#{type},#{lastMsgContent},#{lastMsgContentType}
     // ,#{lastMsgTimestamp},#{unreadCount});
-    ConversationBean insert(ConversationBean conversationBean);
+    ConversationBean insert(boolean send, ConversationBean conversationBean);
 
     // 修改语句
     // UPDATE conversation SET
@@ -70,4 +70,10 @@ public interface IConversationDao extends IBaseDao {
     // LEFT OUTER JOIN group_chat AS gc ON gc.id=c.toUserId AND c.type=3001
     // WHERE c.type=#{type} AND c.toUserId=#{toUserId};
     ConversationBean selectByTypeAndToUserId(int type, String toUserId);
+
+    // SELECT SUM(unreadCount) AS totalUnreadCount FROM conversation;
+    int getTotalUnreadCount();
+
+    // UPDATE conversation SET unreadCount=0 WHERE id=#{id];
+    int resetUnreadCount(int id);
 }

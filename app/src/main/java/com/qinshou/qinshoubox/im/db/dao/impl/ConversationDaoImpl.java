@@ -4,7 +4,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
-import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.db.dao.IConversationDao;
 import com.qinshou.qinshoubox.im.enums.MessageType;
@@ -24,10 +23,14 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
     }
 
     @Override
-    public ConversationBean insert(ConversationBean conversationBean) {
+    public ConversationBean insert(boolean send, ConversationBean conversationBean) {
         ConversationBean select = selectIdAndUnreadCountByTypeAndToUserId(conversationBean.getType(), conversationBean.getToUserId());
         if (select == null) {
-            conversationBean.setUnreadCount(0);
+            if (send) {
+                conversationBean.setUnreadCount(0);
+            } else {
+                conversationBean.setUnreadCount(1);
+            }
             String sql = "INSERT INTO conversation" +
                     " (toUserId,type,lastMsgContent,lastMsgContentType,lastMsgTimestamp,unreadCount)" +
                     " VALUES" +
@@ -49,7 +52,9 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
             }
         } else {
             conversationBean.setId(select.getId());
-            conversationBean.setUnreadCount(select.getUnreadCount() + 1);
+            if (!send) {
+                conversationBean.setUnreadCount(select.getUnreadCount() + 1);
+            }
             String sql = "UPDATE conversation SET\n" +
                     " toUserId='%s',type='%s',lastMsgContent='%s',lastMsgContentType='%s'" +
                     " ,lastMsgTimestamp='%s',unreadCount='%s'" +
@@ -199,5 +204,30 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
             }
         }
         return null;
+    }
+
+    @Override
+    public int getTotalUnreadCount() {
+        String sql = "SELECT SUM(unreadCount) AS totalUnreadCount FROM conversation;";
+        Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
+        try {
+            if (cursor.moveToNext()) {
+                return cursor.getInt(cursor.getColumnIndex("totalUnreadCount"));
+            }
+        }finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return 0;
+    }
+
+    @Override
+    public int resetUnreadCount(int id) {
+        String sql = "UPDATE conversation SET unreadCount=0 WHERE id='%s'";
+        sql = String.format(sql, id);
+        getSQLiteDatabase().execSQL(sql);
+        return 1;
+
     }
 }

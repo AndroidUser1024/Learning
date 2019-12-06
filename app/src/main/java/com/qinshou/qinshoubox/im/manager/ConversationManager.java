@@ -37,4 +37,12 @@ public class ConversationManager {
     public ConversationBean selectByTypeAndToUserId(int type, String toUserId) {
        return mConversationDao.selectByTypeAndToUserId(type, toUserId);
     }
+
+    public int getTotalUnreadCount() {
+        return mConversationDao.getTotalUnreadCount();
+    }
+
+    public void resetUnreadCount(int id) {
+        mConversationDao.resetUnreadCount(id);
+    }
 }
