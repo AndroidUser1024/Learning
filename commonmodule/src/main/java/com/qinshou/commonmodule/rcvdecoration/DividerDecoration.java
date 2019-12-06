@@ -107,7 +107,7 @@ public class DividerDecoration extends RecyclerView.ItemDecoration {
             //outRect 相当于 Item 的整体绘制区域,设置 left、top、right、bottom 相当于设置左上右下的内间距
             //如设置 outRect.top = 5 则相当于设置 paddingTop 为 5px。
             if (position < adapter.getItemCount()) {
-                outRect.top = mWidth;
+                outRect.bottom = mWidth;
             }
         } else if (mOrientation == Orientation.HORIZONTAL) {
             if (position < adapter.getItemCount()) {

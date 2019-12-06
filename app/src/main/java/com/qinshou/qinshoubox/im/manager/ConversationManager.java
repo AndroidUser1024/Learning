@@ -34,8 +34,16 @@ public class ConversationManager {
         return mConversationDao.selectList();
     }
 
+    public List<ConversationBean> selectListOrderByLastMsgTimeDesc() {
+        return mConversationDao.selectListOrderByLastMsgTimeDesc();
+    }
+
+    public List<ConversationBean> selectListOrderByTopDescAndLastMsgTimeDesc() {
+        return mConversationDao.selectListOrderByTopDescAndLastMsgTimeDesc();
+    }
+
     public ConversationBean selectByTypeAndToUserId(int type, String toUserId) {
-       return mConversationDao.selectByTypeAndToUserId(type, toUserId);
+        return mConversationDao.selectByTypeAndToUserId(type, toUserId);
     }
 
     public int getTotalUnreadCount() {

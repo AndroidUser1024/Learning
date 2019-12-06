@@ -25,7 +25,7 @@ import com.qinshou.qinshoubox.im.listener.IOnFriendStatusListener;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
-import com.qinshou.qinshoubox.im.view.fragment.IMFragment;
+import com.qinshou.qinshoubox.im.view.fragment.IMActivity;
 import com.qinshou.qinshoubox.util.QSUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -139,7 +139,7 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
         if (tlIM == null) {
             return;
         }
-        TabLayout.Tab tab = tlIM.getTabAt(IMFragment.TAB_INDEX_FRIEND);
+        TabLayout.Tab tab = tlIM.getTabAt(IMActivity.TAB_INDEX_FRIEND);
         if (tab == null) {
             return;
         }

@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.qinshou.commonmodule.util.FragmentUtil;
 import com.qinshou.qinshoubox.R;
+import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.conversation.view.fragment.ConversationFragment;
 import com.qinshou.qinshoubox.demo.view.fragment.DemoFragment;
@@ -21,7 +22,7 @@ import com.qinshou.qinshoubox.im.presenter.IMPresenter;
  * Date: 2019/12/04 21:49
  * Description:IM 界面
  */
-public class IMFragment extends QSFragment<IMPresenter> implements IIMContract.IView {
+public class IMActivity extends QSActivity<IMPresenter> implements IIMContract.IView {
     public static final int TAB_INDEX_CONVERSATION = 0;
     public static final int TAB_INDEX_FRIEND = 1;
     private int[] mTabIvResourceArray = new int[]{R.drawable.main_iv_tab_conversation_src, R.drawable.main_iv_tab_conversation_src_selected
@@ -54,9 +55,9 @@ public class IMFragment extends QSFragment<IMPresenter> implements IIMContract.I
                 int position = tab.getPosition();
                 changeTabState(position);
                 if (position == TAB_INDEX_CONVERSATION) {
-                    FragmentUtil.showFragment(getChildFragmentManager(), R.id.fl_fragment_container, mConversationFragment);
+                    FragmentUtil.showFragment(getSupportFragmentManager(), R.id.fl_fragment_container, mConversationFragment);
                 } else if (position == TAB_INDEX_FRIEND) {
-                    FragmentUtil.showFragment(getChildFragmentManager(), R.id.fl_fragment_container, mFriendFragment);
+                    FragmentUtil.showFragment(getSupportFragmentManager(), R.id.fl_fragment_container, mFriendFragment);
                 }
             }
 
@@ -76,8 +77,8 @@ public class IMFragment extends QSFragment<IMPresenter> implements IIMContract.I
     @Override
     public void initData() {
         String[] mainTvTabTextArray = getResources().getStringArray(R.array.im_tv_tab_text);
-        FragmentUtil.addFragment(getChildFragmentManager(), R.id.fl_fragment_container, mConversationFragment = new ConversationFragment());
-        FragmentUtil.addFragment(getChildFragmentManager(), R.id.fl_fragment_container, mFriendFragment = new FriendFragment());
+        FragmentUtil.addFragment(getSupportFragmentManager(), R.id.fl_fragment_container, mConversationFragment = new ConversationFragment());
+        FragmentUtil.addFragment(getSupportFragmentManager(), R.id.fl_fragment_container, mFriendFragment = new FriendFragment());
         for (int i = 0; i < mainTvTabTextArray.length; i++) {
             TabLayout.Tab tab = mTlIM.newTab();
             View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_tab_main, null);

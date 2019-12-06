@@ -20,6 +20,6 @@ import java.util.List;
 public class ConversationModel implements IConversationContract.IModel {
     @Override
     public void getConversationList(Callback<List<ConversationBean>> callback) {
-        callback.onSuccess(IMClient.SINGLETON.getConversationManager().selectList());
+        callback.onSuccess(IMClient.SINGLETON.getConversationManager().selectListOrderByTopDescAndLastMsgTimeDesc());
     }
 }

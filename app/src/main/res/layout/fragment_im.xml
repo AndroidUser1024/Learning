@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/activity_background_color"
     android:orientation="vertical"
-    tools:context="com.qinshou.qinshoubox.im.view.fragment.IMFragment">
+    tools:context="com.qinshou.qinshoubox.im.view.fragment.IMActivity">
 
     <FrameLayout
         android:id="@+id/fl_fragment_container"

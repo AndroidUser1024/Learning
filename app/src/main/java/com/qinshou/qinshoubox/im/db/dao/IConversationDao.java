@@ -76,4 +76,8 @@ public interface IConversationDao extends IBaseDao {
 
     // UPDATE conversation SET unreadCount=0 WHERE id=#{id];
     int resetUnreadCount(int id);
+
+    List<ConversationBean> selectListOrderByLastMsgTimeDesc();
+
+    List<ConversationBean> selectListOrderByTopDescAndLastMsgTimeDesc();
 }

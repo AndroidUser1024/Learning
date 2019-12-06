@@ -28,6 +28,7 @@ import com.qinshou.commonmodule.util.permissionutil.PermissionUtil;
 import com.qinshou.commonmodule.widget.RefreshLayout;
 import com.qinshou.commonmodule.widget.TitleBar;
 import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatSettingFragment;
+import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.enums.MessageContentType;
@@ -316,6 +317,10 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
             if (messageBean.getType() != MessageType.GROUP_CHAT.getValue() || !TextUtils.equals(mGroupChatId, messageBean.getToUserId())) {
                 return;
             }
+            // 重置未读数
+            ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().selectByTypeAndToUserId(MessageType.GROUP_CHAT.getValue(), mGroupChatId);
+            IMClient.SINGLETON.getConversationManager().resetUnreadCount(conversationBean.getId());
+            // 更新列表
             mRcvMessageAdapter.getDataList().add(messageBean);
             mRcvMessageAdapter.notifyItemInserted(mRcvMessageAdapter.getDataList().size() - 1);
             // 消息列表滚动到底部

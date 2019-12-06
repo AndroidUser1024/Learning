@@ -76,11 +76,9 @@ public class MessageManager {
 
     public List<MessageBean> getList(int type, String toUserId, int page, int pageSize) {
         ConversationBean conversationBean = mConversationDao.selectIdAndUnreadCountByTypeAndToUserId(type, toUserId);
-        ShowLogUtil.logi("conversationBean--->" + conversationBean);
         if (conversationBean == null) {
             return new ArrayList<>();
         }
-        ShowLogUtil.logi("到了吗");
         return mMessageDao.selectList(conversationBean.getId(), page, pageSize);
     }
 //

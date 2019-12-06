@@ -30,6 +30,7 @@ import com.qinshou.commonmodule.widget.RefreshLayout;
 import com.qinshou.commonmodule.widget.TitleBar;
 import com.qinshou.qinshoubox.conversation.view.fragment.ChatSettingFragment;
 import com.qinshou.qinshoubox.im.IMClient;
+import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.enums.MessageContentType;
@@ -317,6 +318,10 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
             if (!TextUtils.equals(mToUserId, messageBean.getFromUserId())) {
                 return;
             }
+            // 重置未读数
+            ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().selectByTypeAndToUserId(MessageType.CHAT.getValue(), mToUserId);
+            IMClient.SINGLETON.getConversationManager().resetUnreadCount(conversationBean.getId());
+            // 更新列表
             mRcvMessageAdapter.getDataList().add(messageBean);
             mRcvMessageAdapter.notifyItemInserted(mRcvMessageAdapter.getDataList().size() - 1);
             // 消息列表滚动到底部

@@ -7,7 +7,7 @@ import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.MainActivity;
-import com.qinshou.qinshoubox.im.view.fragment.IMFragment;
+import com.qinshou.qinshoubox.im.view.fragment.IMActivity;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.me.ui.fragment.DataSettingFragment;
 
@@ -55,6 +55,6 @@ public class LoginStatus implements IUserStatus {
 
     @Override
     public void jump2IM(Context context) {
-        context.startActivity(ContainerActivity.getJumpIntent(context, IMFragment.class));
+        context.startActivity(new Intent(context, IMActivity.class));
     }
 }

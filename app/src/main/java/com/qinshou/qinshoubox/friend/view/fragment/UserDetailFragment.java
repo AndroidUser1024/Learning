@@ -27,9 +27,7 @@ import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.friend.contract.IUserDetailContract;
 import com.qinshou.qinshoubox.friend.presenter.UserDetailPresenter;
 import com.qinshou.qinshoubox.friend.view.activity.SetRemarkActivity;
-import com.qinshou.qinshoubox.im.view.fragment.IMFragment;
-import com.qinshou.qinshoubox.login.bean.UserBean;
-import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
+import com.qinshou.qinshoubox.im.view.fragment.IMActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -166,7 +164,7 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
     @Override
     public void deleteFriendSuccess() {
         EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.REFRESH_FRIEND_LIST, null));
-        finish();
+        startActivity(new Intent(getContext(), IMActivity.class));
     }
 
     @Override

@@ -35,11 +35,6 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
-        <!-- WanAndroid 搜索关键词界面 -->
-        <activity
-            android:name=".knowledgesystem.ui.activity.SearchActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
         <!-- Web 界面 -->
         <activity
             android:name=".WebActivity"
@@ -91,12 +86,18 @@
             android:name=".me.ui.activity.PeiQiActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
+        <!--IM 界面 -->
+        <activity
+            android:name=".im.view.fragment.IMActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <!-- 聊天界面 -->
         <activity
             android:name=".conversation.view.activity.ChatActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
-        <!-- 聊天界面 -->
+        <!-- 群聊界面 -->
         <activity
             android:name=".conversation.view.activity.GroupChatActivity"
             android:launchMode="singleTask"
