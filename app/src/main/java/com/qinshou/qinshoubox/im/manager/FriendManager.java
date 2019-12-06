@@ -3,6 +3,8 @@ package com.qinshou.qinshoubox.im.manager;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.qinshou.qinshoubox.friend.bean.FriendHistoryBean;
+import com.qinshou.qinshoubox.homepage.bean.PageResultBean;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
@@ -11,6 +13,7 @@ import com.qinshou.qinshoubox.im.db.dao.IFriendDao;
 import com.qinshou.qinshoubox.listener.SuccessRunnable;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxFriendApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
+import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -68,76 +71,140 @@ public class FriendManager {
                 });
     }
 
-    public void setRemark(final int toUserId, String remark, final QSCallback<Object> qsCallback) {
-//        OkHttpHelperForQSBoxFriendApi.SINGLETON.setRemark(IMClient.SINGLETON.getUserId(), toUserId, remark)
-//                .transform(new QSApiTransformer<Object>())
-//                .enqueue(new Callback<Object>() {
-//                    @Override
-//                    public void onSuccess(Object data) {
-//                        qsCallback.onSuccess(data);
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Exception e) {
-//                        qsCallback.onFailure(e);
-//                    }
-//                });
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2019/12/6 11:50
+     * Description:添加好友
+     *
+     * @param toUserId      待添加的好友的 id
+     * @param remark        备注
+     * @param additionalMsg 附加验证信息
+     * @param source        添加来源
+     */
+    public void addFriend(String toUserId, String remark, String additionalMsg, int source, Callback<Object> callback) {
+        OkHttpHelperForQSBoxFriendApi.SINGLETON.add(mUserId, toUserId, remark, additionalMsg, source)
+                .transform(new QSApiTransformer<Object>())
+                .enqueue(callback);
     }
 
-    public void setTop(final int toUserId, final int top, final QSCallback<FriendBean> qsCallback) {
-//        OkHttpHelperForQSBoxFriendApi.SINGLETON.setTop(IMClient.SINGLETON.getUserId(), toUserId, top)
-//                .transform(new QSApiTransformer<FriendBean>())
-//                .enqueue(new Callback<FriendBean>() {
-//                    @Override
-//                    public void onSuccess(FriendBean data) {
-//                        FriendBean friendBean = getFriend(toUserId);
-//                        friendBean.setTop(top);
-//                        insertOrUpdate(friendBean);
-//                        qsCallback.onSuccess(data);
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Exception e) {
-//                        qsCallback.onFailure(e);
-//                    }
-//                });
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2019/12/6 11:50
+     * Description:同意添加好友
+     *
+     * @param toUserId 待同意添加的好友的 id
+     * @param remark   备注
+     */
+    public void agreeAddFriend(String toUserId, String remark, Callback<Object> callback) {
+        OkHttpHelperForQSBoxFriendApi.SINGLETON.agreeAdd(mUserId, toUserId, remark)
+                .transform(new QSApiTransformer<Object>())
+                .enqueue(callback);
     }
 
-    public void setDoNotDisturb(final int toUserId, final int doNotDisturb, final QSCallback<FriendBean> qsCallback) {
-//        OkHttpHelperForQSBoxFriendApi.SINGLETON.setDoNotDisturb(IMClient.SINGLETON.getUserId(), toUserId, doNotDisturb)
-//                .transform(new QSApiTransformer<FriendBean>())
-//                .enqueue(new Callback<FriendBean>() {
-//                    @Override
-//                    public void onSuccess(FriendBean data) {
-//                        FriendBean friendBean = getFriend(toUserId);
-//                        friendBean.setDoNotDisturb(doNotDisturb);
-//                        insertOrUpdate(friendBean);
-//                        qsCallback.onSuccess(data);
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Exception e) {
-//                        qsCallback.onFailure(e);
-//                    }
-//                });
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2019/12/6 11:50
+     * Description:删除好友
+     *
+     * @param toUserId 待删除的好友的 id
+     */
+    public void deleteFriend(String toUserId, Callback<Object> callback) {
+        OkHttpHelperForQSBoxFriendApi.SINGLETON.delete(mUserId, toUserId)
+                .transform(new QSApiTransformer<Object>())
+                .enqueue(callback);
     }
 
-    public void setBlackList(final int toUserId, final int blackList, final QSCallback<FriendBean> qsCallback) {
-//        OkHttpHelperForQSBoxFriendApi.SINGLETON.setBlackList(IMClient.SINGLETON.getUserId(), toUserId, blackList)
-//                .transform(new QSApiTransformer<FriendBean>())
-//                .enqueue(new Callback<FriendBean>() {
-//                    @Override
-//                    public void onSuccess(FriendBean data) {
-//                        FriendBean friendBean = getFriend(toUserId);
-//                        friendBean.setBlackList(blackList);
-//                        insertOrUpdate(friendBean);
-//                        qsCallback.onSuccess(data);
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Exception e) {
-//                        qsCallback.onFailure(e);
-//                    }
-//                });
+    public void setRemark(final String toUserId, final String remark, final Callback<Object> callback) {
+        OkHttpHelperForQSBoxFriendApi.SINGLETON.setInfo(mUserId, toUserId, remark, null, null, null)
+                .transform(new QSApiTransformer<Object>())
+                .enqueue(new Callback<Object>() {
+                    @Override
+                    public void onSuccess(Object data) {
+                        FriendBean friendBean = getById(toUserId);
+                        friendBean.setRemark(remark);
+                        mFriendDao.insert(friendBean);
+                        callback.onSuccess(data);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        callback.onFailure(e);
+                    }
+                });
+    }
+
+    public void setTop(final String toUserId, final int top, final Callback<Object> callback) {
+        OkHttpHelperForQSBoxFriendApi.SINGLETON.setInfo(mUserId, toUserId, null, top, null, null)
+                .transform(new QSApiTransformer<Object>())
+                .enqueue(new Callback<Object>() {
+                    @Override
+                    public void onSuccess(Object data) {
+                        FriendBean friendBean = getById(toUserId);
+                        friendBean.setTop(top);
+                        mFriendDao.insert(friendBean);
+                        callback.onSuccess(data);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        callback.onFailure(e);
+                    }
+                });
+    }
+
+    public void setDoNotDisturb(final String toUserId, final int doNotDisturb, final Callback<Object> callback) {
+        OkHttpHelperForQSBoxFriendApi.SINGLETON.setInfo(mUserId, toUserId, null, null, doNotDisturb, null)
+                .transform(new QSApiTransformer<Object>())
+                .enqueue(new Callback<Object>() {
+                    @Override
+                    public void onSuccess(Object data) {
+                        FriendBean friendBean = getById(toUserId);
+                        friendBean.setDoNotDisturb(doNotDisturb);
+                        mFriendDao.insert(friendBean);
+                        callback.onSuccess(data);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        callback.onFailure(e);
+                    }
+                });
+    }
+
+    public void setBlackList(final String toUserId, final int blackList, final Callback<Object> callback) {
+        OkHttpHelperForQSBoxFriendApi.SINGLETON.setInfo(mUserId, toUserId, null, null, null, blackList)
+                .transform(new QSApiTransformer<Object>())
+                .enqueue(new Callback<Object>() {
+                    @Override
+                    public void onSuccess(Object data) {
+                        FriendBean friendBean = getById(toUserId);
+                        friendBean.setBlackList(blackList);
+                        mFriendDao.insert(friendBean);
+                        callback.onSuccess(data);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        callback.onFailure(e);
+                    }
+                });
+    }
+
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2019/12/6 14:54
+     * Description:获取好友申请历史
+     *
+     * @param page     分页加载当前页码
+     * @param pageSize 分页加载每一页的条数
+     */
+    public void getHistory(int page, int pageSize, Callback<PageResultBean<FriendHistoryBean>> callback) {
+        OkHttpHelperForQSBoxFriendApi.SINGLETON.getHistory(mUserId, page, pageSize)
+                .transform(new QSApiTransformer<PageResultBean<FriendHistoryBean>>())
+                .enqueue(callback);
     }
 }

@@ -8,7 +8,7 @@ package com.qinshou.qinshoubox.im.bean;
  */
 public class FriendStatusBean {
     private int status;
-    private int fromUserId;
+    private String fromUserId;
     private String additionalMsg;
     private boolean newFriend;
 
@@ -33,11 +33,11 @@ public class FriendStatusBean {
         this.status = status;
     }
 
-    public int getFromUserId() {
+    public String getFromUserId() {
         return fromUserId;
     }
 
-    public void setFromUserId(int fromUserId) {
+    public void setFromUserId(String fromUserId) {
         this.fromUserId = fromUserId;
     }
 

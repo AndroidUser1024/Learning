@@ -7,15 +7,15 @@ package com.qinshou.qinshoubox.im.listener;
  * Description:好友状态监听器
  */
 public interface IOnFriendStatusListener {
-    void add(int fromUserId, String additionalMsg, boolean newFriend);
+    void add(String fromUserId, String additionalMsg, boolean newFriend);
 
-    void agreeAdd(int fromUserId);
+    void agreeAdd(String fromUserId);
 
-    void refuseAdd(int fromUserId);
+    void refuseAdd(String fromUserId);
 
-    void delete(int fromUserId);
+    void delete(String fromUserId);
 
-    void online(int fromUserId);
+    void online(String fromUserId);
 
-    void offline(int fromUserId);
+    void offline(String fromUserId);
 }

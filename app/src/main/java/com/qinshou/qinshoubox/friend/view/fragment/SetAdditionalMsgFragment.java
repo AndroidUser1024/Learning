@@ -74,11 +74,10 @@ public class SetAdditionalMsgFragment extends QSFragment<SetAdditionalMsgPresent
                 if (TextUtils.isEmpty(mToUserId)) {
                     return;
                 }
-//                getPresenter().addFriend(UserStatusManager.SINGLETON.getUserBean().getId()
-//                        , mToUserId
-//                        , mRemark
-//                        , mEtAdditionalMsg.getText().toString().trim()
-//                        , mSource);
+                getPresenter().addFriend(mToUserId
+                        , mRemark
+                        , mEtAdditionalMsg.getText().toString().trim()
+                        , mSource);
             }
         });
         mEtAdditionalMsg.addTextChangedListener(new TextWatcher() {

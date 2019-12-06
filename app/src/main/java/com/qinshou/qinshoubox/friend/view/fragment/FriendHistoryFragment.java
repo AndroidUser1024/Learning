@@ -17,6 +17,7 @@ import com.qinshou.qinshoubox.friend.bean.FriendHistoryBean;
 import com.qinshou.qinshoubox.friend.contract.IFriendHistoryContract;
 import com.qinshou.qinshoubox.friend.presenter.FriendHistoryPresenter;
 import com.qinshou.qinshoubox.friend.view.adapter.RcvFriendHistoryAdapter;
+import com.qinshou.qinshoubox.homepage.bean.PageResultBean;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 import java.util.List;
@@ -70,12 +71,12 @@ public class FriendHistoryFragment extends QSFragment<FriendHistoryPresenter> im
 
     @Override
     public void initData() {
-//        getPresenter().getFriendHistory(mPage, IConstant.PAGE_SIZE, UserStatusManager.SINGLETON.getUserBean().getId());
+        getPresenter().getFriendHistory(mPage, IConstant.PAGE_SIZE);
     }
 
     @Override
-    public void getFriendHistorySuccess(List<FriendHistoryBean> friendHistoryBeanList) {
-        mRcvFriendHistoryAdapter.addDataList(friendHistoryBeanList);
+    public void getFriendHistorySuccess(PageResultBean<FriendHistoryBean> friendHistoryBeanList) {
+        mRcvFriendHistoryAdapter.addDataList(friendHistoryBeanList.getList());
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.qinshou.okhttphelperprocessor;
 
 import com.google.auto.service.AutoService;
 import com.qinshou.okhttphelper.call.Call;
+import com.qinshou.okhttphelper.enums.LogLevel;
 import com.qinshou.okhttphelper.util.RequestFactory;
 import com.qinshou.okhttphelper.annotation.Api;
 import com.qinshou.okhttphelper.annotation.CommonParameter;
@@ -122,9 +123,11 @@ public class OkHttpHelperProcessor extends AbstractProcessor {
                     // 读取超时时间
                     .addStatement("okHttpClientBuilder.readTimeout($L,$T.$L)", 15 * 1000, TimeUnit.class, TimeUnit.MILLISECONDS)
                     // 写入超时时间
-                    .addStatement("okHttpClientBuilder.writeTimeout($L,$T.$L)", 15 * 1000, TimeUnit.class, TimeUnit.MILLISECONDS)
+                    .addStatement("okHttpClientBuilder.writeTimeout($L,$T.$L)", 15 * 1000, TimeUnit.class, TimeUnit.MILLISECONDS);
+
+            LogLevel logLevel = apiElement.getAnnotation(Api.class).logLevel();
                     // 请求日志拦截器
-                    .addStatement("okHttpClientBuilder.addInterceptor(new $T($T.Level.BASIC, new $T.Logger() {\n" +
+            constructorBuilder.addStatement("okHttpClientBuilder.addInterceptor(new $T($T.Level."+logLevel+", new $T.Logger() {\n" +
                             "@Override" +
                             "\n" +
                             "public void log(String message) {" +

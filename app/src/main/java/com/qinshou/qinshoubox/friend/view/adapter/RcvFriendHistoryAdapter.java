@@ -49,7 +49,7 @@ public class RcvFriendHistoryAdapter extends RcvSingleBaseAdapter<FriendHistoryB
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UserDetailFragment.start(getContext(), friendHistoryBean.getUsername());
+                UserDetailFragment.start(getContext(), friendHistoryBean.getFromUserId());
             }
         };
         btnView.setOnClickListener(onClickListener);

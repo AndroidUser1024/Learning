@@ -2,8 +2,8 @@ package com.qinshou.qinshoubox.conversation.contract;
 
 import com.qinshou.commonmodule.base.IBaseModel;
 import com.qinshou.commonmodule.base.IBaseView;
+import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.view.fragment.ChatSettingFragment;
-import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 
 /**
@@ -21,9 +21,9 @@ public interface IChatSettingContract {
          * Description:获取好友信息
          *
          * @param id         好友 id
-         * @param qsCallback 回调接口
+         * @param callback 回调接口
          */
-        void getFriend(int id, QSCallback<FriendBean> qsCallback);
+        void getFriend(String id, Callback<FriendBean> callback);
 
         /**
          * Author: QinHao
@@ -33,9 +33,9 @@ public interface IChatSettingContract {
          *
          * @param toUserId   好友的用户 id
          * @param top        0 表示不置顶,1 表示置顶
-         * @param qsCallback 回调接口
+         * @param callback 回调接口
          */
-        void setTop(int toUserId, int top, QSCallback<FriendBean> qsCallback);
+        void setTop(String toUserId, int top, Callback<Object> callback);
 
         /**
          * Author: QinHao
@@ -45,9 +45,9 @@ public interface IChatSettingContract {
          *
          * @param toUserId     好友的用户 id
          * @param doNotDisturb 0 表示非免打扰,1 表示免打扰
-         * @param qsCallback   回调接口
+         * @param callback   回调接口
          */
-        void setDoNotDisturb(int toUserId, int doNotDisturb, QSCallback<FriendBean> qsCallback);
+        void setDoNotDisturb(String toUserId, int doNotDisturb, Callback<Object> callback);
 
         /**
          * Author: QinHao
@@ -57,9 +57,9 @@ public interface IChatSettingContract {
          *
          * @param toUserId   好友的用户 id
          * @param blackList  0 表示从黑名单中移除,1 表示加入黑名单
-         * @param qsCallback 回调接口
+         * @param callback 回调接口
          */
-        void setBlackList(int toUserId, int blackList, QSCallback<FriendBean> qsCallback);
+        void setBlackList(String toUserId, int blackList, Callback<Object> callback);
     }
 
     interface IView extends IBaseView {
@@ -147,7 +147,7 @@ public interface IChatSettingContract {
          *
          * @param id 好友 id
          */
-        void getFriend(int id);
+        void getFriend(String id);
 
         /**
          * Author: QinHao
@@ -158,7 +158,7 @@ public interface IChatSettingContract {
          * @param toUserId 好友的用户 id
          * @param top      0 表示不置顶,1 表示置顶
          */
-        void setTop(int toUserId, int top);
+        void setTop(String toUserId, int top);
 
         /**
          * Author: QinHao
@@ -169,7 +169,7 @@ public interface IChatSettingContract {
          * @param toUserId     好友的用户 id
          * @param doNotDisturb 0 表示非免打扰,1 表示免打扰
          */
-        void setDoNotDisturb(int toUserId, int doNotDisturb);
+        void setDoNotDisturb(String toUserId, int doNotDisturb);
 
         /**
          * Author: QinHao
@@ -180,6 +180,6 @@ public interface IChatSettingContract {
          * @param toUserId  好友的用户 id
          * @param blackList 0 表示从黑名单中移除,1 表示加入黑名单
          */
-        void setBlackList(int toUserId, int blackList);
+        void setBlackList(String toUserId, int blackList);
     }
 }

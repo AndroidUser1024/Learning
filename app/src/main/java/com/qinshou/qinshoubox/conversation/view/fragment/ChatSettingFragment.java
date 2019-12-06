@@ -14,6 +14,7 @@ import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.conversation.contract.IChatSettingContract;
 import com.qinshou.qinshoubox.conversation.presenter.ChatSettingPresenter;
+import com.qinshou.qinshoubox.friend.view.fragment.UserDetailFragment;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.me.ui.widget.SwitchButton;
 
@@ -82,7 +83,7 @@ public class ChatSettingFragment extends QSFragment<ChatSettingPresenter> implem
                 if (!fromUser) {
                     return;
                 }
-//                getPresenter().setTop(mFriendBean.getId(), checked ? 1 : 0);
+                getPresenter().setTop(mFriendBean.getId(), checked ? 1 : 0);
             }
         });
         mSwtDoNotDisturb.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
@@ -91,7 +92,7 @@ public class ChatSettingFragment extends QSFragment<ChatSettingPresenter> implem
                 if (!fromUser) {
                     return;
                 }
-//                getPresenter().setDoNotDisturb(mFriendBean.getId(), checked ? 1 : 0);
+                getPresenter().setDoNotDisturb(mFriendBean.getId(), checked ? 1 : 0);
             }
         });
         mSwtBlackList.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
@@ -100,7 +101,7 @@ public class ChatSettingFragment extends QSFragment<ChatSettingPresenter> implem
                 if (!fromUser) {
                     return;
                 }
-//                getPresenter().setBlackList(mFriendBean.getId(), checked ? 1 : 0);
+                getPresenter().setBlackList(mFriendBean.getId(), checked ? 1 : 0);
             }
         });
         findViewByID(R.id.ll_clear_chat_history).setOnClickListener(new View.OnClickListener() {
@@ -113,7 +114,7 @@ public class ChatSettingFragment extends QSFragment<ChatSettingPresenter> implem
         mIvHeadImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                UserDetailFragment.start(getContext(), UserDetailFragment.UserType.HUMAN, mToUsername);
+                UserDetailFragment.start(getContext(),mFriendBean.getId());
             }
         });
         // 发起群聊
@@ -130,8 +131,8 @@ public class ChatSettingFragment extends QSFragment<ChatSettingPresenter> implem
         if (bundle == null) {
             return;
         }
-        int toUserId = bundle.getInt(TO_USER_ID, 0);
-        if (toUserId == 0) {
+        String toUserId = bundle.getString(TO_USER_ID);
+        if (TextUtils.isEmpty(toUserId)) {
             return;
         }
         getPresenter().getFriend(toUserId);

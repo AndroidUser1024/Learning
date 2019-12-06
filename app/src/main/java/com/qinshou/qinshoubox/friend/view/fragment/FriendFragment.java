@@ -61,7 +61,7 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
 
     private IOnFriendStatusListener mOnFriendStatusListener = new IOnFriendStatusListener() {
         @Override
-        public void add(int fromUserId, String additionalMsg, boolean newFriend) {
+        public void add(String fromUserId, String additionalMsg, boolean newFriend) {
             ShowLogUtil.logi("add: fromUserId--->" + fromUserId + ",additionalMsg--->" + additionalMsg + ",newFriend--->" + newFriend);
             if (!newFriend) {
                 return;
@@ -88,29 +88,29 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
         }
 
         @Override
-        public void agreeAdd(int fromUserId) {
+        public void agreeAdd(String fromUserId) {
             ShowLogUtil.logi("agreeAdd: fromUserId--->" + fromUserId);
             getPresenter().getFriendList();
         }
 
         @Override
-        public void refuseAdd(int fromUserId) {
+        public void refuseAdd(String fromUserId) {
             ShowLogUtil.logi("refuseAdd: fromUserId--->" + fromUserId);
         }
 
         @Override
-        public void delete(int fromUserId) {
+        public void delete(String fromUserId) {
             ShowLogUtil.logi("delete: fromUserId--->" + fromUserId);
             getPresenter().getFriendList();
         }
 
         @Override
-        public void online(int fromUserId) {
+        public void online(String fromUserId) {
             ShowLogUtil.logi("online: fromUserId--->" + fromUserId);
         }
 
         @Override
-        public void offline(int fromUserId) {
+        public void offline(String fromUserId) {
             ShowLogUtil.logi("offline: fromUserId--->" + fromUserId);
         }
     };

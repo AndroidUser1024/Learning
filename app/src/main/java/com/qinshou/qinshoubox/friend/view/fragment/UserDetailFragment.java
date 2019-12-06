@@ -27,6 +27,7 @@ import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.friend.contract.IUserDetailContract;
 import com.qinshou.qinshoubox.friend.presenter.UserDetailPresenter;
 import com.qinshou.qinshoubox.friend.view.activity.SetRemarkActivity;
+import com.qinshou.qinshoubox.im.view.fragment.IMFragment;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
@@ -165,7 +166,7 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
     @Override
     public void deleteFriendSuccess() {
         EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.REFRESH_FRIEND_LIST, null));
-        startActivity(new Intent(getContext(), MainActivity.class));
+        finish();
     }
 
     @Override
@@ -257,9 +258,10 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
         mBtnAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getPresenter().agreeAddFriend(UserStatusManager.SINGLETON.getUserBean().getId(), userDetailBean.getId(), mTvRemark.getText().toString().trim());
+                getPresenter().agreeAddFriend(userDetailBean.getId(), mTvRemark.getText().toString().trim());
             }
-        });   // 用户来源
+        });
+        // 用户来源
         String source = "";
         if (userDetailBean.getSource() == 1) {
             source = "通过用户名添加";
@@ -323,7 +325,7 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
                 deleteContactDialog.setTvDeleteOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        getPresenter().deleteFriend(userBean.getId());
+                        getPresenter().deleteFriend(userDetailBean.getId());
                     }
                 });
                 deleteContactDialog.show(getChildFragmentManager(), "DeleteContactDialog");

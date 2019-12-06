@@ -1,6 +1,7 @@
 package com.qinshou.qinshoubox.conversation.presenter;
 
 import com.qinshou.commonmodule.base.AbsPresenter;
+import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.contract.IChatSettingContract;
 import com.qinshou.qinshoubox.conversation.model.ChatSettingModel;
 import com.qinshou.qinshoubox.conversation.view.fragment.ChatSettingFragment;
@@ -20,8 +21,8 @@ public class ChatSettingPresenter extends AbsPresenter<IChatSettingContract.IVie
     }
 
     @Override
-    public void getFriend(int id) {
-        getModel().getFriend(id, new QSCallback<FriendBean>() {
+    public void getFriend(String id) {
+        getModel().getFriend(id, new Callback<FriendBean>() {
             @Override
             public void onSuccess(FriendBean data) {
                 if (!isViewAttached()) {
@@ -41,10 +42,10 @@ public class ChatSettingPresenter extends AbsPresenter<IChatSettingContract.IVie
     }
 
     @Override
-    public void setTop(int toUserId, int top) {
-        getModel().setTop(toUserId, top, new QSCallback<FriendBean>() {
+    public void setTop(String toUserId, int top) {
+        getModel().setTop(toUserId, top, new Callback<Object>() {
             @Override
-            public void onSuccess(FriendBean data) {
+            public void onSuccess(Object data) {
                 if (!isViewAttached()) {
                     return;
                 }
@@ -62,10 +63,10 @@ public class ChatSettingPresenter extends AbsPresenter<IChatSettingContract.IVie
     }
 
     @Override
-    public void setDoNotDisturb(int toUserId, int doNotDisturb) {
-        getModel().setDoNotDisturb(toUserId, doNotDisturb, new QSCallback<FriendBean>() {
+    public void setDoNotDisturb(String toUserId, int doNotDisturb) {
+        getModel().setDoNotDisturb(toUserId, doNotDisturb, new Callback<Object>() {
             @Override
-            public void onSuccess(FriendBean data) {
+            public void onSuccess(Object data) {
                 if (!isViewAttached()) {
                     return;
                 }
@@ -83,10 +84,10 @@ public class ChatSettingPresenter extends AbsPresenter<IChatSettingContract.IVie
     }
 
     @Override
-    public void setBlackList(int toUserId, int blackList) {
-        getModel().setBlackList(toUserId, blackList, new QSCallback<FriendBean>() {
+    public void setBlackList(String toUserId, int blackList) {
+        getModel().setBlackList(toUserId, blackList, new Callback<Object>() {
             @Override
-            public void onSuccess(FriendBean data) {
+            public void onSuccess(Object data) {
                 if (!isViewAttached()) {
                     return;
                 }

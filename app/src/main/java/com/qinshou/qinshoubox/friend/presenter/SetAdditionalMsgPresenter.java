@@ -20,8 +20,8 @@ public class SetAdditionalMsgPresenter extends AbsPresenter<ISetAdditionalMsgCon
     }
 
     @Override
-    public void addFriend(String fromUserId, String toUserId, String remark, String additionalMsg, int source) {
-        getModel().addFriend(fromUserId, toUserId, remark, additionalMsg, source, new Callback<Object>() {
+    public void addFriend(String toUserId, String remark, String additionalMsg, int source) {
+        getModel().addFriend(toUserId, remark, additionalMsg, source, new Callback<Object>() {
             @Override
             public void onSuccess(Object data) {
                 if (!isViewAttached()) {
