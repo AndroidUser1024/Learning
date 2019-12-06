@@ -3,6 +3,7 @@ package com.qinshou.qinshoubox.friend.presenter;
 
 import com.qinshou.commonmodule.base.AbsPresenter;
 import com.qinshou.okhttphelper.callback.Callback;
+import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.friend.contract.IAddFriendContract;
 import com.qinshou.qinshoubox.friend.model.AddFriendModel;
 import com.qinshou.qinshoubox.friend.view.fragment.AddFriendFragment;
@@ -21,14 +22,14 @@ public class AddFriendPresenter extends AbsPresenter<IAddFriendContract.IView, I
     }
 
     @Override
-    public void getUserDetail(String userId,String keyword) {
-        getModel().getUserDetail(userId,keyword, new Callback<UserBean>() {
+    public void getUserDetail(String keyword) {
+        getModel().getUserDetail(keyword, new Callback<UserDetailBean>() {
             @Override
-            public void onSuccess(UserBean userBean) {
+            public void onSuccess(UserDetailBean userDetailBean) {
                 if (!isViewAttached()) {
                     return;
                 }
-                getView().getUserDetailSuccess(userBean);
+                getView().getUserDetailSuccess(userDetailBean);
             }
 
             @Override

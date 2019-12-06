@@ -3,6 +3,7 @@ package com.qinshou.qinshoubox.friend.view.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
@@ -31,7 +32,7 @@ public class SetAdditionalMsgFragment extends QSFragment<SetAdditionalMsgPresent
     /**
      * 待添加的人的用户 id
      */
-    private int mToUserId;
+    private String mToUserId;
     /**
      * 待添加的人的备注
      */
@@ -70,7 +71,7 @@ public class SetAdditionalMsgFragment extends QSFragment<SetAdditionalMsgPresent
         ((TitleBar) findViewByID(R.id.title_bar)).setRightTextOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mToUserId == 0) {
+                if (TextUtils.isEmpty(mToUserId)) {
                     return;
                 }
 //                getPresenter().addFriend(UserStatusManager.SINGLETON.getUserBean().getId()
@@ -114,7 +115,7 @@ public class SetAdditionalMsgFragment extends QSFragment<SetAdditionalMsgPresent
         if (bundle == null) {
             return;
         }
-        mToUserId = bundle.getInt(TO_USER_ID, 0);
+        mToUserId = bundle.getString(TO_USER_ID);
         mRemark = bundle.getString(REMARK);
         mSource = bundle.getInt(SOURCE, 0);
     }
@@ -142,9 +143,9 @@ public class SetAdditionalMsgFragment extends QSFragment<SetAdditionalMsgPresent
      * @param remark   待添加的人的备注
      * @param source   添加来源
      */
-    public static void start(Context context, int toUserId, String remark, int source) {
+    public static void start(Context context, String toUserId, String remark, int source) {
         Bundle bundle = new Bundle();
-        bundle.putInt(TO_USER_ID, toUserId);
+        bundle.putString(TO_USER_ID, toUserId);
         bundle.putString(REMARK, remark);
         bundle.putInt(SOURCE, source);
         context.startActivity(ContainerActivity.getJumpIntent(context

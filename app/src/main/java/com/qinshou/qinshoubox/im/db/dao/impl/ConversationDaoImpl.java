@@ -23,7 +23,6 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
     @Override
     public ConversationBean insert(ConversationBean conversationBean) {
         ConversationBean select = selectByToUserIdAndType(conversationBean.getToUserId(), conversationBean.getType());
-        ShowLogUtil.logi("select--->" + select);
         if (select == null) {
             conversationBean.setUnreadCount(0);
             String sql = "INSERT INTO conversation" +
@@ -130,8 +129,6 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
                 ConversationBean conversationBean = new ConversationBean();
                 int id = cursor.getInt(cursor.getColumnIndex("id"));
                 int unreadCount = cursor.getInt(cursor.getColumnIndex("unreadCount"));
-                ShowLogUtil.logi("id--->" + id);
-                ShowLogUtil.logi("unreadCount--->" + unreadCount);
                 conversationBean.setId(id);
                 conversationBean.setUnreadCount(unreadCount);
                 return conversationBean;

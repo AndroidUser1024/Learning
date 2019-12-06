@@ -20,12 +20,15 @@ import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
+import com.qinshou.qinshoubox.conversation.view.activity.ChatActivity;
+import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.friend.view.dialog.DeleteContactDialog;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.friend.contract.IUserDetailContract;
 import com.qinshou.qinshoubox.friend.presenter.UserDetailPresenter;
 import com.qinshou.qinshoubox.friend.view.activity.SetRemarkActivity;
 import com.qinshou.qinshoubox.login.bean.UserBean;
+import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -52,7 +55,7 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
     private TextView mTvSignature;
     private TextView mTvSource;
     private Button mBtnAddFriend;
-    private UserBean mUserBean;
+    private UserDetailBean mUserDetailBean;
 
     @Override
     public int getLayoutId() {
@@ -101,9 +104,9 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
                             mTvRemark.setText(remark);
                             mTvRemark2.setText(remark);
                         }
-//                        if (mUserBean.getFriendStatus() == 1) {
-//                            getPresenter().setRemark(mUserBean.getId(), mTvRemark.getText().toString().trim());
-//                        }
+                        if (mUserDetailBean.getFriendStatus() == 1) {
+                            getPresenter().setRemark(mUserDetailBean.getId(), mTvRemark.getText().toString().trim());
+                        }
                     }
                 });
             }
@@ -124,17 +127,17 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
     }
 
     @Override
-    public void getUserDetailSuccess(UserBean userBean) {
-        mUserBean = userBean;
-//        if (userBean.getFriendStatus() == 1) {
-//            showFriendUI(userBean);
-//        } else {
-//            if (userBean.getReceive() == 1) {
-//                showWaitAcceptUI(userBean);
-//            } else {
-//                showNotFriendUI(userBean);
-//            }
-//        }
+    public void getUserDetailSuccess(UserDetailBean userDetailBean) {
+        mUserDetailBean = userDetailBean;
+        if (userDetailBean.getFriendStatus() == 1) {
+            showFriendUI(userDetailBean);
+        } else {
+            if (userDetailBean.getReceive() == 1) {
+                showWaitAcceptUI(userDetailBean);
+            } else {
+                showNotFriendUI(userDetailBean);
+            }
+        }
     }
 
     @Override
@@ -149,7 +152,7 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
             @Override
             public void onClick(View v) {
                 EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.REFRESH_FRIEND_LIST, null));
-//                ChatActivity.start(getContext(), mUserBean.getId());
+                ChatActivity.start(getContext(), mUserDetailBean.getId());
             }
         });
     }
@@ -180,136 +183,136 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
 
     }
 
-    private void showFriendUI(final UserBean userBean) {
+    private void showFriendUI(final UserDetailBean userDetailBean) {
         mTitleBar.setRightImageOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPopupWindow(userBean);
+                showPopupWindow(userDetailBean);
             }
         });
-        setData(userBean);
+        setData(userDetailBean);
         mLlAdditionalMsg.setVisibility(View.GONE);
         mBtnAddFriend.setText(getString(R.string.user_detail_btn_add_friend_text_2));
         mBtnAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                ChatActivity.start(getContext(), userBean.getId());
+                ChatActivity.start(getContext(), userDetailBean.getId());
             }
         });
         // 用户来源
         String source = "";
-//        if (userBean.getSource() == 1) {
-//            source = "通过用户名添加";
-//        } else if (userBean.getSource() == 2) {
-//            source = "通过手机号添加";
-//        } else if (userBean.getSource() == 3) {
-//            source = "通过邮箱添加";
-//        } else if (userBean.getSource() == 4) {
-//            source = "通过扫一扫添加";
-//        } else if (userBean.getSource() == 5) {
-//            source = "通过群聊添加";
-//        } else if (userBean.getSource() == -1) {
-//            source = "对方通过用户名添加";
-//        } else if (userBean.getSource() == -2) {
-//            source = "对方通过手机号添加";
-//        } else if (userBean.getSource() == -3) {
-//            source = "对方通过邮箱添加";
-//        } else if (userBean.getSource() == -4) {
-//            source = "对方通过扫一扫添加";
-//        } else if (userBean.getSource() == -5) {
-//            source = "对方通过群聊添加";
-//        }
+        if (userDetailBean.getSource() == 1) {
+            source = "通过用户名添加";
+        } else if (userDetailBean.getSource() == 2) {
+            source = "通过手机号添加";
+        } else if (userDetailBean.getSource() == 3) {
+            source = "通过邮箱添加";
+        } else if (userDetailBean.getSource() == 4) {
+            source = "通过扫一扫添加";
+        } else if (userDetailBean.getSource() == 5) {
+            source = "通过群聊添加";
+        } else if (userDetailBean.getSource() == -1) {
+            source = "对方通过用户名添加";
+        } else if (userDetailBean.getSource() == -2) {
+            source = "对方通过手机号添加";
+        } else if (userDetailBean.getSource() == -3) {
+            source = "对方通过邮箱添加";
+        } else if (userDetailBean.getSource() == -4) {
+            source = "对方通过扫一扫添加";
+        } else if (userDetailBean.getSource() == -5) {
+            source = "对方通过群聊添加";
+        }
         mTvSource.setText(source);
     }
 
-    private void showNotFriendUI(final UserBean userBean) {
-        setData(userBean);
+    private void showNotFriendUI(final UserDetailBean userDetailBean) {
+        setData(userDetailBean);
         mLlAdditionalMsg.setVisibility(View.GONE);
         mBtnAddFriend.setText(getString(R.string.user_detail_btn_add_friend_text));
         mBtnAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                SetAdditionalMsgFragment.start(getContext()
-//                        , userBean.getId()
-//                        , mTvRemark.getText().toString().trim()
-//                        , userBean.getSource()
-//                );
+                SetAdditionalMsgFragment.start(getContext()
+                        , userDetailBean.getId()
+                        , mTvRemark.getText().toString().trim()
+                        , userDetailBean.getSource()
+                );
             }
         });
         String source = "";
-//        if (userBean.getSource() == 1) {
-//            source = "通过用户名搜索";
-//        } else if (userBean.getSource() == 2) {
-//            source = "通过手机号搜索";
-//        } else if (userBean.getSource() == 3) {
-//            source = "通过邮箱搜索";
-//        }
+        if (userDetailBean.getSource() == 1) {
+            source = "通过用户名搜索";
+        } else if (userDetailBean.getSource() == 2) {
+            source = "通过手机号搜索";
+        } else if (userDetailBean.getSource() == 3) {
+            source = "通过邮箱搜索";
+        }
         mTvSource.setText(source);
     }
 
-    private void showWaitAcceptUI(final UserBean userBean) {
-        setData(userBean);
+    private void showWaitAcceptUI(final UserDetailBean userDetailBean) {
+        setData(userDetailBean);
         mLlAdditionalMsg.setVisibility(View.VISIBLE);
         mBtnAddFriend.setText(getString(R.string.user_detail_btn_add_friend_text_3));
         mBtnAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                getPresenter().agreeAddFriend(UserStatusManager.SINGLETON.getUserBean().getId(), userBean.getId(), mTvRemark.getText().toString().trim());
+                getPresenter().agreeAddFriend(UserStatusManager.SINGLETON.getUserBean().getId(), userDetailBean.getId(), mTvRemark.getText().toString().trim());
             }
         });   // 用户来源
         String source = "";
-//        if (userBean.getSource() == 1) {
-//            source = "通过用户名添加";
-//        } else if (userBean.getSource() == 2) {
-//            source = "通过手机号添加";
-//        } else if (userBean.getSource() == 3) {
-//            source = "通过邮箱添加";
-//        } else if (userBean.getSource() == 4) {
-//            source = "通过扫一扫添加";
-//        } else if (userBean.getSource() == 5) {
-//            source = "通过群聊添加";
-//        } else if (userBean.getSource() == -1) {
-//            source = "对方通过用户名添加";
-//        } else if (userBean.getSource() == -2) {
-//            source = "对方通过手机号添加";
-//        } else if (userBean.getSource() == -3) {
-//            source = "对方通过邮箱添加";
-//        } else if (userBean.getSource() == -4) {
-//            source = "对方通过扫一扫添加";
-//        } else if (userBean.getSource() == -5) {
-//            source = "对方通过群聊添加";
-//        }
+        if (userDetailBean.getSource() == 1) {
+            source = "通过用户名添加";
+        } else if (userDetailBean.getSource() == 2) {
+            source = "通过手机号添加";
+        } else if (userDetailBean.getSource() == 3) {
+            source = "通过邮箱添加";
+        } else if (userDetailBean.getSource() == 4) {
+            source = "通过扫一扫添加";
+        } else if (userDetailBean.getSource() == 5) {
+            source = "通过群聊添加";
+        } else if (userDetailBean.getSource() == -1) {
+            source = "对方通过用户名添加";
+        } else if (userDetailBean.getSource() == -2) {
+            source = "对方通过手机号添加";
+        } else if (userDetailBean.getSource() == -3) {
+            source = "对方通过邮箱添加";
+        } else if (userDetailBean.getSource() == -4) {
+            source = "对方通过扫一扫添加";
+        } else if (userDetailBean.getSource() == -5) {
+            source = "对方通过群聊添加";
+        }
         mTvSource.setText(source);
     }
 
-    private void setData(UserBean userBean) {
+    private void setData(UserDetailBean userDetailBean) {
         // 头像
-        ImageLoadUtil.SINGLETON.loadImage(getContext(), userBean.getHeadImgSmall(), mIvHeadImg);
+        ImageLoadUtil.SINGLETON.loadImage(getContext(), userDetailBean.getHeadImgSmall(), mIvHeadImg);
         // 备注
-//        mTvRemark.setText(TextUtils.isEmpty(userBean.getRemark()) ? userBean.getNickname() : userBean.getRemark());
+        mTvRemark.setText(TextUtils.isEmpty(userDetailBean.getRemark()) ? userDetailBean.getNickname() : userDetailBean.getRemark());
         // 0 为其他,1 为女,2 为男
-        if (userBean.getGender() == 1) {
+        if (userDetailBean.getGender() == 1) {
             mIvGender.setImageResource(R.drawable.user_detail_iv_gender_src);
         } else {
             mIvGender.setImageResource(R.drawable.user_detail_iv_gender_src_2);
         }
         // 账号
-        mTvUsername.setText(userBean.getUsername());
+        mTvUsername.setText(userDetailBean.getUsername());
         // 昵称
-        mTvNickname.setText(userBean.getNickname());
+        mTvNickname.setText(userDetailBean.getNickname());
         // 附加消息
-//        mTvAdditionalMsg.setText(userBean.getAdditionalMsg());
+        mTvAdditionalMsg.setText(userDetailBean.getAdditionalMsg());
         // 功能栏的备注
-//        mTvRemark2.setText(TextUtils.isEmpty(userBean.getRemark()) ? "" : userBean.getRemark());
+        mTvRemark2.setText(TextUtils.isEmpty(userDetailBean.getRemark()) ? "" : userDetailBean.getRemark());
         // 手机号
-        mTvPhoneNumber.setText(userBean.getPhoneNumber());
+        mTvPhoneNumber.setText(userDetailBean.getPhoneNumber());
         // 邮箱
-        mTvEmail.setText(userBean.getEmail());
+        mTvEmail.setText(userDetailBean.getEmail());
         // 个性签名
-        mTvSignature.setText(userBean.getSignature());
+        mTvSignature.setText(userDetailBean.getSignature());
     }
 
-    private void showPopupWindow(final UserBean userBean) {
+    private void showPopupWindow(final UserDetailBean userDetailBean) {
         final PopupWindow popupWindow = new PopupWindow();
         View view = LayoutInflater.from(getContext()).inflate(R.layout.ppw_user_detail_more, null);
         LinearLayout llDeleteContact = view.findViewById(R.id.ll_delete_contact);

@@ -50,9 +50,9 @@ public class MessageManager {
         mUserId = userId;
     }
 
-    public int insert(boolean send, MessageBean messageBean) {
+    public MessageBean insert(boolean send, MessageBean messageBean) {
         // 插入消息
-        mMessageDao.insert(messageBean);
+        messageBean = mMessageDao.insert(messageBean);
         // 插入或更新会话
         ConversationBean conversationBean = new ConversationBean();
         if (send) {
@@ -68,7 +68,7 @@ public class MessageManager {
         mConversationDao.insert(conversationBean);
         // 插入会话与消息关系
         mIConversationMessageRelDao.insert(new ConversationMessageRelBean(conversationBean.getId(), messageBean.getPid()));
-        return 1;
+        return messageBean;
     }
 //
 //    public List<MessageBean> getList(int conversationId, int page, int pageSize) {

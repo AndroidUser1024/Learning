@@ -29,9 +29,10 @@ import com.qinshou.commonmodule.util.permissionutil.PermissionUtil;
 import com.qinshou.commonmodule.widget.RefreshLayout;
 import com.qinshou.commonmodule.widget.TitleBar;
 import com.qinshou.qinshoubox.conversation.view.fragment.ChatSettingFragment;
-import com.qinshou.immodule.enums.MessageContentType;
 import com.qinshou.qinshoubox.im.IMClient;
+import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
+import com.qinshou.qinshoubox.im.enums.MessageContentType;
 import com.qinshou.qinshoubox.im.listener.IOnMessageListener;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSActivity;
@@ -316,7 +317,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
         @Override
         public void onMessage(MessageBean messageBean) {
             // 不是当前会话的对方用户发过来的消息,不添加到列表中
-            if (TextUtils.equals(mToUserId, messageBean.getFromUserId())) {
+            if (!TextUtils.equals(mToUserId, messageBean.getFromUserId())) {
                 return;
             }
             mRcvMessageAdapter.getDataList().add(messageBean);
@@ -468,13 +469,13 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
         if (TextUtils.isEmpty(mToUserId)) {
             return;
         }
-//        FriendBean friendBean = IMClient.SINGLETON.getFriendManager().getFriend(mToUserId);
-//        if (friendBean != null) {
-//            // 对方的昵称
-//            mTitleBar.setTitleText(TextUtils.isEmpty(friendBean.getRemark())
-//                    ? friendBean.getNickname()
-//                    : friendBean.getRemark());
-//        }
+        FriendBean friendBean = IMClient.SINGLETON.getFriendManager().selectById(mToUserId);
+        if (friendBean != null) {
+            // 对方的昵称
+            mTitleBar.setTitleText(TextUtils.isEmpty(friendBean.getRemark())
+                    ? friendBean.getNickname()
+                    : friendBean.getRemark());
+        }
         // 加载消息列表
 //        getPresenter().getMessageList(MessageType.CHAT.getValue(), mToUserId, mPage, IConstant.PAGE_SIZE);
     }

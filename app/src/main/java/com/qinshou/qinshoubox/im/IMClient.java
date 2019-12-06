@@ -7,10 +7,11 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.qinshou.qinshoubox.im.bean.FriendStatusBean;
-import com.qinshou.immodule.enums.FriendStatus;
-import com.qinshou.immodule.enums.MessageType;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.db.DatabaseHelper;
+import com.qinshou.qinshoubox.im.enums.FriendStatus;
+import com.qinshou.qinshoubox.im.enums.MessageStatus;
+import com.qinshou.qinshoubox.im.enums.MessageType;
 import com.qinshou.qinshoubox.im.listener.IOnConnectListener;
 import com.qinshou.qinshoubox.im.listener.IOnFriendStatusListener;
 import com.qinshou.qinshoubox.im.listener.IOnMessageListener;
@@ -155,8 +156,8 @@ public enum IMClient {
 //                    if (exist) {
 //                        return;
 //                    }
-//                    messageBean.setStatus(MessageStatus.RECEIVED.getValue());
-//                    mMessageManager.insertOrUpdate(false, messageBean);
+                    messageBean.setStatus(MessageStatus.RECEIVED.getValue());
+                    mMessageManager.insert(false, messageBean);
                     for (IOnMessageListener onMessageListener : mOnMessageListenerList) {
                         onMessageListener.onMessage(messageBean);
                     }
@@ -337,7 +338,7 @@ public enum IMClient {
         messageBean.setFromUserId(mUserId);
         if (messageBean.getType() == MessageType.CHAT.getValue()
                 || messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
-//            mMessageManager.insertOrUpdate(true, messageBean);
+            mMessageManager.insert(true, messageBean);
 
 //            // 创建一个唯一索引作为 ACK Key,将其 json 串做 Base64 加密,得到的加密字符串作为 key
 //            AckKeyBean ackKeyBean = new AckKeyBean(mUserId

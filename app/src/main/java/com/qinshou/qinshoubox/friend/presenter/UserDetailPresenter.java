@@ -3,6 +3,7 @@ package com.qinshou.qinshoubox.friend.presenter;
 
 import com.qinshou.commonmodule.base.AbsPresenter;
 import com.qinshou.okhttphelper.callback.Callback;
+import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.friend.contract.IUserDetailContract;
 import com.qinshou.qinshoubox.friend.model.UserDetailModel;
 import com.qinshou.qinshoubox.friend.view.fragment.UserDetailFragment;
@@ -23,9 +24,9 @@ public class UserDetailPresenter extends AbsPresenter<IUserDetailContract.IView,
 
     @Override
     public void getUserDetail(String keyword) {
-        getModel().getUserDetail(keyword, new QSCallback<UserBean>() {
+        getModel().getUserDetail(keyword, new Callback<UserDetailBean>() {
             @Override
-            public void onSuccess(UserBean data) {
+            public void onSuccess(UserDetailBean data) {
                 if (!isViewAttached()) {
                     return;
                 }
@@ -43,7 +44,7 @@ public class UserDetailPresenter extends AbsPresenter<IUserDetailContract.IView,
     }
 
     @Override
-    public void agreeAddFriend(int fromUserId, int toUserId, String remark) {
+    public void agreeAddFriend(String fromUserId, String toUserId, String remark) {
         getModel().agreeAddFriend(fromUserId, toUserId, remark, new Callback<Object>() {
             @Override
             public void onSuccess(Object data) {
@@ -64,7 +65,7 @@ public class UserDetailPresenter extends AbsPresenter<IUserDetailContract.IView,
     }
 
     @Override
-    public void deleteFriend(int toUserId) {
+    public void deleteFriend(String toUserId) {
         getModel().deleteFriend(toUserId, new Callback<Object>() {
             @Override
             public void onSuccess(Object data) {
@@ -85,8 +86,8 @@ public class UserDetailPresenter extends AbsPresenter<IUserDetailContract.IView,
     }
 
     @Override
-    public void setRemark(int toUserId, String remark) {
-        getModel().setRemark(toUserId, remark, new QSCallback<Object>() {
+    public void setRemark(String toUserId, String remark) {
+        getModel().setRemark(toUserId, remark, new Callback<Object>() {
             @Override
             public void onSuccess(Object data) {
                 if (!isViewAttached()) {

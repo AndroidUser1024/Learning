@@ -4,6 +4,7 @@ package com.qinshou.qinshoubox.friend.contract;
 import com.qinshou.commonmodule.base.IBaseModel;
 import com.qinshou.commonmodule.base.IBaseView;
 import com.qinshou.okhttphelper.callback.Callback;
+import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.friend.view.fragment.AddFriendFragment;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 
@@ -21,11 +22,10 @@ public interface IAddFriendContract {
          * Date:2019/9/6 9:34
          * Description:获取用户信息
          *
-         * @param userId   用户 id
          * @param keyword  系统账号/手机号/邮箱
          * @param callback 回调接口
          */
-        void getUserDetail(String userId, String keyword, Callback<UserBean> callback);
+        void getUserDetail(String keyword, Callback<UserDetailBean> callback);
     }
 
     interface IView extends IBaseView {
@@ -35,9 +35,9 @@ public interface IAddFriendContract {
          * Date:2019/9/6 9:34
          * Description:获取用户信息成功
          *
-         * @param userBean 用户信息实体类
+         * @param userDetailBean 用户信息实体类
          */
-        void getUserDetailSuccess(UserBean userBean);
+        void getUserDetailSuccess(UserDetailBean userDetailBean);
 
         /**
          * Author: QinHao
@@ -57,9 +57,8 @@ public interface IAddFriendContract {
          * Date:2019/9/6 9:34
          * Description:获取用户信息
          *
-         * @param userId  用户 id
          * @param keyword 系统账号/手机号/邮箱
          */
-        void getUserDetail(String userId, String keyword);
+        void getUserDetail( String keyword);
     }
 }

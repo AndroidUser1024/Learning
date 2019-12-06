@@ -1,8 +1,8 @@
 package com.qinshou.qinshoubox.im.bean;
 
 
-import com.qinshou.immodule.enums.MessageContentType;
-import com.qinshou.immodule.enums.MessageType;
+import com.qinshou.qinshoubox.im.enums.MessageContentType;
+import com.qinshou.qinshoubox.im.enums.MessageType;
 
 /**
  * Author: QinHao

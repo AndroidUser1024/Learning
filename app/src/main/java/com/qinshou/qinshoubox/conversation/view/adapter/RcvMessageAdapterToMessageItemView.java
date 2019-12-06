@@ -1,6 +1,7 @@
 package com.qinshou.qinshoubox.conversation.view.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -9,6 +10,7 @@ import com.qinshou.commonmodule.rcvbaseadapter.itemview.BaseItemView;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
+import com.qinshou.qinshoubox.im.enums.MessageContentType;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 import java.text.SimpleDateFormat;
@@ -33,8 +35,7 @@ public class RcvMessageAdapterToMessageItemView extends BaseItemView<MessageBean
     @Override
     public boolean isForViewType(MessageBean item, int position) {
         // 消息来源与当前登录的用户 id 相同,则是发送的消息
-//        return item.getFromUserId() == UserStatusManager.SINGLETON.getUserBean().getId();
-        return true;
+        return TextUtils.equals(item.getFromUserId(), UserStatusManager.SINGLETON.getUserBean().getId());
     }
 
     @Override
