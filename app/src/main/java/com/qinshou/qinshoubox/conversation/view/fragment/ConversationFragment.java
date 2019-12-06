@@ -14,6 +14,7 @@ import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.util.SystemUtil;
 import com.qinshou.qinshoubox.conversation.view.activity.ChatActivity;
 import com.qinshou.qinshoubox.conversation.view.activity.GroupChatActivity;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.enums.MessageType;
@@ -26,6 +27,10 @@ import com.qinshou.qinshoubox.conversation.presenter.ConversationPresenter;
 import com.qinshou.qinshoubox.conversation.view.adapter.RcvConversationAdapter;
 import com.qinshou.qinshoubox.im.view.fragment.IMActivity;
 import com.qinshou.qinshoubox.util.QSUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -81,19 +86,16 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
     };
 
     @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
+        EventBus.getDefault().unregister(this);
         mTvUnreadCountInTlMain.setVisibility(View.GONE);
         IMClient.SINGLETON.removeOnMessageListener(mOnMessageListener);
     }
 
     @Override
     public int getLayoutId() {
+        EventBus.getDefault().register(this);
         return R.layout.fragment_conversation;
     }
 
@@ -159,6 +161,11 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
 
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void receiveEvent(EventBean<ConversationBean> eventBean) {
+        getPresenter().getConversationList();
+    }
+
     /**
      * Author: QinHao
      * Email:cqflqinhao@126.com
@@ -216,8 +223,6 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
                     break;
                 }
             }
-            ShowLogUtil.logi("firstNotTopIndex--->" + firstNotTopIndex);
-            ShowLogUtil.logi("index--->" + index);
             if (contains) {
                 if (index == firstNotTopIndex) {
                     // 如果该会话本来就在非置顶会话的第一个,直接修改

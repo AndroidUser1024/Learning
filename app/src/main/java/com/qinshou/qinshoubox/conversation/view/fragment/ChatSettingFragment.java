@@ -15,8 +15,11 @@ import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.conversation.contract.IChatSettingContract;
 import com.qinshou.qinshoubox.conversation.presenter.ChatSettingPresenter;
 import com.qinshou.qinshoubox.friend.view.fragment.UserDetailFragment;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.me.ui.widget.SwitchButton;
+
+import org.greenrobot.eventbus.EventBus;
 
 
 /**
@@ -114,7 +117,7 @@ public class ChatSettingFragment extends QSFragment<ChatSettingPresenter> implem
         mIvHeadImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UserDetailFragment.start(getContext(),mFriendBean.getId());
+                UserDetailFragment.start(getContext(), mFriendBean.getId());
             }
         });
         // 发起群聊
@@ -155,7 +158,7 @@ public class ChatSettingFragment extends QSFragment<ChatSettingPresenter> implem
 
     @Override
     public void setTopSuccess() {
-        mFriendBean.setTop(1);
+        EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_LIST, null));
     }
 
     @Override
@@ -165,7 +168,7 @@ public class ChatSettingFragment extends QSFragment<ChatSettingPresenter> implem
 
     @Override
     public void setDoNotDisturbSuccess() {
-
+        EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_LIST, null));
     }
 
     @Override
@@ -175,7 +178,6 @@ public class ChatSettingFragment extends QSFragment<ChatSettingPresenter> implem
 
     @Override
     public void setBlackListSuccess() {
-
     }
 
     @Override
@@ -189,8 +191,8 @@ public class ChatSettingFragment extends QSFragment<ChatSettingPresenter> implem
      * Date:2019/9/3 15:09
      * Description:获取跳转到该界面需要传递的 Bundle
      *
-     * @param context 上下文
-     * @param toUserId      好友 Id
+     * @param context  上下文
+     * @param toUserId 好友 Id
      */
     public static void start(Context context, String toUserId) {
         Bundle bundle = new Bundle();
