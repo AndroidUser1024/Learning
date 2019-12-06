@@ -8,7 +8,7 @@ import com.qinshou.qinshoubox.login.bean.UserBean;
  * Date: 2019/11/22 16:25
  * Description:创建群聊时的群成员实体类
  */
-public class GroupChatMemberForCreateBean extends UserBean {
+public class GroupChatMemberForCreateBean extends UserDetailBean {
     private boolean choose;
     private boolean enable = true;
 

@@ -24,8 +24,8 @@ public class CreateGroupChatPresenter extends AbsPresenter<ICreateGroupChatContr
     }
 
     @Override
-    public void getFriendList(int fromUserId) {
-        getModel().getFriendList(fromUserId, new QSCallback<List<FriendBean>>() {
+    public void getFriendList() {
+        getModel().getFriendList(new Callback<List<FriendBean>>() {
             @Override
             public void onSuccess(List<FriendBean> data) {
                 if (!isViewAttached()) {
@@ -45,8 +45,8 @@ public class CreateGroupChatPresenter extends AbsPresenter<ICreateGroupChatContr
     }
 
     @Override
-    public void createGroupChat(int ownerId, List<Integer> memberIdList, String nickname, String headImg) {
-        getModel().createGroupChat(ownerId, memberIdList, nickname, headImg, new Callback<GroupChatBean>() {
+    public void createGroupChat(List<String> memberIdList, String nickname, String headImg) {
+        getModel().createGroupChat(memberIdList, nickname, headImg, new Callback<GroupChatBean>() {
             @Override
             public void onSuccess(GroupChatBean data) {
                 if (!isViewAttached()) {

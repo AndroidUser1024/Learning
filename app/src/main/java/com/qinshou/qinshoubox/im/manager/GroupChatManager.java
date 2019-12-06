@@ -3,6 +3,7 @@ package com.qinshou.qinshoubox.im.manager;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
@@ -39,6 +40,12 @@ public class GroupChatManager {
         mUserId = userId;
     }
 
+    public void create(List<String> toUserIdList, String nickname, String headImg, Callback<GroupChatBean> callback) {
+        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.create(mUserId, toUserIdList, nickname, headImg)
+                .transform(new QSApiTransformer<GroupChatBean>())
+                .enqueue(callback);
+    }
+
     public void getGroupChatList(final Callback<List<GroupChatBean>> callback) {
         OkHttpHelperForQSBoxGroupChatApi.SINGLETON.getMyGroupChatList(mUserId)
                 .transform(new QSApiTransformer<List<GroupChatBean>>())
@@ -63,37 +70,33 @@ public class GroupChatManager {
                 });
     }
 
-    public void getGroupChat(int groupChatId, final QSCallback<GroupChatBean> qsCallback) {
-//        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.getGroupChat(groupChatId, IMClient.SINGLETON.getUserId())
-//                .transform(new QSApiTransformer<GroupChatBean>())
-//                .enqueue(new Callback<GroupChatBean>() {
-//                    @Override
-//                    public void onSuccess(GroupChatBean data) {
-//                        qsCallback.onSuccess(data);
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Exception e) {
-//                        qsCallback.onFailure(e);
-//                    }
-//                });
+    public void getDetail(String groupChatId, final Callback<GroupChatBean> callback) {
+        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.getDetail(groupChatId, mUserId)
+                .transform(new QSApiTransformer<GroupChatBean>())
+                .enqueue(new Callback<GroupChatBean>() {
+                    @Override
+                    public void onSuccess(final GroupChatBean data) {
+                        mExecutorService.submit(new Runnable() {
+                            @Override
+                            public void run() {
+                                mGroupChatDao.insert(data);
+                                mHandler.post(new SuccessRunnable<GroupChatBean>(callback, data));
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        callback.onFailure(e);
+                    }
+                });
     }
 
-//    public void getMemberList(int groupChatId, final QSCallback<List<UserBean>> qsCallback) {
-//        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.getMemberList(groupChatId, IMClient.SINGLETON.getUserId())
-//                .transform(new QSApiTransformer<List<UserBean>>())
-//                .enqueue(new Callback<List<UserBean>>() {
-//                    @Override
-//                    public void onSuccess(List<UserBean> data) {
-//                        qsCallback.onSuccess(data);
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Exception e) {
-//                        qsCallback.onFailure(e);
-//                    }
-//                });
-//    }
+    public void getMemberList(String groupChatId, final Callback<List<UserDetailBean>> callback) {
+        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.getMemberList(groupChatId, mUserId)
+                .transform(new QSApiTransformer<List<UserDetailBean>>())
+                .enqueue(callback);
+    }
 
     /**
      * Author: QinHao
@@ -103,20 +106,10 @@ public class GroupChatManager {
      *
      * @param groupChatId 待添加的群成员的 Id 集合
      */
-    public void addMember(int groupChatId, List<Integer> toUserIdList, final QSCallback<Object> qsCallback) {
-//        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.addMember(groupChatId, IMClient.SINGLETON.getUserId(), toUserIdList)
-//                .transform(new QSApiTransformer<Object>())
-//                .enqueue(new Callback<Object>() {
-//                    @Override
-//                    public void onSuccess(Object data) {
-//                        qsCallback.onSuccess(data);
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Exception e) {
-//                        qsCallback.onFailure(e);
-//                    }
-//                });
+    public void addMember(String groupChatId, List<String> toUserIdList, final Callback<Object> callback) {
+        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.addMember(groupChatId, mUserId, toUserIdList)
+                .transform(new QSApiTransformer<Object>())
+                .enqueue(callback);
     }
 
     /**
@@ -127,20 +120,10 @@ public class GroupChatManager {
      *
      * @param groupChatId 待删除的群成员的 Id 集合
      */
-    public void deleteMember(int groupChatId, List<Integer> toUserIdList, final QSCallback<Object> qsCallback) {
-//        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.deleteMember(groupChatId, IMClient.SINGLETON.getUserId(), toUserIdList)
-//                .transform(new QSApiTransformer<Object>())
-//                .enqueue(new Callback<Object>() {
-//                    @Override
-//                    public void onSuccess(Object data) {
-//                        qsCallback.onSuccess(data);
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Exception e) {
-//                        qsCallback.onFailure(e);
-//                    }
-//                });
+    public void deleteMember(String groupChatId, List<String> toUserIdList, final Callback<Object> callback) {
+        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.deleteMember(groupChatId, mUserId, toUserIdList)
+                .transform(new QSApiTransformer<Object>())
+                .enqueue(callback);
     }
 
     public GroupChatBean getById(String groupChatId) {

@@ -19,9 +19,9 @@ import java.util.List;
  */
 public interface ICreateGroupChatContract {
     interface IModel extends IBaseModel {
-        void getFriendList(int fromUserId, QSCallback<List<FriendBean>> qsCallback);
+        void getFriendList(Callback<List<FriendBean>> callback);
 
-        void createGroupChat(int ownerId, List<Integer> memberIdList, String nickname, String headImg, Callback<GroupChatBean> callback);
+        void createGroupChat(List<String> memberIdList, String nickname, String headImg, Callback<GroupChatBean> callback);
     }
 
     interface IView extends IBaseView {
@@ -35,8 +35,8 @@ public interface ICreateGroupChatContract {
     }
 
     interface IPresenter {
-        void getFriendList(int fromUserId);
+        void getFriendList();
 
-        void createGroupChat(int ownerId, List<Integer> memberIdList, String nickname, String headImg);
+        void createGroupChat(List<String> memberIdList, String nickname, String headImg);
     }
 }
