@@ -25,6 +25,7 @@ import com.qinshou.qinshoubox.im.listener.IOnFriendStatusListener;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
+import com.qinshou.qinshoubox.im.listener.IOnGroupChatStatusListener;
 import com.qinshou.qinshoubox.im.view.fragment.IMActivity;
 import com.qinshou.qinshoubox.util.QSUtil;
 
@@ -58,7 +59,9 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
     private List<RecyclerView> mRecyclerViewList = new ArrayList<>();
     private RcvFriendAdapter mRcvFriendAdapter;
     private RcvGroupChatAdapter mRcvGroupChatAdapter;
-
+    /**
+     * 好友状态监听器
+     */
     private IOnFriendStatusListener mOnFriendStatusListener = new IOnFriendStatusListener() {
         @Override
         public void add(String fromUserId, String additionalMsg, boolean newFriend) {
@@ -115,11 +118,39 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
         }
     };
 
+    /**
+     * 群状态监听器
+     */
+    private IOnGroupChatStatusListener mOnGroupChatStatusListener = new IOnGroupChatStatusListener() {
+        @Override
+        public void add(String groupChatId, String fromUserId, String toUserId) {
+            ShowLogUtil.logi("add: groupChatId--->" + groupChatId + ",fromUserId--->" + fromUserId + ",toUserId--->" + toUserId);
+            getPresenter().getMyGroupChatList();
+        }
+
+        @Override
+        public void delete(String groupChatId, String fromUserId, String toUserId) {
+            ShowLogUtil.logi("delete: groupChatId--->" + groupChatId + ",fromUserId--->" + fromUserId + ",toUserId--->" + toUserId);
+            getPresenter().getMyGroupChatList();
+        }
+
+        @Override
+        public void otherAdd(String groupChatId, String fromUserId, String toUserId) {
+            ShowLogUtil.logi("otherAdd: groupChatId--->" + groupChatId + ",fromUserId--->" + fromUserId + ",toUserId--->" + toUserId);
+        }
+
+        @Override
+        public void otherDelete(String groupChatId, String fromUserId, String toUserId) {
+            ShowLogUtil.logi("otherDelete: groupChatId--->" + groupChatId + ",fromUserId--->" + fromUserId + ",toUserId--->" + toUserId);
+        }
+    };
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         EventBus.getDefault().unregister(this);
         IMClient.SINGLETON.removeOnFriendStatusListener(mOnFriendStatusListener);
+        IMClient.SINGLETON.removeOnGroupChatStatusListener(mOnGroupChatStatusListener);
         mTvUnreadCount.setVisibility(View.GONE);
         mTvUnreadCountInTlMain.setVisibility(View.GONE);
     }
@@ -155,6 +186,7 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
     public void setListener() {
         EventBus.getDefault().register(this);
         IMClient.SINGLETON.addOnFriendStatusListener(mOnFriendStatusListener);
+        IMClient.SINGLETON.addOnGroupChatStatusListener(mOnGroupChatStatusListener);
         findViewByID(R.id.ll_new_friend).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

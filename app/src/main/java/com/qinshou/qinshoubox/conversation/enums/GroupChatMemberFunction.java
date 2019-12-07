@@ -1,4 +1,4 @@
-package com.qinshou.qinshoubox.conversation.bean;
+package com.qinshou.qinshoubox.conversation.enums;
 
 /**
  * Author: QinHao

@@ -2,7 +2,7 @@ package com.qinshou.qinshoubox.im.listener;
 
 /**
  * Author: QinHao
- * Email:qinhao@jeejio.com
+ * Email:cqflqinhao@126.com
  * Date: 2019/11/21 10:41
  * Description:好友状态监听器
  */

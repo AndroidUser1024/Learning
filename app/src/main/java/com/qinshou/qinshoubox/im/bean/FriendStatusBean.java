@@ -2,7 +2,7 @@ package com.qinshou.qinshoubox.im.bean;
 
 /**
  * Author: QinHao
- * Email:qinhao@jeejio.com
+ * Email:cqflqinhao@126.com
  * Date: 2019/11/21 12:52
  * Description:好友状态事件监听的映射类
  */

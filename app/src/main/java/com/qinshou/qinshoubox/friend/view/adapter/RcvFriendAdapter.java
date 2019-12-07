@@ -8,6 +8,7 @@ import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemClickListener;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.R;
+import com.qinshou.qinshoubox.conversation.view.activity.ChatActivity;
 import com.qinshou.qinshoubox.friend.view.fragment.UserDetailFragment;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 
@@ -24,7 +25,8 @@ public class RcvFriendAdapter extends RcvBaseAdapter<FriendBean> {
         setOnItemClickListener(new IOnItemClickListener<FriendBean>() {
             @Override
             public void onItemClick(BaseViewHolder holder, FriendBean itemData, int position) {
-                UserDetailFragment.start(getContext(), itemData.getId());
+                ChatActivity.start(getContext(), itemData.getId());
+//                UserDetailFragment.start(getContext(), itemData.getId());
             }
         });
     }

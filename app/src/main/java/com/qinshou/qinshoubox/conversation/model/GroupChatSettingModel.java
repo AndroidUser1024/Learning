@@ -1,7 +1,10 @@
 package com.qinshou.qinshoubox.conversation.model;
 
+import com.qinshou.okhttphelper.callback.Callback;
+import com.qinshou.qinshoubox.conversation.bean.GroupChatDetailBean;
 import com.qinshou.qinshoubox.conversation.contract.IGroupChatSettingContract;
 import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatSettingFragment;
+import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 
@@ -14,7 +17,7 @@ import com.qinshou.qinshoubox.im.bean.GroupChatBean;
  */
 public class GroupChatSettingModel implements IGroupChatSettingContract.IModel {
     @Override
-    public void getGroupChat(int groupChatId, QSCallback<GroupChatBean> qsCallback) {
-//        IMClient.SINGLETON.getGroupChatManager().getGroupChat(groupChatId, qsCallback);
+    public void getGroupChatDetail(String groupChatId, Callback<GroupChatDetailBean> callback) {
+        IMClient.SINGLETON.getGroupChatManager().getDetail(groupChatId, callback);
     }
 }

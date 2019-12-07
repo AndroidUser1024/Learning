@@ -3,6 +3,8 @@ package com.qinshou.qinshoubox.conversation.contract;
 
 import com.qinshou.commonmodule.base.IBaseModel;
 import com.qinshou.commonmodule.base.IBaseView;
+import com.qinshou.okhttphelper.callback.Callback;
+import com.qinshou.qinshoubox.conversation.bean.GroupChatDetailBean;
 import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatSettingFragment;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
@@ -24,7 +26,7 @@ public interface IGroupChatSettingContract {
          *
          * @param groupChatId 群 id
          */
-        void getGroupChat(int groupChatId, QSCallback<GroupChatBean> qsCallback);
+        void getGroupChatDetail(String groupChatId, Callback<GroupChatDetailBean> callback);
     }
 
     interface IView extends IBaseView {
@@ -34,9 +36,9 @@ public interface IGroupChatSettingContract {
          * Date:2019/12/2 14:43
          * Description:获取群信息成功
          *
-         * @param groupChatBean 群信息实体类
+         * @param groupChatDetailBean 群详情实体类
          */
-        void getGroupChatSuccess(GroupChatBean groupChatBean);
+        void getGroupChatDetailSuccess(GroupChatDetailBean groupChatDetailBean);
 
         /**
          * Author: QinHao
@@ -46,7 +48,7 @@ public interface IGroupChatSettingContract {
          *
          * @param e 错误信息
          */
-        void getGroupChatFailure(Exception e);
+        void getGroupChatDetailFailure(Exception e);
     }
 
     interface IPresenter {
@@ -58,6 +60,6 @@ public interface IGroupChatSettingContract {
          *
          * @param groupChatId 群 id
          */
-        void getGroupChat(int groupChatId);
+        void getGroupChatDetail(String groupChatId);
     }
 }

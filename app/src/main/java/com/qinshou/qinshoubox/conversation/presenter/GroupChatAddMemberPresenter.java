@@ -1,6 +1,7 @@
 package com.qinshou.qinshoubox.conversation.presenter;
 
 import com.qinshou.commonmodule.base.AbsPresenter;
+import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.contract.IGroupChatAddMemberContract;
 import com.qinshou.qinshoubox.conversation.model.GroupChatAddMemberModel;
 import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatAddMemberFragment;
@@ -23,8 +24,8 @@ public class GroupChatAddMemberPresenter extends AbsPresenter<IGroupChatAddMembe
     }
 
     @Override
-    public void getMemberList(int groupChatId) {
-        getModel().getMemberList(groupChatId, new QSCallback<List<UserBean>>() {
+    public void getMemberList(String groupChatId) {
+        getModel().getMemberList(groupChatId, new Callback<List<UserBean>>() {
             @Override
             public void onSuccess(List<UserBean> data) {
                 if (!isViewAttached()) {
@@ -45,7 +46,7 @@ public class GroupChatAddMemberPresenter extends AbsPresenter<IGroupChatAddMembe
 
     @Override
     public void getFriendList() {
-        getModel().getFriendList(new QSCallback<List<FriendBean>>() {
+        getModel().getFriendList(new Callback<List<FriendBean>>() {
             @Override
             public void onSuccess(List<FriendBean> data) {
                 if (!isViewAttached()) {
@@ -65,8 +66,8 @@ public class GroupChatAddMemberPresenter extends AbsPresenter<IGroupChatAddMembe
     }
 
     @Override
-    public void addMember(int groupChatId, List<Integer> addMemberIdList) {
-        getModel().addMember(groupChatId, addMemberIdList, new QSCallback<Object>() {
+    public void addMember(String groupChatId, List<String> addMemberIdList) {
+        getModel().addMember(groupChatId, addMemberIdList, new Callback<Object>() {
             @Override
             public void onSuccess(Object data) {
                 if (!isViewAttached()) {

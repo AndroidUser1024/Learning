@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -38,7 +39,7 @@ public class GroupChatDeleteMemberFragment extends QSFragment<GroupChatDeleteMem
      * 群聊成员列表适配器
      */
     private RcvGroupChatMemberForCreateAdapter mRcvGroupChatMemberForCreateAdapter;
-    private int mGroupChatId;
+    private String mGroupChatId;
 
     @Override
     public int getLayoutId() {
@@ -61,11 +62,11 @@ public class GroupChatDeleteMemberFragment extends QSFragment<GroupChatDeleteMem
         mTvFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<Integer> deleteMemberIdList = new ArrayList<>();
+                List<String> deleteMemberIdList = new ArrayList<>();
                 for (GroupChatMemberForCreateBean groupChatMemberForCreateBean : mRcvGroupChatMemberForCreateAdapter.getDataList()) {
-//                    if (groupChatMemberForCreateBean.isChoose()) {
-//                        deleteMemberIdList.add(groupChatMemberForCreateBean.getId());
-//                    }
+                    if (groupChatMemberForCreateBean.isChoose()) {
+                        deleteMemberIdList.add(groupChatMemberForCreateBean.getId());
+                    }
                 }
                 getPresenter().deleteMember(mGroupChatId, deleteMemberIdList);
             }
@@ -94,8 +95,8 @@ public class GroupChatDeleteMemberFragment extends QSFragment<GroupChatDeleteMem
         if (bundle == null) {
             return;
         }
-        mGroupChatId = bundle.getInt(GROUP_CHAT_ID, 0);
-        if (mGroupChatId == 0) {
+        mGroupChatId = bundle.getString(GROUP_CHAT_ID);
+        if (TextUtils.isEmpty(mGroupChatId)) {
             return;
         }
         getPresenter().getMemberList(mGroupChatId);
@@ -141,9 +142,9 @@ public class GroupChatDeleteMemberFragment extends QSFragment<GroupChatDeleteMem
      * @param context     上下文
      * @param groupChatId 群 Id
      */
-    public static void start(Context context, int groupChatId) {
+    public static void start(Context context, String groupChatId) {
         Bundle bundle = new Bundle();
-        bundle.putInt(GROUP_CHAT_ID, groupChatId);
+        bundle.putString(GROUP_CHAT_ID, groupChatId);
         context.startActivity(ContainerActivity.getJumpIntent(context
                 , GroupChatDeleteMemberFragment.class
                 , bundle));

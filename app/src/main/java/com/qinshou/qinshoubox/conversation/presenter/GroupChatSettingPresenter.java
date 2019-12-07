@@ -1,10 +1,11 @@
 package com.qinshou.qinshoubox.conversation.presenter;
 
 import com.qinshou.commonmodule.base.AbsPresenter;
+import com.qinshou.okhttphelper.callback.Callback;
+import com.qinshou.qinshoubox.conversation.bean.GroupChatDetailBean;
 import com.qinshou.qinshoubox.conversation.contract.IGroupChatSettingContract;
 import com.qinshou.qinshoubox.conversation.model.GroupChatSettingModel;
 import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatSettingFragment;
-import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 
 
@@ -21,14 +22,14 @@ public class GroupChatSettingPresenter extends AbsPresenter<IGroupChatSettingCon
     }
 
     @Override
-    public void getGroupChat(int groupChatId) {
-        getModel().getGroupChat(groupChatId, new QSCallback<GroupChatBean>() {
+    public void getGroupChatDetail(String groupChatId) {
+        getModel().getGroupChatDetail(groupChatId, new Callback<GroupChatDetailBean>() {
             @Override
-            public void onSuccess(GroupChatBean data) {
+            public void onSuccess(GroupChatDetailBean data) {
                 if (!isViewAttached()) {
                     return;
                 }
-                getView().getGroupChatSuccess(data);
+                getView().getGroupChatDetailSuccess(data);
             }
 
             @Override
@@ -36,7 +37,7 @@ public class GroupChatSettingPresenter extends AbsPresenter<IGroupChatSettingCon
                 if (!isViewAttached()) {
                     return;
                 }
-                getView().getGroupChatFailure(e);
+                getView().getGroupChatDetailFailure(e);
             }
         });
     }

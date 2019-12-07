@@ -1,6 +1,7 @@
 package com.qinshou.qinshoubox.conversation.presenter;
 
 import com.qinshou.commonmodule.base.AbsPresenter;
+import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.contract.IGroupChatDeleteMemberContract;
 import com.qinshou.qinshoubox.conversation.model.GroupChatDeleteMemberModel;
 import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatDeleteMemberFragment;
@@ -22,8 +23,8 @@ public class GroupChatDeleteMemberPresenter extends AbsPresenter<IGroupChatDelet
     }
 
     @Override
-    public void getMemberList(int groupChatId) {
-        getModel().getMemberList(groupChatId, new QSCallback<List<UserBean>>() {
+    public void getMemberList(String groupChatId) {
+        getModel().getMemberList(groupChatId, new Callback<List<UserBean>>() {
             @Override
             public void onSuccess(List<UserBean> data) {
                 if (!isViewAttached()) {
@@ -43,8 +44,8 @@ public class GroupChatDeleteMemberPresenter extends AbsPresenter<IGroupChatDelet
     }
 
     @Override
-    public void deleteMember(int groupChatId, List<Integer> deleteMemberIdList) {
-        getModel().deleteMember(groupChatId, deleteMemberIdList, new QSCallback<Object>() {
+    public void deleteMember(String groupChatId, List<String> deleteMemberIdList) {
+        getModel().deleteMember(groupChatId, deleteMemberIdList, new Callback<Object>() {
             @Override
             public void onSuccess(Object data) {
                 if (!isViewAttached()) {

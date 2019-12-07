@@ -2,6 +2,7 @@ package com.qinshou.qinshoubox.conversation.contract;
 
 import com.qinshou.commonmodule.base.IBaseModel;
 import com.qinshou.commonmodule.base.IBaseView;
+import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatDeleteMemberFragment;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
@@ -24,7 +25,7 @@ public interface IGroupChatDeleteMemberContract {
          *
          * @param groupChatId 群 id
          */
-        void getMemberList(int groupChatId, QSCallback<List<UserBean>> qsCallback);
+        void getMemberList(String groupChatId, Callback<List<UserBean>> callback);
 
         /**
          * Author: QinHao
@@ -35,7 +36,7 @@ public interface IGroupChatDeleteMemberContract {
          * @param groupChatId        群 id
          * @param deleteMemberIdList 待删除的群成员的 id 列表
          */
-        void deleteMember(int groupChatId, List<Integer> deleteMemberIdList, QSCallback<Object> qsCallback);
+        void deleteMember(String groupChatId, List<String> deleteMemberIdList, Callback<Object> callback);
     }
 
     interface IView extends IBaseView {
@@ -81,7 +82,7 @@ public interface IGroupChatDeleteMemberContract {
          *
          * @param groupChatId 群 id
          */
-        void getMemberList(int groupChatId);
+        void getMemberList(String groupChatId);
 
         /**
          * Author: QinHao
@@ -92,6 +93,6 @@ public interface IGroupChatDeleteMemberContract {
          * @param groupChatId        群 id
          * @param deleteMemberIdList 待删除的群成员的 id 列表
          */
-        void deleteMember(int groupChatId, List<Integer> deleteMemberIdList);
+        void deleteMember(String groupChatId, List<String> deleteMemberIdList);
     }
 }

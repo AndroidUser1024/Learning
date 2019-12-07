@@ -68,8 +68,8 @@ public class GroupChatDaoImpl extends AbsDaoImpl<GroupChatBean> implements IGrou
                 " gc.id,gc.ownerId,gc.nickname,gc.headImg,gc.headImgSmall" +
                 ",gc.nicknameDefault,gc.nicknameInGroupChat" +
                 ",gc.top,gc.doNotDisturb,gc.showGroupChatMemberNickname" +
-                "FROM group_chat AS gc" +
-                "WHERE id='%s'";
+                " FROM group_chat AS gc" +
+                " WHERE id='%s'";
         sql = String.format(sql, id);
         Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
         try {

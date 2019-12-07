@@ -13,12 +13,19 @@ import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemClickListener;
 import com.qinshou.commonmodule.widget.TitleBar;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
-import com.qinshou.qinshoubox.conversation.bean.GroupChatMemberFunction;
+import com.qinshou.qinshoubox.conversation.bean.GroupChatDetailBean;
+import com.qinshou.qinshoubox.conversation.enums.GroupChatMemberFunction;
 import com.qinshou.qinshoubox.conversation.contract.IGroupChatSettingContract;
 import com.qinshou.qinshoubox.conversation.presenter.GroupChatSettingPresenter;
 import com.qinshou.qinshoubox.conversation.view.adapter.RcvGroupChatMemberAdapter;
+import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
+import com.qinshou.qinshoubox.friend.view.fragment.UserDetailFragment;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 import com.qinshou.qinshoubox.login.bean.UserBean;
+import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -35,7 +42,7 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
      * 群昵称
      */
     private TextView mTvNickname;
-    private GroupChatBean mGroupChatBean;
+    private GroupChatDetailBean mGroupChatDetailBean;
 
     @Override
     public int getLayoutId() {
@@ -56,13 +63,13 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
         mRcvGroupChatMemberAdapter.setOnItemClickListener(new IOnItemClickListener() {
             @Override
             public void onItemClick(BaseViewHolder holder, Object itemData, int position) {
-                if (itemData instanceof UserBean) {
-
+                if (itemData instanceof UserDetailBean) {
+                    UserDetailFragment.start(getContext(), ((UserDetailBean) itemData).getId());
                 } else if (itemData instanceof GroupChatMemberFunction) {
                     if (itemData == GroupChatMemberFunction.ADD_MEMBER) {
-//                        GroupChatAddMemberFragment.start(getContext(), mGroupChatBean.getId());
+                        GroupChatAddMemberFragment.start(getContext(), mGroupChatDetailBean.getId());
                     } else if (itemData == GroupChatMemberFunction.DELETE_MEMBER) {
-//                        GroupChatDeleteMemberFragment.start(getContext(), mGroupChatBean.getId());
+                        GroupChatDeleteMemberFragment.start(getContext(), mGroupChatDetailBean.getId());
                     }
                 }
             }
@@ -75,30 +82,30 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
         if (bundle == null) {
             return;
         }
-        int groupChatId = bundle.getInt(GROUP_CHAT_ID, 0);
-        if (groupChatId == 0) {
+        String groupChatId = bundle.getString(GROUP_CHAT_ID);
+        if (TextUtils.isEmpty(groupChatId)) {
             return;
         }
-        getPresenter().getGroupChat(groupChatId);
+        getPresenter().getGroupChatDetail(groupChatId);
     }
 
     @Override
-    public void getGroupChatSuccess(GroupChatBean groupChatBean) {
-        mGroupChatBean = groupChatBean;
-//        mTitleBar.setTitleText(getString(R.string.group_chat_setting_title, "" + groupChatBean.getMemberList().size()));
-//        List list = new ArrayList(groupChatBean.getMemberList());
-//        list.add(GroupChatMemberFunction.ADD_MEMBER);
-//        if (groupChatBean.getOwnerId() == UserStatusManager.SINGLETON.getUserBean().getId()) {
-//            list.add(GroupChatMemberFunction.DELETE_MEMBER);
-//        }
-//        mRcvGroupChatMemberAdapter.setDataList(list);
-        mTvNickname.setText(TextUtils.isEmpty(groupChatBean.getNickname())
+    public void getGroupChatDetailSuccess(GroupChatDetailBean groupChatDetailBean) {
+        mGroupChatDetailBean = groupChatDetailBean;
+        mTitleBar.setTitleText(getString(R.string.group_chat_setting_title, "" + groupChatDetailBean.getMemberList().size()));
+        List list = new ArrayList(groupChatDetailBean.getMemberList());
+        list.add(GroupChatMemberFunction.ADD_MEMBER);
+        if (TextUtils.equals(groupChatDetailBean.getOwnerId(), UserStatusManager.SINGLETON.getUserBean().getId())) {
+            list.add(GroupChatMemberFunction.DELETE_MEMBER);
+        }
+        mRcvGroupChatMemberAdapter.setDataList(list);
+        mTvNickname.setText(TextUtils.isEmpty(groupChatDetailBean.getNickname())
                 ? getString(R.string.group_chat_setting_tv_nickname_text)
-                : groupChatBean.getNickname());
+                : groupChatDetailBean.getNickname());
     }
 
     @Override
-    public void getGroupChatFailure(Exception e) {
+    public void getGroupChatDetailFailure(Exception e) {
 
     }
 

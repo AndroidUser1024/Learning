@@ -1,13 +1,11 @@
 package com.qinshou.qinshoubox.conversation.view.adapter;
 
 import android.content.Context;
-import android.view.View;
 
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.commonmodule.rcvbaseadapter.itemview.BaseItemView;
 import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.conversation.bean.GroupChatMemberFunction;
-import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatAddMemberFragment;
+import com.qinshou.qinshoubox.conversation.enums.GroupChatMemberFunction;
 
 /**
  * Author: QinHao

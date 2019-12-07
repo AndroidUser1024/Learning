@@ -8,6 +8,7 @@ import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemClickListener;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.R;
+import com.qinshou.qinshoubox.conversation.view.activity.GroupChatActivity;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 
 /**
@@ -23,7 +24,7 @@ public class RcvGroupChatAdapter extends RcvBaseAdapter<GroupChatBean> {
         setOnItemClickListener(new IOnItemClickListener<GroupChatBean>() {
             @Override
             public void onItemClick(BaseViewHolder holder, GroupChatBean itemData, int position) {
-//                GroupChatActivity.start(getContext(), itemData.getId());
+                GroupChatActivity.start(getContext(), itemData.getId());
             }
         });
     }

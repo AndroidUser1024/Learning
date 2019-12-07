@@ -1,6 +1,5 @@
 package com.qinshou.qinshoubox.friend.bean;
 
-import com.qinshou.qinshoubox.login.bean.UserBean;
 
 /**
  * Author: QinHao

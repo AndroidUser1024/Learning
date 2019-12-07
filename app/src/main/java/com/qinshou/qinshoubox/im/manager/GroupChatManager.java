@@ -3,6 +3,7 @@ package com.qinshou.qinshoubox.im.manager;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.qinshou.qinshoubox.conversation.bean.GroupChatDetailBean;
 import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.okhttphelper.callback.Callback;
@@ -70,26 +71,10 @@ public class GroupChatManager {
                 });
     }
 
-    public void getDetail(String groupChatId, final Callback<GroupChatBean> callback) {
+    public void getDetail(String groupChatId, final Callback<GroupChatDetailBean> callback) {
         OkHttpHelperForQSBoxGroupChatApi.SINGLETON.getDetail(groupChatId, mUserId)
-                .transform(new QSApiTransformer<GroupChatBean>())
-                .enqueue(new Callback<GroupChatBean>() {
-                    @Override
-                    public void onSuccess(final GroupChatBean data) {
-                        mExecutorService.submit(new Runnable() {
-                            @Override
-                            public void run() {
-                                mGroupChatDao.insert(data);
-                                mHandler.post(new SuccessRunnable<GroupChatBean>(callback, data));
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onFailure(Exception e) {
-                        callback.onFailure(e);
-                    }
-                });
+                .transform(new QSApiTransformer<GroupChatDetailBean>())
+                .enqueue(callback);
     }
 
     public void getMemberList(String groupChatId, final Callback<List<UserDetailBean>> callback) {

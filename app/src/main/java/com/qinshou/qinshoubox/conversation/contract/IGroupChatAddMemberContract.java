@@ -2,6 +2,7 @@ package com.qinshou.qinshoubox.conversation.contract;
 
 import com.qinshou.commonmodule.base.IBaseModel;
 import com.qinshou.commonmodule.base.IBaseView;
+import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatAddMemberFragment;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.login.bean.UserBean;
@@ -25,7 +26,7 @@ public interface IGroupChatAddMemberContract {
          *
          * @param groupChatId 群 id
          */
-        void getMemberList(int groupChatId, QSCallback<List<UserBean>> qsCallback);
+        void getMemberList(String groupChatId, Callback<List<UserBean>> callback);
 
         /**
          * Author: QinHao
@@ -33,7 +34,7 @@ public interface IGroupChatAddMemberContract {
          * Date:2019/12/2 18:12
          * Description:获取好友列表
          */
-        void getFriendList(QSCallback<List<FriendBean>> qsCallback);
+        void getFriendList(Callback<List<FriendBean>> callback);
 
         /**
          * Author: QinHao
@@ -44,7 +45,7 @@ public interface IGroupChatAddMemberContract {
          * @param groupChatId     群 id
          * @param addMemberIdList 待添加的群成员的 id 列表
          */
-        void addMember(int groupChatId, List<Integer> addMemberIdList, QSCallback<Object> qsCallback);
+        void addMember(String groupChatId, List<String> addMemberIdList, Callback<Object> callback);
     }
 
     interface IView extends IBaseView {
@@ -106,7 +107,7 @@ public interface IGroupChatAddMemberContract {
          *
          * @param groupChatId 群 id
          */
-        void getMemberList(int groupChatId);
+        void getMemberList(String groupChatId);
 
         /**
          * Author: QinHao
@@ -125,6 +126,6 @@ public interface IGroupChatAddMemberContract {
          * @param groupChatId     群 id
          * @param addMemberIdList 待添加的群成员的 id 列表
          */
-        void addMember(int groupChatId, List<Integer> addMemberIdList);
+        void addMember(String groupChatId, List<String> addMemberIdList);
     }
 }
