@@ -17,8 +17,13 @@ import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.conversation.contract.IGroupChatDeleteMemberContract;
 import com.qinshou.qinshoubox.conversation.presenter.GroupChatDeleteMemberPresenter;
 import com.qinshou.qinshoubox.friend.bean.GroupChatMemberForCreateBean;
+import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.friend.view.adapter.RcvGroupChatMemberForCreateAdapter;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.login.bean.UserBean;
+import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,18 +108,18 @@ public class GroupChatDeleteMemberFragment extends QSFragment<GroupChatDeleteMem
     }
 
     @Override
-    public void getMemberListSuccess(List<UserBean> userBeanList) {
+    public void getMemberListSuccess(List<UserDetailBean> userDetailBeanList) {
         List<GroupChatMemberForCreateBean> groupChatMemberForCreateBeanList = new ArrayList<>();
-        for (UserBean userBean : userBeanList) {
-//            if (userBean.getId() == UserStatusManager.SINGLETON.getUserBean().getId()) {
-//                continue;
-//            }
-//            GroupChatMemberForCreateBean groupChatMemberForCreateBean = new GroupChatMemberForCreateBean();
-//            groupChatMemberForCreateBean.setId(userBean.getId());
-//            groupChatMemberForCreateBean.setHeadImgSmall(userBean.getHeadImgSmall());
-//            groupChatMemberForCreateBean.setRemark(userBean.getRemark());
-//            groupChatMemberForCreateBean.setNickname(userBean.getNickname());
-//            groupChatMemberForCreateBeanList.add(groupChatMemberForCreateBean);
+        for (UserDetailBean userDetailBean : userDetailBeanList) {
+            if (TextUtils.equals(userDetailBean.getId(), UserStatusManager.SINGLETON.getUserBean().getId())) {
+                continue;
+            }
+            GroupChatMemberForCreateBean groupChatMemberForCreateBean = new GroupChatMemberForCreateBean();
+            groupChatMemberForCreateBean.setId(userDetailBean.getId());
+            groupChatMemberForCreateBean.setHeadImgSmall(userDetailBean.getHeadImgSmall());
+            groupChatMemberForCreateBean.setRemark(userDetailBean.getRemark());
+            groupChatMemberForCreateBean.setNickname(userDetailBean.getNickname());
+            groupChatMemberForCreateBeanList.add(groupChatMemberForCreateBean);
         }
         mRcvGroupChatMemberForCreateAdapter.setDataList(groupChatMemberForCreateBeanList);
     }
@@ -126,6 +131,7 @@ public class GroupChatDeleteMemberFragment extends QSFragment<GroupChatDeleteMem
 
     @Override
     public void deleteMemberSuccess() {
+        EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.REFRESH_GROUP_CHAT_MEMBER_LIST, null));
         finish();
     }
 

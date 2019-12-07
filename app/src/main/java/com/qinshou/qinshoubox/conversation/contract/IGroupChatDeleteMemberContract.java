@@ -4,6 +4,7 @@ import com.qinshou.commonmodule.base.IBaseModel;
 import com.qinshou.commonmodule.base.IBaseView;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatDeleteMemberFragment;
+import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
 
@@ -25,7 +26,7 @@ public interface IGroupChatDeleteMemberContract {
          *
          * @param groupChatId 群 id
          */
-        void getMemberList(String groupChatId, Callback<List<UserBean>> callback);
+        void getMemberList(String groupChatId, Callback<List<UserDetailBean>> callback);
 
         /**
          * Author: QinHao
@@ -46,7 +47,7 @@ public interface IGroupChatDeleteMemberContract {
          * Date:2019/12/2 18:13
          * Description:获取群成员列表成功
          */
-        void getMemberListSuccess(List<UserBean> userBeanList);
+        void getMemberListSuccess(List<UserDetailBean> userDetailBeanList);
 
         /**
          * Author: QinHao

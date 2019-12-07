@@ -5,6 +5,7 @@ import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.contract.IGroupChatDeleteMemberContract;
 import com.qinshou.qinshoubox.conversation.model.GroupChatDeleteMemberModel;
 import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatDeleteMemberFragment;
+import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
 
@@ -24,9 +25,9 @@ public class GroupChatDeleteMemberPresenter extends AbsPresenter<IGroupChatDelet
 
     @Override
     public void getMemberList(String groupChatId) {
-        getModel().getMemberList(groupChatId, new Callback<List<UserBean>>() {
+        getModel().getMemberList(groupChatId, new Callback<List<UserDetailBean>>() {
             @Override
-            public void onSuccess(List<UserBean> data) {
+            public void onSuccess(List<UserDetailBean> data) {
                 if (!isViewAttached()) {
                     return;
                 }

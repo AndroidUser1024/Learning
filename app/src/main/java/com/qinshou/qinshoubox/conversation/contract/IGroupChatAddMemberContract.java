@@ -4,6 +4,7 @@ import com.qinshou.commonmodule.base.IBaseModel;
 import com.qinshou.commonmodule.base.IBaseView;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatAddMemberFragment;
+import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
@@ -22,19 +23,19 @@ public interface IGroupChatAddMemberContract {
          * Author: QinHao
          * Email:cqflqinhao@126.com
          * Date:2019/12/2 18:12
-         * Description:获取群成员列表
-         *
-         * @param groupChatId 群 id
+         * Description:获取好友列表
          */
-        void getMemberList(String groupChatId, Callback<List<UserBean>> callback);
+        void getFriendList(Callback<List<FriendBean>> callback);
 
         /**
          * Author: QinHao
          * Email:cqflqinhao@126.com
          * Date:2019/12/2 18:12
-         * Description:获取好友列表
+         * Description:获取群成员列表
+         *
+         * @param groupChatId 群 id
          */
-        void getFriendList(Callback<List<FriendBean>> callback);
+        void getMemberList(String groupChatId, Callback<List<UserDetailBean>> callback);
 
         /**
          * Author: QinHao
@@ -53,22 +54,6 @@ public interface IGroupChatAddMemberContract {
          * Author: QinHao
          * Email:cqflqinhao@126.com
          * Date:2019/12/2 18:13
-         * Description:获取群成员列表成功
-         */
-        void getMemberListSuccess(List<UserBean> userBeanList);
-
-        /**
-         * Author: QinHao
-         * Email:cqflqinhao@126.com
-         * Date:2019/12/2 18:13
-         * Description:获取群成员列表失败
-         */
-        void getMemberListFailure(Exception e);
-
-        /**
-         * Author: QinHao
-         * Email:cqflqinhao@126.com
-         * Date:2019/12/2 18:13
          * Description:获取好友列表成功
          */
         void getFriendListSuccess(List<FriendBean> friendBeanList);
@@ -80,6 +65,22 @@ public interface IGroupChatAddMemberContract {
          * Description:获取好友列表失败
          */
         void getFriendListFailure(Exception e);
+
+        /**
+         * Author: QinHao
+         * Email:cqflqinhao@126.com
+         * Date:2019/12/2 18:13
+         * Description:获取群成员列表成功
+         */
+        void getMemberListSuccess(List<UserDetailBean> userDetailBeanList);
+
+        /**
+         * Author: QinHao
+         * Email:cqflqinhao@126.com
+         * Date:2019/12/2 18:13
+         * Description:获取群成员列表失败
+         */
+        void getMemberListFailure(Exception e);
 
         /**
          * Author: QinHao
@@ -103,19 +104,19 @@ public interface IGroupChatAddMemberContract {
          * Author: QinHao
          * Email:cqflqinhao@126.com
          * Date:2019/12/2 18:14
-         * Description:获取群成员列表
-         *
-         * @param groupChatId 群 id
+         * Description:获取好友列表
          */
-        void getMemberList(String groupChatId);
+        void getFriendList();
 
         /**
          * Author: QinHao
          * Email:cqflqinhao@126.com
          * Date:2019/12/2 18:14
-         * Description:获取好友列表
+         * Description:获取群成员列表
+         *
+         * @param groupChatId 群 id
          */
-        void getFriendList();
+        void getMemberList(String groupChatId);
 
         /**
          * Author: QinHao

@@ -5,9 +5,9 @@ import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.contract.IGroupChatAddMemberContract;
 import com.qinshou.qinshoubox.conversation.model.GroupChatAddMemberModel;
 import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatAddMemberFragment;
+import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.login.bean.UserBean;
-import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 import java.util.List;
 
@@ -21,27 +21,6 @@ public class GroupChatAddMemberPresenter extends AbsPresenter<IGroupChatAddMembe
     @Override
     public IGroupChatAddMemberContract.IModel initModel() {
         return new GroupChatAddMemberModel();
-    }
-
-    @Override
-    public void getMemberList(String groupChatId) {
-        getModel().getMemberList(groupChatId, new Callback<List<UserBean>>() {
-            @Override
-            public void onSuccess(List<UserBean> data) {
-                if (!isViewAttached()) {
-                    return;
-                }
-                getView().getMemberListSuccess(data);
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                if (!isViewAttached()) {
-                    return;
-                }
-                getView().getMemberListFailure(e);
-            }
-        });
     }
 
     @Override
@@ -61,6 +40,27 @@ public class GroupChatAddMemberPresenter extends AbsPresenter<IGroupChatAddMembe
                     return;
                 }
                 getView().getFriendListFailure(e);
+            }
+        });
+    }
+
+    @Override
+    public void getMemberList(String groupChatId) {
+        getModel().getMemberList(groupChatId, new Callback<List<UserDetailBean>>() {
+            @Override
+            public void onSuccess(List<UserDetailBean> data) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().getMemberListSuccess(data);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().getMemberListFailure(e);
             }
         });
     }

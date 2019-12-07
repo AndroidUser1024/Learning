@@ -20,9 +20,14 @@ import com.qinshou.qinshoubox.conversation.presenter.GroupChatSettingPresenter;
 import com.qinshou.qinshoubox.conversation.view.adapter.RcvGroupChatMemberAdapter;
 import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.friend.view.fragment.UserDetailFragment;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +50,12 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
     private GroupChatDetailBean mGroupChatDetailBean;
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
     public int getLayoutId() {
         return R.layout.fragment_group_chat_setting;
     }
@@ -60,6 +71,7 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
 
     @Override
     public void setListener() {
+        EventBus.getDefault().register(this);
         mRcvGroupChatMemberAdapter.setOnItemClickListener(new IOnItemClickListener() {
             @Override
             public void onItemClick(BaseViewHolder holder, Object itemData, int position) {
@@ -107,6 +119,13 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
     @Override
     public void getGroupChatDetailFailure(Exception e) {
 
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void receiveEvent(EventBean<Object> eventBean) {
+        if (eventBean.getType() == EventBean.Type.REFRESH_GROUP_CHAT_MEMBER_LIST) {
+            getPresenter().getGroupChatDetail(mGroupChatDetailBean.getId());
+        }
     }
 
     /**

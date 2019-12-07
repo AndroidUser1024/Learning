@@ -3,6 +3,8 @@ package com.qinshou.qinshoubox.conversation.model;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.contract.IGroupChatAddMemberContract;
 import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatAddMemberFragment;
+import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
+import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
@@ -17,17 +19,17 @@ import java.util.List;
  */
 public class GroupChatAddMemberModel implements IGroupChatAddMemberContract.IModel {
     @Override
-    public void getMemberList(String groupChatId, Callback<List<UserBean>> callback) {
-//        IMClient.SINGLETON.getGroupChatManager().getMemberList(groupChatId, qsCallback);
+    public void getFriendList(Callback<List<FriendBean>> callback) {
+        IMClient.SINGLETON.getFriendManager().getList(callback);
     }
 
     @Override
-    public void getFriendList(Callback<List<FriendBean>> callback) {
-//        IMClient.SINGLETON.getFriendManager().getFriendList(qsCallback);
+    public void getMemberList(String groupChatId, Callback<List<UserDetailBean>> callback) {
+        IMClient.SINGLETON.getGroupChatManager().getMemberList(groupChatId, callback);
     }
 
     @Override
     public void addMember(String groupChatId, List<String> addMemberIdList, Callback<Object> callback) {
-//        IMClient.SINGLETON.getGroupChatManager().addMember(groupChatId, addMemberIdList, qsCallback);
+        IMClient.SINGLETON.getGroupChatManager().addMember(groupChatId, addMemberIdList, callback);
     }
 }
