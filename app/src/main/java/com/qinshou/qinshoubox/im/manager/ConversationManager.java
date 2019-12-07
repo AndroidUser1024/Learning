@@ -53,4 +53,8 @@ public class ConversationManager {
     public void resetUnreadCount(int id) {
         mConversationDao.resetUnreadCount(id);
     }
+
+    public void deleteById(int id) {
+        mConversationDao.deleteById(id);
+    }
 }

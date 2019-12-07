@@ -345,4 +345,12 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
         }
         return conversationBeanList;
     }
+
+    @Override
+    public int deleteById(int id) {
+        String sql = "DELETE FROM conversation WHERE id='%s'";
+        sql = String.format(sql, id);
+        getSQLiteDatabase().execSQL(sql);
+        return 1;
+    }
 }

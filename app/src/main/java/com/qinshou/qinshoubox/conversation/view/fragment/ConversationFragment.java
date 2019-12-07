@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemClickListener;
+import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemLongClickListener;
 import com.qinshou.commonmodule.rcvdecoration.DividerDecoration;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.util.SystemUtil;
@@ -63,6 +64,7 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
                 toUserId = messageBean.getToUserId();
             }
             ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().selectByTypeAndToUserId(messageBean.getType(), toUserId);
+            ShowLogUtil.logi("conversationBean--->" + conversationBean);
             // 更新会话列表
             updateConversationList(conversationBean);
             // 更新未读数
@@ -140,6 +142,14 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
                 itemData.setUnreadCount(0);
                 mRcvConversationAdapter.notifyItemChanged(position);
                 updateUnreadCount();
+            }
+        });
+        mRcvConversationAdapter.setOnItemLongClickListener(new IOnItemLongClickListener<ConversationBean>() {
+            @Override
+            public void onItemLongClick(BaseViewHolder holder, ConversationBean itemData, int position) {
+                IMClient.SINGLETON.getConversationManager().deleteById(itemData.getId());
+                mRcvConversationAdapter.getDataList().remove(itemData);
+                mRcvConversationAdapter.notifyItemRemoved(position);
             }
         });
     }

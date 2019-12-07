@@ -11,6 +11,7 @@ import com.qinshou.qinshoubox.im.db.DatabaseHelper;
 import com.qinshou.qinshoubox.im.db.dao.IConversationDao;
 import com.qinshou.qinshoubox.im.db.dao.IConversationMessageRelDao;
 import com.qinshou.qinshoubox.im.db.dao.IMessageDao;
+import com.qinshou.qinshoubox.im.enums.MessageType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,10 +59,13 @@ public class MessageManager {
         messageBean = mMessageDao.insert(messageBean);
         // 插入或更新会话
         ConversationBean conversationBean = new ConversationBean();
-        if (send) {
+        if (send||messageBean.getType()== MessageType.GROUP_CHAT.getValue()) {
+            // 发送的消息, conversation 的目标 id 为接收方 id
+            // 群聊的发送方永远是自己,接收方永远是群 id,所以群聊类型的消息,conversation 的目标 id 为永远为群 id
             conversationBean.setToUserId(messageBean.getToUserId());
             conversationBean.setLastMsgTimestamp(messageBean.getSendTimestamp());
         } else {
+            // 接收的消息, conversation 的目标 id 为发送方 id
             conversationBean.setToUserId(messageBean.getFromUserId());
             conversationBean.setLastMsgTimestamp(messageBean.getReceiveTimestamp());
         }

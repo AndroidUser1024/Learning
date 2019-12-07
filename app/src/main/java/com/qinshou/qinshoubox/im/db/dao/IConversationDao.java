@@ -80,4 +80,8 @@ public interface IConversationDao extends IBaseDao {
     List<ConversationBean> selectListOrderByLastMsgTimeDesc();
 
     List<ConversationBean> selectListOrderByTopDescAndLastMsgTimeDesc();
+
+    // 删除语句
+    // DELETE FROM conversation WHERE id=#{id};
+    int deleteById(int id);
 }
