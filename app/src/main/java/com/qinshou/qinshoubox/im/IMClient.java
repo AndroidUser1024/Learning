@@ -49,11 +49,15 @@ public enum IMClient {
      */
     private final long HEART_BEAT_INTERVAL = 60 * 1000;
     /**
+     * 重连间隔
+     */
+    private final int RECONNECT_INTERVAL = 15 * 1000;
+    /**
      * 重连次数
      */
     private final int MAX_RECONNECT_COUNT = 5;
-    private static final String URL = "http://172.16.60.231:10086/websocket";
-    //    private static final String URL = "http://192.168.1.109:10086/websocket";
+    //    private static final String URL = "http://172.16.60.231:10086/websocket";
+    private static final String URL = "http://192.168.1.109:10086/websocket";
     private Context mContext;
     private WebSocket mWebSocket;
     private Handler mHandler = new Handler(Looper.getMainLooper());
@@ -347,7 +351,7 @@ public enum IMClient {
                 if (mWebSocket != null && mReconnectCount < MAX_RECONNECT_COUNT) {
                     // 异常断开,开始重连
                     mReconnectCount++;
-                    mHandler.post(mReconnectRunnable);
+                    mHandler.postDelayed(mReconnectRunnable, RECONNECT_INTERVAL);
                 } else {
                     for (IOnConnectListener onConnectListener : mOnConnectListenerList) {
                         onConnectListener.onConnectFailure(new Exception(t));

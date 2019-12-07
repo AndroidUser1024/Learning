@@ -77,8 +77,8 @@ public class IMActivity extends QSActivity<IMPresenter> implements IIMContract.I
     @Override
     public void initData() {
         String[] mainTvTabTextArray = getResources().getStringArray(R.array.im_tv_tab_text);
-        FragmentUtil.addFragment(getSupportFragmentManager(), R.id.fl_fragment_container, mConversationFragment = new ConversationFragment());
         FragmentUtil.addFragment(getSupportFragmentManager(), R.id.fl_fragment_container, mFriendFragment = new FriendFragment());
+        FragmentUtil.addFragment(getSupportFragmentManager(), R.id.fl_fragment_container, mConversationFragment = new ConversationFragment());
         for (int i = 0; i < mainTvTabTextArray.length; i++) {
             TabLayout.Tab tab = mTlIM.newTab();
             View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_tab_main, null);

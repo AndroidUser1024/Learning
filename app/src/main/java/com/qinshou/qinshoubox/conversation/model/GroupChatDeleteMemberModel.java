@@ -1,5 +1,6 @@
 package com.qinshou.qinshoubox.conversation.model;
 
+import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.contract.IGroupChatDeleteMemberContract;
 import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatDeleteMemberFragment;
 import com.qinshou.qinshoubox.login.bean.UserBean;
@@ -15,12 +16,12 @@ import java.util.List;
  */
 public class GroupChatDeleteMemberModel implements IGroupChatDeleteMemberContract.IModel {
     @Override
-    public void getMemberList(int groupChatId, QSCallback<List<UserBean>> qsCallback) {
+    public void getMemberList(String groupChatId, Callback<List<UserBean>> callback) {
 //        IMClient.SINGLETON.getGroupChatManager().getMemberList(groupChatId, qsCallback);
     }
 
     @Override
-    public void deleteMember(int groupChatId, List<Integer> deleteMemberIdList, QSCallback<Object> qsCallback) {
+    public void deleteMember(String groupChatId, List<String> deleteMemberIdList, Callback<Object> callback) {
 //        IMClient.SINGLETON.getGroupChatManager().deleteMember(groupChatId, deleteMemberIdList, qsCallback);
     }
 }
