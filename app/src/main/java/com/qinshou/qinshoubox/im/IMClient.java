@@ -157,6 +157,8 @@ public enum IMClient {
             @Override
             public void run() {
                 messageBean.setReceiveTimestamp(System.currentTimeMillis());
+                messageBean.setStatus(MessageStatus.RECEIVED.getValue());
+
                 if (messageBean.getType() == MessageType.CHAT.getValue()
                         || messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
 //                    boolean exist = mMessageManager.getByFromUserIdAndToUserIdAndTypeAndSendTimestamp(messageBean.getFromUserId()
@@ -167,7 +169,6 @@ public enum IMClient {
 //                    if (exist) {
 //                        return;
 //                    }
-                    messageBean.setStatus(MessageStatus.RECEIVED.getValue());
                     mMessageManager.insert(false, messageBean);
                     for (IOnMessageListener onMessageListener : mOnMessageListenerList) {
                         onMessageListener.onMessage(messageBean);
