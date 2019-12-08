@@ -29,6 +29,7 @@ import com.qinshou.commonmodule.util.permissionutil.PermissionUtil;
 import com.qinshou.commonmodule.widget.RefreshLayout;
 import com.qinshou.commonmodule.widget.TitleBar;
 import com.qinshou.qinshoubox.conversation.view.fragment.ChatSettingFragment;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
@@ -43,6 +44,8 @@ import com.qinshou.qinshoubox.listener.ClearErrorInfoTextWatcher;
 import com.qinshou.qinshoubox.conversation.contract.IChatContract;
 import com.qinshou.qinshoubox.conversation.presenter.ChatPresenter;
 import com.qinshou.qinshoubox.conversation.view.adapter.RcvMessageAdapter;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.HashMap;
@@ -526,6 +529,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
         // 消息列表滚动到底部
         mRcvMessage.scrollToPosition(mRcvMessageAdapter.getItemCount() - 1);
         mEtContent.setText("");
+        EventBus.getDefault().post(new EventBean<MessageBean>(EventBean.Type.REFRESH_CONVERSATION_LIST, messageBean));
     }
 
     /**

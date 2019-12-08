@@ -172,8 +172,18 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void receiveEvent(EventBean<ConversationBean> eventBean) {
-        getPresenter().getConversationList();
+    public void receiveEvent(EventBean<Object> eventBean) {
+        if (eventBean.getType() != EventBean.Type.REFRESH_CONVERSATION_LIST) {
+            return;
+        }
+        if (eventBean.getData() == null) {
+            getPresenter().getConversationList();
+        } else if (eventBean.getData() instanceof MessageBean) {
+            ShowLogUtil.logi("eventBean--->" + eventBean);
+            ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().selectByTypeAndToUserId(((MessageBean) eventBean.getData()).getType(), ((MessageBean) eventBean.getData()).getToUserId());
+            ShowLogUtil.logi("conversationBean--->" + conversationBean);
+            updateConversationList(conversationBean);
+        }
     }
 
     /**

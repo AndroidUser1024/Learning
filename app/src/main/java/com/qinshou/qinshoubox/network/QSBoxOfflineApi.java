@@ -22,9 +22,9 @@ public interface QSBoxOfflineApi {
 
     @Json
     @Post("/getOfflineMessageList")
-    Call<QinshouResultBean<List<MessageBean>>> getOfflineMessageList(@Field(name = "userId") int userId);
+    Call<QinshouResultBean<List<MessageBean>>> getOfflineMessageList(@Field(name = "userId") String userId);
 
     @Json
     @Post("/deleteOfflineMessageList")
-    Call<QinshouResultBean<Object>> deleteOfflineMessageList(@Field(name = "userId") int userId);
+    Call<QinshouResultBean<Object>> deleteOfflineMessageList(@Field(name = "userId") String userId);
 }

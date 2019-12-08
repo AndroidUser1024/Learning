@@ -6,6 +6,7 @@ import android.os.Looper;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.im.bean.FriendStatusBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatStatusBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
@@ -22,6 +23,8 @@ import com.qinshou.qinshoubox.im.manager.ConversationManager;
 import com.qinshou.qinshoubox.im.manager.FriendManager;
 import com.qinshou.qinshoubox.im.manager.GroupChatManager;
 import com.qinshou.qinshoubox.im.manager.MessageManager;
+import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxOfflineApi;
+import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -118,24 +121,24 @@ public enum IMClient {
         // 创建会话管理者
         mConversationManager = new ConversationManager(databaseHelper, userId);
         // 拉取离线消息
-//        OkHttpHelperForQSBoxOfflineApi.SINGLETON.getOfflineMessageList(userId)
-//                .transform(new QSApiTransformer<List<MessageBean>>())
-//                .enqueue(new Callback<List<MessageBean>>() {
-//                    @Override
-//                    public void onSuccess(List<MessageBean> data) {
-//                        for (MessageBean messageBean : data) {
-//                            handleMessage(messageBean);
-//                        }
-//                        // 通知后台删除离线消息
-//                        OkHttpHelperForQSBoxOfflineApi.SINGLETON.deleteOfflineMessageList(mUserId)
-//                                .enqueue(null);
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Exception e) {
-//
-//                    }
-//                });
+        OkHttpHelperForQSBoxOfflineApi.SINGLETON.getOfflineMessageList(userId)
+                .transform(new QSApiTransformer<List<MessageBean>>())
+                .enqueue(new Callback<List<MessageBean>>() {
+                    @Override
+                    public void onSuccess(List<MessageBean> data) {
+                        for (MessageBean messageBean : data) {
+                            handleMessage(messageBean);
+                        }
+                        // 通知后台删除离线消息
+                        OkHttpHelperForQSBoxOfflineApi.SINGLETON.deleteOfflineMessageList(mUserId)
+                                .enqueue(null);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+
+                    }
+                });
         // 一定时间后发送心跳
         mHandler.removeCallbacks(mHeartBeatRunnable);
         mHandler.postDelayed(mHeartBeatRunnable, HEART_BEAT_INTERVAL);
