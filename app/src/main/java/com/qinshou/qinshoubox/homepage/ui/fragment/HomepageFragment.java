@@ -11,7 +11,6 @@ import com.qinshou.commonmodule.adapter.InfiniteCycleViewPagerAdapter;
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemClickListener;
 import com.qinshou.commonmodule.rcvdecoration.DividerDecoration;
-import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.util.StatusBarUtil;
 import com.qinshou.commonmodule.widget.RefreshLayout;
 import com.qinshou.commonmodule.widget.ViewPagerPoints;
@@ -145,8 +144,8 @@ public class HomepageFragment extends QSFragment<HomepagePresenter> implements I
             final ImageView imageView = new ImageView(getContext());
             imageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            ImageLoadUtil.SINGLETON.loadImage(getContext(), wallpaperBeanList.get(i).getPath(), imageView);
-            imageList.add(wallpaperBeanList.get(i).getPath());
+            ImageLoadUtil.SINGLETON.loadImage(getContext(), wallpaperBeanList.get(i).getUrl(), imageView);
+            imageList.add(wallpaperBeanList.get(i).getUrl());
             final int finalI = i;
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override

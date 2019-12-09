@@ -2,7 +2,6 @@ package com.qinshou.qinshoubox.homepage.bean;
 
 import com.google.gson.annotations.SerializedName;
 import com.qinshou.qinshoubox.constant.IUrlConstant;
-import com.qinshou.qinshoubox.network.QSBoxWallpaperApi;
 
 /**
  * Author: QinHao
@@ -11,12 +10,9 @@ import com.qinshou.qinshoubox.network.QSBoxWallpaperApi;
  * Description:壁纸实体类
  */
 public class WallpaperBean {
-    @SerializedName("id")
     private int id;
-    @SerializedName("name")
     private String name;
-    @SerializedName("path")
-    private String path;
+    private String url;
 
     public WallpaperBean() {
     }
@@ -26,7 +22,7 @@ public class WallpaperBean {
         return "WallpaperBean{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", path='" + path + '\'' +
+                ", url='" + url + '\'' +
                 '}';
     }
 
@@ -46,14 +42,14 @@ public class WallpaperBean {
         this.name = name;
     }
 
-    public String getPath() {
-        if (!path.startsWith(IUrlConstant.DEFAULT_HOST_ONLINE)) {
-            path = IUrlConstant.DEFAULT_HOST_ONLINE + "/" + path;
+    public String getUrl() {
+        if (!url.startsWith(IUrlConstant.DEFAULT_HOST)) {
+            url = IUrlConstant.DEFAULT_HOST + "/" + url;
         }
-        return path;
+        return url;
     }
 
     public void setPath(String path) {
-        this.path = path;
+        this.url = path;
     }
 }

@@ -64,7 +64,7 @@ public class MessageDaoImpl extends AbsDaoImpl<MessageBean> implements IMessageD
                 "message AS m ON m.pid = cmr.messagePid\n" +
                 "WHERE cmr.conversationId = '%s'\n" +
                 "LIMIT '%s','%s'";
-        sql = String.format(sql, conversationId, page * pageSize, (page + 1) * pageSize);
+        sql = String.format(sql, conversationId, (page-1) * pageSize, (page) * pageSize);
         List<MessageBean> messageBeanList = new ArrayList<>();
         Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
         try {

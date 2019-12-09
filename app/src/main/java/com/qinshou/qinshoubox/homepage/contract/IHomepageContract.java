@@ -5,6 +5,7 @@ import com.qinshou.commonmodule.base.IBaseModel;
 import com.qinshou.commonmodule.base.IBaseView;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.homepage.bean.NewsBean;
+import com.qinshou.qinshoubox.homepage.bean.PageResultBean;
 import com.qinshou.qinshoubox.homepage.bean.WallpaperBean;
 import com.qinshou.qinshoubox.homepage.ui.fragment.HomepageFragment;
 
@@ -26,7 +27,7 @@ public interface IHomepageContract extends IBaseContract {
          *
          * @param callback 回调接口
          */
-        void getWallpaperList(Callback<List<WallpaperBean>> callback);
+        void getWallpaperList(Callback<PageResultBean<WallpaperBean>> callback);
 
         /**
          * Author: QinHao
@@ -38,7 +39,7 @@ public interface IHomepageContract extends IBaseContract {
          * @param pageSize 每一页查询多少条数据
          * @param callback 回调接口
          */
-        void getNewsList(int page, int pageSize, Callback<List<NewsBean>> callback);
+        void getNewsList(int page, int pageSize, Callback<PageResultBean<NewsBean>> callback);
     }
 
     interface IView extends IBaseView {

@@ -3,6 +3,7 @@ package com.qinshou.qinshoubox.homepage.presenter;
 import com.qinshou.commonmodule.base.AbsPresenter;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.homepage.bean.NewsBean;
+import com.qinshou.qinshoubox.homepage.bean.PageResultBean;
 import com.qinshou.qinshoubox.homepage.bean.WallpaperBean;
 import com.qinshou.qinshoubox.homepage.contract.IHomepageContract;
 import com.qinshou.qinshoubox.homepage.model.HomepageModel;
@@ -25,13 +26,13 @@ public class HomepagePresenter extends AbsPresenter<IHomepageContract.IView, IHo
 
     @Override
     public void getWallpaperList() {
-        getModel().getWallpaperList(new Callback<List<WallpaperBean>>() {
+        getModel().getWallpaperList(new Callback<PageResultBean<WallpaperBean>>() {
             @Override
-            public void onSuccess(List<WallpaperBean> data) {
+            public void onSuccess(PageResultBean<WallpaperBean> data) {
                 if (!isViewAttached()) {
                     return;
                 }
-                getView().getWallpaperListSuccess(data);
+                getView().getWallpaperListSuccess(data.getList());
             }
 
             @Override
@@ -46,13 +47,13 @@ public class HomepagePresenter extends AbsPresenter<IHomepageContract.IView, IHo
 
     @Override
     public void getNewsList(int page, int pageSize) {
-        getModel().getNewsList(page, pageSize, new Callback<List<NewsBean>>() {
+        getModel().getNewsList(page, pageSize, new Callback<PageResultBean<NewsBean>>() {
             @Override
-            public void onSuccess(List<NewsBean> data) {
+            public void onSuccess(PageResultBean<NewsBean> data) {
                 if (!isViewAttached()) {
                     return;
                 }
-                getView().getNewsListSuccess(data);
+                getView().getNewsListSuccess(data.getList());
             }
 
             @Override
