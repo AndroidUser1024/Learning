@@ -13,20 +13,16 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.qinshou.commonmodule.ContainerActivity;
-import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.commonmodule.util.ShowLogUtil;
-import com.qinshou.commonmodule.util.SystemUtil;
 import com.qinshou.commonmodule.util.activityresultutil.ActivityResultUtil;
 import com.qinshou.commonmodule.util.activityresultutil.OnActivityResultCallBack;
 import com.qinshou.commonmodule.widget.TitleBar;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
-import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
-import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.conversation.view.activity.ChatActivity;
 import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
-import com.qinshou.qinshoubox.friend.view.dialog.DeleteContactDialog;
+import com.qinshou.qinshoubox.friend.view.dialog.DeleteFriendDialog;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.friend.contract.IUserDetailContract;
 import com.qinshou.qinshoubox.friend.presenter.UserDetailPresenter;
@@ -34,7 +30,6 @@ import com.qinshou.qinshoubox.friend.view.activity.SetRemarkActivity;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.listener.IOnFriendStatusListener;
 import com.qinshou.qinshoubox.im.view.fragment.IMActivity;
-import com.qinshou.qinshoubox.util.QSUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -401,14 +396,14 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
         llDeleteContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DeleteContactDialog deleteContactDialog = new DeleteContactDialog();
-                deleteContactDialog.setTvDeleteOnClickListener(new View.OnClickListener() {
+                DeleteFriendDialog deleteFriendDialog = new DeleteFriendDialog();
+                deleteFriendDialog.setTvDeleteOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         getPresenter().deleteFriend(userDetailBean.getId());
                     }
                 });
-                deleteContactDialog.show(getChildFragmentManager(), "DeleteContactDialog");
+                deleteFriendDialog.show(getChildFragmentManager(), "DeleteFriendDialog");
                 popupWindow.dismiss();
             }
         });

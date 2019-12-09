@@ -1,11 +1,10 @@
-package com.qinshou.qinshoubox.friend.view.dialog;
+package com.qinshou.qinshoubox.conversation.view.dialog;
 
 import android.app.Dialog;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.qinshou.commonmodule.base.AbsDialogFragment;
 import com.qinshou.qinshoubox.R;
@@ -15,14 +14,14 @@ import com.qinshou.qinshoubox.R;
  * Author: QinHao
  * Email:qinhao@jeejio.com
  * Date: 2019/11/13 10:22
- * Description:清空聊天记录对话框
+ * Description:退出群聊对话框
  */
-public class DeleteContactDialog extends AbsDialogFragment {
+public class ExitGroupChatDialog extends AbsDialogFragment {
     private View.OnClickListener mOnClickListener;
 
     @Override
     public int initLayoutId() {
-        return R.layout.dialog_delete_contact;
+        return R.layout.dialog_exit_group_chat;
     }
 
     @Override
@@ -31,7 +30,7 @@ public class DeleteContactDialog extends AbsDialogFragment {
 
     @Override
     public void setListener() {
-        findViewByID(R.id.tv_delete).setOnClickListener(new View.OnClickListener() {
+        findViewByID(R.id.tv_positive).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mOnClickListener != null) {
@@ -40,7 +39,7 @@ public class DeleteContactDialog extends AbsDialogFragment {
                 dismiss();
             }
         });
-        findViewByID(R.id.tv_cancel).setOnClickListener(new View.OnClickListener() {
+        findViewByID(R.id.tv_negative).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();
@@ -64,7 +63,7 @@ public class DeleteContactDialog extends AbsDialogFragment {
         return dialog;
     }
 
-    public void setTvDeleteOnClickListener(View.OnClickListener onClickListener) {
+    public void setTvPositiveOnClickListener(View.OnClickListener onClickListener) {
         mOnClickListener = onClickListener;
     }
 }

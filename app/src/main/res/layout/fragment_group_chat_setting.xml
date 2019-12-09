@@ -115,25 +115,25 @@
             </LinearLayout>
 
             <!-- 群管理 -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    style="@style/DataSettingLlHeadImgBaseStyle">
+            <LinearLayout
+                style="@style/DataSettingLlHeadImgBaseStyle"
+                android:layout_width="match_parent">
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/group_chat_setting_tv_manage_text"
-                        android:textColor="#FF333333"
-                        android:textSize="@dimen/px30" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/group_chat_setting_tv_manage_text"
+                    android:textColor="#FF333333"
+                    android:textSize="@dimen/px30" />
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/px25"
-                        android:layout_marginLeft="@dimen/px25"
-                        android:src="@drawable/common_iv_arrow_right_src" />
-                </LinearLayout>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/px25"
+                    android:layout_marginLeft="@dimen/px25"
+                    android:src="@drawable/common_iv_arrow_right_src" />
+            </LinearLayout>
 
             <include layout="@layout/layout_divider" />
 
@@ -305,8 +305,8 @@
                 android:layout_height="wrap_content"
                 android:background="#FFFFFFFF">
 
-                <TextView
-                    android:id="@+id/tv_leave"
+                <Button
+                    android:id="@+id/btn_exit"
                     android:layout_width="@dimen/px657"
                     android:layout_height="@dimen/px102"
                     android:layout_marginStart="@dimen/px32"
@@ -315,7 +315,7 @@
                     android:layout_marginEnd="@dimen/px32"
                     android:layout_marginRight="@dimen/px32"
                     android:layout_marginBottom="@dimen/px60"
-                    android:background="@drawable/groupchat_setting_btn_exit_bg"
+                    android:background="@drawable/group_chat_setting_btn_exit_bg"
                     android:gravity="center"
                     android:text="@string/group_chat_setting_delete_leave"
                     android:textColor="#FFFFFFFF"

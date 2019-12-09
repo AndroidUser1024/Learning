@@ -6,7 +6,6 @@ import com.qinshou.qinshoubox.conversation.bean.GroupChatDetailBean;
 import com.qinshou.qinshoubox.conversation.contract.IGroupChatSettingContract;
 import com.qinshou.qinshoubox.conversation.model.GroupChatSettingModel;
 import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatSettingFragment;
-import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 
 
 /**
@@ -43,8 +42,8 @@ public class GroupChatSettingPresenter extends AbsPresenter<IGroupChatSettingCon
     }
 
     @Override
-    public void setTop(String toUserId, int top) {
-        getModel().setTop(toUserId, top, new Callback<Object>() {
+    public void setTop(String groupChatId, int top) {
+        getModel().setTop(groupChatId, top, new Callback<Object>() {
             @Override
             public void onSuccess(Object data) {
                 if (!isViewAttached()) {
@@ -64,8 +63,8 @@ public class GroupChatSettingPresenter extends AbsPresenter<IGroupChatSettingCon
     }
 
     @Override
-    public void setDoNotDisturb(String toUserId, int doNotDisturb) {
-        getModel().setDoNotDisturb(toUserId, doNotDisturb, new Callback<Object>() {
+    public void setDoNotDisturb(String groupChatId, int doNotDisturb) {
+        getModel().setDoNotDisturb(groupChatId, doNotDisturb, new Callback<Object>() {
             @Override
             public void onSuccess(Object data) {
                 if (!isViewAttached()) {
@@ -85,8 +84,8 @@ public class GroupChatSettingPresenter extends AbsPresenter<IGroupChatSettingCon
     }
 
     @Override
-    public void setShowGroupChatMemberNickname(String toUserId, int showGroupChatMemberNickname) {
-        getModel().setShowGroupChatMemberNickname(toUserId, showGroupChatMemberNickname, new Callback<Object>() {
+    public void setShowGroupChatMemberNickname(String groupChatId, int showGroupChatMemberNickname) {
+        getModel().setShowGroupChatMemberNickname(groupChatId, showGroupChatMemberNickname, new Callback<Object>() {
             @Override
             public void onSuccess(Object data) {
                 if (!isViewAttached()) {
@@ -101,6 +100,27 @@ public class GroupChatSettingPresenter extends AbsPresenter<IGroupChatSettingCon
                     return;
                 }
                 getView().setDoNotDisturbFailure(e);
+            }
+        });
+    }
+
+    @Override
+    public void exit(String groupChatId) {
+        getModel().exit(groupChatId, new Callback<Object>() {
+            @Override
+            public void onSuccess(Object data) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().exitSuccess();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().exitFailure(e);
             }
         });
     }

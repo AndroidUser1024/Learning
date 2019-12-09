@@ -35,4 +35,9 @@ public class GroupChatSettingModel implements IGroupChatSettingContract.IModel {
     public void setShowGroupChatMemberNickname(String groupChatId, int showGroupChatMemberNickname, Callback<Object> callback) {
         IMClient.SINGLETON.getGroupChatManager().setInfo(groupChatId, null, null, null, showGroupChatMemberNickname, callback);
     }
+
+    @Override
+    public void exit(String groupChatId, Callback<Object> callBack) {
+        IMClient.SINGLETON.getGroupChatManager().exit(groupChatId,  callBack);
+    }
 }

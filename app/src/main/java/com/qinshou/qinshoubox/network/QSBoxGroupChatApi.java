@@ -69,6 +69,10 @@ public interface QSBoxGroupChatApi {
             , @Field(name = "nicknameInGroupChat") String nicknameInGroupChat
             , @Field(name = "top") Integer top
             , @Field(name = "doNotDisturb") Integer doNotDisturb
-            , @Field(name = "showGroupChatMemberNickname") Integer showGroupChatMemberNickname
-    );
+            , @Field(name = "showGroupChatMemberNickname") Integer showGroupChatMemberNickname);
+
+    @Json
+    @Post("/exit")
+    Call<QinshouResultBean<Object>> exit(@Field(name = "groupChatId") String groupChatId
+            , @Field(name = "userId") String userId);
 }

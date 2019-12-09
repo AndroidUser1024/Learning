@@ -117,8 +117,7 @@
     <string name="group_chat_setting_clear_chat_history">清空聊天记录</string>
     <string name="group_chat_setting_clear_chat_report">投诉(暂不可用)</string>
     <string name="group_chat_setting_delete_leave">删除并退出</string>
-    <string name="group_chat_setting_clear_chat_history_warning">确定要清空该群的聊天记录\n记录清空后将无法恢复</string>
-    <string name="group_chat_setting_leave_notification">退出后不会通知群聊中其他成员,退出后将删除所有聊天记录</string>
+    <string name="group_chat_setting_tv_exit_group_chat_text">确定要清空该群的聊天记录？记录清空后将无法恢复</string>
 
     <!-- 添加群成员界面 -->
     <string name="group_chat_add_member_tv_title_text">添加群成员</string>
@@ -158,8 +157,6 @@
     <string name="user_detail_btn_add_friend_text_3">接受请求</string>
     <string name="user_detail_tv_delete_contact_text">删除联系人</string>
     <string name="user_detail_tv_delete_contact_prompt_text">确定要删除和当前用户的好友关系？</string>
-    <string name="user_detail_added_dialog_delete_btn_negative_text">取消</string>
-    <string name="user_detail_added_dialog_delete_btn_positive_text">删除</string>
 
     <!-- 设置备注界面 -->
     <string name="set_remark_tv_title_text">修改备注</string>

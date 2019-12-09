@@ -1,6 +1,7 @@
 package com.qinshou.qinshoubox.conversation.view.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,9 +20,11 @@ import com.qinshou.qinshoubox.conversation.enums.GroupChatMemberFunction;
 import com.qinshou.qinshoubox.conversation.contract.IGroupChatSettingContract;
 import com.qinshou.qinshoubox.conversation.presenter.GroupChatSettingPresenter;
 import com.qinshou.qinshoubox.conversation.view.adapter.RcvGroupChatMemberAdapter;
+import com.qinshou.qinshoubox.conversation.view.dialog.ExitGroupChatDialog;
 import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.friend.view.fragment.UserDetailFragment;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
+import com.qinshou.qinshoubox.im.view.fragment.IMActivity;
 import com.qinshou.qinshoubox.me.ui.widget.SwitchButton;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
@@ -74,6 +77,16 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
                     break;
                 case R.id.ll_nickname_in_group_chat:
                     SetNicknameInGroupChatFragment.start(getContext(), mGroupChatDetailBean.getId(), mGroupChatDetailBean.getNicknameInGroupChat());
+                    break;
+                case R.id.btn_exit:
+                    ExitGroupChatDialog exitGroupChatDialog = new ExitGroupChatDialog();
+                    exitGroupChatDialog.setTvPositiveOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            getPresenter().exit(mGroupChatDetailBean.getId());
+                        }
+                    });
+                    exitGroupChatDialog.show(getChildFragmentManager(), "ExitGroupChatDialog");
                     break;
             }
         }
@@ -150,6 +163,7 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
             }
         });
         findViewByID(R.id.ll_nickname_in_group_chat).setOnClickListener(mOnClickListener);
+        findViewByID(R.id.btn_exit).setOnClickListener(mOnClickListener);
     }
 
     @Override
@@ -217,6 +231,17 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
 
     @Override
     public void setShowGroupChatMemberNicknameFailure(Exception e) {
+
+    }
+
+    @Override
+    public void exitSuccess() {
+        EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.REFRESH_GROUP_CHAT_LIST, null));
+        startActivity(new Intent(getContext(), IMActivity.class));
+    }
+
+    @Override
+    public void exitFailure(Exception e) {
 
     }
 

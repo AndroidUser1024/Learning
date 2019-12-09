@@ -151,4 +151,18 @@ public class GroupChatManager {
                 .transform(new QSApiTransformer<Object>())
                 .enqueue(callback);
     }
+
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2019/12/9 15:55
+     * Description:退出群聊
+     *
+     * @param groupChatId 群 id
+     */
+    public void exit(String groupChatId, Callback<Object> callBack) {
+        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.exit(groupChatId, mUserId)
+                .transform(new QSApiTransformer<Object>())
+                .enqueue(callBack);
+    }
 }

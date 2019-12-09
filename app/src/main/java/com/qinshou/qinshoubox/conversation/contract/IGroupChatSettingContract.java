@@ -6,8 +6,8 @@ import com.qinshou.commonmodule.base.IBaseView;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.bean.GroupChatDetailBean;
 import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatSettingFragment;
-import com.qinshou.qinshoubox.im.listener.QSCallback;
-import com.qinshou.qinshoubox.im.bean.GroupChatBean;
+
+import org.android.agoo.common.CallBack;
 
 
 /**
@@ -34,11 +34,11 @@ public interface IGroupChatSettingContract {
          * Date:2019/12/09 14:42
          * Description:设置置顶
          *
-         * @param toUserId 好友的用户 id
-         * @param top      0 表示不置顶,1 表示置顶
-         * @param callback 回调接口
+         * @param groupChatId 群 Id
+         * @param top         0 表示不置顶,1 表示置顶
+         * @param callback    回调接口
          */
-        void setTop(String toUserId, int top, Callback<Object> callback);
+        void setTop(String groupChatId, int top, Callback<Object> callback);
 
         /**
          * Author: QinHao
@@ -46,11 +46,11 @@ public interface IGroupChatSettingContract {
          * Date:2019/12/09 14:42
          * Description:设置免打扰
          *
-         * @param toUserId     好友的用户 id
+         * @param groupChatId  群 Id
          * @param doNotDisturb 0 表示非免打扰,1 表示免打扰
          * @param callback     回调接口
          */
-        void setDoNotDisturb(String toUserId, int doNotDisturb, Callback<Object> callback);
+        void setDoNotDisturb(String groupChatId, int doNotDisturb, Callback<Object> callback);
 
         /**
          * Author: QinHao
@@ -58,11 +58,21 @@ public interface IGroupChatSettingContract {
          * Date:2019/12/09 14:42
          * Description:设置是否显示群成员昵称
          *
-         * @param toUserId                    好友的用户 id
+         * @param groupChatId                 群 Id
          * @param showGroupChatMemberNickname 0 表示不显示,1 表示显示
          * @param callback                    回调接口
          */
-        void setShowGroupChatMemberNickname(String toUserId, int showGroupChatMemberNickname, Callback<Object> callback);
+        void setShowGroupChatMemberNickname(String groupChatId, int showGroupChatMemberNickname, Callback<Object> callback);
+
+        /**
+         * Author: QinHao
+         * Email:cqflqinhao@126.com
+         * Date:2019/12/09 14:42
+         * Description:退出群聊
+         *
+         * @param groupChatId 群 Id
+         */
+        void exit(String groupChatId, Callback<Object> callBack);
     }
 
     interface IView extends IBaseView {
@@ -140,6 +150,22 @@ public interface IGroupChatSettingContract {
          * @param e 错误信息
          */
         void setShowGroupChatMemberNicknameFailure(Exception e);
+
+        /**
+         * Author: QinHao
+         * Email:cqflqinhao@126.com
+         * Date:2019/12/09 14:42
+         * Description:退出群聊成功
+         */
+        void exitSuccess();
+
+        /**
+         * Author: QinHao
+         * Email:cqflqinhao@126.com
+         * Date:2019/12/09 14:42
+         * Description:退出群聊失败
+         */
+        void exitFailure(Exception e);
     }
 
     interface IPresenter {
@@ -159,10 +185,10 @@ public interface IGroupChatSettingContract {
          * Date:2019/12/09 14:42
          * Description:设置置顶
          *
-         * @param toUserId 好友的用户 id
-         * @param top      0 表示不置顶,1 表示置顶
+         * @param groupChatId 群 Id
+         * @param top         0 表示不置顶,1 表示置顶
          */
-        void setTop(String toUserId, int top);
+        void setTop(String groupChatId, int top);
 
         /**
          * Author: QinHao
@@ -170,10 +196,10 @@ public interface IGroupChatSettingContract {
          * Date:2019/12/09 14:42
          * Description:设置免打扰
          *
-         * @param toUserId     好友的用户 id
+         * @param groupChatId  群 Id
          * @param doNotDisturb 0 表示非免打扰,1 表示免打扰
          */
-        void setDoNotDisturb(String toUserId, int doNotDisturb);
+        void setDoNotDisturb(String groupChatId, int doNotDisturb);
 
         /**
          * Author: QinHao
@@ -181,9 +207,19 @@ public interface IGroupChatSettingContract {
          * Date:2019/12/09 14:42
          * Description:设置是否显示群成员昵称
          *
-         * @param toUserId                    好友的用户 id
+         * @param groupChatId                 群 Id
          * @param showGroupChatMemberNickname 0 表示不显示,1 表示显示
          */
-        void setShowGroupChatMemberNickname(String toUserId, int showGroupChatMemberNickname);
+        void setShowGroupChatMemberNickname(String groupChatId, int showGroupChatMemberNickname);
+
+        /**
+         * Author: QinHao
+         * Email:cqflqinhao@126.com
+         * Date:2019/12/09 14:42
+         * Description:退出群聊
+         *
+         * @param groupChatId 群 Id
+         */
+        void exit(String groupChatId);
     }
 }
