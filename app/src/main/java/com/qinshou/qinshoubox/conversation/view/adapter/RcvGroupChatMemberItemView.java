@@ -24,8 +24,12 @@ public class RcvGroupChatMemberItemView extends BaseItemView<UserDetailBean> {
     @Override
     public void bindViewHolder(BaseViewHolder holder, UserDetailBean itemData, int position) {
         ImageLoadUtil.SINGLETON.loadImage(getContext(), itemData.getHeadImgSmall(), holder.getImageView(R.id.iv_head_img));
-        holder.setTvText(R.id.tv_nickname, TextUtils.isEmpty(itemData.getRemark())
-                ? itemData.getNickname()
-                : itemData.getRemark());
+        if (!TextUtils.isEmpty(itemData.getRemark())) {
+            holder.setTvText(R.id.tv_nickname, itemData.getRemark());
+        } else if (!TextUtils.isEmpty(itemData.getNicknameInGroupChat())) {
+            holder.setTvText(R.id.tv_nickname, itemData.getNicknameInGroupChat());
+        } else {
+            holder.setTvText(R.id.tv_nickname, itemData.getNickname());
+        }
     }
 }

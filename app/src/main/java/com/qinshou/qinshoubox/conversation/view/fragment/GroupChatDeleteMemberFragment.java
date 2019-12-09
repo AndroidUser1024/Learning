@@ -117,6 +117,7 @@ public class GroupChatDeleteMemberFragment extends QSFragment<GroupChatDeleteMem
             groupChatMemberForCreateBean.setId(userDetailBean.getId());
             groupChatMemberForCreateBean.setHeadImgSmall(userDetailBean.getHeadImgSmall());
             groupChatMemberForCreateBean.setRemark(userDetailBean.getRemark());
+            groupChatMemberForCreateBean.setNicknameInGroupChat(userDetailBean.getNicknameInGroupChat());
             groupChatMemberForCreateBean.setNickname(userDetailBean.getNickname());
             groupChatMemberForCreateBeanList.add(groupChatMemberForCreateBean);
         }

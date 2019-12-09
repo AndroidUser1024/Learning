@@ -83,6 +83,10 @@ public class UserDetailBean {
      * 好友申请的附加信息
      */
     private String additionalMsg;
+    /**
+     * 在群聊中的昵称
+     */
+    private String nicknameInGroupChat;
 
     public UserDetailBean() {
     }
@@ -105,6 +109,7 @@ public class UserDetailBean {
                 ", receive=" + receive +
                 ", remark='" + remark + '\'' +
                 ", additionalMsg='" + additionalMsg + '\'' +
+                ", nicknameInGroupChat='" + nicknameInGroupChat + '\'' +
                 '}';
     }
 
@@ -226,5 +231,13 @@ public class UserDetailBean {
 
     public void setAdditionalMsg(String additionalMsg) {
         this.additionalMsg = additionalMsg;
+    }
+
+    public String getNicknameInGroupChat() {
+        return nicknameInGroupChat;
+    }
+
+    public void setNicknameInGroupChat(String nicknameInGroupChat) {
+        this.nicknameInGroupChat = nicknameInGroupChat;
     }
 }

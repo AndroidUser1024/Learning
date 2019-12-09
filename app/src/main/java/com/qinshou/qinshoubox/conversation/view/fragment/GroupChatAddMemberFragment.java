@@ -137,6 +137,7 @@ public class GroupChatAddMemberFragment extends QSFragment<GroupChatAddMemberPre
                 if (TextUtils.equals(groupChatMemberForCreateBean.getId(), userDetailBean.getId())) {
                     groupChatMemberForCreateBean.setChoose(true);
                     groupChatMemberForCreateBean.setEnable(false);
+                    groupChatMemberForCreateBean.setNicknameInGroupChat(userDetailBean.getNicknameInGroupChat());
                     continue outer;
                 }
             }
