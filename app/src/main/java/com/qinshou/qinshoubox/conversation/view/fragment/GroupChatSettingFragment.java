@@ -60,6 +60,10 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
      * 是否显示群成员昵称开关
      */
     private SwitchButton mSwtShowGroupChatMemberNickname;
+    /**
+     * 我在本群中的昵称
+     */
+    private TextView mTvNicknameInGroup;
     private GroupChatDetailBean mGroupChatDetailBean;
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
@@ -67,6 +71,9 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
             switch (v.getId()) {
                 case R.id.ll_nickname:
                     SetGroupChatNicknameFragment.start(getContext(), mGroupChatDetailBean.getId(), mGroupChatDetailBean.getNickname());
+                    break;
+                case R.id.ll_nickname_in_group_chat:
+                    SetNicknameInGroupChatFragment.start(getContext(), mGroupChatDetailBean.getId(), mGroupChatDetailBean.getNicknameInGroupChat());
                     break;
             }
         }
@@ -94,6 +101,7 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
         mSwtTop = findViewByID(R.id.swt_top);
         mSwtDoNotDisturb = findViewByID(R.id.swt_do_not_disturb);
         mSwtShowGroupChatMemberNickname = findViewByID(R.id.swt_show_group_chat_member_nickname);
+        mTvNicknameInGroup = findViewByID(R.id.tv_nickname_in_group_chat);
     }
 
     @Override
@@ -141,6 +149,7 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
                 getPresenter().setShowGroupChatMemberNickname(mGroupChatDetailBean.getId(), checked ? 1 : 0);
             }
         });
+        findViewByID(R.id.ll_nickname_in_group_chat).setOnClickListener(mOnClickListener);
     }
 
     @Override
@@ -173,6 +182,7 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
         mSwtTop.setChecked(groupChatDetailBean.getTop() == 1);
         mSwtDoNotDisturb.setChecked(groupChatDetailBean.getDoNotDisturb() == 1);
         mSwtShowGroupChatMemberNickname.setChecked(groupChatDetailBean.getShowGroupChatMemberNickname() == 1);
+        mTvNicknameInGroup.setText(groupChatDetailBean.getNicknameInGroupChat());
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.qinshou.qinshoubox.conversation.presenter;
 
 import com.qinshou.commonmodule.base.AbsPresenter;
 import com.qinshou.okhttphelper.callback.Callback;
-import com.qinshou.qinshoubox.conversation.contract.ISetGroupChatNameContract;
+import com.qinshou.qinshoubox.conversation.contract.ISetGroupChatNicknameContract;
 import com.qinshou.qinshoubox.conversation.model.SetGroupChatNicknameModel;
 import com.qinshou.qinshoubox.conversation.view.fragment.SetGroupChatNicknameFragment;
 
@@ -12,9 +12,9 @@ import com.qinshou.qinshoubox.conversation.view.fragment.SetGroupChatNicknameFra
  * Date: 2019/12/09 14:01
  * Description:{@link SetGroupChatNicknameFragment} 的 P 层
  */
-public class SetGroupChatNicknamePresenter extends AbsPresenter<ISetGroupChatNameContract.IView, ISetGroupChatNameContract.IModel> implements ISetGroupChatNameContract.IPresenter {
+public class SetGroupChatNicknamePresenter extends AbsPresenter<ISetGroupChatNicknameContract.IView, ISetGroupChatNicknameContract.IModel> implements ISetGroupChatNicknameContract.IPresenter {
     @Override
-    public ISetGroupChatNameContract.IModel initModel() {
+    public ISetGroupChatNicknameContract.IModel initModel() {
         return new SetGroupChatNicknameModel();
     }
 

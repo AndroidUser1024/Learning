@@ -11,8 +11,8 @@ import android.widget.TextView;
 import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
-import com.qinshou.qinshoubox.conversation.contract.ISetGroupChatNicknameContract;
-import com.qinshou.qinshoubox.conversation.presenter.SetGroupChatNicknamePresenter;
+import com.qinshou.qinshoubox.conversation.contract.ISetNicknameInGroupChatContract;
+import com.qinshou.qinshoubox.conversation.presenter.SetNicknameInGroupChatPresenter;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.listener.ClearErrorInfoTextWatcher;
 import com.qinshou.qinshoubox.me.ui.dialog.NameIsEmptyDialog;
@@ -23,9 +23,9 @@ import org.greenrobot.eventbus.EventBus;
  * Author: QinHao
  * Email:cqflqinhao@126.com
  * Date: 2019/12/09 14:01
- * Description:群聊-设置群昵称界面
+ * Description:群聊-设置我在本群中的昵称界面
  */
-public class SetGroupChatNicknameFragment extends QSFragment<SetGroupChatNicknamePresenter> implements ISetGroupChatNicknameContract.IView {
+public class SetNicknameInGroupChatFragment extends QSFragment<SetNicknameInGroupChatPresenter> implements ISetNicknameInGroupChatContract.IView {
     public static final String GROUP_CHAT_ID = "GroupChatId";
     private static final String NICKNAME = "Nickname";
     /**
@@ -47,7 +47,7 @@ public class SetGroupChatNicknameFragment extends QSFragment<SetGroupChatNicknam
 
     @Override
     public int getLayoutId() {
-        return R.layout.fragment_set_group_chat_nickname;
+        return R.layout.fragment_set_nickname_in_group_chat;
     }
 
     @Override
@@ -74,7 +74,7 @@ public class SetGroupChatNicknameFragment extends QSFragment<SetGroupChatNicknam
                     nameIsEmptyDialog.show(getChildFragmentManager(), "NameIsEmptyDialog");
                     return;
                 }
-                getPresenter().setGroupChatNickname(mGroupChatId, nickname);
+                getPresenter().setNicknameInGroupChat(mGroupChatId, nickname);
             }
         });
         mEtNickname.addTextChangedListener(new ClearErrorInfoTextWatcher(null) {
@@ -105,13 +105,13 @@ public class SetGroupChatNicknameFragment extends QSFragment<SetGroupChatNicknam
     }
 
     @Override
-    public void setGroupChatNicknameSuccess() {
+    public void setNicknameInGroupChatSuccess() {
         EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.REFRESH_GROUP_CHAT_DETAIL, null));
         finish();
     }
 
     @Override
-    public void setGroupChatNicknameFailure(Exception e) {
+    public void setNicknameInGroupChatFailure(Exception e) {
 
     }
 
@@ -129,7 +129,7 @@ public class SetGroupChatNicknameFragment extends QSFragment<SetGroupChatNicknam
         Bundle bundle = new Bundle();
         bundle.putString(GROUP_CHAT_ID, groupChatId);
         bundle.putString(NICKNAME, nickname);
-        context.startActivity(ContainerActivity.getJumpIntent(context, SetGroupChatNicknameFragment.class, bundle));
+        context.startActivity(ContainerActivity.getJumpIntent(context, SetNicknameInGroupChatFragment.class, bundle));
     }
 
 }

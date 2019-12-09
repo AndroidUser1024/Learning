@@ -11,7 +11,7 @@ import com.qinshou.qinshoubox.conversation.view.fragment.SetGroupChatNicknameFra
  * Date: 2019/12/09 14:01
  * Description:{@link SetGroupChatNicknameFragment} 的契约类
  */
-public interface ISetGroupChatNameContract {
+public interface ISetGroupChatNicknameContract {
     interface IModel extends IBaseModel {
         /**
          * Author: QinHao
