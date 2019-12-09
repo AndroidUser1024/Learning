@@ -5,6 +5,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
@@ -178,8 +179,6 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
             return;
         }
         mTvUnreadCountInTlMain = view.findViewById(R.id.tv_unread_count);
-        mRcvGroupChatAdapter = new RcvGroupChatAdapter(getContext());
-        mRcvFriendAdapter = new RcvFriendAdapter(getContext());
     }
 
     @Override
@@ -204,9 +203,10 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
         mTlFriend.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                // 修改 Tab 状态
+                changeTabState(tab.getPosition());
                 // 切换 ViewPager
                 mViewPager.setCurrentItem(tab.getPosition());
-                loadData(tab.getPosition());
             }
 
             @Override
@@ -242,25 +242,36 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
 
     @Override
     public void initData() {
+        // 初始化 TabLayout
+        String[] nameArray = getResources().getStringArray(R.array.friend_tv_tab_text);
+        for (int i = 0; i < nameArray.length; i++) {
+            TabLayout.Tab tab = mTlFriend.newTab();
+            View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_tab_friend, null);
+            TextView tvName = view.findViewById(R.id.tv_name);
+            tvName.setText(nameArray[i]);
+            // 设置视图
+            tab.setCustomView(view);
+            mTlFriend.addTab(tab, i == TAB_INDEX_GROUP_CHAT);
+        }
         // TabLayout 与 ViewPager 关联
         List<String> titleList = new ArrayList<>();
-        RecyclerView rcvGroupChat = new RecyclerView(getContext());
-        rcvGroupChat.setLayoutManager(new LinearLayoutManager(getContext()));
-        rcvGroupChat.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        rcvGroupChat.setAdapter(mRcvGroupChatAdapter);
-        mRecyclerViewList.add(rcvGroupChat);
-        titleList.add(getString(R.string.friend_ti_group_chat_text));
-
-        RecyclerView rcvFriend = new RecyclerView(getContext());
-        rcvFriend.setLayoutManager(new LinearLayoutManager(getContext()));
-        rcvFriend.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        rcvFriend.setAdapter(mRcvFriendAdapter);
-        mRecyclerViewList.add(rcvFriend);
-        titleList.add(getString(R.string.friend_ti_friend_text));
-
+        for (int i = 0; i < nameArray.length; i++) {
+            RecyclerView recyclerView = new RecyclerView(getContext());
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+            if (i == TAB_INDEX_GROUP_CHAT) {
+                recyclerView.setAdapter(mRcvGroupChatAdapter = new RcvGroupChatAdapter(getContext()));
+            } else if (i == TAB_INDEX_FRIEND) {
+                recyclerView.setAdapter(mRcvFriendAdapter = new RcvFriendAdapter(getContext()));
+            }
+            mRecyclerViewList.add(recyclerView);
+            titleList.add(nameArray[i]);
+        }
         mViewPager.setAdapter(new VpSingleViewAdapter(mRecyclerViewList, titleList));
-        mTlFriend.setupWithViewPager(mViewPager);
+//        mTlFriend.setupWithViewPager(mViewPager);
 
+        getPresenter().getMyGroupChatList();
+        getPresenter().getFriendList();
         showFriendHistoryUnreadCount();
     }
 
@@ -291,11 +302,33 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
         }
     }
 
-    private void loadData(int position) {
-        if (position == TAB_INDEX_GROUP_CHAT) {
-            getPresenter().getMyGroupChatList();
-        } else if (position == TAB_INDEX_FRIEND) {
-            getPresenter().getFriendList();
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2019/10/25 18:36
+     * Description:修改当前选中的 tab 的状态
+     *
+     * @param position 当前选中的 tab 的下标
+     */
+    private void changeTabState(int position) {
+        for (int i = 0; i < mTlFriend.getTabCount(); i++) {
+            TabLayout.Tab tab = mTlFriend.getTabAt(i);
+            ShowLogUtil.logi("tab--->" + tab);
+            if (tab == null) {
+                continue;
+            }
+            View customView = tab.getCustomView();
+            if (customView == null) {
+                continue;
+            }
+            TextView tvName = customView.findViewById(R.id.tv_name);
+            if (tvName == null) {
+                continue;
+            }
+            // 切换文本框文字颜色
+            tvName.setTextColor(i == position ? 0xFF333333 : 0xFF666666);
+            // 切换文本框背景
+            tvName.setBackgroundResource(i == position ? R.drawable.friend_tab_tv_name_bg : 0);
         }
     }
 

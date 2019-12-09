@@ -31,8 +31,10 @@
     <string name="friend_tv_create_group_chat">创建群聊</string>
     <string name="friend_tv_status_text">离线</string>
     <string name="friend_tv_status_text_2">在线</string>
-    <string name="friend_ti_friend_text">好友</string>
-    <string name="friend_ti_group_chat_text">群聊</string>
+    <string-array name="friend_tv_tab_text">
+        <item>群聊</item>
+        <item>好友</item>
+    </string-array>
 
     <!-- "我"界面 -->
     <string name="me_tv_click_2_login_text">点击登录</string>
@@ -61,7 +63,7 @@
     <!-- IM 界面 -->
     <string-array name="im_tv_tab_text">
         <item>会话</item>
-        <item>好友</item>
+        <item>联系人</item>
     </string-array>
 
     <string-array name="conversation_tv_last_msg_time_text">
@@ -97,7 +99,6 @@
     <string name="chat_setting_tv_clear_chat_history_prompt_text">确定要清空与“<xliff:g id="nickname">%1$s</xliff:g>”的聊天记录\n记录清空后将无法恢复</string>
     <string name="chat_setting_tv_cancel_text">取消</string>
     <string name="chat_setting_toast_clear_chat_history_success_text">聊天记录已清空</string>
-
 
     <!-- 群聊设置界面 -->
     <string name="group_chat_setting_title">聊天设置(<xliff:g id="memberCount">%1$s</xliff:g>)</string>

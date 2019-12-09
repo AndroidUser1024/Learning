@@ -23,7 +23,7 @@
         android:background="@drawable/main_tv_unread_count_bg"
         android:gravity="center"
         android:textColor="#FFFFFFFF"
-        android:textSize="@dimen/px22"
+        android:textSize="@dimen/px18"
         android:visibility="gone"
         app:layout_constraintCircle="@id/iv_tab"
         app:layout_constraintCircleAngle="45"
@@ -45,5 +45,5 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_tab"
-        tools:text="@string/main_tv_tab_text_chat" />
+        tools:text="会话" />
 </android.support.constraint.ConstraintLayout>
