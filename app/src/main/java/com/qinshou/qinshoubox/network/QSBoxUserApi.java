@@ -36,7 +36,7 @@ public interface QSBoxUserApi {
     Call<QinshouResultBean<UserBean>> logout(@Field(name = "username") String username);
 
     @Json
-    @Post("/setRemark")
+    @Post("/setInfo")
     Call<QinshouResultBean<UserBean>> setInfo(@Field(name = "id") String userId
             , @Field(name = "nickname") String nickname);
 

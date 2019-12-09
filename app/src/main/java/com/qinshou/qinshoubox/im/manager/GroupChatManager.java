@@ -114,4 +114,19 @@ public class GroupChatManager {
     public GroupChatBean getById(String groupChatId) {
         return mGroupChatDao.selectById(groupChatId);
     }
+
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2019/12/9 14:12
+     * Description:设置群昵称
+     *
+     * @param groupChatId 群 id
+     * @param nickname    群昵称
+     */
+    public void setNickname(String groupChatId, String nickname, Callback<Object> callback) {
+        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.setNickname(groupChatId, mUserId, nickname)
+                .transform(new QSApiTransformer<Object>())
+                .enqueue(callback);
+    }
 }

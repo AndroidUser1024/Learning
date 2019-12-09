@@ -55,4 +55,10 @@ public interface QSBoxGroupChatApi {
     Call<QinshouResultBean<Object>> deleteMember(@Field(name = "groupChatId") String groupChatId
             , @Field(name = "fromUserId") String fromUserId
             , @Field(name = "toUserIdList") List<String> toUserIdList);
+
+    @Json
+    @Post("/setNickname")
+    Call<QinshouResultBean<Object>> setNickname(@Field(name = "groupChatId") String groupChatId
+            , @Field(name = "userId") String userId
+            , @Field(name = "nickname") String nickname);
 }

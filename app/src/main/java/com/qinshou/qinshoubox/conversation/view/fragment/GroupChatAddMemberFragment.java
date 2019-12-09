@@ -21,7 +21,6 @@ import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.friend.view.adapter.RcvGroupChatMemberForCreateAdapter;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
-import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 import org.greenrobot.eventbus.EventBus;
@@ -151,7 +150,7 @@ public class GroupChatAddMemberFragment extends QSFragment<GroupChatAddMemberPre
 
     @Override
     public void addMemberSuccess() {
-        EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.REFRESH_GROUP_CHAT_MEMBER_LIST, null));
+        EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.REFRESH_GROUP_CHAT_DETAIL, null));
         finish();
     }
 

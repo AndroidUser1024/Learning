@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.TextView;
 
 import com.qinshou.commonmodule.ContainerActivity;
@@ -21,8 +22,6 @@ import com.qinshou.qinshoubox.conversation.view.adapter.RcvGroupChatMemberAdapte
 import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.friend.view.fragment.UserDetailFragment;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
-import com.qinshou.qinshoubox.im.bean.GroupChatBean;
-import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 import org.greenrobot.eventbus.EventBus;
@@ -48,6 +47,16 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
      */
     private TextView mTvNickname;
     private GroupChatDetailBean mGroupChatDetailBean;
+    private View.OnClickListener mOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.ll_nickname:
+                    SetGroupChatNicknameFragment.start(getContext(), mGroupChatDetailBean.getId(), mGroupChatDetailBean.getNickname());
+                    break;
+            }
+        }
+    };
 
     @Override
     public void onDestroyView() {
@@ -86,6 +95,7 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
                 }
             }
         });
+        findViewByID(R.id.ll_nickname).setOnClickListener(mOnClickListener);
     }
 
     @Override
@@ -123,7 +133,7 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void receiveEvent(EventBean<Object> eventBean) {
-        if (eventBean.getType() == EventBean.Type.REFRESH_GROUP_CHAT_MEMBER_LIST) {
+        if (eventBean.getType() == EventBean.Type.REFRESH_GROUP_CHAT_DETAIL) {
             getPresenter().getGroupChatDetail(mGroupChatDetailBean.getId());
         }
     }

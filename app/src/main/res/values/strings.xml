@@ -126,6 +126,8 @@
     <!-- 删除群成员界面 -->
     <string name="group_chat_delete_member_tv_title_text">删除群成员</string>
 
+    <string name="set_group_chat_nickname_tv_title_text">修改群名称</string>
+
     <!-- 好友申请历史界面 -->
     <string name="friend_history_tv_title_text">新增朋友</string>
     <string name="friend_history_tv_right_text">添加</string>
