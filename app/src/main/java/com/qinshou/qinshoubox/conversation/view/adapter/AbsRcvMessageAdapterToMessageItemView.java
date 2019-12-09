@@ -9,9 +9,8 @@ import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.commonmodule.rcvbaseadapter.itemview.BaseItemView;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.im.IMClient;
-import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
+import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -22,31 +21,27 @@ import java.util.Locale;
  * Author: QinHao
  * Email:qinhao@jeejio.com
  * Date: 2019/11/7 20:23
- * Description:消息列表收到的消息的 ItemView 的基类
+ * Description:消息列表发送的消息的 ItemView 的基类
  */
-public abstract class AbsRcvMessageAdapterFromMessageItemView extends BaseItemView<MessageBean> {
+public abstract class AbsRcvMessageAdapterToMessageItemView extends BaseItemView<MessageBean> {
     private String[] mWeekArray;
 
-    public AbsRcvMessageAdapterFromMessageItemView(Context context, int layoutId) {
+    public AbsRcvMessageAdapterToMessageItemView(Context context, int layoutId) {
         super(context, layoutId);
         mWeekArray = context.getResources().getStringArray(R.array.conversation_tv_last_msg_time_text);
     }
 
     @Override
     public void bindViewHolder(BaseViewHolder baseViewHolder, MessageBean messageBean, int i) {
-        setTime(baseViewHolder, messageBean, i);// 头像
-        FriendBean friendBean = IMClient.SINGLETON.getFriendManager().getById(messageBean.getFromUserId());
-        if (friendBean != null) {
-            ImageLoadUtil.SINGLETON.loadImage(getContext(), friendBean.getHeadImgSmall(), baseViewHolder.getImageView(R.id.iv_head_img));
-        }
+        setTime(baseViewHolder, messageBean, i);
+        // 头像
+        ImageLoadUtil.SINGLETON.loadImage(getContext(), UserStatusManager.SINGLETON.getUserBean().getHeadImgSmall(), baseViewHolder.getImageView(R.id.iv_head_img));
 //        // 单聊不显示昵称,群聊可以设置是否显示昵称
 //        baseViewHolder.setVisibility(R.id.tv_nickname, messageBean.getType() == MessageBean.Type.CHAT.getValue() || ((RcvMessageAdapter) getRcvBaseAdapter()).isNotShowNickname()
 //                ? View.GONE
 //                : View.VISIBLE);
         // 先给昵称设置为sysAccount
 //        baseViewHolder.setTvText(R.id.tv_nickname, messageBean.getFromUsername());
-        // 加载用户信息
-//        loadUserInfo(messageBean, baseViewHolder.getTextView(R.id.tv_nickname), baseViewHolder.getImageView(R.id.iv_head_img));
     }
 
     /**
