@@ -27,6 +27,42 @@ public interface IGroupChatSettingContract {
          * @param groupChatId 群 id
          */
         void getGroupChatDetail(String groupChatId, Callback<GroupChatDetailBean> callback);
+
+        /**
+         * Author: QinHao
+         * Email:cqflqinhao@126.com
+         * Date:2019/12/09 14:42
+         * Description:设置置顶
+         *
+         * @param toUserId 好友的用户 id
+         * @param top      0 表示不置顶,1 表示置顶
+         * @param callback 回调接口
+         */
+        void setTop(String toUserId, int top, Callback<Object> callback);
+
+        /**
+         * Author: QinHao
+         * Email:cqflqinhao@126.com
+         * Date:2019/12/09 14:42
+         * Description:设置免打扰
+         *
+         * @param toUserId     好友的用户 id
+         * @param doNotDisturb 0 表示非免打扰,1 表示免打扰
+         * @param callback     回调接口
+         */
+        void setDoNotDisturb(String toUserId, int doNotDisturb, Callback<Object> callback);
+
+        /**
+         * Author: QinHao
+         * Email:cqflqinhao@126.com
+         * Date:2019/12/09 14:42
+         * Description:设置是否显示群成员昵称
+         *
+         * @param toUserId                    好友的用户 id
+         * @param showGroupChatMemberNickname 0 表示不显示,1 表示显示
+         * @param callback                    回调接口
+         */
+        void setShowGroupChatMemberNickname(String toUserId, int showGroupChatMemberNickname, Callback<Object> callback);
     }
 
     interface IView extends IBaseView {
@@ -49,6 +85,61 @@ public interface IGroupChatSettingContract {
          * @param e 错误信息
          */
         void getGroupChatDetailFailure(Exception e);
+
+
+        /**
+         * Author: QinHao
+         * Email:qinhao@jeejio.com
+         * Date:2019/12/09 14:52
+         * Description:设置置顶成功
+         */
+        void setTopSuccess();
+
+        /**
+         * Author: QinHao
+         * Email:qinhao@jeejio.com
+         * Date:2019/12/09 14:52
+         * Description:设置置顶失败
+         *
+         * @param e 错误信息
+         */
+        void setTopFailure(Exception e);
+
+        /**
+         * Author: QinHao
+         * Email:qinhao@jeejio.com
+         * Date:2019/12/09 14:52
+         * Description:设置免打扰成功
+         */
+        void setDoNotDisturbSuccess();
+
+        /**
+         * Author: QinHao
+         * Email:qinhao@jeejio.com
+         * Date:2019/12/09 14:52
+         * Description:设置免打扰失败
+         *
+         * @param e 错误信息
+         */
+        void setDoNotDisturbFailure(Exception e);
+
+        /**
+         * Author: QinHao
+         * Email:qinhao@jeejio.com
+         * Date:2019/12/09 14:52
+         * Description:设置是否显示群成员昵称成功
+         */
+        void setShowGroupChatMemberNicknameSuccess();
+
+        /**
+         * Author: QinHao
+         * Email:qinhao@jeejio.com
+         * Date:2019/12/09 14:52
+         * Description:设置是否显示群成员昵称失败
+         *
+         * @param e 错误信息
+         */
+        void setShowGroupChatMemberNicknameFailure(Exception e);
     }
 
     interface IPresenter {
@@ -61,5 +152,38 @@ public interface IGroupChatSettingContract {
          * @param groupChatId 群 id
          */
         void getGroupChatDetail(String groupChatId);
+
+        /**
+         * Author: QinHao
+         * Email:cqflqinhao@126.com
+         * Date:2019/12/09 14:42
+         * Description:设置置顶
+         *
+         * @param toUserId 好友的用户 id
+         * @param top      0 表示不置顶,1 表示置顶
+         */
+        void setTop(String toUserId, int top);
+
+        /**
+         * Author: QinHao
+         * Email:cqflqinhao@126.com
+         * Date:2019/12/09 14:42
+         * Description:设置免打扰
+         *
+         * @param toUserId     好友的用户 id
+         * @param doNotDisturb 0 表示非免打扰,1 表示免打扰
+         */
+        void setDoNotDisturb(String toUserId, int doNotDisturb);
+
+        /**
+         * Author: QinHao
+         * Email:cqflqinhao@126.com
+         * Date:2019/12/09 14:42
+         * Description:设置是否显示群成员昵称
+         *
+         * @param toUserId                    好友的用户 id
+         * @param showGroupChatMemberNickname 0 表示不显示,1 表示显示
+         */
+        void setShowGroupChatMemberNickname(String toUserId, int showGroupChatMemberNickname);
     }
 }

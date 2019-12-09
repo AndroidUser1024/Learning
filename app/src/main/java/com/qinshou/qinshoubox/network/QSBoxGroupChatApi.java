@@ -61,4 +61,14 @@ public interface QSBoxGroupChatApi {
     Call<QinshouResultBean<Object>> setNickname(@Field(name = "groupChatId") String groupChatId
             , @Field(name = "userId") String userId
             , @Field(name = "nickname") String nickname);
+
+    @Json
+    @Post("/setInfo")
+    Call<QinshouResultBean<Object>> setInfo(@Field(name = "groupChatId") String groupChatId
+            , @Field(name = "userId") String userId
+            , @Field(name = "nicknameInGroupChat") String nicknameInGroupChat
+            , @Field(name = "top") Integer top
+            , @Field(name = "doNotDisturb") Integer doNotDisturb
+            , @Field(name = "showGroupChatMemberNickname") Integer showGroupChatMemberNickname
+    );
 }

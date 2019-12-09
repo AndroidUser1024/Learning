@@ -185,7 +185,7 @@
                     android:textSize="@dimen/px30" />
 
                 <com.qinshou.qinshoubox.me.ui.widget.SwitchButton
-                    android:id="@+id/swt_disturb"
+                    android:id="@+id/swt_do_not_disturb"
                     android:layout_width="@dimen/px88"
                     android:layout_height="@dimen/px48"
                     android:layout_marginStart="@dimen/px25"
@@ -256,7 +256,7 @@
                     android:textSize="@dimen/px30" />
 
                 <com.qinshou.qinshoubox.me.ui.widget.SwitchButton
-                    android:id="@+id/swt_show_nickname"
+                    android:id="@+id/swt_show_group_chat_member_nickname"
                     android:layout_width="@dimen/px88"
                     android:layout_height="@dimen/px48"
                     android:layout_marginStart="@dimen/px25"

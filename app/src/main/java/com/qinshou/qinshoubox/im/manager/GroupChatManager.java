@@ -129,4 +129,26 @@ public class GroupChatManager {
                 .transform(new QSApiTransformer<Object>())
                 .enqueue(callback);
     }
+
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2019/12/9 15:18
+     * Description:设置置顶
+     *
+     * @param groupChatId                 群 id
+     * @param nicknameInGroupChat         在本群中的昵称
+     * @param top                         0 表示不置顶,1 表示置顶
+     * @param doNotDisturb                0 表示不置顶,1 表示置顶
+     * @param showGroupChatMemberNickname 0 表示不置顶,1 表示置顶
+     */
+    public void setInfo(String groupChatId
+            , String nicknameInGroupChat
+            , Integer top, Integer doNotDisturb
+            , Integer showGroupChatMemberNickname
+            , Callback<Object> callback) {
+        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.setInfo(groupChatId, mUserId, nicknameInGroupChat, top, doNotDisturb, showGroupChatMemberNickname)
+                .transform(new QSApiTransformer<Object>())
+                .enqueue(callback);
+    }
 }

@@ -47,5 +47,6 @@ public class EventBean<T> {
         REFRESH_FRIEND_LIST,
         REFRESH_CONVERSATION_LIST,
         REFRESH_GROUP_CHAT_DETAIL,
+        REFRESH_MESSAGE_LIST,
     }
 }

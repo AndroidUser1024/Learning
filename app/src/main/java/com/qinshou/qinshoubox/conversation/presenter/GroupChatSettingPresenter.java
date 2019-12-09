@@ -41,4 +41,68 @@ public class GroupChatSettingPresenter extends AbsPresenter<IGroupChatSettingCon
             }
         });
     }
+
+    @Override
+    public void setTop(String toUserId, int top) {
+        getModel().setTop(toUserId, top, new Callback<Object>() {
+            @Override
+            public void onSuccess(Object data) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().setTopSuccess();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().setTopFailure(e);
+            }
+        });
+    }
+
+    @Override
+    public void setDoNotDisturb(String toUserId, int doNotDisturb) {
+        getModel().setDoNotDisturb(toUserId, doNotDisturb, new Callback<Object>() {
+            @Override
+            public void onSuccess(Object data) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().setDoNotDisturbSuccess();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().setDoNotDisturbFailure(e);
+            }
+        });
+    }
+
+    @Override
+    public void setShowGroupChatMemberNickname(String toUserId, int showGroupChatMemberNickname) {
+        getModel().setShowGroupChatMemberNickname(toUserId, showGroupChatMemberNickname, new Callback<Object>() {
+            @Override
+            public void onSuccess(Object data) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().setDoNotDisturbSuccess();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().setDoNotDisturbFailure(e);
+            }
+        });
+    }
+
 }

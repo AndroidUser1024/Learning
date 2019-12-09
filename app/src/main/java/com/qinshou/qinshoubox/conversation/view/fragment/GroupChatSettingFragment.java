@@ -22,6 +22,7 @@ import com.qinshou.qinshoubox.conversation.view.adapter.RcvGroupChatMemberAdapte
 import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.friend.view.fragment.UserDetailFragment;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
+import com.qinshou.qinshoubox.me.ui.widget.SwitchButton;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 import org.greenrobot.eventbus.EventBus;
@@ -46,6 +47,19 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
      * 群昵称
      */
     private TextView mTvNickname;
+
+    /**
+     * 置顶开关
+     */
+    private SwitchButton mSwtTop;
+    /**
+     * 免打扰开关
+     */
+    private SwitchButton mSwtDoNotDisturb;
+    /**
+     * 是否显示群成员昵称开关
+     */
+    private SwitchButton mSwtShowGroupChatMemberNickname;
     private GroupChatDetailBean mGroupChatDetailBean;
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
@@ -76,6 +90,10 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
         rcvGroupChatMember.setLayoutManager(new GridLayoutManager(getContext(), 5));
         rcvGroupChatMember.setAdapter(mRcvGroupChatMemberAdapter = new RcvGroupChatMemberAdapter(getContext()));
         mTvNickname = findViewByID(R.id.tv_nickname);
+
+        mSwtTop = findViewByID(R.id.swt_top);
+        mSwtDoNotDisturb = findViewByID(R.id.swt_do_not_disturb);
+        mSwtShowGroupChatMemberNickname = findViewByID(R.id.swt_show_group_chat_member_nickname);
     }
 
     @Override
@@ -96,6 +114,33 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
             }
         });
         findViewByID(R.id.ll_nickname).setOnClickListener(mOnClickListener);
+        mSwtTop.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(boolean checked, boolean fromUser) {
+                if (!fromUser) {
+                    return;
+                }
+                getPresenter().setTop(mGroupChatDetailBean.getId(), checked ? 1 : 0);
+            }
+        });
+        mSwtDoNotDisturb.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(boolean checked, boolean fromUser) {
+                if (!fromUser) {
+                    return;
+                }
+                getPresenter().setDoNotDisturb(mGroupChatDetailBean.getId(), checked ? 1 : 0);
+            }
+        });
+        mSwtShowGroupChatMemberNickname.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(boolean checked, boolean fromUser) {
+                if (!fromUser) {
+                    return;
+                }
+                getPresenter().setShowGroupChatMemberNickname(mGroupChatDetailBean.getId(), checked ? 1 : 0);
+            }
+        });
     }
 
     @Override
@@ -124,10 +169,44 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
         mTvNickname.setText(TextUtils.isEmpty(groupChatDetailBean.getNickname())
                 ? getString(R.string.group_chat_setting_tv_nickname_text)
                 : groupChatDetailBean.getNickname());
+
+        mSwtTop.setChecked(groupChatDetailBean.getTop() == 1);
+        mSwtDoNotDisturb.setChecked(groupChatDetailBean.getDoNotDisturb() == 1);
+        mSwtShowGroupChatMemberNickname.setChecked(groupChatDetailBean.getShowGroupChatMemberNickname() == 1);
     }
 
     @Override
     public void getGroupChatDetailFailure(Exception e) {
+
+    }
+
+    @Override
+    public void setTopSuccess() {
+        EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_LIST, null));
+    }
+
+    @Override
+    public void setTopFailure(Exception e) {
+
+    }
+
+    @Override
+    public void setDoNotDisturbSuccess() {
+        EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_LIST, null));
+    }
+
+    @Override
+    public void setDoNotDisturbFailure(Exception e) {
+
+    }
+
+    @Override
+    public void setShowGroupChatMemberNicknameSuccess() {
+        EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_MESSAGE_LIST, null));
+    }
+
+    @Override
+    public void setShowGroupChatMemberNicknameFailure(Exception e) {
 
     }
 

@@ -20,4 +20,19 @@ public class GroupChatSettingModel implements IGroupChatSettingContract.IModel {
     public void getGroupChatDetail(String groupChatId, Callback<GroupChatDetailBean> callback) {
         IMClient.SINGLETON.getGroupChatManager().getDetail(groupChatId, callback);
     }
+
+    @Override
+    public void setTop(String groupChatId, int top, Callback<Object> callback) {
+        IMClient.SINGLETON.getGroupChatManager().setInfo(groupChatId, null, top, null, null, callback);
+    }
+
+    @Override
+    public void setDoNotDisturb(String groupChatId, int doNotDisturb, Callback<Object> callback) {
+        IMClient.SINGLETON.getGroupChatManager().setInfo(groupChatId, null, null, doNotDisturb, null, callback);
+    }
+
+    @Override
+    public void setShowGroupChatMemberNickname(String groupChatId, int showGroupChatMemberNickname, Callback<Object> callback) {
+        IMClient.SINGLETON.getGroupChatManager().setInfo(groupChatId, null, null, null, showGroupChatMemberNickname, callback);
+    }
 }
