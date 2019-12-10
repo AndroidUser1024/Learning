@@ -28,6 +28,8 @@ import com.qinshou.qinshoubox.friend.contract.IUserDetailContract;
 import com.qinshou.qinshoubox.friend.presenter.UserDetailPresenter;
 import com.qinshou.qinshoubox.friend.view.activity.SetRemarkActivity;
 import com.qinshou.qinshoubox.im.IMClient;
+import com.qinshou.qinshoubox.im.enums.FriendSource;
+import com.qinshou.qinshoubox.im.enums.UserSource;
 import com.qinshou.qinshoubox.im.listener.IOnFriendStatusListener;
 import com.qinshou.qinshoubox.im.view.fragment.IMActivity;
 
@@ -276,29 +278,10 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
             }
         });
         // 用户来源
-        String source = "";
-        if (userDetailBean.getSource() == 1) {
-            source = "通过用户名添加";
-        } else if (userDetailBean.getSource() == 2) {
-            source = "通过手机号添加";
-        } else if (userDetailBean.getSource() == 3) {
-            source = "通过邮箱添加";
-        } else if (userDetailBean.getSource() == 4) {
-            source = "通过扫一扫添加";
-        } else if (userDetailBean.getSource() == 5) {
-            source = "通过群聊添加";
-        } else if (userDetailBean.getSource() == -1) {
-            source = "对方通过用户名添加";
-        } else if (userDetailBean.getSource() == -2) {
-            source = "对方通过手机号添加";
-        } else if (userDetailBean.getSource() == -3) {
-            source = "对方通过邮箱添加";
-        } else if (userDetailBean.getSource() == -4) {
-            source = "对方通过扫一扫添加";
-        } else if (userDetailBean.getSource() == -5) {
-            source = "对方通过群聊添加";
+        FriendSource friendSource = FriendSource.getByValue(userDetailBean.getSource());
+        if (friendSource != null) {
+            mTvSource.setText(friendSource.getDesc());
         }
-        mTvSource.setText(source);
     }
 
     private void showNotFriendUI(final UserDetailBean userDetailBean) {
@@ -315,15 +298,10 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
                 );
             }
         });
-        String source = "";
-        if (userDetailBean.getSource() == 1) {
-            source = "通过用户名搜索";
-        } else if (userDetailBean.getSource() == 2) {
-            source = "通过手机号搜索";
-        } else if (userDetailBean.getSource() == 3) {
-            source = "通过邮箱搜索";
+        UserSource userSource = UserSource.getByValue(userDetailBean.getSource());
+        if (userSource != null) {
+            mTvSource.setText(userSource.getDesc());
         }
-        mTvSource.setText(source);
     }
 
     private void showWaitAcceptUI(final UserDetailBean userDetailBean) {
@@ -337,29 +315,10 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
             }
         });
         // 用户来源
-        String source = "";
-        if (userDetailBean.getSource() == 1) {
-            source = "通过用户名添加";
-        } else if (userDetailBean.getSource() == 2) {
-            source = "通过手机号添加";
-        } else if (userDetailBean.getSource() == 3) {
-            source = "通过邮箱添加";
-        } else if (userDetailBean.getSource() == 4) {
-            source = "通过扫一扫添加";
-        } else if (userDetailBean.getSource() == 5) {
-            source = "通过群聊添加";
-        } else if (userDetailBean.getSource() == -1) {
-            source = "对方通过用户名添加";
-        } else if (userDetailBean.getSource() == -2) {
-            source = "对方通过手机号添加";
-        } else if (userDetailBean.getSource() == -3) {
-            source = "对方通过邮箱添加";
-        } else if (userDetailBean.getSource() == -4) {
-            source = "对方通过扫一扫添加";
-        } else if (userDetailBean.getSource() == -5) {
-            source = "对方通过群聊添加";
+        FriendSource friendSource = FriendSource.getByValue(userDetailBean.getSource());
+        if (friendSource != null) {
+            mTvSource.setText(friendSource.getDesc());
         }
-        mTvSource.setText(source);
     }
 
     private void setData(UserDetailBean userDetailBean) {
