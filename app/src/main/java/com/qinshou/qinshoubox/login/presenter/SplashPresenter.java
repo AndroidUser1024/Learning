@@ -1,6 +1,8 @@
 package com.qinshou.qinshoubox.login.presenter;
 
 import com.qinshou.commonmodule.base.AbsPresenter;
+import com.qinshou.okhttphelper.callback.Callback;
+import com.qinshou.qinshoubox.login.bean.PoemBean;
 import com.qinshou.qinshoubox.login.contract.ISplashContract;
 import com.qinshou.qinshoubox.login.model.SplashModel;
 import com.qinshou.qinshoubox.login.view.activity.SplashActivity;
@@ -14,5 +16,26 @@ public class SplashPresenter extends AbsPresenter<ISplashContract.ISplashView, I
     @Override
     public ISplashContract.ISplashModel initModel() {
         return new SplashModel();
+    }
+
+    @Override
+    public void getRandomPoem() {
+        getModel().getRandomPoem(new Callback<PoemBean>() {
+            @Override
+            public void onSuccess(PoemBean data) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().getRandomSuccess(data);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().getRandomFailure(e);
+            }
+        });
     }
 }

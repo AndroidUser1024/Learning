@@ -2,11 +2,13 @@ package com.qinshou.qinshoubox.login.view.activity;
 
 import android.content.Intent;
 import android.view.View;
+import android.widget.TextView;
 
 import com.qinshou.commonmodule.base.AbsMVPActivity;
 import com.qinshou.commonmodule.widget.CountDownView;
 import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.R;
+import com.qinshou.qinshoubox.login.bean.PoemBean;
 import com.qinshou.qinshoubox.login.presenter.SplashPresenter;
 import com.qinshou.qinshoubox.login.contract.ISplashContract;
 
@@ -17,6 +19,9 @@ import com.qinshou.qinshoubox.login.contract.ISplashContract;
  */
 public class SplashActivity extends AbsMVPActivity<SplashPresenter> implements ISplashContract.ISplashView {
     private CountDownView mCountDownView;
+    private TextView mTvContent;
+    private TextView mTvTitle;
+    private TextView mTvAuthor;
 
     @Override
     public int getLayoutId() {
@@ -26,6 +31,9 @@ public class SplashActivity extends AbsMVPActivity<SplashPresenter> implements I
     @Override
     public void initView() {
         mCountDownView = findViewByID(R.id.count_down_view);
+        mTvContent = findViewByID(R.id.tv_content);
+        mTvTitle = findViewByID(R.id.tv_title);
+        mTvAuthor = findViewByID(R.id.tv_author);
     }
 
     @Override
@@ -51,6 +59,7 @@ public class SplashActivity extends AbsMVPActivity<SplashPresenter> implements I
 
     @Override
     public void initData() {
+        getPresenter().getRandomPoem();
     }
 
     private void jumpToMainActivity() {
@@ -60,5 +69,30 @@ public class SplashActivity extends AbsMVPActivity<SplashPresenter> implements I
         startActivity(new Intent(getContext(), MainActivity.class));
 //        startActivity(ContainerActivity.getJumpIntent(getContext(), LoginOrRegisterFragment.class));
         finish();
+    }
+
+    @Override
+    public void getRandomSuccess(PoemBean poemBean) {
+        String content = poemBean.getContent();
+        content = content.replace("，", "\n")
+                .replace("。", "\n");
+        String[] split = content.split("\n");
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < split.length; i++) {
+            stringBuilder.append(split[i]);
+            if (i == 2) {
+                break;
+            } else {
+                stringBuilder.append("\n");
+            }
+        }
+        mTvContent.setText(stringBuilder);
+        mTvTitle.setText("--" + poemBean.getTitle());
+        mTvAuthor.setText("--" + poemBean.getAuthor());
+    }
+
+    @Override
+    public void getRandomFailure(Exception e) {
+
     }
 }

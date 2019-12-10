@@ -28,4 +28,51 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:ringColor="#FF6495ED" />
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/px100"
+        android:layout_marginLeft="@dimen/px100"
+        android:layout_marginTop="@dimen/px600"
+        android:maxLines="2"
+        android:textColor="#FF000000"
+        android:textSize="@dimen/px40"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="落花迤逦层阴少\n\t青梅竞弄枝头小" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/px100"
+        android:layout_marginLeft="@dimen/px100"
+        android:maxLines="1"
+        android:textColor="#FF000000"
+        android:textSize="@dimen/px30"
+        app:layout_constraintLeft_toLeftOf="@id/tv_content"
+        app:layout_constraintStart_toStartOf="@id/tv_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_content"
+        tools:text="菩萨蛮·落花迤逦层阴少" />
+
+    <TextView
+        android:id="@+id/tv_author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/px100"
+        android:layout_marginLeft="@dimen/px100"
+        android:maxLines="1"
+        android:textColor="#FF000000"
+        android:textSize="@dimen/px30"
+        app:layout_constraintLeft_toLeftOf="@id/tv_content"
+        app:layout_constraintStart_toStartOf="@id/tv_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        tools:text="沈蔚" />
 </android.support.constraint.ConstraintLayout>
