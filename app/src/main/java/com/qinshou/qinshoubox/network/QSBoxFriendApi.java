@@ -38,13 +38,13 @@ public interface QSBoxFriendApi {
 
     @Json
     @Post("/getHistory")
-    Call<QinshouResultBean<List<FriendHistoryBean>>> getHistory(@Field(name = "id") String id
+    Call<QinshouResultBean<List<FriendHistoryBean>>> getHistory(@Field(name = "userId") String userId
             , @Field(name = "page") int page
             , @Field(name = "pageSize") int pageSize);
 
     @Json
     @Post("/getList")
-    Call<QinshouResultBean<List<FriendBean>>> getList(@Field(name = "id") String id);
+    Call<QinshouResultBean<List<FriendBean>>> getList(@Field(name = "userId") String userId);
 
     @Json
     @Post("/delete")

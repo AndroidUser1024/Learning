@@ -132,6 +132,7 @@ public class GroupChatDeleteMemberFragment extends QSFragment<GroupChatDeleteMem
     @Override
     public void deleteMemberSuccess() {
         EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.REFRESH_GROUP_CHAT_DETAIL, null));
+        EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.REFRESH_GROUP_CHAT_LIST, null));
         finish();
     }
 

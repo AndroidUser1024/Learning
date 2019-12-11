@@ -313,7 +313,6 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
     private void changeTabState(int position) {
         for (int i = 0; i < mTlFriend.getTabCount(); i++) {
             TabLayout.Tab tab = mTlFriend.getTabAt(i);
-            ShowLogUtil.logi("tab--->" + tab);
             if (tab == null) {
                 continue;
             }

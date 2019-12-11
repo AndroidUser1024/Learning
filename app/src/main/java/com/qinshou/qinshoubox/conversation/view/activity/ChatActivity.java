@@ -490,7 +490,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
     public void getMessageListSuccess(List<MessageBean> messageBeanList) {
         mRcvMessageAdapter.getDataList().addAll(0, messageBeanList);
         mRcvMessageAdapter.notifyItemRangeInserted(0, messageBeanList.size());
-        if (mPage == 0) {
+        if (mPage == IConstant.PAGE_START) {
             // 消息列表滚动到底部
             mRcvMessage.scrollToPosition(mRcvMessageAdapter.getItemCount() - 1);
         } else {

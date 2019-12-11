@@ -152,6 +152,7 @@ public class GroupChatAddMemberFragment extends QSFragment<GroupChatAddMemberPre
     @Override
     public void addMemberSuccess() {
         EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.REFRESH_GROUP_CHAT_DETAIL, null));
+        EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.REFRESH_GROUP_CHAT_LIST, null));
         finish();
     }
 

@@ -59,8 +59,8 @@ public enum IMClient {
      * 重连次数
      */
     private final int MAX_RECONNECT_COUNT = 5;
-    private static final String URL = "http://39.98.181.125:10086/websocket";
-    //        private static final String URL = "http://172.16.60.231:10086/websocket";
+//    private static final String URL = "http://www.mrqinshou.com:10086/websocket";
+            private static final String URL = "http://172.16.60.231:10086/websocket";
 //    private static final String URL = "http://192.168.1.109:10086/websocket";
     private Context mContext;
     private WebSocket mWebSocket;
