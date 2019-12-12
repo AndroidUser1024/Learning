@@ -100,7 +100,7 @@ public class RcvConversationAdapter extends RcvSingleBaseAdapter<ConversationBea
         int day = calendar.get(Calendar.DAY_OF_YEAR);
         String time;
         if (currentDay - day > 7) {
-            time = new SimpleDateFormat("yyyy.MM.dd", Locale.CHINA).format(new Date(conversationBean.getLastMsgTimestamp()));
+            time = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA).format(new Date(conversationBean.getLastMsgTimestamp()));
         } else if (currentDay - day > 1) {
             // 星期天为 1,依次增加,星期六为 7
             int weekIndex = calendar.get(Calendar.DAY_OF_WEEK);

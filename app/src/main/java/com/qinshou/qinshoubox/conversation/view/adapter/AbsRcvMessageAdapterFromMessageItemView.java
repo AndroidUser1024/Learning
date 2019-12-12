@@ -1,9 +1,8 @@
 package com.qinshou.qinshoubox.conversation.view.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.commonmodule.rcvbaseadapter.itemview.BaseItemView;
@@ -12,6 +11,7 @@ import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
+import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -76,29 +76,29 @@ public abstract class AbsRcvMessageAdapterFromMessageItemView extends BaseItemVi
             int amOrPm = calendar.get(Calendar.AM_PM);
             if (currentDay - day > 7) {
                 if (amOrPm == 0) {
-                    time = new SimpleDateFormat("yyyy年MM月dd日 上午hh:mm", Locale.CHINA).format(new Date(messageBean.getReceiveTimestamp()));
+                    time = new SimpleDateFormat("yyyy-MM月dd日 HH:mm", Locale.CHINA).format(new Date(messageBean.getReceiveTimestamp()));
                 } else {
-                    time = new SimpleDateFormat("yyyy年MM月dd日 下午hh:mm", Locale.CHINA).format(new Date(messageBean.getReceiveTimestamp()));
+                    time = new SimpleDateFormat("yyyy-MM月dd日 HH:mm", Locale.CHINA).format(new Date(messageBean.getReceiveTimestamp()));
                 }
             } else if (currentDay - day > 1) {
                 // 星期天为 1,依次增加,星期六为 7
                 int weekIndex = calendar.get(Calendar.DAY_OF_WEEK);
                 if (amOrPm == 0) {
-                    time = new SimpleDateFormat(mWeekArray[weekIndex - 1] + " 上午hh:mm", Locale.CHINA).format(new Date(messageBean.getSendTimestamp()));
+                    time = new SimpleDateFormat(mWeekArray[weekIndex - 1] + " HH:mm", Locale.CHINA).format(new Date(messageBean.getSendTimestamp()));
                 } else {
-                    time = new SimpleDateFormat(mWeekArray[weekIndex - 1] + " 下午hh:mm", Locale.CHINA).format(new Date(messageBean.getSendTimestamp()));
+                    time = new SimpleDateFormat(mWeekArray[weekIndex - 1] + " HH:mm", Locale.CHINA).format(new Date(messageBean.getSendTimestamp()));
                 }
             } else if (currentDay - day > 0) {
                 if (amOrPm == 0) {
-                    time = new SimpleDateFormat("昨天 上午hh:mm", Locale.CHINA).format(new Date(messageBean.getReceiveTimestamp()));
+                    time = new SimpleDateFormat("昨天 HH:mm", Locale.CHINA).format(new Date(messageBean.getReceiveTimestamp()));
                 } else {
-                    time = new SimpleDateFormat("昨天 下午hh:mm", Locale.CHINA).format(new Date(messageBean.getReceiveTimestamp()));
+                    time = new SimpleDateFormat("昨天 HH:mm", Locale.CHINA).format(new Date(messageBean.getReceiveTimestamp()));
                 }
             } else {
                 if (amOrPm == 0) {
-                    time = new SimpleDateFormat("上午hh:mm", Locale.CHINA).format(new Date(messageBean.getReceiveTimestamp()));
+                    time = new SimpleDateFormat("HH:mm", Locale.CHINA).format(new Date(messageBean.getReceiveTimestamp()));
                 } else {
-                    time = new SimpleDateFormat("下午hh:mm", Locale.CHINA).format(new Date(messageBean.getReceiveTimestamp()));
+                    time = new SimpleDateFormat("HH:mm", Locale.CHINA).format(new Date(messageBean.getReceiveTimestamp()));
                 }
             }
             baseViewHolder.setTvText(R.id.tv_time, time);
@@ -108,14 +108,14 @@ public abstract class AbsRcvMessageAdapterFromMessageItemView extends BaseItemVi
         // 前一条消息
         MessageBean previousMessageBean = getRcvBaseAdapter().getDataList().get(i - 1);
         // 与前一条消息的时间间隔
-        long timeDiff = 0;
-//        if (previousMessageBean.getFromUserId() == UserStatusManager.SINGLETON.getUserBean().getId()) {
-//            // 上一条消息是发送的,就和发送时间比较
-//            timeDiff = messageBean.getReceiveTimestamp() - previousMessageBean.getSendTimestamp();
-//        } else {
-//            // 上一条消息是收到的,就和接收时间比较
-//            timeDiff = messageBean.getReceiveTimestamp() - previousMessageBean.getReceiveTimestamp();
-//        }
+        long timeDiff;
+        if (TextUtils.equals(previousMessageBean.getFromUserId(), UserStatusManager.SINGLETON.getUserBean().getId())) {
+            // 上一条消息是发送的,就和发送时间比较
+            timeDiff = messageBean.getReceiveTimestamp() - previousMessageBean.getSendTimestamp();
+        } else {
+            // 上一条消息是收到的,就和接收时间比较
+            timeDiff = messageBean.getReceiveTimestamp() - previousMessageBean.getReceiveTimestamp();
+        }
         if (timeDiff <= 1000 * 60 * 5) {
             baseViewHolder.setVisibility(R.id.tv_time, View.GONE);
             return;
@@ -135,29 +135,29 @@ public abstract class AbsRcvMessageAdapterFromMessageItemView extends BaseItemVi
         int amOrPm = calendar.get(Calendar.AM_PM);
         if (currentDay - day > 7) {
             if (amOrPm == 0) {
-                time = new SimpleDateFormat("yyyy年MM月dd日 上午hh:mm", Locale.CHINA).format(new Date(messageBean.getReceiveTimestamp()));
+                time = new SimpleDateFormat("yyyy-MM月dd日 HH:mm", Locale.CHINA).format(new Date(messageBean.getReceiveTimestamp()));
             } else {
-                time = new SimpleDateFormat("yyyy年MM月dd日 下午hh:mm", Locale.CHINA).format(new Date(messageBean.getReceiveTimestamp()));
+                time = new SimpleDateFormat("yyyy-MM月dd日 HH:mm", Locale.CHINA).format(new Date(messageBean.getReceiveTimestamp()));
             }
         } else if (currentDay - day > 1) {
             // 星期天为 1,依次增加,星期六为 7
             int weekIndex = calendar.get(Calendar.DAY_OF_WEEK);
             if (amOrPm == 0) {
-                time = new SimpleDateFormat(mWeekArray[weekIndex - 1] + " 上午hh:mm", Locale.CHINA).format(new Date(messageBean.getSendTimestamp()));
+                time = new SimpleDateFormat(mWeekArray[weekIndex - 1] + " HH:mm", Locale.CHINA).format(new Date(messageBean.getSendTimestamp()));
             } else {
-                time = new SimpleDateFormat(mWeekArray[weekIndex - 1] + " 下午hh:mm", Locale.CHINA).format(new Date(messageBean.getSendTimestamp()));
+                time = new SimpleDateFormat(mWeekArray[weekIndex - 1] + " HH:mm", Locale.CHINA).format(new Date(messageBean.getSendTimestamp()));
             }
         } else if (currentDay - day > 0) {
             if (amOrPm == 0) {
-                time = new SimpleDateFormat("昨天 上午hh:mm", Locale.CHINA).format(new Date(messageBean.getReceiveTimestamp()));
+                time = new SimpleDateFormat("昨天 HH:mm", Locale.CHINA).format(new Date(messageBean.getReceiveTimestamp()));
             } else {
-                time = new SimpleDateFormat("昨天 下午hh:mm", Locale.CHINA).format(new Date(messageBean.getReceiveTimestamp()));
+                time = new SimpleDateFormat("昨天 HH:mm", Locale.CHINA).format(new Date(messageBean.getReceiveTimestamp()));
             }
         } else {
             if (amOrPm == 0) {
-                time = new SimpleDateFormat("上午hh:mm", Locale.CHINA).format(new Date(messageBean.getReceiveTimestamp()));
+                time = new SimpleDateFormat("HH:mm", Locale.CHINA).format(new Date(messageBean.getReceiveTimestamp()));
             } else {
-                time = new SimpleDateFormat("下午hh:mm", Locale.CHINA).format(new Date(messageBean.getReceiveTimestamp()));
+                time = new SimpleDateFormat("HH:mm", Locale.CHINA).format(new Date(messageBean.getReceiveTimestamp()));
             }
         }
         baseViewHolder.setTvText(R.id.tv_time, time);

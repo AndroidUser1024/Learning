@@ -60,7 +60,7 @@ public enum IMClient {
      */
     private final int MAX_RECONNECT_COUNT = 5;
     private static final String URL = "http://www.mrqinshou.com:10086/websocket";
-//            private static final String URL = "http://172.16.60.231:10086/websocket";
+    //            private static final String URL = "http://172.16.60.231:10086/websocket";
 //    private static final String URL = "http://192.168.1.109:10086/websocket";
     private Context mContext;
     private WebSocket mWebSocket;
@@ -89,6 +89,7 @@ public enum IMClient {
             if (mWebSocket == null) {
                 return;
             }
+            Log.i(TAG, "发送心跳");
             mWebSocket.send(new Gson().toJson(MessageBean.createHeartBeatMessage(mUserId)));
             mHandler.postDelayed(mHeartBeatRunnable, HEART_BEAT_INTERVAL);
         }
