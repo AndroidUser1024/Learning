@@ -83,7 +83,6 @@ public class FriendHistoryFragment extends QSFragment<FriendHistoryPresenter> im
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        EventBus.getDefault().unregister(this);
         IMClient.SINGLETON.removeOnFriendStatusListener(mOnFriendStatusListener);
     }
 
@@ -104,7 +103,6 @@ public class FriendHistoryFragment extends QSFragment<FriendHistoryPresenter> im
 
     @Override
     public void setListener() {
-        EventBus.getDefault().register(this);
         IMClient.SINGLETON.addOnFriendStatusListener(mOnFriendStatusListener);
         mTitleBar.setLeftTextOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,6 +134,10 @@ public class FriendHistoryFragment extends QSFragment<FriendHistoryPresenter> im
     @Override
     public void initData() {
         getPresenter().getFriendHistory(mPage, IConstant.PAGE_SIZE);
+    }
+
+    @Override
+    public void handleEvent(EventBean<Object> eventBean) {
     }
 
     @Override

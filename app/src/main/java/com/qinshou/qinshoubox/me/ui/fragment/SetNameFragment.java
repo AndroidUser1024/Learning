@@ -101,6 +101,11 @@ public class SetNameFragment extends QSFragment<SetNamePresenter> implements ISe
     }
 
     @Override
+    public void handleEvent(EventBean<Object> eventBean) {
+
+    }
+
+    @Override
     public void setUserInfoSuccess(UserBean userBean) {
         UserStatusManager.SINGLETON.getUserBean().setNickname(userBean.getNickname());
         EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.REFRESH_USER_BEAN, null));

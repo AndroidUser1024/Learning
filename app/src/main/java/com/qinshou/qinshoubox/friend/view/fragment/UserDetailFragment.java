@@ -211,6 +211,10 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
     }
 
     @Override
+    public void handleEvent(EventBean<Object> eventBean) {
+    }
+
+    @Override
     public void getUserDetailSuccess(UserDetailBean userDetailBean) {
         mUserDetailBean = userDetailBean;
         if (userDetailBean.getFriendStatus() == 1) {

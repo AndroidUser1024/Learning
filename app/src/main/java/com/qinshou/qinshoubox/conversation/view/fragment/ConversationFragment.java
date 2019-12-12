@@ -90,14 +90,12 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        EventBus.getDefault().unregister(this);
         mTvUnreadCountInTlMain.setVisibility(View.GONE);
         IMClient.SINGLETON.removeOnMessageListener(mOnMessageListener);
     }
 
     @Override
     public int getLayoutId() {
-        EventBus.getDefault().register(this);
         return R.layout.fragment_conversation;
     }
 
@@ -171,8 +169,8 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
 
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void receiveEvent(EventBean<Object> eventBean) {
+    @Override
+    public void handleEvent(EventBean<Object> eventBean) {
         if (eventBean.getType() != EventBean.Type.REFRESH_CONVERSATION_LIST) {
             return;
         }

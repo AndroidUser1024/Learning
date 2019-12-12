@@ -149,7 +149,6 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        EventBus.getDefault().unregister(this);
         IMClient.SINGLETON.removeOnFriendStatusListener(mOnFriendStatusListener);
         IMClient.SINGLETON.removeOnGroupChatStatusListener(mOnGroupChatStatusListener);
         mTvUnreadCount.setVisibility(View.GONE);
@@ -183,7 +182,6 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
 
     @Override
     public void setListener() {
-        EventBus.getDefault().register(this);
         IMClient.SINGLETON.addOnFriendStatusListener(mOnFriendStatusListener);
         IMClient.SINGLETON.addOnGroupChatStatusListener(mOnGroupChatStatusListener);
         findViewByID(R.id.ll_new_friend).setOnClickListener(new View.OnClickListener() {
@@ -273,6 +271,10 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
         getPresenter().getMyGroupChatList();
         getPresenter().getFriendList();
         showFriendHistoryUnreadCount();
+    }
+
+    @Override
+    public void handleEvent(EventBean<Object> eventBean) {
     }
 
     @Override

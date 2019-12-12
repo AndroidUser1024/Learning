@@ -93,12 +93,6 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
     };
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Override
     public int getLayoutId() {
         return R.layout.fragment_group_chat_setting;
     }
@@ -119,7 +113,6 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
 
     @Override
     public void setListener() {
-        EventBus.getDefault().register(this);
         mRcvGroupChatMemberAdapter.setOnItemClickListener(new IOnItemClickListener() {
             @Override
             public void onItemClick(BaseViewHolder holder, Object itemData, int position) {
@@ -177,6 +170,13 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
             return;
         }
         getPresenter().getGroupChatDetail(groupChatId);
+    }
+
+    @Override
+    public void handleEvent(EventBean<Object> eventBean) {
+        if (eventBean.getType() == EventBean.Type.REFRESH_GROUP_CHAT_DETAIL) {
+            getPresenter().getGroupChatDetail(mGroupChatDetailBean.getId());
+        }
     }
 
     @Override
@@ -243,13 +243,6 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
     @Override
     public void exitFailure(Exception e) {
 
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void receiveEvent(EventBean<Object> eventBean) {
-        if (eventBean.getType() == EventBean.Type.REFRESH_GROUP_CHAT_DETAIL) {
-            getPresenter().getGroupChatDetail(mGroupChatDetailBean.getId());
-        }
     }
 
     /**

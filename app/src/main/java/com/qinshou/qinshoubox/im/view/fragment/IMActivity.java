@@ -13,6 +13,7 @@ import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.conversation.view.fragment.ConversationFragment;
 import com.qinshou.qinshoubox.demo.view.fragment.DemoFragment;
 import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.contract.IIMContract;
 import com.qinshou.qinshoubox.im.presenter.IMPresenter;
 
@@ -93,6 +94,11 @@ public class IMActivity extends QSActivity<IMPresenter> implements IIMContract.I
             tab.setCustomView(view);
             mTlIM.addTab(tab, i == 0);
         }
+    }
+
+    @Override
+    public void handleEvent(EventBean<Object> eventBean) {
+
     }
 
     /**

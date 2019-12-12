@@ -28,6 +28,7 @@ import com.qinshou.commonmodule.util.permissionutil.PermissionUtil;
 import com.qinshou.commonmodule.widget.RefreshLayout;
 import com.qinshou.commonmodule.widget.TitleBar;
 import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatSettingFragment;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
@@ -334,6 +335,11 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
         IMClient.SINGLETON.removeOnMessageListener(mOnMessageListener);
         MediaPlayerHelper.SINGLETON.stop();
         MediaRecorderHelper.SINGLETON.stopRecord();
+    }
+
+    @Override
+    public void handleEvent(EventBean<Object> eventBean) {
+
     }
 
     @Override

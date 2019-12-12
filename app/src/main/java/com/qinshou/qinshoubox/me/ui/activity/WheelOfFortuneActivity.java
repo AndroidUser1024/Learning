@@ -2,9 +2,11 @@ package com.qinshou.qinshoubox.me.ui.activity;
 
 import android.graphics.Color;
 
+import com.qinshou.commonmodule.base.AbsPresenter;
 import com.qinshou.commonmodule.widget.WheelOfFortuneView;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSActivity;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +16,7 @@ import java.util.List;
  * Create On:2019-01-12 15:53
  * Description:
  */
-public class WheelOfFortuneActivity extends QSActivity {
+public class WheelOfFortuneActivity extends QSActivity<AbsPresenter> {
 
     @Override
     public int getLayoutId() {
@@ -49,5 +51,9 @@ public class WheelOfFortuneActivity extends QSActivity {
     @Override
     public void initData() {
 
+    }
+
+    @Override
+    public void handleEvent(EventBean<Object> eventBean) {
     }
 }

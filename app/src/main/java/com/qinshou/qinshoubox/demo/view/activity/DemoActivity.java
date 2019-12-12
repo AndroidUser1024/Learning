@@ -4,6 +4,7 @@ package com.qinshou.qinshoubox.demo.view.activity;
 import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.demo.contract.IDemoContract;
 import com.qinshou.qinshoubox.demo.presenter.DemoPresenter;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
 
 /**
  * Author: QinHao
@@ -31,6 +32,11 @@ public class DemoActivity extends QSActivity<DemoPresenter> implements IDemoCont
     @Override
     public void initData() {
         getPresenter().demoRequest();
+    }
+
+    @Override
+    public void handleEvent(EventBean<Object> eventBean) {
+
     }
 
     @Override

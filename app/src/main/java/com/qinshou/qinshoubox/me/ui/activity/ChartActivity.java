@@ -2,6 +2,7 @@ package com.qinshou.qinshoubox.me.ui.activity;
 
 import android.graphics.Color;
 
+import com.qinshou.commonmodule.base.AbsPresenter;
 import com.qinshou.commonmodule.widget.chartview.ColumnChartView;
 import com.qinshou.commonmodule.widget.chartview.LineChartView;
 import com.qinshou.commonmodule.widget.chartview.component.AxisText;
@@ -13,13 +14,14 @@ import com.qinshou.commonmodule.widget.chartview.component.HorizontalLine;
 import com.qinshou.commonmodule.widget.chartview.component.IAxisTextFormatter;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSActivity;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class ChartActivity extends QSActivity {
+public class ChartActivity extends QSActivity<AbsPresenter> {
     private static final int MSG_DRAW = 1;
     private LineChartView mLineChartView;
     private ColumnChartView mColumnChartView;
@@ -44,6 +46,10 @@ public class ChartActivity extends QSActivity {
     public void initData() {
         drawColumnChartView();
         drawLineChartView();
+    }
+
+    @Override
+    public void handleEvent(EventBean<Object> eventBean) {
     }
 
     private void drawLineChartView() {

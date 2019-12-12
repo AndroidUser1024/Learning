@@ -2,8 +2,10 @@ package com.qinshou.qinshoubox.me.ui.activity;
 
 import android.view.View;
 
+import com.qinshou.commonmodule.base.AbsPresenter;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSActivity;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.me.ui.widget.PeiQiView;
 
 /**
@@ -11,7 +13,7 @@ import com.qinshou.qinshoubox.me.ui.widget.PeiQiView;
  * Create On:2019-03-05 22:56
  * Description:
  */
-public class PeiQiActivity extends QSActivity {
+public class PeiQiActivity extends QSActivity<AbsPresenter> {
 
     @Override
     public int getLayoutId() {
@@ -36,5 +38,9 @@ public class PeiQiActivity extends QSActivity {
     @Override
     public void initData() {
 
+    }
+
+    @Override
+    public void handleEvent(EventBean<Object> eventBean) {
     }
 }

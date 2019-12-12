@@ -148,6 +148,10 @@ public class CreateGroupChatFragment extends QSFragment<CreateGroupChatPresenter
     }
 
     @Override
+    public void handleEvent(EventBean<Object> eventBean) {
+    }
+
+    @Override
     public void getFriendListSuccess(List<FriendBean> friendBeanList) {
         List<GroupChatMemberForCreateBean> groupChatMemberForCreateBeanList = new ArrayList<>();
         for (FriendBean friendBean : friendBeanList) {

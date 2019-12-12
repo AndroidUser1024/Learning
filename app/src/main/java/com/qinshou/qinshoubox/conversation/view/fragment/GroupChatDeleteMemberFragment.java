@@ -107,6 +107,11 @@ public class GroupChatDeleteMemberFragment extends QSFragment<GroupChatDeleteMem
     }
 
     @Override
+    public void handleEvent(EventBean<Object> eventBean) {
+
+    }
+
+    @Override
     public void getMemberListSuccess(List<UserDetailBean> userDetailBeanList) {
         List<GroupChatMemberForCreateBean> groupChatMemberForCreateBeanList = new ArrayList<>();
         for (UserDetailBean userDetailBean : userDetailBeanList) {

@@ -12,6 +12,7 @@ import com.qinshou.commonmodule.util.permissionutil.IOnRequestPermissionResultCa
 import com.qinshou.commonmodule.util.permissionutil.PermissionUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.music.bean.MusicBean;
 import com.qinshou.qinshoubox.music.contract.IMusicListContract;
 import com.qinshou.qinshoubox.music.presenter.MusicListPresenter;
@@ -68,6 +69,10 @@ public class MusicListFragment extends QSFragment<MusicListPresenter> implements
     }
 
     @Override
+    public void handleEvent(EventBean<Object> eventBean) {
+    }
+
+    @Override
     public void setMusicList(List<MusicBean> musicList) {
         mRcvMusicAdapter.setDataList(musicList);
     }
@@ -76,5 +81,4 @@ public class MusicListFragment extends QSFragment<MusicListPresenter> implements
     public void queryMusicListFailure(String failureInfo) {
 
     }
-
 }

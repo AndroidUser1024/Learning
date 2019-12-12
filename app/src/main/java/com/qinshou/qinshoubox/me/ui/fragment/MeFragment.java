@@ -117,12 +117,6 @@ public class MeFragment extends QSFragment<MePresenter> implements IMeContract.I
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Override
     public int getLayoutId() {
         return R.layout.fragment_me;
     }
@@ -130,7 +124,6 @@ public class MeFragment extends QSFragment<MePresenter> implements IMeContract.I
 
     @Override
     public void initView() {
-        EventBus.getDefault().register(this);
         mIvHeadImg = findViewByID(R.id.iv_head_img);
         mTvNickname = findViewByID(R.id.tv_click_2_login);
         mTvUsername = findViewByID(R.id.tv_login_2_have_more_function);
@@ -175,8 +168,8 @@ public class MeFragment extends QSFragment<MePresenter> implements IMeContract.I
 
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void receiveEvent(EventBean<Object> eventBean) {
+    @Override
+    public void handleEvent(EventBean<Object> eventBean) {
         if (eventBean.getType() == EventBean.Type.LOGIN || eventBean.getType() == EventBean.Type.REFRESH_USER_BEAN) {
             UserBean userBean = UserStatusManager.SINGLETON.getUserBean();
             ImageLoadUtil.SINGLETON.loadImage(getContext(), userBean.getHeadImgSmall(), mIvHeadImg);

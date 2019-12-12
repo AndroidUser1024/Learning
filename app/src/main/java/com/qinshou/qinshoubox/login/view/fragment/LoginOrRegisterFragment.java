@@ -19,6 +19,7 @@ import com.qinshou.commonmodule.util.SoftKeyboardUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.constant.IConstant;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.login.contract.ILoginOrRegisterContract;
 import com.qinshou.qinshoubox.login.presenter.LoginOrRegisterPresenter;
@@ -96,6 +97,10 @@ public class LoginOrRegisterFragment extends QSFragment<LoginOrRegisterPresenter
     @Override
     public void initData() {
 
+    }
+
+    @Override
+    public void handleEvent(EventBean<Object> eventBean) {
     }
 
     @Override

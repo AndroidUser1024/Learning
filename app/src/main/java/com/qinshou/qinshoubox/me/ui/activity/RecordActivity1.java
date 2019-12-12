@@ -9,8 +9,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.qinshou.commonmodule.base.AbsPresenter;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSActivity;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,7 +23,7 @@ import java.util.concurrent.ExecutorService;
  * Create On:2019-03-19 21:05
  * Description:
  */
-public class RecordActivity1 extends QSActivity {
+public class RecordActivity1 extends QSActivity<AbsPresenter> {
     private Button mBtnPressToSpeech;
     private Button mBtnPlay;
 
@@ -94,6 +96,10 @@ public class RecordActivity1 extends QSActivity {
 //        });
 //        mExecutorService = Executors.newSingleThreadExecutor();
 //        mHandler = new Handler(Looper.getMainLooper());
+    }
+
+    @Override
+    public void handleEvent(EventBean<Object> eventBean) {
     }
 
     /**

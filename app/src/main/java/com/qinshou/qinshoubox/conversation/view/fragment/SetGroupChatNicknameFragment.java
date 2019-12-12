@@ -105,6 +105,10 @@ public class SetGroupChatNicknameFragment extends QSFragment<SetGroupChatNicknam
     }
 
     @Override
+    public void handleEvent(EventBean<Object> eventBean) {
+    }
+
+    @Override
     public void setGroupChatNicknameSuccess() {
         EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.REFRESH_GROUP_CHAT_DETAIL, null));
         finish();

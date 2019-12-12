@@ -14,6 +14,7 @@ import android.widget.ProgressBar;
 import com.qinshou.commonmodule.widget.RefreshLayout;
 import com.qinshou.imagemodule.PhotoViewActivity;
 import com.qinshou.qinshoubox.base.QSActivity;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
 
 import java.util.ArrayList;
 
@@ -101,6 +102,11 @@ public class WebActivity extends QSActivity<WebPresenter> implements IWebContrac
     public void initData() {
         String url = getIntent().getStringExtra(URL);
         webView.loadUrl(url);
+    }
+
+    @Override
+    public void handleEvent(EventBean<Object> eventBean) {
+
     }
 
     /**

@@ -167,6 +167,11 @@ public class PersonalHeadImgFragment extends QSFragment<PersonalHeadImgPresenter
     }
 
     @Override
+    public void handleEvent(EventBean<Object> eventBean) {
+
+    }
+
+    @Override
     public void setHeadImgSuccess(UserBean userBean) {
         UserStatusManager.SINGLETON.getUserBean().setHeadImg(userBean.getHeadImg());
         UserStatusManager.SINGLETON.getUserBean().setHeadImgSmall(userBean.getHeadImgSmall());
@@ -418,5 +423,4 @@ public class PersonalHeadImgFragment extends QSFragment<PersonalHeadImgPresenter
             }
         });
     }
-
 }

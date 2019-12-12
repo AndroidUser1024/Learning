@@ -17,6 +17,8 @@ import com.qinshou.commonmodule.base.AbsMVPFragment;
 import com.qinshou.commonmodule.util.DisplayUtil;
 import com.qinshou.commonmodule.util.MediaPlayerHelper;
 import com.qinshou.qinshoubox.R;
+import com.qinshou.qinshoubox.base.QSFragment;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.music.bean.MusicBean;
 import com.qinshou.qinshoubox.music.contract.IMusicPlayContract;
 import com.qinshou.qinshoubox.music.presenter.MusicPlayPresenter;
@@ -30,7 +32,7 @@ import java.util.List;
  * Author: QinHao
  * Date: 2019/4/4 18:32
  */
-public class MusicPlayFragment extends AbsMVPFragment<MusicPlayPresenter> implements IMusicPlayContract.IMusicPlayView {
+public class MusicPlayFragment extends QSFragment<MusicPlayPresenter> implements IMusicPlayContract.IMusicPlayView {
 
     private TextView mTvTitle;  //音乐标题
     private ImageButton mIbShare;   //分享按钮
@@ -145,6 +147,11 @@ public class MusicPlayFragment extends AbsMVPFragment<MusicPlayPresenter> implem
             return;
         }
         playMusic();
+    }
+
+    @Override
+    public void handleEvent(EventBean<Object> eventBean) {
+
     }
 
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {

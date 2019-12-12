@@ -54,7 +54,6 @@ public class GroupChatAddMemberFragment extends QSFragment<GroupChatAddMemberPre
     @Override
     public void initView() {
         mTvFinish = findViewByID(R.id.tv_finish);
-
         RecyclerView rcvGroupChatMember = findViewByID(R.id.rcv_group_chat_member);
         rcvGroupChatMember.setLayoutManager(new LinearLayoutManager(getContext()));
         rcvGroupChatMember.setAdapter(mRcvGroupChatMemberForCreateAdapter = new RcvGroupChatMemberForCreateAdapter(getContext()));
@@ -105,6 +104,11 @@ public class GroupChatAddMemberFragment extends QSFragment<GroupChatAddMemberPre
             return;
         }
         getPresenter().getFriendList();
+    }
+
+    @Override
+    public void handleEvent(EventBean<Object> eventBean) {
+
     }
 
     @Override

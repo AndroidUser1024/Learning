@@ -20,6 +20,7 @@ import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.WebActivity;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.constant.IConstant;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.homepage.bean.NewsBean;
 import com.qinshou.qinshoubox.homepage.contract.IHomepageContract;
 import com.qinshou.qinshoubox.homepage.presenter.HomepagePresenter;
@@ -134,6 +135,10 @@ public class HomepageFragment extends QSFragment<HomepagePresenter> implements I
     public void initData() {
         getPresenter().getWallpaperList();
         getPresenter().getNewsList(mPage, IConstant.PAGE_SIZE);
+    }
+
+    @Override
+    public void handleEvent(EventBean<Object> eventBean) {
     }
 
     @Override

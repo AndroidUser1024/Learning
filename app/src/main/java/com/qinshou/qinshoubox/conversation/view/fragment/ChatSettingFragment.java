@@ -16,6 +16,7 @@ import com.qinshou.qinshoubox.conversation.contract.IChatSettingContract;
 import com.qinshou.qinshoubox.conversation.presenter.ChatSettingPresenter;
 import com.qinshou.qinshoubox.friend.view.fragment.UserDetailFragment;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
+import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.me.ui.widget.SwitchButton;
 
@@ -141,6 +142,7 @@ public class ChatSettingFragment extends QSFragment<ChatSettingPresenter> implem
         getPresenter().getFriend(toUserId);
     }
 
+
     @Override
     public void getFriendSuccess(FriendBean friendBean) {
         mFriendBean = friendBean;
@@ -200,5 +202,13 @@ public class ChatSettingFragment extends QSFragment<ChatSettingPresenter> implem
         context.startActivity(ContainerActivity.getJumpIntent(context
                 , ChatSettingFragment.class
                 , bundle));
+    }
+
+    @Override
+    public void handleEvent(EventBean<Object> eventBean) {
+        if (eventBean.getType() != EventBean.Type.REFRESH_FRIEND_LIST) {
+            return;
+        }
+        getPresenter().getFriend(mFriendBean.getId());
     }
 }

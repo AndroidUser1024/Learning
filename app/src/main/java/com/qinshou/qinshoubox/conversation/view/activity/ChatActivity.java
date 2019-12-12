@@ -485,6 +485,20 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
         getPresenter().getMessageList(mToUserId, mPage, IConstant.PAGE_SIZE);
     }
 
+    @Override
+    public void handleEvent(EventBean<Object> eventBean) {
+        if (eventBean.getType() != EventBean.Type.REFRESH_FRIEND_LIST) {
+            return;
+        }
+        FriendBean friendBean = IMClient.SINGLETON.getFriendManager().getById(mToUserId);
+        if (friendBean == null) {
+            return;
+        }
+        // 对方的昵称
+        mTitleBar.setTitleText(TextUtils.isEmpty(friendBean.getRemark())
+                ? friendBean.getNickname()
+                : friendBean.getRemark());
+    }
 
     @Override
     public void getMessageListSuccess(List<MessageBean> messageBeanList) {

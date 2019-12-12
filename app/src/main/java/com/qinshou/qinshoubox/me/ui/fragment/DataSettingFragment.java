@@ -61,14 +61,7 @@ public class DataSettingFragment extends QSFragment<DataSettingPresenter> implem
     };
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Override
     public int getLayoutId() {
-        EventBus.getDefault().register(this);
         return R.layout.fragment_data_setting;
     }
 
@@ -107,8 +100,8 @@ public class DataSettingFragment extends QSFragment<DataSettingPresenter> implem
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void receiveEvent(EventBean<Object> eventBean) {
+    @Override
+    public void handleEvent(EventBean<Object> eventBean) {
         if (eventBean.getType() == EventBean.Type.REFRESH_USER_BEAN) {
             UserBean userBean = UserStatusManager.SINGLETON.getUserBean();
             ImageLoadUtil.SINGLETON.loadImage(getContext(), userBean.getHeadImgSmall(), mIvHeadImg);

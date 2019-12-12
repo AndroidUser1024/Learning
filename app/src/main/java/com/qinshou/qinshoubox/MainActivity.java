@@ -42,13 +42,6 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
             , R.drawable.main_iv_tab_conversation_src, R.drawable.main_iv_tab_conversation_src_selected
             , R.drawable.main_iv_tab_me_src, R.drawable.main_iv_tab_me_src_selected};
 
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
-    }
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -63,7 +56,6 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
 
     @Override
     public int getLayoutId() {
-        EventBus.getDefault().register(this);
         return R.layout.activity_main;
     }
 
@@ -157,22 +149,8 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void receiveEvent(EventBean<Object> eventBean) {
-        if (eventBean.getType() == EventBean.Type.LOGIN) {
-//            FragmentUtil.removeFragment(getActivity(), mConversationFragment);
-//            FragmentUtil.removeFragment(getActivity(), mFriendFragment);
-//            mConversationFragment = new ConversationFragment();
-//            mFriendFragment = new FriendFragment();
-//            FragmentUtil.addFragment(getActivity(), R.id.fl_fragment_container, mConversationFragment);
-//            FragmentUtil.addFragment(getActivity(), R.id.fl_fragment_container, mFriendFragment);
-        } else if (eventBean.getType() == EventBean.Type.LOGOUT) {
-//            FragmentUtil.removeFragment(getActivity(), mConversationFragment);
-//            FragmentUtil.removeFragment(getActivity(), mFriendFragment);
-//            mConversationFragment = new DemoFragment();
-//            mFriendFragment = new DemoFragment();
-//            FragmentUtil.addFragment(getActivity(), R.id.fl_fragment_container, mConversationFragment);
-//            FragmentUtil.addFragment(getActivity(), R.id.fl_fragment_container, mFriendFragment);
-        }
+    @Override
+    public void handleEvent(EventBean<Object> eventBean) {
+
     }
 }

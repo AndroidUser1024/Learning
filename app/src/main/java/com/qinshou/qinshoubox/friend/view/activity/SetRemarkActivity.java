@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qinshou.commonmodule.widget.TitleBar;
@@ -14,6 +15,8 @@ import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.friend.contract.ISetRemarkContract;
 import com.qinshou.qinshoubox.friend.presenter.SetRemarkPresenter;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
+import com.qinshou.qinshoubox.listener.ClearErrorInfoTextWatcher;
 
 /**
  * Author: QinHao
@@ -34,6 +37,11 @@ public class SetRemarkActivity extends QSActivity<SetRemarkPresenter> implements
      * 完成按钮
      */
     private TextView mTvFinish;
+    /**
+     * 输入框清空按钮
+     */
+    private ImageView mIvClear;
+
 
     @Override
     public int getLayoutId() {
@@ -44,6 +52,7 @@ public class SetRemarkActivity extends QSActivity<SetRemarkPresenter> implements
     public void initView() {
         mTvFinish = findViewByID(R.id.tv_finish);
         mEtRemark = findViewByID(R.id.et_remark);
+        mIvClear = findViewByID(R.id.iv_clear);
     }
 
     @Override
@@ -64,20 +73,17 @@ public class SetRemarkActivity extends QSActivity<SetRemarkPresenter> implements
                 finish();
             }
         });
-        mEtRemark.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
+        mEtRemark.addTextChangedListener(new ClearErrorInfoTextWatcher(null) {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mTvFinish.setEnabled(!TextUtils.isEmpty(mEtRemark.getText().toString().trim()));
+                mIvClear.setVisibility(TextUtils.isEmpty(mEtRemark.getText()) ? View.GONE : View.VISIBLE);
+                mTvFinish.setEnabled(!TextUtils.isEmpty(mEtRemark.getText()));
             }
-
+        });
+        mIvClear.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void afterTextChanged(Editable s) {
-
+            public void onClick(View v) {
+                mEtRemark.setText("");
             }
         });
     }
@@ -86,6 +92,10 @@ public class SetRemarkActivity extends QSActivity<SetRemarkPresenter> implements
     public void initData() {
         String oldRemark = getIntent().getStringExtra(OLD_REMARK);
         mEtRemark.setText(oldRemark);
+    }
+
+    @Override
+    public void handleEvent(EventBean<Object> eventBean) {
     }
 
     /**

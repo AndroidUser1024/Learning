@@ -15,11 +15,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.qinshou.commonmodule.base.AbsPresenter;
 import com.qinshou.commonmodule.util.BackgroundUtil;
 import com.qinshou.commonmodule.util.SystemUtil;
 import com.qinshou.imagemodule.util.BitmapUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSActivity;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.me.ui.adapter.RvPuzzleAdapter;
 import com.qinshou.qinshoubox.me.bean.PuzzleItemBean;
 import com.qinshou.qinshoubox.util.PuzzleUtil;
@@ -31,7 +33,7 @@ import java.util.List;
  * Created by 禽兽先生
  * Created on 2018/8/29
  */
-public class PuzzleActivity extends QSActivity {
+public class PuzzleActivity extends QSActivity<AbsPresenter> {
     private RecyclerView rvPuzzle;  //拼图块列表容器
     private RvPuzzleAdapter mRvPuzzleAdapter;   //拼图块列表适配器
     private Button btnChooseImg;    //选择相册中的图片按钮
@@ -128,6 +130,10 @@ public class PuzzleActivity extends QSActivity {
 
         //加载一张默认的图片作为拼图图片
         loadPuzzle(BitmapFactory.decodeResource(getResources(), R.drawable.img_puzzle1));
+    }
+
+    @Override
+    public void handleEvent(EventBean<Object> eventBean) {
     }
 
     private void loadPuzzle(Bitmap bitmap) {

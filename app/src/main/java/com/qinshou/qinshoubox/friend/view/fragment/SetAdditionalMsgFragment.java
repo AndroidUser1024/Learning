@@ -16,6 +16,7 @@ import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.friend.contract.ISetAdditionalMsgContract;
 import com.qinshou.qinshoubox.friend.presenter.SetAdditionalMsgPresenter;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 
@@ -117,6 +118,10 @@ public class SetAdditionalMsgFragment extends QSFragment<SetAdditionalMsgPresent
         mToUserId = bundle.getString(TO_USER_ID);
         mRemark = bundle.getString(REMARK);
         mSource = bundle.getInt(SOURCE, 0);
+    }
+
+    @Override
+    public void handleEvent(EventBean<Object> eventBean) {
     }
 
     @Override

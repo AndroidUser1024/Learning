@@ -4,9 +4,11 @@ import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.support.v7.widget.RecyclerView;
 
+import com.qinshou.commonmodule.base.AbsPresenter;
 import com.qinshou.commonmodule.rcvdecoration.StickyDecoration;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSActivity;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.me.ui.adapter.RvContactAdapter;
 import com.qinshou.qinshoubox.me.bean.ContactBean;
 import com.qinshou.qinshoubox.me.comparator.PinyinComparator;
@@ -22,7 +24,7 @@ import java.util.List;
  * Created by 禽兽先生
  * Created on 2018/11/8
  */
-public class ContactListActivity extends QSActivity {
+public class ContactListActivity extends QSActivity<AbsPresenter> {
 
     private RecyclerView rvContact;
     private RvContactAdapter mRvContactAdapter;
@@ -69,6 +71,10 @@ public class ContactListActivity extends QSActivity {
 //                ShowLogUtil.logi("没有获取联系人权限");
 //            }
 //        });
+    }
+
+    @Override
+    public void handleEvent(EventBean<Object> eventBean) {
     }
 
     /**

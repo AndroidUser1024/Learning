@@ -4,6 +4,7 @@ import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.demo.contract.IDemoContract;
 import com.qinshou.qinshoubox.demo.presenter.DemoPresenter;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
 
 /**
  * Author: QinHao
@@ -29,6 +30,11 @@ public class DemoFragment extends QSFragment<DemoPresenter> implements IDemoCont
 
     @Override
     public void initData() {
+
+    }
+
+    @Override
+    public void handleEvent(EventBean<Object> eventBean) {
 
     }
 

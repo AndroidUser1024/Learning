@@ -7,6 +7,7 @@ import android.widget.TextView;
 import com.qinshou.commonmodule.widget.TitleBar;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.me.contract.IMyQRCodeContract;
 import com.qinshou.qinshoubox.me.presenter.MyQRCodePresenter;
 
@@ -107,6 +108,11 @@ public class MyQRCodeFragment extends QSFragment<MyQRCodePresenter> implements I
 //                generateQRCode();
 //            }
 //        });
+    }
+
+    @Override
+    public void handleEvent(EventBean<Object> eventBean) {
+
     }
 
     /**

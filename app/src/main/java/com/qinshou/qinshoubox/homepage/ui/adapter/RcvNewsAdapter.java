@@ -4,12 +4,8 @@ import android.content.Context;
 
 import com.qinshou.commonmodule.rcvbaseadapter.RcvBaseAdapter;
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
-import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemClickListener;
 import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.WebActivity;
-import com.qinshou.qinshoubox.homepage.bean.ArticleBean;
 import com.qinshou.qinshoubox.homepage.bean.NewsBean;
-import com.qinshou.qinshoubox.homepage.util.HtmlTextUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
