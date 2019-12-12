@@ -131,15 +131,15 @@ public class MeFragment extends QSFragment<MePresenter> implements IMeContract.I
 //        ibLoginByQq = findViewByID(R.id.ib_login_by_qq);
 //        ibLoginByWechat = findViewByID(R.id.ib_login_by_wechat);
 //        ibLoginByWeibo = findViewByID(R.id.ib_login_by_weibo);
-//        btnPuzzle = findViewByID(R.id.btn_puzzle);
-//        btnTurningRobot = findViewByID(R.id.btn_turning_robot);
-//        btnMagicTower = findViewByID(R.id.btn_magic_tower);
-//        btnContactList = findViewByID(R.id.btn_contact_list);
-//        btnWeather = findViewByID(R.id.btn_weather);
-//        mBtnWheelOfFortune = findViewByID(R.id.btn_wheel_of_fortune);
-//        mBtnChart = findViewByID(R.id.btn_chart);
-//        mBtnQRCodeScan = findViewByID(R.id.btn_qr_code_scan);
-//        mBtnPeiQi = findViewByID(R.id.btn_pei_qi);
+        btnPuzzle = findViewByID(R.id.btn_puzzle);
+        btnTurningRobot = findViewByID(R.id.btn_turning_robot);
+        btnMagicTower = findViewByID(R.id.btn_magic_tower);
+        btnContactList = findViewByID(R.id.btn_contact_list);
+        btnWeather = findViewByID(R.id.btn_weather);
+        mBtnWheelOfFortune = findViewByID(R.id.btn_wheel_of_fortune);
+        mBtnChart = findViewByID(R.id.btn_chart);
+        mBtnQRCodeScan = findViewByID(R.id.btn_qr_code_scan);
+        mBtnPeiQi = findViewByID(R.id.btn_pei_qi);
     }
 
     @Override
@@ -151,15 +151,15 @@ public class MeFragment extends QSFragment<MePresenter> implements IMeContract.I
 //        ibLoginByQq.setOnClickListener(mOnClickListener);
 //        ibLoginByWechat.setOnClickListener(mOnClickListener);
 //        ibLoginByWeibo.setOnClickListener(mOnClickListener);
-//        btnTurningRobot.setOnClickListener(mOnClickListener);
-//        btnMagicTower.setOnClickListener(mOnClickListener);
-//        btnPuzzle.setOnClickListener(mOnClickListener);
-//        btnContactList.setOnClickListener(mOnClickListener);
-//        btnWeather.setOnClickListener(mOnClickListener);
-//        mBtnWheelOfFortune.setOnClickListener(mOnClickListener);
-//        mBtnChart.setOnClickListener(mOnClickListener);
-//        mBtnQRCodeScan.setOnClickListener(mOnClickListener);
-//        mBtnPeiQi.setOnClickListener(mOnClickListener);
+        btnTurningRobot.setOnClickListener(mOnClickListener);
+        btnMagicTower.setOnClickListener(mOnClickListener);
+        btnPuzzle.setOnClickListener(mOnClickListener);
+        btnContactList.setOnClickListener(mOnClickListener);
+        btnWeather.setOnClickListener(mOnClickListener);
+        mBtnWheelOfFortune.setOnClickListener(mOnClickListener);
+        mBtnChart.setOnClickListener(mOnClickListener);
+        mBtnQRCodeScan.setOnClickListener(mOnClickListener);
+        mBtnPeiQi.setOnClickListener(mOnClickListener);
         findViewByID(R.id.btn_test).setOnClickListener(mOnClickListener);
     }
 

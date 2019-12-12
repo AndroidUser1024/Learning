@@ -1,14 +1,17 @@
 package com.qinshou.qinshoubox.me.ui.activity;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -16,17 +19,35 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qinshou.commonmodule.base.AbsPresenter;
+import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
+import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemClickListener;
 import com.qinshou.commonmodule.util.BackgroundUtil;
+import com.qinshou.commonmodule.util.ShowLogUtil;
+import com.qinshou.commonmodule.util.SnackbarUtil;
 import com.qinshou.commonmodule.util.SystemUtil;
+import com.qinshou.commonmodule.util.permissionutil.IOnRequestPermissionResultCallBack;
+import com.qinshou.commonmodule.util.permissionutil.PermissionUtil;
+import com.qinshou.imagemodule.callback.IOnImageChooseResultCallback;
+import com.qinshou.imagemodule.callback.IOnImageCropResultCallback;
 import com.qinshou.imagemodule.util.BitmapUtil;
+import com.qinshou.imagemodule.util.ImageChooseUtil;
+import com.qinshou.imagemodule.util.ImageCropUtil;
+import com.qinshou.imagemodule.util.ImagePathUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.me.ui.adapter.RvPuzzleAdapter;
 import com.qinshou.qinshoubox.me.bean.PuzzleItemBean;
 import com.qinshou.qinshoubox.util.PuzzleUtil;
+import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
+
+import top.zibin.luban.CompressionPredicate;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 
 /**
  * Description:拼图游戏界面
@@ -55,17 +76,17 @@ public class PuzzleActivity extends QSActivity<AbsPresenter> {
 
     @Override
     public void initView() {
-//        rvPuzzle = findViewByID(R.id.rv_puzzle);
-//        rvPuzzle.setLayoutManager(new GridLayoutManager(getContext(), PuzzleUtil.PUZZLE_TYPE));
-//        mRvPuzzleAdapter = new RvPuzzleAdapter(getContext());
-//        rvPuzzle.setAdapter(mRvPuzzleAdapter);
-//
-//        btnChooseImg = findViewByID(R.id.btn_choose_img);
-//        btnChooseDifficulty = findViewByID(R.id.btn_choose_difficulty);
-//        btnShowOriginImg = findViewByID(R.id.btn_show_origin_img);
-//        btnReset = findViewByID(R.id.btn_reset);
-//        tvStep = findViewByID(R.id.tv_step);
-//        tvTime = findViewByID(R.id.tv_time);
+        rvPuzzle = findViewByID(R.id.rv_puzzle);
+        rvPuzzle.setLayoutManager(new GridLayoutManager(getContext(), PuzzleUtil.PUZZLE_TYPE));
+        mRvPuzzleAdapter = new RvPuzzleAdapter(getContext());
+        rvPuzzle.setAdapter(mRvPuzzleAdapter);
+
+        btnChooseImg = findViewByID(R.id.btn_choose_img);
+        btnChooseDifficulty = findViewByID(R.id.btn_choose_difficulty);
+        btnShowOriginImg = findViewByID(R.id.btn_show_origin_img);
+        btnReset = findViewByID(R.id.btn_reset);
+        tvStep = findViewByID(R.id.tv_step);
+        tvTime = findViewByID(R.id.tv_time);
 
         new BackgroundUtil.BackgroundBuilder(btnChooseDifficulty)
 //                .addState(new BackgroundUtil.BackgroundBuilder()
@@ -86,39 +107,39 @@ public class PuzzleActivity extends QSActivity<AbsPresenter> {
         btnChooseDifficulty.setOnClickListener(mOnClickListener);
         btnShowOriginImg.setOnClickListener(mOnClickListener);
         btnReset.setOnClickListener(mOnClickListener);
-//        mRvPuzzleAdapter.setOnItemClickListener(new IOnItemClickListener<PuzzleItemBean>() {
-//            @Override
-//            public void onItemClick(BaseViewHolder holder, PuzzleItemBean puzzleItemBean, int position) {
-//                //如果已经成功了，重新加载
-//                if (PuzzleUtil.success(mRvPuzzleAdapter.getDataList())) {
-//                    loadPuzzle(mPuzzleBitmap);
-//                    return;
-//                }
-//                //如果当前点击的拼图块不能执行交换操作，则 return
-//                if (!PuzzleUtil.canSwap(position)) {
-//                    return;
-//                }
-//                //步数 +1
-//                step++;
-//                tvStep.setText("计步：" + step);
-//                //如果计时线程为空，开始计时
-//                if (mTimeRunnable == null) {
-//                    mTimeRunnable = new TimeRunnable();
-//                    mHandler.postDelayed(mTimeRunnable, 1000);
-//                }
-//                //得到交换后的拼图块数组
-//                List<PuzzleItemBean> puzzleItemBeanList = PuzzleUtil.swapPuzzleItemBean(mRvPuzzleAdapter.getDataList(), position);
-//                //如果已经拼图成功，则给出提示，停止计时
-//                if (PuzzleUtil.success(puzzleItemBeanList)) {
-//                    puzzleItemBeanList = PuzzleUtil.addMissingBitmap(puzzleItemBeanList);
-//                    SnackbarUtil.showSnackbar(getActivity(), "拼图成功");
-//                    mHandler.removeCallbacks(mTimeRunnable);
-//                    mTimeRunnable = null;
-//                }
-//                //刷新拼图块列表
-//                mRvPuzzleAdapter.setDataList(puzzleItemBeanList);
-//            }
-//        });
+        mRvPuzzleAdapter.setOnItemClickListener(new IOnItemClickListener<PuzzleItemBean>() {
+            @Override
+            public void onItemClick(BaseViewHolder holder, PuzzleItemBean puzzleItemBean, int position) {
+                //如果已经成功了，重新加载
+                if (PuzzleUtil.success(mRvPuzzleAdapter.getDataList())) {
+                    loadPuzzle(mPuzzleBitmap);
+                    return;
+                }
+                //如果当前点击的拼图块不能执行交换操作，则 return
+                if (!PuzzleUtil.canSwap(position)) {
+                    return;
+                }
+                //步数 +1
+                step++;
+                tvStep.setText("计步：" + step);
+                //如果计时线程为空，开始计时
+                if (mTimeRunnable == null) {
+                    mTimeRunnable = new TimeRunnable();
+                    mHandler.postDelayed(mTimeRunnable, 1000);
+                }
+                //得到交换后的拼图块数组
+                List<PuzzleItemBean> puzzleItemBeanList = PuzzleUtil.swapPuzzleItemBean(mRvPuzzleAdapter.getDataList(), position);
+                //如果已经拼图成功，则给出提示，停止计时
+                if (PuzzleUtil.success(puzzleItemBeanList)) {
+                    puzzleItemBeanList = PuzzleUtil.addMissingBitmap(puzzleItemBeanList);
+                    SnackbarUtil.showSnackbar(getActivity(), "拼图成功");
+                    mHandler.removeCallbacks(mTimeRunnable);
+                    mTimeRunnable = null;
+                }
+                //刷新拼图块列表
+                mRvPuzzleAdapter.setDataList(puzzleItemBeanList);
+            }
+        });
     }
 
     @Override
@@ -143,11 +164,11 @@ public class PuzzleActivity extends QSActivity<AbsPresenter> {
         //根据拼图图片获取拼图块数组
         List<PuzzleItemBean> puzzleItemBeanList = PuzzleUtil.getPuzzleItemBeanList(mPuzzleBitmap);
         //如果拼图块数组有解，则设置拼图块列表，如果没有解则重新创建
-//        if (PuzzleUtil.canResolve(puzzleItemBeanList)) {
-//            mRvPuzzleAdapter.setDataList(puzzleItemBeanList);
-//        } else {
-//            loadPuzzle(mPuzzleBitmap);
-//        }
+        if (PuzzleUtil.canResolve(puzzleItemBeanList)) {
+            mRvPuzzleAdapter.setDataList(puzzleItemBeanList);
+        } else {
+            loadPuzzle(mPuzzleBitmap);
+        }
         //重置所用步数和所用时间
         tvStep.setText("计步：0");
         tvTime.setText("计时：0m0s");
@@ -183,29 +204,31 @@ public class PuzzleActivity extends QSActivity<AbsPresenter> {
      * return
      */
     private void chooseImg() {
-//        PermissionUtil.requestPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE, new IOnRequestPermissionResultCallBack() {
-//            @Override
-//            public void onSuccess() {
-//                ImageChooseUtil.chooseImage(getActivity(), new IOnImageChooseResultCallback() {
-//                    @Override
-//                    public void onSuccess(ArrayList<String> resultsPathList) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onSuccess(List<Bitmap> results) {
-//                        if (results != null && results.size() > 0) {
-//                            loadPuzzle(results.get(0));
-//                        }
-//                    }
-//                });
-//            }
-//
-//            @Override
-//            public void onError(List<String> deniedPermissionList) {
-//
-//            }
-//        });
+        PermissionUtil.requestPermission(getSupportFragmentManager(), new IOnRequestPermissionResultCallBack() {
+            @Override
+            public void onSuccess() {
+                ImageChooseUtil.chooseImage(getActivity(), new IOnImageChooseResultCallback() {
+                    @Override
+                    public void onSuccess(List<Uri> uriList) {
+                        if (uriList == null || uriList.size() == 0) {
+                            toastShort(getString(R.string.personal_head_img_toast_pick_photo_failure_text));
+                            return;
+                        }
+                        String path = ImagePathUtil.getRealPathFromUri(getContext(), uriList.get(0));
+                        if (TextUtils.isEmpty(path)) {
+                            toastShort(getString(R.string.personal_head_img_toast_pick_photo_failure_text));
+                            return;
+                        }
+                        loadPuzzle(BitmapFactory.decodeFile(path));
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(List<String> deniedPermissionList) {
+
+            }
+        }, Manifest.permission.READ_EXTERNAL_STORAGE);
     }
 
     /**
