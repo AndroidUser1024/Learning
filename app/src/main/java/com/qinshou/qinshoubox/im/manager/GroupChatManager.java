@@ -10,6 +10,7 @@ import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 import com.qinshou.qinshoubox.im.db.DatabaseHelper;
 import com.qinshou.qinshoubox.im.db.dao.IGroupChatDao;
+import com.qinshou.qinshoubox.listener.FailureRunnable;
 import com.qinshou.qinshoubox.listener.SuccessRunnable;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxGroupChatApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
@@ -124,10 +125,28 @@ public class GroupChatManager {
      * @param groupChatId 群 id
      * @param nickname    群昵称
      */
-    public void setNickname(String groupChatId, String nickname, Callback<Object> callback) {
+    public void setNickname(final String groupChatId, final String nickname, final Callback<Object> callback) {
         OkHttpHelperForQSBoxGroupChatApi.SINGLETON.setNickname(groupChatId, mUserId, nickname)
                 .transform(new QSApiTransformer<Object>())
-                .enqueue(callback);
+                .enqueue(new Callback<Object>() {
+                    @Override
+                    public void onSuccess(final Object data) {
+                        mExecutorService.submit(new Runnable() {
+                            @Override
+                            public void run() {
+                                GroupChatBean groupChatBean = mGroupChatDao.selectById(groupChatId);
+                                groupChatBean.setNickname(nickname);
+                                mGroupChatDao.insert(groupChatBean);
+                                mHandler.post(new SuccessRunnable<Object>(callback, data));
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        mHandler.post(new FailureRunnable<>(callback, e));
+                    }
+                });
     }
 
     /**

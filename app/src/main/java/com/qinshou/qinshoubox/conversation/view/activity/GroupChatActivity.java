@@ -338,11 +338,6 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
     }
 
     @Override
-    public void handleEvent(EventBean<Object> eventBean) {
-
-    }
-
-    @Override
     public int getLayoutId() {
         return R.layout.activity_group_chat;
     }
@@ -485,6 +480,20 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
         }
         // 加载消息列表
         getPresenter().getMessageList(mGroupChatId, mPage, IConstant.PAGE_SIZE);
+    }
+
+    @Override
+    public void handleEvent(EventBean<Object> eventBean) {
+        if (eventBean.getType() != EventBean.Type.REFRESH_GROUP_CHAT_DETAIL) {
+            return;
+        }
+        GroupChatBean groupChatBean = IMClient.SINGLETON.getGroupChatManager().getById(mGroupChatId);
+        if (groupChatBean != null) {
+            // 群昵称
+            mTitleBar.setTitleText(TextUtils.isEmpty(groupChatBean.getNickname())
+                    ? groupChatBean.getNicknameDefault()
+                    : groupChatBean.getNickname());
+        }
     }
 
 

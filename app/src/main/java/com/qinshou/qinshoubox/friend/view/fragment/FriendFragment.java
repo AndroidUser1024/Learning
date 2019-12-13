@@ -22,6 +22,8 @@ import com.qinshou.qinshoubox.friend.presenter.FriendPresenter;
 import com.qinshou.qinshoubox.friend.view.adapter.RcvFriendAdapter;
 import com.qinshou.qinshoubox.friend.view.adapter.RcvGroupChatAdapter;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
+import com.qinshou.qinshoubox.im.bean.ConversationBean;
+import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.listener.IOnFriendStatusListener;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
@@ -30,7 +32,6 @@ import com.qinshou.qinshoubox.im.listener.IOnGroupChatStatusListener;
 import com.qinshou.qinshoubox.im.view.fragment.IMActivity;
 import com.qinshou.qinshoubox.util.QSUtil;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -275,6 +276,12 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
 
     @Override
     public void handleEvent(EventBean<Object> eventBean) {
+        if (eventBean.getType() == EventBean.Type.REFRESH_GROUP_CHAT_LIST
+                || eventBean.getType() == EventBean.Type.REFRESH_GROUP_CHAT_DETAIL) {
+            getPresenter().getMyGroupChatList();
+        } else if (eventBean.getType() == EventBean.Type.REFRESH_FRIEND_LIST) {
+            getPresenter().getFriendList();
+        }
     }
 
     @Override
@@ -293,15 +300,6 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
 
     @Override
     public void getFriendListFailure(Exception e) {
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void receiveEvent(EventBean<Object> eventBean) {
-        if (eventBean.getType() == EventBean.Type.REFRESH_GROUP_CHAT_LIST) {
-            getPresenter().getMyGroupChatList();
-        } else if (eventBean.getType() == EventBean.Type.REFRESH_FRIEND_LIST) {
-            getPresenter().getFriendList();
-        }
     }
 
     /**
