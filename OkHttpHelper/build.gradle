@@ -3,9 +3,8 @@ apply plugin: 'java-library'
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.google.code.gson:gson:2.8.5'
-    compile "com.squareup.okhttp3:okhttp:3.8.0"
-    compile 'com.squareup.okio:okio:1.13.0'
+    compile 'com.google.code.gson:gson:2.8.6'
+    compile "com.squareup.okhttp3:okhttp:3.11.0"
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8

@@ -14,7 +14,7 @@ public class FriendHistoryBean {
     /**
      * 好友关系状态
      */
-    private int status;
+    private Integer status;
     /**
      * 发起申请的人的 id
      */
@@ -60,11 +60,11 @@ public class FriendHistoryBean {
         this.additionalMsg = additionalMsg;
     }
 
-    public int getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
