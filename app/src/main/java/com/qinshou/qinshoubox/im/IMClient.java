@@ -59,9 +59,9 @@ public enum IMClient {
      * 重连次数
      */
     private final int MAX_RECONNECT_COUNT = 5;
-    private static final String URL = "http://www.mrqinshou.com:10086/websocket";
-//                private static final String URL = "http://172.16.60.231:10086/websocket";
-//    private static final String URL = "http://192.168.1.109:10086/websocket";
+//    private static final String URL = "ws://www.mrqinshou.com:10086/websocket";
+                private static final String URL = "ws://172.16.60.231:10086/websocket";
+//    private static final String URL = "ws://192.168.1.109:10086/websocket";
     private Context mContext;
     private WebSocket mWebSocket;
     private Handler mHandler = new Handler(Looper.getMainLooper());
@@ -309,7 +309,7 @@ public enum IMClient {
             @Override
             public void onOpen(WebSocket webSocket, Response response) {
                 super.onOpen(webSocket, response);
-                Log.i(TAG, "onOpen: ");
+                Log.i(TAG, "onOpen:");
                 for (IOnConnectListener onConnectListener : mOnConnectListenerList) {
                     onConnectListener.onConnected();
                 }

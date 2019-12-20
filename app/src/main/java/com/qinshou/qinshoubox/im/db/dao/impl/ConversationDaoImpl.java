@@ -207,7 +207,7 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
 
     @Override
     public int getTotalUnreadCount() {
-        String sql = "SELECT SUM(unreadCount) AS totalUnreadCount FROM conversation;";
+        String sql = "SELECT SUM(unreadCount) AS totalUnreadCount FROM conversation";
         Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
         try {
             if (cursor.moveToNext()) {
@@ -242,7 +242,7 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
                 " FROM conversation AS c" +
                 " LEFT OUTER JOIN friend AS f ON f.id=c.toUserId AND c.type=2001" +
                 " LEFT OUTER JOIN group_chat AS gc ON gc.id=c.toUserId AND c.type=3001" +
-                " ORDER BY c.lastMsgTimestamp DESC;";
+                " ORDER BY c.lastMsgTimestamp DESC";
         List<ConversationBean> conversationBeanList = new ArrayList<>();
         Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
         try {
@@ -300,7 +300,7 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
                 " FROM conversation AS c" +
                 " LEFT OUTER JOIN friend AS f ON f.id=c.toUserId AND c.type=2001" +
                 " LEFT OUTER JOIN group_chat AS gc ON gc.id=c.toUserId AND c.type=3001" +
-                " ORDER BY fTop DESC,gcTop DESC,c.lastMsgTimestamp DESC;";
+                " ORDER BY fTop DESC,gcTop DESC,c.lastMsgTimestamp DESC";
         List<ConversationBean> conversationBeanList = new ArrayList<>();
         Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
         try {
