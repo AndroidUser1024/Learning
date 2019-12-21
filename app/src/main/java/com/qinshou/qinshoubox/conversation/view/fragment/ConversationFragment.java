@@ -269,6 +269,7 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
      */
     private void updateUnreadCount() {
         int totalUnreadCount = IMClient.SINGLETON.getConversationManager().getTotalUnreadCount();
+        ShowLogUtil.logi("totalUnreadCount--->" + totalUnreadCount);
         if (totalUnreadCount > 0) {
             mTvUnreadCountInTlMain.setVisibility(View.VISIBLE);
             mTvUnreadCountInTlMain.setText("" + totalUnreadCount);

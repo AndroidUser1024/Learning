@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
+import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.db.dao.IConversationDao;
 import com.qinshou.qinshoubox.im.enums.MessageType;
@@ -207,7 +208,11 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
 
     @Override
     public int getTotalUnreadCount() {
-        String sql = "SELECT SUM(unreadCount) AS totalUnreadCount FROM conversation";
+//        String sql = "SELECT SUM(unreadCount) AS totalUnreadCount FROM conversation";
+        String sql = "SELECT SUM(unreadCount) AS totalUnreadCount FROM conversation AS c" +
+                " WHERE" +
+                " (SELECT doNotDisturb FROM friend AS f WHERE c.type=2001 AND f.id=c.toUserId)=0" +
+                " OR (SELECT doNotDisturb FROM group_chat AS gc WHERE c.type=3001 AND gc.id=c.toUserId)=0";
         Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
         try {
             if (cursor.moveToNext()) {
