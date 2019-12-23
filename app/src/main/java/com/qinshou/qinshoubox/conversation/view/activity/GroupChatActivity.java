@@ -44,6 +44,8 @@ import com.qinshou.qinshoubox.conversation.presenter.GroupChatPresenter;
 import com.qinshou.qinshoubox.listener.ClearErrorInfoTextWatcher;
 import com.qinshou.qinshoubox.conversation.view.adapter.RcvMessageAdapter;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
@@ -520,6 +522,7 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
         // 消息列表滚动到底部
         mRcvMessage.scrollToPosition(mRcvMessageAdapter.getItemCount() - 1);
         mEtContent.setText("");
+        EventBus.getDefault().post(new EventBean<MessageBean>(EventBean.Type.REFRESH_CONVERSATION_LIST, messageBean));
     }
 
     /**

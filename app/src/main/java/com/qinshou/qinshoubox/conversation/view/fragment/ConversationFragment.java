@@ -64,7 +64,6 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
                 toUserId = messageBean.getToUserId();
             }
             ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().selectByTypeAndToUserId(messageBean.getType(), toUserId);
-            ShowLogUtil.logi("conversationBean--->" + conversationBean);
             // 更新会话列表
             updateConversationList(conversationBean);
             // 更新未读数
@@ -177,9 +176,7 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
         if (eventBean.getData() == null) {
             getPresenter().getConversationList();
         } else if (eventBean.getData() instanceof MessageBean) {
-            ShowLogUtil.logi("eventBean--->" + eventBean);
             ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().selectByTypeAndToUserId(((MessageBean) eventBean.getData()).getType(), ((MessageBean) eventBean.getData()).getToUserId());
-            ShowLogUtil.logi("conversationBean--->" + conversationBean);
             updateConversationList(conversationBean);
         }
     }
@@ -230,10 +227,13 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
             int index = 0;
             // 定义一个变量记录非置顶的第一条会话的位置
             int firstNotTopIndex = 0;
+            // 用于标记 firstNotTopIndex 是否有修改过
+            boolean temp = false;
             for (int i = 0; i < conversationBeanList.size(); i++) {
                 // firstNotTopIndex 只修改一次
-                if (conversationBeanList.get(i).getTop() == 0 && firstNotTopIndex == 0) {
+                if (conversationBeanList.get(i).getTop() == 0 && !temp) {
                     firstNotTopIndex = i;
+                    temp = true;
                 }
                 if (conversationBeanList.get(i).getId() == conversationBean.getId()) {
                     contains = true;
@@ -269,7 +269,6 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
      */
     private void updateUnreadCount() {
         int totalUnreadCount = IMClient.SINGLETON.getConversationManager().getTotalUnreadCount();
-        ShowLogUtil.logi("totalUnreadCount--->" + totalUnreadCount);
         if (totalUnreadCount > 0) {
             mTvUnreadCountInTlMain.setVisibility(View.VISIBLE);
             mTvUnreadCountInTlMain.setText("" + totalUnreadCount);
