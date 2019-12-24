@@ -32,6 +32,7 @@ import com.qinshou.qinshoubox.im.listener.IOnGroupChatStatusListener;
 import com.qinshou.qinshoubox.im.view.fragment.IMActivity;
 import com.qinshou.qinshoubox.util.QSUtil;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -144,6 +145,12 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
         @Override
         public void otherDelete(String groupChatId, String fromUserId, String toUserId) {
             ShowLogUtil.logi("otherDelete: groupChatId--->" + groupChatId + ",fromUserId--->" + fromUserId + ",toUserId--->" + toUserId);
+        }
+
+        @Override
+        public void nicknameChanged(String groupChatId, String fromUserId, String toUserId) {
+            ShowLogUtil.logi("nicknameChanged: groupChatId--->" + groupChatId + ",fromUserId--->" + fromUserId + ",toUserId--->" + toUserId);
+            getPresenter().getMyGroupChatList();
         }
     };
 
@@ -287,6 +294,7 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
     @Override
     public void getMyGroupChatListSuccess(List<GroupChatBean> groupChatBeanList) {
         mRcvGroupChatAdapter.setDataList(groupChatBeanList);
+        EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_LIST, null));
     }
 
     @Override

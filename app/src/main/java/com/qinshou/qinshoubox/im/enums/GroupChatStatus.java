@@ -5,7 +5,7 @@ package com.qinshou.qinshoubox.im.enums;
  * Author: QinHao
  * Date: 2019/12/07 00:41
  */
-public enum  GroupChatStatus {
+public enum GroupChatStatus {
     /**
      * 被邀请
      */
@@ -21,7 +21,11 @@ public enum  GroupChatStatus {
     /**
      * 别人被踢出
      */
-    OTHER_DELETE(4);
+    OTHER_DELETE(4),
+    /**
+     * 群昵称被修改
+     */
+    NICKNAME_CHANGED(5);
     private int value;
 
     GroupChatStatus(int value) {

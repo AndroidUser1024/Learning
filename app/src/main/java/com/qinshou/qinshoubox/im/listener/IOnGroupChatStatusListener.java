@@ -14,4 +14,6 @@ public interface IOnGroupChatStatusListener {
     void otherAdd(String groupChatId, String fromUserId, String toUserId);
 
     void otherDelete(String groupChatId, String fromUserId, String toUserId);
+
+    void nicknameChanged(String groupChatId, String fromUserId, String toUserId);
 }

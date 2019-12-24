@@ -88,7 +88,6 @@ public class MessageDaoImpl extends AbsDaoImpl<MessageBean> implements IMessageD
                 cursor.close();
             }
         }
-        ShowLogUtil.logi("messageBeanList--->"+messageBeanList.size());
         return messageBeanList;
     }
 }

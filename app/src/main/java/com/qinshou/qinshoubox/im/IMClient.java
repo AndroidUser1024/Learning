@@ -59,9 +59,9 @@ public enum IMClient {
      * 重连次数
      */
     private final int MAX_RECONNECT_COUNT = 5;
-    private static final String URL = "ws://www.mrqinshou.com:10086/websocket";
-//                private static final String URL = "ws://172.16.60.231:10086/websocket";
-//    private static final String URL = "ws://192.168.1.109:10086/websocket";
+    //    private static final String URL = "ws://www.mrqinshou.com:10086/websocket";
+    private static final String URL = "ws://172.16.60.231:10086/websocket";
+    //    private static final String URL = "ws://192.168.1.109:10086/websocket";
     private Context mContext;
     private WebSocket mWebSocket;
     private Handler mHandler = new Handler(Looper.getMainLooper());
@@ -276,6 +276,10 @@ public enum IMClient {
         } else if (groupChatStatusBean.getStatus() == GroupChatStatus.OTHER_DELETE.getValue()) {
             for (IOnGroupChatStatusListener onGroupChatStatusListener : mOnGroupChatStatusListenerList) {
                 onGroupChatStatusListener.otherDelete(groupChatStatusBean.getGroupChatId(), groupChatStatusBean.getFromUserId(), groupChatStatusBean.getToUserId());
+            }
+        } else if (groupChatStatusBean.getStatus() == GroupChatStatus.NICKNAME_CHANGED.getValue()) {
+            for (IOnGroupChatStatusListener onGroupChatStatusListener : mOnGroupChatStatusListenerList) {
+                onGroupChatStatusListener.nicknameChanged(groupChatStatusBean.getGroupChatId(), groupChatStatusBean.getFromUserId(), groupChatStatusBean.getToUserId());
             }
         }
     }
