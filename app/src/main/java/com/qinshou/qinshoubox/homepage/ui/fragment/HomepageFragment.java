@@ -113,8 +113,9 @@ public class HomepageFragment extends QSFragment<HomepagePresenter> implements I
         mRefreshLayout.setOnRefreshLoadMoreListener(new RefreshLayout.IOnRefreshLoadMoreListener() {
             @Override
             public void onRefresh(RefreshLayout refreshLayout) {
-                mPage = 0;
+                mPage = IConstant.PAGE_START;
                 getPresenter().getNewsList(mPage, IConstant.PAGE_SIZE);
+                getPresenter().getWallpaperList();
             }
 
             @Override
