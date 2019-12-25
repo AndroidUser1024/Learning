@@ -35,4 +35,13 @@ public enum GroupChatStatus {
     public int getValue() {
         return value;
     }
+
+    public static GroupChatStatus getByValue(int value) {
+        for (GroupChatStatus groupChatStatus : values()) {
+            if (groupChatStatus.value == value) {
+                return groupChatStatus;
+            }
+        }
+        return null;
+    }
 }

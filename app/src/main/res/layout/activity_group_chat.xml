@@ -43,7 +43,7 @@
             android:layout_height="match_parent"
             tools:itemCount="10"
             tools:layoutManager="LinearLayoutManager"
-            tools:listitem="@layout/item_rcv_message_to_message"
+            tools:listitem="@layout/item_rcv_message_to_message_text"
             tools:orientation="vertical">
 
         </android.support.v7.widget.RecyclerView>

@@ -315,6 +315,7 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
                 conversationBean.setToUserId(cursor.getString(cursor.getColumnIndex("toUserId")));
                 conversationBean.setType(cursor.getInt(cursor.getColumnIndex("type")));
                 conversationBean.setLastMsgContent(cursor.getString(cursor.getColumnIndex("lastMsgContent")));
+                ShowLogUtil.logi("content--->" + cursor.getString(cursor.getColumnIndex("lastMsgContent")));
                 conversationBean.setLastMsgContentType(cursor.getInt(cursor.getColumnIndex("lastMsgContentType")));
                 conversationBean.setLastMsgTimestamp(cursor.getLong(cursor.getColumnIndex("lastMsgTimestamp")));
                 conversationBean.setUnreadCount(cursor.getInt(cursor.getColumnIndex("unreadCount")));

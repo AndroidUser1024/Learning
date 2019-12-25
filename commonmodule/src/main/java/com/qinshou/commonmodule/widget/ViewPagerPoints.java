@@ -7,6 +7,7 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -122,8 +123,12 @@ public class ViewPagerPoints extends LinearLayout {
             ivPoint.setBackgroundResource(itemBackground);
             addView(ivPoint);
         }
-        getChildAt(currentItem).setLayoutParams(currentItemParams);
-        getChildAt(currentItem).setBackgroundResource(currentItemBackground);
+        View view = getChildAt(currentItem);
+        if (view == null) {
+            return;
+        }
+        view.setLayoutParams(currentItemParams);
+        view.setBackgroundResource(currentItemBackground);
     }
 
     float x = 0;

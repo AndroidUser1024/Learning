@@ -39,4 +39,13 @@ public enum FriendStatus {
     public int getValue() {
         return value;
     }
+
+    public static FriendStatus getByValue(int value) {
+        for (FriendStatus friendStatus : values()) {
+            if (friendStatus.value == value) {
+                return friendStatus;
+            }
+        }
+        return null;
+    }
 }

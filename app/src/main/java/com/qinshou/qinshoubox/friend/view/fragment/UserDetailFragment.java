@@ -101,12 +101,10 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
     private IOnFriendStatusListener mOnFriendStatusListener = new IOnFriendStatusListener() {
         @Override
         public void add(String fromUserId, String additionalMsg, boolean newFriend) {
-            ShowLogUtil.logi("add: fromUserId--->" + fromUserId + ",additionalMsg--->" + additionalMsg + ",newFriend--->" + newFriend);
         }
 
         @Override
         public void agreeAdd(String fromUserId) {
-            ShowLogUtil.logi("agreeAdd: fromUserId--->" + fromUserId);
             if (TextUtils.equals(fromUserId, mUserDetailBean.getId())) {
                 // 监听到发起的添加请求被同意了,更新 UI
                 showFriendUI(mUserDetailBean);
@@ -115,22 +113,18 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
 
         @Override
         public void refuseAdd(String fromUserId) {
-            ShowLogUtil.logi("refuseAdd: fromUserId--->" + fromUserId);
         }
 
         @Override
         public void delete(String fromUserId) {
-            ShowLogUtil.logi("delete: fromUserId--->" + fromUserId);
         }
 
         @Override
         public void online(String fromUserId) {
-            ShowLogUtil.logi("online: fromUserId--->" + fromUserId);
         }
 
         @Override
         public void offline(String fromUserId) {
-            ShowLogUtil.logi("offline: fromUserId--->" + fromUserId);
         }
     };
 

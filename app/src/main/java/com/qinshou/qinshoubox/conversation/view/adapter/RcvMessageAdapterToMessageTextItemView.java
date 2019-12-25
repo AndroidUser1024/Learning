@@ -2,21 +2,13 @@ package com.qinshou.qinshoubox.conversation.view.adapter;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.TextView;
 
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
-import com.qinshou.commonmodule.rcvbaseadapter.itemview.BaseItemView;
-import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.enums.MessageContentType;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 /**
  * Author: QinHao
@@ -24,10 +16,10 @@ import java.util.Locale;
  * Date: 2019/7/12 14:32
  * Description:发送的消息
  */
-public class RcvMessageAdapterToMessageItemView extends AbsRcvMessageAdapterToMessageItemView {
+public class RcvMessageAdapterToMessageTextItemView extends AbsRcvMessageAdapterToMessageItemView {
 
-    public RcvMessageAdapterToMessageItemView(Context context) {
-        super(context, R.layout.item_rcv_message_to_message);
+    public RcvMessageAdapterToMessageTextItemView(Context context) {
+        super(context, R.layout.item_rcv_message_to_message_text);
     }
 
     @Override

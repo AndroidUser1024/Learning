@@ -16,8 +16,9 @@ public class RcvMessageAdapter extends RcvMultipleBaseAdapter<MessageBean> {
     public RcvMessageAdapter(final Context context) {
         super(context);
         // 添加不同类型的 item
-        addItemView(new RcvMessageAdapterToMessageItemView(context));
+        addItemView(new RcvMessageAdapterToMessageTextItemView(context));
         addItemView(new RcvMessageAdapterFromMessageTextItemView(context));
+        addItemView(new RcvMessageAdapterFromMessageSystemItemView(context));
 //        addItemView(new RcvMessageAdapterFromMessageVoiceItemView(context));
     }
 }

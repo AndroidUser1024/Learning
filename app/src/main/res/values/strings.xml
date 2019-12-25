@@ -87,6 +87,8 @@
     <string name="chat_tv_send_file_text">文件</string>
     <string name="chat_tv_send_img_text">图片</string>
     <string name="chat_et_content_hint">请输入命令</string>
+    <string name="chat_agree_add_text">您已经和%1$s成为好友,现在可以开始聊天了</string>
+
 
     <!-- 聊天设置界面 -->
     <string name="chat_setting_tv_title_text">聊天设置</string>

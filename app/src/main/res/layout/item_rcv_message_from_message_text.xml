@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingTop="@dimen/px19"
-    android:paddingBottom="@dimen/px19"
+    android:paddingTop="@dimen/px20"
+    android:paddingBottom="@dimen/px20"
     tools:context="com.qinshou.qinshoubox.conversation.view.adapter.RcvMessageAdapterFromMessageTextItemView">
 
     <!-- 消息接收时间 -->
@@ -22,7 +22,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/px37"
+        android:layout_marginTop="@dimen/px30"
         android:orientation="horizontal">
         <!-- 头像 -->
         <ImageView
