@@ -6,8 +6,12 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Vibrator;
+import android.text.TextUtils;
 
+import com.qinshou.qinshoubox.im.IMClient;
+import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
+import com.qinshou.qinshoubox.im.manager.FriendManager;
 
 import java.io.File;
 
@@ -71,10 +75,19 @@ public class QSUtil {
      */
     public static void showNotification(Context context, final MessageBean messageBean) {
         String content = messageBean.getContent();
+        FriendBean friendBean = IMClient.SINGLETON.getFriendManager().getById(messageBean.getFromUserId());
+        String title = null;
+        if (friendBean == null) {
+            title = messageBean.getFromUserId();
+        } else {
+            title = TextUtils.isEmpty(friendBean.getRemark())
+                    ? friendBean.getNickname()
+                    : friendBean.getRemark();
+        }
         NotificationUtil.showNotification(context
                 , messageBean.getPid()
                 , messageBean.getFromUserId()
-                , "先随便传一个"
+                , title
                 , content);
     }
 }
