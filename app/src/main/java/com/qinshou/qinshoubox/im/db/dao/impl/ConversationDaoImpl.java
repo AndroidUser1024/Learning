@@ -305,7 +305,7 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
                 " FROM conversation AS c" +
                 " LEFT OUTER JOIN friend AS f ON f.id=c.toUserId AND c.type=2001" +
                 " LEFT OUTER JOIN group_chat AS gc ON gc.id=c.toUserId AND c.type=3001" +
-                " ORDER BY fTop DESC,gcTop DESC,c.lastMsgTimestamp DESC";
+                " ORDER BY fTop OR gcTop DESC,c.lastMsgTimestamp DESC";
         List<ConversationBean> conversationBeanList = new ArrayList<>();
         Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
         try {
