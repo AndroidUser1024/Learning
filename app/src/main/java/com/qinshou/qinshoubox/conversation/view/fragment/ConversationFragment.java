@@ -160,6 +160,7 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
 
     @Override
     public void getConversationListSuccess(List<ConversationBean> conversationBeanList) {
+        ShowLogUtil.logi("conversationBeanList--->" + conversationBeanList);
         mRcvConversationAdapter.setDataList(conversationBeanList);
     }
 
@@ -170,6 +171,7 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
 
     @Override
     public void handleEvent(EventBean<Object> eventBean) {
+        ShowLogUtil.logi("eventBean--->" + eventBean);
         if (eventBean.getType() != EventBean.Type.REFRESH_CONVERSATION_LIST) {
             return;
         }

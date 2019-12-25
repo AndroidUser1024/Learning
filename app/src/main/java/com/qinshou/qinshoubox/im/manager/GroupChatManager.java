@@ -152,23 +152,133 @@ public class GroupChatManager {
     /**
      * Author: QinHao
      * Email:cqflqinhao@126.com
-     * Date:2019/12/9 15:18
-     * Description:设置置顶
+     * Date:2019/12/25 10:25
+     * Description:修改在本群中的昵称
+     *
+     * @param groupChatId         群 id
+     * @param nicknameInGroupChat 在本群中的昵称
+     */
+    public void setNicknameInGroupChat(final String groupChatId, final String nicknameInGroupChat, final Callback<Object> callback) {
+        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.setInfo(groupChatId, mUserId, nicknameInGroupChat, null, null, null)
+                .transform(new QSApiTransformer<Object>())
+                .enqueue(new Callback<Object>() {
+                    @Override
+                    public void onSuccess(final Object data) {
+                        mExecutorService.submit(new Runnable() {
+                            @Override
+                            public void run() {
+                                GroupChatBean groupChatBean = mGroupChatDao.selectById(groupChatId);
+                                groupChatBean.setNicknameInGroupChat(nicknameInGroupChat);
+                                mGroupChatDao.insert(groupChatBean);
+                                mHandler.post(new SuccessRunnable<Object>(callback, data));
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        mHandler.post(new FailureRunnable<>(callback, e));
+                    }
+                });
+    }
+
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2019/12/25 10:25
+     * Description:修改在本群中的昵称
+     *
+     * @param groupChatId 群 id
+     * @param top         0 表示不置顶,1 表示置顶
+     */
+    public void setTop(final String groupChatId, final int top, final Callback<Object> callback) {
+        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.setInfo(groupChatId, mUserId, null, top, null, null)
+                .transform(new QSApiTransformer<Object>())
+                .enqueue(new Callback<Object>() {
+                    @Override
+                    public void onSuccess(final Object data) {
+                        mExecutorService.submit(new Runnable() {
+                            @Override
+                            public void run() {
+                                GroupChatBean groupChatBean = mGroupChatDao.selectById(groupChatId);
+                                groupChatBean.setTop(top);
+                                mGroupChatDao.insert(groupChatBean);
+                                mHandler.post(new SuccessRunnable<Object>(callback, data));
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        mHandler.post(new FailureRunnable<>(callback, e));
+                    }
+                });
+    }
+
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2019/12/25 10:25
+     * Description:设置是否免打扰
+     *
+     * @param groupChatId  群 id
+     * @param doNotDisturb 0 表示非免打扰,1 表示免打扰
+     */
+    public void setDoNotDisturb(final String groupChatId, final int doNotDisturb, final Callback<Object> callback) {
+        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.setInfo(groupChatId, mUserId, null, null, doNotDisturb, null)
+                .transform(new QSApiTransformer<Object>())
+                .enqueue(new Callback<Object>() {
+                    @Override
+                    public void onSuccess(final Object data) {
+                        mExecutorService.submit(new Runnable() {
+                            @Override
+                            public void run() {
+                                GroupChatBean groupChatBean = mGroupChatDao.selectById(groupChatId);
+                                groupChatBean.setDoNotDisturb(doNotDisturb);
+                                mGroupChatDao.insert(groupChatBean);
+                                mHandler.post(new SuccessRunnable<Object>(callback, data));
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        mHandler.post(new FailureRunnable<>(callback, e));
+                    }
+                });
+    }
+
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2019/12/25 10:25
+     * Description:设置是否显示群成员昵称
      *
      * @param groupChatId                 群 id
-     * @param nicknameInGroupChat         在本群中的昵称
-     * @param top                         0 表示不置顶,1 表示置顶
-     * @param doNotDisturb                0 表示不置顶,1 表示置顶
-     * @param showGroupChatMemberNickname 0 表示不置顶,1 表示置顶
+     * @param showGroupChatMemberNickname 0 表示不显示,1 表示显示
      */
-    public void setInfo(String groupChatId
-            , String nicknameInGroupChat
-            , Integer top, Integer doNotDisturb
-            , Integer showGroupChatMemberNickname
-            , Callback<Object> callback) {
-        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.setInfo(groupChatId, mUserId, nicknameInGroupChat, top, doNotDisturb, showGroupChatMemberNickname)
+    public void setShowGroupChatMemberNickname(final String groupChatId, final int showGroupChatMemberNickname, final Callback<Object> callback) {
+        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.setInfo(groupChatId, mUserId, null, null, null, showGroupChatMemberNickname)
                 .transform(new QSApiTransformer<Object>())
-                .enqueue(callback);
+                .enqueue(new Callback<Object>() {
+                    @Override
+                    public void onSuccess(final Object data) {
+                        mExecutorService.submit(new Runnable() {
+                            @Override
+                            public void run() {
+                                GroupChatBean groupChatBean = mGroupChatDao.selectById(groupChatId);
+                                groupChatBean.setShowGroupChatMemberNickname(showGroupChatMemberNickname);
+                                mGroupChatDao.insert(groupChatBean);
+                                mHandler.post(new SuccessRunnable<Object>(callback, data));
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        mHandler.post(new FailureRunnable<>(callback, e));
+                    }
+                });
     }
 
     /**

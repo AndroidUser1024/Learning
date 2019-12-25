@@ -14,6 +14,6 @@ import com.qinshou.qinshoubox.im.IMClient;
 public class SetNicknameInGroupChatModel implements ISetNicknameInGroupChatContract.IModel {
     @Override
     public void setNicknameInGroupChat(String groupChatId, String nicknameInGroupChat, Callback<Object> callback) {
-        IMClient.SINGLETON.getGroupChatManager().setInfo(groupChatId, nicknameInGroupChat, null, null, null, callback);
+        IMClient.SINGLETON.getGroupChatManager().setNicknameInGroupChat(groupChatId, nicknameInGroupChat, callback);
     }
 }
