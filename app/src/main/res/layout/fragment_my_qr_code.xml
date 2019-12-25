@@ -8,7 +8,7 @@
     android:orientation="vertical"
     tools:context="com.qinshou.qinshoubox.me.ui.fragment.MyQRCodeFragment">
 
-    <com.jeejio.commonmodule.widget.TitleBar
+    <com.qinshou.commonmodule.widget.TitleBar
         android:id="@+id/title_bar"
         style="@style/TitleBarBaseStyle"
         app:layout_constraintEnd_toEndOf="parent"
@@ -20,7 +20,7 @@
         app:rightImageResource="@drawable/common_iv_more_src"
         app:titleText="@string/my_qr_code_tv_title_text">
 
-    </com.jeejio.commonmodule.widget.TitleBar>
+    </com.qinshou.commonmodule.widget.TitleBar>
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/cl_qr_code"
