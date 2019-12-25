@@ -21,7 +21,7 @@ public interface IConstant {
     /**
      * 好友申请历史未读数在 SharedPreferences 中的 key
      */
-    String SP_KEY_FRIEND_HISTORY_UNREAD_COUNT = "friendHistoryUnreadCount";
+    String SP_KEY_FRIEND_HISTORY_UNREAD_COUNT = "friendHistoryUnreadCount_%s";
     String DATABASE_NAME = "QinshouBox.db";
     int DATABASE_VERSION = 1;
     //天气界面

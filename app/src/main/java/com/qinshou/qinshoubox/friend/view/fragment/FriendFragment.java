@@ -31,6 +31,7 @@ import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 import com.qinshou.qinshoubox.im.listener.IOnGroupChatStatusListener;
 import com.qinshou.qinshoubox.im.view.fragment.IMActivity;
 import com.qinshou.qinshoubox.util.QSUtil;
+import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -84,12 +85,13 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
             }
 
             // 红点提示
-            int friendHistoryUnreadCount = SharedPreferencesHelper.SINGLETON.getInt(IConstant.SP_KEY_FRIEND_HISTORY_UNREAD_COUNT);
+            String key = String.format(IConstant.SP_KEY_FRIEND_HISTORY_UNREAD_COUNT, UserStatusManager.SINGLETON.getUserBean().getId());
+            int friendHistoryUnreadCount = SharedPreferencesHelper.SINGLETON.getInt(key);
             if (friendHistoryUnreadCount == -1) {
                 friendHistoryUnreadCount = 0;
             }
             friendHistoryUnreadCount++;
-            SharedPreferencesHelper.SINGLETON.putInt(IConstant.SP_KEY_FRIEND_HISTORY_UNREAD_COUNT, friendHistoryUnreadCount);
+            SharedPreferencesHelper.SINGLETON.putInt(key, friendHistoryUnreadCount);
             showFriendHistoryUnreadCount();
         }
 
@@ -196,7 +198,8 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
             @Override
             public void onClick(View v) {
                 startActivity(ContainerActivity.getJumpIntent(getContext(), FriendHistoryFragment.class));
-                SharedPreferencesHelper.SINGLETON.remove(IConstant.SP_KEY_FRIEND_HISTORY_UNREAD_COUNT);
+                String key = String.format(IConstant.SP_KEY_FRIEND_HISTORY_UNREAD_COUNT, UserStatusManager.SINGLETON.getUserBean().getId());
+                SharedPreferencesHelper.SINGLETON.remove(key);
                 showFriendHistoryUnreadCount();
             }
         });
@@ -340,7 +343,8 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
     }
 
     private void showFriendHistoryUnreadCount() {
-        int friendHistoryUnreadCount = SharedPreferencesHelper.SINGLETON.getInt(IConstant.SP_KEY_FRIEND_HISTORY_UNREAD_COUNT);
+        String key = String.format(IConstant.SP_KEY_FRIEND_HISTORY_UNREAD_COUNT, UserStatusManager.SINGLETON.getUserBean().getId());
+        int friendHistoryUnreadCount = SharedPreferencesHelper.SINGLETON.getInt(key);
         mTvUnreadCount.setVisibility(friendHistoryUnreadCount > 0 ? View.VISIBLE : View.GONE);
         mTvUnreadCount.setText(friendHistoryUnreadCount + "");
         mTvUnreadCountInTlMain.setVisibility(friendHistoryUnreadCount > 0 ? View.VISIBLE : View.GONE);
