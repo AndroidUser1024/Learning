@@ -40,7 +40,6 @@
             android:layout_marginEnd="@dimen/px32"
             android:layout_marginRight="@dimen/px32"
             android:background="@drawable/set_name_tv_finish_bg"
-            android:enabled="false"
             android:gravity="center"
             android:text="@string/common_tv_finish_text"
             android:textColor="#FFFFFFFF"

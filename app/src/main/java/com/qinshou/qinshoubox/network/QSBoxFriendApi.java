@@ -20,7 +20,7 @@ import java.util.List;
  * Date: 19-11-25 下午10:20
  */
 
-@Api(value = IUrlConstant.DEFAULT_HOST + "/friend")
+@Api(value = IUrlConstant.DEFAULT_HOST + "/friend",logLevel = LogLevel.BODY)
 public interface QSBoxFriendApi {
     @Json
     @Post("/add")

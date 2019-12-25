@@ -77,7 +77,6 @@ public class SetRemarkActivity extends QSActivity<SetRemarkPresenter> implements
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mIvClear.setVisibility(TextUtils.isEmpty(mEtRemark.getText()) ? View.GONE : View.VISIBLE);
-                mTvFinish.setEnabled(!TextUtils.isEmpty(mEtRemark.getText()));
             }
         });
         mIvClear.setOnClickListener(new View.OnClickListener() {

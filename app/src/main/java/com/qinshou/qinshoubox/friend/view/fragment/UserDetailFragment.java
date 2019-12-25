@@ -175,7 +175,7 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
         findViewByID(R.id.ll_set_remark).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = SetRemarkActivity.getJumpIntent(getContext(), mTvRemark.getText().toString().trim());
+                Intent intent = SetRemarkActivity.getJumpIntent(getContext(), mUserDetailBean.getRemark());
                 ActivityResultUtil.startActivityForResult(getActivity(), intent, SetRemarkActivity.REQUEST_CODE, new OnActivityResultCallBack() {
                     @Override
                     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -184,12 +184,15 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
                             return;
                         }
                         String remark = data.getStringExtra(SetRemarkActivity.NEW_REMARK);
-                        if (!TextUtils.isEmpty(remark)) {
+                        // 设置新备注,是允许为空的
+                        mTvRemark2.setText(remark);
+                        if (TextUtils.isEmpty(remark)) {
+                            mTvRemark.setText(mUserDetailBean.getNickname());
+                        } else {
                             mTvRemark.setText(remark);
-                            mTvRemark2.setText(remark);
                         }
                         if (mUserDetailBean.getFriendStatus() == 1) {
-                            getPresenter().setRemark(mUserDetailBean.getId(), mTvRemark.getText().toString().trim());
+                            getPresenter().setRemark(mUserDetailBean.getId(), remark);
                         }
                     }
                 });
