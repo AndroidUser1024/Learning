@@ -329,6 +329,10 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
             mRcvMessageAdapter.notifyItemInserted(mRcvMessageAdapter.getDataList().size() - 1);
             // 消息列表滚动到底部
             mRcvMessage.scrollToPosition(mRcvMessageAdapter.getItemCount() - 1);
+
+            // 通知会话列表刷新未读数
+            conversationBean.setUnreadCount(0);
+            EventBus.getDefault().post(new EventBean<ConversationBean>(EventBean.Type.REFRESH_CONVERSATION_LIST, conversationBean));
         }
     };
 

@@ -153,8 +153,8 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
 
     @Override
     public void initData() {
-        getPresenter().getConversationList();
         updateUnreadCount();
+        getPresenter().getConversationList();
     }
 
 
@@ -178,6 +178,10 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
         } else if (eventBean.getData() instanceof MessageBean) {
             ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().selectByTypeAndToUserId(((MessageBean) eventBean.getData()).getType(), ((MessageBean) eventBean.getData()).getToUserId());
             updateConversationList(conversationBean);
+        } else if (eventBean.getData() instanceof ConversationBean) {
+            updateConversationList((ConversationBean) eventBean.getData());
+            // 更新未读数
+            updateUnreadCount();
         }
     }
 
