@@ -7,6 +7,8 @@ package com.qinshou.qinshoubox.im.enums;
  * Description:消息状态
  */
 public enum MessageStatus {
+    FAILURE(-1),
+    SENDING(0),
     SENDED(1),
     RECEIVED(2),
     READED(3);

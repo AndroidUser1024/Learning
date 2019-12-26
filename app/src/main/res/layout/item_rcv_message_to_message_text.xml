@@ -53,12 +53,23 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
+                <!-- 发送中提示 -->
+                <ProgressBar
+                    android:id="@+id/pb_sending"
+                    android:layout_width="@dimen/px40"
+                    android:layout_height="@dimen/px40"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="@dimen/px30"
+                    android:layout_marginRight="@dimen/px30"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
                 <!-- 发送失败提示 -->
                 <ImageView
                     android:id="@+id/iv_send_message_failure"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/px28"
+                    android:layout_marginEnd="@dimen/px30"
                     android:layout_marginRight="@dimen/px28"
                     android:src="@drawable/chat_iv_send_message_failure_src"
                     android:visibility="gone"

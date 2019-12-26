@@ -18,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-
 import com.qinshou.commonmodule.util.MediaPlayerHelper;
 import com.qinshou.commonmodule.util.MediaRecorderHelper;
 import com.qinshou.commonmodule.util.ShowLogUtil;
@@ -28,6 +27,12 @@ import com.qinshou.commonmodule.util.permissionutil.IOnRequestPermissionResultCa
 import com.qinshou.commonmodule.util.permissionutil.PermissionUtil;
 import com.qinshou.commonmodule.widget.RefreshLayout;
 import com.qinshou.commonmodule.widget.TitleBar;
+import com.qinshou.qinshoubox.R;
+import com.qinshou.qinshoubox.base.QSActivity;
+import com.qinshou.qinshoubox.constant.IConstant;
+import com.qinshou.qinshoubox.conversation.contract.IChatContract;
+import com.qinshou.qinshoubox.conversation.presenter.ChatPresenter;
+import com.qinshou.qinshoubox.conversation.view.adapter.RcvMessageAdapter;
 import com.qinshou.qinshoubox.conversation.view.fragment.ChatSettingFragment;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.IMClient;
@@ -37,13 +42,8 @@ import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.enums.MessageContentType;
 import com.qinshou.qinshoubox.im.enums.MessageType;
 import com.qinshou.qinshoubox.im.listener.IOnMessageListener;
-import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.base.QSActivity;
-import com.qinshou.qinshoubox.constant.IConstant;
+import com.qinshou.qinshoubox.im.listener.IOnSendMessageListener;
 import com.qinshou.qinshoubox.listener.ClearErrorInfoTextWatcher;
-import com.qinshou.qinshoubox.conversation.contract.IChatContract;
-import com.qinshou.qinshoubox.conversation.presenter.ChatPresenter;
-import com.qinshou.qinshoubox.conversation.view.adapter.RcvMessageAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -336,10 +336,44 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
         }
     };
 
+    private IOnSendMessageListener mOnSendMessageListener = new IOnSendMessageListener() {
+        @Override
+        public void onSending(MessageBean messageBean) {
+            ShowLogUtil.logi("onSending: pid--->" + messageBean.getPid() + ",id--->" + messageBean.getId());
+        }
+
+        @Override
+        public void onSendSuccess(MessageBean messageBean) {
+            ShowLogUtil.logi("onSendSuccess: pid--->" + messageBean.getId() + ",id--->" + messageBean.getId());
+            List<MessageBean> dataList = mRcvMessageAdapter.getDataList();
+            for (int i = 0; i < dataList.size(); i++) {
+                if (messageBean.getPid() == dataList.get(i).getPid()) {
+                    dataList.set(i, messageBean);
+                    mRcvMessageAdapter.notifyItemChanged(i);
+                    break;
+                }
+            }
+        }
+
+        @Override
+        public void onSendFailure(MessageBean messageBean, int failureCode) {
+            ShowLogUtil.logi("onSendFailure: pid--->" + messageBean.getPid() + ",id--->" + messageBean.getId() + ",failureCode--->" + failureCode);
+            List<MessageBean> dataList = mRcvMessageAdapter.getDataList();
+            for (int i = 0; i < dataList.size(); i++) {
+                if (messageBean.getPid() == dataList.get(i).getPid()) {
+                    dataList.set(i, messageBean);
+                    mRcvMessageAdapter.notifyItemChanged(i);
+                    break;
+                }
+            }
+        }
+    };
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         IMClient.SINGLETON.removeOnMessageListener(mOnMessageListener);
+        IMClient.SINGLETON.removeOnSendMessageListener(mOnSendMessageListener);
         MediaPlayerHelper.SINGLETON.stop();
         MediaRecorderHelper.SINGLETON.stopRecord();
     }
@@ -390,6 +424,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
     @Override
     public void setListener() {
         IMClient.SINGLETON.addOnMessageListener(mOnMessageListener);
+        IMClient.SINGLETON.addOnSendMessageListener(mOnSendMessageListener);
         mTitleBar.setLeftImageOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

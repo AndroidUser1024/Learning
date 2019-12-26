@@ -11,6 +11,7 @@ import com.qinshou.commonmodule.rcvbaseadapter.itemview.BaseItemView;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
+import com.qinshou.qinshoubox.im.enums.MessageStatus;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 import java.text.SimpleDateFormat;
@@ -43,6 +44,14 @@ public abstract class AbsRcvMessageAdapterToMessageItemView extends BaseItemView
 //                : View.VISIBLE);
         // 先给昵称设置为sysAccount
 //        baseViewHolder.setTvText(R.id.tv_nickname, messageBean.getFromUsername());
+        // 发送中标识
+        baseViewHolder.setVisibility(R.id.pb_sending, messageBean.getStatus() == MessageStatus.SENDING.getValue()
+                ? View.VISIBLE
+                : View.GONE);
+        // 发送失败标识
+        baseViewHolder.setVisibility(R.id.iv_send_message_failure, messageBean.getStatus() == MessageStatus.FAILURE.getValue()
+                ? View.VISIBLE
+                : View.GONE);
     }
 
     /**

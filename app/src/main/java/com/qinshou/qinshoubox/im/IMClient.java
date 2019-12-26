@@ -6,10 +6,12 @@ import android.os.Looper;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.im.bean.FriendStatusBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatStatusBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
+import com.qinshou.qinshoubox.im.bean.ServerReceiptBean;
 import com.qinshou.qinshoubox.im.db.DatabaseHelper;
 import com.qinshou.qinshoubox.im.enums.FriendStatus;
 import com.qinshou.qinshoubox.im.enums.GroupChatStatus;
@@ -19,6 +21,7 @@ import com.qinshou.qinshoubox.im.listener.IOnConnectListener;
 import com.qinshou.qinshoubox.im.listener.IOnFriendStatusListener;
 import com.qinshou.qinshoubox.im.listener.IOnGroupChatStatusListener;
 import com.qinshou.qinshoubox.im.listener.IOnMessageListener;
+import com.qinshou.qinshoubox.im.listener.IOnSendMessageListener;
 import com.qinshou.qinshoubox.im.manager.ConversationManager;
 import com.qinshou.qinshoubox.im.manager.FriendManager;
 import com.qinshou.qinshoubox.im.manager.GroupChatManager;
@@ -59,9 +62,9 @@ public enum IMClient {
      * 重连次数
      */
     private final int MAX_RECONNECT_COUNT = 5;
-//    private static final String URL = "ws://www.mrqinshou.com:10086/websocket";
-        private static final String URL = "ws://172.16.60.231:10086/websocket";
-//        private static final String URL = "ws://192.168.1.109:10086/websocket";
+    //    private static final String URL = "ws://www.mrqinshou.com:10086/websocket";
+    private static final String URL = "ws://172.16.60.231:10086/websocket";
+    //        private static final String URL = "ws://192.168.1.109:10086/websocket";
     private Context mContext;
     private WebSocket mWebSocket;
     private Handler mHandler = new Handler(Looper.getMainLooper());
@@ -69,6 +72,7 @@ public enum IMClient {
     private List<IOnMessageListener> mOnMessageListenerList = new ArrayList<>();
     private List<IOnFriendStatusListener> mOnFriendStatusListenerList = new ArrayList<>();
     private List<IOnGroupChatStatusListener> mOnGroupChatStatusListenerList = new ArrayList<>();
+    private List<IOnSendMessageListener> mOnSendMessageListenerList = new ArrayList<>();
     private String mUserId;
     private GroupChatManager mGroupChatManager;
     private FriendManager mFriendManager;
@@ -209,6 +213,27 @@ public enum IMClient {
 //                            timer.cancel();
 //                        }
 //                    }
+                    ServerReceiptBean serverReceiptBean = new Gson().fromJson(messageBean.getExtend(), ServerReceiptBean.class);
+                    MessageBean select = mMessageManager.selectByPid(serverReceiptBean.getPid());
+                    if (serverReceiptBean.getStatus() == MessageStatus.FAILURE.getValue()) {
+                        if (select != null) {
+                            select.setId(serverReceiptBean.getId());
+                            select.setStatus(MessageStatus.FAILURE.getValue());
+                            mMessageManager.update(select);
+                        }
+                        for (IOnSendMessageListener onSendMessageListener : mOnSendMessageListenerList) {
+                            onSendMessageListener.onSendFailure(select, serverReceiptBean.getFailureCode());
+                        }
+                    } else {
+                        if (select != null) {
+                            select.setId(serverReceiptBean.getId());
+                            select.setStatus(MessageStatus.SENDED.getValue());
+                            mMessageManager.update(select);
+                        }
+                        for (IOnSendMessageListener onSendMessageListener : mOnSendMessageListenerList) {
+                            onSendMessageListener.onSendSuccess(select);
+                        }
+                    }
                 }
             }
         });
@@ -392,7 +417,7 @@ public enum IMClient {
         mWebSocket.close(1000, "normal close");
     }
 
-    public void sendMessage(MessageBean messageBean) {
+    public void sendMessage(final MessageBean messageBean) {
         if (mWebSocket == null) {
             return;
         }
@@ -400,7 +425,6 @@ public enum IMClient {
         if (messageBean.getType() == MessageType.CHAT.getValue()
                 || messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
             mMessageManager.insert(true, messageBean);
-
 //            // 创建一个唯一索引作为 ACK Key,将其 json 串做 Base64 加密,得到的加密字符串作为 key
 //            AckKeyBean ackKeyBean = new AckKeyBean(mUserId
 //                    , messageBean.getFromUserId()
@@ -415,6 +439,16 @@ public enum IMClient {
 //            mRetrySendTimerMap.put(key, timer);
         }
         mWebSocket.send(new Gson().toJson(messageBean));
+        ShowLogUtil.logi(messageBean.getPid());
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                for (IOnSendMessageListener onSendMessageListener : mOnSendMessageListenerList) {
+                    ShowLogUtil.logi(messageBean.getPid());
+                    onSendMessageListener.onSending(messageBean);
+                }
+            }
+        });
     }
 
 //    private class RetrySendTimerTask extends TimerTask {
@@ -434,8 +468,20 @@ public enum IMClient {
 //        }
 //    }
 
-    public String getUserId() {
-        return mUserId;
+    public GroupChatManager getGroupChatManager() {
+        return mGroupChatManager;
+    }
+
+    public FriendManager getFriendManager() {
+        return mFriendManager;
+    }
+
+    public MessageManager getMessageManager() {
+        return mMessageManager;
+    }
+
+    public ConversationManager getConversationManager() {
+        return mConversationManager;
     }
 
     public void addOnConnectListener(IOnConnectListener onConnectListener) {
@@ -470,19 +516,11 @@ public enum IMClient {
         mOnGroupChatStatusListenerList.remove(onGroupChatStatusListener);
     }
 
-    public GroupChatManager getGroupChatManager() {
-        return mGroupChatManager;
+    public void addOnSendMessageListener(IOnSendMessageListener onSendMessageListener) {
+        mOnSendMessageListenerList.add(onSendMessageListener);
     }
 
-    public FriendManager getFriendManager() {
-        return mFriendManager;
-    }
-
-    public MessageManager getMessageManager() {
-        return mMessageManager;
-    }
-
-    public ConversationManager getConversationManager() {
-        return mConversationManager;
+    public void removeOnSendMessageListener(IOnSendMessageListener onSendMessageListener) {
+        mOnSendMessageListenerList.remove(onSendMessageListener);
     }
 }

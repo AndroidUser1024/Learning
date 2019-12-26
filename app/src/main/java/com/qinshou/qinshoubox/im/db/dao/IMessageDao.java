@@ -42,7 +42,21 @@ public interface IMessageDao extends IBaseDao {
     //    FROM conversation_message_rel AS cmr
     //    LEFT OUTER JOIN
     //    message AS m ON m.pid = cmr.messagePid
-    //    WHERE cmr.conversationId = 1
-    //    LIMIT page*pageSize,(page+1)*pageSize;
+    //    WHERE cmr.conversationId = #{conversationId}
+    //    LIMIT #{page}*#{pageSize},(#{page}+1)*#{pageSize};
     List<MessageBean> selectList(int conversationId, int page, int pageSize);
+
+    // 查询语句
+    // SELECT m.pid,m.id,m.fromUserId,m.toUserId,m.type,m.contentType,m.content,m.sendTimestamp,m.receiveTimestamp
+    // ,m.status,m.extend
+    // FROM message AS m
+    // WHERE m.pid=#{pid};
+    MessageBean selectByPid(int pid);
+
+    // 修改语句
+    // UPDATE message SET id=#{id},fromUserId=#{fromUserId},toUserId=#{toUserId},type=#{type}
+    // ,contentType=#{contentType},content=#{content},sendTimestamp=#{sendTimestamp}
+    // ,receiveTimestamp=#{receiveTimestamp},status=#{status},extend=#{extend}
+    // WHERE pid=#{pid};
+    int update(MessageBean messageBean);
 }

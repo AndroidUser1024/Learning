@@ -59,7 +59,7 @@ public class MessageManager {
         messageBean = mMessageDao.insert(messageBean);
         // 插入或更新会话
         ConversationBean conversationBean = new ConversationBean();
-        if (send||messageBean.getType()== MessageType.GROUP_CHAT.getValue()) {
+        if (send || messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
             // 发送的消息, conversation 的目标 id 为接收方 id
             // 群聊的发送方永远是自己,接收方永远是群 id,所以群聊类型的消息,conversation 的目标 id 为永远为群 id
             conversationBean.setToUserId(messageBean.getToUserId());
@@ -72,7 +72,7 @@ public class MessageManager {
         conversationBean.setLastMsgContent(messageBean.getContent());
         conversationBean.setLastMsgContentType(messageBean.getContentType());
         conversationBean.setType(messageBean.getType());
-        mConversationDao.insert(send,conversationBean);
+        mConversationDao.insert(send, conversationBean);
         // 插入会话与消息关系
         mIConversationMessageRelDao.insert(new ConversationMessageRelBean(conversationBean.getId(), messageBean.getPid()));
         return messageBean;
@@ -85,15 +85,14 @@ public class MessageManager {
         }
         return mMessageDao.selectList(conversationBean.getId(), page, pageSize);
     }
-//
-//    public List<MessageBean> getList(int conversationId, int page, int pageSize) {
-//        return mMessageDao.getList(conversationId, page, pageSize);
-//    }
-//
-//    public int setStatus(int status, int fromUserId, int toUserId, long sendTimestamp) {
-//        return mMessageDao.setStatus(status, fromUserId, toUserId, sendTimestamp);
-//    }
-//
+
+    public MessageBean selectByPid(int pid) {
+        return mMessageDao.selectByPid(pid);
+    }
+
+    public int update(MessageBean messageBean) {
+        return mMessageDao.update(messageBean);
+    }
 //    public MessageBean getByFromUserIdAndToUserIdAndTypeAndSendTimestamp(int fromUserId, int toUserId, int type, long sendTimestamp) {
 //        return mMessageDao.getByFromUserIdAndToUserIdAndTypeAndSendTimestamp(fromUserId, toUserId, type, sendTimestamp);
 //    }
