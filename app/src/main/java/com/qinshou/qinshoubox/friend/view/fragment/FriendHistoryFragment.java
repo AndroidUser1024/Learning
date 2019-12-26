@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.qinshou.commonmodule.ContainerActivity;
+import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.widget.RefreshLayout;
 import com.qinshou.commonmodule.widget.TitleBar;
@@ -22,6 +23,7 @@ import com.qinshou.qinshoubox.homepage.bean.PageResultBean;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.enums.FriendRelStatus;
 import com.qinshou.qinshoubox.im.listener.IOnFriendStatusListener;
+import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -50,33 +52,31 @@ public class FriendHistoryFragment extends QSFragment<FriendHistoryPresenter> im
     private IOnFriendStatusListener mOnFriendStatusListener = new IOnFriendStatusListener() {
         @Override
         public void add(String fromUserId, String additionalMsg, boolean newFriend) {
-            ShowLogUtil.logi("add: fromUserId--->" + fromUserId + ",additionalMsg--->" + additionalMsg + ",newFriend--->" + newFriend);
             getPresenter().getFriendHistory(mPage, IConstant.PAGE_SIZE);
+            // 已经在当前页,查看到了好友申请,就不用保存申请历史未读数了
+            String key = String.format(IConstant.SP_KEY_FRIEND_HISTORY_UNREAD_COUNT, UserStatusManager.SINGLETON.getUserBean().getId());
+            SharedPreferencesHelper.SINGLETON.remove(key);
+            EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_FRIEND_HISTORY_UNREAD_COUNT, null));
         }
 
         @Override
         public void agreeAdd(String fromUserId) {
-            ShowLogUtil.logi("agreeAdd: fromUserId--->" + fromUserId);
         }
 
         @Override
         public void refuseAdd(String fromUserId) {
-            ShowLogUtil.logi("refuseAdd: fromUserId--->" + fromUserId);
         }
 
         @Override
         public void delete(String fromUserId) {
-            ShowLogUtil.logi("delete: fromUserId--->" + fromUserId);
         }
 
         @Override
         public void online(String fromUserId) {
-            ShowLogUtil.logi("online: fromUserId--->" + fromUserId);
         }
 
         @Override
         public void offline(String fromUserId) {
-            ShowLogUtil.logi("offline: fromUserId--->" + fromUserId);
         }
     };
 

@@ -22,8 +22,6 @@ import com.qinshou.qinshoubox.friend.presenter.FriendPresenter;
 import com.qinshou.qinshoubox.friend.view.adapter.RcvFriendAdapter;
 import com.qinshou.qinshoubox.friend.view.adapter.RcvGroupChatAdapter;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
-import com.qinshou.qinshoubox.im.bean.ConversationBean;
-import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.listener.IOnFriendStatusListener;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
@@ -34,8 +32,6 @@ import com.qinshou.qinshoubox.util.QSUtil;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +65,6 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
     private IOnFriendStatusListener mOnFriendStatusListener = new IOnFriendStatusListener() {
         @Override
         public void add(String fromUserId, String additionalMsg, boolean newFriend) {
-            ShowLogUtil.logi("add: fromUserId--->" + fromUserId + ",additionalMsg--->" + additionalMsg + ",newFriend--->" + newFriend);
             if (!newFriend) {
                 return;
             }
@@ -92,34 +87,29 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
             }
             friendHistoryUnreadCount++;
             SharedPreferencesHelper.SINGLETON.putInt(key, friendHistoryUnreadCount);
-            showFriendHistoryUnreadCount();
+            updateFriendHistoryUnreadCount();
         }
 
         @Override
         public void agreeAdd(String fromUserId) {
-            ShowLogUtil.logi("agreeAdd: fromUserId--->" + fromUserId);
             getPresenter().getFriendList();
         }
 
         @Override
         public void refuseAdd(String fromUserId) {
-            ShowLogUtil.logi("refuseAdd: fromUserId--->" + fromUserId);
         }
 
         @Override
         public void delete(String fromUserId) {
-            ShowLogUtil.logi("delete: fromUserId--->" + fromUserId);
             getPresenter().getFriendList();
         }
 
         @Override
         public void online(String fromUserId) {
-            ShowLogUtil.logi("online: fromUserId--->" + fromUserId);
         }
 
         @Override
         public void offline(String fromUserId) {
-            ShowLogUtil.logi("offline: fromUserId--->" + fromUserId);
         }
     };
 
@@ -200,7 +190,7 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
                 startActivity(ContainerActivity.getJumpIntent(getContext(), FriendHistoryFragment.class));
                 String key = String.format(IConstant.SP_KEY_FRIEND_HISTORY_UNREAD_COUNT, UserStatusManager.SINGLETON.getUserBean().getId());
                 SharedPreferencesHelper.SINGLETON.remove(key);
-                showFriendHistoryUnreadCount();
+                updateFriendHistoryUnreadCount();
             }
         });
         findViewByID(R.id.ll_create_group_chat).setOnClickListener(new View.OnClickListener() {
@@ -281,7 +271,7 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
 
         getPresenter().getMyGroupChatList();
         getPresenter().getFriendList();
-        showFriendHistoryUnreadCount();
+        updateFriendHistoryUnreadCount();
     }
 
     @Override
@@ -291,6 +281,8 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
             getPresenter().getMyGroupChatList();
         } else if (eventBean.getType() == EventBean.Type.REFRESH_FRIEND_LIST) {
             getPresenter().getFriendList();
+        } else if (eventBean.getType() == EventBean.Type.REFRESH_FRIEND_HISTORY_UNREAD_COUNT) {
+            updateFriendHistoryUnreadCount();
         }
     }
 
@@ -342,7 +334,7 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
         }
     }
 
-    private void showFriendHistoryUnreadCount() {
+    private void updateFriendHistoryUnreadCount() {
         String key = String.format(IConstant.SP_KEY_FRIEND_HISTORY_UNREAD_COUNT, UserStatusManager.SINGLETON.getUserBean().getId());
         int friendHistoryUnreadCount = SharedPreferencesHelper.SINGLETON.getInt(key);
         mTvUnreadCount.setVisibility(friendHistoryUnreadCount > 0 ? View.VISIBLE : View.GONE);
