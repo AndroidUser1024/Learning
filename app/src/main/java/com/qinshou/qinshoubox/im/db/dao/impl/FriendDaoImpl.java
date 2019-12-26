@@ -22,8 +22,8 @@ public class FriendDaoImpl extends AbsDaoImpl<FriendBean> implements IFriendDao 
     @Override
     public int insert(FriendBean friendBean) {
         // 先查询该 id 是否存在
-        String sql = "SELECT COUNT(*) AS count FROM friend WHERE id='%s'";
-        sql = String.format(sql, friendBean.getId());
+        String sql = "SELECT COUNT(*) AS count FROM friend WHERE id=%s";
+        sql = String.format(sql, getStringValue(friendBean.getId()));
         Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
         int count = 0;
         try {
@@ -39,22 +39,23 @@ public class FriendDaoImpl extends AbsDaoImpl<FriendBean> implements IFriendDao 
             sql = "INSERT INTO friend" +
                     " (id,nickname,headImg,headImgSmall,signature,remark,top,doNotDisturb,blackList)" +
                     " VALUES" +
-                    " ('%s','%s','%s','%s','%s','%s','%s','%s','%s')";
-            sql = String.format(sql, friendBean.getId(), friendBean.getNickname(), friendBean.getHeadImg()
-                    , friendBean.getHeadImgSmall(), friendBean.getSignature(), friendBean.getRemark()
+                    " (%s,%s,%s,%s,%s,%s,%s,%s,%s)";
+            sql = String.format(sql, getStringValue(friendBean.getId()), getStringValue(friendBean.getNickname())
+                    , getStringValue(friendBean.getHeadImg()), getStringValue(friendBean.getHeadImgSmall())
+                    , getStringValue(friendBean.getSignature()), getStringValue(friendBean.getRemark())
                     , friendBean.getTop(), friendBean.getDoNotDisturb(), friendBean.getBlackList());
             getSQLiteDatabase().execSQL(sql);
         } else {
             // 已存在则更新
             sql = "UPDATE friend SET" +
-                    " nickname='%s',headImg='%s',headImgSmall='%s'" +
-                    " ,signature='%s',remark='%s',top='%s'" +
-                    " ,doNotDisturb='%s',blackList='%s'" +
-                    " WHERE id='%s'";
-            sql = String.format(sql, friendBean.getNickname(), friendBean.getHeadImg(), friendBean.getHeadImgSmall()
-                    , friendBean.getSignature(), friendBean.getRemark(), friendBean.getTop()
-                    , friendBean.getDoNotDisturb(), friendBean.getBlackList()
-                    , friendBean.getId());
+                    " nickname=%s,headImg=%s,headImgSmall=%s" +
+                    " ,signature=%s,remark=%s,top=%s" +
+                    " ,doNotDisturb=%s,blackList=%s" +
+                    " WHERE id=%s";
+            sql = String.format(sql, getStringValue(friendBean.getNickname()), getStringValue(friendBean.getHeadImg())
+                    , getStringValue(friendBean.getHeadImgSmall()), getStringValue(friendBean.getSignature())
+                    , getStringValue(friendBean.getRemark()), friendBean.getTop(), friendBean.getDoNotDisturb()
+                    , friendBean.getBlackList(), getStringValue(friendBean.getId()));
             getSQLiteDatabase().execSQL(sql);
         }
         return 1;
@@ -66,8 +67,8 @@ public class FriendDaoImpl extends AbsDaoImpl<FriendBean> implements IFriendDao 
         String sql = "SELECT" +
                 " f.id,f.nickname,f.headImg,f.headImgSmall,f.signature,f.remark,f.top,f.doNotDisturb,f.blackList" +
                 " FROM friend AS f" +
-                " WHERE f.id='%s'";
-        sql = String.format(sql, id);
+                " WHERE f.id=%s";
+        sql = String.format(sql, getStringValue(id));
         Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
         try {
             if (cursor.moveToNext()) {

@@ -22,7 +22,7 @@ public class ConversationMessageRelDaoImpl extends AbsDaoImpl<ConversationMessag
          String sql="INSERT INTO conversation_message_rel" +
                  " (conversationId,messagePid)" +
                  " VALUES" +
-                 " ('%s','%s')";
+                 " (%s,%s)";
         sql = String.format(sql,conversationMessageRelBean.getConversationId(), conversationMessageRelBean.getMessagePid());
         getSQLiteDatabase().execSQL(sql);
     }

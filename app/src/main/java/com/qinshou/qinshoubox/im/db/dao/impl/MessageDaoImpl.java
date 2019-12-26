@@ -26,11 +26,11 @@ public class MessageDaoImpl extends AbsDaoImpl<MessageBean> implements IMessageD
         String sql = "INSERT INTO message" +
                 " (id,fromUserId,toUserId,type,contentType,content,sendTimestamp,receiveTimestamp,status,extend)" +
                 " VALUES" +
-                " ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')";
-        sql = String.format(sql, messageBean.getId(), messageBean.getFromUserId(), messageBean.getToUserId()
-                , messageBean.getType(), messageBean.getContentType(), messageBean.getContent()
-                , messageBean.getSendTimestamp(), messageBean.getReceiveTimestamp(), messageBean.getStatus()
-                , messageBean.getExtend());
+                " (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)";
+        sql = String.format(sql, getStringValue(messageBean.getId()), getStringValue(messageBean.getFromUserId())
+                , getStringValue(messageBean.getToUserId()), messageBean.getType(), messageBean.getContentType()
+                , getStringValue(messageBean.getContent()), messageBean.getSendTimestamp()
+                , messageBean.getReceiveTimestamp(), messageBean.getStatus(), getStringValue(messageBean.getExtend()));
         getSQLiteDatabase().execSQL(sql);
         Cursor cursor = getSQLiteDatabase().rawQuery("SELECT last_insert_rowid() FROM message", new String[]{});
         try {
@@ -62,9 +62,9 @@ public class MessageDaoImpl extends AbsDaoImpl<MessageBean> implements IMessageD
                 "FROM conversation_message_rel AS cmr\n" +
                 "LEFT OUTER JOIN\n" +
                 "message AS m ON m.pid = cmr.messagePid\n" +
-                "WHERE cmr.conversationId = '%s'\n" +
-                "LIMIT '%s','%s'";
-        sql = String.format(sql, conversationId, (page-1) * pageSize, (page) * pageSize);
+                "WHERE cmr.conversationId = %s\n" +
+                "LIMIT %s,%s";
+        sql = String.format(sql, conversationId, (page - 1) * pageSize, (page) * pageSize);
         List<MessageBean> messageBeanList = new ArrayList<>();
         Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
         try {

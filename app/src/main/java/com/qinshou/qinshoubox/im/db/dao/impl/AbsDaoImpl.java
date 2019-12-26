@@ -18,4 +18,12 @@ public abstract class AbsDaoImpl<T> {
     public SQLiteDatabase getSQLiteDatabase() {
         return mSQLiteDatabase;
     }
+
+    public String getStringValue(String value) {
+        if (value == null) {
+            return null;
+        } else {
+            return "\'" + value + "\'";
+        }
+    }
 }

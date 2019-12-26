@@ -35,9 +35,9 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
             String sql = "INSERT INTO conversation" +
                     " (toUserId,type,lastMsgContent,lastMsgContentType,lastMsgTimestamp,unreadCount)" +
                     " VALUES" +
-                    " ('%s','%s','%s','%s','%s','%s')";
-            sql = String.format(sql, conversationBean.getToUserId(), conversationBean.getType()
-                    , conversationBean.getLastMsgContent(), conversationBean.getLastMsgContentType()
+                    " (%s,%s,%s,%s,%s,%s)";
+            sql = String.format(sql, getStringValue(conversationBean.getToUserId()), conversationBean.getType()
+                    , getStringValue(conversationBean.getLastMsgContent()), conversationBean.getLastMsgContentType()
                     , conversationBean.getLastMsgTimestamp(), conversationBean.getUnreadCount());
             getSQLiteDatabase().execSQL(sql);
             Cursor cursor = getSQLiteDatabase().rawQuery("SELECT last_insert_rowid() FROM message", new String[]{});
@@ -57,11 +57,11 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
                 conversationBean.setUnreadCount(select.getUnreadCount() + 1);
             }
             String sql = "UPDATE conversation SET\n" +
-                    " toUserId='%s',type='%s',lastMsgContent='%s',lastMsgContentType='%s'" +
-                    " ,lastMsgTimestamp='%s',unreadCount='%s'" +
-                    " WHERE id='%s'";
-            sql = String.format(sql, conversationBean.getToUserId(), conversationBean.getType()
-                    , conversationBean.getLastMsgContent(), conversationBean.getLastMsgContentType()
+                    " toUserId=%s,type=%s,lastMsgContent=%s,lastMsgContentType=%s" +
+                    " ,lastMsgTimestamp=%s,unreadCount=%s" +
+                    " WHERE id=%s";
+            sql = String.format(sql, getStringValue(conversationBean.getToUserId()), conversationBean.getType()
+                    , getStringValue(conversationBean.getLastMsgContent()), conversationBean.getLastMsgContentType()
                     , conversationBean.getLastMsgTimestamp(), conversationBean.getUnreadCount()
                     , conversationBean.getId());
             getSQLiteDatabase().execSQL(sql);
@@ -128,8 +128,8 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
 
     @Override
     public ConversationBean selectIdAndUnreadCountByTypeAndToUserId(int type, String toUserId) {
-        String sql = "SELECT id,unreadCount FROM conversation WHERE type='%s' AND toUserId='%s'";
-        sql = String.format(sql, type, toUserId);
+        String sql = "SELECT id,unreadCount FROM conversation WHERE type=%s AND toUserId=%s";
+        sql = String.format(sql, type, getStringValue(toUserId));
         Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
         try {
             if (cursor.moveToNext()) {
@@ -160,8 +160,8 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
                 " FROM conversation AS c" +
                 " LEFT OUTER JOIN friend AS f ON f.id=c.toUserId AND c.type=2001" +
                 " LEFT OUTER JOIN group_chat AS gc ON gc.id=c.toUserId AND c.type=3001" +
-                " WHERE c.type='%s' AND c.toUserId='%s'";
-        sql = String.format(sql, type, toUserId);
+                " WHERE c.type=%s AND c.toUserId=%s";
+        sql = String.format(sql, type, getStringValue(toUserId));
         Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
         try {
             if (cursor.moveToNext()) {
@@ -228,7 +228,7 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
 
     @Override
     public int resetUnreadCount(int id) {
-        String sql = "UPDATE conversation SET unreadCount=0 WHERE id='%s'";
+        String sql = "UPDATE conversation SET unreadCount=0 WHERE id=%s";
         sql = String.format(sql, id);
         getSQLiteDatabase().execSQL(sql);
         return 1;
@@ -315,7 +315,6 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
                 conversationBean.setToUserId(cursor.getString(cursor.getColumnIndex("toUserId")));
                 conversationBean.setType(cursor.getInt(cursor.getColumnIndex("type")));
                 conversationBean.setLastMsgContent(cursor.getString(cursor.getColumnIndex("lastMsgContent")));
-                ShowLogUtil.logi("content--->" + cursor.getString(cursor.getColumnIndex("lastMsgContent")));
                 conversationBean.setLastMsgContentType(cursor.getInt(cursor.getColumnIndex("lastMsgContentType")));
                 conversationBean.setLastMsgTimestamp(cursor.getLong(cursor.getColumnIndex("lastMsgTimestamp")));
                 conversationBean.setUnreadCount(cursor.getInt(cursor.getColumnIndex("unreadCount")));
@@ -354,7 +353,7 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
 
     @Override
     public int deleteById(int id) {
-        String sql = "DELETE FROM conversation WHERE id='%s'";
+        String sql = "DELETE FROM conversation WHERE id=%s";
         sql = String.format(sql, id);
         getSQLiteDatabase().execSQL(sql);
         return 1;

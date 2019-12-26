@@ -25,8 +25,8 @@ public class RcvFriendAdapter extends RcvBaseAdapter<FriendBean> {
         setOnItemClickListener(new IOnItemClickListener<FriendBean>() {
             @Override
             public void onItemClick(BaseViewHolder holder, FriendBean itemData, int position) {
-                ChatActivity.start(getContext(), itemData.getId());
-//                UserDetailFragment.start(getContext(), itemData.getId());
+//                ChatActivity.start(getContext(), itemData.getId());
+                UserDetailFragment.start(getContext(), itemData.getId());
             }
         });
     }
