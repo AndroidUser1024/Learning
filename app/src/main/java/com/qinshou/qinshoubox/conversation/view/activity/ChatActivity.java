@@ -314,6 +314,9 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
             return false;
         }
     };
+    /**
+     * 接收消息监听器
+     */
     private IOnMessageListener mOnMessageListener = new IOnMessageListener() {
         @Override
         public void onMessage(MessageBean messageBean) {
@@ -335,7 +338,9 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
             EventBus.getDefault().post(new EventBean<ConversationBean>(EventBean.Type.REFRESH_CONVERSATION_LIST, conversationBean));
         }
     };
-
+    /**
+     * 消息发送状态监听器
+     */
     private IOnSendMessageListener mOnSendMessageListener = new IOnSendMessageListener() {
         @Override
         public void onSending(MessageBean messageBean) {

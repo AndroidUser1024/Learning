@@ -41,6 +41,7 @@ import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.conversation.contract.IGroupChatContract;
 import com.qinshou.qinshoubox.conversation.presenter.GroupChatPresenter;
+import com.qinshou.qinshoubox.im.listener.IOnSendMessageListener;
 import com.qinshou.qinshoubox.listener.ClearErrorInfoTextWatcher;
 import com.qinshou.qinshoubox.conversation.view.adapter.RcvMessageAdapter;
 
@@ -313,6 +314,9 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
             return false;
         }
     };
+    /**
+     * 接收消息监听器
+     */
     private IOnMessageListener mOnMessageListener = new IOnMessageListener() {
         @Override
         public void onMessage(MessageBean messageBean) {
@@ -334,11 +338,47 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
             EventBus.getDefault().post(new EventBean<ConversationBean>(EventBean.Type.REFRESH_CONVERSATION_LIST, conversationBean));
         }
     };
+    /**
+     * 消息发送状态监听器
+     */
+    private IOnSendMessageListener mOnSendMessageListener = new IOnSendMessageListener() {
+        @Override
+        public void onSending(MessageBean messageBean) {
+            ShowLogUtil.logi("onSending: pid--->" + messageBean.getPid() + ",id--->" + messageBean.getId());
+        }
+
+        @Override
+        public void onSendSuccess(MessageBean messageBean) {
+            ShowLogUtil.logi("onSendSuccess: pid--->" + messageBean.getId() + ",id--->" + messageBean.getId());
+            List<MessageBean> dataList = mRcvMessageAdapter.getDataList();
+            for (int i = 0; i < dataList.size(); i++) {
+                if (messageBean.getPid() == dataList.get(i).getPid()) {
+                    dataList.set(i, messageBean);
+                    mRcvMessageAdapter.notifyItemChanged(i);
+                    break;
+                }
+            }
+        }
+
+        @Override
+        public void onSendFailure(MessageBean messageBean, int failureCode) {
+            ShowLogUtil.logi("onSendFailure: pid--->" + messageBean.getPid() + ",id--->" + messageBean.getId() + ",failureCode--->" + failureCode);
+            List<MessageBean> dataList = mRcvMessageAdapter.getDataList();
+            for (int i = 0; i < dataList.size(); i++) {
+                if (messageBean.getPid() == dataList.get(i).getPid()) {
+                    dataList.set(i, messageBean);
+                    mRcvMessageAdapter.notifyItemChanged(i);
+                    break;
+                }
+            }
+        }
+    };
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         IMClient.SINGLETON.removeOnMessageListener(mOnMessageListener);
+        IMClient.SINGLETON.removeOnSendMessageListener(mOnSendMessageListener);
         MediaPlayerHelper.SINGLETON.stop();
         MediaRecorderHelper.SINGLETON.stopRecord();
     }
@@ -389,6 +429,7 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
     @Override
     public void setListener() {
         IMClient.SINGLETON.addOnMessageListener(mOnMessageListener);
+        IMClient.SINGLETON.addOnSendMessageListener(mOnSendMessageListener);
         mTitleBar.setLeftImageOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

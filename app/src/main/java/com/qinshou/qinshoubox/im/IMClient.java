@@ -439,12 +439,10 @@ public enum IMClient {
 //            mRetrySendTimerMap.put(key, timer);
         }
         mWebSocket.send(new Gson().toJson(messageBean));
-        ShowLogUtil.logi(messageBean.getPid());
         mHandler.post(new Runnable() {
             @Override
             public void run() {
                 for (IOnSendMessageListener onSendMessageListener : mOnSendMessageListenerList) {
-                    ShowLogUtil.logi(messageBean.getPid());
                     onSendMessageListener.onSending(messageBean);
                 }
             }

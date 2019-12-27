@@ -131,10 +131,9 @@ public class MessageDaoImpl extends AbsDaoImpl<MessageBean> implements IMessageD
                 " WHERE pid=%s";
         sql = String.format(sql, getStringValue(messageBean.getId()), getStringValue(messageBean.getFromUserId())
                 , getStringValue(messageBean.getToUserId()), messageBean.getType()
-                , messageBean.getContentType(), messageBean.getContent(), messageBean.getSendTimestamp()
+                , messageBean.getContentType(), getStringValue(messageBean.getContent()), messageBean.getSendTimestamp()
                 , messageBean.getReceiveTimestamp(), messageBean.getStatus(), getStringValue(messageBean.getExtend())
                 , messageBean.getPid());
-        ShowLogUtil.logi("sql--->" + sql);
         getSQLiteDatabase().execSQL(sql);
         return 1;
     }
