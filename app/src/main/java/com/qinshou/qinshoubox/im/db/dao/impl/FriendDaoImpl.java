@@ -80,7 +80,7 @@ public class FriendDaoImpl extends AbsDaoImpl<FriendBean> implements IFriendDao 
 
     @Override
     public boolean existsById(String id) {
-        String sql = "SELECT COUNT(id) AS count FROM friend WHERE id=%s";
+        String sql = "SELECT COUNT(id) FROM friend WHERE id=%s";
         sql = String.format(sql, getStringValue(id));
         Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
         try {

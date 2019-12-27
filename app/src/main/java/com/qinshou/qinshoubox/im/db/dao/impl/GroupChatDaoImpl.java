@@ -85,12 +85,12 @@ public class GroupChatDaoImpl extends AbsDaoImpl<GroupChatBean> implements IGrou
 
     @Override
     public boolean existsById(String id) {
-        String sql = "SELECT COUNT(*) AS count FROM group_chat WHERE id=%s";
+        String sql = "SELECT COUNT(id) FROM group_chat WHERE id=%s";
         sql = String.format(sql, getStringValue(id));
         Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
         try {
             if (cursor.moveToNext()) {
-                int count = cursor.getInt(cursor.getColumnIndex("count"));
+                int count = cursor.getInt(cursor.getColumnIndex("COUNT(id)"));
                 return count > 0;
             }
         } finally {

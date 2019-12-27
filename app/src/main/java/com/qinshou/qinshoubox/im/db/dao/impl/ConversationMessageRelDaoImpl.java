@@ -29,7 +29,7 @@ public class ConversationMessageRelDaoImpl extends AbsDaoImpl<ConversationMessag
     }
 
     @Override
-    public int existsByConversationIdAndMessagePid(ConversationMessageRelBean conversationMessageRelBean) {
+    public boolean existsByConversationIdAndMessagePid(ConversationMessageRelBean conversationMessageRelBean) {
         String sql = "SELECT" +
                 " COUNT(id)" +
                 " FROM conversation_message_rel" +
@@ -39,13 +39,14 @@ public class ConversationMessageRelDaoImpl extends AbsDaoImpl<ConversationMessag
         Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
         try {
             if (cursor.moveToNext()) {
-                return cursor.getInt(cursor.getColumnIndex("COUNT(id)"));
+                int count = cursor.getInt(cursor.getColumnIndex("COUNT(id)"));
+                return count > 0;
             }
         } finally {
             if (cursor != null) {
                 cursor.close();
             }
         }
-        return 0;
+        return false;
     }
 }

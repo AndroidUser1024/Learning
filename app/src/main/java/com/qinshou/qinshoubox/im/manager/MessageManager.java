@@ -82,7 +82,7 @@ public class MessageManager {
         mConversationDao.insert(send, conversationBean);
         // 插入会话与消息关系
         ConversationMessageRelBean conversationMessageRelBean = new ConversationMessageRelBean(conversationBean.getId(), messageBean.getPid());
-        if (mConversationMessageRelDao.existsByConversationIdAndMessagePid(conversationMessageRelBean) == 0) {
+        if (!mConversationMessageRelDao.existsByConversationIdAndMessagePid(conversationMessageRelBean)) {
             mConversationMessageRelDao.insert(conversationMessageRelBean);
         }
         return messageBean;

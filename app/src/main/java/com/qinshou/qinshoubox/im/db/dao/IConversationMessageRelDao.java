@@ -27,5 +27,5 @@ public interface IConversationMessageRelDao  extends IBaseDao{
     // FROM conversation_message_rel
     // WHERE
     // conversationId=#{conversationId} AND messagePid=#{messagePid}
-    int existsByConversationIdAndMessagePid(ConversationMessageRelBean conversationMessageRelBean);
+    boolean existsByConversationIdAndMessagePid(ConversationMessageRelBean conversationMessageRelBean);
 }
