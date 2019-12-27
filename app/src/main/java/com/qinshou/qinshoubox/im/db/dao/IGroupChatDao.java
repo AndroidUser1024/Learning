@@ -33,6 +33,7 @@ public interface IGroupChatDao extends IBaseDao {
     // ,nicknameInGroupChat=#{nicknameInGroupChat},top=#{top}
     // ,doNotDisturb=#{doNotDisturb},showGroupChatMemberNickname=#{showGroupChatMemberNickname}
     // WHERE id=#{id};
+    int update(GroupChatBean groupChatBean);
 
     // 查询语句
     // SELECT
@@ -44,5 +45,6 @@ public interface IGroupChatDao extends IBaseDao {
     GroupChatBean selectById(String id);
 
     // existsById
-    // SELECT COUNT(*) AS count FROM group_chat WHERE id=#{id};
+    // SELECT COUNT(id) AS count FROM group_chat WHERE id=#{id};
+    boolean existsById(String id);
 }

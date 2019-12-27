@@ -10,6 +10,7 @@ import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.db.DatabaseHelper;
 import com.qinshou.qinshoubox.im.db.dao.IFriendDao;
+import com.qinshou.qinshoubox.listener.FailureRunnable;
 import com.qinshou.qinshoubox.listener.SuccessRunnable;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxFriendApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
@@ -55,8 +56,12 @@ public class FriendManager {
                         mExecutorService.submit(new Runnable() {
                             @Override
                             public void run() {
-                                for (int i = 0; data != null && i < data.size(); i++) {
-                                    mFriendDao.insert(data.get(i));
+                                for (FriendBean friendBean : data) {
+                                    if (mFriendDao.existsById(friendBean.getId())) {
+                                        mFriendDao.update(friendBean);
+                                    } else {
+                                        mFriendDao.insert(friendBean);
+                                    }
                                 }
                                 mHandler.post(new SuccessRunnable<List<FriendBean>>(callback, data));
                             }
@@ -66,7 +71,7 @@ public class FriendManager {
 
                     @Override
                     public void onFailure(Exception e) {
-                        callback.onFailure(e);
+                        mHandler.post(new FailureRunnable<>(callback, e));
                     }
                 });
     }
@@ -122,16 +127,25 @@ public class FriendManager {
                 .transform(new QSApiTransformer<Object>())
                 .enqueue(new Callback<Object>() {
                     @Override
-                    public void onSuccess(Object data) {
-                        FriendBean friendBean = getById(toUserId);
-                        friendBean.setRemark(remark);
-                        mFriendDao.insert(friendBean);
-                        callback.onSuccess(data);
+                    public void onSuccess(final Object data) {
+                        mExecutorService.submit(new Runnable() {
+                            @Override
+                            public void run() {
+                                FriendBean friendBean = getById(toUserId);
+                                friendBean.setRemark(remark);
+                                if (mFriendDao.existsById(friendBean.getId())) {
+                                    mFriendDao.update(friendBean);
+                                } else {
+                                    mFriendDao.insert(friendBean);
+                                }
+                                mHandler.post(new SuccessRunnable<>(callback, data));
+                            }
+                        });
                     }
 
                     @Override
                     public void onFailure(Exception e) {
-                        callback.onFailure(e);
+                        mHandler.post(new FailureRunnable<>(callback, e));
                     }
                 });
     }
@@ -141,16 +155,26 @@ public class FriendManager {
                 .transform(new QSApiTransformer<Object>())
                 .enqueue(new Callback<Object>() {
                     @Override
-                    public void onSuccess(Object data) {
-                        FriendBean friendBean = getById(toUserId);
-                        friendBean.setTop(top);
-                        mFriendDao.insert(friendBean);
-                        callback.onSuccess(data);
+                    public void onSuccess(final Object data) {
+                        mExecutorService.submit(new Runnable() {
+                            @Override
+                            public void run() {
+                                FriendBean friendBean = getById(toUserId);
+                                friendBean.setTop(top);
+                                if (mFriendDao.existsById(friendBean.getId())) {
+                                    mFriendDao.update(friendBean);
+                                } else {
+                                    mFriendDao.insert(friendBean);
+                                }
+                                mHandler.post(new SuccessRunnable<>(callback, data));
+                            }
+                        });
+
                     }
 
                     @Override
                     public void onFailure(Exception e) {
-                        callback.onFailure(e);
+                        mHandler.post(new FailureRunnable<>(callback, e));
                     }
                 });
     }
@@ -160,16 +184,25 @@ public class FriendManager {
                 .transform(new QSApiTransformer<Object>())
                 .enqueue(new Callback<Object>() {
                     @Override
-                    public void onSuccess(Object data) {
-                        FriendBean friendBean = getById(toUserId);
-                        friendBean.setDoNotDisturb(doNotDisturb);
-                        mFriendDao.insert(friendBean);
-                        callback.onSuccess(data);
+                    public void onSuccess(final Object data) {
+                        mExecutorService.submit(new Runnable() {
+                            @Override
+                            public void run() {
+                                FriendBean friendBean = getById(toUserId);
+                                friendBean.setDoNotDisturb(doNotDisturb);
+                                if (mFriendDao.existsById(friendBean.getId())) {
+                                    mFriendDao.update(friendBean);
+                                } else {
+                                    mFriendDao.insert(friendBean);
+                                }
+                                mHandler.post(new SuccessRunnable<>(callback, data));
+                            }
+                        });
                     }
 
                     @Override
                     public void onFailure(Exception e) {
-                        callback.onFailure(e);
+                        mHandler.post(new FailureRunnable<>(callback, e));
                     }
                 });
     }
@@ -179,16 +212,25 @@ public class FriendManager {
                 .transform(new QSApiTransformer<Object>())
                 .enqueue(new Callback<Object>() {
                     @Override
-                    public void onSuccess(Object data) {
-                        FriendBean friendBean = getById(toUserId);
-                        friendBean.setBlackList(blackList);
-                        mFriendDao.insert(friendBean);
-                        callback.onSuccess(data);
+                    public void onSuccess(final Object data) {
+                        mExecutorService.submit(new Runnable() {
+                            @Override
+                            public void run() {
+                                FriendBean friendBean = getById(toUserId);
+                                friendBean.setBlackList(blackList);
+                                if (mFriendDao.existsById(friendBean.getId())) {
+                                    mFriendDao.update(friendBean);
+                                } else {
+                                    mFriendDao.insert(friendBean);
+                                }
+                                mHandler.post(new SuccessRunnable<>(callback, data));
+                            }
+                        });
                     }
 
                     @Override
                     public void onFailure(Exception e) {
-                        callback.onFailure(e);
+                        mHandler.post(new FailureRunnable<>(callback, e));
                     }
                 });
     }

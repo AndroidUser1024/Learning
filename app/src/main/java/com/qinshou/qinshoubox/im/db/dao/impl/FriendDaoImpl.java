@@ -8,7 +8,7 @@ import com.qinshou.qinshoubox.im.db.dao.IFriendDao;
 
 /**
  * Author: QinHao
- * Email:qinhao@jeejio.com
+ * Email:cqflqinhao@126.com
  * Date: 2019/12/5 8:57
  * Description:
  */
@@ -21,43 +21,30 @@ public class FriendDaoImpl extends AbsDaoImpl<FriendBean> implements IFriendDao 
 
     @Override
     public int insert(FriendBean friendBean) {
-        // 先查询该 id 是否存在
-        String sql = "SELECT COUNT(*) AS count FROM friend WHERE id=%s";
-        sql = String.format(sql, getStringValue(friendBean.getId()));
-        Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
-        int count = 0;
-        try {
-            if (cursor.moveToNext()) {
-                count = cursor.getInt(cursor.getColumnIndex("count"));
-            }
-        } finally {
-            cursor.close();
-        }
+        String sql = "INSERT INTO friend" +
+                " (id,nickname,headImg,headImgSmall,signature,remark,top,doNotDisturb,blackList)" +
+                " VALUES" +
+                " (%s,%s,%s,%s,%s,%s,%s,%s,%s)";
+        sql = String.format(sql, getStringValue(friendBean.getId()), getStringValue(friendBean.getNickname())
+                , getStringValue(friendBean.getHeadImg()), getStringValue(friendBean.getHeadImgSmall())
+                , getStringValue(friendBean.getSignature()), getStringValue(friendBean.getRemark())
+                , friendBean.getTop(), friendBean.getDoNotDisturb(), friendBean.getBlackList());
+        getSQLiteDatabase().execSQL(sql);
+        return 1;
+    }
 
-        if (count == 0) {
-            // 如果不存在,则新增
-            sql = "INSERT INTO friend" +
-                    " (id,nickname,headImg,headImgSmall,signature,remark,top,doNotDisturb,blackList)" +
-                    " VALUES" +
-                    " (%s,%s,%s,%s,%s,%s,%s,%s,%s)";
-            sql = String.format(sql, getStringValue(friendBean.getId()), getStringValue(friendBean.getNickname())
-                    , getStringValue(friendBean.getHeadImg()), getStringValue(friendBean.getHeadImgSmall())
-                    , getStringValue(friendBean.getSignature()), getStringValue(friendBean.getRemark())
-                    , friendBean.getTop(), friendBean.getDoNotDisturb(), friendBean.getBlackList());
-            getSQLiteDatabase().execSQL(sql);
-        } else {
-            // 已存在则更新
-            sql = "UPDATE friend SET" +
-                    " nickname=%s,headImg=%s,headImgSmall=%s" +
-                    " ,signature=%s,remark=%s,top=%s" +
-                    " ,doNotDisturb=%s,blackList=%s" +
-                    " WHERE id=%s";
-            sql = String.format(sql, getStringValue(friendBean.getNickname()), getStringValue(friendBean.getHeadImg())
-                    , getStringValue(friendBean.getHeadImgSmall()), getStringValue(friendBean.getSignature())
-                    , getStringValue(friendBean.getRemark()), friendBean.getTop(), friendBean.getDoNotDisturb()
-                    , friendBean.getBlackList(), getStringValue(friendBean.getId()));
-            getSQLiteDatabase().execSQL(sql);
-        }
+    @Override
+    public int update(FriendBean friendBean) {
+        String sql = "UPDATE friend SET" +
+                " nickname=%s,headImg=%s,headImgSmall=%s" +
+                " ,signature=%s,remark=%s,top=%s" +
+                " ,doNotDisturb=%s,blackList=%s" +
+                " WHERE id=%s";
+        sql = String.format(sql, getStringValue(friendBean.getNickname()), getStringValue(friendBean.getHeadImg())
+                , getStringValue(friendBean.getHeadImgSmall()), getStringValue(friendBean.getSignature())
+                , getStringValue(friendBean.getRemark()), friendBean.getTop(), friendBean.getDoNotDisturb()
+                , friendBean.getBlackList(), getStringValue(friendBean.getId()));
+        getSQLiteDatabase().execSQL(sql);
         return 1;
     }
 
@@ -89,5 +76,23 @@ public class FriendDaoImpl extends AbsDaoImpl<FriendBean> implements IFriendDao 
             cursor.close();
         }
         return null;
+    }
+
+    @Override
+    public boolean existsById(String id) {
+        String sql = "SELECT COUNT(id) AS count FROM friend WHERE id=%s";
+        sql = String.format(sql, getStringValue(id));
+        Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
+        try {
+            if (cursor.moveToNext()) {
+                int count = cursor.getInt(cursor.getColumnIndex("COUNT(id)"));
+                return count > 0;
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return false;
     }
 }

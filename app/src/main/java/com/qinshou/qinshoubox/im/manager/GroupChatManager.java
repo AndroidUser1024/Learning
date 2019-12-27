@@ -58,7 +58,11 @@ public class GroupChatManager {
                             @Override
                             public void run() {
                                 for (GroupChatBean groupChatBean : data) {
-                                    mGroupChatDao.insert(groupChatBean);
+                                    if (mGroupChatDao.existsById(groupChatBean.getId())) {
+                                        mGroupChatDao.update(groupChatBean);
+                                    } else {
+                                        mGroupChatDao.insert(groupChatBean);
+                                    }
                                 }
                                 mHandler.post(new SuccessRunnable<List<GroupChatBean>>(callback, data));
                             }
@@ -136,7 +140,11 @@ public class GroupChatManager {
                             public void run() {
                                 GroupChatBean groupChatBean = mGroupChatDao.selectById(groupChatId);
                                 groupChatBean.setNickname(nickname);
-                                mGroupChatDao.insert(groupChatBean);
+                                if (mGroupChatDao.existsById(groupChatBean.getId())) {
+                                    mGroupChatDao.update(groupChatBean);
+                                } else {
+                                    mGroupChatDao.insert(groupChatBean);
+                                }
                                 mHandler.post(new SuccessRunnable<Object>(callback, data));
                             }
                         });
@@ -169,7 +177,11 @@ public class GroupChatManager {
                             public void run() {
                                 GroupChatBean groupChatBean = mGroupChatDao.selectById(groupChatId);
                                 groupChatBean.setNicknameInGroupChat(nicknameInGroupChat);
-                                mGroupChatDao.insert(groupChatBean);
+                                if (mGroupChatDao.existsById(groupChatBean.getId())) {
+                                    mGroupChatDao.update(groupChatBean);
+                                } else {
+                                    mGroupChatDao.insert(groupChatBean);
+                                }
                                 mHandler.post(new SuccessRunnable<Object>(callback, data));
                             }
                         });
@@ -202,7 +214,11 @@ public class GroupChatManager {
                             public void run() {
                                 GroupChatBean groupChatBean = mGroupChatDao.selectById(groupChatId);
                                 groupChatBean.setTop(top);
-                                mGroupChatDao.insert(groupChatBean);
+                                if (mGroupChatDao.existsById(groupChatBean.getId())) {
+                                    mGroupChatDao.update(groupChatBean);
+                                } else {
+                                    mGroupChatDao.insert(groupChatBean);
+                                }
                                 mHandler.post(new SuccessRunnable<Object>(callback, data));
                             }
                         });
@@ -235,7 +251,11 @@ public class GroupChatManager {
                             public void run() {
                                 GroupChatBean groupChatBean = mGroupChatDao.selectById(groupChatId);
                                 groupChatBean.setDoNotDisturb(doNotDisturb);
-                                mGroupChatDao.insert(groupChatBean);
+                                if (mGroupChatDao.existsById(groupChatBean.getId())) {
+                                    mGroupChatDao.update(groupChatBean);
+                                } else {
+                                    mGroupChatDao.insert(groupChatBean);
+                                }
                                 mHandler.post(new SuccessRunnable<Object>(callback, data));
                             }
                         });
@@ -268,7 +288,11 @@ public class GroupChatManager {
                             public void run() {
                                 GroupChatBean groupChatBean = mGroupChatDao.selectById(groupChatId);
                                 groupChatBean.setShowGroupChatMemberNickname(showGroupChatMemberNickname);
-                                mGroupChatDao.insert(groupChatBean);
+                                if (mGroupChatDao.existsById(groupChatBean.getId())) {
+                                    mGroupChatDao.update(groupChatBean);
+                                } else {
+                                    mGroupChatDao.insert(groupChatBean);
+                                }
                                 mHandler.post(new SuccessRunnable<Object>(callback, data));
                             }
                         });

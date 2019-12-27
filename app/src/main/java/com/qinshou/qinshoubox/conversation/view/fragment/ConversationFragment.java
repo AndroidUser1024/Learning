@@ -141,14 +141,6 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
                 updateUnreadCount();
             }
         });
-        mRcvConversationAdapter.setOnItemLongClickListener(new IOnItemLongClickListener<ConversationBean>() {
-            @Override
-            public void onItemLongClick(BaseViewHolder holder, ConversationBean itemData, int position) {
-                IMClient.SINGLETON.getConversationManager().deleteById(itemData.getId());
-                mRcvConversationAdapter.getDataList().remove(itemData);
-                mRcvConversationAdapter.notifyItemRemoved(position);
-            }
-        });
     }
 
     @Override

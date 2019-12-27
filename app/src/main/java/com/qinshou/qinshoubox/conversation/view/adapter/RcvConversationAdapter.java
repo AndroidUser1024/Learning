@@ -1,6 +1,8 @@
 package com.qinshou.qinshoubox.conversation.view.adapter;
 
 import android.content.Context;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.qinshou.commonmodule.rcvbaseadapter.RcvSingleBaseAdapter;
@@ -30,7 +32,13 @@ public class RcvConversationAdapter extends RcvSingleBaseAdapter<ConversationBea
     }
 
     @Override
-    public void bindViewHolder(final BaseViewHolder baseViewHolder, final ConversationBean conversationBean, final int i) {
+    public void bindViewHolder(final BaseViewHolder baseViewHolder, final ConversationBean conversationBean, final int position) {
+        baseViewHolder.getItemView().setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return new MyGestureDetector(getContext(), baseViewHolder, conversationBean, position).onTouchEvent(event);
+            }
+        });
         ImageLoadUtil.SINGLETON.loadImage(getContext(), conversationBean.getHeadImgSmall(), baseViewHolder.getImageView(R.id.iv_head_img));
         baseViewHolder.setTvText(R.id.tv_title, conversationBean.getTitle());
         baseViewHolder.setTvText(R.id.tv_last_msg_content, conversationBean.getLastMsgContent());
@@ -118,4 +126,42 @@ public class RcvConversationAdapter extends RcvSingleBaseAdapter<ConversationBea
         }
         baseViewHolder.setTvText(R.id.tv_last_msg_time, time);
     }
+
+    private class MyGestureDetector extends GestureDetector {
+
+        public MyGestureDetector(Context context, BaseViewHolder holder, ConversationBean itemData, int position) {
+            super(context, new OnGestureListener() {
+                @Override
+                public boolean onDown(MotionEvent e) {
+                    return false;
+                }
+
+                @Override
+                public void onShowPress(MotionEvent e) {
+
+                }
+
+                @Override
+                public boolean onSingleTapUp(MotionEvent e) {
+                    return false;
+                }
+
+                @Override
+                public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+                    return false;
+                }
+
+                @Override
+                public void onLongPress(MotionEvent e) {
+                    ShowLogUtil.logi("长按");
+                }
+
+                @Override
+                public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                    return false;
+                }
+            });
+        }
+    }
+
 }

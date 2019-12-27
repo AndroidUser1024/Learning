@@ -8,7 +8,7 @@ import com.qinshou.qinshoubox.im.db.dao.IConversationMessageRelDao;
 
 /**
  * Author: QinHao
- * Email:qinhao@jeejio.com
+ * Email:cqflqinhao@126.com
  * Date: 2019/12/5 9:03
  * Description:类描述
  */

@@ -30,6 +30,7 @@ public interface IFriendDao extends IBaseDao {
     // ,signature=#{signature},remark=#{remark},top=#{top}
     // ,doNotDisturb=#{doNotDisturb},blackList=#{blackList}
     // WHERE id=#{id};
+    int update(FriendBean friendBean);
 
     // 查询语句
     // SELECT
@@ -40,5 +41,6 @@ public interface IFriendDao extends IBaseDao {
     FriendBean selectById(String id);
 
     // existsById
-    // SELECT COUNT(*) AS count FROM friend WHERE id=#{id};
+    // SELECT COUNT(id) AS count FROM friend WHERE id=#{id};
+    boolean existsById(String id);
 }

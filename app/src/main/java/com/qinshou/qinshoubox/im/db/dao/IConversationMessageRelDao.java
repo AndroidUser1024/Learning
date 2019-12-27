@@ -1,6 +1,5 @@
 package com.qinshou.qinshoubox.im.db.dao;
 
-import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.bean.ConversationMessageRelBean;
 
 /**

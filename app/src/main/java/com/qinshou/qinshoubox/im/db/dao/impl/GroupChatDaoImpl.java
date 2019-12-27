@@ -9,7 +9,7 @@ import com.qinshou.qinshoubox.im.db.dao.IGroupChatDao;
 
 /**
  * Author: QinHao
- * Email:qinhao@jeejio.com
+ * Email:cqflqinhao@126.com
  * Date: 2019/12/5 9:01
  * Description:类描述
  */
@@ -20,46 +20,33 @@ public class GroupChatDaoImpl extends AbsDaoImpl<GroupChatBean> implements IGrou
 
     @Override
     public int insert(GroupChatBean groupChatBean) {
-        // 先查询该 id 是否存在
-        String sql = "SELECT COUNT(*) AS count FROM group_chat WHERE id=%s";
-        sql = String.format(sql, getStringValue(groupChatBean.getId()));
-        Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
-        int count = 0;
-        try {
-            if (cursor.moveToNext()) {
-                count = cursor.getInt(cursor.getColumnIndex("count"));
-            }
-        } finally {
-            cursor.close();
-        }
+        String sql = "INSERT INTO group_chat" +
+                " (id,ownerId,nickname,headImg,headImgSmall,nicknameDefault,nicknameInGroupChat,top" +
+                " ,doNotDisturb,showGroupChatMemberNickname)" +
+                " VALUES" +
+                " (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)";
+        sql = String.format(sql, getStringValue(groupChatBean.getId()), getStringValue(groupChatBean.getOwnerId())
+                , getStringValue(groupChatBean.getNickname()), getStringValue(groupChatBean.getHeadImg())
+                , getStringValue(groupChatBean.getHeadImgSmall()), getStringValue(groupChatBean.getNicknameDefault())
+                , getStringValue(groupChatBean.getNicknameInGroupChat()), groupChatBean.getTop(), groupChatBean.getDoNotDisturb()
+                , groupChatBean.getShowGroupChatMemberNickname());
+        getSQLiteDatabase().execSQL(sql);
+        return 1;
+    }
 
-        if (count == 0) {
-            // 如果不存在,则新增
-            sql = "INSERT INTO group_chat" +
-                    " (id,ownerId,nickname,headImg,headImgSmall,nicknameDefault,nicknameInGroupChat,top" +
-                    " ,doNotDisturb,showGroupChatMemberNickname)" +
-                    " VALUES" +
-                    " (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)";
-            sql = String.format(sql, getStringValue(groupChatBean.getId()), getStringValue(groupChatBean.getOwnerId())
-                    , getStringValue(groupChatBean.getNickname()), getStringValue(groupChatBean.getHeadImg())
-                    , getStringValue(groupChatBean.getHeadImgSmall()), getStringValue(groupChatBean.getNicknameDefault())
-                    , getStringValue(groupChatBean.getNicknameInGroupChat()), groupChatBean.getTop(), groupChatBean.getDoNotDisturb()
-                    , groupChatBean.getShowGroupChatMemberNickname());
-            getSQLiteDatabase().execSQL(sql);
-        } else {
-            // 已存在则更新
-            sql = "UPDATE group_chat SET" +
-                    " ownerId=%s,nickname=%s,headImg=%s,headImgSmall=%s" +
-                    " ,nicknameDefault=%s,nicknameInGroupChat=%s,top=%s" +
-                    " ,doNotDisturb=%s,showGroupChatMemberNickname=%s" +
-                    " WHERE id=%s";
-            sql = String.format(sql, getStringValue(groupChatBean.getOwnerId()), getStringValue(groupChatBean.getNickname())
-                    , getStringValue(groupChatBean.getHeadImg()), getStringValue(groupChatBean.getHeadImgSmall())
-                    , getStringValue(groupChatBean.getNicknameDefault()), getStringValue(groupChatBean.getNicknameInGroupChat())
-                    , groupChatBean.getTop(), groupChatBean.getDoNotDisturb(), groupChatBean.getShowGroupChatMemberNickname()
-                    , getStringValue(groupChatBean.getId()));
-            getSQLiteDatabase().execSQL(sql);
-        }
+    @Override
+    public int update(GroupChatBean groupChatBean) {
+        String sql = "UPDATE group_chat SET" +
+                " ownerId=%s,nickname=%s,headImg=%s,headImgSmall=%s" +
+                " ,nicknameDefault=%s,nicknameInGroupChat=%s,top=%s" +
+                " ,doNotDisturb=%s,showGroupChatMemberNickname=%s" +
+                " WHERE id=%s";
+        sql = String.format(sql, getStringValue(groupChatBean.getOwnerId()), getStringValue(groupChatBean.getNickname())
+                , getStringValue(groupChatBean.getHeadImg()), getStringValue(groupChatBean.getHeadImgSmall())
+                , getStringValue(groupChatBean.getNicknameDefault()), getStringValue(groupChatBean.getNicknameInGroupChat())
+                , groupChatBean.getTop(), groupChatBean.getDoNotDisturb(), groupChatBean.getShowGroupChatMemberNickname()
+                , getStringValue(groupChatBean.getId()));
+        getSQLiteDatabase().execSQL(sql);
         return 1;
     }
 
@@ -94,5 +81,23 @@ public class GroupChatDaoImpl extends AbsDaoImpl<GroupChatBean> implements IGrou
             }
         }
         return null;
+    }
+
+    @Override
+    public boolean existsById(String id) {
+        String sql = "SELECT COUNT(*) AS count FROM group_chat WHERE id=%s";
+        sql = String.format(sql, getStringValue(id));
+        Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
+        try {
+            if (cursor.moveToNext()) {
+                int count = cursor.getInt(cursor.getColumnIndex("count"));
+                return count > 0;
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return false;
     }
 }
