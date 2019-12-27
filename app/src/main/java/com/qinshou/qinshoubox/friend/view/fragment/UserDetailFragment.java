@@ -13,7 +13,6 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.qinshou.commonmodule.ContainerActivity;
-import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.util.activityresultutil.ActivityResultUtil;
 import com.qinshou.commonmodule.util.activityresultutil.OnActivityResultCallBack;
 import com.qinshou.commonmodule.widget.TitleBar;
@@ -50,9 +49,9 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
      */
     private ImageView mIvHeadImg;
     /**
-     * 备注
+     * 备注或者昵称
      */
-    private TextView mTvRemark;
+    private TextView mTvRemarkOrNickname;
     /**
      * 性别
      */
@@ -73,7 +72,7 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
     /**
      * 备注
      */
-    private TextView mTvRemark2;
+    private TextView mTvRemark;
     /**
      * 手机号码
      */
@@ -143,13 +142,13 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
     public void initView() {
         mTitleBar = findViewByID(R.id.title_bar);
         mIvHeadImg = findViewByID(R.id.iv_head_img);
-        mTvRemark = findViewByID(R.id.tv_remark);
+        mTvRemarkOrNickname = findViewByID(R.id.tv_remark_or_nickname);
         mIvGender = findViewByID(R.id.iv_gender);
         mTvUsername = findViewByID(R.id.tv_username);
         mTvNickname = findViewByID(R.id.tv_nickname);
         mLlAdditionalMsg = findViewByID(R.id.ll_additional_msg);
         mTvAdditionalMsg = findViewByID(R.id.tv_additional_msg);
-        mTvRemark2 = findViewByID(R.id.tv_remark_2);
+        mTvRemark = findViewByID(R.id.tv_remark);
         mTvPhoneNumber = findViewByID(R.id.tv_phone_number);
         mTvEmail = findViewByID(R.id.tv_email);
         mTvSignature = findViewByID(R.id.tv_signature);
@@ -179,11 +178,11 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
                         }
                         String remark = data.getStringExtra(SetRemarkActivity.NEW_REMARK);
                         // 设置新备注,是允许为空的
-                        mTvRemark2.setText(remark);
+                        mTvRemark.setText(remark);
                         if (TextUtils.isEmpty(remark)) {
-                            mTvRemark.setText(mUserDetailBean.getNickname());
+                            mTvRemarkOrNickname.setText(mUserDetailBean.getNickname());
                         } else {
-                            mTvRemark.setText(remark);
+                            mTvRemarkOrNickname.setText(remark);
                         }
                         if (mUserDetailBean.getFriendStatus() == 1) {
                             getPresenter().setRemark(mUserDetailBean.getId(), remark);
@@ -326,7 +325,7 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
         // 头像
         ImageLoadUtil.SINGLETON.loadImage(getContext(), userDetailBean.getHeadImgSmall(), mIvHeadImg);
         // 备注
-        mTvRemark.setText(TextUtils.isEmpty(userDetailBean.getRemark()) ? userDetailBean.getNickname() : userDetailBean.getRemark());
+        mTvRemarkOrNickname.setText(TextUtils.isEmpty(userDetailBean.getRemark()) ? userDetailBean.getNickname() : userDetailBean.getRemark());
         // 0 为其他,1 为女,2 为男
         if (userDetailBean.getGender() == 1) {
             mIvGender.setImageResource(R.drawable.user_detail_iv_gender_src);
@@ -340,7 +339,7 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
         // 附加消息
         mTvAdditionalMsg.setText(userDetailBean.getAdditionalMsg());
         // 功能栏的备注
-        mTvRemark2.setText(TextUtils.isEmpty(userDetailBean.getRemark()) ? "" : userDetailBean.getRemark());
+        mTvRemark.setText(TextUtils.isEmpty(userDetailBean.getRemark()) ? "" : userDetailBean.getRemark());
         // 手机号
         mTvPhoneNumber.setText(userDetailBean.getPhoneNumber());
         // 邮箱

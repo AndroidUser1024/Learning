@@ -63,7 +63,7 @@
 
                             <!-- 备注 -->
                             <TextView
-                                android:id="@+id/tv_remark"
+                                android:id="@+id/tv_remark_or_nickname"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -193,7 +193,7 @@
                 android:textSize="@dimen/px30" />
 
             <TextView
-                android:id="@+id/tv_remark_2"
+                android:id="@+id/tv_remark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#FF666666"
