@@ -3,13 +3,13 @@ package com.qinshou.qinshoubox.conversation.view.adapter;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.commonmodule.rcvbaseadapter.itemview.BaseItemView;
+import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.R;
+import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.enums.MessageStatus;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
@@ -34,7 +34,7 @@ public abstract class AbsRcvMessageAdapterToMessageItemView extends BaseItemView
     }
 
     @Override
-    public void bindViewHolder(BaseViewHolder baseViewHolder, MessageBean messageBean, int i) {
+    public void bindViewHolder(BaseViewHolder baseViewHolder, final MessageBean messageBean, int i) {
         setTime(baseViewHolder, messageBean, i);
         // 头像
         ImageLoadUtil.SINGLETON.loadImage(getContext(), UserStatusManager.SINGLETON.getUserBean().getHeadImgSmall(), baseViewHolder.getImageView(R.id.iv_head_img));
@@ -52,6 +52,13 @@ public abstract class AbsRcvMessageAdapterToMessageItemView extends BaseItemView
         baseViewHolder.setVisibility(R.id.iv_send_message_failure, messageBean.getStatus() == MessageStatus.FAILURE.getValue()
                 ? View.VISIBLE
                 : View.GONE);
+        baseViewHolder.setOnClickListener(R.id.iv_send_message_failure, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShowLogUtil.logi("messageBean--->" + messageBean);
+                IMClient.SINGLETON.sendMessage(messageBean);
+            }
+        });
     }
 
     /**

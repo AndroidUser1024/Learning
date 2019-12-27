@@ -1,5 +1,6 @@
 package com.qinshou.qinshoubox.im.db.dao;
 
+import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.bean.ConversationMessageRelBean;
 
 /**
@@ -21,4 +22,11 @@ public interface IConversationMessageRelDao  extends IBaseDao{
     // VALUES
     // (#{conversationId},#{messagePid});
     void insert(ConversationMessageRelBean conversationMessageRelBean);
+
+    // SELECT
+    // COUNT(id)
+    // FROM conversation_message_rel
+    // WHERE
+    // conversationId=#{conversationId} AND messagePid=#{messagePid}
+    int existsByConversationIdAndMessagePid(ConversationMessageRelBean conversationMessageRelBean);
 }

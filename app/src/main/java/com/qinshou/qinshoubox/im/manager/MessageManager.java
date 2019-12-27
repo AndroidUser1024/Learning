@@ -36,7 +36,7 @@ public class MessageManager {
     /**
      * 会话与消息关系 Dao
      */
-    private IConversationMessageRelDao mIConversationMessageRelDao;
+    private IConversationMessageRelDao mConversationMessageRelDao;
     private String mUserId;
     /**
      * 线程池,线程数量不定,适合执行大量耗时较少的任务
@@ -50,13 +50,20 @@ public class MessageManager {
     public MessageManager(DatabaseHelper databaseHelper, String userId) {
         mMessageDao = databaseHelper.getDao(IMessageDao.class);
         mConversationDao = databaseHelper.getDao(IConversationDao.class);
-        mIConversationMessageRelDao = databaseHelper.getDao(IConversationMessageRelDao.class);
+        mConversationMessageRelDao = databaseHelper.getDao(IConversationMessageRelDao.class);
         mUserId = userId;
     }
 
     public MessageBean insert(boolean send, MessageBean messageBean) {
         // 插入消息
-        messageBean = mMessageDao.insert(messageBean);
+        ShowLogUtil.logi("messageBean--->" + messageBean);
+        if (messageBean.getPid() == 0) {
+            ShowLogUtil.logi("插入");
+            messageBean = mMessageDao.insert(messageBean);
+        } else {
+            ShowLogUtil.logi("更新");
+            mMessageDao.update(messageBean);
+        }
         // 插入或更新会话
         ConversationBean conversationBean = new ConversationBean();
         if (send || messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
@@ -74,7 +81,10 @@ public class MessageManager {
         conversationBean.setType(messageBean.getType());
         mConversationDao.insert(send, conversationBean);
         // 插入会话与消息关系
-        mIConversationMessageRelDao.insert(new ConversationMessageRelBean(conversationBean.getId(), messageBean.getPid()));
+        ConversationMessageRelBean conversationMessageRelBean = new ConversationMessageRelBean(conversationBean.getId(), messageBean.getPid());
+        if (mConversationMessageRelDao.existsByConversationIdAndMessagePid(conversationMessageRelBean) == 0) {
+            mConversationMessageRelDao.insert(conversationMessageRelBean);
+        }
         return messageBean;
     }
 
