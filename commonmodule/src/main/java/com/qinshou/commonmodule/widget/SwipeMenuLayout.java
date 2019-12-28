@@ -93,7 +93,7 @@ public class SwipeMenuLayout extends ViewGroup {
     private boolean isSwipeEnable;
 
     /**
-     * IOS、QQ式交互，默认开
+     * IOS、QQ式交互，默认关
      */
     private boolean isIos;
 
@@ -178,8 +178,8 @@ public class SwipeMenuLayout extends ViewGroup {
 
         //右滑删除功能的开关,默认开
         isSwipeEnable = true;
-        //IOS、QQ式交互，默认开
-        isIos = true;
+        //IOS、QQ式交互，默认关
+        isIos = false;
         //左滑右滑的开关,默认左滑打开菜单
         isLeftSwipe = true;
         TypedArray ta = context.getTheme().obtainStyledAttributes(attrs, R.styleable.SwipeMenuLayout, defStyleAttr, 0);
@@ -190,7 +190,7 @@ public class SwipeMenuLayout extends ViewGroup {
             if (attr == R.styleable.SwipeMenuLayout_swipeEnable) {
                 isSwipeEnable = ta.getBoolean(attr, true);
             } else if (attr == R.styleable.SwipeMenuLayout_ios) {
-                isIos = ta.getBoolean(attr, true);
+                isIos = ta.getBoolean(attr, false);
             } else if (attr == R.styleable.SwipeMenuLayout_leftSwipe) {
                 isLeftSwipe = ta.getBoolean(attr, true);
             }

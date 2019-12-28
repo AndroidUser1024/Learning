@@ -1,28 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.qinshou.commonmodule.widget.SwipeMenuLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/root_view"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#FFFFFFFF"
-    android:gravity="center_vertical"
-    android:orientation="vertical"
-    tools:context="com.qinshou.qinshoubox.conversation.view.adapter.RcvConversationAdapter">
+    android:layout_height="wrap_content">
 
-    <LinearLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/px14"
-        android:layout_marginBottom="@dimen/px22"
+        android:layout_height="@dimen/px128"
+        android:background="#FFFFFFFF"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        tools:context="com.qinshou.qinshoubox.conversation.view.adapter.RcvConversationAdapter">
+
         <!-- 头像 -->
         <ImageView
             android:id="@+id/iv_head_img"
             android:layout_width="@dimen/px81"
             android:layout_height="@dimen/px81"
-            android:layout_marginStart="@dimen/px32"
-            android:layout_marginLeft="@dimen/px32"
+            android:layout_marginStart="@dimen/px30"
+            android:layout_marginLeft="@dimen/px30"
             android:scaleType="centerCrop"
             tools:src="@mipmap/ic_launcher" />
 
@@ -44,10 +42,10 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_marginStart="@dimen/px32"
-                    android:layout_marginLeft="@dimen/px32"
-                    android:layout_marginEnd="@dimen/px32"
-                    android:layout_marginRight="@dimen/px32"
+                    android:layout_marginStart="@dimen/px30"
+                    android:layout_marginLeft="@dimen/px30"
+                    android:layout_marginEnd="@dimen/px30"
+                    android:layout_marginRight="@dimen/px30"
                     android:layout_marginBottom="@dimen/px5"
                     android:layout_weight="1"
                     android:gravity="bottom">
@@ -81,8 +79,8 @@
                     android:layout_marginStart="@dimen/px31"
                     android:layout_marginLeft="@dimen/px31"
                     android:layout_marginTop="@dimen/px5"
-                    android:layout_marginEnd="@dimen/px32"
-                    android:layout_marginRight="@dimen/px32"
+                    android:layout_marginEnd="@dimen/px30"
+                    android:layout_marginRight="@dimen/px30"
                     android:gravity="center_vertical">
 
                     <TextView
@@ -100,10 +98,10 @@
                     <ImageView
                         android:id="@+id/iv_do_not_disturb"
                         android:layout_width="@dimen/px24"
-                        android:layout_height="@dimen/px19"
+                        android:layout_height="@dimen/px20"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginEnd="@dimen/px19"
-                        android:layout_marginRight="@dimen/px19"
+                        android:layout_marginEnd="@dimen/px20"
+                        android:layout_marginRight="@dimen/px20"
                         android:src="@drawable/conversation_iv_do_not_disturb_src"
                         android:visibility="gone"
                         tools:visibility="visible" />
@@ -133,10 +131,27 @@
 
                 </LinearLayout>
                 <!-- 消息内容 + （免打扰+ 未读数+ 未读消息圆点）end -->
-
             </LinearLayout>
             <!-- 内容布局 end -->
         </LinearLayout>
         <!-- 头像右侧布局 end -->
     </LinearLayout>
-</LinearLayout>
+
+    <Button
+        android:id="@+id/btn_mark_unread"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="@dimen/px160"
+        android:layout_height="match_parent"
+        android:background="#FFCCCCCC"
+        android:text="标为未读"
+        android:textColor="#FFFFFFFF" />
+
+    <Button
+        android:id="@+id/btn_delete"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="@dimen/px100"
+        android:layout_height="match_parent"
+        android:background="#FFFF0000"
+        android:text="删除"
+        android:textColor="#FFFFFFFF" />
+</com.qinshou.commonmodule.widget.SwipeMenuLayout>

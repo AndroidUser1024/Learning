@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
 
-public class PopupWindowUtil {
+public class PopupWindowHelper {
     public static class Builder {
         private Context mContext;
         private View contentView = null;
