@@ -5,6 +5,8 @@ import android.view.View;
 
 import com.qinshou.commonmodule.rcvbaseadapter.RcvSingleBaseAdapter;
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
+import com.qinshou.commonmodule.util.ShowLogUtil;
+import com.qinshou.commonmodule.widget.SwipeMenuLayout;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.conversation.view.activity.ChatActivity;
@@ -37,6 +39,7 @@ public class RcvConversationAdapter extends RcvSingleBaseAdapter<ConversationBea
 
     @Override
     public void bindViewHolder(final BaseViewHolder baseViewHolder, final ConversationBean conversationBean, final int position) {
+        ShowLogUtil.logi("conversationBean--->" + conversationBean);
         ImageLoadUtil.SINGLETON.loadImage(getContext(), conversationBean.getHeadImgSmall(), baseViewHolder.getImageView(R.id.iv_head_img));
         baseViewHolder.setTvText(R.id.tv_title, conversationBean.getTitle());
         baseViewHolder.setTvText(R.id.tv_last_msg_content, conversationBean.getLastMsgContent());
@@ -55,30 +58,56 @@ public class RcvConversationAdapter extends RcvSingleBaseAdapter<ConversationBea
         // 最后一条消息的时间
         setTime(baseViewHolder, conversationBean);
 
+        final SwipeMenuLayout swipeMenuLayout = baseViewHolder.findViewById(R.id.swipe_menu_layout);
         baseViewHolder.setOnClickListener(R.id.root_view, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // 重置未读数
+                swipeMenuLayout.quickClose();
+                IMClient.SINGLETON.getConversationManager().resetUnreadCount(conversationBean.getId());
+                conversationBean.setUnreadCount(0);
+                notifyItemChanged(position);
+                EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_UNREAD_COUNT, conversationBean));
+                // 跳转到对应聊天界面
                 if (conversationBean.getType() == MessageType.CHAT.getValue()) {
                     ChatActivity.start(getContext(), conversationBean.getToUserId());
                 } else if (conversationBean.getType() == MessageType.GROUP_CHAT.getValue()) {
                     GroupChatActivity.start(getContext(), conversationBean.getToUserId());
                 }
-                // 重置未读数
-                IMClient.SINGLETON.getConversationManager().resetUnreadCount(conversationBean.getId());
-                conversationBean.setUnreadCount(0);
-                notifyItemChanged(position);
-                EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_UNREAD_COUNT, conversationBean));
             }
         });
-        baseViewHolder.setOnClickListener(R.id.btn_mark_unread, new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
+        if (conversationBean.getUnreadCount() == -1
+                || conversationBean.getUnreadCount() > 0) {
+            baseViewHolder.setBtnText(R.id.btn_mark_unread, getContext().getString(R.string.conversation_btn_mark_unread_text_2));
+            baseViewHolder.setOnClickListener(R.id.btn_mark_unread, new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // 标为已读,重置未读数
+                    swipeMenuLayout.quickClose();
+                    IMClient.SINGLETON.getConversationManager().resetUnreadCount(conversationBean.getId());
+                    conversationBean.setUnreadCount(0);
+                    notifyItemChanged(position);
+                    EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_UNREAD_COUNT, conversationBean));
+                }
+            });
+        } else {
+            baseViewHolder.setBtnText(R.id.btn_mark_unread, getContext().getString(R.string.conversation_btn_mark_unread_text));
+            baseViewHolder.setOnClickListener(R.id.btn_mark_unread, new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // 标为未读,设置未读数为 -1
+                    swipeMenuLayout.quickClose();
+                    IMClient.SINGLETON.getConversationManager().setUnreadCount(-1,conversationBean.getId());
+                    conversationBean.setUnreadCount(-1);
+                    notifyItemChanged(position);
+                    EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_UNREAD_COUNT, conversationBean));
+                }
+            });
+        }
         baseViewHolder.setOnClickListener(R.id.btn_delete, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                swipeMenuLayout.quickClose();
                 IMClient.SINGLETON.getConversationManager().deleteById(conversationBean.getId());
                 getDataList().remove(conversationBean);
                 notifyItemRemoved(position);
@@ -91,7 +120,11 @@ public class RcvConversationAdapter extends RcvSingleBaseAdapter<ConversationBea
         if (conversationBean.getDoNotDisturb() == 1) {
             // 免打扰,显示免打扰图标
             baseViewHolder.setVisibility(R.id.iv_do_not_disturb, View.VISIBLE);
-            if (conversationBean.getUnreadCount() > 0) {
+            if (conversationBean.getUnreadCount() == -1) {
+                // 被标为未读,显示未读消息圆点,不显示未读数
+                baseViewHolder.setVisibility(R.id.tv_unread_count, View.GONE);
+                baseViewHolder.setVisibility(R.id.iv_do_not_disturb_unread, View.VISIBLE);
+            } else if (conversationBean.getUnreadCount() > 0) {
                 // 有未读消息,显示未读消息圆点,不显示未读数
                 baseViewHolder.setVisibility(R.id.tv_unread_count, View.GONE);
                 baseViewHolder.setVisibility(R.id.iv_do_not_disturb_unread, View.VISIBLE);
@@ -102,7 +135,12 @@ public class RcvConversationAdapter extends RcvSingleBaseAdapter<ConversationBea
         } else {
             // 非免打扰,不显示免打扰图标
             baseViewHolder.setVisibility(R.id.iv_do_not_disturb_unread, View.GONE);
-            if (conversationBean.getUnreadCount() > 0) {
+            if (conversationBean.getUnreadCount() == -1) {
+                // 被标为未读,显示未读消息数量
+                baseViewHolder.setVisibility(R.id.tv_unread_count, View.VISIBLE);
+                // 设置未读消息数量取绝对值
+                baseViewHolder.setTvText(R.id.tv_unread_count, "" + Math.abs(conversationBean.getUnreadCount()));
+            } else if (conversationBean.getUnreadCount() > 0) {
                 // 有未读消息,显示未读消息数量
                 baseViewHolder.setVisibility(R.id.tv_unread_count, View.VISIBLE);
                 // 设置未读消息数量 大于99条：'···'

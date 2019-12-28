@@ -58,10 +58,8 @@ public class MessageManager {
         // 插入消息
         ShowLogUtil.logi("messageBean--->" + messageBean);
         if (messageBean.getPid() == 0) {
-            ShowLogUtil.logi("插入");
             messageBean = mMessageDao.insert(messageBean);
         } else {
-            ShowLogUtil.logi("更新");
             mMessageDao.update(messageBean);
         }
         // 插入或更新会话

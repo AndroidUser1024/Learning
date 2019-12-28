@@ -21,21 +21,6 @@
     <string name="homepage_tv_translator_prompt_text">翻译者</string>
     <string name="homepage_tv_time_prompt_text">时间</string>
 
-    <!-- 会话界面 -->
-    <string name="conversation_tv_title_text">会话</string>
-    <string name="conversation_tv_search_text">搜索</string>
-
-    <!-- 好友界面 -->
-    <string name="friend_tv_title_text">好友</string>
-    <string name="friend_tv_new_friend_text">新的朋友</string>
-    <string name="friend_tv_create_group_chat">创建群聊</string>
-    <string name="friend_tv_status_text">离线</string>
-    <string name="friend_tv_status_text_2">在线</string>
-    <string-array name="friend_tv_tab_text">
-        <item>群聊</item>
-        <item>好友</item>
-    </string-array>
-
     <!-- "我"界面 -->
     <string name="me_tv_click_2_login_text">点击登录</string>
     <string name="me_tv_login_2_have_more_function_text">登录后，体验更多功能</string>
@@ -65,7 +50,12 @@
         <item>会话</item>
         <item>联系人</item>
     </string-array>
-
+    <!-- 会话界面 -->
+    <string name="conversation_tv_title_text">会话</string>
+    <string name="conversation_tv_search_text">搜索</string>
+    <string name="conversation_btn_mark_unread_text">标为未读</string>
+    <string name="conversation_btn_mark_unread_text_2">标为已读</string>
+    <string name="conversation_btn_delete_text">删除</string>
     <string-array name="conversation_tv_last_msg_time_text">
         <item>星期日</item>
         <item>星期一</item>
@@ -74,6 +64,17 @@
         <item>星期四</item>
         <item>星期五</item>
         <item>星期六</item>
+    </string-array>
+
+    <!-- 好友界面 -->
+    <string name="friend_tv_title_text">好友</string>
+    <string name="friend_tv_new_friend_text">新的朋友</string>
+    <string name="friend_tv_create_group_chat">创建群聊</string>
+    <string name="friend_tv_status_text">离线</string>
+    <string name="friend_tv_status_text_2">在线</string>
+    <string-array name="friend_tv_tab_text">
+        <item>群聊</item>
+        <item>好友</item>
     </string-array>
 
     <!-- 聊天界面 -->

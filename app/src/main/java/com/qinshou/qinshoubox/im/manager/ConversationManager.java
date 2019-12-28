@@ -5,8 +5,6 @@ import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.db.DatabaseHelper;
 import com.qinshou.qinshoubox.im.db.dao.IConversationDao;
 import com.qinshou.qinshoubox.im.db.dao.IMessageDao;
-import com.qinshou.qinshoubox.im.db.dao.impl.ConversationDaoImpl;
-import com.qinshou.qinshoubox.im.db.dao.impl.MessageDaoImpl;
 
 import java.util.List;
 
@@ -56,5 +54,9 @@ public class ConversationManager {
 
     public void deleteById(int id) {
         mConversationDao.deleteById(id);
+    }
+
+    public void setUnreadCount(int unreadCount,int id) {
+        mConversationDao.setUnreadCount(unreadCount,id);
     }
 }

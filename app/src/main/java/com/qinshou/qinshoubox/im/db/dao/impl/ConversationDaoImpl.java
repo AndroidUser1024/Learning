@@ -54,7 +54,13 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
         } else {
             conversationBean.setId(select.getId());
             if (!send) {
-                conversationBean.setUnreadCount(select.getUnreadCount() + 1);
+                if (select.getUnreadCount() == -1) {
+                    // 如果被标记过未读,则设置未读数为 1
+                    conversationBean.setUnreadCount(1);
+                } else {
+                    // 否则在原有的未读数上 +1
+                    conversationBean.setUnreadCount(select.getUnreadCount() + 1);
+                }
             }
             String sql = "UPDATE conversation SET\n" +
                     " toUserId=%s,type=%s,lastMsgContent=%s,lastMsgContentType=%s" +
@@ -207,35 +213,6 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
     }
 
     @Override
-    public int getTotalUnreadCount() {
-//        String sql = "SELECT SUM(unreadCount) AS totalUnreadCount FROM conversation";
-        String sql = "SELECT SUM(unreadCount) AS totalUnreadCount FROM conversation AS c" +
-                " WHERE" +
-                " (SELECT doNotDisturb FROM friend AS f WHERE c.type=2001 AND f.id=c.toUserId)=0" +
-                " OR (SELECT doNotDisturb FROM group_chat AS gc WHERE c.type=3001 AND gc.id=c.toUserId)=0";
-        Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
-        try {
-            if (cursor.moveToNext()) {
-                return cursor.getInt(cursor.getColumnIndex("totalUnreadCount"));
-            }
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-        return 0;
-    }
-
-    @Override
-    public int resetUnreadCount(int id) {
-        String sql = "UPDATE conversation SET unreadCount=0 WHERE id=%s";
-        sql = String.format(sql, id);
-        getSQLiteDatabase().execSQL(sql);
-        return 1;
-
-    }
-
-    @Override
     public List<ConversationBean> selectListOrderByLastMsgTimeDesc() {
         String sql = "SELECT" +
                 " c.id,c.toUserId,c.type,c.lastMsgContent,c.lastMsgContentType" +
@@ -352,9 +329,46 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
     }
 
     @Override
+    public int getTotalUnreadCount() {
+//        String sql = "SELECT SUM(unreadCount) AS totalUnreadCount FROM conversation";
+        String sql = "SELECT SUM(ABS(unreadCount)) AS totalUnreadCount FROM conversation AS c" +
+                " WHERE" +
+                " (SELECT doNotDisturb FROM friend AS f WHERE c.type=2001 AND f.id=c.toUserId)=0" +
+                " OR (SELECT doNotDisturb FROM group_chat AS gc WHERE c.type=3001 AND gc.id=c.toUserId)=0";
+        Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
+        try {
+            if (cursor.moveToNext()) {
+                return cursor.getInt(cursor.getColumnIndex("totalUnreadCount"));
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return 0;
+    }
+
+    @Override
+    public int resetUnreadCount(int id) {
+        String sql = "UPDATE conversation SET unreadCount=0 WHERE id=%s";
+        sql = String.format(sql, id);
+        getSQLiteDatabase().execSQL(sql);
+        return 1;
+
+    }
+
+    @Override
     public int deleteById(int id) {
         String sql = "DELETE FROM conversation WHERE id=%s";
         sql = String.format(sql, id);
+        getSQLiteDatabase().execSQL(sql);
+        return 1;
+    }
+
+    @Override
+    public int setUnreadCount(int unreadCount, int id) {
+        String sql = "UPDATE conversation SET unreadCount=%s WHERE id=%s";
+        sql = String.format(sql, unreadCount, id);
         getSQLiteDatabase().execSQL(sql);
         return 1;
     }
