@@ -7,7 +7,14 @@ import com.qinshou.commonmodule.rcvbaseadapter.RcvSingleBaseAdapter;
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.R;
+import com.qinshou.qinshoubox.conversation.view.activity.ChatActivity;
+import com.qinshou.qinshoubox.conversation.view.activity.GroupChatActivity;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
+import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
+import com.qinshou.qinshoubox.im.enums.MessageType;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -47,6 +54,37 @@ public class RcvConversationAdapter extends RcvSingleBaseAdapter<ConversationBea
 
         // 最后一条消息的时间
         setTime(baseViewHolder, conversationBean);
+
+        baseViewHolder.setOnClickListener(R.id.root_view, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (conversationBean.getType() == MessageType.CHAT.getValue()) {
+                    ChatActivity.start(getContext(), conversationBean.getToUserId());
+                } else if (conversationBean.getType() == MessageType.GROUP_CHAT.getValue()) {
+                    GroupChatActivity.start(getContext(), conversationBean.getToUserId());
+                }
+                // 重置未读数
+                IMClient.SINGLETON.getConversationManager().resetUnreadCount(conversationBean.getId());
+                conversationBean.setUnreadCount(0);
+                notifyItemChanged(position);
+                EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_UNREAD_COUNT, conversationBean));
+            }
+        });
+        baseViewHolder.setOnClickListener(R.id.btn_mark_unread, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        baseViewHolder.setOnClickListener(R.id.btn_delete, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                IMClient.SINGLETON.getConversationManager().deleteById(conversationBean.getId());
+                getDataList().remove(conversationBean);
+                notifyItemRemoved(position);
+                EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_UNREAD_COUNT, conversationBean));
+            }
+        });
     }
 
     private void setUnreadCount(BaseViewHolder baseViewHolder, ConversationBean conversationBean) {

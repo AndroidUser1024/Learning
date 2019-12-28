@@ -9,6 +9,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="@dimen/px128"
+        android:id="@+id/root_view"
         android:background="#FFFFFFFF"
         android:gravity="center_vertical"
         android:orientation="horizontal"
