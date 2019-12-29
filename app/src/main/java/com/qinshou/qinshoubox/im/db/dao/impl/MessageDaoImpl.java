@@ -137,4 +137,22 @@ public class MessageDaoImpl extends AbsDaoImpl<MessageBean> implements IMessageD
         getSQLiteDatabase().execSQL(sql);
         return 1;
     }
+
+    @Override
+    public boolean existsByPid(int pid) {
+        String sql = "SELECT COUNT(pid) FROM message WHERE pid=%s";
+        sql = String.format(sql, pid);
+        Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
+        try {
+            if (cursor.moveToNext()) {
+                int count = cursor.getInt(cursor.getColumnIndex("COUNT(pid)"));
+                return count > 0;
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return false;
+    }
 }

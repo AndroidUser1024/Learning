@@ -59,4 +59,8 @@ public interface IMessageDao extends IBaseDao {
     // ,receiveTimestamp=#{receiveTimestamp},status=#{status},extend=#{extend}
     // WHERE pid=#{pid};
     int update(MessageBean messageBean);
+
+    // existsByPid
+    // SELECT COUNT(pid) FROM message WHERE pid=#{pid}
+    boolean existsByPid(int pid);
 }

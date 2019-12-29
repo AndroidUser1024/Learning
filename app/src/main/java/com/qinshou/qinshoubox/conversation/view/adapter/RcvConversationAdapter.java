@@ -39,7 +39,6 @@ public class RcvConversationAdapter extends RcvSingleBaseAdapter<ConversationBea
 
     @Override
     public void bindViewHolder(final BaseViewHolder baseViewHolder, final ConversationBean conversationBean, final int position) {
-        ShowLogUtil.logi("conversationBean--->" + conversationBean);
         ImageLoadUtil.SINGLETON.loadImage(getContext(), conversationBean.getHeadImgSmall(), baseViewHolder.getImageView(R.id.iv_head_img));
         baseViewHolder.setTvText(R.id.tv_title, conversationBean.getTitle());
         baseViewHolder.setTvText(R.id.tv_last_msg_content, conversationBean.getLastMsgContent());

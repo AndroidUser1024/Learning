@@ -56,11 +56,10 @@ public class MessageManager {
 
     public MessageBean insert(boolean send, MessageBean messageBean) {
         // 插入消息
-        ShowLogUtil.logi("messageBean--->" + messageBean);
-        if (messageBean.getPid() == 0) {
-            messageBean = mMessageDao.insert(messageBean);
-        } else {
+        if (mMessageDao.existsByPid(messageBean.getPid())) {
             mMessageDao.update(messageBean);
+        } else {
+            messageBean = mMessageDao.insert(messageBean);
         }
         // 插入或更新会话
         ConversationBean conversationBean = new ConversationBean();
