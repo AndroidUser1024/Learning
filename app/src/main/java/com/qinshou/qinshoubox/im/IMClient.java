@@ -7,7 +7,10 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.qinshou.commonmodule.util.ShowLogUtil;
+import com.qinshou.okhttphelper.callback.AbsDownloadCallback;
 import com.qinshou.okhttphelper.callback.Callback;
+import com.qinshou.okhttphelper.interceptor.DownloadInterceptor;
+import com.qinshou.qinshoubox.conversation.bean.UploadVoiceResultBean;
 import com.qinshou.qinshoubox.im.bean.FriendStatusBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatStatusBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
@@ -22,20 +25,29 @@ import com.qinshou.qinshoubox.im.listener.IOnFriendStatusListener;
 import com.qinshou.qinshoubox.im.listener.IOnGroupChatStatusListener;
 import com.qinshou.qinshoubox.im.listener.IOnMessageListener;
 import com.qinshou.qinshoubox.im.listener.IOnSendMessageListener;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.im.manager.ConversationManager;
 import com.qinshou.qinshoubox.im.manager.FriendManager;
 import com.qinshou.qinshoubox.im.manager.GroupChatManager;
 import com.qinshou.qinshoubox.im.manager.MessageManager;
+import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxCommonApi;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxOfflineApi;
+import com.qinshou.qinshoubox.network.QSBoxCommonApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;
@@ -63,8 +75,8 @@ public enum IMClient {
      */
     private final int MAX_RECONNECT_COUNT = 5;
     //    private static final String URL = "ws://www.mrqinshou.com:10086/websocket";
-//    private static final String URL = "ws://172.16.60.231:10086/websocket";
-            private static final String URL = "ws://192.168.1.109:10086/websocket";
+    private static final String URL = "ws://172.16.60.231:10086/websocket";
+    //    private static final String URL = "ws://192.168.1.109:10086/websocket";
     private Context mContext;
     private WebSocket mWebSocket;
     private Handler mHandler = new Handler(Looper.getMainLooper());
@@ -466,6 +478,65 @@ public enum IMClient {
 //        }
 //    }
 
+    public void uploadVoice(long time, File voice, final QSCallback<UploadVoiceResultBean> qsCallback) {
+        OkHttpHelperForQSBoxCommonApi.SINGLETON.uploadVoice(mUserId, time, voice)
+                .transform(new QSApiTransformer<UploadVoiceResultBean>())
+                .enqueue(new Callback<UploadVoiceResultBean>() {
+                    @Override
+                    public void onSuccess(UploadVoiceResultBean data) {
+                        qsCallback.onSuccess(data);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        qsCallback.onFailure(e);
+                    }
+                });
+    }
+
+    public void download(String url, final File file, AbsDownloadCallback downloadCallback) {
+        new OkHttpClient.Builder().addInterceptor(new DownloadInterceptor(downloadCallback)).build()
+                .newCall(new Request.Builder().addHeader("Accept-Encoding", "dentity").url(url).get().build())
+                .enqueue(new okhttp3.Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        Log.i("daolema", "onFailure--->" + e.getMessage());
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        ResponseBody responseBody = response.body();
+                        if (responseBody == null) {
+                            return;
+                        }
+                        InputStream inputStream = responseBody.byteStream();
+                        Log.i("daolema", "onResponse: inputStream--->" + inputStream.available());
+                        if (file.getParentFile().exists()) {
+                            file.getParentFile().mkdirs();
+                        }
+                        file.createNewFile();
+                        FileOutputStream fileOutputStream = null;
+                        try {
+                            fileOutputStream = new FileOutputStream(file);
+                            byte[] bytes = new byte[1024];
+                            int len;
+                            while ((len = inputStream.read(bytes)) != -1) {
+                                fileOutputStream.write(bytes, 0, len);
+                            }
+                            inputStream.close();
+                            fileOutputStream.close();
+                        } finally {
+                            if (inputStream != null) {
+                                inputStream.close();
+                            }
+                            if (fileOutputStream != null) {
+                                fileOutputStream.close();
+                            }
+                        }
+                    }
+                });
+    }
+
     public GroupChatManager getGroupChatManager() {
         return mGroupChatManager;
     }
@@ -521,4 +592,5 @@ public enum IMClient {
     public void removeOnSendMessageListener(IOnSendMessageListener onSendMessageListener) {
         mOnSendMessageListenerList.remove(onSendMessageListener);
     }
+
 }

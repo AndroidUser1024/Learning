@@ -1,6 +1,8 @@
 package com.qinshou.qinshoubox.conversation.model;
 
 
+import com.qinshou.qinshoubox.conversation.bean.UploadResultBean;
+import com.qinshou.qinshoubox.conversation.bean.UploadVoiceResultBean;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.enums.MessageType;
@@ -8,6 +10,7 @@ import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.conversation.contract.IChatContract;
 import com.qinshou.qinshoubox.conversation.view.activity.ChatActivity;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -21,5 +24,15 @@ public class ChatModel implements IChatContract.IModel {
     public void getMessageList(String toUserId, int page, int pageSize, QSCallback<List<MessageBean>> qsCallback) {
         List<MessageBean> messageBeanList = IMClient.SINGLETON.getMessageManager().getList(MessageType.CHAT.getValue(), toUserId, page, pageSize);
         qsCallback.onSuccess(messageBeanList);
+    }
+
+    @Override
+    public void uploadVoice(long time, File voice, QSCallback<UploadVoiceResultBean> qsCallback) {
+        IMClient.SINGLETON.uploadVoice(time, voice,qsCallback);
+    }
+
+    @Override
+    public void uploadImg(File img, QSCallback<UploadResultBean> qsCallback) {
+
     }
 }

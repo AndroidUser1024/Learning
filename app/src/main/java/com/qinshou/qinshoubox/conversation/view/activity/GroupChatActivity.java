@@ -410,7 +410,7 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
         mRefreshLayout.canLoadMore(false);
         mRcvMessage = findViewByID(R.id.rcv_message);
         mRcvMessage.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRcvMessageAdapter = new RcvMessageAdapter(getContext());
+        mRcvMessageAdapter = new RcvMessageAdapter(getContext(), mRcvMessage);
         mRcvMessage.setAdapter(mRcvMessageAdapter);
         mIvContentType = findViewByID(R.id.iv_content_type);
         mEtContent = findViewByID(R.id.et_content);

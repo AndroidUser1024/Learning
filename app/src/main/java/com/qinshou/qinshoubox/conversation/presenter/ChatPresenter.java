@@ -2,12 +2,15 @@ package com.qinshou.qinshoubox.conversation.presenter;
 
 
 import com.qinshou.commonmodule.base.AbsPresenter;
+import com.qinshou.qinshoubox.conversation.bean.UploadResultBean;
+import com.qinshou.qinshoubox.conversation.bean.UploadVoiceResultBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.conversation.contract.IChatContract;
 import com.qinshou.qinshoubox.conversation.model.ChatModel;
 import com.qinshou.qinshoubox.conversation.view.activity.ChatActivity;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -39,6 +42,48 @@ public class ChatPresenter extends AbsPresenter<IChatContract.IView, IChatContra
                     return;
                 }
                 getView().getMessageListFailure(e);
+            }
+        });
+    }
+
+    @Override
+    public void uploadVoice(long time, File voice) {
+        getModel().uploadVoice(time, voice, new QSCallback<UploadVoiceResultBean>() {
+            @Override
+            public void onSuccess(UploadVoiceResultBean data) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().uploadVoiceSuccess(data);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().uploadVoiceFailure(e);
+            }
+        });
+    }
+
+    @Override
+    public void uploadImg(File img) {
+        getModel().uploadImg(img, new QSCallback<UploadResultBean>() {
+            @Override
+            public void onSuccess(UploadResultBean data) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().uploadImgSuccess(data);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().uploadImgFailure(e);
             }
         });
     }

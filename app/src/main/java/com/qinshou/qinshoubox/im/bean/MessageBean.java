@@ -1,6 +1,8 @@
 package com.qinshou.qinshoubox.im.bean;
 
 
+import com.google.gson.Gson;
+import com.qinshou.qinshoubox.conversation.bean.VoiceBean;
 import com.qinshou.qinshoubox.im.enums.MessageContentType;
 import com.qinshou.qinshoubox.im.enums.MessageType;
 
@@ -195,9 +197,29 @@ public class MessageBean {
         messageBean.toUserId = toUserId;
         messageBean.content = content;
         messageBean.sendTimestamp = System.currentTimeMillis();
-//        messageBean.fromUserId = IMClient.SINGLETON.getUserId();
         messageBean.contentType = MessageContentType.TEXT.getValue();
         messageBean.type = MessageType.CHAT.getValue();
+        return messageBean;
+    }
+
+    /**
+     * Author: QinHao
+     * Email:qinhao@jeejio.com
+     * Date:2019/12/30 17:03
+     * Description:创建一个语音消息
+     *
+     * @param toUserId 接收方用户 id
+     * @param url      语音上传后的 url
+     * @param time     语音时长
+     * @return 类型为语音的消息对象
+     */
+    public static MessageBean createVoiceMessage(String toUserId, String url, String path, long time) {
+        MessageBean messageBean = new MessageBean();
+        messageBean.toUserId = toUserId;
+        messageBean.sendTimestamp = System.currentTimeMillis();
+        messageBean.contentType = MessageContentType.VOICE.getValue();
+        messageBean.type = MessageType.CHAT.getValue();
+        messageBean.extend = new Gson().toJson(new VoiceBean(url, path, time));
         return messageBean;
     }
 

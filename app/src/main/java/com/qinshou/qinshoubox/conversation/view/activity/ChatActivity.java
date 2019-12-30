@@ -30,6 +30,8 @@ import com.qinshou.commonmodule.widget.TitleBar;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.constant.IConstant;
+import com.qinshou.qinshoubox.conversation.bean.UploadResultBean;
+import com.qinshou.qinshoubox.conversation.bean.UploadVoiceResultBean;
 import com.qinshou.qinshoubox.conversation.contract.IChatContract;
 import com.qinshou.qinshoubox.conversation.presenter.ChatPresenter;
 import com.qinshou.qinshoubox.conversation.view.adapter.RcvMessageAdapter;
@@ -131,6 +133,10 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
      * 是否发送语音的标志位
      */
     private boolean sendVoice = false;
+    /**
+     * 录音中的标志位
+     */
+    private boolean mRecording = false;
     private Handler mHandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
@@ -160,6 +166,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
                         break;
                 }
             } else if (msg.what == MESSAGE_WHAT_SEND_VOICE) {
+                ShowLogUtil.logi("发送语音: sendVoice--->" + sendVoice);
                 if (!sendVoice) {
                     return true;
                 }
@@ -169,22 +176,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
                 if (file == null) {
                     return true;
                 }
-//                MessageBean message = MessageBean.createVoiceMessage(mToUserId, recordTime, file.getAbsolutePath());
-//                JMClient.SINGLETON.getChatManager().sendVoiceMessage(message, file, recordTime, new JMCallback<Void>() {
-//                    @Override
-//                    public void onSuccess(Void aVoid) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Exception e) {
-//                        ShowLogUtil.logi("发送失败--->" + e.getMessage());
-//                    }
-//                });
-//                mRcvMessageAdapter.getDataList().add(message);
-//                mRcvMessageAdapter.notifyItemInserted(mRcvMessageAdapter.getDataList().size() - 1);
-//                // 消息列表滚动到底部
-//                mRcvMessage.scrollToPosition(mRcvMessageAdapter.getItemCount() - 1);
+                getPresenter().uploadVoice(recordTime, file);
             }
             return true;
         }
@@ -204,7 +196,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.iv_content_type:
-                    showTextOrVoiceType();
+                    changeMessageType();
                     break;
                 case R.id.et_content:
                     // 点击输入框会弹出软键盘,然后遮挡 RecyclerView 部分内容
@@ -228,7 +220,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
                     }
                     break;
                 case R.id.btn_send:
-                    sendMessage();
+                    sendMessage(null);
                     break;
                 case R.id.ll_send_img:
                     pickPhoto();
@@ -245,9 +237,6 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
             float x, y;
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    mLlSendVoicePrompt.setVisibility(View.VISIBLE);
-                    mBtnPressToSpeech.setText(getString(R.string.chat_btn_press_to_speech_text2));
-                    mBtnPressToSpeech.setSelected(true);
                     sendVoice = true;
                     File file = new File(getActivity().getCacheDir()
                             + File.separator
@@ -258,14 +247,37 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
                     MediaRecorderHelper.SINGLETON.startRecordAudio(file, new MediaRecorderHelper.IOnMediaRecorderListener() {
                         @Override
                         public void onStart() {
+                            mRecording = true;
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    rcvMessageScrollToLast();
+                                    showSendVoiceLayout();
+                                }
+                            });
                         }
 
                         @Override
                         public void onError(String errorInfo) {
+                            mRecording = false;
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    hideSendVoiceLayout();
+                                }
+                            });
                         }
 
                         @Override
                         public void onStop(final File file, final long recordTime) {
+                            ShowLogUtil.logi("onStop: file--->" + file.getAbsolutePath() + ",recordTime--->" + recordTime);
+                            mRecording = false;
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    hideSendVoiceLayout();
+                                }
+                            });
                             mHandler.removeCallbacks(mStopRecordRunnable);
                             Map<String, Object> map = new HashMap<>();
                             map.put("file", file);
@@ -282,11 +294,14 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
                     mHandler.postDelayed(mStopRecordRunnable, VOICE_MAX_TIME);
                     break;
                 case MotionEvent.ACTION_MOVE:
+                    if (!mRecording) {
+                        break;
+                    }
                     mBtnPressToSpeech.setSelected(true);
                     x = event.getRawX();
                     y = event.getRawY();
                     // 触摸点在屏幕高度 3/4 以上时,显示取消发送语音的界面
-                    if (y < SystemUtil.getRealScreenHeight(getContext()) / 4 * 3) {
+                    if (y < SystemUtil.getRealScreenHeight(getContext()) / 5 * 4) {
                         showCancelSendVoiceLayout(x, y);
                     } else {
                         showSendVoiceLayout();
@@ -294,11 +309,6 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
                     break;
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_CANCEL:
-                    mLlSendVoicePrompt.setVisibility(View.GONE);
-                    mIvCancelSend.setVisibility(View.GONE);
-                    mBtnPressToSpeech.setText(getString(R.string.chat_btn_press_to_speech_text));
-                    mBtnPressToSpeech.setSelected(false);
-                    MediaRecorderHelper.SINGLETON.stopRecord();
                     x = event.getRawX();
                     y = event.getRawY();
                     if (x > mIvCancelSend.getLeft()
@@ -314,6 +324,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
             return false;
         }
     };
+
     /**
      * 接收消息监听器
      */
@@ -410,7 +421,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
         mRefreshLayout.canLoadMore(false);
         mRcvMessage = findViewByID(R.id.rcv_message);
         mRcvMessage.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRcvMessageAdapter = new RcvMessageAdapter(getContext());
+        mRcvMessageAdapter = new RcvMessageAdapter(getContext(), mRcvMessage);
         mRcvMessage.setAdapter(mRcvMessageAdapter);
         mIvContentType = findViewByID(R.id.iv_content_type);
         mEtContent = findViewByID(R.id.et_content);
@@ -568,23 +579,43 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
 
     }
 
+    @Override
+    public void uploadVoiceSuccess(UploadVoiceResultBean uploadVoiceResultBean) {
+        MessageBean messageBean = MessageBean.createVoiceMessage(mToUserId, uploadVoiceResultBean.getUrl(), uploadVoiceResultBean.getPath(), uploadVoiceResultBean.getTime());
+        sendMessage(messageBean);
+    }
+
+    @Override
+    public void uploadVoiceFailure(Exception e) {
+
+    }
+
+    @Override
+    public void uploadImgSuccess(UploadResultBean uploadResultBean) {
+
+    }
+
+    @Override
+    public void uploadImgFailure(Exception e) {
+
+    }
+
     /**
      * Author: QinHao
      * Email:qinhao@jeejio.com
      * Date:2019/9/10 16:28
      * Description:发送消息
      */
-    private void sendMessage() {
-        String content = mEtContent.getText().toString().trim();
-        if (TextUtils.isEmpty(content)) {
-            toastShort(getString(R.string.chat_toast_can_not_send_empty_message_text));
-            return;
-        }
-        MessageBean messageBean = null;
-        if (mMessageContentType == MessageContentType.TEXT) {
+    private void sendMessage(MessageBean messageBean) {
+        if (messageBean == null) {
+            String content = mEtContent.getText().toString().trim();
+            if (TextUtils.isEmpty(content)) {
+                toastShort(getString(R.string.chat_toast_can_not_send_empty_message_text));
+                return;
+            }
             messageBean = MessageBean.createTextMessage(mToUserId, content);
-            IMClient.SINGLETON.sendMessage(messageBean);
         }
+        IMClient.SINGLETON.sendMessage(messageBean);
         mRcvMessageAdapter.getDataList().add(messageBean);
         mRcvMessageAdapter.notifyItemInserted(mRcvMessageAdapter.getDataList().size() - 1);
         // 消息列表滚动到底部
@@ -599,9 +630,9 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
      * Author: QinHao
      * Email:qinhao@jeejio.com
      * Date:2019/10/24 13:42
-     * Description:显示文本或者语音输入模式
+     * Description:切换消息类型
      */
-    private void showTextOrVoiceType() {
+    private void changeMessageType() {
         if (mMessageContentType == MessageContentType.TEXT) {
             // 切换为发送语音模式
             // 隐藏软键盘
@@ -625,6 +656,28 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
             // 隐藏更多功能布局
             mLlMore.setVisibility(View.GONE);
         }
+    }
+
+    /**
+     * Author: QinHao
+     * Email:qinhao@jeejio.com
+     * Date:2019/12/17 18:16
+     * Description:消息列表滚动到底部
+     */
+    private void rcvMessageScrollToLast() {
+        // 延时 100ms 再将 RecyclerView 消息列表滚动到底部
+        mRcvMessage.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                RecyclerView.LayoutManager layoutManager = mRcvMessage.getLayoutManager();
+                if (!(layoutManager instanceof LinearLayoutManager)) {
+                    return;
+                }
+                // 滚动到最后一个 item,并设置偏移量为 RecyclerView 的整体高度,但是如果一个 item
+                // 的高度比 RecyclerView 还要高,这里就还是会显示不全
+                ((LinearLayoutManager) layoutManager).scrollToPositionWithOffset(mRcvMessageAdapter.getItemCount() - 1, -mRcvMessage.getMeasuredHeight());
+            }
+        }, 100);
     }
 
     /**
@@ -663,6 +716,26 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
         mLlVolume.setBackgroundResource(R.drawable.chat_ll_volume_bg);
         mTvCancelSendPrompt.setText(getString(R.string.chat_tv_cancel_send_voice_prompt_text));
         mIvCancelSend.setVisibility(View.GONE);
+        mLlSendVoicePrompt.setVisibility(View.VISIBLE);
+
+        mBtnPressToSpeech.setText(getString(R.string.chat_btn_press_to_speech_text2));
+    }
+
+    /**
+     * Author: QinHao
+     * Email:qinhao@jeejio.com
+     * Date:2019/12/25 16:19
+     * Description:隐藏发送语音的布局
+     */
+    private void hideSendVoiceLayout() {
+        mLlSendVoicePrompt.setBackgroundColor(0x00000000);
+        mLlVolume.setBackgroundResource(R.drawable.chat_ll_volume_bg);
+        mTvCancelSendPrompt.setText(getString(R.string.chat_tv_cancel_send_voice_prompt_text));
+        mLlSendVoicePrompt.setVisibility(View.GONE);
+        mIvCancelSend.setVisibility(View.GONE);
+
+        mBtnPressToSpeech.setText(getString(R.string.chat_btn_press_to_speech_text));
+        mBtnPressToSpeech.setSelected(false);
     }
 
     /**
