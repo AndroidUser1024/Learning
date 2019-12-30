@@ -567,7 +567,9 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
         // 消息列表滚动到底部
         mRcvMessage.scrollToPosition(mRcvMessageAdapter.getItemCount() - 1);
         mEtContent.setText("");
-        EventBus.getDefault().post(new EventBean<MessageBean>(EventBean.Type.REFRESH_CONVERSATION_LIST, messageBean));
+        // 更新会话列表
+        ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().selectByTypeAndToUserId(messageBean.getType(), messageBean.getToUserId());
+        EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_LIST, conversationBean));
     }
 
     /**

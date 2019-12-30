@@ -349,7 +349,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
 
         @Override
         public void onSendSuccess(MessageBean messageBean) {
-            ShowLogUtil.logi("onSendSuccess: pid--->" + messageBean.getId() + ",id--->" + messageBean.getId());
+            ShowLogUtil.logi("onSendSuccess: pid--->" + messageBean.getPid() + ",id--->" + messageBean.getId());
             List<MessageBean> dataList = mRcvMessageAdapter.getDataList();
             for (int i = 0; i < dataList.size(); i++) {
                 if (messageBean.getPid() == dataList.get(i).getPid()) {
@@ -546,6 +546,9 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
 
     @Override
     public void getMessageListSuccess(List<MessageBean> messageBeanList) {
+        for (MessageBean messageBean : messageBeanList) {
+            ShowLogUtil.logi("messageBean--->" + messageBean);
+        }
         mRcvMessageAdapter.getDataList().addAll(0, messageBeanList);
         mRcvMessageAdapter.notifyItemRangeInserted(0, messageBeanList.size());
         if (mPage == IConstant.PAGE_START) {
@@ -587,7 +590,9 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
         // 消息列表滚动到底部
         mRcvMessage.scrollToPosition(mRcvMessageAdapter.getItemCount() - 1);
         mEtContent.setText("");
-        EventBus.getDefault().post(new EventBean<MessageBean>(EventBean.Type.REFRESH_CONVERSATION_LIST, messageBean));
+        // 更新会话列表
+        ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().selectByTypeAndToUserId(messageBean.getType(), messageBean.getToUserId());
+        EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_LIST, conversationBean));
     }
 
     /**

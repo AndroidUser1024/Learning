@@ -71,17 +71,20 @@ public interface IConversationDao extends IBaseDao {
     // WHERE c.type=#{type} AND c.toUserId=#{toUserId};
     ConversationBean selectByTypeAndToUserId(int type, String toUserId);
 
-    // SELECT SUM(unreadCount) AS totalUnreadCount FROM conversation;
-    int getTotalUnreadCount();
-
-    // UPDATE conversation SET unreadCount=0 WHERE id=#{id];
-    int resetUnreadCount(int id);
-
     List<ConversationBean> selectListOrderByLastMsgTimeDesc();
 
     List<ConversationBean> selectListOrderByTopDescAndLastMsgTimeDesc();
 
+    // SELECT SUM(unreadCount) AS totalUnreadCount FROM conversation;
+    int getTotalUnreadCount();
+
+    // UPDATE conversation SET unreadCount=0 WHERE id=#{id};
+    int resetUnreadCount(int id);
+
     // 删除语句
     // DELETE FROM conversation WHERE id=#{id};
     int deleteById(int id);
+
+    // UPDATE conversation SET unreadCount=-1 WHERE id=#{id};
+    int setUnreadCount(int unreadCount,int id);
 }

@@ -126,21 +126,6 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
     public void setListener() {
         // 设置聊天监听器,监听收到的消息
         IMClient.SINGLETON.addOnMessageListener(mOnMessageListener);
-        mRcvConversationAdapter.setOnItemClickListener(new IOnItemClickListener<ConversationBean>() {
-            @Override
-            public void onItemClick(BaseViewHolder holder, ConversationBean itemData, int position) {
-                if (itemData.getType() == MessageType.CHAT.getValue()) {
-                    ChatActivity.start(getContext(), itemData.getToUserId());
-                } else if (itemData.getType() == MessageType.GROUP_CHAT.getValue()) {
-                    GroupChatActivity.start(getContext(), itemData.getToUserId());
-                }
-                // 重置未读数
-                IMClient.SINGLETON.getConversationManager().resetUnreadCount(itemData.getId());
-                itemData.setUnreadCount(0);
-                mRcvConversationAdapter.notifyItemChanged(position);
-                updateUnreadCount();
-            }
-        });
     }
 
     @Override
@@ -163,18 +148,16 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
 
     @Override
     public void handleEvent(EventBean<Object> eventBean) {
-        if (eventBean.getType() != EventBean.Type.REFRESH_CONVERSATION_LIST) {
-            return;
-        }
-        if (eventBean.getData() == null) {
-            getPresenter().getConversationList();
-        } else if (eventBean.getData() instanceof MessageBean) {
-            ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().selectByTypeAndToUserId(((MessageBean) eventBean.getData()).getType(), ((MessageBean) eventBean.getData()).getToUserId());
-            updateConversationList(conversationBean);
-        } else if (eventBean.getData() instanceof ConversationBean) {
-            updateConversationList((ConversationBean) eventBean.getData());
-            // 更新未读数
+        if (eventBean.getType() == EventBean.Type.REFRESH_CONVERSATION_UNREAD_COUNT) {
             updateUnreadCount();
+        } else if (eventBean.getType() != EventBean.Type.REFRESH_CONVERSATION_LIST) {
+            if (eventBean.getData() == null) {
+                getPresenter().getConversationList();
+            } else if (eventBean.getData() instanceof ConversationBean) {
+                updateConversationList((ConversationBean) eventBean.getData());
+                // 更新未读数
+                updateUnreadCount();
+            }
         }
     }
 

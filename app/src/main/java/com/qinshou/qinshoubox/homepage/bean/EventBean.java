@@ -46,6 +46,10 @@ public class EventBean<T> {
         REFRESH_GROUP_CHAT_LIST,
         REFRESH_FRIEND_LIST,
         REFRESH_CONVERSATION_LIST,
+        /**
+         * 更新会话未读数
+         */
+        REFRESH_CONVERSATION_UNREAD_COUNT,
         REFRESH_GROUP_CHAT_DETAIL,
         REFRESH_MESSAGE_LIST,
         /**

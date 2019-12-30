@@ -55,7 +55,6 @@ public abstract class AbsRcvMessageAdapterToMessageItemView extends BaseItemView
         baseViewHolder.setOnClickListener(R.id.iv_send_message_failure, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShowLogUtil.logi("messageBean--->" + messageBean);
                 IMClient.SINGLETON.sendMessage(messageBean);
             }
         });

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.qinshou.commonmodule.widget.SwipeMenuLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swipe_menu_layout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,6 +10,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="@dimen/px128"
+        android:id="@+id/root_view"
         android:background="#FFFFFFFF"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -143,7 +145,7 @@
         android:layout_width="@dimen/px160"
         android:layout_height="match_parent"
         android:background="#FFCCCCCC"
-        android:text="标为未读"
+        android:text="@string/conversation_btn_mark_unread_text"
         android:textColor="#FFFFFFFF" />
 
     <Button
@@ -152,6 +154,6 @@
         android:layout_width="@dimen/px100"
         android:layout_height="match_parent"
         android:background="#FFFF0000"
-        android:text="删除"
+        android:text="@string/conversation_btn_delete_text"
         android:textColor="#FFFFFFFF" />
 </com.qinshou.commonmodule.widget.SwipeMenuLayout>
