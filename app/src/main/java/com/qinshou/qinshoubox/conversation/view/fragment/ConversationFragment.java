@@ -223,14 +223,11 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
             // 如果会话列表中包含该会话,定义一个变量记录该会话原来的位置
             int index = 0;
             // 定义一个变量记录非置顶的第一条会话的位置
-            int firstNotTopIndex = 0;
-            // 用于标记 firstNotTopIndex 是否有修改过
-            boolean temp = false;
+            int firstNotTopIndex = conversationBeanList.size();
             for (int i = 0; i < conversationBeanList.size(); i++) {
                 // firstNotTopIndex 只修改一次
-                if (conversationBeanList.get(i).getTop() == 0 && !temp) {
+                if (conversationBeanList.get(i).getTop() == 0 && firstNotTopIndex == conversationBeanList.size()) {
                     firstNotTopIndex = i;
-                    temp = true;
                 }
                 if (conversationBeanList.get(i).getId() == conversationBean.getId()) {
                     contains = true;
