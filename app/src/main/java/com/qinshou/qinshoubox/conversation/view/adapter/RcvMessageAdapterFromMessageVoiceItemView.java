@@ -142,8 +142,8 @@ public class RcvMessageAdapterFromMessageVoiceItemView extends AbsRcvMessageAdap
             MediaPlayerHelper.SINGLETON.playMusic(file.getAbsolutePath(), onMediaPlayerListener);
             return;
         }
-        String fileName = voiceBean.getUrl().substring(voiceBean.getUrl().indexOf("/"));
-        ShowLogUtil.logi("fileName--->" + fileName);
+        String fileName = voiceBean.getUrl().substring(voiceBean.getUrl().lastIndexOf("/" + "/".length()));
+        ShowLogUtil.logi("voiceBean--->" + voiceBean);
         file = new File(getContext().getCacheDir()
                 + File.separator
                 + "Voice"
@@ -153,22 +153,23 @@ public class RcvMessageAdapterFromMessageVoiceItemView extends AbsRcvMessageAdap
         IMClient.SINGLETON.download(voiceBean.getUrl(), file, new AbsDownloadCallback() {
             @Override
             public void onStart(long length) {
-
+                ShowLogUtil.logi("onStart: length--->" + length);
             }
 
             @Override
             public void onProgress(int progress) {
-
+                ShowLogUtil.logi("onProgress: progress--->" + progress);
             }
 
             @Override
             public void onSuccess() {
+                ShowLogUtil.logi("onSuccess");
                 MediaPlayerHelper.SINGLETON.playMusic(finalFile.getAbsolutePath(), onMediaPlayerListener);
             }
 
             @Override
             public void onFailure(Exception e) {
-
+                ShowLogUtil.logi("onFailure: e--->" + e.getMessage());
             }
         });
     }

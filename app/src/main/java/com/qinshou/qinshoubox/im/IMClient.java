@@ -10,6 +10,7 @@ import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.okhttphelper.callback.AbsDownloadCallback;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.okhttphelper.interceptor.DownloadInterceptor;
+import com.qinshou.okhttphelper.interceptor.LogInterceptor;
 import com.qinshou.qinshoubox.conversation.bean.UploadVoiceResultBean;
 import com.qinshou.qinshoubox.im.bean.FriendStatusBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatStatusBean;
@@ -495,7 +496,12 @@ public enum IMClient {
     }
 
     public void download(String url, final File file, AbsDownloadCallback downloadCallback) {
-        new OkHttpClient.Builder().addInterceptor(new DownloadInterceptor(downloadCallback)).build()
+        new OkHttpClient.Builder().addInterceptor(new LogInterceptor(LogInterceptor.Level.BODY, new LogInterceptor.Logger() {
+            @Override
+            public void log(String message) {
+                ShowLogUtil.logi("message--->" + message);
+            }
+        })).addInterceptor(new DownloadInterceptor(downloadCallback)).build()
                 .newCall(new Request.Builder().addHeader("Accept-Encoding", "dentity").url(url).get().build())
                 .enqueue(new okhttp3.Callback() {
                     @Override
@@ -511,7 +517,7 @@ public enum IMClient {
                         }
                         InputStream inputStream = responseBody.byteStream();
                         Log.i("daolema", "onResponse: inputStream--->" + inputStream.available());
-                        if (file.getParentFile().exists()) {
+                        if (!file.getParentFile().exists()) {
                             file.getParentFile().mkdirs();
                         }
                         file.createNewFile();
