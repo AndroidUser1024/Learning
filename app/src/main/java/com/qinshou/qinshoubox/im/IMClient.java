@@ -11,6 +11,8 @@ import com.qinshou.okhttphelper.callback.AbsDownloadCallback;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.okhttphelper.interceptor.DownloadInterceptor;
 import com.qinshou.okhttphelper.interceptor.LogInterceptor;
+import com.qinshou.qinshoubox.conversation.bean.UploadImgResultBean;
+import com.qinshou.qinshoubox.conversation.bean.UploadResultBean;
 import com.qinshou.qinshoubox.conversation.bean.UploadVoiceResultBean;
 import com.qinshou.qinshoubox.im.bean.FriendStatusBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatStatusBean;
@@ -76,8 +78,8 @@ public enum IMClient {
      */
     private final int MAX_RECONNECT_COUNT = 5;
     //    private static final String URL = "ws://www.mrqinshou.com:10086/websocket";
-    private static final String URL = "ws://172.16.60.231:10086/websocket";
-    //    private static final String URL = "ws://192.168.1.109:10086/websocket";
+//    private static final String URL = "ws://172.16.60.231:10086/websocket";
+    private static final String URL = "ws://192.168.1.109:10086/websocket";
     private Context mContext;
     private WebSocket mWebSocket;
     private Handler mHandler = new Handler(Looper.getMainLooper());
@@ -485,6 +487,22 @@ public enum IMClient {
                 .enqueue(new Callback<UploadVoiceResultBean>() {
                     @Override
                     public void onSuccess(UploadVoiceResultBean data) {
+                        qsCallback.onSuccess(data);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        qsCallback.onFailure(e);
+                    }
+                });
+    }
+
+    public void uploadImg(File img, final QSCallback<UploadImgResultBean> qsCallback) {
+        OkHttpHelperForQSBoxCommonApi.SINGLETON.uploadImg(mUserId, img)
+                .transform(new QSApiTransformer<UploadImgResultBean>())
+                .enqueue(new Callback<UploadImgResultBean>() {
+                    @Override
+                    public void onSuccess(UploadImgResultBean data) {
                         qsCallback.onSuccess(data);
                     }
 

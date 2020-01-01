@@ -6,6 +6,7 @@ import com.qinshou.okhttphelper.annotation.Multipart;
 import com.qinshou.okhttphelper.annotation.Post;
 import com.qinshou.okhttphelper.call.Call;
 import com.qinshou.qinshoubox.constant.IUrlConstant;
+import com.qinshou.qinshoubox.conversation.bean.UploadImgResultBean;
 import com.qinshou.qinshoubox.conversation.bean.UploadResultBean;
 import com.qinshou.qinshoubox.conversation.bean.UploadVoiceResultBean;
 import com.qinshou.qinshoubox.homepage.bean.QinshouResultBean;
@@ -28,6 +29,6 @@ public interface QSBoxCommonApi {
 
     @Multipart
     @Post(value = "/uploadImg")
-    Call<QinshouResultBean<UploadResultBean>> uploadImg(@Field(name = "userId") String userId
+    Call<QinshouResultBean<UploadImgResultBean>> uploadImg(@Field(name = "userId") String userId
             , @Field(name = "img") File img);
 }

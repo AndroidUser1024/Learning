@@ -2,6 +2,7 @@ package com.qinshou.qinshoubox.conversation.presenter;
 
 
 import com.qinshou.commonmodule.base.AbsPresenter;
+import com.qinshou.qinshoubox.conversation.bean.UploadImgResultBean;
 import com.qinshou.qinshoubox.conversation.bean.UploadResultBean;
 import com.qinshou.qinshoubox.conversation.bean.UploadVoiceResultBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
@@ -69,9 +70,9 @@ public class ChatPresenter extends AbsPresenter<IChatContract.IView, IChatContra
 
     @Override
     public void uploadImg(File img) {
-        getModel().uploadImg(img, new QSCallback<UploadResultBean>() {
+        getModel().uploadImg(img, new QSCallback<UploadImgResultBean>() {
             @Override
-            public void onSuccess(UploadResultBean data) {
+            public void onSuccess(UploadImgResultBean data) {
                 if (!isViewAttached()) {
                     return;
                 }

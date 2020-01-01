@@ -1,6 +1,7 @@
 package com.qinshou.qinshoubox.conversation.model;
 
 
+import com.qinshou.qinshoubox.conversation.bean.UploadImgResultBean;
 import com.qinshou.qinshoubox.conversation.bean.UploadResultBean;
 import com.qinshou.qinshoubox.conversation.bean.UploadVoiceResultBean;
 import com.qinshou.qinshoubox.im.IMClient;
@@ -32,7 +33,7 @@ public class ChatModel implements IChatContract.IModel {
     }
 
     @Override
-    public void uploadImg(File img, QSCallback<UploadResultBean> qsCallback) {
-
+    public void uploadImg(File img, QSCallback<UploadImgResultBean> qsCallback) {
+        IMClient.SINGLETON.uploadImg(img, qsCallback);
     }
 }

@@ -3,21 +3,21 @@ package com.qinshou.qinshoubox.conversation.bean;
 /**
  * Author: MrQinshou
  * Email:cqflqinhao@126.com
- * Date: 2019/12/30 15:53
- * Description:上传语音结果映射类
+ * Date: 2020/1/1 15:17
+ * Description:上传图片结果映射类
  */
-public class UploadVoiceResultBean extends UploadResultBean {
+public class UploadImgResultBean extends UploadResultBean {
     private String path;
-    private long time;
+    private String smallUrl;
 
-    public UploadVoiceResultBean() {
+    public UploadImgResultBean() {
     }
 
     @Override
     public String toString() {
         return "UploadVoiceResultBean{" +
                 ", path='" + path + '\'' +
-                ", time=" + time +
+                ", smallUrl=" + smallUrl +
                 '}';
     }
 
@@ -29,11 +29,11 @@ public class UploadVoiceResultBean extends UploadResultBean {
         this.path = path;
     }
 
-    public long getTime() {
-        return time;
+    public String getSmallUrl() {
+        return smallUrl;
     }
 
-    public void setTime(long time) {
-        this.time = time;
+    public void setSmallUrl(String smallUrl) {
+        this.smallUrl = smallUrl;
     }
 }

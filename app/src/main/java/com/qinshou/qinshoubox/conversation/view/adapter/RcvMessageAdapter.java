@@ -20,8 +20,10 @@ public class RcvMessageAdapter extends RcvMultipleBaseAdapter<MessageBean> {
         addItemView(new RcvMessageAdapterToMessageTextItemView(context));
         RcvMessageAdapterToMessageVoiceItemView rcvMessageAdapterToMessageVoiceItemView = new RcvMessageAdapterToMessageVoiceItemView(context, rcvMessage);
         addItemView(rcvMessageAdapterToMessageVoiceItemView);
+        addItemView(new RcvMessageAdapterToMessageImgItemView(context));
         addItemView(new RcvMessageAdapterFromMessageTextItemView(context));
         addItemView(new RcvMessageAdapterFromMessageSystemItemView(context));
         addItemView(new RcvMessageAdapterFromMessageVoiceItemView(context, rcvMessage, rcvMessageAdapterToMessageVoiceItemView));
+        addItemView(new RcvMessageAdapterFromMessageImgItemView(context));
     }
 }

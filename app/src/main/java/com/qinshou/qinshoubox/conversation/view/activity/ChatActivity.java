@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
@@ -27,9 +28,15 @@ import com.qinshou.commonmodule.util.permissionutil.IOnRequestPermissionResultCa
 import com.qinshou.commonmodule.util.permissionutil.PermissionUtil;
 import com.qinshou.commonmodule.widget.RefreshLayout;
 import com.qinshou.commonmodule.widget.TitleBar;
+import com.qinshou.imagemodule.callback.IOnImageChooseResultCallback;
+import com.qinshou.imagemodule.callback.IOnImageCropResultCallback;
+import com.qinshou.imagemodule.util.ImageChooseUtil;
+import com.qinshou.imagemodule.util.ImageCropUtil;
+import com.qinshou.imagemodule.util.ImagePathUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.constant.IConstant;
+import com.qinshou.qinshoubox.conversation.bean.UploadImgResultBean;
 import com.qinshou.qinshoubox.conversation.bean.UploadResultBean;
 import com.qinshou.qinshoubox.conversation.bean.UploadVoiceResultBean;
 import com.qinshou.qinshoubox.conversation.contract.IChatContract;
@@ -46,13 +53,19 @@ import com.qinshou.qinshoubox.im.enums.MessageType;
 import com.qinshou.qinshoubox.im.listener.IOnMessageListener;
 import com.qinshou.qinshoubox.im.listener.IOnSendMessageListener;
 import com.qinshou.qinshoubox.listener.ClearErrorInfoTextWatcher;
+import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import top.zibin.luban.CompressionPredicate;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 
 /**
  * Author: QinHao
@@ -581,7 +594,10 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
 
     @Override
     public void uploadVoiceSuccess(UploadVoiceResultBean uploadVoiceResultBean) {
-        MessageBean messageBean = MessageBean.createVoiceMessage(mToUserId, uploadVoiceResultBean.getUrl(), uploadVoiceResultBean.getPath(), uploadVoiceResultBean.getTime());
+        MessageBean messageBean = MessageBean.createVoiceMessage(mToUserId
+                , uploadVoiceResultBean.getUrl()
+                , uploadVoiceResultBean.getPath()
+                , uploadVoiceResultBean.getTime());
         sendMessage(messageBean);
     }
 
@@ -591,8 +607,12 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
     }
 
     @Override
-    public void uploadImgSuccess(UploadResultBean uploadResultBean) {
-
+    public void uploadImgSuccess(UploadImgResultBean uploadImgResultBean) {
+        MessageBean messageBean = MessageBean.createImgMessage(mToUserId
+                , uploadImgResultBean.getUrl()
+                , uploadImgResultBean.getPath()
+                , uploadImgResultBean.getSmallUrl());
+        sendMessage(messageBean);
     }
 
     @Override
@@ -745,6 +765,61 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
      * Description: 选择照片
      */
     private void pickPhoto() {
+        ImageChooseUtil.chooseImage(getActivity(), new IOnImageChooseResultCallback() {
+            @Override
+            public void onSuccess(List<Uri> uriList) {
+                if (uriList == null || uriList.size() == 0) {
+                    toastShort(getString(R.string.personal_head_img_toast_pick_photo_failure_text));
+                    return;
+                }
+                String path = ImagePathUtil.getRealPathFromUri(getContext(), uriList.get(0));
+                if (TextUtils.isEmpty(path)) {
+                    toastShort(getString(R.string.personal_head_img_toast_pick_photo_failure_text));
+                    return;
+                }
+                ArrayList<String> imagePathList = new ArrayList<>();
+                imagePathList.add(path);
+                ImageCropUtil.cropImage(getActivity(), imagePathList, new IOnImageCropResultCallback() {
+                    @Override
+                    public void onSuccess(List<String> resultList) {
+                        if (resultList == null || resultList.size() == 0) {
+                            toastShort(getString(R.string.personal_head_img_toast_pick_photo_failure_text));
+                            return;
+                        }
+                        // 上传头像
+                        File origin = new File(resultList.get(0));
+                        Luban.with(getContext())
+                                .load(origin)
+                                .ignoreBy(100)
+                                .setTargetDir(getContext().getCacheDir() + "/Image")
+                                .filter(new CompressionPredicate() {
+                                    @Override
+                                    public boolean apply(String path) {
+                                        return !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif"));
+                                    }
+                                })
+                                .setCompressListener(new OnCompressListener() {
+                                    @Override
+                                    public void onStart() {
+                                        // 压缩开始前调用，可以在方法内启动 loading UI
+                                    }
+
+                                    @Override
+                                    public void onSuccess(File file) {
+                                        // 压缩成功后调用，返回压缩后的图片文件
+                                        getPresenter().uploadImg(file);
+                                    }
+
+                                    @Override
+                                    public void onError(Throwable e) {
+                                        // 当压缩过程出现问题时调用
+                                        ShowLogUtil.logi("onError: e--->" + e.getMessage());
+                                    }
+                                }).launch();
+                    }
+                });
+            }
+        });
     }
 
     /**

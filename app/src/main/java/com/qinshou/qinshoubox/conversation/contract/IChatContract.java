@@ -3,6 +3,7 @@ package com.qinshou.qinshoubox.conversation.contract;
 
 import com.qinshou.commonmodule.base.IBaseModel;
 import com.qinshou.commonmodule.base.IBaseView;
+import com.qinshou.qinshoubox.conversation.bean.UploadImgResultBean;
 import com.qinshou.qinshoubox.conversation.bean.UploadResultBean;
 import com.qinshou.qinshoubox.conversation.bean.UploadVoiceResultBean;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
@@ -51,7 +52,7 @@ public interface IChatContract {
          *
          * @param img 图片文件
          */
-        void uploadImg(File img, QSCallback<UploadResultBean> qsCallback);
+        void uploadImg(File img, QSCallback<UploadImgResultBean> qsCallback);
     }
 
     interface IView extends IBaseView {
@@ -101,9 +102,9 @@ public interface IChatContract {
          * Date:2019/12/30 16:27
          * Description:上传图片
          *
-         * @param uploadResultBean 上传结果
+         * @param uploadImgResultBean 上传图片结果
          */
-        void uploadImgSuccess(UploadResultBean uploadResultBean);
+        void uploadImgSuccess(UploadImgResultBean uploadImgResultBean);
 
         /**
          * Author: QinHao
