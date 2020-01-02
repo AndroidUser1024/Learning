@@ -7,7 +7,6 @@ package com.qinshou.qinshoubox.conversation.bean;
  * Description:上传图片结果映射类
  */
 public class UploadImgResultBean extends UploadResultBean {
-    private String path;
     private String smallUrl;
 
     public UploadImgResultBean() {
@@ -16,17 +15,8 @@ public class UploadImgResultBean extends UploadResultBean {
     @Override
     public String toString() {
         return "UploadVoiceResultBean{" +
-                ", path='" + path + '\'' +
                 ", smallUrl=" + smallUrl +
                 '}';
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
     }
 
     public String getSmallUrl() {

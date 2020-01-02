@@ -15,7 +15,19 @@ import com.qinshou.imagemodule.fragment.ImageChooseResultFragment;
  */
 
 public class ImageChooseUtil {
+    public static void chooseImage(FragmentActivity activity, IOnImageChooseResultCallback OnImageChooseResultCallback) {
+        chooseImage(activity, 1, false, OnImageChooseResultCallback);
+    }
+
     public static void chooseImage(FragmentActivity activity, int maxSize, IOnImageChooseResultCallback OnImageChooseResultCallback) {
+        chooseImage(activity, maxSize, false, OnImageChooseResultCallback);
+    }
+
+    public static void chooseImage(FragmentActivity activity, boolean capture, IOnImageChooseResultCallback OnImageChooseResultCallback) {
+        chooseImage(activity, 1, capture, OnImageChooseResultCallback);
+    }
+
+    public static void chooseImage(FragmentActivity activity, int maxSize, boolean capture, IOnImageChooseResultCallback OnImageChooseResultCallback) {
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
         ImageChooseResultFragment imageChooseResultFragment = (ImageChooseResultFragment) fragmentManager.findFragmentByTag(ImageChooseResultFragment.class.getSimpleName());
         if (imageChooseResultFragment == null) {
@@ -25,10 +37,6 @@ public class ImageChooseUtil {
                     .commitAllowingStateLoss();
             fragmentManager.executePendingTransactions();
         }
-        imageChooseResultFragment.startActivityForResult(maxSize, OnImageChooseResultCallback);
-    }
-
-    public static void chooseImage(FragmentActivity activity, IOnImageChooseResultCallback OnImageChooseResultCallback) {
-        chooseImage(activity, 9, OnImageChooseResultCallback);
+        imageChooseResultFragment.startActivityForResult(maxSize, capture, OnImageChooseResultCallback);
     }
 }

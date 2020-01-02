@@ -17,6 +17,7 @@ import com.qinshou.qinshoubox.conversation.bean.VoiceBean;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.enums.MessageContentType;
+import com.qinshou.qinshoubox.util.QSUtil;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 import java.io.File;
@@ -137,19 +138,13 @@ public class RcvMessageAdapterFromMessageVoiceItemView extends AbsRcvMessageAdap
             public void onBufferingUpdate(int percent) {
             }
         };
-        File file = new File(new Gson().fromJson(messageBean.getExtend(), VoiceBean.class).getPath());
+        String fileName = voiceBean.getUrl().substring(voiceBean.getUrl().lastIndexOf("/" )+ "/".length());
+        final File file = new File(QSUtil.getVoicePath(getContext(), messageBean.getType(), messageBean.getFromUserId())
+                + fileName);
         if (file.exists()) {
             MediaPlayerHelper.SINGLETON.playMusic(file.getAbsolutePath(), onMediaPlayerListener);
             return;
         }
-        String fileName = voiceBean.getUrl().substring(voiceBean.getUrl().lastIndexOf("/" + "/".length()));
-        ShowLogUtil.logi("voiceBean--->" + voiceBean);
-        file = new File(getContext().getCacheDir()
-                + File.separator
-                + "Voice"
-                + File.separator
-                + fileName);
-        final File finalFile = file;
         IMClient.SINGLETON.download(voiceBean.getUrl(), file, new AbsDownloadCallback() {
             @Override
             public void onStart(long length) {
@@ -164,7 +159,7 @@ public class RcvMessageAdapterFromMessageVoiceItemView extends AbsRcvMessageAdap
             @Override
             public void onSuccess() {
                 ShowLogUtil.logi("onSuccess");
-                MediaPlayerHelper.SINGLETON.playMusic(finalFile.getAbsolutePath(), onMediaPlayerListener);
+                MediaPlayerHelper.SINGLETON.playMusic(file.getAbsolutePath(), onMediaPlayerListener);
             }
 
             @Override

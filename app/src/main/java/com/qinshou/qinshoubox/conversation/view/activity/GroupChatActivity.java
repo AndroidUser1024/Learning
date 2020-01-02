@@ -393,18 +393,16 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
         PermissionUtil.requestPermission(getSupportFragmentManager(), new IOnRequestPermissionResultCallBack() {
             @Override
             public void onSuccess() {
-                ShowLogUtil.logi("获取录音权限成功");
             }
 
             @Override
             public void onFailure(List<String> deniedPermissionList) {
-                ShowLogUtil.logi("onFailure");
-                ShowLogUtil.logi("获取录音权限失败");
+                ShowLogUtil.logi("获取权限失败: deniedPermissionList--->" + deniedPermissionList);
                 if (getActivity() != null) {
                     finish();
                 }
             }
-        }, Manifest.permission.RECORD_AUDIO);
+        }, Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA);
         mTitleBar = findViewByID(R.id.title_bar);
         mRefreshLayout = findViewByID(R.id.refresh_layout);
         mRefreshLayout.canLoadMore(false);

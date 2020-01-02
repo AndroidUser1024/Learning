@@ -211,17 +211,16 @@ public class MessageBean {
      *
      * @param toUserId 接收方用户 id
      * @param url      语音上传后的 url
-     * @param path     语音本地路径
      * @param time     语音时长
      * @return 类型为语音的消息对象
      */
-    public static MessageBean createVoiceMessage(String toUserId, String url, String path, long time) {
+    public static MessageBean createVoiceMessage(String toUserId, String url, long time) {
         MessageBean messageBean = new MessageBean();
         messageBean.toUserId = toUserId;
         messageBean.sendTimestamp = System.currentTimeMillis();
         messageBean.contentType = MessageContentType.VOICE.getValue();
         messageBean.type = MessageType.CHAT.getValue();
-        messageBean.extend = new Gson().toJson(new VoiceBean(url, path, time));
+        messageBean.extend = new Gson().toJson(new VoiceBean(url, time));
         return messageBean;
     }
 
@@ -233,17 +232,16 @@ public class MessageBean {
      *
      * @param toUserId 接收方用户 id
      * @param url      图片上传后的 url
-     * @param path     图片本地路径
      * @param smallUrl 图片缩略图 url
      * @return 类型为图片的消息对象
      */
-    public static MessageBean createImgMessage(String toUserId, String url, String path, String smallUrl) {
+    public static MessageBean createImgMessage(String toUserId, String url, String smallUrl) {
         MessageBean messageBean = new MessageBean();
         messageBean.toUserId = toUserId;
         messageBean.sendTimestamp = System.currentTimeMillis();
         messageBean.contentType = MessageContentType.IMAGE.getValue();
         messageBean.type = MessageType.CHAT.getValue();
-        messageBean.extend = new Gson().toJson(new ImgBean(url, path, smallUrl));
+        messageBean.extend = new Gson().toJson(new ImgBean(url, smallUrl));
         return messageBean;
     }
 

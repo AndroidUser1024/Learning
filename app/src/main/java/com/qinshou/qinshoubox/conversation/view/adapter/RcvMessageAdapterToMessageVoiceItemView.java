@@ -17,6 +17,7 @@ import com.qinshou.qinshoubox.conversation.bean.VoiceBean;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.enums.MessageContentType;
+import com.qinshou.qinshoubox.util.QSUtil;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 import java.io.File;
@@ -25,7 +26,7 @@ import java.io.File;
  * Author: QinHao
  * Email:qinhao@jeejio.com
  * Date: 2019/7/12 14:32
- * Description:发送的消息
+ * Description:发送的消息,消息类型为语音
  */
 public class RcvMessageAdapterToMessageVoiceItemView extends AbsRcvMessageAdapterToMessageItemView {
     private final RecyclerView mRecyclerView;
@@ -124,19 +125,13 @@ public class RcvMessageAdapterToMessageVoiceItemView extends AbsRcvMessageAdapte
             public void onBufferingUpdate(int percent) {
             }
         };
-        File file = new File(new Gson().fromJson(messageBean.getExtend(), VoiceBean.class).getPath());
+        String fileName = voiceBean.getUrl().substring(voiceBean.getUrl().lastIndexOf("/" )+ "/".length());
+        final File file = new File(QSUtil.getVoicePath(getContext(), messageBean.getType(), messageBean.getToUserId())
+                + fileName);
         if (file.exists()) {
             MediaPlayerHelper.SINGLETON.playMusic(file.getAbsolutePath(), onMediaPlayerListener);
             return;
         }
-        String fileName = voiceBean.getUrl().substring(voiceBean.getUrl().lastIndexOf("/" + "/".length()));
-        ShowLogUtil.logi("voiceBean--->" + voiceBean);
-        file = new File(getContext().getCacheDir()
-                + File.separator
-                + "Voice"
-                + File.separator
-                + fileName);
-        final File finalFile = file;
         IMClient.SINGLETON.download(voiceBean.getUrl(), file, new AbsDownloadCallback() {
             @Override
             public void onStart(long length) {
@@ -151,7 +146,7 @@ public class RcvMessageAdapterToMessageVoiceItemView extends AbsRcvMessageAdapte
             @Override
             public void onSuccess() {
                 ShowLogUtil.logi("onSuccess");
-                MediaPlayerHelper.SINGLETON.playMusic(finalFile.getAbsolutePath(), onMediaPlayerListener);
+                MediaPlayerHelper.SINGLETON.playMusic(file.getAbsolutePath(), onMediaPlayerListener);
             }
 
             @Override

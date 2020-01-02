@@ -78,8 +78,8 @@ public enum IMClient {
      */
     private final int MAX_RECONNECT_COUNT = 5;
     //    private static final String URL = "ws://www.mrqinshou.com:10086/websocket";
-//    private static final String URL = "ws://172.16.60.231:10086/websocket";
-    private static final String URL = "ws://192.168.1.109:10086/websocket";
+    private static final String URL = "ws://172.16.60.231:10086/websocket";
+//    private static final String URL = "ws://192.168.1.109:10086/websocket";
     private Context mContext;
     private WebSocket mWebSocket;
     private Handler mHandler = new Handler(Looper.getMainLooper());
@@ -514,7 +514,7 @@ public enum IMClient {
     }
 
     public void download(String url, final File file, AbsDownloadCallback downloadCallback) {
-        new OkHttpClient.Builder().addInterceptor(new LogInterceptor(LogInterceptor.Level.BODY, new LogInterceptor.Logger() {
+        new OkHttpClient.Builder().addInterceptor(new LogInterceptor(LogInterceptor.Level.BASIC, new LogInterceptor.Logger() {
             @Override
             public void log(String message) {
                 ShowLogUtil.logi("message--->" + message);

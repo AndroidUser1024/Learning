@@ -22,7 +22,7 @@ import com.qinshou.commonmodule.util.activityresultutil.OnActivityResultCallBack
 import com.qinshou.commonmodule.util.permissionutil.IOnRequestPermissionResultCallBack;
 import com.qinshou.commonmodule.util.permissionutil.PermissionUtil;
 import com.qinshou.commonmodule.widget.TitleBar;
-import com.qinshou.imagemodule.callback.IOnGetImageCallback;
+import com.qinshou.imagemodule.callback.IOnGetImgCallback;
 import com.qinshou.imagemodule.callback.IOnImageChooseResultCallback;
 import com.qinshou.imagemodule.callback.IOnImageCropResultCallback;
 import com.qinshou.imagemodule.util.BitmapUtil;
@@ -339,10 +339,12 @@ public class PersonalHeadImgFragment extends QSFragment<PersonalHeadImgPresenter
                         }
                         // 上传头像
                         File origin = new File(resultList.get(0));
+                        File targetDir = new File(getContext().getCacheDir() + "/Image");
+                        targetDir.mkdirs();
                         Luban.with(getContext())
                                 .load(origin)
                                 .ignoreBy(100)
-                                .setTargetDir(getContext().getCacheDir() + "/Image")
+                                .setTargetDir(targetDir.getAbsolutePath())
                                 .filter(new CompressionPredicate() {
                                     @Override
                                     public boolean apply(String path) {
@@ -380,7 +382,7 @@ public class PersonalHeadImgFragment extends QSFragment<PersonalHeadImgPresenter
      * Description:保存图片到手机
      */
     private void saveImage() {
-        ImageLoadUtil.SINGLETON.getImage(getContext(), UserStatusManager.SINGLETON.getUserBean().getHeadImg(), new IOnGetImageCallback() {
+        ImageLoadUtil.SINGLETON.getImage(getContext(), UserStatusManager.SINGLETON.getUserBean().getHeadImg(), new IOnGetImgCallback() {
             @Override
             public void onSuccess(Drawable drawable) {
                 Bitmap bitmap = BitmapUtil.drawable2Bitmap(drawable);

@@ -22,6 +22,14 @@ public interface IConstant {
      * 好友申请历史未读数在 SharedPreferences 中的 key
      */
     String SP_KEY_FRIEND_HISTORY_UNREAD_COUNT = "friendHistoryUnreadCount_%s";
+    /**
+     * 存放语音文件的文件夹名
+     */
+    String VOICE_DIR = "Voice";
+    /**
+     * 存放图片文件的文件夹名
+     */
+    String IMG_DIR = "Img";
     String DATABASE_NAME = "QinshouBox.db";
     int DATABASE_VERSION = 1;
     //天气界面
