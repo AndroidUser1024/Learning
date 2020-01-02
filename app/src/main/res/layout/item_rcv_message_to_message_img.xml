@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/px20"
+    android:paddingBottom="@dimen/px20"
+    tools:context="com.qinshou.qinshoubox.conversation.view.adapter.RcvMessageAdapterToMessageTextItemView">
+
+    <!-- 消息发送时间 -->
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#FF999999"
+        android:textSize="@dimen/px24"
+        tools:text="14:31" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/px30"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/px20"
+            android:layout_marginRight="@dimen/px20"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:orientation="vertical">
+
+            <!-- 昵称 -->
+            <TextView
+                android:id="@+id/tv_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/px20"
+                android:textColor="#FFCCCCCC"
+                android:textSize="@dimen/px24"
+                android:visibility="gone"
+                tools:text="昵称"
+                tools:visibility="visible" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/px133"
+                android:layout_marginLeft="@dimen/px133"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <!-- 发送中提示 -->
+                <ProgressBar
+                    android:id="@+id/pb_sending"
+                    android:layout_width="@dimen/px40"
+                    android:layout_height="@dimen/px40"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="@dimen/px30"
+                    android:layout_marginRight="@dimen/px30"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <!-- 发送失败提示 -->
+                <ImageView
+                    android:id="@+id/iv_send_message_failure"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/px30"
+                    android:layout_marginRight="@dimen/px28"
+                    android:src="@drawable/chat_iv_send_message_failure_src"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <!-- 图片消息内容 -->
+                <ImageView
+                    android:background="#FFFF0000"
+                    android:id="@+id/iv_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxWidth="@dimen/px300"
+                    android:maxHeight="@dimen/px300"
+                    android:minHeight="@dimen/px80"
+                    tools:src="@mipmap/ic_launcher" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 头像 -->
+        <ImageView
+            android:id="@+id/iv_head_img"
+            android:layout_width="@dimen/px81"
+            android:layout_height="@dimen/px81"
+            android:layout_marginEnd="@dimen/px32"
+            android:layout_marginRight="@dimen/px32"
+            android:scaleType="centerCrop"
+            tools:src="@mipmap/ic_launcher" />
+    </LinearLayout>
+
+
+</LinearLayout>

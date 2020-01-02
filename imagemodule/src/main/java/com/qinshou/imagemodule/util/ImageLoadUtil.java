@@ -1,9 +1,6 @@
 package com.qinshou.imagemodule.util;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,7 +11,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.qinshou.imagemodule.R;
-import com.qinshou.imagemodule.callback.IOnGetImageCallback;
+import com.qinshou.imagemodule.callback.IOnGetImgCallback;
 
 /**
  * Author: QinHao
@@ -122,7 +119,7 @@ public enum ImageLoadUtil {
      * @param url                图片来源,可以是 url,资源 id,文件地址等
      * @param onGetImageCallback 回调接口
      */
-    public void getImage(Context context, String url, final IOnGetImageCallback onGetImageCallback) {
+    public void getImage(Context context, String url, final IOnGetImgCallback onGetImageCallback) {
         Glide.with(context).load(url).apply(mRequestOptions).into(new SimpleTarget<Drawable>() {
             @Override
             public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
@@ -147,7 +144,7 @@ public enum ImageLoadUtil {
      * @param model              图片来源,可以是 url,资源 id,文件地址等
      * @param onGetImageCallback 回调接口
      */
-    public void getImage(Context context, Object model, final IOnGetImageCallback onGetImageCallback) {
+    public void getImage(Context context, Object model, final IOnGetImgCallback onGetImageCallback) {
         Glide.with(context).load(model).into(new SimpleTarget<Drawable>() {
             @Override
             public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {

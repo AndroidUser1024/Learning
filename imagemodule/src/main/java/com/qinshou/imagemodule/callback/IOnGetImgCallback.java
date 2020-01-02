@@ -8,7 +8,7 @@ import android.graphics.drawable.Drawable;
  * Created on 2018/3/5
  */
 
-public interface IOnGetImageCallback {
+public interface IOnGetImgCallback {
     void onSuccess(Drawable drawable);
 
     void onFailure(String error, Drawable errorDrawable);

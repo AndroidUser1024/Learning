@@ -59,6 +59,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -417,18 +418,16 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
         PermissionUtil.requestPermission(getSupportFragmentManager(), new IOnRequestPermissionResultCallBack() {
             @Override
             public void onSuccess() {
-                ShowLogUtil.logi("获取录音权限成功");
             }
 
             @Override
             public void onFailure(List<String> deniedPermissionList) {
-                ShowLogUtil.logi("onFailure");
-                ShowLogUtil.logi("获取录音权限失败");
+                ShowLogUtil.logi("获取权限失败: deniedPermissionList--->" + deniedPermissionList);
                 if (getActivity() != null) {
                     finish();
                 }
             }
-        }, Manifest.permission.RECORD_AUDIO);
+        }, Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA);
         mTitleBar = findViewByID(R.id.title_bar);
         mRefreshLayout = findViewByID(R.id.refresh_layout);
         mRefreshLayout.canLoadMore(false);
@@ -596,7 +595,6 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
     public void uploadVoiceSuccess(UploadVoiceResultBean uploadVoiceResultBean) {
         MessageBean messageBean = MessageBean.createVoiceMessage(mToUserId
                 , uploadVoiceResultBean.getUrl()
-                , uploadVoiceResultBean.getPath()
                 , uploadVoiceResultBean.getTime());
         sendMessage(messageBean);
     }
@@ -610,7 +608,6 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
     public void uploadImgSuccess(UploadImgResultBean uploadImgResultBean) {
         MessageBean messageBean = MessageBean.createImgMessage(mToUserId
                 , uploadImgResultBean.getUrl()
-                , uploadImgResultBean.getPath()
                 , uploadImgResultBean.getSmallUrl());
         sendMessage(messageBean);
     }
@@ -777,47 +774,36 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
                     toastShort(getString(R.string.personal_head_img_toast_pick_photo_failure_text));
                     return;
                 }
-                ArrayList<String> imagePathList = new ArrayList<>();
-                imagePathList.add(path);
-                ImageCropUtil.cropImage(getActivity(), imagePathList, new IOnImageCropResultCallback() {
-                    @Override
-                    public void onSuccess(List<String> resultList) {
-                        if (resultList == null || resultList.size() == 0) {
-                            toastShort(getString(R.string.personal_head_img_toast_pick_photo_failure_text));
-                            return;
-                        }
-                        // 上传头像
-                        File origin = new File(resultList.get(0));
-                        Luban.with(getContext())
-                                .load(origin)
-                                .ignoreBy(100)
-                                .setTargetDir(getContext().getCacheDir() + "/Image")
-                                .filter(new CompressionPredicate() {
-                                    @Override
-                                    public boolean apply(String path) {
-                                        return !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif"));
-                                    }
-                                })
-                                .setCompressListener(new OnCompressListener() {
-                                    @Override
-                                    public void onStart() {
-                                        // 压缩开始前调用，可以在方法内启动 loading UI
-                                    }
+                File targetDir = new File(getContext().getCacheDir() + "/Image");
+                targetDir.mkdirs();
+                Luban.with(getContext())
+                        .load(path)
+                        .ignoreBy(100)
+                        .setTargetDir(targetDir.getAbsolutePath())
+                        .filter(new CompressionPredicate() {
+                            @Override
+                            public boolean apply(String path) {
+                                return !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif"));
+                            }
+                        })
+                        .setCompressListener(new OnCompressListener() {
+                            @Override
+                            public void onStart() {
+                                // 压缩开始前调用，可以在方法内启动 loading UI
+                            }
 
-                                    @Override
-                                    public void onSuccess(File file) {
-                                        // 压缩成功后调用，返回压缩后的图片文件
-                                        getPresenter().uploadImg(file);
-                                    }
+                            @Override
+                            public void onSuccess(File file) {
+                                // 压缩成功后调用，返回压缩后的图片文件
+                                getPresenter().uploadImg(file);
+                            }
 
-                                    @Override
-                                    public void onError(Throwable e) {
-                                        // 当压缩过程出现问题时调用
-                                        ShowLogUtil.logi("onError: e--->" + e.getMessage());
-                                    }
-                                }).launch();
-                    }
-                });
+                            @Override
+                            public void onError(Throwable e) {
+                                // 当压缩过程出现问题时调用
+                                ShowLogUtil.logi("onError: e--->" + e.getMessage());
+                            }
+                        }).launch();
             }
         });
     }

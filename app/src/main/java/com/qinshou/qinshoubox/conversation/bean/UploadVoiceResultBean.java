@@ -7,7 +7,6 @@ package com.qinshou.qinshoubox.conversation.bean;
  * Description:上传语音结果映射类
  */
 public class UploadVoiceResultBean extends UploadResultBean {
-    private String path;
     private long time;
 
     public UploadVoiceResultBean() {
@@ -16,17 +15,8 @@ public class UploadVoiceResultBean extends UploadResultBean {
     @Override
     public String toString() {
         return "UploadVoiceResultBean{" +
-                ", path='" + path + '\'' +
                 ", time=" + time +
                 '}';
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
     }
 
     public long getTime() {

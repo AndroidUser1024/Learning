@@ -41,7 +41,7 @@ public class ImageChooseResultFragment extends Fragment {
         setRetainInstance(true);
     }
 
-    public void startActivityForResult(int maxSize, IOnImageChooseResultCallback onImageChooseResultCallback) {
+    public void startActivityForResult(int maxSize, boolean capture, IOnImageChooseResultCallback onImageChooseResultCallback) {
         this.mCallBack = onImageChooseResultCallback;
         Matisse.from(this)
                 // 设置可选择图片类型
@@ -54,7 +54,7 @@ public class ImageChooseResultFragment extends Fragment {
                 .imageEngine(new Glide4Engine())
                 .thumbnailScale(0.85f)
                 //设置允许拍照
-                .capture(true)
+                .capture(capture)
                 //设置拍照策略，如果允许拍照则必须进行该设置
                 .captureStrategy(new CaptureStrategy(true, getContext().getApplicationInfo().processName + ".fileProvider"))
                 .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)

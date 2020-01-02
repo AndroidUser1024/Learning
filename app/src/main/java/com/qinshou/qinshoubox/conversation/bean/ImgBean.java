@@ -8,15 +8,13 @@ package com.qinshou.qinshoubox.conversation.bean;
  */
 public class ImgBean {
     private String url;
-    private String path;
     private String smallUrl;
 
     public ImgBean() {
     }
 
-    public ImgBean(String url, String path, String smallUrl) {
+    public ImgBean(String url, String smallUrl) {
         this.url = url;
-        this.path = path;
         this.smallUrl = smallUrl;
     }
 
@@ -24,7 +22,6 @@ public class ImgBean {
     public String toString() {
         return "VoiceBean{" +
                 "url='" + url + '\'' +
-                ", path='" + path + '\'' +
                 ", smallUrl=" + smallUrl +
                 '}';
     }
@@ -35,14 +32,6 @@ public class ImgBean {
 
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
     }
 
     public String getSmallUrl() {
