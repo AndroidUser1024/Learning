@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
+import com.qinshou.qinshoubox.im.enums.MessageType;
 import com.qinshou.qinshoubox.im.manager.FriendManager;
 
 import java.io.File;
@@ -28,6 +29,60 @@ public class QSUtil {
                 + "QinshouBox"
                 + File.separator
                 + "Picture"
+                + File.separator;
+    }
+
+    /**
+     * Author: QinHao
+     * Email:qinhao@jeejio.com
+     * Date:2020/1/2 19:42
+     * Description:获取语音存放路径
+     *
+     * @param context
+     * @param messageType 聊天类型
+     * @param userId      对方的用户 id 或群 id
+     */
+    public static String getVoicePath(Context context, int messageType, String userId) {
+        String chatOrGroupChat = "";
+        if (messageType == MessageType.CHAT.getValue()) {
+            chatOrGroupChat = "Chat";
+        } else if (messageType == MessageType.GROUP_CHAT.getValue()) {
+            chatOrGroupChat = "GroupChat";
+        }
+        return context.getCacheDir()
+                + File.separator
+                + "Voice"
+                + File.separator
+                + chatOrGroupChat
+                + File.separator
+                + userId
+                + File.separator;
+    }
+
+    /**
+     * Author: QinHao
+     * Email:qinhao@jeejio.com
+     * Date:2020/1/2 19:42
+     * Description:获取图片存放路径
+     *
+     * @param context
+     * @param messageType 聊天类型
+     * @param userId      对方的用户 id 或群 id
+     */
+    public static String getImgPath(Context context, int messageType, String userId) {
+        String chatOrGroupChat = "";
+        if (messageType == MessageType.CHAT.getValue()) {
+            chatOrGroupChat = "Chat";
+        } else if (messageType == MessageType.GROUP_CHAT.getValue()) {
+            chatOrGroupChat = "GroupChat";
+        }
+        return context.getCacheDir()
+                + File.separator
+                + "Img"
+                + File.separator
+                + chatOrGroupChat
+                + File.separator
+                + userId
                 + File.separator;
     }
 

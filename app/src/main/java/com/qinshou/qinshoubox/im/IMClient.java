@@ -514,7 +514,7 @@ public enum IMClient {
     }
 
     public void download(String url, final File file, AbsDownloadCallback downloadCallback) {
-        new OkHttpClient.Builder().addInterceptor(new LogInterceptor(LogInterceptor.Level.BODY, new LogInterceptor.Logger() {
+        new OkHttpClient.Builder().addInterceptor(new LogInterceptor(LogInterceptor.Level.BASIC, new LogInterceptor.Logger() {
             @Override
             public void log(String message) {
                 ShowLogUtil.logi("message--->" + message);
