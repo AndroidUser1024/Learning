@@ -79,7 +79,7 @@ public enum IMClient {
     private final int MAX_RECONNECT_COUNT = 5;
     //    private static final String URL = "ws://www.mrqinshou.com:10086/websocket";
     private static final String URL = "ws://172.16.60.231:10086/websocket";
-//    private static final String URL = "ws://192.168.1.109:10086/websocket";
+    //    private static final String URL = "ws://192.168.1.109:10086/websocket";
     private Context mContext;
     private WebSocket mWebSocket;
     private Handler mHandler = new Handler(Looper.getMainLooper());
@@ -513,52 +513,22 @@ public enum IMClient {
                 });
     }
 
-    public void download(String url, final File file, AbsDownloadCallback downloadCallback) {
-        new OkHttpClient.Builder().addInterceptor(new LogInterceptor(LogInterceptor.Level.BASIC, new LogInterceptor.Logger() {
-            @Override
-            public void log(String message) {
-                ShowLogUtil.logi("message--->" + message);
-            }
-        })).addInterceptor(new DownloadInterceptor(downloadCallback)).build()
-                .newCall(new Request.Builder().addHeader("Accept-Encoding", "dentity").url(url).get().build())
-                .enqueue(new okhttp3.Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        Log.i("daolema", "onFailure--->" + e.getMessage());
-                    }
+    public void download(String url, final File file, final QSCallback<File> qsCallback) {
+        download(url, file, null, qsCallback);
+    }
 
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        ResponseBody responseBody = response.body();
-                        if (responseBody == null) {
-                            return;
-                        }
-                        InputStream inputStream = responseBody.byteStream();
-                        Log.i("daolema", "onResponse: inputStream--->" + inputStream.available());
-                        if (!file.getParentFile().exists()) {
-                            file.getParentFile().mkdirs();
-                        }
-                        file.createNewFile();
-                        FileOutputStream fileOutputStream = null;
-                        try {
-                            fileOutputStream = new FileOutputStream(file);
-                            byte[] bytes = new byte[1024];
-                            int len;
-                            while ((len = inputStream.read(bytes)) != -1) {
-                                fileOutputStream.write(bytes, 0, len);
-                            }
-                            inputStream.close();
-                            fileOutputStream.close();
-                        } finally {
-                            if (inputStream != null) {
-                                inputStream.close();
-                            }
-                            if (fileOutputStream != null) {
-                                fileOutputStream.close();
-                            }
-                        }
-                    }
-                });
+    public void download(String url, final File file, AbsDownloadCallback downloadCallback, final QSCallback<File> qsCallback) {
+        OkHttpHelperForQSBoxCommonApi.SINGLETON.download(url, file, downloadCallback).enqueue(new Callback<File>() {
+            @Override
+            public void onSuccess(File data) {
+                qsCallback.onSuccess(data);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                qsCallback.onFailure(e);
+            }
+        });
     }
 
     public GroupChatManager getGroupChatManager() {

@@ -160,12 +160,12 @@ public class MyQRCodeFragment extends QSFragment<MyQRCodePresenter> implements I
 //                // 保存文件
 //                FileOutputStream fileOutputStream = null;
 //                try {
-//                    File file = new File(Environment.getExternalStorageDirectory()
-//                            + File.separator
+//                    FileTarget file = new FileTarget(Environment.getExternalStorageDirectory()
+//                            + FileTarget.separator
 //                            + "JeejioMessage"
-//                            + File.separator
+//                            + FileTarget.separator
 //                            + "Picture"
-//                            + File.separator
+//                            + FileTarget.separator
 //                            + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date(System.currentTimeMillis()))
 //                            + ".jpg");
 //                    if (!file.exists()) {

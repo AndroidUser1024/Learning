@@ -312,7 +312,7 @@ public class PersonalHeadImgFragment extends QSFragment<PersonalHeadImgPresenter
 //                    return;
 //                }
 //                // 上传头像
-//                File file = new File(path);
+//                FileTarget file = new FileTarget(path);
 //                getPresenter().setHeadImg(UserStatusManager.SINGLETON.getUserBean().getId(), file);
 //            }
 //        });

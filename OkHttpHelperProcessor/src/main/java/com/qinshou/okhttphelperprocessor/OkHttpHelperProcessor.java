@@ -2,8 +2,14 @@ package com.qinshou.okhttphelperprocessor;
 
 
 import com.google.auto.service.AutoService;
+import com.qinshou.okhttphelper.annotation.Download;
+import com.qinshou.okhttphelper.annotation.DownloadCallback;
+import com.qinshou.okhttphelper.annotation.FileTarget;
+import com.qinshou.okhttphelper.annotation.Url;
 import com.qinshou.okhttphelper.call.Call;
+import com.qinshou.okhttphelper.call.DownloadCall;
 import com.qinshou.okhttphelper.enums.LogLevel;
+import com.qinshou.okhttphelper.interceptor.DownloadInterceptor;
 import com.qinshou.okhttphelper.util.RequestFactory;
 import com.qinshou.okhttphelper.annotation.Api;
 import com.qinshou.okhttphelper.annotation.CommonParameter;
@@ -79,16 +85,6 @@ public class OkHttpHelperProcessor extends AbstractProcessor {
     public Set<String> getSupportedAnnotationTypes() {
         Set<String> types = new LinkedHashSet<>();
         types.add(Api.class.getCanonicalName());
-        types.add(CommonParameter.class.getCanonicalName());
-        types.add(Host.class.getCanonicalName());
-        types.add(Field.class.getCanonicalName());
-        types.add(Get.class.getCanonicalName());
-        types.add(Header.class.getCanonicalName());
-        types.add(Json.class.getCanonicalName());
-        types.add(Multipart.class.getCanonicalName());
-        types.add(Path.class.getCanonicalName());
-        types.add(Post.class.getCanonicalName());
-        types.add(Query.class.getCanonicalName());
         return types;
     }
 
@@ -126,17 +122,17 @@ public class OkHttpHelperProcessor extends AbstractProcessor {
                     .addStatement("okHttpClientBuilder.writeTimeout($L,$T.$L)", 15 * 1000, TimeUnit.class, TimeUnit.MILLISECONDS);
 
             LogLevel logLevel = apiElement.getAnnotation(Api.class).logLevel();
-                    // 请求日志拦截器
-            constructorBuilder.addStatement("okHttpClientBuilder.addInterceptor(new $T($T.Level."+logLevel+", new $T.Logger() {\n" +
-                            "@Override" +
-                            "\n" +
-                            "public void log(String message) {" +
-                            "\n" +
-                            "System.out.println(\"log:message--->\" + message);" +
-                            "\n" +
-                            "}" +
-                            "\n" +
-                            "}))", LogInterceptor.class, LogInterceptor.class, LogInterceptor.class)
+            // 请求日志拦截器
+            constructorBuilder.addStatement("okHttpClientBuilder.addInterceptor(new $T($T.Level." + logLevel + ", new $T.Logger() {\n" +
+                    "@Override" +
+                    "\n" +
+                    "public void log(String message) {" +
+                    "\n" +
+                    "System.out.println(\"log:message--->\" + message);" +
+                    "\n" +
+                    "}" +
+                    "\n" +
+                    "}))", LogInterceptor.class, LogInterceptor.class, LogInterceptor.class)
                     // 创建一个 Map 集合,存放公共参数
                     .addStatement("$T<String,Object> commonParameterMap = new $T<>()", Map.class, HashMap.class);
             // defaultHostElement
@@ -151,8 +147,13 @@ public class OkHttpHelperProcessor extends AbstractProcessor {
                     // 请求方法
                     MethodSpec methodSpec = null;
                     if (element.getAnnotation(Get.class) != null) {
-                        // Get 请求
-                        methodSpec = createGetRequestMethod(element.getSimpleName().toString(), (ExecutableElement) element, defaultHost);
+                        if (element.getAnnotation(Download.class) != null) {
+                            // Get 下载文件请求
+                            methodSpec = createGetDownloadMethod(element.getSimpleName().toString(), (ExecutableElement) element);
+                        } else {
+                            // Get 请求
+                            methodSpec = createGetRequestMethod(element.getSimpleName().toString(), (ExecutableElement) element, defaultHost);
+                        }
                     } else if (element.getAnnotation(Post.class) != null) {
                         // Post 请求
                         methodSpec = createPostRequestMethod(element.getSimpleName().toString(), (ExecutableElement) element, defaultHost);
@@ -347,6 +348,67 @@ public class OkHttpHelperProcessor extends AbstractProcessor {
         // 创建 Call 对象
         builder.addStatement(element.getReturnType().toString() + " call = new " + element.getReturnType().toString() + "(mOkHttpClient,request,type)");
         builder.addStatement("return call");
+        return builder.build();
+    }
+
+    /**
+     * Author: QinHao
+     * Email:qinhao@jeejio.com
+     * Date:2020/1/3 10:05
+     * Description:创建一个下载文件的 Get 请求
+     *
+     * @param methodName 方法名
+     * @param element
+     * @return 方法模版
+     */
+    private MethodSpec createGetDownloadMethod(String methodName, ExecutableElement element) {
+        // 创建一个方法模版构造器
+        // 设置方法名和 public 修饰符
+        MethodSpec.Builder builder = MethodSpec.methodBuilder(methodName)
+                .addModifiers(Modifier.PUBLIC);
+        // 方法模版构造器设置返回值
+        if (!DownloadCall.class.getName().equals(TypeName.get(element.getReturnType()).toString())) {
+            throw new IllegalArgumentException("Return type must be " + DownloadCall.class.getName());
+        }
+        builder.returns(TypeName.get(element.getReturnType()));
+        info("TypeName.get(element.getReturnType())--->" + TypeName.get(element.getReturnType()));
+        // 获取参数列表
+        List<? extends VariableElement> parameterList = ((ExecutableElement) element).getParameters();
+        String urlParameterName = null;
+        String fileParameterName = null;
+        String downloadCallbackParameterName = null;
+        boolean needDownloadCallback = false;
+        for (VariableElement variableElement : parameterList) {
+            // 获取参数名
+            Name parameterName = variableElement.getSimpleName();
+            // 方法模版构造器添加参数
+            builder.addParameter(TypeName.get(variableElement.asType()), parameterName.toString());
+            if (variableElement.getAnnotation(Url.class) != null) {
+                urlParameterName = parameterName.toString();
+            } else if (variableElement.getAnnotation(FileTarget.class) != null) {
+                // 创建 Call 对象
+                fileParameterName = parameterName.toString();
+            } else if (variableElement.getAnnotation(DownloadCallback.class) != null) {
+                needDownloadCallback = true;
+                downloadCallbackParameterName = parameterName.toString();
+            }
+        }
+        if (needDownloadCallback) {
+            builder.addStatement(element.getReturnType().toString() + " downloadCall = null;");
+            builder.addStatement("if(" + downloadCallbackParameterName + "==null){");
+            builder.addStatement("  $T okHttpClient = mOkHttpClient.newBuilder().addInterceptor(new $T(" + downloadCallbackParameterName + "," + fileParameterName + ")).build();"
+                    , OkHttpClient.class, DownloadInterceptor.class);
+            builder.addStatement("  $T request = $T.newGetDownloadRequest($L)", Request.class, RequestFactory.class, urlParameterName);
+            builder.addStatement("  downloadCall = new " + element.getReturnType().toString() + "(okHttpClient,request," + fileParameterName + ")");
+            builder.addStatement("} else {");
+            builder.addStatement("  $T request = $T.newGetDownloadRequest($L)", Request.class, RequestFactory.class, urlParameterName);
+            builder.addStatement("  downloadCall = new " + element.getReturnType().toString() + "(mOkHttpClient,request," + fileParameterName + ")");
+            builder.addStatement("}");
+        } else {
+            builder.addStatement("$T request = $T.newGetDownloadRequest($L)", Request.class, RequestFactory.class, urlParameterName);
+            builder.addStatement(element.getReturnType().toString() + " downloadCall = new " + element.getReturnType().toString() + "(mOkHttpClient,request," + fileParameterName + ")");
+        }
+        builder.addStatement("return downloadCall");
         return builder.build();
     }
 }

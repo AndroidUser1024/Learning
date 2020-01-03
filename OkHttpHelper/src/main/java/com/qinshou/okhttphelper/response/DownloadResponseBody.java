@@ -3,6 +3,7 @@ package com.qinshou.okhttphelper.response;
 
 import com.qinshou.okhttphelper.callback.AbsDownloadCallback;
 
+import java.io.File;
 import java.io.IOException;
 
 import okhttp3.MediaType;
@@ -18,11 +19,13 @@ public class DownloadResponseBody extends ResponseBody {
     private AbsDownloadCallback mDownloadCallback;
     // BufferedSource 是 okio 库中的输入流，这里就当作 inputStream 来使用。
     private BufferedSource bufferedSource;
+    private File mFile;
 
-    public DownloadResponseBody(ResponseBody responseBody, AbsDownloadCallback downloadCallback) {
+    public DownloadResponseBody(ResponseBody responseBody, AbsDownloadCallback downloadCallback, File file) {
         this.responseBody = responseBody;
         this.mDownloadCallback = downloadCallback;
         mDownloadCallback.onStart(responseBody.contentLength());
+        mFile = file;
     }
 
     @Override
@@ -58,7 +61,7 @@ public class DownloadResponseBody extends ResponseBody {
                 if (mDownloadCallback != null) {
                     mDownloadCallback.onProgress(progress);
                     if (totalBytesRead == responseBody.contentLength()) {
-                        mDownloadCallback.onSuccess();
+                        mDownloadCallback.onSuccess(mFile);
                     }
                 }
                 return bytesRead;

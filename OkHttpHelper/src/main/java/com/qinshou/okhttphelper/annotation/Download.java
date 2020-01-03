@@ -8,12 +8,10 @@ import java.lang.annotation.Target;
 /**
  * Author: QinHao
  * Email:qinhao@jeejio.com
- * Date: 2019/7/5 11:29
- * Description:该注解用于标识 post 请求
+ * Date: 2020/1/3 9:03
+ * Description:该注解用于标识下载文件
  */
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.METHOD)
-public @interface Post {
-    // 请求 url
-    String value() default "";
+public @interface Download {
 }

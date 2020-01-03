@@ -165,4 +165,22 @@ public class RequestFactory {
                 .post(multipartBodyBuilder.build())
                 .build();
     }
+
+    /**
+     * Author: QinHao
+     * Email:qinhao@jeejio.com
+     * Date:2020/1/3 09:08
+     * Description:创建一个下载文件的 get 请求
+     *
+     * @param url 请求地址
+     * @return 用于发起请求的对象
+     */
+    public static Request newGetDownloadRequest(String url) {
+        // 创建Request
+        return new Request.Builder()
+                .addHeader("Accept-Encoding", "dentity")
+                .url(url)
+                .get()
+                .build();
+    }
 }

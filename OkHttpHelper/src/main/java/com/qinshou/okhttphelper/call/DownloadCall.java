@@ -5,7 +5,10 @@ import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.okhttphelper.callback.FailureRunnable;
 import com.qinshou.okhttphelper.callback.SuccessRunnable;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -13,29 +16,26 @@ import java.lang.reflect.Type;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 /**
  * Author: QinHao
  * Email:qinhao@jeejio.com
- * Date: 2019/7/4 9:22
- * Description:请求调用者
+ * Date: 2020/1/3 9:35
+ * Description:类描述
  */
-public class Call<T> {
+public class DownloadCall {
     private OkHttpClient mOkHttpClient;
     private Request mRequest;
-    private Type mType;
+    private File mFile;
 
-    public Call(OkHttpClient okHttpClient, Request request, Type type) {
+    public DownloadCall(OkHttpClient okHttpClient, Request request, File file) {
         mOkHttpClient = okHttpClient;
         mRequest = request;
-        mType = type;
+        mFile = file;
     }
 
-    public <O> TransformCall<T, O> transform(ResponseTransformer<T, O> responseTransformer) {
-        return new TransformCall<>(mOkHttpClient, mRequest, responseTransformer, mType);
-    }
-
-    public void enqueue(final Callback<T> callback) {
+    public void enqueue(final Callback<File> callback) {
         if (mOkHttpClient == null || mRequest == null) {
             return;
         }
@@ -84,22 +84,45 @@ public class Call<T> {
                     System.err.println(ignoreException.getMessage());
                 }
                 if (response.body() == null) {
-                    failureCallback(post, handler, callback, new Exception(("response's body is null")));
+                    failureCallback(post, handler, callback, new Exception(("Response's body is null")));
                     return;
                 }
-                if (mType == null) {
-                    failureCallback(post, handler, callback, new Exception(("return type is null")));
-                    return;
+                if (mFile == null) {
+                    failureCallback(post, handler, callback, new NullPointerException("The file to save is null"));
                 }
-                String json;
+                InputStream inputStream = response.body().byteStream();
+                FileOutputStream fileOutputStream = null;
                 try {
-                    json = response.body().string();
+                    if (!mFile.getParentFile().exists()) {
+                        mFile.getParentFile().mkdirs();
+                    }
+                    mFile.createNewFile();
+                    fileOutputStream = new FileOutputStream(mFile);
+                    byte[] bytes = new byte[1024 * 1024];
+                    int len;
+                    while ((len = inputStream.read(bytes)) != -1) {
+                        fileOutputStream.write(bytes, 0, len);
+                    }
+                    fileOutputStream.flush();
+                    successCallback(post, handler, callback, mFile);
                 } catch (IOException e) {
                     failureCallback(post, handler, callback, e);
-                    return;
+                } finally {
+                    if (inputStream != null) {
+                        try {
+                            inputStream.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (fileOutputStream != null) {
+                        try {
+                            fileOutputStream.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
-                T t = new Gson().fromJson(json, mType);
-                successCallback(post, handler, callback, t);
             }
         });
     }
@@ -115,7 +138,7 @@ public class Call<T> {
      * @param callback 回调接口
      * @param t        解析后的数据
      */
-    private void successCallback(Method post, Object handler, Callback<T> callback, T t) {
+    private void successCallback(Method post, Object handler, Callback<File> callback, File t) {
         if (post == null || handler == null) {
             // 如果反射不成功,则就在子线程中回调
             callback.onSuccess(t);
@@ -141,7 +164,7 @@ public class Call<T> {
      * @param callback 回调接口
      * @param e        异常
      */
-    private void failureCallback(Method post, Object handler, Callback<T> callback, Exception e) {
+    private void failureCallback(Method post, Object handler, Callback<File> callback, Exception e) {
         if (post == null || handler == null) {
             // 如果反射不成功,则就在子线程中回调
             callback.onFailure(e);

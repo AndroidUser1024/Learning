@@ -5,6 +5,7 @@ package com.qinshou.okhttphelper.interceptor;
 import com.qinshou.okhttphelper.callback.AbsDownloadCallback;
 import com.qinshou.okhttphelper.response.DownloadResponseBody;
 
+import java.io.File;
 import java.io.IOException;
 
 import okhttp3.Interceptor;
@@ -32,8 +33,8 @@ import okhttp3.ResponseBody;
  * .doOnNext(new Consumer<InputStream>() {
  * @Override public void accept(InputStream inputStream) throws Exception {
  * FileUtil.writeFile(inputStream, FileUtil.getSDCardPath()
- * + File.separator + "Demo"
- * + File.separator + "Starry_Night_Over_the_Rhone.jpg");
+ * + FileTarget.separator + "Demo"
+ * + FileTarget.separator + "Starry_Night_Over_the_Rhone.jpg");
  * }
  * })
  * .observeOn(AndroidSchedulers.mainThread());
@@ -54,9 +55,11 @@ import okhttp3.ResponseBody;
  */
 public class DownloadInterceptor implements Interceptor {
     private AbsDownloadCallback mDownloadCallback;
+    private File mFile;
 
-    public DownloadInterceptor(AbsDownloadCallback downloadCallback) {
+    public DownloadInterceptor(AbsDownloadCallback downloadCallback,File file) {
         mDownloadCallback = downloadCallback;
+        mFile = file;
     }
 
     @Override
@@ -66,6 +69,6 @@ public class DownloadInterceptor implements Interceptor {
         if (responseBody == null) {
             return response;
         }
-        return response.newBuilder().body(new DownloadResponseBody(responseBody, mDownloadCallback)).build();
+        return response.newBuilder().body(new DownloadResponseBody(responseBody, mDownloadCallback,mFile)).build();
     }
 }

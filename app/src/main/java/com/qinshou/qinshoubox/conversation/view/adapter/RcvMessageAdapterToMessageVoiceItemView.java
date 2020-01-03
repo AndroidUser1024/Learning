@@ -17,6 +17,7 @@ import com.qinshou.qinshoubox.conversation.bean.VoiceBean;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.enums.MessageContentType;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.util.QSUtil;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
@@ -125,7 +126,7 @@ public class RcvMessageAdapterToMessageVoiceItemView extends AbsRcvMessageAdapte
             public void onBufferingUpdate(int percent) {
             }
         };
-        String fileName = voiceBean.getUrl().substring(voiceBean.getUrl().lastIndexOf("/" )+ "/".length());
+        String fileName = voiceBean.getUrl().substring(voiceBean.getUrl().lastIndexOf("/") + "/".length());
         final File file = new File(QSUtil.getVoicePath(getContext(), messageBean.getType(), messageBean.getToUserId())
                 + fileName);
         if (file.exists()) {
@@ -144,14 +145,24 @@ public class RcvMessageAdapterToMessageVoiceItemView extends AbsRcvMessageAdapte
             }
 
             @Override
-            public void onSuccess() {
+            public void onSuccess(File file) {
                 ShowLogUtil.logi("onSuccess");
-                MediaPlayerHelper.SINGLETON.playMusic(file.getAbsolutePath(), onMediaPlayerListener);
+
             }
 
             @Override
             public void onFailure(Exception e) {
                 ShowLogUtil.logi("onFailure: e--->" + e.getMessage());
+            }
+        }, new QSCallback<File>() {
+            @Override
+            public void onSuccess(File data) {
+                MediaPlayerHelper.SINGLETON.playMusic(data.getAbsolutePath(), onMediaPlayerListener);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
             }
         });
     }

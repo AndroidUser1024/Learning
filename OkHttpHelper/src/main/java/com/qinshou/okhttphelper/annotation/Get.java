@@ -15,5 +15,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface Get {
     // 请求 url
-    String value();
+    String value() default "";
 }
