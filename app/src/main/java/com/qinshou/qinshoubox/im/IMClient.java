@@ -513,10 +513,27 @@ public enum IMClient {
                 });
     }
 
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2020/1/3 14:13
+     * Description:下载文件,重载
+     */
     public void download(String url, final File file, final QSCallback<File> qsCallback) {
         download(url, file, null, qsCallback);
     }
 
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2020/1/3 14:13
+     * Description:下载文件
+     *
+     * @param url              下载地址
+     * @param file             下载文件目标地址
+     * @param downloadCallback 下载进度回调
+     * @param qsCallback       下载结果回调
+     */
     public void download(String url, final File file, AbsDownloadCallback downloadCallback, final QSCallback<File> qsCallback) {
         OkHttpHelperForQSBoxCommonApi.SINGLETON.download(url, file, downloadCallback).enqueue(new Callback<File>() {
             @Override
