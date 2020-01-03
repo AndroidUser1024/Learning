@@ -1,14 +1,7 @@
 package com.qinshou.qinshoubox.im.manager;
 
-import android.os.Handler;
-import android.os.Looper;
-
-import com.qinshou.qinshoubox.friend.bean.FriendHistoryBean;
-import com.qinshou.qinshoubox.homepage.bean.PageResultBean;
-import com.qinshou.qinshoubox.im.IMClient;
-import com.qinshou.qinshoubox.im.listener.IOnFriendStatusListener;
-import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.okhttphelper.callback.Callback;
+import com.qinshou.qinshoubox.friend.bean.FriendHistoryBean;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.db.DatabaseHelper;
 import com.qinshou.qinshoubox.im.db.dao.IFriendDao;
@@ -16,11 +9,8 @@ import com.qinshou.qinshoubox.listener.FailureRunnable;
 import com.qinshou.qinshoubox.listener.SuccessRunnable;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxFriendApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
-import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * Author: QinHao
