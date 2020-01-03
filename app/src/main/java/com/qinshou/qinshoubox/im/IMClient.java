@@ -3,6 +3,7 @@ package com.qinshou.qinshoubox.im;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -34,8 +35,14 @@ import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxOfflineApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 
 import java.io.File;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -54,15 +61,11 @@ import okio.ByteString;
 public enum IMClient {
     SINGLETON;
     private static final String TAG = "IMClient";
-    private final int TIME_OUT = 15 * 1000;
+    private final int TIME_OUT = 10 * 1000;
     /**
      * 发送心跳间隔
      */
     private final long PING_INTERVAL = 60 * 1000;
-    /**
-     * 重连间隔
-     */
-    private final int RECONNECT_INTERVAL = 15 * 1000;
     /**
      * 重连次数
      */
@@ -86,6 +89,24 @@ public enum IMClient {
     //    private Map<String, MessageBean> mAckMessageMap = new HashMap<>();
 //    private Map<String, Timer> mRetrySendTimerMap = new HashMap<>();
     /**
+     * 执行重连任务的线程池
+     */
+    private ScheduledExecutorService mScheduledExecutorService = Executors.newSingleThreadScheduledExecutor(
+            new ThreadFactory() {
+                @Override
+                public Thread newThread(@NonNull Runnable r) {
+                    Thread thread = new Thread(r);
+                    thread.setName("Reconnect Thread");
+                    thread.setDaemon(true);
+                    return thread;
+                }
+            }
+    );
+    /**
+     * 执行重连任务的线程
+     */
+    private ScheduledFuture<?> mReconnectScheduledFuture;
+    /**
      * 重连次数计数器
      */
     private int mReconnectCount;
@@ -93,9 +114,15 @@ public enum IMClient {
      * 重连任务
      */
     private Runnable mReconnectRunnable = new Runnable() {
+
         @Override
         public void run() {
-            Log.i(TAG, "开始第 " + mReconnectCount + " 次重连");
+            if (mReconnectCount >= MAX_RECONNECT_COUNT) {
+                Log.i(TAG, "重连了" + MAX_RECONNECT_COUNT + "次都没有连上,不再重连了");
+                return;
+            }
+            mReconnectCount++;
+            Log.i(TAG, "即将开始第" + mReconnectCount + " 次重连");
             connect(mUserId);
         }
     };
@@ -106,7 +133,13 @@ public enum IMClient {
     private void connectSuccess(WebSocket webSocket, String userId) {
         mWebSocket = webSocket;
         mUserId = userId;
+        // 重置重连尝试次数
         mReconnectCount = 0;
+        // 移除重连任务
+        if (mReconnectScheduledFuture != null) {
+            mReconnectScheduledFuture.cancel(true);
+            mReconnectScheduledFuture = null;
+        }
         // 初始化数据库
         DatabaseHelper databaseHelper = new DatabaseHelper(mContext, userId);
         // 创建好友管理者
@@ -373,12 +406,15 @@ public enum IMClient {
                     @Override
                     public void onFailure(WebSocket webSocket, final Throwable t, Response response) {
                         super.onFailure(webSocket, t, response);
-                        Log.i(TAG, "onFailure: t--->" + t.getMessage());
-                        if (mWebSocket != null && mReconnectCount < MAX_RECONNECT_COUNT) {
-                            // 异常断开,开始重连
-                            mReconnectCount++;
-                            mHandler.postDelayed(mReconnectRunnable, RECONNECT_INTERVAL);
-                        } else {
+                        Log.i(TAG, "onFailure: t.class--->" + t.getClass() + ",t.message--->" + t.getMessage());
+                        if (t instanceof SocketException) {
+                            mScheduledExecutorService.schedule(mReconnectRunnable, TIME_OUT, TimeUnit.MILLISECONDS);
+                        } else if (t instanceof SocketTimeoutException) {
+                            if (mReconnectCount != 0) {
+                                // 如果是重连中的超时,则继续重连,不用通知用户
+                                mScheduledExecutorService.schedule(mReconnectRunnable, TIME_OUT, TimeUnit.MILLISECONDS);
+                                return;
+                            }
                             for (IOnConnectListener onConnectListener : mOnConnectListenerList) {
                                 onConnectListener.onConnectFailure(new Exception(t));
                             }
