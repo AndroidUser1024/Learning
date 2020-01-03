@@ -6,13 +6,9 @@ import android.os.Looper;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.okhttphelper.callback.AbsDownloadCallback;
 import com.qinshou.okhttphelper.callback.Callback;
-import com.qinshou.okhttphelper.interceptor.DownloadInterceptor;
-import com.qinshou.okhttphelper.interceptor.LogInterceptor;
 import com.qinshou.qinshoubox.conversation.bean.UploadImgResultBean;
-import com.qinshou.qinshoubox.conversation.bean.UploadResultBean;
 import com.qinshou.qinshoubox.conversation.bean.UploadVoiceResultBean;
 import com.qinshou.qinshoubox.im.bean.FriendStatusBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatStatusBean;
@@ -35,22 +31,16 @@ import com.qinshou.qinshoubox.im.manager.GroupChatManager;
 import com.qinshou.qinshoubox.im.manager.MessageManager;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxCommonApi;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxOfflineApi;
-import com.qinshou.qinshoubox.network.QSBoxCommonApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;
@@ -68,7 +58,7 @@ public enum IMClient {
     /**
      * 发送心跳间隔
      */
-    private final long HEART_BEAT_INTERVAL = 60 * 1000;
+    private final long PING_INTERVAL = 60 * 1000;
     /**
      * 重连间隔
      */
@@ -99,20 +89,6 @@ public enum IMClient {
      * 重连次数计数器
      */
     private int mReconnectCount;
-    /**
-     * 发送心跳任务
-     */
-    private Runnable mHeartBeatRunnable = new Runnable() {
-        @Override
-        public void run() {
-            if (mWebSocket == null) {
-                return;
-            }
-            Log.i(TAG, "发送心跳");
-            mWebSocket.send(new Gson().toJson(MessageBean.createHeartBeatMessage(mUserId)));
-            mHandler.postDelayed(mHeartBeatRunnable, HEART_BEAT_INTERVAL);
-        }
-    };
     /**
      * 重连任务
      */
@@ -160,9 +136,6 @@ public enum IMClient {
 
                     }
                 });
-        // 一定时间后发送心跳
-        mHandler.removeCallbacks(mHeartBeatRunnable);
-        mHandler.postDelayed(mHeartBeatRunnable, HEART_BEAT_INTERVAL);
     }
 
     /**
@@ -349,66 +322,69 @@ public enum IMClient {
                 .connectTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
                 .readTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
                 .writeTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
-                .build().newWebSocket(new Request.Builder().url(URL).build(), new WebSocketListener() {
-            @Override
-            public void onOpen(WebSocket webSocket, Response response) {
-                super.onOpen(webSocket, response);
-                Log.i(TAG, "onOpen:");
-                for (IOnConnectListener onConnectListener : mOnConnectListenerList) {
-                    onConnectListener.onConnected();
-                }
-                webSocket.send(new Gson().toJson(MessageBean.createHandshakeMessage(userId)));
-            }
+                // 发送心跳间隔
+                .pingInterval(PING_INTERVAL, TimeUnit.MILLISECONDS)
+                .build()
+                .newWebSocket(new Request.Builder().url(URL).build(), new WebSocketListener() {
+                    @Override
+                    public void onOpen(WebSocket webSocket, Response response) {
+                        super.onOpen(webSocket, response);
+                        Log.i(TAG, "onOpen:");
+                        for (IOnConnectListener onConnectListener : mOnConnectListenerList) {
+                            onConnectListener.onConnected();
+                        }
+                        webSocket.send(new Gson().toJson(MessageBean.createHandshakeMessage(userId)));
+                    }
 
-            @Override
-            public void onMessage(WebSocket webSocket, String text) {
-                super.onMessage(webSocket, text);
-                Log.i(TAG, "onMessage: text--->" + text);
-                final MessageBean messageBean = new Gson().fromJson(text, MessageBean.class);
-                if (messageBean.getType() == MessageType.HANDSHAKE_SUCCESS.getValue()) {
+                    @Override
+                    public void onMessage(WebSocket webSocket, String text) {
+                        super.onMessage(webSocket, text);
+                        Log.i(TAG, "onMessage: text--->" + text);
+                        final MessageBean messageBean = new Gson().fromJson(text, MessageBean.class);
+                        if (messageBean.getType() == MessageType.HANDSHAKE_SUCCESS.getValue()) {
 //                    UserBean userBean = new Gson().fromJson(messageBean.getExtend(), UserBean.class);
-                    connectSuccess(webSocket, userId);
-                    for (IOnConnectListener onConnectListener : mOnConnectListenerList) {
-                        onConnectListener.onAuthenticated();
+                            connectSuccess(webSocket, userId);
+                            for (IOnConnectListener onConnectListener : mOnConnectListenerList) {
+                                onConnectListener.onAuthenticated();
+                            }
+                            return;
+                        }
+                        handleMessage(messageBean);
                     }
-                    return;
-                }
-                handleMessage(messageBean);
-            }
 
-            @Override
-            public void onMessage(WebSocket webSocket, ByteString bytes) {
-                super.onMessage(webSocket, bytes);
-                Log.i(TAG, "onMessage: bytes--->" + bytes);
-            }
-
-            @Override
-            public void onClosing(WebSocket webSocket, int code, String reason) {
-                super.onClosing(webSocket, code, reason);
-                Log.i(TAG, "onClosing: ");
-            }
-
-            @Override
-            public void onClosed(WebSocket webSocket, int code, String reason) {
-                super.onClosed(webSocket, code, reason);
-                Log.i(TAG, "onClosed: ");
-            }
-
-            @Override
-            public void onFailure(WebSocket webSocket, final Throwable t, Response response) {
-                super.onFailure(webSocket, t, response);
-                Log.i(TAG, "onFailure: t--->" + t.getMessage());
-                if (mWebSocket != null && mReconnectCount < MAX_RECONNECT_COUNT) {
-                    // 异常断开,开始重连
-                    mReconnectCount++;
-                    mHandler.postDelayed(mReconnectRunnable, RECONNECT_INTERVAL);
-                } else {
-                    for (IOnConnectListener onConnectListener : mOnConnectListenerList) {
-                        onConnectListener.onConnectFailure(new Exception(t));
+                    @Override
+                    public void onMessage(WebSocket webSocket, ByteString bytes) {
+                        super.onMessage(webSocket, bytes);
+                        Log.i(TAG, "onMessage: bytes--->" + bytes);
                     }
-                }
-            }
-        });
+
+                    @Override
+                    public void onClosing(WebSocket webSocket, int code, String reason) {
+                        super.onClosing(webSocket, code, reason);
+                        Log.i(TAG, "onClosing: ");
+                    }
+
+                    @Override
+                    public void onClosed(WebSocket webSocket, int code, String reason) {
+                        super.onClosed(webSocket, code, reason);
+                        Log.i(TAG, "onClosed: ");
+                    }
+
+                    @Override
+                    public void onFailure(WebSocket webSocket, final Throwable t, Response response) {
+                        super.onFailure(webSocket, t, response);
+                        Log.i(TAG, "onFailure: t--->" + t.getMessage());
+                        if (mWebSocket != null && mReconnectCount < MAX_RECONNECT_COUNT) {
+                            // 异常断开,开始重连
+                            mReconnectCount++;
+                            mHandler.postDelayed(mReconnectRunnable, RECONNECT_INTERVAL);
+                        } else {
+                            for (IOnConnectListener onConnectListener : mOnConnectListenerList) {
+                                onConnectListener.onConnectFailure(new Exception(t));
+                            }
+                        }
+                    }
+                });
     }
 
     /**
@@ -424,7 +400,6 @@ public enum IMClient {
 //        mAckMessageMap.clear();
 //        mRetrySendTimerMap.clear();
         mUserId = null;
-        mHandler.removeCallbacks(mHeartBeatRunnable);
         mHandler.removeCallbacks(mReconnectRunnable);
         if (mWebSocket == null) {
             return;
