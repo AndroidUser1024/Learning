@@ -5,6 +5,8 @@ import android.os.Looper;
 
 import com.qinshou.qinshoubox.friend.bean.FriendHistoryBean;
 import com.qinshou.qinshoubox.homepage.bean.PageResultBean;
+import com.qinshou.qinshoubox.im.IMClient;
+import com.qinshou.qinshoubox.im.listener.IOnFriendStatusListener;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
@@ -26,19 +28,12 @@ import java.util.concurrent.Executors;
  * Date: 2019/11/28 14:18
  * Description:好友管理者
  */
-public class FriendManager {
+public class FriendManager extends AbsManager<FriendBean> {
     private IFriendDao mFriendDao;
     private String mUserId;
-    /**
-     * 线程池,线程数量不定,适合执行大量耗时较少的任务
-     */
-    private ExecutorService mExecutorService = Executors.newCachedThreadPool();
-    /**
-     * 将回调切换到主线程的 Handler
-     */
-    private Handler mHandler = new Handler(Looper.getMainLooper());
 
     public FriendManager(DatabaseHelper databaseHelper, String userId) {
+        super(databaseHelper, userId);
         mFriendDao = databaseHelper.getDao(IFriendDao.class);
         mUserId = userId;
     }
@@ -53,17 +48,20 @@ public class FriendManager {
                 .enqueue(new Callback<List<FriendBean>>() {
                     @Override
                     public void onSuccess(final List<FriendBean> data) {
-                        mExecutorService.submit(new Runnable() {
+                        getExecutorService().submit(new Runnable() {
                             @Override
                             public void run() {
                                 for (FriendBean friendBean : data) {
+                                    // 更新缓存
+                                    getLruCache().put(friendBean.getId(), friendBean);
+                                    // 更新数据库
                                     if (mFriendDao.existsById(friendBean.getId())) {
                                         mFriendDao.update(friendBean);
                                     } else {
                                         mFriendDao.insert(friendBean);
                                     }
                                 }
-                                mHandler.post(new SuccessRunnable<List<FriendBean>>(callback, data));
+                                getHandler().post(new SuccessRunnable<List<FriendBean>>(callback, data));
                             }
                         });
 
@@ -71,7 +69,7 @@ public class FriendManager {
 
                     @Override
                     public void onFailure(Exception e) {
-                        mHandler.post(new FailureRunnable<>(callback, e));
+                        getHandler().post(new FailureRunnable<>(callback, e));
                     }
                 });
     }
@@ -128,7 +126,7 @@ public class FriendManager {
                 .enqueue(new Callback<Object>() {
                     @Override
                     public void onSuccess(final Object data) {
-                        mExecutorService.submit(new Runnable() {
+                        getExecutorService().submit(new Runnable() {
                             @Override
                             public void run() {
                                 FriendBean friendBean = getById(toUserId);
@@ -138,14 +136,14 @@ public class FriendManager {
                                 } else {
                                     mFriendDao.insert(friendBean);
                                 }
-                                mHandler.post(new SuccessRunnable<>(callback, data));
+                                getHandler().post(new SuccessRunnable<>(callback, data));
                             }
                         });
                     }
 
                     @Override
                     public void onFailure(Exception e) {
-                        mHandler.post(new FailureRunnable<>(callback, e));
+                        getHandler().post(new FailureRunnable<>(callback, e));
                     }
                 });
     }
@@ -156,7 +154,7 @@ public class FriendManager {
                 .enqueue(new Callback<Object>() {
                     @Override
                     public void onSuccess(final Object data) {
-                        mExecutorService.submit(new Runnable() {
+                        getExecutorService().submit(new Runnable() {
                             @Override
                             public void run() {
                                 FriendBean friendBean = getById(toUserId);
@@ -166,7 +164,7 @@ public class FriendManager {
                                 } else {
                                     mFriendDao.insert(friendBean);
                                 }
-                                mHandler.post(new SuccessRunnable<>(callback, data));
+                                getHandler().post(new SuccessRunnable<>(callback, data));
                             }
                         });
 
@@ -174,7 +172,7 @@ public class FriendManager {
 
                     @Override
                     public void onFailure(Exception e) {
-                        mHandler.post(new FailureRunnable<>(callback, e));
+                        getHandler().post(new FailureRunnable<>(callback, e));
                     }
                 });
     }
@@ -185,7 +183,7 @@ public class FriendManager {
                 .enqueue(new Callback<Object>() {
                     @Override
                     public void onSuccess(final Object data) {
-                        mExecutorService.submit(new Runnable() {
+                        getExecutorService().submit(new Runnable() {
                             @Override
                             public void run() {
                                 FriendBean friendBean = getById(toUserId);
@@ -195,14 +193,14 @@ public class FriendManager {
                                 } else {
                                     mFriendDao.insert(friendBean);
                                 }
-                                mHandler.post(new SuccessRunnable<>(callback, data));
+                                getHandler().post(new SuccessRunnable<>(callback, data));
                             }
                         });
                     }
 
                     @Override
                     public void onFailure(Exception e) {
-                        mHandler.post(new FailureRunnable<>(callback, e));
+                        getHandler().post(new FailureRunnable<>(callback, e));
                     }
                 });
     }
@@ -213,7 +211,7 @@ public class FriendManager {
                 .enqueue(new Callback<Object>() {
                     @Override
                     public void onSuccess(final Object data) {
-                        mExecutorService.submit(new Runnable() {
+                        getExecutorService().submit(new Runnable() {
                             @Override
                             public void run() {
                                 FriendBean friendBean = getById(toUserId);
@@ -223,14 +221,14 @@ public class FriendManager {
                                 } else {
                                     mFriendDao.insert(friendBean);
                                 }
-                                mHandler.post(new SuccessRunnable<>(callback, data));
+                                getHandler().post(new SuccessRunnable<>(callback, data));
                             }
                         });
                     }
 
                     @Override
                     public void onFailure(Exception e) {
-                        mHandler.post(new FailureRunnable<>(callback, e));
+                        getHandler().post(new FailureRunnable<>(callback, e));
                     }
                 });
     }
