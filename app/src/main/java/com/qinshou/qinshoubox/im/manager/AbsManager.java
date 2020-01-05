@@ -5,6 +5,8 @@ import android.os.Looper;
 import android.util.LruCache;
 
 
+import com.qinshou.qinshoubox.im.cache.ICache;
+import com.qinshou.qinshoubox.im.cache.MemoryCache;
 import com.qinshou.qinshoubox.im.db.DatabaseHelper;
 
 
@@ -17,10 +19,9 @@ import java.util.concurrent.Executors;
  * Date: 2020/1/3 18:10
  * Description:管理者的基类
  */
-public class AbsManager<T> {
-    private DatabaseHelper mDatabaseHelper;
+public class AbsManager<K, V> {
     private String mUserId;
-    private final LruCache<String, T> mLruCache;
+    private final ICache<K, V> mCache;
     /**
      * 线程池,线程数量不定,适合执行大量耗时较少的任务
      */
@@ -31,20 +32,13 @@ public class AbsManager<T> {
     private Handler mHandler = new Handler(Looper.getMainLooper());
 
 
-    public AbsManager(DatabaseHelper databaseHelper, String userId) {
-        mDatabaseHelper = databaseHelper;
+    public AbsManager(String userId, ICache<K, V> cache) {
         mUserId = userId;
-        int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-        int cacheSize = maxMemory / 16;
-        mLruCache = new LruCache<>(cacheSize);
+        mCache = cache;
     }
 
-    public DatabaseHelper getDatabaseHelper() {
-        return mDatabaseHelper;
-    }
-
-    public LruCache<String, T> getLruCache() {
-        return mLruCache;
+    public ICache<K, V> getCache() {
+        return mCache;
     }
 
     public ExecutorService getExecutorService() {

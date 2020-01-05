@@ -1,8 +1,12 @@
 package com.qinshou.qinshoubox.im.manager;
 
+import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.friend.bean.FriendHistoryBean;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
+import com.qinshou.qinshoubox.im.cache.FriendDatabaseCache;
+import com.qinshou.qinshoubox.im.cache.FriendDoubleCache;
+import com.qinshou.qinshoubox.im.cache.MemoryCache;
 import com.qinshou.qinshoubox.im.db.DatabaseHelper;
 import com.qinshou.qinshoubox.im.db.dao.IFriendDao;
 import com.qinshou.qinshoubox.listener.FailureRunnable;
@@ -18,18 +22,22 @@ import java.util.List;
  * Date: 2019/11/28 14:18
  * Description:好友管理者
  */
-public class FriendManager extends AbsManager<FriendBean> {
-    private IFriendDao mFriendDao;
+public class FriendManager extends AbsManager<String, FriendBean> {
     private String mUserId;
 
     public FriendManager(DatabaseHelper databaseHelper, String userId) {
-        super(databaseHelper, userId);
-        mFriendDao = databaseHelper.getDao(IFriendDao.class);
+//        super(userId, new MemoryCache<String, FriendBean>());
+//        super(userId, new FriendDatabaseCache(databaseHelper));
+        super(userId, new FriendDoubleCache(new MemoryCache<String, FriendBean>(), new FriendDatabaseCache(databaseHelper)));
         mUserId = userId;
     }
 
     public FriendBean getById(String id) {
-        return mFriendDao.selectById(id);
+        FriendBean friendBean = getCache().get(id);
+        if (friendBean == null) {
+            ShowLogUtil.logi("从网络拿");
+        }
+        return friendBean;
     }
 
     public void getList(final Callback<List<FriendBean>> callback) {
@@ -42,14 +50,8 @@ public class FriendManager extends AbsManager<FriendBean> {
                             @Override
                             public void run() {
                                 for (FriendBean friendBean : data) {
-                                    // 更新缓存
-                                    getLruCache().put(friendBean.getId(), friendBean);
-                                    // 更新数据库
-                                    if (mFriendDao.existsById(friendBean.getId())) {
-                                        mFriendDao.update(friendBean);
-                                    } else {
-                                        mFriendDao.insert(friendBean);
-                                    }
+                                    // 存到缓存
+                                    getCache().put(friendBean.getId(), friendBean);
                                 }
                                 getHandler().post(new SuccessRunnable<List<FriendBean>>(callback, data));
                             }
@@ -121,11 +123,8 @@ public class FriendManager extends AbsManager<FriendBean> {
                             public void run() {
                                 FriendBean friendBean = getById(toUserId);
                                 friendBean.setRemark(remark);
-                                if (mFriendDao.existsById(friendBean.getId())) {
-                                    mFriendDao.update(friendBean);
-                                } else {
-                                    mFriendDao.insert(friendBean);
-                                }
+                                // 更新缓存
+                                getCache().put(friendBean.getId(), friendBean);
                                 getHandler().post(new SuccessRunnable<>(callback, data));
                             }
                         });
@@ -149,11 +148,8 @@ public class FriendManager extends AbsManager<FriendBean> {
                             public void run() {
                                 FriendBean friendBean = getById(toUserId);
                                 friendBean.setTop(top);
-                                if (mFriendDao.existsById(friendBean.getId())) {
-                                    mFriendDao.update(friendBean);
-                                } else {
-                                    mFriendDao.insert(friendBean);
-                                }
+                                // 更新缓存
+                                getCache().put(friendBean.getId(), friendBean);
                                 getHandler().post(new SuccessRunnable<>(callback, data));
                             }
                         });
@@ -178,11 +174,8 @@ public class FriendManager extends AbsManager<FriendBean> {
                             public void run() {
                                 FriendBean friendBean = getById(toUserId);
                                 friendBean.setDoNotDisturb(doNotDisturb);
-                                if (mFriendDao.existsById(friendBean.getId())) {
-                                    mFriendDao.update(friendBean);
-                                } else {
-                                    mFriendDao.insert(friendBean);
-                                }
+                                // 更新缓存
+                                getCache().put(friendBean.getId(), friendBean);
                                 getHandler().post(new SuccessRunnable<>(callback, data));
                             }
                         });
@@ -206,11 +199,8 @@ public class FriendManager extends AbsManager<FriendBean> {
                             public void run() {
                                 FriendBean friendBean = getById(toUserId);
                                 friendBean.setBlackList(blackList);
-                                if (mFriendDao.existsById(friendBean.getId())) {
-                                    mFriendDao.update(friendBean);
-                                } else {
-                                    mFriendDao.insert(friendBean);
-                                }
+                                // 更新缓存
+                                getCache().put(friendBean.getId(), friendBean);
                                 getHandler().post(new SuccessRunnable<>(callback, data));
                             }
                         });
