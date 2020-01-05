@@ -1,12 +1,11 @@
 package com.qinshou.qinshoubox.im.cache;
 
-import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 
 /**
  * Author: QinHao
  * Email:qinhao@jeejio.com
- * Date: 20-1-4 下午10:03
+ * Date: 2020/1/4 19:55
  * Description:
  */
 public class FriendDoubleCache extends AbsDoubleCache<String, FriendBean> {
@@ -24,10 +23,8 @@ public class FriendDoubleCache extends AbsDoubleCache<String, FriendBean> {
     @Override
     public FriendBean get(String key) {
         FriendBean friendBean = getMemoryCache().get(key);
-        ShowLogUtil.logi("从缓存拿到的 friendBean--->" + friendBean);
         if (friendBean == null) {
             friendBean = getDatabaseCache().get(key);
-            ShowLogUtil.logi("从数据库拿到的 friendBean--->" + friendBean);
         }
         return friendBean;
     }
