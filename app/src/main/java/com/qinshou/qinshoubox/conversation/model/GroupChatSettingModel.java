@@ -17,8 +17,8 @@ import com.qinshou.qinshoubox.im.bean.GroupChatBean;
  */
 public class GroupChatSettingModel implements IGroupChatSettingContract.IModel {
     @Override
-    public void getGroupChatDetail(String groupChatId, Callback<GroupChatDetailBean> callback) {
-        IMClient.SINGLETON.getGroupChatManager().getDetail(groupChatId, callback);
+    public void getGroupChatDetail(String groupChatId, QSCallback<GroupChatDetailBean> qsCallback) {
+        IMClient.SINGLETON.getGroupChatManager().getDetail(groupChatId, qsCallback);
     }
 
     @Override

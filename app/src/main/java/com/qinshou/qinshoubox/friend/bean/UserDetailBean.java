@@ -87,6 +87,26 @@ public class UserDetailBean {
      * 在群聊中的昵称
      */
     private String nicknameInGroupChat;
+    /**
+     * 是否在线,0 为不在线,1 为在线
+     */
+    private int online;
+    /**
+     * 最后一次退出时间
+     */
+    private long lastLogoutTimestamp;
+    /**
+     * 是否置顶,0 是非置顶,1 是置顶
+     */
+    private int top;
+    /**
+     * 是否免打扰,0 是非免打扰,1 是免打扰
+     */
+    private int doNotDisturb;
+    /**
+     * 是否加入了黑名单,0 是没有加入,1 是加入了
+     */
+    private int blackList;
 
     public UserDetailBean() {
     }
@@ -94,7 +114,7 @@ public class UserDetailBean {
     @Override
     public String toString() {
         return "UserDetailBean{" +
-                "id=" + id +
+                "id='" + id + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", nickname='" + nickname + '\'' +
@@ -110,6 +130,11 @@ public class UserDetailBean {
                 ", remark='" + remark + '\'' +
                 ", additionalMsg='" + additionalMsg + '\'' +
                 ", nicknameInGroupChat='" + nicknameInGroupChat + '\'' +
+                ", online=" + online +
+                ", lastLogoutTimestamp=" + lastLogoutTimestamp +
+                ", top=" + top +
+                ", doNotDisturb=" + doNotDisturb +
+                ", blackList=" + blackList +
                 '}';
     }
 
@@ -239,5 +264,45 @@ public class UserDetailBean {
 
     public void setNicknameInGroupChat(String nicknameInGroupChat) {
         this.nicknameInGroupChat = nicknameInGroupChat;
+    }
+
+    public int getOnline() {
+        return online;
+    }
+
+    public void setOnline(int online) {
+        this.online = online;
+    }
+
+    public long getLastLogoutTimestamp() {
+        return lastLogoutTimestamp;
+    }
+
+    public void setLastLogoutTimestamp(long lastLogoutTimestamp) {
+        this.lastLogoutTimestamp = lastLogoutTimestamp;
+    }
+
+    public int getTop() {
+        return top;
+    }
+
+    public void setTop(int top) {
+        this.top = top;
+    }
+
+    public int getDoNotDisturb() {
+        return doNotDisturb;
+    }
+
+    public void setDoNotDisturb(int doNotDisturb) {
+        this.doNotDisturb = doNotDisturb;
+    }
+
+    public int getBlackList() {
+        return blackList;
+    }
+
+    public void setBlackList(int blackList) {
+        this.blackList = blackList;
     }
 }

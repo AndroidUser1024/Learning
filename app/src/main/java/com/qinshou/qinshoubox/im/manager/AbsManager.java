@@ -37,6 +37,10 @@ public abstract class AbsManager<K, V> {
         mCache = cache;
     }
 
+    public String getUserId() {
+        return mUserId;
+    }
+
     public ICache<K, V> getCache() {
         return mCache;
     }

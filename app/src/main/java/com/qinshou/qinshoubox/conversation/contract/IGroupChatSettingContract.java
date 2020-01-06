@@ -6,6 +6,7 @@ import com.qinshou.commonmodule.base.IBaseView;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.bean.GroupChatDetailBean;
 import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatSettingFragment;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 import org.android.agoo.common.CallBack;
 
@@ -26,7 +27,7 @@ public interface IGroupChatSettingContract {
          *
          * @param groupChatId 群 id
          */
-        void getGroupChatDetail(String groupChatId, Callback<GroupChatDetailBean> callback);
+        void getGroupChatDetail(String groupChatId, QSCallback<GroupChatDetailBean> qsCallback);
 
         /**
          * Author: QinHao
