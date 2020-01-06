@@ -8,7 +8,6 @@ import com.qinshou.qinshoubox.im.cache.FriendDatabaseCache;
 import com.qinshou.qinshoubox.im.cache.FriendDoubleCache;
 import com.qinshou.qinshoubox.im.cache.MemoryCache;
 import com.qinshou.qinshoubox.im.db.DatabaseHelper;
-import com.qinshou.qinshoubox.im.db.dao.IFriendDao;
 import com.qinshou.qinshoubox.listener.FailureRunnable;
 import com.qinshou.qinshoubox.listener.SuccessRunnable;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxFriendApi;

@@ -2,9 +2,9 @@ package com.qinshou.qinshoubox.im.cache;
 
 /**
  * Author: QinHao
- * Email:qinhao@jeejio.com
- * Date: 20-1-4 下午10:01
- * Description:
+ * Email:cqflqinhao@126.com
+ * Date: 2020/1/4 19:01
+ * Description:双重缓存
  */
 public abstract class AbsDoubleCache<K, V> implements ICache<K, V> {
     private MemoryCache<K, V> mMemoryCache;

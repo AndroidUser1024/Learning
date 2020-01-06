@@ -19,7 +19,7 @@ import java.util.concurrent.Executors;
  * Date: 2020/1/3 18:10
  * Description:管理者的基类
  */
-public class AbsManager<K, V> {
+public abstract class AbsManager<K, V> {
     private String mUserId;
     private final ICache<K, V> mCache;
     /**

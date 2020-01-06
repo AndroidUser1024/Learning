@@ -4,9 +4,9 @@ import com.qinshou.qinshoubox.im.bean.FriendBean;
 
 /**
  * Author: QinHao
- * Email:qinhao@jeejio.com
+ * Email:cqflqinhao@126.com
  * Date: 2020/1/4 19:55
- * Description:
+ * Description:FriendBean 双重缓存
  */
 public class FriendDoubleCache extends AbsDoubleCache<String, FriendBean> {
 

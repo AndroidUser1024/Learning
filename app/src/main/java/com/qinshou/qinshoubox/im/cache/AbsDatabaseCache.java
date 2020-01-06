@@ -4,8 +4,8 @@ import com.qinshou.qinshoubox.im.db.DatabaseHelper;
 
 /**
  * Author: QinHao
- * Email:qinhao@jeejio.com
- * Date: 20-1-4 下午4:50
+ * Email:cqflqinhao@126.com
+ * Date: 2020/1/4 16:50
  * Description:数据库缓存
  */
 public abstract class AbsDatabaseCache<K, V> implements ICache<K, V> {

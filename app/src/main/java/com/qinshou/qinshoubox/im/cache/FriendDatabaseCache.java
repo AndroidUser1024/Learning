@@ -6,9 +6,9 @@ import com.qinshou.qinshoubox.im.db.dao.IFriendDao;
 
 /**
  * Author: QinHao
- * Email:qinhao@jeejio.com
- * Date: 20-1-4 下午4:51
- * Description:
+ * Email:cqflqinhao@126.com
+ * Date: 2020/1/4 16:51
+ * Description:FriendBean 数据库缓存
  */
 public class FriendDatabaseCache extends AbsDatabaseCache<String, FriendBean> {
 
