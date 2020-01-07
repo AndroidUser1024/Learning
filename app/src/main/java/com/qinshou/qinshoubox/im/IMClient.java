@@ -34,6 +34,7 @@ import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxCommonApi;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxOfflineApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 
+import java.io.EOFException;
 import java.io.File;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
@@ -60,19 +61,12 @@ import okio.ByteString;
  */
 public enum IMClient {
     SINGLETON;
+
     private static final String TAG = "IMClient";
     private final int TIME_OUT = 10 * 1000;
-    /**
-     * 发送心跳间隔
-     */
-    private final long PING_INTERVAL = 60 * 1000;
-    /**
-     * 重连次数
-     */
-    private final int MAX_RECONNECT_COUNT = 5;
     //    private static final String URL = "ws://www.mrqinshou.com:10086/websocket";
 //    private static final String URL = "ws://172.16.60.231:10086/websocket";
-        private static final String URL = "ws://192.168.1.109:10086/websocket";
+    private static final String URL = "ws://192.168.1.109:10086/websocket";
     private Context mContext;
     private WebSocket mWebSocket;
     private Handler mHandler = new Handler(Looper.getMainLooper());
@@ -88,10 +82,15 @@ public enum IMClient {
     private ConversationManager mConversationManager;
     //    private Map<String, MessageBean> mAckMessageMap = new HashMap<>();
 //    private Map<String, Timer> mRetrySendTimerMap = new HashMap<>();
+
     /**
-     * 执行重连任务的线程池
+     * 发送心跳间隔
      */
-    private ScheduledExecutorService mScheduledExecutorService = Executors.newSingleThreadScheduledExecutor(
+    private final long HEART_BEAT_INTERVAL = 60 * 1000;
+    /**
+     * 发送心跳任务的线程池
+     */
+    private ScheduledExecutorService mHeartBeatScheduledExecutorService = Executors.newSingleThreadScheduledExecutor(
             new ThreadFactory() {
                 @Override
                 public Thread newThread(@NonNull Runnable r) {
@@ -103,9 +102,47 @@ public enum IMClient {
             }
     );
     /**
-     * 执行重连任务的线程
+     * 心跳任务的线程
+     */
+    private ScheduledFuture<?> mHeartBeatScheduledFuture;
+    /**
+     * 心跳任务
+     */
+    private Runnable mHeartBeatRunnable = new Runnable() {
+
+        @Override
+        public void run() {
+            if (mWebSocket == null) {
+                return;
+            }
+            Log.i(TAG, "发送心跳");
+            mWebSocket.send(new Gson().toJson(MessageBean.createHeartBeatMessage(mUserId)));
+            mHeartBeatScheduledFuture = mHeartBeatScheduledExecutorService.schedule(mHeartBeatRunnable, HEART_BEAT_INTERVAL, TimeUnit.MILLISECONDS);
+        }
+    };
+
+    /**
+     * 重连任务的线程池
+     */
+    private ScheduledExecutorService mReconnectScheduledExecutorService = Executors.newSingleThreadScheduledExecutor(
+            new ThreadFactory() {
+                @Override
+                public Thread newThread(@NonNull Runnable r) {
+                    Thread thread = new Thread(r);
+                    thread.setName("Reconnect Thread");
+                    thread.setDaemon(true);
+                    return thread;
+                }
+            }
+    );
+    /**
+     * 重连任务的线程
      */
     private ScheduledFuture<?> mReconnectScheduledFuture;
+    /**
+     * 最大重连次数
+     */
+    private final int MAX_RECONNECT_COUNT = 5;
     /**
      * 重连次数计数器
      */
@@ -140,6 +177,8 @@ public enum IMClient {
             mReconnectScheduledFuture.cancel(true);
             mReconnectScheduledFuture = null;
         }
+        // 开启心跳任务
+        mHeartBeatScheduledFuture = mHeartBeatScheduledExecutorService.schedule(mHeartBeatRunnable, HEART_BEAT_INTERVAL, TimeUnit.MILLISECONDS);
         // 初始化数据库
         DatabaseHelper databaseHelper = new DatabaseHelper(mContext, userId);
         // 创建好友管理者
@@ -355,8 +394,8 @@ public enum IMClient {
                 .connectTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
                 .readTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
                 .writeTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
-                // 发送心跳间隔
-                .pingInterval(PING_INTERVAL, TimeUnit.MILLISECONDS)
+//                // 发送心跳间隔
+//                .pingInterval(HEART_BEAT_INTERVAL, TimeUnit.MILLISECONDS)
                 .build()
                 .newWebSocket(new Request.Builder().url(URL).build(), new WebSocketListener() {
                     @Override
@@ -407,12 +446,18 @@ public enum IMClient {
                     public void onFailure(WebSocket webSocket, final Throwable t, Response response) {
                         super.onFailure(webSocket, t, response);
                         Log.i(TAG, "onFailure: t.class--->" + t.getClass() + ",t.message--->" + t.getMessage());
-                        if (t instanceof SocketException) {
-                            mScheduledExecutorService.schedule(mReconnectRunnable, TIME_OUT, TimeUnit.MILLISECONDS);
+                        // 移除心跳任务
+                        if (mHeartBeatScheduledFuture != null) {
+                            mHeartBeatScheduledFuture.cancel(true);
+                            mHeartBeatScheduledFuture = null;
+                        }
+                        if ((t instanceof SocketException) || (t instanceof EOFException)) {
+                            // 自动重连
+                            mReconnectScheduledFuture = mReconnectScheduledExecutorService.schedule(mReconnectRunnable, TIME_OUT, TimeUnit.MILLISECONDS);
                         } else if (t instanceof SocketTimeoutException) {
                             if (mReconnectCount != 0) {
                                 // 如果是重连中的超时,则继续重连,不用通知用户
-                                mScheduledExecutorService.schedule(mReconnectRunnable, TIME_OUT, TimeUnit.MILLISECONDS);
+                                mReconnectScheduledFuture = mReconnectScheduledExecutorService.schedule(mReconnectRunnable, TIME_OUT, TimeUnit.MILLISECONDS);
                                 return;
                             }
                             for (IOnConnectListener onConnectListener : mOnConnectListenerList) {
@@ -436,11 +481,20 @@ public enum IMClient {
 //        mAckMessageMap.clear();
 //        mRetrySendTimerMap.clear();
         mUserId = null;
-        mHandler.removeCallbacks(mReconnectRunnable);
-        if (mWebSocket == null) {
-            return;
+        // 移除重连任务
+        if (mReconnectScheduledFuture != null) {
+            mReconnectScheduledFuture.cancel(true);
+            mReconnectScheduledFuture = null;
         }
-        mWebSocket.close(1000, "normal close");
+        // 移除心跳任务
+        if (mHeartBeatScheduledFuture != null) {
+            mHeartBeatScheduledFuture.cancel(true);
+            mHeartBeatScheduledFuture = null;
+        }
+        // 关闭连接
+        if (mWebSocket != null) {
+            mWebSocket.close(1000, "normal close");
+        }
     }
 
     public void sendMessage(final MessageBean messageBean) {
