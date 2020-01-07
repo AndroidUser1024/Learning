@@ -5,7 +5,10 @@ import com.google.gson.Gson;
 import com.qinshou.qinshoubox.conversation.bean.ImgBean;
 import com.qinshou.qinshoubox.conversation.bean.VoiceBean;
 import com.qinshou.qinshoubox.im.enums.MessageContentType;
+import com.qinshou.qinshoubox.im.enums.MessageStatus;
 import com.qinshou.qinshoubox.im.enums.MessageType;
+
+import java.util.Map;
 
 /**
  * Author: QinHao
@@ -267,6 +270,24 @@ public class MessageBean {
         messageBean.sendTimestamp = System.currentTimeMillis();
         messageBean.fromUserId = fromUserId;
         messageBean.type = MessageType.HEART_BEAT.getValue();
+        return messageBean;
+    }
+
+    /**
+     * Author: MrQinshou
+     * Email:cqflqinhao@126.com
+     * Date:2019/12/25 22:09
+     * Description:创建单聊的系统消息
+     */
+    public static MessageBean createChatSystemMessage(String fromUserId, String toUserId, Map<String, Object> map) {
+        MessageBean messageBean = new MessageBean();
+        messageBean.setFromUserId(fromUserId);
+        messageBean.setToUserId(toUserId);
+        messageBean.setType(MessageType.CHAT.getValue());
+        messageBean.setContentType(MessageContentType.SYSTEM.getValue());
+        messageBean.setExtend(new Gson().toJson(map));
+        messageBean.setSendTimestamp(System.currentTimeMillis());
+        messageBean.setStatus(MessageStatus.SENDED.getValue());
         return messageBean;
     }
 }

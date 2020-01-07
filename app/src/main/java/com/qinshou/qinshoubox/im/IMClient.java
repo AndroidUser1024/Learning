@@ -39,7 +39,9 @@ import java.io.File;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -218,7 +220,7 @@ public enum IMClient {
      *
      * @param messageBean 消息实体类
      */
-    private void handleMessage(final MessageBean messageBean) {
+    public void handleMessage(final MessageBean messageBean) {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -317,6 +319,11 @@ public enum IMClient {
             for (IOnFriendStatusListener onFriendStatusListener : mOnFriendStatusListenerList) {
                 onFriendStatusListener.agreeAdd(friendStatusBean.getFromUserId());
             }
+            Map<String, Object> extend = new HashMap<>();
+            extend.put("status", FriendStatus.AGREE_ADD.getValue());
+            // 创建已经是好友的提示信息的系统消息
+            MessageBean m = MessageBean.createChatSystemMessage(friendStatusBean.getFromUserId(), mUserId, extend);
+            handleMessage(m);
         } else if (friendStatusBean.getStatus() == FriendStatus.REFUSE_ADD.getValue()) {
             for (IOnFriendStatusListener onFriendStatusListener : mOnFriendStatusListenerList) {
                 onFriendStatusListener.refuseAdd(friendStatusBean.getFromUserId());

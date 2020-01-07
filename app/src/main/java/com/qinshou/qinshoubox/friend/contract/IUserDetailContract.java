@@ -36,7 +36,7 @@ public interface IUserDetailContract {
          * @param toUserId 待添加的用户 id
          * @param remark   备注
          */
-        void agreeAddFriend(String toUserId, String remark, Callback<Object> callback);
+        void agreeAddFriend(String toUserId, String remark, QSCallback<Object> qsCallback);
 
         /**
          * Author: QinHao

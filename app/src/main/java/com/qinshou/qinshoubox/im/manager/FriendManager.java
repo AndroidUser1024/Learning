@@ -3,17 +3,23 @@ package com.qinshou.qinshoubox.im.manager;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.friend.bean.FriendHistoryBean;
+import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
+import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.cache.FriendDatabaseCache;
 import com.qinshou.qinshoubox.im.cache.FriendDoubleCache;
 import com.qinshou.qinshoubox.im.cache.MemoryCache;
 import com.qinshou.qinshoubox.im.db.DatabaseHelper;
+import com.qinshou.qinshoubox.im.enums.FriendStatus;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.listener.FailureRunnable;
 import com.qinshou.qinshoubox.listener.SuccessRunnable;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxFriendApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Author: QinHao
@@ -91,10 +97,25 @@ public class FriendManager extends AbsManager<String, FriendBean> {
      * @param toUserId 待同意添加的好友的 id
      * @param remark   备注
      */
-    public void agreeAddFriend(String toUserId, String remark, Callback<Object> callback) {
+    public void agreeAddFriend(final String toUserId, String remark, final QSCallback<Object> qsCallback) {
         OkHttpHelperForQSBoxFriendApi.SINGLETON.agreeAdd(mUserId, toUserId, remark)
                 .transform(new QSApiTransformer<Object>())
-                .enqueue(callback);
+                .enqueue(new Callback<Object>() {
+                    @Override
+                    public void onSuccess(Object data) {
+                        Map<String, Object> extend = new HashMap<>();
+                        extend.put("status", FriendStatus.AGREE_ADD.getValue());
+                        // 创建已经是好友的提示信息的系统消息
+                        MessageBean messageBean = MessageBean.createChatSystemMessage(toUserId, mUserId, extend);
+                        IMClient.SINGLETON.handleMessage(messageBean);
+                        qsCallback.onSuccess(data);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+
+                    }
+                });
     }
 
     /**
