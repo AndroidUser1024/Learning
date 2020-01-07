@@ -31,8 +31,8 @@ public class UserDetailModel implements IUserDetailContract.IModel {
     }
 
     @Override
-    public void deleteFriend(String toUserId, Callback<Object> callback) {
-        IMClient.SINGLETON.getFriendManager().deleteFriend(toUserId, callback);
+    public void deleteFriend(String toUserId, QSCallback<Object> qsCallback) {
+        IMClient.SINGLETON.getFriendManager().deleteFriend(toUserId, qsCallback);
     }
 
     @Override

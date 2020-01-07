@@ -243,6 +243,7 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
     @Override
     public void deleteFriendSuccess() {
         EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.REFRESH_FRIEND_LIST, null));
+        EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.REFRESH_CONVERSATION_LIST, null));
         startActivity(new Intent(getContext(), IMActivity.class));
     }
 

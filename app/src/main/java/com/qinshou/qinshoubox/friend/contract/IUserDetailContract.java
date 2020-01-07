@@ -46,7 +46,7 @@ public interface IUserDetailContract {
          *
          * @param toUserId 待删除的用户 id
          */
-        void deleteFriend(String toUserId, Callback<Object> callback);
+        void deleteFriend(String toUserId, QSCallback<Object> qsCallback);
 
         /**
          * Author: QinHao

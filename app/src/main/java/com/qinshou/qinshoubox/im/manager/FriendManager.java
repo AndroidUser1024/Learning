@@ -4,6 +4,7 @@ import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.friend.bean.FriendHistoryBean;
 import com.qinshou.qinshoubox.im.IMClient;
+import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.cache.FriendDatabaseCache;
@@ -11,6 +12,7 @@ import com.qinshou.qinshoubox.im.cache.FriendDoubleCache;
 import com.qinshou.qinshoubox.im.cache.MemoryCache;
 import com.qinshou.qinshoubox.im.db.DatabaseHelper;
 import com.qinshou.qinshoubox.im.enums.FriendStatus;
+import com.qinshou.qinshoubox.im.enums.MessageType;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.listener.FailureRunnable;
 import com.qinshou.qinshoubox.listener.SuccessRunnable;
@@ -126,10 +128,26 @@ public class FriendManager extends AbsManager<String, FriendBean> {
      *
      * @param toUserId 待删除的好友的 id
      */
-    public void deleteFriend(String toUserId, Callback<Object> callback) {
+    public void deleteFriend(final String toUserId, final QSCallback<Object> qsCallback) {
         OkHttpHelperForQSBoxFriendApi.SINGLETON.delete(mUserId, toUserId)
                 .transform(new QSApiTransformer<Object>())
-                .enqueue(callback);
+                .enqueue(new Callback<Object>() {
+                    @Override
+                    public void onSuccess(Object data) {
+                        ConversationManager conversationManager = IMClient.SINGLETON.getConversationManager();
+                        ConversationBean conversationBean = conversationManager.selectByTypeAndToUserId(MessageType.CHAT.getValue(), toUserId);
+                        if (conversationBean != null) {
+                            conversationManager.deleteById(conversationBean.getId());
+                        }
+
+                        qsCallback.onSuccess(data);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+
+                    }
+                });
     }
 
     public void setRemark(final String toUserId, final String remark, final Callback<Object> callback) {

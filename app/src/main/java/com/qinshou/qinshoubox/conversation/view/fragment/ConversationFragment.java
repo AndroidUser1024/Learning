@@ -153,6 +153,8 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
         } else if (eventBean.getType() != EventBean.Type.REFRESH_CONVERSATION_LIST) {
             if (eventBean.getData() == null) {
                 getPresenter().getConversationList();
+                // 更新未读数
+                updateUnreadCount();
             } else if (eventBean.getData() instanceof ConversationBean) {
                 updateConversationList((ConversationBean) eventBean.getData());
                 // 更新未读数
