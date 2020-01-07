@@ -20,6 +20,7 @@ import com.qinshou.qinshoubox.im.enums.FriendStatus;
 import com.qinshou.qinshoubox.im.enums.GroupChatStatus;
 import com.qinshou.qinshoubox.im.enums.MessageStatus;
 import com.qinshou.qinshoubox.im.enums.MessageType;
+import com.qinshou.qinshoubox.im.enums.StatusCode;
 import com.qinshou.qinshoubox.im.listener.IOnConnectListener;
 import com.qinshou.qinshoubox.im.listener.IOnFriendStatusListener;
 import com.qinshou.qinshoubox.im.listener.IOnGroupChatStatusListener;
@@ -157,11 +158,11 @@ public enum IMClient {
         @Override
         public void run() {
             if (mReconnectCount >= MAX_RECONNECT_COUNT) {
-                Log.i(TAG, "重连了" + MAX_RECONNECT_COUNT + "次都没有连上,不再重连了");
+                Log.i(TAG, "重连了 " + MAX_RECONNECT_COUNT + " 次都没有连上,不再重连了");
                 return;
             }
             mReconnectCount++;
-            Log.i(TAG, "即将开始第" + mReconnectCount + " 次重连");
+            Log.i(TAG, "即将开始第 " + mReconnectCount + " 次重连");
             connect(mUserId);
         }
     };
@@ -379,6 +380,21 @@ public enum IMClient {
     /**
      * Author: QinHao
      * Email:cqflqinhao@126.com
+     * Date:2020/1/7 21:17
+     * Description:断开 IM 连接
+     *
+     * @param statusCode 状态码
+     */
+    private void disconnect(StatusCode statusCode) {
+        // 关闭连接
+        if (mWebSocket != null) {
+            mWebSocket.close(statusCode.getCode(), statusCode.getReason());
+        }
+    }
+
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
      * Date:2019/12/5 10:43
      * Description:初始化 IM 服务,建议在 Application 中
      *
@@ -440,13 +456,21 @@ public enum IMClient {
                     @Override
                     public void onClosing(WebSocket webSocket, int code, String reason) {
                         super.onClosing(webSocket, code, reason);
-                        Log.i(TAG, "onClosing: ");
+                        Log.i(TAG, "onClosing: code--->" + code + ",reason--->" + reason);
+                        if (code == StatusCode.SERVER_FORCE_CLOSE.getCode()) {
+                            // 服务器强制断开连接
+                            disconnect(StatusCode.SERVER_FORCE_CLOSE);
+                        }
                     }
 
                     @Override
                     public void onClosed(WebSocket webSocket, int code, String reason) {
                         super.onClosed(webSocket, code, reason);
-                        Log.i(TAG, "onClosed: ");
+                        Log.i(TAG, "onClosed: code--->" + code + ",reason--->" + reason);
+                        for (IOnConnectListener onConnectListener : mOnConnectListenerList) {
+                            onConnectListener.onDisconnected();
+                        }
+                        release();
                     }
 
                     @Override
@@ -475,6 +499,7 @@ public enum IMClient {
                 });
     }
 
+
     /**
      * Author: QinHao
      * Email:cqflqinhao@126.com
@@ -482,6 +507,21 @@ public enum IMClient {
      * Description:断开 IM 连接
      */
     public void disconnect() {
+        disconnect(StatusCode.NORMAL_CLOSE);
+    }
+
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2020/1/7 21:38
+     * Description:释放资源
+     */
+    private void release() {
+        mOnConnectListenerList.clear();
+        mOnFriendStatusListenerList.clear();
+        mOnGroupChatStatusListenerList.clear();
+        mOnMessageListenerList.clear();
+        mOnSendMessageListenerList.clear();
 //        for (Timer timer : mRetrySendTimerMap.values()) {
 //            timer.cancel();
 //        }
@@ -497,10 +537,6 @@ public enum IMClient {
         if (mHeartBeatScheduledFuture != null) {
             mHeartBeatScheduledFuture.cancel(true);
             mHeartBeatScheduledFuture = null;
-        }
-        // 关闭连接
-        if (mWebSocket != null) {
-            mWebSocket.close(1000, "normal close");
         }
     }
 
