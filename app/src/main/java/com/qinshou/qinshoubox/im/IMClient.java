@@ -554,8 +554,6 @@ public enum IMClient {
      */
     private void insert2Database(MessageBean messageBean, boolean send) {
         mMessageManager.insertOrUpdate(messageBean);
-        ShowLogUtil.logi("send--->" + send);
-        ShowLogUtil.logi("messageBean--->" + messageBean);
         // 插入或更新会话
         String toUserId;
         long lastMsgTimestamp;
@@ -591,7 +589,6 @@ public enum IMClient {
             }
         }
         mConversationManager.insertOrUpdate(conversationBean);
-        ShowLogUtil.logi("conversationBean--->" + conversationBean);
         // 插入会话与消息关系
         mConversationManager.insertConversationMessageRel(new ConversationMessageRelBean(conversationBean.getId(), messageBean.getPid()));
     }

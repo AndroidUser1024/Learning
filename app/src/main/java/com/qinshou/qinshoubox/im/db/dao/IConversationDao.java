@@ -45,6 +45,17 @@ public interface IConversationDao extends IBaseDao {
     // LEFT OUTER JOIN group_chat AS gc ON gc.id=c.toUserId AND c.type=3001
     // WHERE f.id=#{id};
 
+    // SELECT
+    // c.id,c.toUserId,c.type,c.lastMsgContentType,c.lastMsgContent
+    // ,c.lastMsgTimestamp,c.lastMsgPid,c.unreadCount
+    // ,f.nickname,f.headImgSmall,f.remark,f.top,f.doNotDisturb
+    // ,gc.nickname,gc.headImgSmall,gc.nicknameDefault,gc.top,gc.doNotDisturb
+    // FROM conversation AS c
+    // LEFT OUTER JOIN friend AS f ON f.id=c.toUserId AND c.type=2001
+    // LEFT OUTER JOIN group_chat AS gc ON gc.id=c.toUserId AND c.type=3001
+    // WHERE c.type=#{type} AND c.toUserId=#{toUserId};
+    ConversationBean selectByTypeAndToUserId(int type, String toUserId);
+
     // 查询列表语句
     // SELECT
     // c.id,c.toUserId,c.type,c.lastMsgContentType,c.lastMsgContent
@@ -56,21 +67,6 @@ public interface IConversationDao extends IBaseDao {
     // LEFT OUTER JOIN group_chat AS gc ON gc.id=c.toUserId AND c.type=3001
     // ORDER BY c.lastMsgTimestamp DESC;
     List<ConversationBean> selectList();
-
-    // selectIdAndUnreadCountByTypeAndToUserId
-    // SELECT id,unreadCount FROM conversation WHERE type=#{type} AND toUserId=#{toUserId};
-    ConversationBean selectIdAndUnreadCountByTypeAndToUserId(int type, String toUserId);
-
-    // SELECT
-    // c.id,c.toUserId,c.type,c.lastMsgContentType,c.lastMsgContent
-    // ,c.lastMsgTimestamp,c.lastMsgPid,c.unreadCount
-    // ,f.nickname,f.headImgSmall,f.remark,f.top,f.doNotDisturb
-    // ,gc.nickname,gc.headImgSmall,gc.nicknameDefault,gc.top,gc.doNotDisturb
-    // FROM conversation AS c
-    // LEFT OUTER JOIN friend AS f ON f.id=c.toUserId AND c.type=2001
-    // LEFT OUTER JOIN group_chat AS gc ON gc.id=c.toUserId AND c.type=3001
-    // WHERE c.type=#{type} AND c.toUserId=#{toUserId};
-    ConversationBean selectByTypeAndToUserId(int type, String toUserId);
 
     List<ConversationBean> selectListOrderByLastMsgTimeDesc();
 

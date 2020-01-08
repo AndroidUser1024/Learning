@@ -16,7 +16,7 @@ import java.util.List;
  * Author: QinHao
  * Email:cqflqinhao@126.com
  * Date: 2019/12/5 9:03
- * Description:类描述
+ * Description:conversation 表的 Dao 的实现类
  */
 public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements IConversationDao {
     public ConversationDaoImpl(SQLiteDatabase SQLiteDatabase) {
@@ -61,14 +61,97 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
     }
 
     @Override
+    public ConversationBean selectByTypeAndToUserId(int type, String toUserId) {
+        String sql = "SELECT" +
+                " c.id" +
+                ",c.toUserId" +
+                ",c.type" +
+                ",c.lastMsgContentType" +
+                ",c.lastMsgContent" +
+                ",c.lastMsgTimestamp" +
+                ",c.lastMsgPid" +
+                ",c.unreadCount" +
+                ",f.nickname AS fNickname" +
+                ",f.headImgSmall AS fHeadImgSmall" +
+                ",f.remark AS fRemark" +
+                ",f.top AS fTop" +
+                ",f.doNotDisturb AS fDoNotDisturb" +
+                ",gc.nickname AS gcNickname" +
+                ",gc.headImgSmall AS gcHeadImgSmall" +
+                ",gc.nicknameDefault AS gcNicknameDefault" +
+                ",gc.top AS gcTop" +
+                ",gc.doNotDisturb AS gcDoNotDisturb" +
+                " FROM conversation AS c" +
+                " LEFT OUTER JOIN friend AS f ON f.id=c.toUserId AND c.type=2001" +
+                " LEFT OUTER JOIN group_chat AS gc ON gc.id=c.toUserId AND c.type=3001" +
+                " WHERE c.type=%s AND c.toUserId=%s";
+        sql = String.format(sql, type, getStringValue(toUserId));
+        Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
+        try {
+            if (cursor.moveToNext()) {
+                ConversationBean conversationBean = new ConversationBean();
+                conversationBean.setId(cursor.getInt(cursor.getColumnIndex("id")));
+                conversationBean.setToUserId(cursor.getString(cursor.getColumnIndex("toUserId")));
+                conversationBean.setType(cursor.getInt(cursor.getColumnIndex("type")));
+                conversationBean.setLastMsgContentType(cursor.getInt(cursor.getColumnIndex("lastMsgContentType")));
+                conversationBean.setLastMsgContent(cursor.getString(cursor.getColumnIndex("lastMsgContent")));
+                conversationBean.setLastMsgTimestamp(cursor.getLong(cursor.getColumnIndex("lastMsgTimestamp")));
+                conversationBean.setLastMsgPid(cursor.getInt(cursor.getColumnIndex("lastMsgPid")));
+                conversationBean.setUnreadCount(cursor.getInt(cursor.getColumnIndex("unreadCount")));
+                if (conversationBean.getType() == MessageType.CHAT.getValue()) {
+                    // 单聊
+                    String remark = cursor.getString(cursor.getColumnIndex("fRemark"));
+                    if (!TextUtils.isEmpty(remark)) {
+                        conversationBean.setTitle(remark);
+                    } else {
+                        conversationBean.setTitle(cursor.getString(cursor.getColumnIndex("fNickname")));
+                    }
+                    conversationBean.setHeadImgSmall(cursor.getString(cursor.getColumnIndex("fHeadImgSmall")));
+                    conversationBean.setTop(cursor.getInt(cursor.getColumnIndex("fTop")));
+                    conversationBean.setDoNotDisturb(cursor.getInt(cursor.getColumnIndex("fDoNotDisturb")));
+                } else if (conversationBean.getType() == MessageType.GROUP_CHAT.getValue()) {
+                    // 群聊
+                    String nickname = cursor.getString(cursor.getColumnIndex("gcNickname"));
+                    if (!TextUtils.isEmpty(nickname)) {
+                        conversationBean.setTitle(nickname);
+                    } else {
+                        conversationBean.setTitle(cursor.getString(cursor.getColumnIndex("gcNicknameDefault")));
+                    }
+                    conversationBean.setHeadImgSmall(cursor.getString(cursor.getColumnIndex("gcHeadImgSmall")));
+                    conversationBean.setTop(cursor.getInt(cursor.getColumnIndex("gcTop")));
+                    conversationBean.setDoNotDisturb(cursor.getInt(cursor.getColumnIndex("gcDoNotDisturb")));
+                }
+                return conversationBean;
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return null;
+    }
+
+    @Override
     public List<ConversationBean> selectList() {
         String sql = "SELECT" +
-                " c.id,c.toUserId,c.type,c.lastMsgContentType,c.lastMsgContent" +
-                " ,c.lastMsgTimestamp,c.lastMsgPid,c.unreadCount" +
-                " ,f.nickname AS fNickname,f.headImgSmall AS fHeadImgSmall" +
-                " ,f.remark AS fRemark,f.top AS fTop,f.doNotDisturb AS fDoNotDisturb" +
-                " ,gc.nickname AS gcNickname,gc.headImgSmall AS gcHeadImgSmall" +
-                " ,gc.nicknameDefault AS gcNicknameDefault,gc.top AS gcTop,gc.doNotDisturb AS gcDoNotDisturb" +
+                " c.id" +
+                ",c.toUserId" +
+                ",c.type" +
+                ",c.lastMsgContentType" +
+                ",c.lastMsgContent" +
+                ",c.lastMsgTimestamp" +
+                ",c.lastMsgPid" +
+                ",c.unreadCount" +
+                ",f.nickname AS fNickname" +
+                ",f.headImgSmall AS fHeadImgSmall" +
+                ",f.remark AS fRemark" +
+                ",f.top AS fTop" +
+                ",f.doNotDisturb AS fDoNotDisturb" +
+                ",gc.nickname AS gcNickname" +
+                ",gc.headImgSmall AS gcHeadImgSmall" +
+                ",gc.nicknameDefault AS gcNicknameDefault" +
+                ",gc.top AS gcTop" +
+                ",gc.doNotDisturb AS gcDoNotDisturb" +
                 " FROM conversation AS c" +
                 " LEFT OUTER JOIN friend AS f ON f.id=c.toUserId AND c.type=2001" +
                 " LEFT OUTER JOIN group_chat AS gc ON gc.id=c.toUserId AND c.type=3001;";
@@ -119,97 +202,26 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
     }
 
     @Override
-    public ConversationBean selectIdAndUnreadCountByTypeAndToUserId(int type, String toUserId) {
-        String sql = "SELECT id,unreadCount FROM conversation WHERE type=%s AND toUserId=%s";
-        sql = String.format(sql, type, getStringValue(toUserId));
-        Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
-        try {
-            if (cursor.moveToNext()) {
-                ConversationBean conversationBean = new ConversationBean();
-                int id = cursor.getInt(cursor.getColumnIndex("id"));
-                int unreadCount = cursor.getInt(cursor.getColumnIndex("unreadCount"));
-                conversationBean.setId(id);
-                conversationBean.setUnreadCount(unreadCount);
-                return conversationBean;
-            }
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public ConversationBean selectByTypeAndToUserId(int type, String toUserId) {
-        String sql = "SELECT" +
-                " c.id,c.toUserId,c.type,c.lastMsgContentType,c.lastMsgContent" +
-                " ,c.lastMsgTimestamp,c.lastMsgPid,c.unreadCount" +
-                " ,f.nickname AS fNickname,f.headImgSmall AS fHeadImgSmall" +
-                " ,f.remark AS fRemark,f.top AS fTop,f.doNotDisturb AS fDoNotDisturb" +
-                " ,gc.nickname AS gcNickname,gc.headImgSmall AS gcHeadImgSmall" +
-                " ,gc.nicknameDefault AS gcNicknameDefault,gc.top AS gcTop,gc.doNotDisturb AS gcDoNotDisturb" +
-                " FROM conversation AS c" +
-                " LEFT OUTER JOIN friend AS f ON f.id=c.toUserId AND c.type=2001" +
-                " LEFT OUTER JOIN group_chat AS gc ON gc.id=c.toUserId AND c.type=3001" +
-                " WHERE c.type=%s AND c.toUserId=%s";
-        sql = String.format(sql, type, getStringValue(toUserId));
-        ShowLogUtil.logi("sql--->" + sql);
-        Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
-        try {
-            if (cursor.moveToNext()) {
-                ShowLogUtil.logi("有");
-                ConversationBean conversationBean = new ConversationBean();
-                conversationBean.setId(cursor.getInt(cursor.getColumnIndex("id")));
-                conversationBean.setToUserId(cursor.getString(cursor.getColumnIndex("toUserId")));
-                conversationBean.setType(cursor.getInt(cursor.getColumnIndex("type")));
-                conversationBean.setLastMsgContentType(cursor.getInt(cursor.getColumnIndex("lastMsgContentType")));
-                conversationBean.setLastMsgContent(cursor.getString(cursor.getColumnIndex("lastMsgContent")));
-                conversationBean.setLastMsgTimestamp(cursor.getLong(cursor.getColumnIndex("lastMsgTimestamp")));
-                conversationBean.setLastMsgPid(cursor.getInt(cursor.getColumnIndex("lastMsgPid")));
-                conversationBean.setUnreadCount(cursor.getInt(cursor.getColumnIndex("unreadCount")));
-                if (conversationBean.getType() == MessageType.CHAT.getValue()) {
-                    // 单聊
-                    String remark = cursor.getString(cursor.getColumnIndex("fRemark"));
-                    if (!TextUtils.isEmpty(remark)) {
-                        conversationBean.setTitle(remark);
-                    } else {
-                        conversationBean.setTitle(cursor.getString(cursor.getColumnIndex("fNickname")));
-                    }
-                    conversationBean.setHeadImgSmall(cursor.getString(cursor.getColumnIndex("fHeadImgSmall")));
-                    conversationBean.setTop(cursor.getInt(cursor.getColumnIndex("fTop")));
-                    conversationBean.setDoNotDisturb(cursor.getInt(cursor.getColumnIndex("fDoNotDisturb")));
-                } else if (conversationBean.getType() == MessageType.GROUP_CHAT.getValue()) {
-                    // 群聊
-                    String nickname = cursor.getString(cursor.getColumnIndex("gcNickname"));
-                    if (!TextUtils.isEmpty(nickname)) {
-                        conversationBean.setTitle(nickname);
-                    } else {
-                        conversationBean.setTitle(cursor.getString(cursor.getColumnIndex("gcNicknameDefault")));
-                    }
-                    conversationBean.setHeadImgSmall(cursor.getString(cursor.getColumnIndex("gcHeadImgSmall")));
-                    conversationBean.setTop(cursor.getInt(cursor.getColumnIndex("gcTop")));
-                    conversationBean.setDoNotDisturb(cursor.getInt(cursor.getColumnIndex("gcDoNotDisturb")));
-                }
-                return conversationBean;
-            }
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-        return null;
-    }
-
-    @Override
     public List<ConversationBean> selectListOrderByLastMsgTimeDesc() {
         String sql = "SELECT" +
-                " c.id,c.toUserId,c.type,c.lastMsgContentType,c.lastMsgContent" +
-                " ,c.lastMsgTimestamp,c.lastMsgPid,c.unreadCount" +
-                " ,f.nickname AS fNickname,f.headImgSmall AS fHeadImgSmall" +
-                " ,f.remark AS fRemark,f.top AS fTop,f.doNotDisturb AS fDoNotDisturb" +
-                " ,gc.nickname AS gcNickname,gc.headImgSmall AS gcHeadImgSmall" +
-                " ,gc.nicknameDefault AS gcNicknameDefault,gc.top AS gcTop,gc.doNotDisturb AS gcDoNotDisturb" +
+                " c.id" +
+                ",c.toUserId" +
+                ",c.type" +
+                ",c.lastMsgContentType" +
+                ",c.lastMsgContent" +
+                ",c.lastMsgTimestamp" +
+                ",c.lastMsgPid" +
+                ",c.unreadCount" +
+                ",f.nickname AS fNickname" +
+                ",f.headImgSmall AS fHeadImgSmall" +
+                ",f.remark AS fRemark" +
+                ",f.top AS fTop" +
+                ",f.doNotDisturb AS fDoNotDisturb" +
+                ",gc.nickname AS gcNickname" +
+                ",gc.headImgSmall AS gcHeadImgSmall" +
+                ",gc.nicknameDefault AS gcNicknameDefault" +
+                ",gc.top AS gcTop" +
+                ",gc.doNotDisturb AS gcDoNotDisturb" +
                 " FROM conversation AS c" +
                 " LEFT OUTER JOIN friend AS f ON f.id=c.toUserId AND c.type=2001" +
                 " LEFT OUTER JOIN group_chat AS gc ON gc.id=c.toUserId AND c.type=3001" +
@@ -263,12 +275,24 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
     @Override
     public List<ConversationBean> selectListOrderByTopDescAndLastMsgTimeDesc() {
         String sql = "SELECT" +
-                " c.id,c.toUserId,c.type,c.lastMsgContentType,c.lastMsgContent" +
-                " ,c.lastMsgTimestamp,c.lastMsgPid,c.unreadCount" +
-                " ,f.nickname AS fNickname,f.headImgSmall AS fHeadImgSmall" +
-                " ,f.remark AS fRemark,f.top AS fTop,f.doNotDisturb AS fDoNotDisturb" +
-                " ,gc.nickname AS gcNickname,gc.headImgSmall AS gcHeadImgSmall" +
-                " ,gc.nicknameDefault AS gcNicknameDefault,gc.top AS gcTop,gc.doNotDisturb AS gcDoNotDisturb" +
+                " c.id" +
+                ",c.toUserId" +
+                ",c.type" +
+                ",c.lastMsgContentType" +
+                ",c.lastMsgContent" +
+                ",c.lastMsgTimestamp" +
+                ",c.lastMsgPid" +
+                ",c.unreadCount" +
+                ",f.nickname AS fNickname" +
+                ",f.headImgSmall AS fHeadImgSmall" +
+                ",f.remark AS fRemark" +
+                ",f.top AS fTop" +
+                ",f.doNotDisturb AS fDoNotDisturb" +
+                ",gc.nickname AS gcNickname" +
+                ",gc.headImgSmall AS gcHeadImgSmall" +
+                ",gc.nicknameDefault AS gcNicknameDefault" +
+                ",gc.top AS gcTop" +
+                ",gc.doNotDisturb AS gcDoNotDisturb" +
                 " FROM conversation AS c" +
                 " LEFT OUTER JOIN friend AS f ON f.id=c.toUserId AND c.type=2001" +
                 " LEFT OUTER JOIN group_chat AS gc ON gc.id=c.toUserId AND c.type=3001" +
@@ -347,7 +371,6 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
         sql = String.format(sql, id);
         getSQLiteDatabase().execSQL(sql);
         return 1;
-
     }
 
     @Override

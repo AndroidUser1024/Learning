@@ -63,7 +63,7 @@ public class MessageManager {
     }
 
     public List<MessageBean> getList(int type, String toUserId, int page, int pageSize) {
-        ConversationBean conversationBean = mConversationDao.selectIdAndUnreadCountByTypeAndToUserId(type, toUserId);
+        ConversationBean conversationBean = mConversationDao.selectByTypeAndToUserId(type, toUserId);
         if (conversationBean == null) {
             return new ArrayList<>();
         }
