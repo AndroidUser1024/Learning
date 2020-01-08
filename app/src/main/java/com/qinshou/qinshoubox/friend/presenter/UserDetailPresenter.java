@@ -65,7 +65,7 @@ public class UserDetailPresenter extends AbsPresenter<IUserDetailContract.IView,
 
     @Override
     public void deleteFriend(String toUserId) {
-        getModel().deleteFriend(toUserId, new Callback<Object>() {
+        getModel().deleteFriend(toUserId, new QSCallback<Object>() {
             @Override
             public void onSuccess(Object data) {
                 if (!isViewAttached()) {

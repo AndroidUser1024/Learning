@@ -9,6 +9,7 @@ import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
+import com.qinshou.qinshoubox.im.listener.IOnConnectListener;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.login.view.fragment.LoginOrRegisterFragment;
 
@@ -28,7 +29,7 @@ public class LogoutStatus implements IUserStatus {
     }
 
     @Override
-    public void login(Context context, UserBean userBean) {
+    public void login(final Context context, UserBean userBean) {
         // 存储最后一次登录成功的用户名
         SharedPreferencesHelper.SINGLETON.putString(IConstant.SP_KEY_LAST_LOGIN_USERNAME, userBean.getUsername());
         context.startActivity(new Intent(context, MainActivity.class));
@@ -36,6 +37,27 @@ public class LogoutStatus implements IUserStatus {
         UserStatusManager.SINGLETON.setUserStatus(new LoginStatus(userBean));
         // 发送事件更新登录状态
         EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.LOGIN, null));
+        IMClient.SINGLETON.addOnConnectListener(new IOnConnectListener() {
+            @Override
+            public void onConnected() {
+
+            }
+
+            @Override
+            public void onAuthenticated() {
+
+            }
+
+            @Override
+            public void onConnectFailure(Exception e) {
+
+            }
+
+            @Override
+            public void onDisconnected() {
+                UserStatusManager.SINGLETON.logout(context);
+            }
+        });
         // 连接 IM 服务
         IMClient.SINGLETON.connect(userBean.getId());
     }

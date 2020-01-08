@@ -3,13 +3,19 @@ package com.qinshou.qinshoubox.im.manager;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.friend.bean.FriendHistoryBean;
+import com.qinshou.qinshoubox.im.IMClient;
+import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
+import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.cache.FriendDatabaseCache;
 import com.qinshou.qinshoubox.im.cache.FriendDoubleCache;
 import com.qinshou.qinshoubox.im.cache.MemoryCache;
 import com.qinshou.qinshoubox.im.db.DatabaseHelper;
+import com.qinshou.qinshoubox.im.enums.FriendStatus;
+import com.qinshou.qinshoubox.im.enums.MessageType;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.im.listener.IOnFriendStatusListener;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.listener.FailureRunnable;
@@ -18,7 +24,9 @@ import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxFriendApi;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxUserApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Author: QinHao
@@ -32,74 +40,6 @@ public class FriendManager extends AbsManager<String, FriendBean> {
 //        super(userId, new MemoryCache<String, FriendBean>());
 //        super(userId, new FriendDatabaseCache(databaseHelper));
         super(userId, new FriendDoubleCache(new MemoryCache<String, FriendBean>(), new FriendDatabaseCache(databaseHelper)));
-        IMClient.SINGLETON.addOnFriendStatusListener(new IOnFriendStatusListener() {
-            @Override
-            public void add(String fromUserId, String additionalMsg, boolean newFriend) {
-
-            }
-
-            @Override
-            public void agreeAdd(String fromUserId) {
-                // 更新缓存
-                updateCache(fromUserId);
-            }
-
-            @Override
-            public void refuseAdd(String fromUserId) {
-
-            }
-
-            @Override
-            public void delete(String fromUserId) {
-
-            }
-
-            @Override
-            public void online(String fromUserId) {
-
-            }
-
-            @Override
-            public void offline(String fromUserId) {
-
-            }
-        });
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2020/1/6 17:50
-     * Description:更新缓存
-     *
-     * @param id 用户 id
-     */
-    private void updateCache(String id) {
-        // 更新缓存
-        OkHttpHelperForQSBoxUserApi.SINGLETON.getUserDetail(getUserId(), id)
-                .transform(new QSApiTransformer<UserDetailBean>())
-                .enqueue(new Callback<UserDetailBean>() {
-                    @Override
-                    public void onSuccess(UserDetailBean data) {
-                        FriendBean friendBean = new FriendBean();
-                        friendBean.setId(data.getId());
-                        friendBean.setNickname(data.getNickname());
-                        friendBean.setHeadImg(data.getHeadImg());
-                        friendBean.setHeadImgSmall(data.getHeadImgSmall());
-                        friendBean.setSignature(data.getSignature());
-                        friendBean.setRemark(data.getRemark());
-                        friendBean.setTop(data.getTop());
-                        friendBean.setDoNotDisturb(data.getDoNotDisturb());
-                        friendBean.setBlackList(data.getBlackList());
-
-                        getCache().put(friendBean.getId(), friendBean);
-                    }
-
-                    @Override
-                    public void onFailure(Exception e) {
-
-                    }
-                });
     }
 
     /**
@@ -176,9 +116,12 @@ public class FriendManager extends AbsManager<String, FriendBean> {
                 .enqueue(new Callback<Object>() {
                     @Override
                     public void onSuccess(Object data) {
+                        Map<String, Object> extend = new HashMap<>();
+                        extend.put("status", FriendStatus.AGREE_ADD.getValue());
+                        // 创建已经是好友的提示信息的系统消息
+                        MessageBean messageBean = MessageBean.createChatSystemMessage(toUserId, getUserId(), extend);
+                        IMClient.SINGLETON.handleMessage(messageBean);
                         qsCallback.onSuccess(data);
-                        // 更新缓存
-                        updateCache(toUserId);
                     }
 
                     @Override
@@ -196,12 +139,37 @@ public class FriendManager extends AbsManager<String, FriendBean> {
      *
      * @param toUserId 待删除的好友的 id
      */
-    public void deleteFriend(String toUserId, Callback<Object> callback) {
+    public void deleteFriend(final String toUserId, final QSCallback<Object> qsCallback) {
         OkHttpHelperForQSBoxFriendApi.SINGLETON.delete(getUserId(), toUserId)
                 .transform(new QSApiTransformer<Object>())
-                .enqueue(callback);
+                .enqueue(new Callback<Object>() {
+                    @Override
+                    public void onSuccess(Object data) {
+                        ConversationManager conversationManager = IMClient.SINGLETON.getConversationManager();
+                        ConversationBean conversationBean = conversationManager.selectByTypeAndToUserId(MessageType.CHAT.getValue(), toUserId);
+                        if (conversationBean != null) {
+                            conversationManager.deleteById(conversationBean.getId());
+                        }
+
+                        qsCallback.onSuccess(data);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+
+                    }
+                });
     }
 
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2019/12/6 11:50
+     * Description:设置备注
+     *
+     * @param toUserId 目标好友的 id
+     * @param remark   目标好友的新备注
+     */
     public void setRemark(final String toUserId, final String remark, final Callback<Object> callback) {
         OkHttpHelperForQSBoxFriendApi.SINGLETON.setInfo(getUserId(), toUserId, remark, null, null, null)
                 .transform(new QSApiTransformer<Object>())
