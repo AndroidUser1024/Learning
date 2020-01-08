@@ -1,21 +1,11 @@
 package com.qinshou.qinshoubox.im.manager;
 
 
-import android.text.TextUtils;
-
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.bean.ConversationMessageRelBean;
-import com.qinshou.qinshoubox.im.bean.FriendBean;
-import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 import com.qinshou.qinshoubox.im.db.DatabaseHelper;
 import com.qinshou.qinshoubox.im.db.dao.IConversationDao;
 import com.qinshou.qinshoubox.im.db.dao.IConversationMessageRelDao;
-import com.qinshou.qinshoubox.im.db.dao.IFriendDao;
-import com.qinshou.qinshoubox.im.db.dao.IGroupChatDao;
-import com.qinshou.qinshoubox.im.db.dao.IMessageDao;
-import com.qinshou.qinshoubox.im.enums.MessageType;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -34,20 +24,10 @@ public class ConversationManager {
      * 会话和消息关系 Dao
      */
     private IConversationMessageRelDao mConversationMessageRelDao;
-    /**
-     * 好友 Dao
-     */
-    private IFriendDao mFriendDao;
-    /**
-     * 群 Dao
-     */
-    private IGroupChatDao mGroupChatDao;
 
     public ConversationManager(DatabaseHelper databaseHelper, String userId) {
         mConversationDao = databaseHelper.getDao(IConversationDao.class);
         mConversationMessageRelDao = databaseHelper.getDao(IConversationMessageRelDao.class);
-        mFriendDao = databaseHelper.getDao(IFriendDao.class);
-        mGroupChatDao = databaseHelper.getDao(IGroupChatDao.class);
     }
 
     public void insertOrUpdate(ConversationBean conversationBean) {
