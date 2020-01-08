@@ -5,8 +5,6 @@ import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.friend.bean.FriendHistoryBean;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
-import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
-import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.cache.FriendDatabaseCache;
@@ -16,12 +14,9 @@ import com.qinshou.qinshoubox.im.db.DatabaseHelper;
 import com.qinshou.qinshoubox.im.enums.FriendStatus;
 import com.qinshou.qinshoubox.im.enums.MessageType;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
-import com.qinshou.qinshoubox.im.listener.IOnFriendStatusListener;
-import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.listener.FailureRunnable;
 import com.qinshou.qinshoubox.listener.SuccessRunnable;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxFriendApi;
-import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxUserApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 
 import java.util.HashMap;
@@ -146,7 +141,7 @@ public class FriendManager extends AbsManager<String, FriendBean> {
                     @Override
                     public void onSuccess(Object data) {
                         ConversationManager conversationManager = IMClient.SINGLETON.getConversationManager();
-                        ConversationBean conversationBean = conversationManager.selectByTypeAndToUserId(MessageType.CHAT.getValue(), toUserId);
+                        ConversationBean conversationBean = conversationManager.getByTypeAndToUserId(MessageType.CHAT.getValue(), toUserId);
                         if (conversationBean != null) {
                             conversationManager.deleteById(conversationBean.getId());
                         }

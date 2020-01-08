@@ -24,62 +24,47 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
     }
 
     @Override
-    public ConversationBean insert(boolean send, ConversationBean conversationBean) {
-        ConversationBean select = selectIdAndUnreadCountByTypeAndToUserId(conversationBean.getType(), conversationBean.getToUserId());
-        if (select == null) {
-            if (send) {
-                conversationBean.setUnreadCount(0);
-            } else {
-                conversationBean.setUnreadCount(1);
+    public ConversationBean insert(ConversationBean conversationBean) {
+        String sql = "INSERT INTO conversation" +
+                " (toUserId,type,lastMsgContentType,lastMsgContent,lastMsgTimestamp,lastMsgPid,unreadCount)" +
+                " VALUES" +
+                " (%s,%s,%s,%s,%s,%s,%s)";
+        sql = String.format(sql, getStringValue(conversationBean.getToUserId()), conversationBean.getType()
+                , conversationBean.getLastMsgContentType(), getStringValue(conversationBean.getLastMsgContent())
+                , conversationBean.getLastMsgTimestamp(), conversationBean.getLastMsgPid(), conversationBean.getUnreadCount());
+        getSQLiteDatabase().execSQL(sql);
+        Cursor cursor = getSQLiteDatabase().rawQuery("SELECT last_insert_rowid() FROM message", new String[]{});
+        try {
+            if (cursor.moveToFirst()) {
+                int id = cursor.getInt(0);
+                conversationBean.setId(id);
             }
-            String sql = "INSERT INTO conversation" +
-                    " (toUserId,type,lastMsgContent,lastMsgContentType,lastMsgTimestamp,unreadCount)" +
-                    " VALUES" +
-                    " (%s,%s,%s,%s,%s,%s)";
-            sql = String.format(sql, getStringValue(conversationBean.getToUserId()), conversationBean.getType()
-                    , getStringValue(conversationBean.getLastMsgContent()), conversationBean.getLastMsgContentType()
-                    , conversationBean.getLastMsgTimestamp(), conversationBean.getUnreadCount());
-            getSQLiteDatabase().execSQL(sql);
-            Cursor cursor = getSQLiteDatabase().rawQuery("SELECT last_insert_rowid() FROM message", new String[]{});
-            try {
-                if (cursor.moveToFirst()) {
-                    int pid = cursor.getInt(0);
-                    conversationBean.setId(pid);
-                }
-            } finally {
-                if (cursor != null) {
-                    cursor.close();
-                }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
             }
-        } else {
-            conversationBean.setId(select.getId());
-            if (!send) {
-                if (select.getUnreadCount() == -1) {
-                    // 如果被标记过未读,则设置未读数为 1
-                    conversationBean.setUnreadCount(1);
-                } else {
-                    // 否则在原有的未读数上 +1
-                    conversationBean.setUnreadCount(select.getUnreadCount() + 1);
-                }
-            }
-            String sql = "UPDATE conversation SET\n" +
-                    " toUserId=%s,type=%s,lastMsgContent=%s,lastMsgContentType=%s" +
-                    " ,lastMsgTimestamp=%s,unreadCount=%s" +
-                    " WHERE id=%s";
-            sql = String.format(sql, getStringValue(conversationBean.getToUserId()), conversationBean.getType()
-                    , getStringValue(conversationBean.getLastMsgContent()), conversationBean.getLastMsgContentType()
-                    , conversationBean.getLastMsgTimestamp(), conversationBean.getUnreadCount()
-                    , conversationBean.getId());
-            getSQLiteDatabase().execSQL(sql);
         }
         return conversationBean;
     }
 
     @Override
+    public void update(ConversationBean conversationBean) {
+        String sql = "UPDATE conversation SET\n" +
+                " toUserId=%s,type=%s,lastMsgContentType=%s,lastMsgContent=%s" +
+                " ,lastMsgTimestamp=%s,lastMsgPid=%s,unreadCount=%s" +
+                " WHERE id=%s";
+        sql = String.format(sql, getStringValue(conversationBean.getToUserId()), conversationBean.getType()
+                , conversationBean.getLastMsgContentType(), getStringValue(conversationBean.getLastMsgContent())
+                , conversationBean.getLastMsgTimestamp(), conversationBean.getLastMsgPid(), conversationBean.getUnreadCount()
+                , conversationBean.getId());
+        getSQLiteDatabase().execSQL(sql);
+    }
+
+    @Override
     public List<ConversationBean> selectList() {
         String sql = "SELECT" +
-                " c.id,c.toUserId,c.type,c.lastMsgContent,c.lastMsgContentType" +
-                " ,c.lastMsgTimestamp,c.unreadCount" +
+                " c.id,c.toUserId,c.type,c.lastMsgContentType,c.lastMsgContent" +
+                " ,c.lastMsgTimestamp,c.lastMsgPid,c.unreadCount" +
                 " ,f.nickname AS fNickname,f.headImgSmall AS fHeadImgSmall" +
                 " ,f.remark AS fRemark,f.top AS fTop,f.doNotDisturb AS fDoNotDisturb" +
                 " ,gc.nickname AS gcNickname,gc.headImgSmall AS gcHeadImgSmall" +
@@ -95,9 +80,10 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
                 conversationBean.setId(cursor.getInt(cursor.getColumnIndex("id")));
                 conversationBean.setToUserId(cursor.getString(cursor.getColumnIndex("toUserId")));
                 conversationBean.setType(cursor.getInt(cursor.getColumnIndex("type")));
-                conversationBean.setLastMsgContent(cursor.getString(cursor.getColumnIndex("lastMsgContent")));
                 conversationBean.setLastMsgContentType(cursor.getInt(cursor.getColumnIndex("lastMsgContentType")));
+                conversationBean.setLastMsgContent(cursor.getString(cursor.getColumnIndex("lastMsgContent")));
                 conversationBean.setLastMsgTimestamp(cursor.getLong(cursor.getColumnIndex("lastMsgTimestamp")));
+                conversationBean.setLastMsgPid(cursor.getInt(cursor.getColumnIndex("lastMsgPid")));
                 conversationBean.setUnreadCount(cursor.getInt(cursor.getColumnIndex("unreadCount")));
                 if (conversationBean.getType() == MessageType.CHAT.getValue()) {
                     // 单聊
@@ -157,8 +143,8 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
     @Override
     public ConversationBean selectByTypeAndToUserId(int type, String toUserId) {
         String sql = "SELECT" +
-                " c.id,c.toUserId,c.type,c.lastMsgContent,c.lastMsgContentType" +
-                " ,c.lastMsgTimestamp,c.unreadCount" +
+                " c.id,c.toUserId,c.type,c.lastMsgContentType,c.lastMsgContent" +
+                " ,c.lastMsgTimestamp,c.lastMsgPid,c.unreadCount" +
                 " ,f.nickname AS fNickname,f.headImgSmall AS fHeadImgSmall" +
                 " ,f.remark AS fRemark,f.top AS fTop,f.doNotDisturb AS fDoNotDisturb" +
                 " ,gc.nickname AS gcNickname,gc.headImgSmall AS gcHeadImgSmall" +
@@ -168,16 +154,19 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
                 " LEFT OUTER JOIN group_chat AS gc ON gc.id=c.toUserId AND c.type=3001" +
                 " WHERE c.type=%s AND c.toUserId=%s";
         sql = String.format(sql, type, getStringValue(toUserId));
+        ShowLogUtil.logi("sql--->" + sql);
         Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
         try {
             if (cursor.moveToNext()) {
+                ShowLogUtil.logi("有");
                 ConversationBean conversationBean = new ConversationBean();
                 conversationBean.setId(cursor.getInt(cursor.getColumnIndex("id")));
                 conversationBean.setToUserId(cursor.getString(cursor.getColumnIndex("toUserId")));
                 conversationBean.setType(cursor.getInt(cursor.getColumnIndex("type")));
-                conversationBean.setLastMsgContent(cursor.getString(cursor.getColumnIndex("lastMsgContent")));
                 conversationBean.setLastMsgContentType(cursor.getInt(cursor.getColumnIndex("lastMsgContentType")));
+                conversationBean.setLastMsgContent(cursor.getString(cursor.getColumnIndex("lastMsgContent")));
                 conversationBean.setLastMsgTimestamp(cursor.getLong(cursor.getColumnIndex("lastMsgTimestamp")));
+                conversationBean.setLastMsgPid(cursor.getInt(cursor.getColumnIndex("lastMsgPid")));
                 conversationBean.setUnreadCount(cursor.getInt(cursor.getColumnIndex("unreadCount")));
                 if (conversationBean.getType() == MessageType.CHAT.getValue()) {
                     // 单聊
@@ -215,8 +204,8 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
     @Override
     public List<ConversationBean> selectListOrderByLastMsgTimeDesc() {
         String sql = "SELECT" +
-                " c.id,c.toUserId,c.type,c.lastMsgContent,c.lastMsgContentType" +
-                " ,c.lastMsgTimestamp,c.unreadCount" +
+                " c.id,c.toUserId,c.type,c.lastMsgContentType,c.lastMsgContent" +
+                " ,c.lastMsgTimestamp,c.lastMsgPid,c.unreadCount" +
                 " ,f.nickname AS fNickname,f.headImgSmall AS fHeadImgSmall" +
                 " ,f.remark AS fRemark,f.top AS fTop,f.doNotDisturb AS fDoNotDisturb" +
                 " ,gc.nickname AS gcNickname,gc.headImgSmall AS gcHeadImgSmall" +
@@ -233,9 +222,10 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
                 conversationBean.setId(cursor.getInt(cursor.getColumnIndex("id")));
                 conversationBean.setToUserId(cursor.getString(cursor.getColumnIndex("toUserId")));
                 conversationBean.setType(cursor.getInt(cursor.getColumnIndex("type")));
-                conversationBean.setLastMsgContent(cursor.getString(cursor.getColumnIndex("lastMsgContent")));
                 conversationBean.setLastMsgContentType(cursor.getInt(cursor.getColumnIndex("lastMsgContentType")));
+                conversationBean.setLastMsgContent(cursor.getString(cursor.getColumnIndex("lastMsgContent")));
                 conversationBean.setLastMsgTimestamp(cursor.getLong(cursor.getColumnIndex("lastMsgTimestamp")));
+                conversationBean.setLastMsgPid(cursor.getInt(cursor.getColumnIndex("lastMsgPid")));
                 conversationBean.setUnreadCount(cursor.getInt(cursor.getColumnIndex("unreadCount")));
                 if (conversationBean.getType() == MessageType.CHAT.getValue()) {
                     // 单聊
@@ -273,8 +263,8 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
     @Override
     public List<ConversationBean> selectListOrderByTopDescAndLastMsgTimeDesc() {
         String sql = "SELECT" +
-                " c.id,c.toUserId,c.type,c.lastMsgContent,c.lastMsgContentType" +
-                " ,c.lastMsgTimestamp,c.unreadCount" +
+                " c.id,c.toUserId,c.type,c.lastMsgContentType,c.lastMsgContent" +
+                " ,c.lastMsgTimestamp,c.lastMsgPid,c.unreadCount" +
                 " ,f.nickname AS fNickname,f.headImgSmall AS fHeadImgSmall" +
                 " ,f.remark AS fRemark,f.top AS fTop,f.doNotDisturb AS fDoNotDisturb" +
                 " ,gc.nickname AS gcNickname,gc.headImgSmall AS gcHeadImgSmall" +
@@ -291,9 +281,10 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
                 conversationBean.setId(cursor.getInt(cursor.getColumnIndex("id")));
                 conversationBean.setToUserId(cursor.getString(cursor.getColumnIndex("toUserId")));
                 conversationBean.setType(cursor.getInt(cursor.getColumnIndex("type")));
-                conversationBean.setLastMsgContent(cursor.getString(cursor.getColumnIndex("lastMsgContent")));
                 conversationBean.setLastMsgContentType(cursor.getInt(cursor.getColumnIndex("lastMsgContentType")));
+                conversationBean.setLastMsgContent(cursor.getString(cursor.getColumnIndex("lastMsgContent")));
                 conversationBean.setLastMsgTimestamp(cursor.getLong(cursor.getColumnIndex("lastMsgTimestamp")));
+                conversationBean.setLastMsgPid(cursor.getInt(cursor.getColumnIndex("lastMsgPid")));
                 conversationBean.setUnreadCount(cursor.getInt(cursor.getColumnIndex("unreadCount")));
                 if (conversationBean.getType() == MessageType.CHAT.getValue()) {
                     // 单聊
@@ -331,10 +322,12 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
     @Override
     public int getTotalUnreadCount() {
 //        String sql = "SELECT SUM(unreadCount) AS totalUnreadCount FROM conversation";
-        String sql = "SELECT SUM(ABS(unreadCount)) AS totalUnreadCount FROM conversation AS c" +
+        String sql = "SELECT SUM(ABS(unreadCount)) AS totalUnreadCount" +
+                " FROM conversation AS c" +
                 " WHERE" +
                 " (SELECT doNotDisturb FROM friend AS f WHERE c.type=2001 AND f.id=c.toUserId)=0" +
-                " OR (SELECT doNotDisturb FROM group_chat AS gc WHERE c.type=3001 AND gc.id=c.toUserId)=0";
+                " OR" +
+                " (SELECT doNotDisturb FROM group_chat AS gc WHERE c.type=3001 AND gc.id=c.toUserId)=0";
         Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
         try {
             if (cursor.moveToNext()) {
@@ -371,5 +364,23 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
         sql = String.format(sql, unreadCount, id);
         getSQLiteDatabase().execSQL(sql);
         return 1;
+    }
+
+    @Override
+    public boolean existsById(int id) {
+        String sql = "SELECT COUNT(id) FROM conversation WHERE id=%s";
+        sql = String.format(sql, id);
+        Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
+        try {
+            if (cursor.moveToNext()) {
+                int count = cursor.getInt(cursor.getColumnIndex("COUNT(id)"));
+                return count > 0;
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return false;
     }
 }

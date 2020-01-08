@@ -29,6 +29,24 @@ public class ConversationMessageRelDaoImpl extends AbsDaoImpl<ConversationMessag
     }
 
     @Override
+    public void deleteByConversationId(ConversationMessageRelBean conversationMessageRelBean) {
+        String sql = "DELETE FROM conversation_message_rel WHERE conversationId=%s";
+        sql = String.format(sql, conversationMessageRelBean.getConversationId());
+        getSQLiteDatabase().execSQL(sql);
+    }
+
+    @Override
+    public void update(ConversationMessageRelBean conversationMessageRelBean) {
+        String sql = "UPDATE conversation_message_rel SET" +
+                " conversationId=%s,messagePid=%s" +
+                " WHERE" +
+                " id=%s";
+        sql = String.format(sql, conversationMessageRelBean.getConversationId(), conversationMessageRelBean.getMessagePid()
+                , conversationMessageRelBean.getId());
+        getSQLiteDatabase().execSQL(sql);
+    }
+
+    @Override
     public boolean existsByConversationIdAndMessagePid(ConversationMessageRelBean conversationMessageRelBean) {
         String sql = "SELECT" +
                 " COUNT(id)" +

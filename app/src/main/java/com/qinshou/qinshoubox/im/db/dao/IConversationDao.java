@@ -13,31 +13,32 @@ import java.util.List;
 public interface IConversationDao extends IBaseDao {
     // 创建表语句
     // CREATE TABLE IF NOT EXISTS conversation(id INTEGER PRIMARY KEY AUTOINCREMENT
-    // ,toUserId TEXT,type INTEGER,lastMsgContent TEXT
-    // ,lastMsgContentType INTEGER,lastMsgTimestamp INTEGER
-    // ,unreadCount INTEGER
+    // ,toUserId TEXT,type INTEGER,lastMsgContentType INTEGER
+    // ,lastMsgContent TEXT,lastMsgTimestamp INTEGER
+    // ,lastMsgPid INTEGER,unreadCount INTEGER
     // );
 
     // 插入语句
     // INSERT INTO conversation
-    // (toUserId,type,lastMsgContent,lastMsgContentType,lastMsgTimestamp
-    // ,unreadCount)
+    // (toUserId,type,lastMsgContentType,lastMsgContent,lastMsgTimestamp
+    // ,lastMsgPid,unreadCount)
     // VALUES
-    // (#{toUserId},#{type},#{lastMsgContent},#{lastMsgContentType}
-    // ,#{lastMsgTimestamp},#{unreadCount});
-    ConversationBean insert(boolean send, ConversationBean conversationBean);
+    // (#{toUserId},#{type},#{lastMsgContentType},#{lastMsgContent}
+    // ,#{lastMsgTimestamp},#{lastMsgPid},#{unreadCount});
+    ConversationBean insert(ConversationBean conversationBean);
 
     // 修改语句
     // UPDATE conversation SET
-    // toUserId=#{toUserId},type=#{type},lastMsgContent=#{lastMsgContent}
-    // ,lastMsgContentType=#{lastMsgContentType},lastMsgTimestamp=#{lastMsgTimestamp}
-    // ,unreadCount=#{unreadCount}
+    // toUserId=#{toUserId},type=#{type},lastMsgContentType=#{lastMsgContentType}
+    // ,lastMsgContent=#{lastMsgContent},lastMsgTimestamp=#{lastMsgTimestamp}
+    // ,lastMsgPid={lastMsgPid},unreadCount=#{unreadCount}
     // WHERE id=#{id};
+    void update(ConversationBean conversationBean);
 
     // 查询语句
     // SELECT
-    // c.id,c.toUserId,c.type,c.lastMsgContent,c.lastMsgContentType
-    // ,c.lastMsgTimestamp,c.unreadCount
+    // c.id,c.toUserId,c.type,c.lastMsgContentType,c.lastMsgContent
+    // ,c.lastMsgTimestamp,c.lastMsgPid,c.unreadCount
     // ,f.doNotDisturb,f.blackList
     // FROM conversation AS c
     // LEFT OUTER JOIN friend AS f ON f.id=c.toUserId AND c.type=2001
@@ -46,8 +47,8 @@ public interface IConversationDao extends IBaseDao {
 
     // 查询列表语句
     // SELECT
-    // c.id,c.toUserId,c.type,c.lastMsgContent,c.lastMsgContentType
-    // ,c.lastMsgTimestamp,c.unreadCount
+    // c.id,c.toUserId,c.type,c.lastMsgContentType,c.lastMsgContent
+    // ,c.lastMsgTimestamp,c.lastMsgPid,c.unreadCount
     // ,f.nickname,f.headImgSmall,f.remark,f.top,f.doNotDisturb
     // ,gc.nickname,gc.headImgSmall,gc.nicknameDefault,gc.top,gc.doNotDisturb
     // FROM conversation AS c
@@ -61,8 +62,8 @@ public interface IConversationDao extends IBaseDao {
     ConversationBean selectIdAndUnreadCountByTypeAndToUserId(int type, String toUserId);
 
     // SELECT
-    // c.id,c.toUserId,c.type,c.lastMsgContent,c.lastMsgContentType
-    // ,c.lastMsgTimestamp,c.unreadCount
+    // c.id,c.toUserId,c.type,c.lastMsgContentType,c.lastMsgContent
+    // ,c.lastMsgTimestamp,c.lastMsgPid,c.unreadCount
     // ,f.nickname,f.headImgSmall,f.remark,f.top,f.doNotDisturb
     // ,gc.nickname,gc.headImgSmall,gc.nicknameDefault,gc.top,gc.doNotDisturb
     // FROM conversation AS c
@@ -86,5 +87,10 @@ public interface IConversationDao extends IBaseDao {
     int deleteById(int id);
 
     // UPDATE conversation SET unreadCount=-1 WHERE id=#{id};
-    int setUnreadCount(int unreadCount,int id);
+    int setUnreadCount(int unreadCount, int id);
+
+    // existsById
+    // SELECT COUNT(id) FROM conversation WHERE id=#{id}
+    boolean existsById(int id);
+
 }

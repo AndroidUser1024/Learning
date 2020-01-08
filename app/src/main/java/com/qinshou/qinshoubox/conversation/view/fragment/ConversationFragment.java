@@ -7,14 +7,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
-import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
-import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemClickListener;
-import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemLongClickListener;
 import com.qinshou.commonmodule.rcvdecoration.DividerDecoration;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.util.SystemUtil;
-import com.qinshou.qinshoubox.conversation.view.activity.ChatActivity;
-import com.qinshou.qinshoubox.conversation.view.activity.GroupChatActivity;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
@@ -28,10 +23,6 @@ import com.qinshou.qinshoubox.conversation.presenter.ConversationPresenter;
 import com.qinshou.qinshoubox.conversation.view.adapter.RcvConversationAdapter;
 import com.qinshou.qinshoubox.im.view.fragment.IMActivity;
 import com.qinshou.qinshoubox.util.QSUtil;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -63,7 +54,8 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
             } else if (messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
                 toUserId = messageBean.getToUserId();
             }
-            ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().selectByTypeAndToUserId(messageBean.getType(), toUserId);
+            ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().getByTypeAndToUserId(messageBean.getType(), toUserId);
+            ShowLogUtil.logi("onReceive: conversationBean--->" + conversationBean);
             // 更新会话列表
             updateConversationList(conversationBean);
             // 更新未读数

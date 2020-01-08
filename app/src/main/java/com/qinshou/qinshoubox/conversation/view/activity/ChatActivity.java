@@ -29,15 +29,12 @@ import com.qinshou.commonmodule.util.permissionutil.PermissionUtil;
 import com.qinshou.commonmodule.widget.RefreshLayout;
 import com.qinshou.commonmodule.widget.TitleBar;
 import com.qinshou.imagemodule.callback.IOnImageChooseResultCallback;
-import com.qinshou.imagemodule.callback.IOnImageCropResultCallback;
 import com.qinshou.imagemodule.util.ImageChooseUtil;
-import com.qinshou.imagemodule.util.ImageCropUtil;
 import com.qinshou.imagemodule.util.ImagePathUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.conversation.bean.UploadImgResultBean;
-import com.qinshou.qinshoubox.conversation.bean.UploadResultBean;
 import com.qinshou.qinshoubox.conversation.bean.UploadVoiceResultBean;
 import com.qinshou.qinshoubox.conversation.contract.IChatContract;
 import com.qinshou.qinshoubox.conversation.presenter.ChatPresenter;
@@ -53,13 +50,10 @@ import com.qinshou.qinshoubox.im.enums.MessageType;
 import com.qinshou.qinshoubox.im.listener.IOnMessageListener;
 import com.qinshou.qinshoubox.im.listener.IOnSendMessageListener;
 import com.qinshou.qinshoubox.listener.ClearErrorInfoTextWatcher;
-import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -350,7 +344,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
                 return;
             }
             // 重置未读数
-            ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().selectByTypeAndToUserId(MessageType.CHAT.getValue(), mToUserId);
+            ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().getByTypeAndToUserId(MessageType.CHAT.getValue(), mToUserId);
             IMClient.SINGLETON.getConversationManager().resetUnreadCount(conversationBean.getId());
             // 更新列表
             mRcvMessageAdapter.getDataList().add(messageBean);
@@ -636,7 +630,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
         mRcvMessage.scrollToPosition(mRcvMessageAdapter.getItemCount() - 1);
         mEtContent.setText("");
         // 更新会话列表
-        ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().selectByTypeAndToUserId(messageBean.getType(), messageBean.getToUserId());
+        ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().getByTypeAndToUserId(messageBean.getType(), messageBean.getToUserId());
         EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_LIST, conversationBean));
     }
 

@@ -7,10 +7,13 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.okhttphelper.callback.AbsDownloadCallback;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.bean.UploadImgResultBean;
 import com.qinshou.qinshoubox.conversation.bean.UploadVoiceResultBean;
+import com.qinshou.qinshoubox.im.bean.ConversationBean;
+import com.qinshou.qinshoubox.im.bean.ConversationMessageRelBean;
 import com.qinshou.qinshoubox.im.bean.FriendStatusBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatStatusBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
@@ -68,8 +71,8 @@ public enum IMClient {
     private static final String TAG = "IMClient";
     private final int TIME_OUT = 10 * 1000;
     //    private static final String URL = "ws://www.mrqinshou.com:10086/websocket";
-//    private static final String URL = "ws://172.16.60.231:10086/websocket";
-    private static final String URL = "ws://192.168.1.109:10086/websocket";
+    private static final String URL = "ws://172.16.60.231:10086/websocket";
+    //    private static final String URL = "ws://192.168.1.109:10086/websocket";
     private Context mContext;
     private WebSocket mWebSocket;
     private Handler mHandler = new Handler(Looper.getMainLooper());
@@ -238,7 +241,7 @@ public enum IMClient {
 //                    if (exist) {
 //                        return;
 //                    }
-                    mMessageManager.insert(false, messageBean);
+                    insert2Database(messageBean, false);
                     for (IOnMessageListener onMessageListener : mOnMessageListenerList) {
                         onMessageListener.onMessage(messageBean);
                     }
@@ -282,7 +285,7 @@ public enum IMClient {
                         if (select != null) {
                             select.setId(serverReceiptBean.getId());
                             select.setStatus(MessageStatus.FAILURE.getValue());
-                            mMessageManager.update(select);
+                            mMessageManager.insertOrUpdate(select);
                         }
                         for (IOnSendMessageListener onSendMessageListener : mOnSendMessageListenerList) {
                             onSendMessageListener.onSendFailure(select, serverReceiptBean.getFailureCode());
@@ -291,7 +294,7 @@ public enum IMClient {
                         if (select != null) {
                             select.setId(serverReceiptBean.getId());
                             select.setStatus(MessageStatus.SENDED.getValue());
-                            mMessageManager.update(select);
+                            mMessageManager.insertOrUpdate(select);
                         }
                         for (IOnSendMessageListener onSendMessageListener : mOnSendMessageListenerList) {
                             onSendMessageListener.onSendSuccess(select);
@@ -540,6 +543,59 @@ public enum IMClient {
         }
     }
 
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2020/1/8 15:55
+     * Description:保存消息和会话到数据库
+     *
+     * @param messageBean 消息对象
+     * @param send        true 表示是发送的消息,false 表示是接收的消息
+     */
+    private void insert2Database(MessageBean messageBean, boolean send) {
+        mMessageManager.insertOrUpdate(messageBean);
+        ShowLogUtil.logi("send--->" + send);
+        ShowLogUtil.logi("messageBean--->" + messageBean);
+        // 插入或更新会话
+        String toUserId;
+        long lastMsgTimestamp;
+        if (send || messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
+            // 发送的消息, conversation 的目标 id 为接收方 id
+            // 群聊的发送方永远是自己,接收方永远是群 id,所以群聊类型的消息,conversation 的目标 id 为永远为群 id
+            toUserId = messageBean.getToUserId();
+            lastMsgTimestamp = messageBean.getSendTimestamp();
+        } else {
+            // 接收的消息, conversation 的目标 id 为发送方 id
+            toUserId = messageBean.getFromUserId();
+            lastMsgTimestamp = messageBean.getReceiveTimestamp();
+        }
+        ConversationBean conversationBean = mConversationManager.getByTypeAndToUserId(messageBean.getType(), toUserId);
+        if (conversationBean == null) {
+            conversationBean = new ConversationBean();
+        }
+        // 发送的消息, conversation 的目标 id 为接收方 id
+        // 群聊的发送方永远是自己,接收方永远是群 id,所以群聊类型的消息,conversation 的目标 id 为永远为群 id
+        conversationBean.setToUserId(toUserId);
+        conversationBean.setType(messageBean.getType());
+        conversationBean.setLastMsgContentType(messageBean.getContentType());
+        conversationBean.setLastMsgContent(messageBean.getContent());
+        conversationBean.setLastMsgTimestamp(lastMsgTimestamp);
+        conversationBean.setLastMsgPid(messageBean.getPid());
+        if (!send) {
+            if (conversationBean.getUnreadCount() == -1) {
+                // 如果被标记过未读,则设置未读数为 1
+                conversationBean.setUnreadCount(1);
+            } else {
+                // 否则在原有的未读数上 +1
+                conversationBean.setUnreadCount(conversationBean.getUnreadCount() + 1);
+            }
+        }
+        mConversationManager.insertOrUpdate(conversationBean);
+        ShowLogUtil.logi("conversationBean--->" + conversationBean);
+        // 插入会话与消息关系
+        mConversationManager.insertConversationMessageRel(new ConversationMessageRelBean(conversationBean.getId(), messageBean.getPid()));
+    }
+
     public void sendMessage(final MessageBean messageBean) {
         if (mWebSocket == null) {
             return;
@@ -547,7 +603,7 @@ public enum IMClient {
         messageBean.setFromUserId(mUserId);
         if (messageBean.getType() == MessageType.CHAT.getValue()
                 || messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
-            mMessageManager.insert(true, messageBean);
+            insert2Database(messageBean, true);
 //            // 创建一个唯一索引作为 ACK Key,将其 json 串做 Base64 加密,得到的加密字符串作为 key
 //            AckKeyBean ackKeyBean = new AckKeyBean(mUserId
 //                    , messageBean.getFromUserId()

@@ -33,6 +33,11 @@ public class ConversationBean {
      */
     private long lastMsgTimestamp;
     /**
+     * 最后一条消息的 pid，通常情况下不会用到，当 lastMsgContent，lastMsgContentType，lastMsgTimestamp
+     * 不够用的情况下可以使用该字段找到具体消息
+     */
+    private int lastMsgPid;
+    /**
      * 未读数
      */
     private int unreadCount;
@@ -65,6 +70,7 @@ public class ConversationBean {
                 ", lastMsgContent='" + lastMsgContent + '\'' +
                 ", lastMsgContentType=" + lastMsgContentType +
                 ", lastMsgTimestamp=" + lastMsgTimestamp +
+                ", lastMsgPid=" + lastMsgPid +
                 ", unreadCount=" + unreadCount +
                 ", headImgSmall='" + headImgSmall + '\'' +
                 ", title='" + title + '\'' +
@@ -121,6 +127,13 @@ public class ConversationBean {
         this.lastMsgTimestamp = lastMsgTimestamp;
     }
 
+    public int getLastMsgPid() {
+        return lastMsgPid;
+    }
+
+    public void setLastMsgPid(int lastMsgPid) {
+        this.lastMsgPid = lastMsgPid;
+    }
 
     public int getUnreadCount() {
         return unreadCount;

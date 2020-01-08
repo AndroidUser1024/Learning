@@ -3,7 +3,6 @@ package com.qinshou.qinshoubox.im.manager;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.bean.ConversationMessageRelBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
@@ -54,35 +53,13 @@ public class MessageManager {
         mUserId = userId;
     }
 
-    public MessageBean insert(boolean send, MessageBean messageBean) {
+    public void insertOrUpdate(MessageBean messageBean) {
         // 插入消息
         if (mMessageDao.existsByPid(messageBean.getPid())) {
             mMessageDao.update(messageBean);
         } else {
-            messageBean = mMessageDao.insert(messageBean);
+            mMessageDao.insert(messageBean);
         }
-        // 插入或更新会话
-        ConversationBean conversationBean = new ConversationBean();
-        if (send || messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
-            // 发送的消息, conversation 的目标 id 为接收方 id
-            // 群聊的发送方永远是自己,接收方永远是群 id,所以群聊类型的消息,conversation 的目标 id 为永远为群 id
-            conversationBean.setToUserId(messageBean.getToUserId());
-            conversationBean.setLastMsgTimestamp(messageBean.getSendTimestamp());
-        } else {
-            // 接收的消息, conversation 的目标 id 为发送方 id
-            conversationBean.setToUserId(messageBean.getFromUserId());
-            conversationBean.setLastMsgTimestamp(messageBean.getReceiveTimestamp());
-        }
-        conversationBean.setLastMsgContent(messageBean.getContent());
-        conversationBean.setLastMsgContentType(messageBean.getContentType());
-        conversationBean.setType(messageBean.getType());
-        mConversationDao.insert(send, conversationBean);
-        // 插入会话与消息关系
-        ConversationMessageRelBean conversationMessageRelBean = new ConversationMessageRelBean(conversationBean.getId(), messageBean.getPid());
-        if (!mConversationMessageRelDao.existsByConversationIdAndMessagePid(conversationMessageRelBean)) {
-            mConversationMessageRelDao.insert(conversationMessageRelBean);
-        }
-        return messageBean;
     }
 
     public List<MessageBean> getList(int type, String toUserId, int page, int pageSize) {
@@ -96,11 +73,4 @@ public class MessageManager {
     public MessageBean selectByPid(int pid) {
         return mMessageDao.selectByPid(pid);
     }
-
-    public int update(MessageBean messageBean) {
-        return mMessageDao.update(messageBean);
-    }
-//    public MessageBean getByFromUserIdAndToUserIdAndTypeAndSendTimestamp(int fromUserId, int toUserId, int type, long sendTimestamp) {
-//        return mMessageDao.getByFromUserIdAndToUserIdAndTypeAndSendTimestamp(fromUserId, toUserId, type, sendTimestamp);
-//    }
 }

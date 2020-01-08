@@ -47,54 +47,26 @@ public class MessageDaoImpl extends AbsDaoImpl<MessageBean> implements IMessageD
     }
 
     @Override
-    public List<MessageBean> selectList(int conversationId, int page, int pageSize) {
-        String sql = "SELECT m.pid,\n" +
-                "m.id,\n" +
-                "m.fromUserId,\n" +
-                "m.toUserId,\n" +
-                "m.type,\n" +
-                "m.contentType,\n" +
-                "m.content,\n" +
-                "m.sendTimestamp,\n" +
-                "m.receiveTimestamp,\n" +
-                "m.status,\n" +
-                "m.extend\n" +
-                "FROM conversation_message_rel AS cmr\n" +
-                "LEFT OUTER JOIN\n" +
-                "message AS m ON m.pid = cmr.messagePid\n" +
-                "WHERE cmr.conversationId = %s\n" +
-                "LIMIT %s,%s";
-        sql = String.format(sql, conversationId, (page - 1) * pageSize, (page) * pageSize);
-        List<MessageBean> messageBeanList = new ArrayList<>();
-        Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
-        try {
-            while (cursor.moveToNext()) {
-                MessageBean messageBean = new MessageBean();
-                messageBean.setPid(cursor.getInt(cursor.getColumnIndex("pid")));
-                messageBean.setId(cursor.getString(cursor.getColumnIndex("id")));
-                messageBean.setFromUserId(cursor.getString(cursor.getColumnIndex("fromUserId")));
-                messageBean.setToUserId(cursor.getString(cursor.getColumnIndex("toUserId")));
-                messageBean.setType(cursor.getInt(cursor.getColumnIndex("type")));
-                messageBean.setContentType(cursor.getInt(cursor.getColumnIndex("contentType")));
-                messageBean.setContent(cursor.getString(cursor.getColumnIndex("content")));
-                messageBean.setSendTimestamp(cursor.getLong(cursor.getColumnIndex("sendTimestamp")));
-                messageBean.setReceiveTimestamp(cursor.getLong(cursor.getColumnIndex("receiveTimestamp")));
-                messageBean.setStatus(cursor.getInt(cursor.getColumnIndex("status")));
-                messageBean.setExtend(cursor.getString(cursor.getColumnIndex("extend")));
-                messageBeanList.add(messageBean);
-            }
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-        return messageBeanList;
+    public int update(MessageBean messageBean) {
+        String sql = "UPDATE message SET" +
+                " id=%s,fromUserId=%s,toUserId=%s,type=%s,contentType=%s" +
+                ",content=%s,sendTimestamp=%s,receiveTimestamp=%s,status=%s,extend=%s" +
+                " WHERE pid=%s";
+        sql = String.format(sql, getStringValue(messageBean.getId()), getStringValue(messageBean.getFromUserId())
+                , getStringValue(messageBean.getToUserId()), messageBean.getType()
+                , messageBean.getContentType(), getStringValue(messageBean.getContent()), messageBean.getSendTimestamp()
+                , messageBean.getReceiveTimestamp(), messageBean.getStatus(), getStringValue(messageBean.getExtend())
+                , messageBean.getPid());
+        getSQLiteDatabase().execSQL(sql);
+        return 1;
     }
 
     @Override
     public MessageBean selectByPid(int pid) {
-        String sql = "SELECT m.pid,m.id,m.fromUserId,m.toUserId,m.type,m.contentType,m.content,m.sendTimestamp,m.receiveTimestamp" +
-                ",m.status,m.extend" +
+        String sql = "SELECT" +
+                " m.pid,m.id,m.fromUserId,m.toUserId,m.type" +
+                ",m.contentType,m.content,m.sendTimestamp,m.receiveTimestamp,m.status" +
+                ",m.extend" +
                 " FROM message AS m" +
                 " WHERE m.pid=%s";
         sql = String.format(sql, pid);
@@ -124,18 +96,40 @@ public class MessageDaoImpl extends AbsDaoImpl<MessageBean> implements IMessageD
     }
 
     @Override
-    public int update(MessageBean messageBean) {
-        String sql = "UPDATE message SET" +
-                " id=%s,fromUserId=%s,toUserId=%s,type=%s,contentType=%s,content=%s,sendTimestamp=%s" +
-                ",receiveTimestamp=%s,status=%s,extend=%s" +
-                " WHERE pid=%s";
-        sql = String.format(sql, getStringValue(messageBean.getId()), getStringValue(messageBean.getFromUserId())
-                , getStringValue(messageBean.getToUserId()), messageBean.getType()
-                , messageBean.getContentType(), getStringValue(messageBean.getContent()), messageBean.getSendTimestamp()
-                , messageBean.getReceiveTimestamp(), messageBean.getStatus(), getStringValue(messageBean.getExtend())
-                , messageBean.getPid());
-        getSQLiteDatabase().execSQL(sql);
-        return 1;
+    public List<MessageBean> selectList(int conversationId, int page, int pageSize) {
+        String sql = "SELECT" +
+                " m.pid,m.id,m.fromUserId,m.toUserId,m.type" +
+                ",m.contentType,m.content,m.sendTimestamp,m.receiveTimestamp,m.status" +
+                ",m.extend" +
+                " FROM conversation_message_rel AS cmr" +
+                " LEFT OUTER JOIN message AS m ON m.pid = cmr.messagePid" +
+                " WHERE cmr.conversationId = %s" +
+                " LIMIT %s,%s";
+        sql = String.format(sql, conversationId, (page - 1) * pageSize, (page) * pageSize);
+        List<MessageBean> messageBeanList = new ArrayList<>();
+        Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
+        try {
+            while (cursor.moveToNext()) {
+                MessageBean messageBean = new MessageBean();
+                messageBean.setPid(cursor.getInt(cursor.getColumnIndex("pid")));
+                messageBean.setId(cursor.getString(cursor.getColumnIndex("id")));
+                messageBean.setFromUserId(cursor.getString(cursor.getColumnIndex("fromUserId")));
+                messageBean.setToUserId(cursor.getString(cursor.getColumnIndex("toUserId")));
+                messageBean.setType(cursor.getInt(cursor.getColumnIndex("type")));
+                messageBean.setContentType(cursor.getInt(cursor.getColumnIndex("contentType")));
+                messageBean.setContent(cursor.getString(cursor.getColumnIndex("content")));
+                messageBean.setSendTimestamp(cursor.getLong(cursor.getColumnIndex("sendTimestamp")));
+                messageBean.setReceiveTimestamp(cursor.getLong(cursor.getColumnIndex("receiveTimestamp")));
+                messageBean.setStatus(cursor.getInt(cursor.getColumnIndex("status")));
+                messageBean.setExtend(cursor.getString(cursor.getColumnIndex("extend")));
+                messageBeanList.add(messageBean);
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return messageBeanList;
     }
 
     @Override

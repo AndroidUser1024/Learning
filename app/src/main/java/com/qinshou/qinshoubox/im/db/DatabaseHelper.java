@@ -67,9 +67,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             " id INTEGER PRIMARY KEY AUTOINCREMENT" +
             " ,toUserId TEXT" +
             " ,type INTEGER" +
-            " ,lastMsgContent TEXT" +
             " ,lastMsgContentType INTEGER" +
+            " ,lastMsgContent TEXT" +
             " ,lastMsgTimestamp INTEGER" +
+            " ,lastMsgPid INTEGER" +
             " ,unreadCount INTEGER" +
             " )";
     private final String CREATE_CONVERSATION_MESSAGE_REL_TABLE_SQL = "CREATE TABLE IF NOT EXISTS conversation_message_rel(" +

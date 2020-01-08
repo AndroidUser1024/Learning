@@ -2,8 +2,10 @@ package com.qinshou.qinshoubox.im.manager;
 
 
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
+import com.qinshou.qinshoubox.im.bean.ConversationMessageRelBean;
 import com.qinshou.qinshoubox.im.db.DatabaseHelper;
 import com.qinshou.qinshoubox.im.db.dao.IConversationDao;
+import com.qinshou.qinshoubox.im.db.dao.IConversationMessageRelDao;
 import com.qinshou.qinshoubox.im.db.dao.IMessageDao;
 
 import java.util.List;
@@ -20,12 +22,27 @@ public class ConversationManager {
      */
     private IConversationDao mConversationDao;
     /**
-     * 消息 Dao
+     * 会话和消息关系 Dao
      */
-    private IMessageDao mMessageDao;
+    private IConversationMessageRelDao mConversationMessageRelDao;
 
     public ConversationManager(DatabaseHelper databaseHelper, String userId) {
         mConversationDao = databaseHelper.getDao(IConversationDao.class);
+        mConversationMessageRelDao = databaseHelper.getDao(IConversationMessageRelDao.class);
+    }
+
+    public void insertOrUpdate(ConversationBean conversationBean) {
+        if (mConversationDao.existsById(conversationBean.getId())) {
+            mConversationDao.update(conversationBean);
+        } else {
+            mConversationDao.insert(conversationBean);
+        }
+    }
+
+    public void insertConversationMessageRel(ConversationMessageRelBean conversationMessageRelBean) {
+        if (!mConversationMessageRelDao.existsByConversationIdAndMessagePid(conversationMessageRelBean)) {
+            mConversationMessageRelDao.insert(conversationMessageRelBean);
+        }
     }
 
     public List<ConversationBean> selectList() {
@@ -40,7 +57,7 @@ public class ConversationManager {
         return mConversationDao.selectListOrderByTopDescAndLastMsgTimeDesc();
     }
 
-    public ConversationBean selectByTypeAndToUserId(int type, String toUserId) {
+    public ConversationBean getByTypeAndToUserId(int type, String toUserId) {
         return mConversationDao.selectByTypeAndToUserId(type, toUserId);
     }
 
@@ -56,7 +73,7 @@ public class ConversationManager {
         mConversationDao.deleteById(id);
     }
 
-    public void setUnreadCount(int unreadCount,int id) {
-        mConversationDao.setUnreadCount(unreadCount,id);
+    public void setUnreadCount(int unreadCount, int id) {
+        mConversationDao.setUnreadCount(unreadCount, id);
     }
 }
