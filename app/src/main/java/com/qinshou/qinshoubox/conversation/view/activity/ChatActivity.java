@@ -345,7 +345,9 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
             }
             // 重置未读数
             ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().getByTypeAndToUserId(MessageType.CHAT.getValue(), mToUserId);
-            IMClient.SINGLETON.getConversationManager().resetUnreadCount(conversationBean.getId());
+            if (conversationBean != null) {
+                IMClient.SINGLETON.getConversationManager().setUnreadCount(0, conversationBean.getId());
+            }
             // 更新列表
             mRcvMessageAdapter.getDataList().add(messageBean);
             mRcvMessageAdapter.notifyItemInserted(mRcvMessageAdapter.getDataList().size() - 1);

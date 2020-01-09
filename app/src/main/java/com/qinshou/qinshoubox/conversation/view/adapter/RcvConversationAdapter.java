@@ -63,7 +63,7 @@ public class RcvConversationAdapter extends RcvSingleBaseAdapter<ConversationBea
             public void onClick(View view) {
                 // 重置未读数
                 swipeMenuLayout.quickClose();
-                IMClient.SINGLETON.getConversationManager().resetUnreadCount(conversationBean.getId());
+                IMClient.SINGLETON.getConversationManager().setUnreadCount(0, conversationBean.getId());
                 conversationBean.setUnreadCount(0);
                 notifyItemChanged(position);
                 EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_UNREAD_COUNT, conversationBean));
@@ -75,15 +75,14 @@ public class RcvConversationAdapter extends RcvSingleBaseAdapter<ConversationBea
                 }
             }
         });
-        if (conversationBean.getUnreadCount() == -1
-                || conversationBean.getUnreadCount() > 0) {
+        if (Math.abs(conversationBean.getUnreadCount()) > 0) {
             baseViewHolder.setBtnText(R.id.btn_mark_unread, getContext().getString(R.string.conversation_btn_mark_unread_text_2));
             baseViewHolder.setOnClickListener(R.id.btn_mark_unread, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     // 标为已读,重置未读数
                     swipeMenuLayout.quickClose();
-                    IMClient.SINGLETON.getConversationManager().resetUnreadCount(conversationBean.getId());
+                    IMClient.SINGLETON.getConversationManager().setUnreadCount(0, conversationBean.getId());
                     conversationBean.setUnreadCount(0);
                     notifyItemChanged(position);
                     EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_UNREAD_COUNT, conversationBean));
@@ -96,7 +95,7 @@ public class RcvConversationAdapter extends RcvSingleBaseAdapter<ConversationBea
                 public void onClick(View view) {
                     // 标为未读,设置未读数为 -1
                     swipeMenuLayout.quickClose();
-                    IMClient.SINGLETON.getConversationManager().setUnreadCount(-1,conversationBean.getId());
+                    IMClient.SINGLETON.getConversationManager().setUnreadCount(-1, conversationBean.getId());
                     conversationBean.setUnreadCount(-1);
                     notifyItemChanged(position);
                     EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_UNREAD_COUNT, conversationBean));

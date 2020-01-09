@@ -44,15 +44,19 @@ public class ConversationManager {
         }
     }
 
-    public List<ConversationBean> selectList() {
+    public void deleteById(int id) {
+        mConversationDao.deleteById(id);
+    }
+
+    public List<ConversationBean> getList() {
         return mConversationDao.selectList();
     }
 
-    public List<ConversationBean> selectListOrderByLastMsgTimeDesc() {
+    public List<ConversationBean> getListOrderByLastMsgTimeDesc() {
         return mConversationDao.selectListOrderByLastMsgTimeDesc();
     }
 
-    public List<ConversationBean> selectListOrderByTopDescAndLastMsgTimeDesc() {
+    public List<ConversationBean> getListOrderByTopDescAndLastMsgTimeDesc() {
         return mConversationDao.selectListOrderByTopDescAndLastMsgTimeDesc();
     }
 
@@ -64,15 +68,12 @@ public class ConversationManager {
         return mConversationDao.getTotalUnreadCount();
     }
 
-    public void resetUnreadCount(int id) {
-        mConversationDao.resetUnreadCount(id);
-    }
-
-    public void deleteById(int id) {
-        mConversationDao.deleteById(id);
-    }
-
     public void setUnreadCount(int unreadCount, int id) {
-        mConversationDao.setUnreadCount(unreadCount, id);
+        ConversationBean conversationBean = mConversationDao.selectById(id);
+        if (conversationBean == null) {
+            return;
+        }
+        conversationBean.setUnreadCount(unreadCount);
+        mConversationDao.update(conversationBean);
     }
 }
