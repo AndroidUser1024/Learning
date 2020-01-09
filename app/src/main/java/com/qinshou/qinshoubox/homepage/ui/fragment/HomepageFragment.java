@@ -26,6 +26,10 @@ import com.qinshou.qinshoubox.homepage.contract.IHomepageContract;
 import com.qinshou.qinshoubox.homepage.presenter.HomepagePresenter;
 import com.qinshou.qinshoubox.homepage.ui.adapter.RcvNewsAdapter;
 import com.qinshou.qinshoubox.homepage.bean.WallpaperBean;
+import com.scwang.smartrefresh.layout.api.RefreshFooter;
+import com.scwang.smartrefresh.layout.api.RefreshHeader;
+import com.scwang.smartrefresh.layout.constant.RefreshState;
+import com.scwang.smartrefresh.layout.listener.OnMultiPurposeListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,6 +120,10 @@ public class HomepageFragment extends QSFragment<HomepagePresenter> implements I
                 mPage = IConstant.PAGE_START;
                 getPresenter().getNewsList(mPage, IConstant.PAGE_SIZE);
                 getPresenter().getWallpaperList();
+                // 刷新时暂停轮播
+                if (mInfiniteViewPagerAdapter != null && mInfiniteViewPagerAdapter.isLooping()) {
+                    mInfiniteViewPagerAdapter.stopLoop();
+                }
             }
 
             @Override
@@ -164,6 +172,10 @@ public class HomepageFragment extends QSFragment<HomepagePresenter> implements I
         mInfiniteViewPagerAdapter.setData(viewList);
         mInfiniteViewPagerAdapter.startLoop();
         mViewPagerPoints.setCount(wallpaperBeanList.size());
+        // 重新开始轮播
+        if (mInfiniteViewPagerAdapter != null && !mInfiniteViewPagerAdapter.isLooping()) {
+            mInfiniteViewPagerAdapter.startLoop();
+        }
     }
 
     @Override
