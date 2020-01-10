@@ -1,18 +1,27 @@
 package com.qinshou.qinshoubox.login.view.activity;
 
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.base.AbsMVPActivity;
+import com.qinshou.commonmodule.util.SharedPreferencesHelper;
+import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.widget.CountDownView;
 import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSActivity;
+import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.login.bean.PoemBean;
+import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.login.presenter.SplashPresenter;
 import com.qinshou.qinshoubox.login.contract.ISplashContract;
+import com.qinshou.qinshoubox.login.view.fragment.LoginOrRegisterFragment;
+import com.qinshou.qinshoubox.util.EncryptUtil;
+import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 /**
  * Description:闪屏界面
@@ -72,9 +81,16 @@ public class SplashActivity extends QSActivity<SplashPresenter> implements ISpla
         if (isFinishing()) {
             return;
         }
-        startActivity(new Intent(getContext(), MainActivity.class));
-//        startActivity(ContainerActivity.getJumpIntent(getContext(), LoginOrRegisterFragment.class));
-        finish();
+        String username = SharedPreferencesHelper.SINGLETON.getString(IConstant.SP_KEY_LAST_LOGIN_USERNAME);
+        String password = SharedPreferencesHelper.SINGLETON.getString(IConstant.SP_KEY_LAST_LOGIN_PASSWORD);
+        if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
+            // 对存储的密码进行解密,并自动登录
+            getPresenter().login(username, EncryptUtil.decrypt(password));
+        } else {
+            startActivity(ContainerActivity.getJumpIntent(getContext(), LoginOrRegisterFragment.class));
+//        startActivity(new Intent(getContext(), MainActivity.class));
+            finish();
+        }
     }
 
     @Override
@@ -100,5 +116,19 @@ public class SplashActivity extends QSActivity<SplashPresenter> implements ISpla
     @Override
     public void getRandomFailure(Exception e) {
 
+    }
+
+    @Override
+    public void loginSuccess(final UserBean userBean) {
+        ShowLogUtil.logi("loginSuccess" + " : " + "userBean--->" + userBean);
+        UserStatusManager.SINGLETON.setUserBean(userBean);
+        startActivity(new Intent(getContext(), MainActivity.class));
+        finish();
+    }
+
+    @Override
+    public void loginFailure(Exception e) {
+        ShowLogUtil.logi("loginFailure" + " : " + "e--->" + e.getMessage());
+        toastShort(e.getMessage());
     }
 }

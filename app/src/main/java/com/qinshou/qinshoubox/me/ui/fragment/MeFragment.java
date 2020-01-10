@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
+import com.qinshou.qinshoubox.im.view.fragment.IMActivity;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
@@ -62,10 +63,10 @@ public class MeFragment extends QSFragment<MePresenter> implements IMeContract.I
                 case R.id.iv_head_img:
                 case R.id.tv_click_2_login:
                 case R.id.tv_login_2_have_more_function:
-                    UserStatusManager.SINGLETON.jump2DataSetting(getContext());
+                    startActivity(ContainerActivity.getJumpIntent(getContext(), DataSettingFragment.class));
                     break;
                 case R.id.iv_im:
-                    UserStatusManager.SINGLETON.jump2IM(getContext());
+                    startActivity(new Intent(getContext(), IMActivity.class));
                     break;
 //                case R.id.ib_login_by_qq:
 //                    break;
@@ -165,20 +166,23 @@ public class MeFragment extends QSFragment<MePresenter> implements IMeContract.I
 
     @Override
     public void initData() {
-
+        UserBean userBean = UserStatusManager.SINGLETON.getUserBean();
+        ImageLoadUtil.SINGLETON.loadImage(getContext(), userBean.getHeadImgSmall(), mIvHeadImg);
+        mTvNickname.setText(userBean.getNickname());
+        mTvUsername.setText(userBean.getUsername());
     }
 
     @Override
     public void handleEvent(EventBean<Object> eventBean) {
-        if (eventBean.getType() == EventBean.Type.LOGIN || eventBean.getType() == EventBean.Type.REFRESH_USER_BEAN) {
-            UserBean userBean = UserStatusManager.SINGLETON.getUserBean();
-            ImageLoadUtil.SINGLETON.loadImage(getContext(), userBean.getHeadImgSmall(), mIvHeadImg);
-            mTvNickname.setText(userBean.getNickname());
-            mTvUsername.setText(userBean.getUsername());
-        } else if (eventBean.getType() == EventBean.Type.LOGOUT) {
-            ImageLoadUtil.SINGLETON.loadImage(getContext(), R.drawable.default_head_img, mIvHeadImg);
-            mTvNickname.setText(getString(R.string.me_tv_click_2_login_text));
-            mTvUsername.setText(getString(R.string.me_tv_login_2_have_more_function_text));
-        }
+//        if (eventBean.getType() == EventBean.Type.LOGIN || eventBean.getType() == EventBean.Type.REFRESH_USER_BEAN) {
+//            UserBean userBean = UserStatusManager.SINGLETON.getUserBean();
+//            ImageLoadUtil.SINGLETON.loadImage(getContext(), userBean.getHeadImgSmall(), mIvHeadImg);
+//            mTvNickname.setText(userBean.getNickname());
+//            mTvUsername.setText(userBean.getUsername());
+//        } else if (eventBean.getType() == EventBean.Type.LOGOUT) {
+//            ImageLoadUtil.SINGLETON.loadImage(getContext(), R.drawable.default_head_img, mIvHeadImg);
+//            mTvNickname.setText(getString(R.string.me_tv_click_2_login_text));
+//            mTvUsername.setText(getString(R.string.me_tv_login_2_have_more_function_text));
+//        }
     }
 }

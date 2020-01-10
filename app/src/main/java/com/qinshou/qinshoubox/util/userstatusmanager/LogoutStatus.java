@@ -30,36 +30,36 @@ public class LogoutStatus implements IUserStatus {
 
     @Override
     public void login(final Context context, UserBean userBean) {
-        // 存储最后一次登录成功的用户名
-        SharedPreferencesHelper.SINGLETON.putString(IConstant.SP_KEY_LAST_LOGIN_USERNAME, userBean.getUsername());
-        context.startActivity(new Intent(context, MainActivity.class));
-        // 设置为登录状态
-        UserStatusManager.SINGLETON.setUserStatus(new LoginStatus(userBean));
-        // 发送事件更新登录状态
-        EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.LOGIN, null));
-        IMClient.SINGLETON.addOnConnectListener(new IOnConnectListener() {
-            @Override
-            public void onConnected() {
-
-            }
-
-            @Override
-            public void onAuthenticated() {
-
-            }
-
-            @Override
-            public void onConnectFailure(Exception e) {
-
-            }
-
-            @Override
-            public void onDisconnected() {
-                UserStatusManager.SINGLETON.logout(context);
-            }
-        });
-        // 连接 IM 服务
-        IMClient.SINGLETON.connect(userBean.getId());
+//        // 存储最后一次登录成功的用户名
+//        SharedPreferencesHelper.SINGLETON.putString(IConstant.SP_KEY_LAST_LOGIN_USERNAME, userBean.getUsername());
+//        context.startActivity(new Intent(context, MainActivity.class));
+//        // 设置为登录状态
+//        UserStatusManager.SINGLETON.setUserStatus(new LoginStatus(userBean));
+//        // 发送事件更新登录状态
+//        EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.LOGIN, null));
+//        IMClient.SINGLETON.addOnConnectListener(new IOnConnectListener() {
+//            @Override
+//            public void onConnected() {
+//
+//            }
+//
+//            @Override
+//            public void onAuthenticated() {
+//
+//            }
+//
+//            @Override
+//            public void onConnectFailure(Exception e) {
+//
+//            }
+//
+//            @Override
+//            public void onDisconnected() {
+//                UserStatusManager.SINGLETON.logout(context);
+//            }
+//        });
+//        // 连接 IM 服务
+//        IMClient.SINGLETON.connect(userBean.getId());
     }
 
     @Override

@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.util.FragmentUtil;
 import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.base.QSFragment;
@@ -16,8 +17,12 @@ import com.qinshou.qinshoubox.demo.view.fragment.DemoFragment;
 import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.homepage.ui.fragment.HomepageFragment;
+import com.qinshou.qinshoubox.im.IMClient;
+import com.qinshou.qinshoubox.im.listener.IOnConnectListener;
+import com.qinshou.qinshoubox.login.view.fragment.LoginOrRegisterFragment;
 import com.qinshou.qinshoubox.me.ui.fragment.MeFragment;
 import com.qinshou.qinshoubox.music.view.fragment.MusicListFragment;
+import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -91,6 +96,30 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
 
             }
         });
+        IMClient.SINGLETON.addOnConnectListener(new IOnConnectListener() {
+            @Override
+            public void onConnected() {
+
+            }
+
+            @Override
+            public void onAuthenticated() {
+
+            }
+
+            @Override
+            public void onConnectFailure(Exception e) {
+
+            }
+
+            @Override
+            public void onDisconnected() {
+                startActivity(ContainerActivity.getJumpIntent(getContext(), LoginOrRegisterFragment.class));
+                finish();
+            }
+        });
+        // 连接 IM 服务
+        IMClient.SINGLETON.connect(UserStatusManager.SINGLETON.getUserBean().getId());
     }
 
     @Override

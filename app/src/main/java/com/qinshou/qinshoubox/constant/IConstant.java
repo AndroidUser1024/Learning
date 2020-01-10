@@ -19,6 +19,10 @@ public interface IConstant {
      */
     String SP_KEY_LAST_LOGIN_USERNAME = "lastLoginUsername";
     /**
+     * 最后一次登录成功的密码存储在 SharedPreferences 中的 key
+     */
+    String SP_KEY_LAST_LOGIN_PASSWORD = "lastLoginPassword";
+    /**
      * 好友申请历史未读数在 SharedPreferences 中的 key
      */
     String SP_KEY_FRIEND_HISTORY_UNREAD_COUNT = "friendHistoryUnreadCount_%s";

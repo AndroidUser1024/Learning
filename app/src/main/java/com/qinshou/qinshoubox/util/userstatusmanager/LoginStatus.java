@@ -38,14 +38,14 @@ public class LoginStatus implements IUserStatus {
 
     @Override
     public void logout(Context context) {
-//        DBHelper.getInstance().close();
-        context.startActivity(new Intent(context, MainActivity.class));
-        // 连接聊天服务
-        IMClient.SINGLETON.disconnect();
-        // 设置为注销状态
-        UserStatusManager.SINGLETON.setUserStatus(new LogoutStatus());
-        // 发送事件更新登录状态
-        EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.LOGOUT, null));
+////        DBHelper.getInstance().close();
+//        context.startActivity(new Intent(context, MainActivity.class));
+//        // 连接聊天服务
+//        IMClient.SINGLETON.disconnect();
+//        // 设置为注销状态
+//        UserStatusManager.SINGLETON.setUserStatus(new LogoutStatus());
+//        // 发送事件更新登录状态
+//        EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.LOGOUT, null));
     }
 
     @Override

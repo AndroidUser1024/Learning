@@ -13,33 +13,38 @@ import com.qinshou.qinshoubox.login.bean.UserBean;
  */
 public enum UserStatusManager {
     SINGLETON;
-    private IUserStatus mUserStatus = new LogoutStatus();
-
-    public boolean isLogin() {
-        return mUserStatus instanceof LoginStatus;
-    }
-
-    public void setUserStatus(IUserStatus userStatus) {
-        mUserStatus = userStatus;
-    }
+    private UserBean mUserBean;
 
     public UserBean getUserBean() {
-        return mUserStatus.getUserBean();
+        return mUserBean;
     }
 
-    public void login(Context context, UserBean userBean) {
-        mUserStatus.login(context, userBean);
+    public void setUserBean(UserBean userBean) {
+        mUserBean = userBean;
     }
 
-    public void logout(Context context) {
-        mUserStatus.logout(context);
-    }
-
-    public void jump2DataSetting(Context context) {
-        mUserStatus.jump2DataSetting(context);
-    }
-
-    public void jump2IM(Context context) {
-        mUserStatus.jump2IM(context);
-    }
+//    private IUserStatus mUserStatus = new LogoutStatus();
+//    public boolean isLogin() {
+//        return mUserStatus instanceof LoginStatus;
+//    }
+//
+//    public void setUserStatus(IUserStatus userStatus) {
+//        mUserStatus = userStatus;
+//    }
+//
+//    public void login(Context context, UserBean userBean) {
+//        mUserStatus.login(context, userBean);
+//    }
+//
+//    public void logout(Context context) {
+//        mUserStatus.logout(context);
+//    }
+//
+//    public void jump2DataSetting(Context context) {
+//        mUserStatus.jump2DataSetting(context);
+//    }
+//
+//    public void jump2IM(Context context) {
+//        mUserStatus.jump2IM(context);
+//    }
 }

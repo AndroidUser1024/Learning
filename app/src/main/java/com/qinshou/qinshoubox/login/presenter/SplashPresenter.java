@@ -3,6 +3,7 @@ package com.qinshou.qinshoubox.login.presenter;
 import com.qinshou.commonmodule.base.AbsPresenter;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.login.bean.PoemBean;
+import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.login.contract.ISplashContract;
 import com.qinshou.qinshoubox.login.model.SplashModel;
 import com.qinshou.qinshoubox.login.view.activity.SplashActivity;
@@ -35,6 +36,27 @@ public class SplashPresenter extends AbsPresenter<ISplashContract.ISplashView, I
                     return;
                 }
                 getView().getRandomFailure(e);
+            }
+        });
+    }
+
+    @Override
+    public void login(String username, String password) {
+        getModel().login(username, password, new Callback<UserBean>() {
+            @Override
+            public void onSuccess(UserBean data) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().loginSuccess(data);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().loginFailure(e);
             }
         });
     }

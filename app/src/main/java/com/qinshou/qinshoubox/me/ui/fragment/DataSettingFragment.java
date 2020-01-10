@@ -5,12 +5,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qinshou.commonmodule.ContainerActivity;
+import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.commonmodule.widget.TitleBar;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
+import com.qinshou.qinshoubox.App;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
+import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.login.bean.UserBean;
+import com.qinshou.qinshoubox.login.view.fragment.LoginOrRegisterFragment;
 import com.qinshou.qinshoubox.me.contract.IDataSettingContract;
 import com.qinshou.qinshoubox.me.presenter.DataSettingPresenter;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
@@ -54,7 +58,11 @@ public class DataSettingFragment extends QSFragment<DataSettingPresenter> implem
                     break;
                 case R.id.btn_logout:
                     getPresenter().logout(UserStatusManager.SINGLETON.getUserBean().getUsername());
-                    UserStatusManager.SINGLETON.logout(getContext());
+                    // 刪除保存到密码,这样下次打开应用就不会自动登录了
+                    SharedPreferencesHelper.SINGLETON.remove(IConstant.SP_KEY_LAST_LOGIN_PASSWORD);
+                    // 关闭所有界面,然后再跳转到主界面
+                    App.getInstance().exit();
+                    startActivity(ContainerActivity.getJumpIntent(getContext(), LoginOrRegisterFragment.class));
                     break;
             }
         }

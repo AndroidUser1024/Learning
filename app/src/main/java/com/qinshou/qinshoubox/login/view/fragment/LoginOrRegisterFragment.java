@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.util.SoftKeyboardUtil;
+import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.constant.IConstant;
@@ -23,6 +25,7 @@ import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.login.contract.ILoginOrRegisterContract;
 import com.qinshou.qinshoubox.login.presenter.LoginOrRegisterPresenter;
+import com.qinshou.qinshoubox.util.EncryptUtil;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 /**
@@ -106,7 +109,16 @@ public class LoginOrRegisterFragment extends QSFragment<LoginOrRegisterPresenter
     @Override
     public void loginSuccess(final UserBean userBean) {
         ShowLogUtil.logi("loginSuccess" + " : " + "userBean--->" + userBean);
-        UserStatusManager.SINGLETON.login(getContext(), userBean);
+        // 存储最后一次登录成功的用户名
+        SharedPreferencesHelper.SINGLETON.putString(IConstant.SP_KEY_LAST_LOGIN_USERNAME, userBean.getUsername());
+        String password = mEtPassword.getText().toString().trim();
+        // 密码进行简单加密后存储
+        String encrypt = EncryptUtil.encrypt(password);
+        SharedPreferencesHelper.SINGLETON.putString(IConstant.SP_KEY_LAST_LOGIN_PASSWORD, encrypt);
+
+        UserStatusManager.SINGLETON.setUserBean(userBean);
+        startActivity(new Intent(getContext(), MainActivity.class));
+        finish();
     }
 
     @Override
