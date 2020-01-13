@@ -10,18 +10,18 @@ import android.widget.TextView;
 import com.qinshou.commonmodule.rcvdecoration.DividerDecoration;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.util.SystemUtil;
-import com.qinshou.qinshoubox.homepage.bean.EventBean;
-import com.qinshou.qinshoubox.im.bean.ConversationBean;
-import com.qinshou.qinshoubox.im.bean.MessageBean;
-import com.qinshou.qinshoubox.im.enums.MessageType;
-import com.qinshou.qinshoubox.im.listener.IOnMessageListener;
-import com.qinshou.qinshoubox.im.IMClient;
+import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.conversation.contract.IConversationContract;
 import com.qinshou.qinshoubox.conversation.presenter.ConversationPresenter;
 import com.qinshou.qinshoubox.conversation.view.adapter.RcvConversationAdapter;
-import com.qinshou.qinshoubox.im.view.fragment.IMActivity;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
+import com.qinshou.qinshoubox.im.IMClient;
+import com.qinshou.qinshoubox.im.bean.ConversationBean;
+import com.qinshou.qinshoubox.im.bean.MessageBean;
+import com.qinshou.qinshoubox.im.enums.MessageType;
+import com.qinshou.qinshoubox.im.listener.IOnMessageListener;
 import com.qinshou.qinshoubox.util.QSUtil;
 
 import java.util.List;
@@ -97,11 +97,11 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
         ((DefaultItemAnimator) rcvConversation.getItemAnimator()).setSupportsChangeAnimations(false);
         rcvConversation.setAdapter(mRcvConversationAdapter = new RcvConversationAdapter(getContext()));
 
-        TabLayout tlIM = getActivity().findViewById(R.id.tl_im);
-        if (tlIM == null) {
+        TabLayout tlMain = getActivity().findViewById(R.id.tl_main);
+        if (tlMain == null) {
             return;
         }
-        TabLayout.Tab tab = tlIM.getTabAt(IMActivity.TAB_INDEX_CONVERSATION);
+        TabLayout.Tab tab = tlMain.getTabAt(MainActivity.TAB_INDEX_CONVERSATION);
         if (tab == null) {
             return;
         }
@@ -128,7 +128,6 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
 
     @Override
     public void getConversationListSuccess(List<ConversationBean> conversationBeanList) {
-        ShowLogUtil.logi("conversationBeanList--->" + conversationBeanList);
         mRcvConversationAdapter.setDataList(conversationBeanList);
     }
 
@@ -139,7 +138,6 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
 
     @Override
     public void handleEvent(EventBean<Object> eventBean) {
-        ShowLogUtil.logi("handleEvent: eventBean--->" + eventBean);
         if (eventBean.getType() == EventBean.Type.REFRESH_CONVERSATION_UNREAD_COUNT) {
             updateUnreadCount();
         } else if (eventBean.getType() == EventBean.Type.REFRESH_CONVERSATION_LIST) {

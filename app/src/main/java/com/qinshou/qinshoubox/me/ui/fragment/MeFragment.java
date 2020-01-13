@@ -9,11 +9,10 @@ import android.widget.TextView;
 
 import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
-import com.qinshou.qinshoubox.homepage.bean.EventBean;
-import com.qinshou.qinshoubox.im.view.fragment.IMActivity;
-import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
+import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.me.contract.IMeContract;
 import com.qinshou.qinshoubox.me.presenter.MePresenter;
 import com.qinshou.qinshoubox.me.ui.activity.ChartActivity;
@@ -25,10 +24,6 @@ import com.qinshou.qinshoubox.me.ui.activity.WeatherActivity;
 import com.qinshou.qinshoubox.me.ui.activity.WheelOfFortuneActivity;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 import com.qinshou.qrcodemodule.QRCodeScanActivity;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * Description:"我"界面
@@ -64,9 +59,6 @@ public class MeFragment extends QSFragment<MePresenter> implements IMeContract.I
                 case R.id.tv_click_2_login:
                 case R.id.tv_login_2_have_more_function:
                     startActivity(ContainerActivity.getJumpIntent(getContext(), DataSettingFragment.class));
-                    break;
-                case R.id.iv_im:
-                    startActivity(new Intent(getContext(), IMActivity.class));
                     break;
 //                case R.id.ib_login_by_qq:
 //                    break;
@@ -148,7 +140,6 @@ public class MeFragment extends QSFragment<MePresenter> implements IMeContract.I
         mIvHeadImg.setOnClickListener(mOnClickListener);
         findViewByID(R.id.tv_click_2_login).setOnClickListener(mOnClickListener);
         findViewByID(R.id.tv_login_2_have_more_function).setOnClickListener(mOnClickListener);
-        findViewByID(R.id.iv_im).setOnClickListener(mOnClickListener);
 //        ibLoginByQq.setOnClickListener(mOnClickListener);
 //        ibLoginByWechat.setOnClickListener(mOnClickListener);
 //        ibLoginByWeibo.setOnClickListener(mOnClickListener);

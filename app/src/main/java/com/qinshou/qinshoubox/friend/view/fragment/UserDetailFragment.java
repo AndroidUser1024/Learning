@@ -17,20 +17,20 @@ import com.qinshou.commonmodule.util.activityresultutil.ActivityResultUtil;
 import com.qinshou.commonmodule.util.activityresultutil.OnActivityResultCallBack;
 import com.qinshou.commonmodule.widget.TitleBar;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
+import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.conversation.view.activity.ChatActivity;
 import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
-import com.qinshou.qinshoubox.friend.view.dialog.DeleteFriendDialog;
-import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.friend.contract.IUserDetailContract;
 import com.qinshou.qinshoubox.friend.presenter.UserDetailPresenter;
 import com.qinshou.qinshoubox.friend.view.activity.SetRemarkActivity;
+import com.qinshou.qinshoubox.friend.view.dialog.DeleteFriendDialog;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.enums.FriendSource;
 import com.qinshou.qinshoubox.im.enums.UserSource;
 import com.qinshou.qinshoubox.im.listener.IOnFriendStatusListener;
-import com.qinshou.qinshoubox.im.view.fragment.IMActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -244,7 +244,7 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
     public void deleteFriendSuccess() {
         EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.REFRESH_FRIEND_LIST, null));
         EventBus.getDefault().post(new EventBean<Object>(EventBean.Type.REFRESH_CONVERSATION_LIST, null));
-        startActivity(new Intent(getContext(), IMActivity.class));
+        startActivity(new Intent(getContext(), MainActivity.class));
     }
 
     @Override

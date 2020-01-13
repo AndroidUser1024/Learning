@@ -56,15 +56,6 @@
                     app:layout_constraintLeft_toLeftOf="@id/tv_click_2_login"
                     app:layout_constraintStart_toStartOf="@id/tv_click_2_login"
                     app:layout_constraintTop_toBottomOf="@id/tv_click_2_login" />
-
-                <ImageView
-                    android:id="@+id/iv_im"
-                    android:layout_width="@dimen/px40"
-                    android:layout_height="@dimen/px40"
-                    android:src="@mipmap/ic_launcher"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
             </android.support.constraint.ConstraintLayout>
 
             <LinearLayout

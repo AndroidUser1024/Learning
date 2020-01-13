@@ -13,6 +13,8 @@
     <string-array name="main_tv_tab_text">
         <item>首页</item>
         <item>音乐</item>
+        <item>会话</item>
+        <item>联系人</item>
         <item>我的</item>
     </string-array>
 
@@ -45,11 +47,6 @@
     <string name="login_btn_login_or_register_text">登录</string>
     <string name="login_btn_login_or_register_text2">注册</string>
 
-    <!-- IM 界面 -->
-    <string-array name="im_tv_tab_text">
-        <item>会话</item>
-        <item>联系人</item>
-    </string-array>
     <!-- 会话界面 -->
     <string name="conversation_tv_title_text">会话</string>
     <string name="conversation_tv_search_text">搜索</string>
