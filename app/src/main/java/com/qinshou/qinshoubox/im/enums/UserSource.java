@@ -7,9 +7,9 @@ package com.qinshou.qinshoubox.im.enums;
  * Description:用户来源
  */
 public enum UserSource {
-    SEARCH_BY_USERNAME(1, "通过用户名搜索"),
-    SEARCH_BY_PHONE_NUMBER(2, "通过手机号搜索"),
-    SEARCH_BY_EMAIL(3, "通过邮箱搜索");
+    SEARCH_BY_USERNAME(20001, "通过用户名搜索"),
+    SEARCH_BY_PHONE_NUMBER(20002, "通过手机号搜索"),
+    SEARCH_BY_EMAIL(20003, "通过邮箱搜索");
     private int value;
     private String desc;
 

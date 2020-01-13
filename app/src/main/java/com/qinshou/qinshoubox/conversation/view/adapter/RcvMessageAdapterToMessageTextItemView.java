@@ -25,8 +25,8 @@ public class RcvMessageAdapterToMessageTextItemView extends AbsRcvMessageAdapter
     @Override
     public boolean isForViewType(MessageBean item, int position) {
         // 消息来源与当前登录的用户 id 相同,则是发送的消息
-        return TextUtils.equals(item.getFromUserId(), UserStatusManager.SINGLETON.getUserBean().getId())
-                && item.getContentType() == MessageContentType.TEXT.getValue();
+        return item.getContentType() == MessageContentType.TEXT.getValue()
+                && TextUtils.equals(item.getFromUserId(), UserStatusManager.SINGLETON.getUserBean().getId());
     }
 
     @Override

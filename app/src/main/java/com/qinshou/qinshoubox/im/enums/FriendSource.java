@@ -7,16 +7,16 @@ package com.qinshou.qinshoubox.im.enums;
  * Description:用户来源
  */
 public enum FriendSource {
-    ADD_BY_USERNAME(1, "通过用户名添加"),
-    ADD_BY_PHONE_NUMBER(2, "通过手机号添加"),
-    ADD_BY_EMAIL(3, "通过邮箱添加"),
-    ADD_BY_QR_CODE(4, "通过扫一扫添加"),
-    ADD_BY_GROUP_CHAT(5, "通过群聊添加"),
-    ADDED_BY_USERNAME(-1, "对方通过用户名添加"),
-    ADDED_BY_PHONE_NUMBER(-2, "对方通过手机号添加"),
-    ADDED_BY_EMAIL(-3, "对方通过邮箱添加"),
-    ADDED_BY_QR_CODE(-4, "对方通过扫一扫添加"),
-    ADDED_BY_GROUP_CHAT(-5, "对方通过群聊添加");
+    ADD_BY_USERNAME(10001, "通过用户名添加"),
+    ADD_BY_PHONE_NUMBER(10002, "通过手机号添加"),
+    ADD_BY_EMAIL(10003, "通过邮箱添加"),
+    ADD_BY_QR_CODE(10004, "通过扫一扫添加"),
+    ADD_BY_GROUP_CHAT(10005, "通过群聊添加"),
+    ADDED_BY_USERNAME(-10001, "对方通过用户名添加"),
+    ADDED_BY_PHONE_NUMBER(-10002, "对方通过手机号添加"),
+    ADDED_BY_EMAIL(-10003, "对方通过邮箱添加"),
+    ADDED_BY_QR_CODE(-10004, "对方通过扫一扫添加"),
+    ADDED_BY_GROUP_CHAT(-10005, "对方通过群聊添加");
     private int value;
     private String desc;
 

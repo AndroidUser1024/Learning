@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.okhttphelper.callback.AbsDownloadCallback;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.bean.UploadImgResultBean;
@@ -70,9 +69,9 @@ public enum IMClient {
 
     private static final String TAG = "IMClient";
     private final int TIME_OUT = 10 * 1000;
-    private static final String URL = "ws://www.mrqinshou.com:10086/websocket";
-    //    private static final String URL = "ws://172.16.60.231:10086/websocket";
-    //    private static final String URL = "ws://192.168.1.109:10086/websocket";
+    //    private static final String URL = "ws://www.mrqinshou.com:10086/websocket";
+//        private static final String URL = "ws://172.16.60.231:10086/websocket";
+    private static final String URL = "ws://192.168.1.109:10086/websocket";
     private Context mContext;
     private WebSocket mWebSocket;
     private Handler mHandler = new Handler(Looper.getMainLooper());
@@ -317,17 +316,21 @@ public enum IMClient {
         FriendStatusBean friendStatusBean = new Gson().fromJson(messageBean.getExtend(), FriendStatusBean.class);
         if (friendStatusBean.getStatus() == FriendStatus.ADD.getValue()) {
             for (IOnFriendStatusListener onFriendStatusListener : mOnFriendStatusListenerList) {
-                onFriendStatusListener.add(friendStatusBean.getFromUserId(), friendStatusBean.getAdditionalMsg(), friendStatusBean.isNewFriend());
+                onFriendStatusListener.add(friendStatusBean.getFromUserId()
+                        , friendStatusBean.getAdditionalMsg()
+                        , friendStatusBean.isNewFriend());
             }
         } else if (friendStatusBean.getStatus() == FriendStatus.AGREE_ADD.getValue()) {
-            for (IOnFriendStatusListener onFriendStatusListener : mOnFriendStatusListenerList) {
-                onFriendStatusListener.agreeAdd(friendStatusBean.getFromUserId());
-            }
             Map<String, Object> extend = new HashMap<>();
             extend.put("status", FriendStatus.AGREE_ADD.getValue());
             // 创建已经是好友的提示信息的系统消息
-            MessageBean m = MessageBean.createChatSystemMessage(friendStatusBean.getFromUserId(), mUserId, extend);
+            MessageBean m = MessageBean.createChatSystemMessage(friendStatusBean.getFromUserId()
+                    , mUserId
+                    , extend);
             handleMessage(m);
+            for (IOnFriendStatusListener onFriendStatusListener : mOnFriendStatusListenerList) {
+                onFriendStatusListener.agreeAdd(friendStatusBean.getFromUserId());
+            }
         } else if (friendStatusBean.getStatus() == FriendStatus.REFUSE_ADD.getValue()) {
             for (IOnFriendStatusListener onFriendStatusListener : mOnFriendStatusListenerList) {
                 onFriendStatusListener.refuseAdd(friendStatusBean.getFromUserId());
@@ -358,6 +361,15 @@ public enum IMClient {
     private void handleGroupChatStatusMessage(MessageBean messageBean) {
         GroupChatStatusBean groupChatStatusBean = new Gson().fromJson(messageBean.getExtend(), GroupChatStatusBean.class);
         if (groupChatStatusBean.getStatus() == GroupChatStatus.ADD.getValue()) {
+            Map<String, Object> extend = new HashMap<>();
+            extend.put("status", GroupChatStatus.ADD.getValue());
+            extend.put("toUserIdList", groupChatStatusBean.getToUserIdList());
+            // 创建已经是好友的提示信息的系统消息
+            MessageBean m = MessageBean.createChatSystemMessage(groupChatStatusBean.getFromUserId()
+                    , groupChatStatusBean.getGroupChatId()
+                    , extend);
+            m.setType(MessageType.GROUP_CHAT.getValue());
+            handleMessage(m);
             for (IOnGroupChatStatusListener onGroupChatStatusListener : mOnGroupChatStatusListenerList) {
                 onGroupChatStatusListener.add(groupChatStatusBean.getGroupChatId(), groupChatStatusBean.getFromUserId(), groupChatStatusBean.getToUserIdList());
             }

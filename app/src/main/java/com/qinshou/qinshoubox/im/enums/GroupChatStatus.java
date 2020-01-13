@@ -9,23 +9,23 @@ public enum GroupChatStatus {
     /**
      * 被邀请
      */
-    ADD(1),
+    ADD(40001),
     /**
      * 被踢出
      */
-    DELETE(2),
+    DELETE(40002),
     /**
      * 别人被邀请
      */
-    OTHER_ADD(3),
+    OTHER_ADD(40003),
     /**
      * 别人被踢出
      */
-    OTHER_DELETE(4),
+    OTHER_DELETE(40004),
     /**
      * 群昵称被修改
      */
-    NICKNAME_CHANGED(5);
+    NICKNAME_CHANGED(40005);
     private int value;
 
     GroupChatStatus(int value) {

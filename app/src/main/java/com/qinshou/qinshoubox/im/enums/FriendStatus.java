@@ -9,27 +9,27 @@ public enum FriendStatus {
     /**
      * 添加好友
      */
-    ADD(1),
+    ADD(30001),
     /**
      * 同意添加好友
      */
-    AGREE_ADD(2),
+    AGREE_ADD(30002),
     /**
      * 拒绝添加
      */
-    REFUSE_ADD(3),
+    REFUSE_ADD(30003),
     /**
      * 删除好友
      */
-    DELETE(4),
+    DELETE(30004),
     /**
      * 好友上线
      */
-    ONLINE(5),
+    ONLINE(30005),
     /**
      * 好友下线
      */
-    OFFLINE(6);
+    OFFLINE(30006);
     private int value;
 
     FriendStatus(int value) {

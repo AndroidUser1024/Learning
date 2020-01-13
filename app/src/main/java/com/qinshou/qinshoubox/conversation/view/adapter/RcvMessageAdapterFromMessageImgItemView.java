@@ -31,8 +31,8 @@ public class RcvMessageAdapterFromMessageImgItemView extends AbsRcvMessageAdapte
     @Override
     public boolean isForViewType(MessageBean item, int position) {
         // 消息来源与当前登录的用户名不同,则是收到的消息
-        return !TextUtils.equals(item.getFromUserId(), UserStatusManager.SINGLETON.getUserBean().getId())
-                && item.getContentType() == MessageContentType.IMAGE.getValue();
+        return item.getContentType() == MessageContentType.IMAGE.getValue()
+                && !TextUtils.equals(item.getFromUserId(), UserStatusManager.SINGLETON.getUserBean().getId());
     }
 
     @Override
