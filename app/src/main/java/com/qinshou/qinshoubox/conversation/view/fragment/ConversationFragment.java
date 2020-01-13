@@ -125,7 +125,6 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
         getPresenter().getConversationList();
     }
 
-
     @Override
     public void getConversationListSuccess(List<ConversationBean> conversationBeanList) {
         mRcvConversationAdapter.setDataList(conversationBeanList);

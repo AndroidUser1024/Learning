@@ -106,28 +106,6 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
 
             }
         });
-        IMClient.SINGLETON.addOnConnectListener(new IOnConnectListener() {
-            @Override
-            public void onConnected() {
-
-            }
-
-            @Override
-            public void onAuthenticated() {
-
-            }
-
-            @Override
-            public void onConnectFailure(Exception e) {
-
-            }
-
-            @Override
-            public void onDisconnected() {
-                startActivity(ContainerActivity.getJumpIntent(getContext(), LoginOrRegisterFragment.class));
-                finish();
-            }
-        });
         // 连接 IM 服务
         IMClient.SINGLETON.connect(UserStatusManager.SINGLETON.getUserBean().getId());
     }
