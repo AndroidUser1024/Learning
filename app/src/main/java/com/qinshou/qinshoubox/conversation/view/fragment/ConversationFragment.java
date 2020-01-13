@@ -139,9 +139,10 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
 
     @Override
     public void handleEvent(EventBean<Object> eventBean) {
+        ShowLogUtil.logi("handleEvent: eventBean--->" + eventBean);
         if (eventBean.getType() == EventBean.Type.REFRESH_CONVERSATION_UNREAD_COUNT) {
             updateUnreadCount();
-        } else if (eventBean.getType() != EventBean.Type.REFRESH_CONVERSATION_LIST) {
+        } else if (eventBean.getType() == EventBean.Type.REFRESH_CONVERSATION_LIST) {
             if (eventBean.getData() == null) {
                 getPresenter().getConversationList();
                 // 更新未读数
@@ -163,6 +164,7 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
      * @param conversationBean 需要插入或更新的会话
      */
     private void updateConversationList(ConversationBean conversationBean) {
+        ShowLogUtil.logi("刷新会话列表--->" + conversationBean);
         List<ConversationBean> conversationBeanList = mRcvConversationAdapter.getDataList();
         if (conversationBean.getTop() == 1) {
             // 置顶的会话

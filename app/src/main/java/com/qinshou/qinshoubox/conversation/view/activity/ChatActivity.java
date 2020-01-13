@@ -343,20 +343,21 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
             if (!TextUtils.equals(mToUserId, messageBean.getFromUserId())) {
                 return;
             }
-            // 重置未读数
-            ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().getByTypeAndToUserId(MessageType.CHAT.getValue(), mToUserId);
-            if (conversationBean != null) {
-                IMClient.SINGLETON.getConversationManager().setUnreadCount(0, conversationBean.getId());
-            }
             // 更新列表
             mRcvMessageAdapter.getDataList().add(messageBean);
             mRcvMessageAdapter.notifyItemInserted(mRcvMessageAdapter.getDataList().size() - 1);
             // 消息列表滚动到底部
             mRcvMessage.scrollToPosition(mRcvMessageAdapter.getItemCount() - 1);
 
-            // 通知会话列表刷新未读数
-            conversationBean.setUnreadCount(0);
-            EventBus.getDefault().post(new EventBean<ConversationBean>(EventBean.Type.REFRESH_CONVERSATION_LIST, conversationBean));
+            // 重置未读数
+            ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().getByTypeAndToUserId(MessageType.CHAT.getValue(), mToUserId);
+            if (conversationBean != null) {
+                IMClient.SINGLETON.getConversationManager().setUnreadCount(0, conversationBean.getId());
+                // 通知会话列表刷新未读数
+                conversationBean.setUnreadCount(0);
+                EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_LIST, conversationBean));
+            }
+
         }
     };
     /**

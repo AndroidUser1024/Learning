@@ -148,7 +148,7 @@ public enum IMClient {
     /**
      * 最大重连次数
      */
-    private final int MAX_RECONNECT_COUNT = 5;
+    private final int MAX_RECONNECT_COUNT = Integer.MAX_VALUE;
     /**
      * 重连次数计数器
      */
