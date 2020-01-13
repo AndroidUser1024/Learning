@@ -118,30 +118,30 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
      */
     private IOnGroupChatStatusListener mOnGroupChatStatusListener = new IOnGroupChatStatusListener() {
         @Override
-        public void add(String groupChatId, String fromUserId, String toUserId) {
-            ShowLogUtil.logi("add: groupChatId--->" + groupChatId + ",fromUserId--->" + fromUserId + ",toUserId--->" + toUserId);
+        public void add(String groupChatId, String fromUserId, List<String> toUserIdList) {
+            ShowLogUtil.logi("add: groupChatId--->" + groupChatId + ",fromUserId--->" + fromUserId + ",toUserIdList--->" + toUserIdList);
             getPresenter().getMyGroupChatList();
         }
 
         @Override
-        public void delete(String groupChatId, String fromUserId, String toUserId) {
-            ShowLogUtil.logi("delete: groupChatId--->" + groupChatId + ",fromUserId--->" + fromUserId + ",toUserId--->" + toUserId);
+        public void delete(String groupChatId, String fromUserId, List<String> toUserIdList) {
+            ShowLogUtil.logi("delete: groupChatId--->" + groupChatId + ",fromUserId--->" + fromUserId + ",toUserIdList--->" + toUserIdList);
             getPresenter().getMyGroupChatList();
         }
 
         @Override
-        public void otherAdd(String groupChatId, String fromUserId, String toUserId) {
-            ShowLogUtil.logi("otherAdd: groupChatId--->" + groupChatId + ",fromUserId--->" + fromUserId + ",toUserId--->" + toUserId);
+        public void otherAdd(String groupChatId, String fromUserId, List<String> toUserIdList) {
+            ShowLogUtil.logi("otherAdd: groupChatId--->" + groupChatId + ",fromUserId--->" + fromUserId + ",toUserIdList--->" + toUserIdList);
         }
 
         @Override
-        public void otherDelete(String groupChatId, String fromUserId, String toUserId) {
-            ShowLogUtil.logi("otherDelete: groupChatId--->" + groupChatId + ",fromUserId--->" + fromUserId + ",toUserId--->" + toUserId);
+        public void otherDelete(String groupChatId, String fromUserId, List<String> toUserIdList) {
+            ShowLogUtil.logi("otherDelete: groupChatId--->" + groupChatId + ",fromUserId--->" + fromUserId + ",toUserIdList--->" + toUserIdList);
         }
 
         @Override
-        public void nicknameChanged(String groupChatId, String fromUserId, String toUserId) {
-            ShowLogUtil.logi("nicknameChanged: groupChatId--->" + groupChatId + ",fromUserId--->" + fromUserId + ",toUserId--->" + toUserId);
+        public void nicknameChanged(String groupChatId, String fromUserId, List<String> toUserIdList) {
+            ShowLogUtil.logi("nicknameChanged: groupChatId--->" + groupChatId + ",fromUserId--->" + fromUserId + ",toUserIdList--->" + toUserIdList);
             getPresenter().getMyGroupChatList();
         }
     };

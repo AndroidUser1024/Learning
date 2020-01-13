@@ -1,5 +1,7 @@
 package com.qinshou.qinshoubox.im.bean;
 
+import java.util.List;
+
 /**
  * Author: QinHao
  * Email:cqflqinhao@126.com
@@ -20,9 +22,9 @@ public class GroupChatStatusBean {
      */
     private String fromUserId;
     /**
-     * 被操作的人
+     * 被操作的人的 Id 的集合
      */
-    private String toUserId;
+    private List<String> toUserIdList;
 
     public GroupChatStatusBean() {
     }
@@ -33,7 +35,7 @@ public class GroupChatStatusBean {
                 "status=" + status +
                 ", groupChatId='" + groupChatId + '\'' +
                 ", fromUserId='" + fromUserId + '\'' +
-                ", toUserId='" + toUserId + '\'' +
+                ", toUserIdList='" + toUserIdList + '\'' +
                 '}';
     }
 
@@ -61,11 +63,11 @@ public class GroupChatStatusBean {
         this.fromUserId = fromUserId;
     }
 
-    public String getToUserId() {
-        return toUserId;
+    public List<String> getToUserIdList() {
+        return toUserIdList;
     }
 
-    public void setToUserId(String toUserId) {
-        this.toUserId = toUserId;
+    public void setToUserIdList(List<String> toUserIdList) {
+        this.toUserIdList = toUserIdList;
     }
 }

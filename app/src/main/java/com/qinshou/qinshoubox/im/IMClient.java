@@ -359,23 +359,23 @@ public enum IMClient {
         GroupChatStatusBean groupChatStatusBean = new Gson().fromJson(messageBean.getExtend(), GroupChatStatusBean.class);
         if (groupChatStatusBean.getStatus() == GroupChatStatus.ADD.getValue()) {
             for (IOnGroupChatStatusListener onGroupChatStatusListener : mOnGroupChatStatusListenerList) {
-                onGroupChatStatusListener.add(groupChatStatusBean.getGroupChatId(), groupChatStatusBean.getFromUserId(), groupChatStatusBean.getToUserId());
+                onGroupChatStatusListener.add(groupChatStatusBean.getGroupChatId(), groupChatStatusBean.getFromUserId(), groupChatStatusBean.getToUserIdList());
             }
         } else if (groupChatStatusBean.getStatus() == GroupChatStatus.DELETE.getValue()) {
             for (IOnGroupChatStatusListener onGroupChatStatusListener : mOnGroupChatStatusListenerList) {
-                onGroupChatStatusListener.delete(groupChatStatusBean.getGroupChatId(), groupChatStatusBean.getFromUserId(), groupChatStatusBean.getToUserId());
+                onGroupChatStatusListener.delete(groupChatStatusBean.getGroupChatId(), groupChatStatusBean.getFromUserId(), groupChatStatusBean.getToUserIdList());
             }
         } else if (groupChatStatusBean.getStatus() == GroupChatStatus.OTHER_ADD.getValue()) {
             for (IOnGroupChatStatusListener onGroupChatStatusListener : mOnGroupChatStatusListenerList) {
-                onGroupChatStatusListener.otherAdd(groupChatStatusBean.getGroupChatId(), groupChatStatusBean.getFromUserId(), groupChatStatusBean.getToUserId());
+                onGroupChatStatusListener.otherAdd(groupChatStatusBean.getGroupChatId(), groupChatStatusBean.getFromUserId(), groupChatStatusBean.getToUserIdList());
             }
         } else if (groupChatStatusBean.getStatus() == GroupChatStatus.OTHER_DELETE.getValue()) {
             for (IOnGroupChatStatusListener onGroupChatStatusListener : mOnGroupChatStatusListenerList) {
-                onGroupChatStatusListener.otherDelete(groupChatStatusBean.getGroupChatId(), groupChatStatusBean.getFromUserId(), groupChatStatusBean.getToUserId());
+                onGroupChatStatusListener.otherDelete(groupChatStatusBean.getGroupChatId(), groupChatStatusBean.getFromUserId(), groupChatStatusBean.getToUserIdList());
             }
         } else if (groupChatStatusBean.getStatus() == GroupChatStatus.NICKNAME_CHANGED.getValue()) {
             for (IOnGroupChatStatusListener onGroupChatStatusListener : mOnGroupChatStatusListenerList) {
-                onGroupChatStatusListener.nicknameChanged(groupChatStatusBean.getGroupChatId(), groupChatStatusBean.getFromUserId(), groupChatStatusBean.getToUserId());
+                onGroupChatStatusListener.nicknameChanged(groupChatStatusBean.getGroupChatId(), groupChatStatusBean.getFromUserId(), groupChatStatusBean.getToUserIdList());
             }
         }
     }

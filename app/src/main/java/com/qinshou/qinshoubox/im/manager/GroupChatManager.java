@@ -31,27 +31,27 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
         super(userId, new GroupChatDoubleCache(new MemoryCache<String, GroupChatBean>(), new GroupChatDatabaseCache(databaseHelper)));
         IMClient.SINGLETON.addOnGroupChatStatusListener(new IOnGroupChatStatusListener() {
             @Override
-            public void add(String groupChatId, String fromUserId, String toUserId) {
+            public void add(String groupChatId, String fromUserId, List<String> toUserIdList) {
                 getDetail(groupChatId, null);
             }
 
             @Override
-            public void delete(String groupChatId, String fromUserId, String toUserId) {
+            public void delete(String groupChatId, String fromUserId, List<String> toUserIdList) {
 
             }
 
             @Override
-            public void otherAdd(String groupChatId, String fromUserId, String toUserId) {
+            public void otherAdd(String groupChatId, String fromUserId, List<String> toUserIdList) {
                 getDetail(groupChatId, null);
             }
 
             @Override
-            public void otherDelete(String groupChatId, String fromUserId, String toUserId) {
+            public void otherDelete(String groupChatId, String fromUserId, List<String> toUserIdList) {
                 getDetail(groupChatId, null);
             }
 
             @Override
-            public void nicknameChanged(String groupChatId, String fromUserId, String toUserId) {
+            public void nicknameChanged(String groupChatId, String fromUserId, List<String> toUserIdList) {
                 getDetail(groupChatId, null);
             }
         });
