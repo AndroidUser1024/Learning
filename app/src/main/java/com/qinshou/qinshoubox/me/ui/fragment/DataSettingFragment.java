@@ -13,6 +13,7 @@ import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
+import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.login.view.fragment.LoginOrRegisterFragment;
 import com.qinshou.qinshoubox.me.contract.IDataSettingContract;
@@ -57,6 +58,8 @@ public class DataSettingFragment extends QSFragment<DataSettingPresenter> implem
                     startActivity(ContainerActivity.getJumpIntent(getContext(), MyQRCodeFragment.class));
                     break;
                 case R.id.btn_logout:
+                    // 连接聊天服务
+                    IMClient.SINGLETON.disconnect();
                     getPresenter().logout(UserStatusManager.SINGLETON.getUserBean().getUsername());
                     // 刪除保存到密码,这样下次打开应用就不会自动登录了
                     SharedPreferencesHelper.SINGLETON.remove(IConstant.SP_KEY_LAST_LOGIN_PASSWORD);
