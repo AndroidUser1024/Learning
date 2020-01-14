@@ -86,73 +86,99 @@ public class RcvMessageAdapterFromMessageSystemItemView extends AbsRcvMessageAda
             public void onSuccess(List<UserDetailBean> data) {
                 StringBuilder stringBuilder = new StringBuilder();
                 if (groupChatStatus == GroupChatStatus.ADD) {
-                    if (TextUtils.equals(messageBean.getFromUserId(), UserStatusManager.SINGLETON.getUserBean().getId())) {
-                        stringBuilder.append("你邀请");
-                        for (int i = 0; toUserIdList != null && i < toUserIdList.size(); i++) {
-                            String toUserId = toUserIdList.get(i);
-                            if (TextUtils.equals(toUserId, UserStatusManager.SINGLETON.getUserBean().getId())) {
-                                continue;
+                    // 操作人如果是自己,显示你
+//                    if (TextUtils.equals(messageBean.getFromUserId(), UserStatusManager.SINGLETON.getUserBean().getId())) {
+//                        stringBuilder.append("你");
+//                    } else {
+                    // 操作人优先显示备注,然后是群昵称,然后是昵称
+                    for (int i = 0; data != null && i < data.size(); i++) {
+                        UserDetailBean userDetailBean = data.get(i);
+                        if (TextUtils.equals(messageBean.getFromUserId(), userDetailBean.getId())) {
+                            if (!TextUtils.isEmpty(userDetailBean.getRemark())) {
+                                stringBuilder.append(userDetailBean.getRemark());
+                            } else if (!TextUtils.isEmpty(userDetailBean.getNicknameInGroupChat())) {
+                                stringBuilder.append(userDetailBean.getNicknameInGroupChat());
+                            } else {
+                                stringBuilder.append(userDetailBean.getNickname());
                             }
-                            for (int j = 0; data != null && j < data.size(); j++) {
-                                UserDetailBean userDetailBean = data.get(j);
-                                if (!TextUtils.equals(toUserId, userDetailBean.getId())) {
-                                    continue;
-                                }
-                                String nickname = TextUtils.isEmpty(userDetailBean.getRemark())
-                                        ? userDetailBean.getNickname()
-                                        : userDetailBean.getRemark();
-                                stringBuilder.append(nickname)
-                                        .append("、");
-                                break;
-                            }
+                            break;
                         }
-                        int index = stringBuilder.lastIndexOf("、");
-                        if (index != -1) {
-                            stringBuilder.deleteCharAt(index);
+                    }
+//                    }
+                    stringBuilder.append("邀请");
+                    // 拼接被邀请人的昵称,优先显示备注,然后是群昵称,然后是昵称
+                    for (int i = 0; toUserIdList != null && i < toUserIdList.size(); i++) {
+                        String toUserId = toUserIdList.get(i);
+                        if (TextUtils.equals(toUserId, UserStatusManager.SINGLETON.getUserBean().getId())) {
+                            stringBuilder.append("你、");
+                            continue;
                         }
-                        stringBuilder.append("加入了群聊");
-                    } else {
-                        for (int i = 0; data != null && i < data.size(); i++) {
-                            UserDetailBean userDetailBean = data.get(i);
-                            if (!TextUtils.equals(messageBean.getFromUserId(), userDetailBean.getId())) {
+                        for (int j = 0; data != null && j < data.size(); j++) {
+                            UserDetailBean userDetailBean = data.get(j);
+                            if (!TextUtils.equals(toUserId, userDetailBean.getId())) {
                                 continue;
                             }
                             String nickname = TextUtils.isEmpty(userDetailBean.getRemark())
                                     ? userDetailBean.getNickname()
                                     : userDetailBean.getRemark();
                             stringBuilder.append(nickname)
-                                    .append("邀请");
+                                    .append("、");
                             break;
                         }
-                        for (int i = 0; toUserIdList != null && i < toUserIdList.size(); i++) {
-                            String toUserId = toUserIdList.get(i);
-                            if (TextUtils.equals(toUserId, messageBean.getFromUserId())) {
-                                continue;
-                            }
-                            for (int j = 0; data != null && j < data.size(); j++) {
-                                UserDetailBean userDetailBean = data.get(i);
-                                if (!TextUtils.equals(toUserId, userDetailBean.getId())) {
-                                    continue;
-                                }
-                                String nickname;
-                                if (TextUtils.equals(userDetailBean.getId(), UserStatusManager.SINGLETON.getUserBean().getId())) {
-                                    nickname = "你";
+                    }
+                    // 去掉最后一个 "、"
+                    int index = stringBuilder.lastIndexOf("、");
+                    if (index != -1) {
+                        stringBuilder.deleteCharAt(index);
+                    }
+                    stringBuilder.append("加入了群聊");
+                } else if (groupChatStatus == GroupChatStatus.OTHER_ADD) {
+                    // 操作人如果是自己,显示你
+                    if (TextUtils.equals(messageBean.getFromUserId(), UserStatusManager.SINGLETON.getUserBean().getId())) {
+                        stringBuilder.append("你");
+                    } else {
+                        // 操作人是别人,优先显示备注,然后是群昵称,然后是昵称
+                        for (int i = 0; data != null && i < data.size(); i++) {
+                            UserDetailBean userDetailBean = data.get(i);
+                            if (TextUtils.equals(messageBean.getFromUserId(), userDetailBean.getId())) {
+                                if (!TextUtils.isEmpty(userDetailBean.getRemark())) {
+                                    stringBuilder.append(userDetailBean.getRemark());
+                                } else if (!TextUtils.isEmpty(userDetailBean.getNicknameInGroupChat())) {
+                                    stringBuilder.append(userDetailBean.getNicknameInGroupChat());
                                 } else {
-                                    nickname = TextUtils.isEmpty(userDetailBean.getRemark())
-                                            ? userDetailBean.getNickname()
-                                            : userDetailBean.getRemark();
+                                    stringBuilder.append(userDetailBean.getNickname());
                                 }
-                                stringBuilder.append(nickname)
-                                        .append("、");
                                 break;
                             }
                         }
-                        int index = stringBuilder.lastIndexOf("、");
-                        if (index != -1) {
-                            stringBuilder.deleteCharAt(index);
-                        }
-                        stringBuilder.append("加入了群聊");
                     }
+                    stringBuilder.append("邀请");
+                    // 拼接被邀请人的昵称,优先显示备注,然后是群昵称,然后是昵称
+                    for (int i = 0; toUserIdList != null && i < toUserIdList.size(); i++) {
+                        String toUserId = toUserIdList.get(i);
+//                        if (TextUtils.equals(toUserId, UserStatusManager.SINGLETON.getUserBean().getId())) {
+//                            stringBuilder.append("你、");
+//                            continue;
+//                        }
+                        for (int j = 0; data != null && j < data.size(); j++) {
+                            UserDetailBean userDetailBean = data.get(j);
+                            if (!TextUtils.equals(toUserId, userDetailBean.getId())) {
+                                continue;
+                            }
+                            String nickname = TextUtils.isEmpty(userDetailBean.getRemark())
+                                    ? userDetailBean.getNickname()
+                                    : userDetailBean.getRemark();
+                            stringBuilder.append(nickname)
+                                    .append("、");
+                            break;
+                        }
+                    }
+                    // 去掉最后一个 "、"
+                    int index = stringBuilder.lastIndexOf("、");
+                    if (index != -1) {
+                        stringBuilder.deleteCharAt(index);
+                    }
+                    stringBuilder.append("加入了群聊");
                 }
                 baseViewHolder.setTvText(R.id.tv_content, stringBuilder);
             }

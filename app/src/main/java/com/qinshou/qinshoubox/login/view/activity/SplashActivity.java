@@ -130,5 +130,7 @@ public class SplashActivity extends QSActivity<SplashPresenter> implements ISpla
     public void loginFailure(Exception e) {
         ShowLogUtil.logi("loginFailure" + " : " + "e--->" + e.getMessage());
         toastShort(e.getMessage());
+        startActivity(ContainerActivity.getJumpIntent(getContext(), LoginOrRegisterFragment.class));
+        finish();
     }
 }
