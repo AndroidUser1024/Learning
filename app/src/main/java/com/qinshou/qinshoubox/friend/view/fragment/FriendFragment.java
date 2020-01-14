@@ -18,6 +18,7 @@ import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.constant.IConstant;
+import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.friend.contract.IFriendContract;
 import com.qinshou.qinshoubox.friend.presenter.FriendPresenter;
 import com.qinshou.qinshoubox.friend.view.adapter.RcvFriendAdapter;
@@ -118,30 +119,30 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
      */
     private IOnGroupChatStatusListener mOnGroupChatStatusListener = new IOnGroupChatStatusListener() {
         @Override
-        public void add(String groupChatId, String fromUserId, List<String> toUserIdList) {
-            ShowLogUtil.logi("add: groupChatId--->" + groupChatId + ",fromUserId--->" + fromUserId + ",toUserIdList--->" + toUserIdList);
+        public void add(String groupChatId, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
+            ShowLogUtil.logi("add: groupChatId--->" + groupChatId + ",fromUser--->" + fromUser + ",toUserList--->" + toUserList);
             getPresenter().getMyGroupChatList();
         }
 
         @Override
-        public void delete(String groupChatId, String fromUserId, List<String> toUserIdList) {
-            ShowLogUtil.logi("delete: groupChatId--->" + groupChatId + ",fromUserId--->" + fromUserId + ",toUserIdList--->" + toUserIdList);
+        public void delete(String groupChatId, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
+            ShowLogUtil.logi("delete: groupChatId--->" + groupChatId + ",fromUser--->" + fromUser + ",toUserList--->" + toUserList);
             getPresenter().getMyGroupChatList();
         }
 
         @Override
-        public void otherAdd(String groupChatId, String fromUserId, List<String> toUserIdList) {
-            ShowLogUtil.logi("otherAdd: groupChatId--->" + groupChatId + ",fromUserId--->" + fromUserId + ",toUserIdList--->" + toUserIdList);
+        public void otherAdd(String groupChatId, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
+            ShowLogUtil.logi("otherAdd: groupChatId--->" + groupChatId + ",fromUser--->" + fromUser + ",toUserList--->" + toUserList);
         }
 
         @Override
-        public void otherDelete(String groupChatId, String fromUserId, List<String> toUserIdList) {
-            ShowLogUtil.logi("otherDelete: groupChatId--->" + groupChatId + ",fromUserId--->" + fromUserId + ",toUserIdList--->" + toUserIdList);
+        public void otherDelete(String groupChatId, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
+            ShowLogUtil.logi("otherDelete: groupChatId--->" + groupChatId + ",fromUser--->" + fromUser + ",toUserList--->" + toUserList);
         }
 
         @Override
-        public void nicknameChanged(String groupChatId, String fromUserId, List<String> toUserIdList) {
-            ShowLogUtil.logi("nicknameChanged: groupChatId--->" + groupChatId + ",fromUserId--->" + fromUserId + ",toUserIdList--->" + toUserIdList);
+        public void nicknameChanged(String groupChatId, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
+            ShowLogUtil.logi("nicknameChanged: groupChatId--->" + groupChatId + ",fromUser--->" + fromUser + ",toUserList--->" + toUserList);
             getPresenter().getMyGroupChatList();
         }
     };

@@ -31,27 +31,27 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
         super(userId, new GroupChatDoubleCache(new MemoryCache<String, GroupChatBean>(), new GroupChatDatabaseCache(databaseHelper)));
         IMClient.SINGLETON.addOnGroupChatStatusListener(new IOnGroupChatStatusListener() {
             @Override
-            public void add(String groupChatId, String fromUserId, List<String> toUserIdList) {
+            public void add(String groupChatId, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
                 getDetail(groupChatId, null);
             }
 
             @Override
-            public void delete(String groupChatId, String fromUserId, List<String> toUserIdList) {
+            public void delete(String groupChatId, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
 
             }
 
             @Override
-            public void otherAdd(String groupChatId, String fromUserId, List<String> toUserIdList) {
+            public void otherAdd(String groupChatId, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
                 getDetail(groupChatId, null);
             }
 
             @Override
-            public void otherDelete(String groupChatId, String fromUserId, List<String> toUserIdList) {
+            public void otherDelete(String groupChatId, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
                 getDetail(groupChatId, null);
             }
 
             @Override
-            public void nicknameChanged(String groupChatId, String fromUserId, List<String> toUserIdList) {
+            public void nicknameChanged(String groupChatId, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
                 getDetail(groupChatId, null);
             }
         });

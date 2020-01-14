@@ -26,7 +26,7 @@ public interface QSBoxGroupChatApi {
     @Json
     @Post("/create")
     Call<QinshouResultBean<GroupChatBean>> create(@Field(name = "fromUserId") String fromUserId
-            , @Field(name = "memberIdList") List<String> memberIdList
+            , @Field(name = "toUserIdList") List<String> toUserIdList
             , @Field(name = "nickname") String nickname
             , @Field(name = "headImg") String headImg);
 

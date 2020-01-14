@@ -1,5 +1,7 @@
 package com.qinshou.qinshoubox.im.bean;
 
+import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
+
 import java.util.List;
 
 /**
@@ -20,11 +22,11 @@ public class GroupChatStatusBean {
     /**
      * 发起该操作的人
      */
-    private String fromUserId;
+    private UserDetailBean fromUser;
     /**
      * 被操作的人的 Id 的集合
      */
-    private List<String> toUserIdList;
+    private List<UserDetailBean> toUserList;
 
     public GroupChatStatusBean() {
     }
@@ -34,8 +36,8 @@ public class GroupChatStatusBean {
         return "GroupChatStatusBean{" +
                 "status=" + status +
                 ", groupChatId='" + groupChatId + '\'' +
-                ", fromUserId='" + fromUserId + '\'' +
-                ", toUserIdList='" + toUserIdList + '\'' +
+                ", fromUser='" + fromUser + '\'' +
+                ", toUserList='" + toUserList + '\'' +
                 '}';
     }
 
@@ -55,19 +57,19 @@ public class GroupChatStatusBean {
         this.groupChatId = groupChatId;
     }
 
-    public String getFromUserId() {
-        return fromUserId;
+    public UserDetailBean getFromUser() {
+        return fromUser;
     }
 
-    public void setFromUserId(String fromUserId) {
-        this.fromUserId = fromUserId;
+    public void setFromUser(UserDetailBean fromUser) {
+        this.fromUser = fromUser;
     }
 
-    public List<String> getToUserIdList() {
-        return toUserIdList;
+    public List<UserDetailBean> getToUserList() {
+        return toUserList;
     }
 
-    public void setToUserIdList(List<String> toUserIdList) {
-        this.toUserIdList = toUserIdList;
+    public void setToUserList(List<UserDetailBean> toUserList) {
+        this.toUserList = toUserList;
     }
 }

@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.okhttphelper.callback.AbsDownloadCallback;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.bean.UploadImgResultBean;
@@ -360,34 +361,37 @@ public enum IMClient {
      */
     private void handleGroupChatStatusMessage(MessageBean messageBean) {
         GroupChatStatusBean groupChatStatusBean = new Gson().fromJson(messageBean.getExtend(), GroupChatStatusBean.class);
+        ShowLogUtil.logi("groupChatStatusBean--->" + groupChatStatusBean);
         Map<String, Object> extend = new HashMap<>();
         extend.put("status", groupChatStatusBean.getStatus());
-        extend.put("toUserIdList", groupChatStatusBean.getToUserIdList());
-        // 创建已经是好友的提示信息的系统消息
-        MessageBean m = MessageBean.createChatSystemMessage(groupChatStatusBean.getFromUserId()
+        extend.put("groupChatId", groupChatStatusBean.getGroupChatId());
+        extend.put("fromUser", groupChatStatusBean.getFromUser());
+        extend.put("toUserList", groupChatStatusBean.getToUserList());
+        // 创建群聊提示信息的系统消息
+        MessageBean m = MessageBean.createChatSystemMessage(groupChatStatusBean.getFromUser().getId()
                 , groupChatStatusBean.getGroupChatId()
                 , extend);
         m.setType(MessageType.GROUP_CHAT.getValue());
         handleMessage(m);
         if (groupChatStatusBean.getStatus() == GroupChatStatus.ADD.getValue()) {
             for (IOnGroupChatStatusListener onGroupChatStatusListener : mOnGroupChatStatusListenerList) {
-                onGroupChatStatusListener.add(groupChatStatusBean.getGroupChatId(), groupChatStatusBean.getFromUserId(), groupChatStatusBean.getToUserIdList());
+                onGroupChatStatusListener.add(groupChatStatusBean.getGroupChatId(), groupChatStatusBean.getFromUser(), groupChatStatusBean.getToUserList());
             }
         } else if (groupChatStatusBean.getStatus() == GroupChatStatus.DELETE.getValue()) {
             for (IOnGroupChatStatusListener onGroupChatStatusListener : mOnGroupChatStatusListenerList) {
-                onGroupChatStatusListener.delete(groupChatStatusBean.getGroupChatId(), groupChatStatusBean.getFromUserId(), groupChatStatusBean.getToUserIdList());
+                onGroupChatStatusListener.delete(groupChatStatusBean.getGroupChatId(), groupChatStatusBean.getFromUser(), groupChatStatusBean.getToUserList());
             }
         } else if (groupChatStatusBean.getStatus() == GroupChatStatus.OTHER_ADD.getValue()) {
             for (IOnGroupChatStatusListener onGroupChatStatusListener : mOnGroupChatStatusListenerList) {
-                onGroupChatStatusListener.otherAdd(groupChatStatusBean.getGroupChatId(), groupChatStatusBean.getFromUserId(), groupChatStatusBean.getToUserIdList());
+                onGroupChatStatusListener.otherAdd(groupChatStatusBean.getGroupChatId(), groupChatStatusBean.getFromUser(), groupChatStatusBean.getToUserList());
             }
         } else if (groupChatStatusBean.getStatus() == GroupChatStatus.OTHER_DELETE.getValue()) {
             for (IOnGroupChatStatusListener onGroupChatStatusListener : mOnGroupChatStatusListenerList) {
-                onGroupChatStatusListener.otherDelete(groupChatStatusBean.getGroupChatId(), groupChatStatusBean.getFromUserId(), groupChatStatusBean.getToUserIdList());
+                onGroupChatStatusListener.otherDelete(groupChatStatusBean.getGroupChatId(), groupChatStatusBean.getFromUser(), groupChatStatusBean.getToUserList());
             }
         } else if (groupChatStatusBean.getStatus() == GroupChatStatus.NICKNAME_CHANGED.getValue()) {
             for (IOnGroupChatStatusListener onGroupChatStatusListener : mOnGroupChatStatusListenerList) {
-                onGroupChatStatusListener.nicknameChanged(groupChatStatusBean.getGroupChatId(), groupChatStatusBean.getFromUserId(), groupChatStatusBean.getToUserIdList());
+                onGroupChatStatusListener.nicknameChanged(groupChatStatusBean.getGroupChatId(), groupChatStatusBean.getFromUser(), groupChatStatusBean.getToUserList());
             }
         }
     }

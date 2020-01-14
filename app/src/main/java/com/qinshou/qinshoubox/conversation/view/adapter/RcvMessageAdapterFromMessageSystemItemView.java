@@ -4,16 +4,12 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
-import com.qinshou.commonmodule.util.ShowLogUtil;
-import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.conversation.bean.GroupChatDetailBean;
 import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
-import com.qinshou.qinshoubox.im.bean.GroupChatBean;
+import com.qinshou.qinshoubox.im.bean.GroupChatStatusBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.enums.FriendStatus;
 import com.qinshou.qinshoubox.im.enums.GroupChatStatus;
@@ -21,11 +17,7 @@ import com.qinshou.qinshoubox.im.enums.MessageContentType;
 import com.qinshou.qinshoubox.im.enums.MessageType;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Type;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Description:类描述
@@ -58,16 +50,11 @@ public class RcvMessageAdapterFromMessageSystemItemView extends AbsRcvMessageAda
 //        super.bindViewHolder(baseViewHolder, messageBean, position);
         setTime(baseViewHolder, messageBean, position);
         // 消息内容
-        Type type = new TypeToken<Map<String, Object>>() {
-        }.getType();
-        Map<String, Object> map = new Gson().fromJson(messageBean.getExtend(), type);
-        Number number = (Number) map.get("status");
-        int status = number.intValue();
-        if (FriendStatus.getByValue(status) != null) {
+        GroupChatStatusBean groupChatStatusBean = new Gson().fromJson(messageBean.getExtend(), GroupChatStatusBean.class);
+        if (FriendStatus.getByValue(groupChatStatusBean.getStatus()) != null) {
             showFriendStatusText(baseViewHolder, messageBean);
-        } else if (GroupChatStatus.getByValue(status) != null) {
-            List<String> toUserIdList = (List<String>) map.get("toUserIdList");
-            showGroupChatStatusText(baseViewHolder, messageBean, GroupChatStatus.getByValue(status), toUserIdList);
+        } else if (GroupChatStatus.getByValue(groupChatStatusBean.getStatus()) != null) {
+            showGroupChatStatusText(baseViewHolder, messageBean, groupChatStatusBean);
         }
     }
 
@@ -79,119 +66,135 @@ public class RcvMessageAdapterFromMessageSystemItemView extends AbsRcvMessageAda
         baseViewHolder.setTvText(R.id.tv_content, content);
     }
 
-    private void showGroupChatStatusText(final BaseViewHolder baseViewHolder, final MessageBean messageBean, final GroupChatStatus groupChatStatus, final List<String> toUserIdList) {
-        final GroupChatBean groupChatBean = IMClient.SINGLETON.getGroupChatManager().getById(messageBean.getToUserId());
-        IMClient.SINGLETON.getGroupChatManager().getMemberList(groupChatBean.getId(), new Callback<List<UserDetailBean>>() {
-            @Override
-            public void onSuccess(List<UserDetailBean> data) {
-                StringBuilder stringBuilder = new StringBuilder();
-                if (groupChatStatus == GroupChatStatus.ADD) {
-                    // 操作人如果是自己,显示你
-//                    if (TextUtils.equals(messageBean.getFromUserId(), UserStatusManager.SINGLETON.getUserBean().getId())) {
-//                        stringBuilder.append("你");
-//                    } else {
-                    // 操作人优先显示备注,然后是群昵称,然后是昵称
-                    for (int i = 0; data != null && i < data.size(); i++) {
-                        UserDetailBean userDetailBean = data.get(i);
-                        if (TextUtils.equals(messageBean.getFromUserId(), userDetailBean.getId())) {
-                            if (!TextUtils.isEmpty(userDetailBean.getRemark())) {
-                                stringBuilder.append(userDetailBean.getRemark());
-                            } else if (!TextUtils.isEmpty(userDetailBean.getNicknameInGroupChat())) {
-                                stringBuilder.append(userDetailBean.getNicknameInGroupChat());
-                            } else {
-                                stringBuilder.append(userDetailBean.getNickname());
-                            }
-                            break;
-                        }
-                    }
-//                    }
-                    stringBuilder.append("邀请");
-                    // 拼接被邀请人的昵称,优先显示备注,然后是群昵称,然后是昵称
-                    for (int i = 0; toUserIdList != null && i < toUserIdList.size(); i++) {
-                        String toUserId = toUserIdList.get(i);
-                        if (TextUtils.equals(toUserId, UserStatusManager.SINGLETON.getUserBean().getId())) {
-                            stringBuilder.append("你、");
-                            continue;
-                        }
-                        for (int j = 0; data != null && j < data.size(); j++) {
-                            UserDetailBean userDetailBean = data.get(j);
-                            if (!TextUtils.equals(toUserId, userDetailBean.getId())) {
-                                continue;
-                            }
-                            String nickname = TextUtils.isEmpty(userDetailBean.getRemark())
-                                    ? userDetailBean.getNickname()
-                                    : userDetailBean.getRemark();
-                            stringBuilder.append(nickname)
-                                    .append("、");
-                            break;
-                        }
-                    }
-                    // 去掉最后一个 "、"
-                    int index = stringBuilder.lastIndexOf("、");
-                    if (index != -1) {
-                        stringBuilder.deleteCharAt(index);
-                    }
-                    stringBuilder.append("加入了群聊");
-                } else if (groupChatStatus == GroupChatStatus.OTHER_ADD) {
-                    // 操作人如果是自己,显示你
-                    if (TextUtils.equals(messageBean.getFromUserId(), UserStatusManager.SINGLETON.getUserBean().getId())) {
-                        stringBuilder.append("你");
-                    } else {
-                        // 操作人是别人,优先显示备注,然后是群昵称,然后是昵称
-                        for (int i = 0; data != null && i < data.size(); i++) {
-                            UserDetailBean userDetailBean = data.get(i);
-                            if (TextUtils.equals(messageBean.getFromUserId(), userDetailBean.getId())) {
-                                if (!TextUtils.isEmpty(userDetailBean.getRemark())) {
-                                    stringBuilder.append(userDetailBean.getRemark());
-                                } else if (!TextUtils.isEmpty(userDetailBean.getNicknameInGroupChat())) {
-                                    stringBuilder.append(userDetailBean.getNicknameInGroupChat());
-                                } else {
-                                    stringBuilder.append(userDetailBean.getNickname());
-                                }
-                                break;
-                            }
-                        }
-                    }
-                    stringBuilder.append("邀请");
-                    // 拼接被邀请人的昵称,优先显示备注,然后是群昵称,然后是昵称
-                    for (int i = 0; toUserIdList != null && i < toUserIdList.size(); i++) {
-                        String toUserId = toUserIdList.get(i);
-//                        if (TextUtils.equals(toUserId, UserStatusManager.SINGLETON.getUserBean().getId())) {
-//                            stringBuilder.append("你、");
-//                            continue;
-//                        }
-                        for (int j = 0; data != null && j < data.size(); j++) {
-                            UserDetailBean userDetailBean = data.get(j);
-                            if (!TextUtils.equals(toUserId, userDetailBean.getId())) {
-                                continue;
-                            }
-                            String nickname = TextUtils.isEmpty(userDetailBean.getRemark())
-                                    ? userDetailBean.getNickname()
-                                    : userDetailBean.getRemark();
-                            stringBuilder.append(nickname)
-                                    .append("、");
-                            break;
-                        }
-                    }
-                    // 去掉最后一个 "、"
-                    int index = stringBuilder.lastIndexOf("、");
-                    if (index != -1) {
-                        stringBuilder.deleteCharAt(index);
-                    }
-                    stringBuilder.append("加入了群聊");
-                }
-                baseViewHolder.setTvText(R.id.tv_content, stringBuilder);
+    private void showGroupChatStatusText(BaseViewHolder baseViewHolder, MessageBean messageBean, GroupChatStatusBean groupChatStatusBean) {
+        if (groupChatStatusBean.getStatus() == GroupChatStatus.ADD.getValue()) {
+            showGroupChatAddUI(baseViewHolder, groupChatStatusBean);
+        } else if (groupChatStatusBean.getStatus() == GroupChatStatus.OTHER_ADD.getValue()) {
+            showGroupChatOtherAddUI(baseViewHolder, groupChatStatusBean);
+        } else if (groupChatStatusBean.getStatus() == GroupChatStatus.DELETE.getValue()) {
+            showGroupChatDeleteUI(baseViewHolder, groupChatStatusBean);
+        } else if (groupChatStatusBean.getStatus() == GroupChatStatus.OTHER_DELETE.getValue()) {
+            showGroupChatOtherDeleteUI(baseViewHolder, groupChatStatusBean);
+        }
+    }
+
+    private void showGroupChatAddUI(BaseViewHolder baseViewHolder, GroupChatStatusBean groupChatStatusBean) {
+        StringBuilder stringBuilder = new StringBuilder();
+        UserDetailBean fromUser = groupChatStatusBean.getFromUser();
+        // 操作人优先显示备注,然后是群昵称,然后是昵称
+        if (!TextUtils.isEmpty(fromUser.getRemark())) {
+            stringBuilder.append(fromUser.getRemark());
+        } else if (!TextUtils.isEmpty(fromUser.getNicknameInGroupChat())) {
+            stringBuilder.append(fromUser.getNicknameInGroupChat());
+        } else {
+            stringBuilder.append(fromUser.getNickname());
+        }
+        stringBuilder.append("邀请");
+        // 拼接被邀请人的昵称,优先显示备注,然后是群昵称,然后是昵称
+        List<UserDetailBean> toUserList = groupChatStatusBean.getToUserList();
+        for (int i = 0; toUserList != null && i < toUserList.size(); i++) {
+            UserDetailBean toUser = toUserList.get(i);
+            if (TextUtils.equals(toUser.getId(), UserStatusManager.SINGLETON.getUserBean().getId())) {
+                stringBuilder.append("你、");
+            } else {
+                String nickname = TextUtils.isEmpty(toUser.getRemark())
+                        ? toUser.getNickname()
+                        : toUser.getRemark();
+                stringBuilder.append(nickname)
+                        .append("、");
             }
+        }
+        // 去掉最后一个 "、"
+        int index = stringBuilder.lastIndexOf("、");
+        if (index != -1) {
+            stringBuilder.deleteCharAt(index);
+        }
+        stringBuilder.append("加入了群聊");
+        baseViewHolder.setTvText(R.id.tv_content, stringBuilder);
+    }
 
-            @Override
-            public void onFailure(Exception e) {
-
+    private void showGroupChatOtherAddUI(BaseViewHolder baseViewHolder, GroupChatStatusBean groupChatStatusBean) {
+        StringBuilder stringBuilder = new StringBuilder();
+        UserDetailBean fromUser = groupChatStatusBean.getFromUser();
+        // 操作人如果是自己,显示你
+        if (TextUtils.equals(fromUser.getId(), UserStatusManager.SINGLETON.getUserBean().getId())) {
+            stringBuilder.append("你");
+        } else {
+            // 操作人是别人,优先显示备注,然后是群昵称,然后是昵称
+            if (!TextUtils.isEmpty(fromUser.getRemark())) {
+                stringBuilder.append(fromUser.getRemark());
+            } else if (!TextUtils.isEmpty(fromUser.getNicknameInGroupChat())) {
+                stringBuilder.append(fromUser.getNicknameInGroupChat());
+            } else {
+                stringBuilder.append(fromUser.getNickname());
             }
-        });
+        }
+        stringBuilder.append("邀请");
+        // 拼接被邀请人的昵称,优先显示备注,然后是群昵称,然后是昵称
+        List<UserDetailBean> toUserList = groupChatStatusBean.getToUserList();
+        for (int i = 0; toUserList != null && i < toUserList.size(); i++) {
+            UserDetailBean toUser = toUserList.get(i);
+            String nickname = TextUtils.isEmpty(toUser.getRemark())
+                    ? toUser.getNickname()
+                    : toUser.getRemark();
+            stringBuilder.append(nickname)
+                    .append("、");
+        }
+        // 去掉最后一个 "、"
+        int index = stringBuilder.lastIndexOf("、");
+        if (index != -1) {
+            stringBuilder.deleteCharAt(index);
+        }
+        stringBuilder.append("加入了群聊");
+        baseViewHolder.setTvText(R.id.tv_content, stringBuilder);
+    }
 
-//        String content = getContext().getResources().getString(R.string.chat_agree_add_text, TextUtils.isEmpty(friendBean.getRemark())
-//                ? friendBean.getNickname()
-//                : friendBean.getRemark());
-//        baseViewHolder.setTvText(R.id.tv_content, content);
+    private void showGroupChatDeleteUI(BaseViewHolder baseViewHolder, GroupChatStatusBean groupChatStatusBean) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("你被");
+        UserDetailBean fromUser = groupChatStatusBean.getFromUser();
+        // 拼接踢出你的人的昵称,优先显示备注,然后是群昵称,然后是昵称
+        String nickname = TextUtils.isEmpty(fromUser.getRemark())
+                ? fromUser.getNickname()
+                : fromUser.getRemark();
+        stringBuilder.append(nickname)
+                .append("移除群聊");
+        baseViewHolder.setTvText(R.id.tv_content, stringBuilder);
+    }
+
+    private void showGroupChatOtherDeleteUI(BaseViewHolder baseViewHolder, GroupChatStatusBean groupChatStatusBean) {
+        StringBuilder stringBuilder = new StringBuilder();
+        UserDetailBean fromUser = groupChatStatusBean.getFromUser();
+        // 操作人如果是自己,显示你
+        if (TextUtils.equals(fromUser.getId(), UserStatusManager.SINGLETON.getUserBean().getId())) {
+            stringBuilder.append("你");
+        } else {
+            // 操作人是别人,优先显示备注,然后是群昵称,然后是昵称
+            if (!TextUtils.isEmpty(fromUser.getRemark())) {
+                stringBuilder.append(fromUser.getRemark());
+            } else if (!TextUtils.isEmpty(fromUser.getNicknameInGroupChat())) {
+                stringBuilder.append(fromUser.getNicknameInGroupChat());
+            } else {
+                stringBuilder.append(fromUser.getNickname());
+            }
+        }
+        stringBuilder.append("将");
+        // 拼接被踢出人的昵称,优先显示备注,然后是群昵称,然后是昵称
+        List<UserDetailBean> toUserList = groupChatStatusBean.getToUserList();
+        for (int i = 0; toUserList != null && i < toUserList.size(); i++) {
+            UserDetailBean toUser = toUserList.get(i);
+            String nickname = TextUtils.isEmpty(toUser.getRemark())
+                    ? toUser.getNickname()
+                    : toUser.getRemark();
+            stringBuilder.append(nickname)
+                    .append("、");
+        }
+        // 去掉最后一个 "、"
+        int index = stringBuilder.lastIndexOf("、");
+        if (index != -1) {
+            stringBuilder.deleteCharAt(index);
+        }
+        stringBuilder.append("移除群聊");
+        baseViewHolder.setTvText(R.id.tv_content, stringBuilder);
     }
 }
