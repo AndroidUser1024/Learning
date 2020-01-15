@@ -8,6 +8,7 @@ import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.conversation.contract.IGroupChatContract;
 import com.qinshou.qinshoubox.conversation.view.activity.GroupChatActivity;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -21,6 +22,8 @@ public class GroupChatModel implements IGroupChatContract.IModel {
     @Override
     public void getMessageList(String toUserId, int page, int pageSize, QSCallback<List<MessageBean>> qsCallback) {
         List<MessageBean> messageBeanList = IMClient.SINGLETON.getMessageManager().getList(MessageType.GROUP_CHAT.getValue(), toUserId, page, pageSize);
+        // 翻转顺序
+        Collections.reverse(messageBeanList);
         qsCallback.onSuccess(messageBeanList);
     }
 }

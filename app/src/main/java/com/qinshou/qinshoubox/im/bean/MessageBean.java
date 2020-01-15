@@ -281,13 +281,13 @@ public class MessageBean {
      */
     public static MessageBean createChatSystemMessage(String fromUserId, String toUserId, Map<String, Object> map) {
         MessageBean messageBean = new MessageBean();
-        messageBean.setFromUserId(fromUserId);
-        messageBean.setToUserId(toUserId);
-        messageBean.setType(MessageType.CHAT.getValue());
-        messageBean.setContentType(MessageContentType.SYSTEM.getValue());
-        messageBean.setExtend(new Gson().toJson(map));
-        messageBean.setSendTimestamp(System.currentTimeMillis());
-        messageBean.setStatus(MessageStatus.SENDED.getValue());
+        messageBean.fromUserId = fromUserId;
+        messageBean.toUserId = toUserId;
+        messageBean.type = MessageType.CHAT.getValue();
+        messageBean.contentType = MessageContentType.SYSTEM.getValue();
+        messageBean.extend = new Gson().toJson(map);
+        messageBean.sendTimestamp = System.currentTimeMillis();
+        messageBean.status = MessageStatus.SENDED.getValue();
         return messageBean;
     }
 }

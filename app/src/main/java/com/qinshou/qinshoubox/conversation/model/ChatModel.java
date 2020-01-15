@@ -12,6 +12,7 @@ import com.qinshou.qinshoubox.conversation.contract.IChatContract;
 import com.qinshou.qinshoubox.conversation.view.activity.ChatActivity;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -24,6 +25,8 @@ public class ChatModel implements IChatContract.IModel {
     @Override
     public void getMessageList(String toUserId, int page, int pageSize, QSCallback<List<MessageBean>> qsCallback) {
         List<MessageBean> messageBeanList = IMClient.SINGLETON.getMessageManager().getList(MessageType.CHAT.getValue(), toUserId, page, pageSize);
+        // 翻转顺序
+        Collections.reverse(messageBeanList);
         qsCallback.onSuccess(messageBeanList);
     }
 

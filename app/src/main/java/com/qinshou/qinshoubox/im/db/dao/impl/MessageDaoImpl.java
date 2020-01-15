@@ -24,9 +24,31 @@ public class MessageDaoImpl extends AbsDaoImpl<MessageBean> implements IMessageD
     @Override
     public MessageBean insert(MessageBean messageBean) {
         String sql = "INSERT INTO message" +
-                " (id,fromUserId,toUserId,type,contentType,content,sendTimestamp,receiveTimestamp,status,extend)" +
+                " (" +
+                "id" +
+                ",fromUserId" +
+                ",toUserId" +
+                ",type" +
+                ",contentType" +
+                ",content" +
+                ",sendTimestamp" +
+                ",receiveTimestamp" +
+                ",status" +
+                ",extend" +
+                ")" +
                 " VALUES" +
-                " (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)";
+                " (" +
+                "%s" +
+                ",%s" +
+                ",%s" +
+                ",%s" +
+                ",%s" +
+                ",%s" +
+                ",%s" +
+                ",%s" +
+                ",%s" +
+                ",%s" +
+                ")";
         sql = String.format(sql, getStringValue(messageBean.getId()), getStringValue(messageBean.getFromUserId())
                 , getStringValue(messageBean.getToUserId()), messageBean.getType(), messageBean.getContentType()
                 , getStringValue(messageBean.getContent()), messageBean.getSendTimestamp()
@@ -49,9 +71,18 @@ public class MessageDaoImpl extends AbsDaoImpl<MessageBean> implements IMessageD
     @Override
     public int update(MessageBean messageBean) {
         String sql = "UPDATE message SET" +
-                " id=%s,fromUserId=%s,toUserId=%s,type=%s,contentType=%s" +
-                ",content=%s,sendTimestamp=%s,receiveTimestamp=%s,status=%s,extend=%s" +
-                " WHERE pid=%s";
+                " id=%s" +
+                ",fromUserId=%s" +
+                ",toUserId=%s" +
+                ",type=%s" +
+                ",contentType=%s" +
+                ",content=%s" +
+                ",sendTimestamp=%s" +
+                ",receiveTimestamp=%s" +
+                ",status=%s" +
+                ",extend=%s" +
+                " WHERE" +
+                " pid=%s";
         sql = String.format(sql, getStringValue(messageBean.getId()), getStringValue(messageBean.getFromUserId())
                 , getStringValue(messageBean.getToUserId()), messageBean.getType()
                 , messageBean.getContentType(), getStringValue(messageBean.getContent()), messageBean.getSendTimestamp()
@@ -64,11 +95,20 @@ public class MessageDaoImpl extends AbsDaoImpl<MessageBean> implements IMessageD
     @Override
     public MessageBean selectByPid(int pid) {
         String sql = "SELECT" +
-                " m.pid,m.id,m.fromUserId,m.toUserId,m.type" +
-                ",m.contentType,m.content,m.sendTimestamp,m.receiveTimestamp,m.status" +
+                " m.pid" +
+                ",m.id" +
+                ",m.fromUserId" +
+                ",m.toUserId" +
+                ",m.type" +
+                ",m.contentType" +
+                ",m.content" +
+                ",m.sendTimestamp" +
+                ",m.receiveTimestamp" +
+                ",m.status" +
                 ",m.extend" +
                 " FROM message AS m" +
-                " WHERE m.pid=%s";
+                " WHERE" +
+                " m.pid=%s";
         sql = String.format(sql, pid);
         Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
         try {
@@ -98,13 +138,25 @@ public class MessageDaoImpl extends AbsDaoImpl<MessageBean> implements IMessageD
     @Override
     public List<MessageBean> selectList(int conversationId, int page, int pageSize) {
         String sql = "SELECT" +
-                " m.pid,m.id,m.fromUserId,m.toUserId,m.type" +
-                ",m.contentType,m.content,m.sendTimestamp,m.receiveTimestamp,m.status" +
+                " m.pid" +
+                ",m.id" +
+                ",m.fromUserId" +
+                ",m.toUserId" +
+                ",m.type" +
+                ",m.contentType" +
+                ",m.content" +
+                ",m.sendTimestamp" +
+                ",m.receiveTimestamp" +
+                ",m.status" +
                 ",m.extend" +
                 " FROM conversation_message_rel AS cmr" +
                 " LEFT OUTER JOIN message AS m ON m.pid = cmr.messagePid" +
-                " WHERE cmr.conversationId = %s" +
-                " LIMIT %s,%s";
+                " WHERE" +
+                " cmr.conversationId = %s" +
+                " ORDER BY" +
+                " m.pid DESC" +
+                " LIMIT" +
+                " %s,%s";
         sql = String.format(sql, conversationId, (page - 1) * pageSize, (page) * pageSize);
         List<MessageBean> messageBeanList = new ArrayList<>();
         Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
