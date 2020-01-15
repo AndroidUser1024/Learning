@@ -47,8 +47,8 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
     private QSFragment mConversationFragment;
     private QSFragment mFriendFragment;
     private QSFragment mMeFragment;
-    private int[] mTabIvResourceArray = new int[]{R.drawable.main_iv_tab_conversation_src, R.drawable.main_iv_tab_conversation_src_selected
-            , R.drawable.main_iv_tab_conversation_src, R.drawable.main_iv_tab_conversation_src_selected
+    private int[] mTabIvResourceArray = new int[]{R.drawable.main_iv_tab_home_src, R.drawable.main_iv_tab_home_src_selected
+            , R.drawable.main_iv_tab_music_src, R.drawable.main_iv_tab_music_src_selected
             , R.drawable.main_iv_tab_conversation_src, R.drawable.main_iv_tab_conversation_src_selected
             , R.drawable.main_iv_tab_friend_src, R.drawable.main_iv_tab_friend_src_selected
             , R.drawable.main_iv_tab_me_src, R.drawable.main_iv_tab_me_src_selected};
@@ -164,7 +164,7 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
                 continue;
             }
             ivTab.setImageResource(i == position ? mTabIvResourceArray[i * 2 + 1] : mTabIvResourceArray[i * 2]);
-            tvTab.setTextColor(i == position ? 0xFF03A9F4 : 0xFF666666);
+            tvTab.setTextColor(i == position ? 0xFF3498DB : 0xFF666666);
         }
     }
 

@@ -7,14 +7,14 @@
 
     <ImageView
         android:id="@+id/iv_tab"
-        android:layout_width="@dimen/px46"
-        android:layout_height="@dimen/px46"
+        android:layout_width="@dimen/px50"
+        android:layout_height="@dimen/px50"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@mipmap/ic_launcher" />
+        tools:src="@drawable/main_iv_tab_home_src" />
 
     <TextView
         android:id="@+id/tv_unread_count"
@@ -40,7 +40,6 @@
         android:textColor="#FF666666"
         android:textSize="@dimen/px22"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
