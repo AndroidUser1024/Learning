@@ -10,7 +10,7 @@ import com.qinshou.qinshoubox.im.db.dao.IConversationMessageRelDao;
  * Author: QinHao
  * Email:cqflqinhao@126.com
  * Date: 2019/12/5 9:03
- * Description:类描述
+ * Description:conversation_message_rel 表的 Dao 的实现类
  */
 public class ConversationMessageRelDaoImpl extends AbsDaoImpl<ConversationMessageRelBean> implements IConversationMessageRelDao {
 

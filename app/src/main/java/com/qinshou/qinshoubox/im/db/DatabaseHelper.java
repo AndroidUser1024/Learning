@@ -9,11 +9,13 @@ import com.qinshou.qinshoubox.im.db.dao.IConversationDao;
 import com.qinshou.qinshoubox.im.db.dao.IConversationMessageRelDao;
 import com.qinshou.qinshoubox.im.db.dao.IFriendDao;
 import com.qinshou.qinshoubox.im.db.dao.IGroupChatDao;
+import com.qinshou.qinshoubox.im.db.dao.IGroupChatMemberDao;
 import com.qinshou.qinshoubox.im.db.dao.IMessageDao;
 import com.qinshou.qinshoubox.im.db.dao.impl.ConversationDaoImpl;
 import com.qinshou.qinshoubox.im.db.dao.impl.ConversationMessageRelDaoImpl;
 import com.qinshou.qinshoubox.im.db.dao.impl.FriendDaoImpl;
 import com.qinshou.qinshoubox.im.db.dao.impl.GroupChatDaoImpl;
+import com.qinshou.qinshoubox.im.db.dao.impl.GroupChatMemberDaoImpl;
 import com.qinshou.qinshoubox.im.db.dao.impl.MessageDaoImpl;
 
 import java.util.HashMap;
@@ -78,6 +80,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             " ,conversationId INTEGER" +
             " ,messagePid INTEGER" +
             " )";
+    private final String CREATE_GROUP_CHAT_MEMBER_TABLE_SQL = "CREATE TABLE IF NOT EXISTS group_chat_member(" +
+            " group_chat_id TEXT" +
+            ",userId TEXT" +
+            ",nickname TEXT" +
+            ",headImg TEXT" +
+            ",headImgSmall TEXT" +
+            ",remark TEXT" +
+            ",nicknameInGroupChat TEXT" +
+            " )";
 
     private Map<Class<? extends IBaseDao>, IBaseDao> mDaoMap = new HashMap<>();
 
@@ -100,6 +111,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         mDaoMap.put(IMessageDao.class, new MessageDaoImpl(sqLiteDatabase));
         mDaoMap.put(IConversationDao.class, new ConversationDaoImpl(sqLiteDatabase));
         mDaoMap.put(IConversationMessageRelDao.class, new ConversationMessageRelDaoImpl(sqLiteDatabase));
+        mDaoMap.put(IGroupChatMemberDao.class, new GroupChatMemberDaoImpl(sqLiteDatabase));
     }
 
     /**
@@ -119,6 +131,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_CONVERSATION_TABLE_SQL);
         // 创建 conversation_message_rel 表
         db.execSQL(CREATE_CONVERSATION_MESSAGE_REL_TABLE_SQL);
+        // 创建 group_chat_member 表
+        db.execSQL(CREATE_GROUP_CHAT_MEMBER_TABLE_SQL);
     }
 
     /**

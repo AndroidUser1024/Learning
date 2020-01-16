@@ -14,7 +14,7 @@ import java.util.List;
  * Author: QinHao
  * Email:cqflqinhao@126.com
  * Date: 2019/12/5 9:02
- * Description:类描述
+ * Description:message 表的 Dao 的实现类
  */
 public class MessageDaoImpl extends AbsDaoImpl<MessageBean> implements IMessageDao {
     public MessageDaoImpl(SQLiteDatabase SQLiteDatabase) {

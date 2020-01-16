@@ -11,7 +11,7 @@ import com.qinshou.qinshoubox.im.db.dao.IGroupChatDao;
  * Author: QinHao
  * Email:cqflqinhao@126.com
  * Date: 2019/12/5 9:01
- * Description:类描述
+ * Description:group_chat 表的 Dao 的实现类
  */
 public class GroupChatDaoImpl extends AbsDaoImpl<GroupChatBean> implements IGroupChatDao {
     public GroupChatDaoImpl(SQLiteDatabase SQLiteDatabase) {

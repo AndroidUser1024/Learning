@@ -10,7 +10,7 @@ import com.qinshou.qinshoubox.im.db.dao.IFriendDao;
  * Author: QinHao
  * Email:cqflqinhao@126.com
  * Date: 2019/12/5 8:57
- * Description:
+ * Description:friend 表的 Dao 的实现类
  */
 public class FriendDaoImpl extends AbsDaoImpl<FriendBean> implements IFriendDao {
     private final String TAG = FriendDaoImpl.class.getSimpleName();
