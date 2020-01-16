@@ -82,7 +82,6 @@ public abstract class AbsMVPActivity<P extends AbsPresenter> extends AppCompatAc
         if (mPresenter != null) {
             mPresenter.attachView(AbsMVPActivity.this);
         }
-        getPresenterClass();
         initView();
         setListener();
         initData();

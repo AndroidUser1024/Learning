@@ -59,6 +59,7 @@ public class SetNicknameInGroupChatFragment extends QSFragment<SetNicknameInGrou
 
     @Override
     public void setListener() {
+        super.setListener();
         findViewByID(R.id.tv_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

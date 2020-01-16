@@ -63,6 +63,7 @@ public class MyQRCodeFragment extends QSFragment<MyQRCodePresenter> implements I
 
     @Override
     public void setListener() {
+        super.setListener();
         mTitleBar.setLeftTextOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

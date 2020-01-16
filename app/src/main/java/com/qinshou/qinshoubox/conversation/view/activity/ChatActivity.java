@@ -449,6 +449,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void setListener() {
+        super.setListener();
         IMClient.SINGLETON.addOnMessageListener(mOnMessageListener);
         IMClient.SINGLETON.addOnSendMessageListener(mOnSendMessageListener);
         mTitleBar.setLeftImageOnClickListener(new View.OnClickListener() {

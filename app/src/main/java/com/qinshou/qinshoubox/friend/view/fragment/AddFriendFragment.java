@@ -64,6 +64,7 @@ public class AddFriendFragment extends QSFragment<AddFriendPresenter> implements
 
     @Override
     public void setListener() {
+        super.setListener();
         mTitleBar.setLeftTextOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

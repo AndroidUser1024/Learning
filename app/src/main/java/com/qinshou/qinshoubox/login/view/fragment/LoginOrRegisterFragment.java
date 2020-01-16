@@ -77,6 +77,7 @@ public class LoginOrRegisterFragment extends QSFragment<LoginOrRegisterPresenter
 
     @Override
     public void setListener() {
+        super.setListener();
         // 点击外部区域关闭软键盘
         findViewByID(R.id.cl_root).setOnClickListener(new View.OnClickListener() {
             @Override

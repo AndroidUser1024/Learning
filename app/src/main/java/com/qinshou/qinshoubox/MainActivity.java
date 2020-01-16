@@ -78,6 +78,7 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
 
     @Override
     public void setListener() {
+        super.setListener();
         mTlMain.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

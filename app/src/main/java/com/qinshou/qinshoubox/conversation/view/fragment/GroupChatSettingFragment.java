@@ -120,6 +120,7 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
 
     @Override
     public void setListener() {
+        super.setListener();
         mRcvGroupChatMemberAdapter.setOnItemClickListener(new IOnItemClickListener() {
             @Override
             public void onItemClick(BaseViewHolder holder, Object itemData, int position) {

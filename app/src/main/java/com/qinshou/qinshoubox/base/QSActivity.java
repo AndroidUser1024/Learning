@@ -1,8 +1,5 @@
 package com.qinshou.qinshoubox.base;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-
 import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.base.AbsMVPActivity;
 import com.qinshou.commonmodule.base.AbsPresenter;
@@ -31,8 +28,7 @@ public abstract class QSActivity<P extends AbsPresenter> extends AbsMVPActivity<
     }
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void setListener() {
         EventBus.getDefault().register(this);
         IMClient.SINGLETON.addOnConnectListener(this);
     }
@@ -54,6 +50,7 @@ public abstract class QSActivity<P extends AbsPresenter> extends AbsMVPActivity<
 
     @Override
     public void onAuthenticated() {
+        ShowLogUtil.logi("getPresenter()--->" + getPresenter());
         ShowLogUtil.logi("onAuthenticated");
     }
 

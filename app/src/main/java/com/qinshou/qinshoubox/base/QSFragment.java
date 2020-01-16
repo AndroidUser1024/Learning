@@ -1,8 +1,5 @@
 package com.qinshou.qinshoubox.base;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-
 import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.base.AbsMVPFragment;
 import com.qinshou.commonmodule.base.AbsPresenter;
@@ -31,8 +28,7 @@ public abstract class QSFragment<P extends AbsPresenter> extends AbsMVPFragment<
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void setListener() {
         EventBus.getDefault().register(this);
         IMClient.SINGLETON.addOnConnectListener(this);
     }

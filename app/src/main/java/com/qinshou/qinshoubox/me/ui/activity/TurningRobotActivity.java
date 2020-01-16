@@ -27,6 +27,7 @@ public class TurningRobotActivity extends QSActivity<AbsPresenter> {
 
     @Override
     public void setListener() {
+        super.setListener();
         findViewByID(R.id.btn_record_1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

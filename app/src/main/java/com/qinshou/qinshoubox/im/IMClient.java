@@ -71,7 +71,7 @@ public enum IMClient {
     private static final String TAG = "IMClient";
     private final int TIME_OUT = 10 * 1000;
     private static final String URL = "ws://www.mrqinshou.com:10086/websocket";
-//        private static final String URL = "ws://172.16.60.231:10086/websocket";
+    //        private static final String URL = "ws://172.16.60.231:10086/websocket";
     //    private static final String URL = "ws://192.168.1.109:10086/websocket";
     private Context mContext;
     private WebSocket mWebSocket;
@@ -82,8 +82,8 @@ public enum IMClient {
     private List<IOnGroupChatStatusListener> mOnGroupChatStatusListenerList = new ArrayList<>();
     private List<IOnSendMessageListener> mOnSendMessageListenerList = new ArrayList<>();
     private String mUserId;
-    private GroupChatManager mGroupChatManager;
     private FriendManager mFriendManager;
+    private GroupChatManager mGroupChatManager;
     private MessageManager mMessageManager;
     private ConversationManager mConversationManager;
     //    private Map<String, MessageBean> mAckMessageMap = new HashMap<>();
@@ -414,6 +414,90 @@ public enum IMClient {
     /**
      * Author: QinHao
      * Email:cqflqinhao@126.com
+     * Date:2020/1/8 15:55
+     * Description:保存消息和会话到数据库
+     *
+     * @param messageBean 消息对象
+     * @param send        true 表示是发送的消息,false 表示是接收的消息
+     */
+    private void insert2Database(MessageBean messageBean, boolean send) {
+        mMessageManager.insertOrUpdate(messageBean);
+        // 插入或更新会话
+        String toUserId;
+        long lastMsgTimestamp;
+        if (send || messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
+            // 发送的消息, conversation 的目标 id 为接收方 id
+            // 群聊的发送方永远是自己,接收方永远是群 id,所以群聊类型的消息,conversation 的目标 id 为永远为群 id
+            toUserId = messageBean.getToUserId();
+            lastMsgTimestamp = messageBean.getSendTimestamp();
+        } else {
+            // 接收的消息, conversation 的目标 id 为发送方 id
+            toUserId = messageBean.getFromUserId();
+            lastMsgTimestamp = messageBean.getReceiveTimestamp();
+        }
+        ConversationBean conversationBean = mConversationManager.getByTypeAndToUserId(messageBean.getType(), toUserId);
+        if (conversationBean == null) {
+            conversationBean = new ConversationBean();
+        }
+        // 发送的消息, conversation 的目标 id 为接收方 id
+        // 群聊的发送方永远是自己,接收方永远是群 id,所以群聊类型的消息,conversation 的目标 id 为永远为群 id
+        conversationBean.setToUserId(toUserId);
+        conversationBean.setType(messageBean.getType());
+        conversationBean.setLastMsgContentType(messageBean.getContentType());
+        conversationBean.setLastMsgContent(messageBean.getContent());
+        conversationBean.setLastMsgTimestamp(lastMsgTimestamp);
+        conversationBean.setLastMsgPid(messageBean.getPid());
+        if (!send) {
+            if (conversationBean.getUnreadCount() == -1) {
+                // 如果被标记过未读,则设置未读数为 1
+                conversationBean.setUnreadCount(1);
+            } else {
+                // 否则在原有的未读数上 +1
+                conversationBean.setUnreadCount(conversationBean.getUnreadCount() + 1);
+            }
+        }
+        mConversationManager.insertOrUpdate(conversationBean);
+        // 插入会话与消息关系
+        mConversationManager.insertConversationMessageRel(new ConversationMessageRelBean(conversationBean.getId(), messageBean.getPid()));
+    }
+
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2020/1/7 21:38
+     * Description:释放资源
+     */
+    private void release() {
+        mFriendManager = null;
+        mGroupChatManager = null;
+        mMessageManager = null;
+        mConversationManager = null;
+        mOnConnectListenerList.clear();
+        mOnFriendStatusListenerList.clear();
+        mOnGroupChatStatusListenerList.clear();
+        mOnMessageListenerList.clear();
+        mOnSendMessageListenerList.clear();
+//        for (Timer timer : mRetrySendTimerMap.values()) {
+//            timer.cancel();
+//        }
+//        mAckMessageMap.clear();
+//        mRetrySendTimerMap.clear();
+        mUserId = null;
+        // 移除重连任务
+        if (mReconnectScheduledFuture != null) {
+            mReconnectScheduledFuture.cancel(true);
+            mReconnectScheduledFuture = null;
+        }
+        // 移除心跳任务
+        if (mHeartBeatScheduledFuture != null) {
+            mHeartBeatScheduledFuture.cancel(true);
+            mHeartBeatScheduledFuture = null;
+        }
+    }
+
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
      * Date:2019/12/5 10:43
      * Description:初始化 IM 服务,建议在 Application 中
      *
@@ -532,83 +616,21 @@ public enum IMClient {
     /**
      * Author: QinHao
      * Email:cqflqinhao@126.com
-     * Date:2020/1/7 21:38
-     * Description:释放资源
+     * Date:2020/1/16 16:47
+     * Description:判断是否已通过验证
      */
-    private void release() {
-        mOnConnectListenerList.clear();
-        mOnFriendStatusListenerList.clear();
-        mOnGroupChatStatusListenerList.clear();
-        mOnMessageListenerList.clear();
-        mOnSendMessageListenerList.clear();
-//        for (Timer timer : mRetrySendTimerMap.values()) {
-//            timer.cancel();
-//        }
-//        mAckMessageMap.clear();
-//        mRetrySendTimerMap.clear();
-        mUserId = null;
-        // 移除重连任务
-        if (mReconnectScheduledFuture != null) {
-            mReconnectScheduledFuture.cancel(true);
-            mReconnectScheduledFuture = null;
-        }
-        // 移除心跳任务
-        if (mHeartBeatScheduledFuture != null) {
-            mHeartBeatScheduledFuture.cancel(true);
-            mHeartBeatScheduledFuture = null;
-        }
+    public boolean isAuthenticated() {
+        return mWebSocket != null;
     }
 
     /**
      * Author: QinHao
      * Email:cqflqinhao@126.com
-     * Date:2020/1/8 15:55
-     * Description:保存消息和会话到数据库
+     * Date:2020/1/16 16:48
+     * Description:发送消息
      *
-     * @param messageBean 消息对象
-     * @param send        true 表示是发送的消息,false 表示是接收的消息
+     * @param messageBean 消息实体类
      */
-    private void insert2Database(MessageBean messageBean, boolean send) {
-        mMessageManager.insertOrUpdate(messageBean);
-        // 插入或更新会话
-        String toUserId;
-        long lastMsgTimestamp;
-        if (send || messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
-            // 发送的消息, conversation 的目标 id 为接收方 id
-            // 群聊的发送方永远是自己,接收方永远是群 id,所以群聊类型的消息,conversation 的目标 id 为永远为群 id
-            toUserId = messageBean.getToUserId();
-            lastMsgTimestamp = messageBean.getSendTimestamp();
-        } else {
-            // 接收的消息, conversation 的目标 id 为发送方 id
-            toUserId = messageBean.getFromUserId();
-            lastMsgTimestamp = messageBean.getReceiveTimestamp();
-        }
-        ConversationBean conversationBean = mConversationManager.getByTypeAndToUserId(messageBean.getType(), toUserId);
-        if (conversationBean == null) {
-            conversationBean = new ConversationBean();
-        }
-        // 发送的消息, conversation 的目标 id 为接收方 id
-        // 群聊的发送方永远是自己,接收方永远是群 id,所以群聊类型的消息,conversation 的目标 id 为永远为群 id
-        conversationBean.setToUserId(toUserId);
-        conversationBean.setType(messageBean.getType());
-        conversationBean.setLastMsgContentType(messageBean.getContentType());
-        conversationBean.setLastMsgContent(messageBean.getContent());
-        conversationBean.setLastMsgTimestamp(lastMsgTimestamp);
-        conversationBean.setLastMsgPid(messageBean.getPid());
-        if (!send) {
-            if (conversationBean.getUnreadCount() == -1) {
-                // 如果被标记过未读,则设置未读数为 1
-                conversationBean.setUnreadCount(1);
-            } else {
-                // 否则在原有的未读数上 +1
-                conversationBean.setUnreadCount(conversationBean.getUnreadCount() + 1);
-            }
-        }
-        mConversationManager.insertOrUpdate(conversationBean);
-        // 插入会话与消息关系
-        mConversationManager.insertConversationMessageRel(new ConversationMessageRelBean(conversationBean.getId(), messageBean.getPid()));
-    }
-
     public void sendMessage(final MessageBean messageBean) {
         if (mWebSocket == null) {
             return;

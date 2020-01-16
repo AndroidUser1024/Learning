@@ -62,6 +62,7 @@ public class SetAdditionalMsgFragment extends QSFragment<SetAdditionalMsgPresent
 
     @Override
     public void setListener() {
+        super.setListener();
         ((TitleBar) findViewByID(R.id.title_bar)).setLeftTextOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

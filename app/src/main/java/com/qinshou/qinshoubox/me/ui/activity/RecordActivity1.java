@@ -58,6 +58,7 @@ public class RecordActivity1 extends QSActivity<AbsPresenter> {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void setListener() {
+        super.setListener();
         mBtnPressToSpeech.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {

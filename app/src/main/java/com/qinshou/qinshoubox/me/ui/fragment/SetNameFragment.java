@@ -56,6 +56,7 @@ public class SetNameFragment extends QSFragment<SetNamePresenter> implements ISe
 
     @Override
     public void setListener() {
+        super.setListener();
         findViewByID(R.id.tv_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

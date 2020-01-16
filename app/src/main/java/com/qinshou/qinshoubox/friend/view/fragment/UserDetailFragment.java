@@ -158,6 +158,7 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
 
     @Override
     public void setListener() {
+        super.setListener();
         IMClient.SINGLETON.addOnFriendStatusListener(mOnFriendStatusListener);
         ((TitleBar) findViewByID(R.id.title_bar)).setLeftImageOnClickListener(new View.OnClickListener() {
             @Override

@@ -26,7 +26,7 @@ public class DemoActivity extends QSActivity<DemoPresenter> implements IDemoCont
 
     @Override
     public void setListener() {
-
+        super.setListener();
     }
 
     @Override

@@ -137,6 +137,7 @@ public class MeFragment extends QSFragment<MePresenter> implements IMeContract.I
 
     @Override
     public void setListener() {
+        super.setListener();
         mIvHeadImg.setOnClickListener(mOnClickListener);
         findViewByID(R.id.tv_click_2_login).setOnClickListener(mOnClickListener);
         findViewByID(R.id.tv_login_2_have_more_function).setOnClickListener(mOnClickListener);

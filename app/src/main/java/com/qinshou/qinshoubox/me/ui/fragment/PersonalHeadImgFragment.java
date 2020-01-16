@@ -93,6 +93,7 @@ public class PersonalHeadImgFragment extends QSFragment<PersonalHeadImgPresenter
 
     @Override
     public void setListener() {
+        super.setListener();
         ((TitleBar) findViewByID(R.id.title_bar)).setLeftImageOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

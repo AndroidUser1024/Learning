@@ -110,6 +110,7 @@ public class MusicPlayFragment extends QSFragment<MusicPlayPresenter> implements
 
     @Override
     public void setListener() {
+        super.setListener();
         mIbShare.setOnClickListener(mOnClickListener);
         mIbPrevious.setOnClickListener(mOnClickListener);
         mIbPlayAndPause.setOnClickListener(mOnClickListener);

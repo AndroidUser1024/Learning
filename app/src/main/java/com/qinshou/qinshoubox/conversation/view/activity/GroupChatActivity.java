@@ -424,6 +424,7 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void setListener() {
+        super.setListener();
         IMClient.SINGLETON.addOnMessageListener(mOnMessageListener);
         IMClient.SINGLETON.addOnSendMessageListener(mOnSendMessageListener);
         mTitleBar.setLeftImageOnClickListener(new View.OnClickListener() {
