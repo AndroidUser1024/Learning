@@ -26,8 +26,7 @@ public class FriendPresenter extends AbsPresenter<IFriendContract.IView, IFriend
     public void getMyGroupChatList() {
         getModel().getMyGroupChatList(new Callback<List<GroupChatBean>>() {
             @Override
-            public void onSuccess(List<
-                    GroupChatBean> data) {
+            public void onSuccess(List<GroupChatBean> data) {
                 if (!isViewAttached()) {
                     return;
                 }

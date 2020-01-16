@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
@@ -27,6 +28,11 @@ import com.qinshou.commonmodule.util.permissionutil.IOnRequestPermissionResultCa
 import com.qinshou.commonmodule.util.permissionutil.PermissionUtil;
 import com.qinshou.commonmodule.widget.RefreshLayout;
 import com.qinshou.commonmodule.widget.TitleBar;
+import com.qinshou.imagemodule.callback.IOnImageChooseResultCallback;
+import com.qinshou.imagemodule.util.ImageChooseUtil;
+import com.qinshou.imagemodule.util.ImagePathUtil;
+import com.qinshou.qinshoubox.conversation.bean.UploadImgResultBean;
+import com.qinshou.qinshoubox.conversation.bean.UploadVoiceResultBean;
 import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatSettingFragment;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
@@ -51,6 +57,10 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import top.zibin.luban.CompressionPredicate;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 
 /**
  * Author: QinHao
@@ -169,22 +179,7 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
                 if (file == null) {
                     return true;
                 }
-//                MessageBean message = MessageBean.createVoiceMessage(mGroupChatId, recordTime, file.getAbsolutePath());
-//                JMClient.SINGLETON.getChatManager().sendVoiceMessage(message, file, recordTime, new JMCallback<Void>() {
-//                    @Override
-//                    public void onSuccess(Void aVoid) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Exception e) {
-//                        ShowLogUtil.logi("发送失败--->" + e.getMessage());
-//                    }
-//                });
-//                mRcvMessageAdapter.getDataList().add(message);
-//                mRcvMessageAdapter.notifyItemInserted(mRcvMessageAdapter.getDataList().size() - 1);
-//                // 消息列表滚动到底部
-//                mRcvMessage.scrollToPosition(mRcvMessageAdapter.getItemCount() - 1);
+                getPresenter().uploadVoice(recordTime, file);
             }
             return true;
         }
@@ -228,7 +223,7 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
                     }
                     break;
                 case R.id.btn_send:
-                    sendMessage();
+                    sendMessage(null);
                     break;
                 case R.id.ll_send_img:
                     pickPhoto();
@@ -543,6 +538,55 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
         }
     }
 
+    @Override
+    public void getMessageListSuccess(List<MessageBean> messageBeanList) {
+        mRcvMessageAdapter.getDataList().addAll(0, messageBeanList);
+        mRcvMessageAdapter.notifyItemRangeInserted(0, messageBeanList.size());
+        if (mPage == IConstant.PAGE_START) {
+            // 消息列表滚动到底部
+            mRcvMessage.scrollToPosition(mRcvMessageAdapter.getItemCount() - 1);
+        } else {
+            if (messageBeanList.size() == 0) {
+                toastShort(getString(R.string.chat_toast_no_more_message_text));
+            }
+        }
+        // 停止下拉刷新和上拉加载
+        mRefreshLayout.stopRefreshAndLoadMore();
+    }
+
+    @Override
+    public void getMessageListFailure(Exception e) {
+
+    }
+
+    @Override
+    public void uploadVoiceSuccess(UploadVoiceResultBean uploadVoiceResultBean) {
+        MessageBean messageBean = MessageBean.createVoiceMessage(mGroupChatId
+                , uploadVoiceResultBean.getUrl()
+                , uploadVoiceResultBean.getTime());
+        messageBean.setType(MessageType.GROUP_CHAT.getValue());
+        sendMessage(messageBean);
+    }
+
+    @Override
+    public void uploadVoiceFailure(Exception e) {
+
+    }
+
+    @Override
+    public void uploadImgSuccess(UploadImgResultBean uploadImgResultBean) {
+        MessageBean messageBean = MessageBean.createImgMessage(mGroupChatId
+                , uploadImgResultBean.getUrl()
+                , uploadImgResultBean.getSmallUrl());
+        messageBean.setType(MessageType.GROUP_CHAT.getValue());
+        sendMessage(messageBean);
+    }
+
+    @Override
+    public void uploadImgFailure(Exception e) {
+
+    }
+
 
     /**
      * Author: QinHao
@@ -550,18 +594,17 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
      * Date:2019/9/10 16:28
      * Description:发送消息
      */
-    private void sendMessage() {
-        String content = mEtContent.getText().toString().trim();
-        if (TextUtils.isEmpty(content)) {
-            toastShort(getString(R.string.chat_toast_can_not_send_empty_message_text));
-            return;
-        }
-        MessageBean messageBean = null;
-        if (mMessageContentType == MessageContentType.TEXT) {
+    private void sendMessage(MessageBean messageBean) {
+        if (messageBean == null) {
+            String content = mEtContent.getText().toString().trim();
+            if (TextUtils.isEmpty(content)) {
+                toastShort(getString(R.string.chat_toast_can_not_send_empty_message_text));
+                return;
+            }
             messageBean = MessageBean.createTextMessage(mGroupChatId, content);
             messageBean.setType(MessageType.GROUP_CHAT.getValue());
-            IMClient.SINGLETON.sendMessage(messageBean);
         }
+        IMClient.SINGLETON.sendMessage(messageBean);
         mRcvMessageAdapter.getDataList().add(messageBean);
         mRcvMessageAdapter.notifyItemInserted(mRcvMessageAdapter.getDataList().size() - 1);
         // 消息列表滚动到底部
@@ -649,6 +692,50 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
      * Description: 选择照片
      */
     private void pickPhoto() {
+        ImageChooseUtil.chooseImage(getActivity(), new IOnImageChooseResultCallback() {
+            @Override
+            public void onSuccess(List<Uri> uriList) {
+                if (uriList == null || uriList.size() == 0) {
+                    toastShort(getString(R.string.personal_head_img_toast_pick_photo_failure_text));
+                    return;
+                }
+                String path = ImagePathUtil.getRealPathFromUri(getContext(), uriList.get(0));
+                if (TextUtils.isEmpty(path)) {
+                    toastShort(getString(R.string.personal_head_img_toast_pick_photo_failure_text));
+                    return;
+                }
+                File targetDir = new File(getContext().getCacheDir() + "/Image");
+                targetDir.mkdirs();
+                Luban.with(getContext())
+                        .load(path)
+                        .ignoreBy(100)
+                        .setTargetDir(targetDir.getAbsolutePath())
+                        .filter(new CompressionPredicate() {
+                            @Override
+                            public boolean apply(String path) {
+                                return !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif"));
+                            }
+                        })
+                        .setCompressListener(new OnCompressListener() {
+                            @Override
+                            public void onStart() {
+                                // 压缩开始前调用，可以在方法内启动 loading UI
+                            }
+
+                            @Override
+                            public void onSuccess(File file) {
+                                // 压缩成功后调用，返回压缩后的图片文件
+                                getPresenter().uploadImg(file);
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                // 当压缩过程出现问题时调用
+                                ShowLogUtil.logi("onError: e--->" + e.getMessage());
+                            }
+                        }).launch();
+            }
+        });
     }
 
     /**
@@ -664,26 +751,5 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
         Intent intent = new Intent(context, GroupChatActivity.class);
         intent.putExtra(GROUP_CHAT_ID, toUserId);
         context.startActivity(intent);
-    }
-
-    @Override
-    public void getMessageListSuccess(List<MessageBean> messageBeanList) {
-        mRcvMessageAdapter.getDataList().addAll(0, messageBeanList);
-        mRcvMessageAdapter.notifyItemRangeInserted(0, messageBeanList.size());
-        if (mPage == IConstant.PAGE_START) {
-            // 消息列表滚动到底部
-            mRcvMessage.scrollToPosition(mRcvMessageAdapter.getItemCount() - 1);
-        } else {
-            if (messageBeanList.size() == 0) {
-                toastShort(getString(R.string.chat_toast_no_more_message_text));
-            }
-        }
-        // 停止下拉刷新和上拉加载
-        mRefreshLayout.stopRefreshAndLoadMore();
-    }
-
-    @Override
-    public void getMessageListFailure(Exception e) {
-
     }
 }

@@ -161,7 +161,6 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
      * @param conversationBean 需要插入或更新的会话
      */
     private void updateConversationList(ConversationBean conversationBean) {
-        ShowLogUtil.logi("刷新会话列表--->" + conversationBean);
         List<ConversationBean> conversationBeanList = mRcvConversationAdapter.getDataList();
         if (conversationBean.getTop() == 1) {
             // 置顶的会话
@@ -182,15 +181,20 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
                     mRcvConversationAdapter.notifyItemChanged(index);
                 } else {
                     // 如果该会话不在第一个,放到第一个
+//                    conversationBeanList.remove(index);
+//                    conversationBeanList.add(0, conversationBean);
+//                    mRcvConversationAdapter.notifyItemMoved(index, 0);
+//                    mRcvConversationAdapter.notifyItemChanged(0);
                     conversationBeanList.remove(index);
                     conversationBeanList.add(0, conversationBean);
-                    mRcvConversationAdapter.notifyItemMoved(index, 0);
-                    mRcvConversationAdapter.notifyItemChanged(0);
+                    mRcvConversationAdapter.notifyItemRangeChanged(0, index - 0 + 1);
                 }
             } else {
                 // 原来的会话列表中没有该会话,则添加到第一个
+//                conversationBeanList.add(0, conversationBean);
+//                mRcvConversationAdapter.notifyItemInserted(0);
                 conversationBeanList.add(0, conversationBean);
-                mRcvConversationAdapter.notifyItemInserted(0);
+                mRcvConversationAdapter.notifyItemRangeChanged(0, conversationBeanList.size() - 0 + 1);
             }
         } else {
             // 非置顶的会话
@@ -217,15 +221,20 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
                     mRcvConversationAdapter.notifyItemChanged(index);
                 } else {
                     // 如果该会话不在非置顶会话第一个,放到非置顶会话第一个
+//                    conversationBeanList.remove(index);
+//                    conversationBeanList.add(firstNotTopIndex, conversationBean);
+//                    mRcvConversationAdapter.notifyItemMoved(index, firstNotTopIndex);
+//                    mRcvConversationAdapter.notifyItemChanged(firstNotTopIndex);
                     conversationBeanList.remove(index);
                     conversationBeanList.add(firstNotTopIndex, conversationBean);
-                    mRcvConversationAdapter.notifyItemMoved(index, firstNotTopIndex);
-                    mRcvConversationAdapter.notifyItemChanged(firstNotTopIndex);
+                    mRcvConversationAdapter.notifyItemRangeChanged(firstNotTopIndex, index - firstNotTopIndex + 1);
                 }
             } else {
                 // 原来的会话列表中没有该会话,则添加到非置顶会话第一个
+//                conversationBeanList.add(firstNotTopIndex, conversationBean);
+//                mRcvConversationAdapter.notifyItemInserted(firstNotTopIndex);
                 conversationBeanList.add(firstNotTopIndex, conversationBean);
-                mRcvConversationAdapter.notifyItemInserted(firstNotTopIndex);
+                mRcvConversationAdapter.notifyItemRangeChanged(firstNotTopIndex, conversationBeanList.size() - firstNotTopIndex + 1);
             }
         }
     }
