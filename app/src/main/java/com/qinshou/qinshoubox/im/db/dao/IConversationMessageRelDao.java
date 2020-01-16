@@ -23,8 +23,10 @@ public interface IConversationMessageRelDao extends IBaseDao {
     void insert(ConversationMessageRelBean conversationMessageRelBean);
 
     // 删除语句
-    // DELETE FROM conversation_message_rel WHERE conversationId=#{conversationId};
-    void deleteByConversationId(ConversationMessageRelBean conversationMessageRelBean);
+//    String sql = "DELETE" +
+//            " FROM conversation_message_rel" +
+//            " WHERE conversationId=%s";
+    int deleteByConversationId(int conversationId);
 
     // 更新语句
     // UPDATE conversation_message_rel SET

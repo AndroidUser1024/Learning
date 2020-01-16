@@ -54,6 +54,7 @@ import com.qinshou.qinshoubox.conversation.view.adapter.RcvMessageAdapter;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -526,15 +527,18 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
 
     @Override
     public void handleEvent(EventBean<Object> eventBean) {
-        if (eventBean.getType() != EventBean.Type.REFRESH_GROUP_CHAT_DETAIL) {
-            return;
-        }
-        GroupChatBean groupChatBean = IMClient.SINGLETON.getGroupChatManager().getById(mGroupChatId);
-        if (groupChatBean != null) {
+        if (eventBean.getType() == EventBean.Type.REFRESH_GROUP_CHAT_DETAIL) {
+            GroupChatBean groupChatBean = IMClient.SINGLETON.getGroupChatManager().getById(mGroupChatId);
+            if (groupChatBean == null) {
+                return;
+            }
             // 群昵称
             mTitleBar.setTitleText(TextUtils.isEmpty(groupChatBean.getNickname())
                     ? groupChatBean.getNicknameDefault()
                     : groupChatBean.getNickname());
+        } else if (eventBean.getType() == EventBean.Type.REFRESH_MESSAGE_LIST) {
+            // 清空列表
+            mRcvMessageAdapter.setDataList(new ArrayList<MessageBean>());
         }
     }
 

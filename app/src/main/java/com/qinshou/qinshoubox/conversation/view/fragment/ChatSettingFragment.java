@@ -14,10 +14,12 @@ import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.conversation.contract.IChatSettingContract;
 import com.qinshou.qinshoubox.conversation.presenter.ChatSettingPresenter;
+import com.qinshou.qinshoubox.conversation.view.dialog.ClearChatHistoryDialog;
 import com.qinshou.qinshoubox.friend.view.fragment.UserDetailFragment;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
+import com.qinshou.qinshoubox.im.enums.MessageType;
 import com.qinshou.qinshoubox.me.ui.widget.SwitchButton;
 
 import org.greenrobot.eventbus.EventBus;
@@ -111,8 +113,11 @@ public class ChatSettingFragment extends QSFragment<ChatSettingPresenter> implem
         findViewByID(R.id.ll_clear_chat_history).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                ClearChatHistoryDialog.newInstance(mToUsername, null)
-//                        .show(getChildFragmentManager(), "ClearChatHistoryDialog");
+                String nickname = TextUtils.isEmpty(mFriendBean.getRemark())
+                        ? mFriendBean.getNickname()
+                        : mFriendBean.getRemark();
+                ClearChatHistoryDialog.newInstance(MessageType.CHAT, mFriendBean.getId(), nickname)
+                        .show(getChildFragmentManager(), "ClearChatHistoryDialog");
             }
         });
         mIvHeadImg.setOnClickListener(new View.OnClickListener() {

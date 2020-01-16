@@ -54,6 +54,7 @@ import com.qinshou.qinshoubox.listener.ClearErrorInfoTextWatcher;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -551,17 +552,19 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
 
     @Override
     public void handleEvent(EventBean<Object> eventBean) {
-        if (eventBean.getType() != EventBean.Type.REFRESH_FRIEND_LIST) {
-            return;
+        if (eventBean.getType() == EventBean.Type.REFRESH_FRIEND_LIST) {
+            FriendBean friendBean = IMClient.SINGLETON.getFriendManager().getById(mToUserId);
+            if (friendBean == null) {
+                return;
+            }
+            // 对方的昵称
+            mTitleBar.setTitleText(TextUtils.isEmpty(friendBean.getRemark())
+                    ? friendBean.getNickname()
+                    : friendBean.getRemark());
+        } else if (eventBean.getType() == EventBean.Type.REFRESH_MESSAGE_LIST) {
+            // 清空列表
+            mRcvMessageAdapter.setDataList(new ArrayList<MessageBean>());
         }
-        FriendBean friendBean = IMClient.SINGLETON.getFriendManager().getById(mToUserId);
-        if (friendBean == null) {
-            return;
-        }
-        // 对方的昵称
-        mTitleBar.setTitleText(TextUtils.isEmpty(friendBean.getRemark())
-                ? friendBean.getNickname()
-                : friendBean.getRemark());
     }
 
     @Override

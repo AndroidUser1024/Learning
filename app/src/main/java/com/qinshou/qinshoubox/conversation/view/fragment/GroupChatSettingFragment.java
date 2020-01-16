@@ -21,10 +21,12 @@ import com.qinshou.qinshoubox.conversation.contract.IGroupChatSettingContract;
 import com.qinshou.qinshoubox.conversation.enums.GroupChatMemberFunction;
 import com.qinshou.qinshoubox.conversation.presenter.GroupChatSettingPresenter;
 import com.qinshou.qinshoubox.conversation.view.adapter.RcvGroupChatMemberAdapter;
+import com.qinshou.qinshoubox.conversation.view.dialog.ClearChatHistoryDialog;
 import com.qinshou.qinshoubox.conversation.view.dialog.ExitGroupChatDialog;
 import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.friend.view.fragment.UserDetailFragment;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
+import com.qinshou.qinshoubox.im.enums.MessageType;
 import com.qinshou.qinshoubox.me.ui.widget.SwitchButton;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
@@ -75,6 +77,13 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
                     break;
                 case R.id.ll_nickname_in_group_chat:
                     SetNicknameInGroupChatFragment.start(getContext(), mGroupChatDetailBean.getId(), mGroupChatDetailBean.getNicknameInGroupChat());
+                    break;
+                case R.id.ll_clear_chat_history:
+                    String nickname = TextUtils.isEmpty(mGroupChatDetailBean.getNickname())
+                            ? mGroupChatDetailBean.getNicknameDefault()
+                            : mGroupChatDetailBean.getNickname();
+                    ClearChatHistoryDialog.newInstance(MessageType.GROUP_CHAT, mGroupChatDetailBean.getId(), nickname)
+                            .show(getChildFragmentManager(), "ClearChatHistoryDialog");
                     break;
                 case R.id.btn_exit:
                     ExitGroupChatDialog exitGroupChatDialog = new ExitGroupChatDialog();
@@ -154,6 +163,7 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
             }
         });
         findViewByID(R.id.ll_nickname_in_group_chat).setOnClickListener(mOnClickListener);
+        findViewByID(R.id.ll_clear_chat_history).setOnClickListener(mOnClickListener);
         findViewByID(R.id.btn_exit).setOnClickListener(mOnClickListener);
     }
 

@@ -76,4 +76,26 @@ public class ConversationManager {
         conversationBean.setUnreadCount(unreadCount);
         mConversationDao.update(conversationBean);
     }
+
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2020/1/16 13:24
+     * Description:清空会话,只是删除该会话的所有消息,但是会话并不会被删除
+     *
+     * @param type     单聊还是群聊
+     * @param toUserId 对方 id
+     */
+    public int clear(int type, String toUserId) {
+        ConversationBean conversationBean = mConversationDao.selectByTypeAndToUserId(type, toUserId);
+        if (conversationBean == null) {
+            return 0;
+        }
+        mConversationMessageRelDao.deleteByConversationId(conversationBean.getId());
+        conversationBean.setLastMsgPid(0);
+        conversationBean.setLastMsgContent("");
+        conversationBean.setLastMsgContentType(0);
+        mConversationDao.update(conversationBean);
+        return 1;
+    }
 }

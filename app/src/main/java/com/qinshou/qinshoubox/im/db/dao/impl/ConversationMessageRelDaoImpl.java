@@ -29,10 +29,13 @@ public class ConversationMessageRelDaoImpl extends AbsDaoImpl<ConversationMessag
     }
 
     @Override
-    public void deleteByConversationId(ConversationMessageRelBean conversationMessageRelBean) {
-        String sql = "DELETE FROM conversation_message_rel WHERE conversationId=%s";
-        sql = String.format(sql, conversationMessageRelBean.getConversationId());
+    public int deleteByConversationId(int conversationId) {
+        String sql = "DELETE" +
+                " FROM conversation_message_rel" +
+                " WHERE conversationId=%s";
+        sql = String.format(sql, conversationId);
         getSQLiteDatabase().execSQL(sql);
+        return 1;
     }
 
     @Override

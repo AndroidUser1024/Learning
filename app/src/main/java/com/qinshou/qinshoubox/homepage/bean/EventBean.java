@@ -51,6 +51,9 @@ public class EventBean<T> {
          */
         REFRESH_CONVERSATION_UNREAD_COUNT,
         REFRESH_GROUP_CHAT_DETAIL,
+        /**
+         * 更新消息列表
+         */
         REFRESH_MESSAGE_LIST,
         /**
          * 更新好友申请历史未读数
