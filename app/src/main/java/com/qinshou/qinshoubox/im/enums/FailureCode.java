@@ -7,7 +7,8 @@ package com.qinshou.qinshoubox.im.enums;
  * Description:错误信息
  */
 public enum FailureCode {
-    NOT_FRIEND(400, "对方不是您的好友");
+    NOT_FRIEND(400, "对方不是您的好友"),
+    NOT_IN_GROUP_CHAT(401, "您不在该群聊中");
     private int value;
     private String desc;
 
