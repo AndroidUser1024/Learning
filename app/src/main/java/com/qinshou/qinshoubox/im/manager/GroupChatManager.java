@@ -27,7 +27,7 @@ import java.util.List;
  */
 public class GroupChatManager extends AbsManager<String, GroupChatBean> {
 
-    public GroupChatManager(DatabaseHelper databaseHelper, String userId) {
+    public GroupChatManager(String userId, DatabaseHelper databaseHelper) {
         super(userId, new GroupChatDoubleCache(new MemoryCache<String, GroupChatBean>(), new GroupChatDatabaseCache(databaseHelper)));
         IMClient.SINGLETON.addOnGroupChatStatusListener(new IOnGroupChatStatusListener() {
             @Override

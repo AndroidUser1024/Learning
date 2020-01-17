@@ -29,7 +29,6 @@ public class GroupChatMemberDaoImpl extends AbsDaoImpl<UserDetailBean> implement
                 ",nickname" +
                 ",headImg" +
                 ",headImgSmall" +
-                ",remark" +
                 ",nicknameInGroupChat" +
                 ")" +
                 " VALUES" +
@@ -40,12 +39,10 @@ public class GroupChatMemberDaoImpl extends AbsDaoImpl<UserDetailBean> implement
                 ",%s" +
                 ",%s" +
                 ",%s" +
-                ",%s" +
                 ")";
         sql = String.format(sql, getStringValue(groupChatId), getStringValue(userDetailBean.getId())
                 , getStringValue(userDetailBean.getNickname()), getStringValue(userDetailBean.getHeadImg())
-                , getStringValue(userDetailBean.getHeadImgSmall()), getStringValue(userDetailBean.getRemark())
-                , getStringValue(userDetailBean.getNicknameInGroupChat()));
+                , getStringValue(userDetailBean.getHeadImgSmall()), getStringValue(userDetailBean.getNicknameInGroupChat()));
         getSQLiteDatabase().execSQL(sql);
         return 1;
     }
@@ -53,16 +50,17 @@ public class GroupChatMemberDaoImpl extends AbsDaoImpl<UserDetailBean> implement
     @Override
     public int update(String groupChatId, UserDetailBean userDetailBean) {
         String sql = "UPDATE group_chat_member SET" +
-                ",nickname%s" +
-                ",headImg%s" +
-                ",headImgSmall%s" +
-                ",remark%s" +
-                ",nicknameInGroupChat%s" +
-                " WHERE groupChatId=%s AND userId=%s";
+                " nickname=%s" +
+                ",headImg=%s" +
+                ",headImgSmall=%s" +
+                ",nicknameInGroupChat=%s" +
+                " WHERE" +
+                " groupChatId=%s" +
+                " AND" +
+                " userId=%s";
         sql = String.format(sql, getStringValue(userDetailBean.getNickname()), getStringValue(userDetailBean.getHeadImg())
-                , getStringValue(userDetailBean.getHeadImgSmall()), getStringValue(userDetailBean.getRemark())
-                , getStringValue(userDetailBean.getNicknameInGroupChat()), getStringValue(groupChatId)
-                , getStringValue(userDetailBean.getId()));
+                , getStringValue(userDetailBean.getHeadImgSmall()), getStringValue(userDetailBean.getNicknameInGroupChat())
+                , getStringValue(groupChatId), getStringValue(userDetailBean.getId()));
         getSQLiteDatabase().execSQL(sql);
         return 1;
     }
@@ -74,9 +72,10 @@ public class GroupChatMemberDaoImpl extends AbsDaoImpl<UserDetailBean> implement
                 ",gcm.nickname" +
                 ",gcm.headImg" +
                 ",gcm.headImgSmall" +
-                ",gcm.remark" +
                 ",gcm.nicknameInGroupChat" +
+                ",f.remark" +
                 " FROM group_chat_member AS gcm" +
+                " LEFT OUTER JOIN friend AS f ON gcm.userId=f.id" +
                 " WHERE" +
                 " groupChatId=%s";
         sql = String.format(sql, getStringValue(groupChatId));
@@ -89,8 +88,8 @@ public class GroupChatMemberDaoImpl extends AbsDaoImpl<UserDetailBean> implement
                 userDetailBean.setNickname(cursor.getString(cursor.getColumnIndex("nickname")));
                 userDetailBean.setHeadImg(cursor.getString(cursor.getColumnIndex("headImg")));
                 userDetailBean.setHeadImgSmall(cursor.getString(cursor.getColumnIndex("headImgSmall")));
-                userDetailBean.setRemark(cursor.getString(cursor.getColumnIndex("remark")));
                 userDetailBean.setNicknameInGroupChat(cursor.getString(cursor.getColumnIndex("nicknameInGroupChat")));
+                userDetailBean.setRemark(cursor.getString(cursor.getColumnIndex("remark")));
                 userDetailBeanList.add(userDetailBean);
             }
         } finally {
@@ -108,9 +107,10 @@ public class GroupChatMemberDaoImpl extends AbsDaoImpl<UserDetailBean> implement
                 ",gcm.nickname" +
                 ",gcm.headImg" +
                 ",gcm.headImgSmall" +
-                ",gcm.remark" +
                 ",gcm.nicknameInGroupChat" +
+                ",f.remark" +
                 " FROM group_chat_member AS gcm" +
+                " LEFT OUTER JOIN friend AS f ON gcm.userId=f.id" +
                 " WHERE" +
                 " groupChatId=%s" +
                 " AND" +
@@ -124,8 +124,8 @@ public class GroupChatMemberDaoImpl extends AbsDaoImpl<UserDetailBean> implement
                 userDetailBean.setNickname(cursor.getString(cursor.getColumnIndex("nickname")));
                 userDetailBean.setHeadImg(cursor.getString(cursor.getColumnIndex("headImg")));
                 userDetailBean.setHeadImgSmall(cursor.getString(cursor.getColumnIndex("headImgSmall")));
-                userDetailBean.setRemark(cursor.getString(cursor.getColumnIndex("remark")));
                 userDetailBean.setNicknameInGroupChat(cursor.getString(cursor.getColumnIndex("nicknameInGroupChat")));
+                userDetailBean.setRemark(cursor.getString(cursor.getColumnIndex("remark")));
                 return userDetailBean;
             }
         } finally {

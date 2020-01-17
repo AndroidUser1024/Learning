@@ -46,7 +46,7 @@ public class MessageManager {
      */
     private Handler mHandler = new Handler(Looper.getMainLooper());
 
-    public MessageManager(DatabaseHelper databaseHelper, String userId) {
+    public MessageManager(String userId, DatabaseHelper databaseHelper) {
         mMessageDao = databaseHelper.getDao(IMessageDao.class);
         mConversationDao = databaseHelper.getDao(IConversationDao.class);
         mConversationMessageRelDao = databaseHelper.getDao(IConversationMessageRelDao.class);

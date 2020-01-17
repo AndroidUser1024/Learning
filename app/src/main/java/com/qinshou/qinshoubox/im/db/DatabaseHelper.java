@@ -86,7 +86,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             ",nickname TEXT" +
             ",headImg TEXT" +
             ",headImgSmall TEXT" +
-            ",remark TEXT" +
             ",nicknameInGroupChat TEXT" +
             " )";
 

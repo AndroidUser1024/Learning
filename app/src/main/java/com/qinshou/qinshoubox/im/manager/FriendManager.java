@@ -31,7 +31,7 @@ import java.util.Map;
  */
 public class FriendManager extends AbsManager<String, FriendBean> {
 
-    public FriendManager(DatabaseHelper databaseHelper, String userId) {
+    public FriendManager(String userId, DatabaseHelper databaseHelper) {
 //        super(userId, new MemoryCache<String, FriendBean>());
 //        super(userId, new FriendDatabaseCache(databaseHelper));
         super(userId, new FriendDoubleCache(new MemoryCache<String, FriendBean>(), new FriendDatabaseCache(databaseHelper)));

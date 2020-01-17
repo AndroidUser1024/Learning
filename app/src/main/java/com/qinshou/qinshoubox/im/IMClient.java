@@ -33,6 +33,7 @@ import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.im.manager.ConversationManager;
 import com.qinshou.qinshoubox.im.manager.FriendManager;
 import com.qinshou.qinshoubox.im.manager.GroupChatManager;
+import com.qinshou.qinshoubox.im.manager.GroupChatMemberManager;
 import com.qinshou.qinshoubox.im.manager.MessageManager;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxCommonApi;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxOfflineApi;
@@ -86,6 +87,7 @@ public enum IMClient {
     private GroupChatManager mGroupChatManager;
     private MessageManager mMessageManager;
     private ConversationManager mConversationManager;
+    private GroupChatMemberManager mGroupChatMemberManager;
     //    private Map<String, MessageBean> mAckMessageMap = new HashMap<>();
 //    private Map<String, Timer> mRetrySendTimerMap = new HashMap<>();
 
@@ -188,13 +190,15 @@ public enum IMClient {
         // 初始化数据库
         DatabaseHelper databaseHelper = new DatabaseHelper(mContext, userId);
         // 创建好友管理者
-        mFriendManager = new FriendManager(databaseHelper, userId);
+        mFriendManager = new FriendManager(userId, databaseHelper);
         // 创建群组管理者
-        mGroupChatManager = new GroupChatManager(databaseHelper, userId);
+        mGroupChatManager = new GroupChatManager(userId, databaseHelper);
         // 创建消息管理者
-        mMessageManager = new MessageManager(databaseHelper, userId);
+        mMessageManager = new MessageManager(userId, databaseHelper);
         // 创建会话管理者
-        mConversationManager = new ConversationManager(databaseHelper, userId);
+        mConversationManager = new ConversationManager(userId, databaseHelper);
+        // 创建群成员管理者
+        mGroupChatMemberManager = new GroupChatMemberManager(userId, databaseHelper);
         // 拉取离线消息
         OkHttpHelperForQSBoxOfflineApi.SINGLETON.getOfflineMessageList(userId)
                 .transform(new QSApiTransformer<List<MessageBean>>())

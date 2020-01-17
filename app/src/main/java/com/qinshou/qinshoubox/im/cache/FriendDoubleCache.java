@@ -25,6 +25,7 @@ public class FriendDoubleCache extends AbsDoubleCache<String, FriendBean> {
         FriendBean friendBean = getMemoryCache().get(key);
         if (friendBean == null) {
             friendBean = getDatabaseCache().get(key);
+            getMemoryCache().put(key, friendBean);
         }
         return friendBean;
     }

@@ -2,6 +2,7 @@ package com.qinshou.qinshoubox.im.cache;
 
 import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.db.DatabaseHelper;
+import com.qinshou.qinshoubox.im.db.dao.IGroupChatMemberDao;
 
 /**
  * Author: QinHao
@@ -11,17 +12,36 @@ import com.qinshou.qinshoubox.im.db.DatabaseHelper;
  */
 public class GroupChatMemberDatabaseCache extends AbsDatabaseCache<String, UserDetailBean> {
 
+    private IGroupChatMemberDao mGroupChatMemberDao;
+
     public GroupChatMemberDatabaseCache(DatabaseHelper databaseHelper) {
         super(databaseHelper);
+        mGroupChatMemberDao = databaseHelper.getDao(IGroupChatMemberDao.class);
     }
 
     @Override
     public void put(String key, UserDetailBean value) {
-
+        String[] split = key.split("_");
+        if (split.length < 2) {
+            return;
+        }
+        String groupChatId = split[0];
+        String userId = split[1];
+        if (mGroupChatMemberDao.existsByGroupChatIdAndUserId(groupChatId, userId)) {
+            mGroupChatMemberDao.update(groupChatId, value);
+        } else {
+            mGroupChatMemberDao.insert(groupChatId, value);
+        }
     }
 
     @Override
     public UserDetailBean get(String key) {
-        return null;
+        String[] split = key.split("_");
+        if (split.length < 2) {
+            return null;
+        }
+        String groupChatId = split[0];
+        String userId = split[1];
+        return mGroupChatMemberDao.selectByGroupChatIdAndUserId(groupChatId, userId);
     }
 }

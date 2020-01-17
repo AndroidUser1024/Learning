@@ -25,6 +25,7 @@ public class GroupChatDoubleCache extends AbsDoubleCache<String, GroupChatBean> 
         GroupChatBean groupChatBean = getMemoryCache().get(key);
         if (groupChatBean == null) {
             groupChatBean = getDatabaseCache().get(key);
+            getMemoryCache().put(key, groupChatBean);
         }
         return groupChatBean;
     }
