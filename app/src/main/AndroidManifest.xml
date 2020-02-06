@@ -87,12 +87,6 @@
             android:name=".me.ui.activity.PeiQiActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
-        <!--IM 界面 -->
-        <activity
-            android:name=".im.view.fragment.IMActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
         <!-- 聊天界面 -->
         <activity
             android:name=".conversation.view.activity.ChatActivity"
@@ -108,6 +102,11 @@
             android:name=".friend.view.activity.SetRemarkActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
+        <!-- 视频播放界面 -->
+        <activity
+            android:name=".me.ui.fragment.VideoPlayerActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="sensor" />
     </application>
 
 </manifest>

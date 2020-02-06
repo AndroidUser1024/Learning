@@ -83,4 +83,5 @@ dependencies {
     // ORMLite 数据库
     api 'com.j256.ormlite:ormlite-android:5.1'
     api 'com.j256.ormlite:ormlite-core:5.1'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }

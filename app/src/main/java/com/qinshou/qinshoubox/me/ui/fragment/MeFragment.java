@@ -92,6 +92,9 @@ public class MeFragment extends QSFragment<MePresenter> implements IMeContract.I
                 case R.id.btn_pei_qi:
                     startActivity(new Intent(getContext(), PeiQiActivity.class));
                     break;
+                case R.id.btn_video_player:
+                    startActivity(new Intent(getContext(), VideoPlayerActivity.class));
+                    break;
                 case R.id.btn_test:
                     startActivity(ContainerActivity.getJumpIntent(getContext(), TestFragment.class));
                     break;
@@ -153,6 +156,7 @@ public class MeFragment extends QSFragment<MePresenter> implements IMeContract.I
         mBtnChart.setOnClickListener(mOnClickListener);
         mBtnQRCodeScan.setOnClickListener(mOnClickListener);
         mBtnPeiQi.setOnClickListener(mOnClickListener);
+        findViewByID(R.id.btn_video_player).setOnClickListener(mOnClickListener);
         findViewByID(R.id.btn_test).setOnClickListener(mOnClickListener);
     }
 

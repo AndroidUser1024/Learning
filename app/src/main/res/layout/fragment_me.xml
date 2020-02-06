@@ -154,6 +154,16 @@
                     android:textSize="@dimen/px40" />
 
                 <Button
+                    android:id="@+id/btn_video_player"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:gravity="start|center_vertical"
+                    android:text="@string/me_video_player"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/px40" />
+
+                <Button
                     android:id="@+id/btn_test"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

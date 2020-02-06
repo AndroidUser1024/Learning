@@ -37,6 +37,7 @@
     <string name="me_chart">图表</string>
     <string name="me_qr_code_scan">二维码扫描</string>
     <string name="me_pei_qi">啥是佩奇</string>
+    <string name="me_video_player">视频播放</string>
     <string name="me_test">测试界面</string>
 
     <!-- 登录界面 -->
