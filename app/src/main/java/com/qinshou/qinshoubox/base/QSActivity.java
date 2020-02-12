@@ -50,7 +50,6 @@ public abstract class QSActivity<P extends AbsPresenter> extends AbsMVPActivity<
 
     @Override
     public void onAuthenticated() {
-        ShowLogUtil.logi("getPresenter()--->" + getPresenter());
         ShowLogUtil.logi("onAuthenticated");
     }
 
