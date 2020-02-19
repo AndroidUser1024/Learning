@@ -19,7 +19,7 @@ public class App extends BaseApplication {
         //初始化数据库
 //        DatabaseManager.getInstance().init(this, IConstant.DATABASE_NAME, IConstant.DATABASE_VERSION, new Class[]{CaseBean.class});
 //        //初始化友盟推送
-//        PushUtil.init(this, IConstant.UMENG_KEY, IConstant.UMENG_SECRET);
+//        PushHelper.init(this, IConstant.UMENG_KEY, IConstant.UMENG_SECRET);
 //        //初始化第三方分享
 //        ShareUtil.init(this);
         // 初始化共享参数帮助者类

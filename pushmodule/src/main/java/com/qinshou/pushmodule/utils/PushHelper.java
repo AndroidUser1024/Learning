@@ -1,5 +1,6 @@
 package com.qinshou.pushmodule.utils;
 
+import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
@@ -18,25 +19,25 @@ import org.android.agoo.xiaomi.MiPushRegistar;
  * Created by 禽兽先生
  * Created on 2018/11/7
  */
-public class PushUtil {
+public class PushHelper {
 
-    private static final String TAG = "PushUtil";
+    private static final String TAG = "PushHelper";
 
     private static PushAgent sPushAgent;
 
     public static void init(Context context, String appKey, String pushSecret) {
-        PushUtil.init(context, appKey, null, UMConfigure.DEVICE_TYPE_PHONE, pushSecret);
+        PushHelper.init(context, appKey, null, UMConfigure.DEVICE_TYPE_PHONE, pushSecret);
     }
 
     public static void init(Context context, String appKey, String channel, int deviceType, String pushSecret) {
         UMConfigure.init(context, appKey, channel, deviceType, pushSecret);
         sPushAgent = PushAgent.getInstance(context);
-        //注册推送服务，每次调用 register 方法都会回调该接口
+        // 注册推送服务，每次调用 register 方法都会回调该接口
         sPushAgent.register(new IUmengRegisterCallback() {
 
             @Override
             public void onSuccess(String deviceToken) {
-                //注册成功会返回device token
+                // 注册成功会返回device token
                 Log.d(TAG, "deviceToken--->" + deviceToken);
             }
 
@@ -59,8 +60,8 @@ public class PushUtil {
      * Description:初始化华为推送辅助渠道
      * Date:2018/11/30
      */
-    public static void initEMUI(final Context context) {
-        HuaWeiRegister.register(context);
+    public static void initEMUI(final Application application) {
+        HuaWeiRegister.register(application);
     }
 
     /**
@@ -89,7 +90,7 @@ public class PushUtil {
             public void dealWithNotificationMessage(Context context, UMessage msg) {
                 Log.d(TAG, "msg--->" + msg.getRaw().toString());
                 if (notification) {
-                    //调用super则会走通知展示流程，不调用super则不展示通知
+                    // 调用super则会走通知展示流程，不调用super则不展示通知
                     super.dealWithNotificationMessage(context, msg);
                 }
                 if (onGetPushListener != null) {

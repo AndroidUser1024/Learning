@@ -113,7 +113,7 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
 
     @Override
     public void initData() {
-//        PushUtil.setOnGetPushListener(new OnGetPushListener() {
+//        PushHelper.setOnGetPushListener(new OnGetPushListener() {
 //            @Override
 //            public void getPush(String content) {
 //                ShowLogUtil.logi(content);
