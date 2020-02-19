@@ -7,7 +7,7 @@ import com.qinshou.qinshoubox.conversation.model.GroupChatAddMemberModel;
 import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatAddMemberFragment;
 import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
-import com.qinshou.qinshoubox.login.bean.UserBean;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 import java.util.List;
 
@@ -46,7 +46,7 @@ public class GroupChatAddMemberPresenter extends AbsPresenter<IGroupChatAddMembe
 
     @Override
     public void getMemberList(String groupChatId) {
-        getModel().getMemberList(groupChatId, new Callback<List<UserDetailBean>>() {
+        getModel().getMemberList(groupChatId, new QSCallback<List<UserDetailBean>>() {
             @Override
             public void onSuccess(List<UserDetailBean> data) {
                 if (!isViewAttached()) {

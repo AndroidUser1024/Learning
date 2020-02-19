@@ -120,7 +120,7 @@ public class SplashActivity extends QSActivity<SplashPresenter> implements ISpla
     }
 
     @Override
-    public void loginSuccess(final UserBean userBean) {
+    public void loginSuccess(UserBean userBean) {
         ShowLogUtil.logi("loginSuccess" + " : " + "userBean--->" + userBean);
         UserStatusManager.SINGLETON.setUserBean(userBean);
         startActivity(new Intent(getContext(), MainActivity.class));

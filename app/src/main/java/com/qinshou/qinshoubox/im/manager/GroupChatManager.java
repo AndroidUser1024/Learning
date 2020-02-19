@@ -82,6 +82,7 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
                             public void run() {
                                 for (GroupChatBean groupChatBean : data) {
                                     getCache().put(groupChatBean.getId(), groupChatBean);
+                                    getMemberList(groupChatBean.getId(), null);
                                 }
                                 getHandler().post(new SuccessRunnable<>(callback, data));
                             }
@@ -160,10 +161,32 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
      *
      * @param groupChatId 群 id
      */
-    public void getMemberList(String groupChatId, final Callback<List<UserDetailBean>> callback) {
+    public void getMemberList(final String groupChatId, final QSCallback<List<UserDetailBean>> qsCallback) {
         OkHttpHelperForQSBoxGroupChatApi.SINGLETON.getMemberList(groupChatId, getUserId())
                 .transform(new QSApiTransformer<List<UserDetailBean>>())
-                .enqueue(callback);
+                .enqueue(new Callback<List<UserDetailBean>>() {
+                    @Override
+                    public void onSuccess(final List<UserDetailBean> data) {
+                        if (qsCallback != null) {
+                            qsCallback.onSuccess(data);
+                        }
+                        getExecutorService().submit(new Runnable() {
+                            @Override
+                            public void run() {
+                                for (UserDetailBean userDetailBean : data) {
+                                    IMClient.SINGLETON.getGroupChatMemberManager().put(groupChatId, userDetailBean);
+                                }
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        if (qsCallback != null) {
+                            qsCallback.onFailure(e);
+                        }
+                    }
+                });
     }
 
     /**

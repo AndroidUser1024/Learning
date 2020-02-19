@@ -13,7 +13,7 @@ import java.util.List;
 public interface IGroupChatMemberDao extends IBaseDao {
     // 创建表语句
 //    String sql = "CREATE TABLE IF NOT EXISTS group_chat_member(" +
-//            " group_chat_id TEXT" +
+//            " groupChatId TEXT" +
 //            ",userId TEXT" +
 //            ",nickname TEXT" +
 //            ",headImg TEXT" +
@@ -54,7 +54,7 @@ public interface IGroupChatMemberDao extends IBaseDao {
 //            " userId=%s";
     int update(String groupChatId, UserDetailBean userDetailBean);
 
-//    String sql = "SELECT" +
+    //    String sql = "SELECT" +
 //            " gcm.userId" +
 //            ",gcm.nickname" +
 //            ",gcm.headImg" +
@@ -67,7 +67,7 @@ public interface IGroupChatMemberDao extends IBaseDao {
 //            " groupChatId=%s";
     List<UserDetailBean> selectByGroupChatId(String groupChatId);
 
-//    String sql = "SELECT" +
+    //    String sql = "SELECT" +
 //            " gcm.userId" +
 //            ",gcm.nickname" +
 //            ",gcm.headImg" +
@@ -82,7 +82,7 @@ public interface IGroupChatMemberDao extends IBaseDao {
 //            " userId=%s";
     UserDetailBean selectByGroupChatIdAndUserId(String groupChatId, String userId);
 
-//    String sql = "SELECT" +
+    //    String sql = "SELECT" +
 //            " COUNT(userId)" +
 //            " FROM group_chat_member" +
 //            " WHERE" +

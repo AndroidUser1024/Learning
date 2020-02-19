@@ -1,10 +1,8 @@
 package com.qinshou.qinshoubox.im.manager;
 
 import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
-import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 import com.qinshou.qinshoubox.im.cache.GroupChatMemberDatabaseCache;
 import com.qinshou.qinshoubox.im.cache.GroupChatMemberDoubleCache;
-import com.qinshou.qinshoubox.im.cache.ICache;
 import com.qinshou.qinshoubox.im.cache.MemoryCache;
 import com.qinshou.qinshoubox.im.db.DatabaseHelper;
 
@@ -18,6 +16,10 @@ public class GroupChatMemberManager extends AbsManager<String, UserDetailBean> {
 
     public GroupChatMemberManager(String userId, DatabaseHelper databaseHelper) {
         super(userId, new GroupChatMemberDoubleCache(new MemoryCache<String, UserDetailBean>(), new GroupChatMemberDatabaseCache(databaseHelper)));
+    }
+
+    public void put(String groupChatId, UserDetailBean userDetailBean) {
+        getCache().put(groupChatId + "_" + userDetailBean.getId(), userDetailBean);
     }
 
     public UserDetailBean getByGroupChatIdAndUserId(String groupChatId, String userId) {

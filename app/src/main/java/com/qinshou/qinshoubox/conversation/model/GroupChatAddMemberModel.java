@@ -24,8 +24,8 @@ public class GroupChatAddMemberModel implements IGroupChatAddMemberContract.IMod
     }
 
     @Override
-    public void getMemberList(String groupChatId, Callback<List<UserDetailBean>> callback) {
-        IMClient.SINGLETON.getGroupChatManager().getMemberList(groupChatId, callback);
+    public void getMemberList(String groupChatId, QSCallback<List<UserDetailBean>> qsCallback) {
+        IMClient.SINGLETON.getGroupChatManager().getMemberList(groupChatId, qsCallback);
     }
 
     @Override

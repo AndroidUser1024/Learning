@@ -21,8 +21,8 @@ import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
  */
 public class RcvMessageAdapterFromMessageTextItemView extends AbsRcvMessageAdapterFromMessageItemView {
 
-    public RcvMessageAdapterFromMessageTextItemView(Context context) {
-        super(context, R.layout.item_rcv_message_from_message_text);
+    public RcvMessageAdapterFromMessageTextItemView(Context context,String groupChatId) {
+        super(context, R.layout.item_rcv_message_from_message_text,groupChatId);
     }
 
     @Override

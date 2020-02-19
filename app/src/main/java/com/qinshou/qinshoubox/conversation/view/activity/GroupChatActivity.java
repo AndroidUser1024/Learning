@@ -401,12 +401,21 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
                 }
             }
         }, Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA);
+        Intent intent = getIntent();
+        if (intent == null) {
+            return;
+        }
+        mGroupChatId = intent.getStringExtra(GROUP_CHAT_ID);
+        if (TextUtils.isEmpty(mGroupChatId)) {
+            finish();
+            return;
+        }
         mTitleBar = findViewByID(R.id.title_bar);
         mRefreshLayout = findViewByID(R.id.refresh_layout);
         mRefreshLayout.canLoadMore(false);
         mRcvMessage = findViewByID(R.id.rcv_message);
         mRcvMessage.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRcvMessageAdapter = new RcvMessageAdapter(getContext(), mRcvMessage);
+        mRcvMessageAdapter = new RcvMessageAdapter(getContext(), mRcvMessage, mGroupChatId);
         mRcvMessage.setAdapter(mRcvMessageAdapter);
         mIvContentType = findViewByID(R.id.iv_content_type);
         mEtContent = findViewByID(R.id.et_content);
@@ -507,14 +516,6 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
 
     @Override
     public void initData() {
-        Intent intent = getIntent();
-        if (intent == null) {
-            return;
-        }
-        mGroupChatId = intent.getStringExtra(GROUP_CHAT_ID);
-        if (TextUtils.isEmpty(mGroupChatId)) {
-            return;
-        }
         GroupChatBean groupChatBean = IMClient.SINGLETON.getGroupChatManager().getById(mGroupChatId);
         if (groupChatBean != null) {
             // 群昵称

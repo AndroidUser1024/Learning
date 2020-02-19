@@ -26,8 +26,8 @@ import java.util.List;
  */
 public class RcvMessageAdapterFromMessageSystemItemView extends AbsRcvMessageAdapterFromMessageItemView {
 
-    public RcvMessageAdapterFromMessageSystemItemView(Context context) {
-        super(context, R.layout.item_rcv_message_from_message_system);
+    public RcvMessageAdapterFromMessageSystemItemView(Context context,String groupChatId) {
+        super(context, R.layout.item_rcv_message_from_message_system,groupChatId);
     }
 
     @Override

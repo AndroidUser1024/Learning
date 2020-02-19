@@ -767,6 +767,10 @@ public enum IMClient {
         return mConversationManager;
     }
 
+    public GroupChatMemberManager getGroupChatMemberManager() {
+        return mGroupChatMemberManager;
+    }
+
     public void addOnConnectListener(IOnConnectListener onConnectListener) {
         mOnConnectListenerList.add(onConnectListener);
     }

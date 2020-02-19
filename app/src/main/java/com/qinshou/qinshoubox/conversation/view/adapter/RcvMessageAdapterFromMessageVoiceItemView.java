@@ -33,8 +33,8 @@ public class RcvMessageAdapterFromMessageVoiceItemView extends AbsRcvMessageAdap
     private final RecyclerView mRecyclerView;
     private final RcvMessageAdapterToMessageVoiceItemView mRcvMessageAdapterToMessageVoiceItemView;
 
-    public RcvMessageAdapterFromMessageVoiceItemView(Context context, RecyclerView rcvMessage, RcvMessageAdapterToMessageVoiceItemView rcvMessageAdapterToMessageVoiceItemView) {
-        super(context, R.layout.item_rcv_message_from_message_voice);
+    public RcvMessageAdapterFromMessageVoiceItemView(Context context,String groupChatId, RecyclerView rcvMessage, RcvMessageAdapterToMessageVoiceItemView rcvMessageAdapterToMessageVoiceItemView) {
+        super(context, R.layout.item_rcv_message_from_message_voice,groupChatId);
         mRecyclerView = rcvMessage;
         mRcvMessageAdapterToMessageVoiceItemView = rcvMessageAdapterToMessageVoiceItemView;
     }

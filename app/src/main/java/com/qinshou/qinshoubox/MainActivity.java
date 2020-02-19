@@ -8,25 +8,18 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.util.FragmentUtil;
+import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.conversation.view.fragment.ConversationFragment;
-import com.qinshou.qinshoubox.demo.view.fragment.DemoFragment;
 import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.homepage.ui.fragment.HomepageFragment;
 import com.qinshou.qinshoubox.im.IMClient;
-import com.qinshou.qinshoubox.im.listener.IOnConnectListener;
-import com.qinshou.qinshoubox.login.view.fragment.LoginOrRegisterFragment;
 import com.qinshou.qinshoubox.me.ui.fragment.MeFragment;
 import com.qinshou.qinshoubox.music.view.fragment.MusicListFragment;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * Description:主 Activity
@@ -107,8 +100,6 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
 
             }
         });
-        // 连接 IM 服务
-        IMClient.SINGLETON.connect(UserStatusManager.SINGLETON.getUserBean().getId());
     }
 
     @Override
@@ -139,6 +130,9 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
             tab.setCustomView(view);
             mTlMain.addTab(tab, i == 0);
         }
+        ShowLogUtil.logi("用户信息--->" + UserStatusManager.SINGLETON.getUserBean());
+        // 连接 IM 服务
+        IMClient.SINGLETON.connect(UserStatusManager.SINGLETON.getUserBean().getId());
     }
 
     /**

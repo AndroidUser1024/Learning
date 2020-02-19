@@ -270,7 +270,6 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
         }
         mViewPager.setAdapter(new VpSingleViewAdapter(mRecyclerViewList, titleList));
 //        mTlFriend.setupWithViewPager(mViewPager);
-
     }
 
     @Override

@@ -26,7 +26,7 @@ public interface IGroupChatDeleteMemberContract {
          *
          * @param groupChatId 群 id
          */
-        void getMemberList(String groupChatId, Callback<List<UserDetailBean>> callback);
+        void getMemberList(String groupChatId, QSCallback<List<UserDetailBean>> qsCallback);
 
         /**
          * Author: QinHao

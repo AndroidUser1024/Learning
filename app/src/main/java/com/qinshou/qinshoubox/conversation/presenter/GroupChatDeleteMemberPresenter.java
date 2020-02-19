@@ -25,7 +25,7 @@ public class GroupChatDeleteMemberPresenter extends AbsPresenter<IGroupChatDelet
 
     @Override
     public void getMemberList(String groupChatId) {
-        getModel().getMemberList(groupChatId, new Callback<List<UserDetailBean>>() {
+        getModel().getMemberList(groupChatId, new QSCallback<List<UserDetailBean>>() {
             @Override
             public void onSuccess(List<UserDetailBean> data) {
                 if (!isViewAttached()) {

@@ -50,7 +50,7 @@ public abstract class QSFragment<P extends AbsPresenter> extends AbsMVPFragment<
 
     @Override
     public void onAuthenticated() {
-        ShowLogUtil.logi("onAuthenticated");
+        ShowLogUtil.logi(getClass().getSimpleName()+",onAuthenticated");
     }
 
     @Override

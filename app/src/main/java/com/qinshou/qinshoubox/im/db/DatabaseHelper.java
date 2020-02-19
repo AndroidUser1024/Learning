@@ -81,7 +81,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             " ,messagePid INTEGER" +
             " )";
     private final String CREATE_GROUP_CHAT_MEMBER_TABLE_SQL = "CREATE TABLE IF NOT EXISTS group_chat_member(" +
-            " group_chat_id TEXT" +
+            " groupChatId TEXT" +
             ",userId TEXT" +
             ",nickname TEXT" +
             ",headImg TEXT" +
