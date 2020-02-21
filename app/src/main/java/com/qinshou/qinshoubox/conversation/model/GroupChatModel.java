@@ -1,16 +1,13 @@
 package com.qinshou.qinshoubox.conversation.model;
 
 
-import com.qinshou.qinshoubox.conversation.bean.UploadImgResultBean;
-import com.qinshou.qinshoubox.conversation.bean.UploadVoiceResultBean;
+import com.qinshou.qinshoubox.conversation.contract.IGroupChatContract;
+import com.qinshou.qinshoubox.conversation.view.activity.GroupChatActivity;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.enums.MessageType;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
-import com.qinshou.qinshoubox.conversation.contract.IGroupChatContract;
-import com.qinshou.qinshoubox.conversation.view.activity.GroupChatActivity;
 
-import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,15 +25,5 @@ public class GroupChatModel implements IGroupChatContract.IModel {
         // 翻转顺序
         Collections.reverse(messageBeanList);
         qsCallback.onSuccess(messageBeanList);
-    }
-
-    @Override
-    public void uploadVoice(long time, File voice, QSCallback<UploadVoiceResultBean> qsCallback) {
-        IMClient.SINGLETON.uploadVoice(time, voice, qsCallback);
-    }
-
-    @Override
-    public void uploadImg(File img, QSCallback<UploadImgResultBean> qsCallback) {
-        IMClient.SINGLETON.uploadImg(img, qsCallback);
     }
 }

@@ -4,6 +4,7 @@ package com.qinshou.qinshoubox.im.bean;
 import com.google.gson.Gson;
 import com.qinshou.qinshoubox.conversation.bean.ImgBean;
 import com.qinshou.qinshoubox.conversation.bean.VoiceBean;
+import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.enums.MessageContentType;
 import com.qinshou.qinshoubox.im.enums.MessageStatus;
 import com.qinshou.qinshoubox.im.enums.MessageType;
@@ -178,10 +179,10 @@ public class MessageBean {
      *
      * @return 类型为握手消息的消息对象
      */
-    public static MessageBean createHandshakeMessage(String fromUserId) {
+    public static MessageBean createHandshakeMessage() {
         MessageBean messageBean = new MessageBean();
+        messageBean.fromUserId = IMClient.SINGLETON.getUserId();
         messageBean.sendTimestamp = System.currentTimeMillis();
-        messageBean.fromUserId = fromUserId;
         messageBean.type = MessageType.HANDSHAKE.getValue();
         return messageBean;
     }
@@ -198,6 +199,7 @@ public class MessageBean {
      */
     public static MessageBean createTextMessage(String toUserId, String content) {
         MessageBean messageBean = new MessageBean();
+        messageBean.fromUserId = IMClient.SINGLETON.getUserId();
         messageBean.toUserId = toUserId;
         messageBean.content = content;
         messageBean.sendTimestamp = System.currentTimeMillis();
@@ -213,17 +215,18 @@ public class MessageBean {
      * Description:创建一个语音消息
      *
      * @param toUserId 接收方用户 id
-     * @param url      语音上传后的 url
+     * @param path     语音文件路径
      * @param time     语音时长
      * @return 类型为语音的消息对象
      */
-    public static MessageBean createVoiceMessage(String toUserId, String url, long time) {
+    public static MessageBean createVoiceMessage(String toUserId, String path, long time) {
         MessageBean messageBean = new MessageBean();
+        messageBean.fromUserId = IMClient.SINGLETON.getUserId();
         messageBean.toUserId = toUserId;
         messageBean.sendTimestamp = System.currentTimeMillis();
         messageBean.contentType = MessageContentType.VOICE.getValue();
         messageBean.type = MessageType.CHAT.getValue();
-        messageBean.extend = new Gson().toJson(new VoiceBean(url, time));
+        messageBean.extend = new Gson().toJson(new VoiceBean(path, time));
         return messageBean;
     }
 
@@ -234,24 +237,24 @@ public class MessageBean {
      * Description:创建一个图片消息
      *
      * @param toUserId 接收方用户 id
-     * @param url      图片上传后的 url
-     * @param smallUrl 图片缩略图 url
+     * @param path     图片路径
      * @return 类型为图片的消息对象
      */
-    public static MessageBean createImgMessage(String toUserId, String url, String smallUrl) {
+    public static MessageBean createImgMessage(String toUserId, String path) {
         MessageBean messageBean = new MessageBean();
+        messageBean.fromUserId = IMClient.SINGLETON.getUserId();
         messageBean.toUserId = toUserId;
         messageBean.sendTimestamp = System.currentTimeMillis();
         messageBean.contentType = MessageContentType.IMAGE.getValue();
         messageBean.type = MessageType.CHAT.getValue();
-        messageBean.extend = new Gson().toJson(new ImgBean(url, smallUrl));
+        messageBean.extend = new Gson().toJson(new ImgBean(path));
         return messageBean;
     }
 
-    public static MessageBean createClientReceiptMessage(String fromUserId) {
+    public static MessageBean createClientReceiptMessage() {
         MessageBean messageBean = new MessageBean();
+        messageBean.fromUserId = IMClient.SINGLETON.getUserId();
         messageBean.sendTimestamp = System.currentTimeMillis();
-        messageBean.fromUserId = fromUserId;
         messageBean.type = MessageType.CLIENT_RECEIPT.getValue();
         return messageBean;
     }
@@ -262,13 +265,12 @@ public class MessageBean {
      * Date:2019/12/1 10:37
      * Description:创建一个心跳消息
      *
-     * @param fromUserId 发送者的 id
      * @return 类型为心跳的消息
      */
-    public static MessageBean createHeartBeatMessage(String fromUserId) {
+    public static MessageBean createHeartBeatMessage() {
         MessageBean messageBean = new MessageBean();
+        messageBean.fromUserId = IMClient.SINGLETON.getUserId();
         messageBean.sendTimestamp = System.currentTimeMillis();
-        messageBean.fromUserId = fromUserId;
         messageBean.type = MessageType.HEART_BEAT.getValue();
         return messageBean;
     }

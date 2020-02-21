@@ -10,8 +10,10 @@ import com.google.gson.Gson;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.okhttphelper.callback.AbsDownloadCallback;
 import com.qinshou.okhttphelper.callback.Callback;
+import com.qinshou.qinshoubox.conversation.bean.ImgBean;
 import com.qinshou.qinshoubox.conversation.bean.UploadImgResultBean;
 import com.qinshou.qinshoubox.conversation.bean.UploadVoiceResultBean;
+import com.qinshou.qinshoubox.conversation.bean.VoiceBean;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.bean.ConversationMessageRelBean;
 import com.qinshou.qinshoubox.im.bean.FriendStatusBean;
@@ -21,6 +23,7 @@ import com.qinshou.qinshoubox.im.bean.ServerReceiptBean;
 import com.qinshou.qinshoubox.im.db.DatabaseHelper;
 import com.qinshou.qinshoubox.im.enums.FriendStatus;
 import com.qinshou.qinshoubox.im.enums.GroupChatStatus;
+import com.qinshou.qinshoubox.im.enums.MessageContentType;
 import com.qinshou.qinshoubox.im.enums.MessageStatus;
 import com.qinshou.qinshoubox.im.enums.MessageType;
 import com.qinshou.qinshoubox.im.enums.StatusCode;
@@ -124,7 +127,7 @@ public enum IMClient {
                 return;
             }
             Log.i(TAG, "发送心跳");
-            mWebSocket.send(new Gson().toJson(MessageBean.createHeartBeatMessage(mUserId)));
+            mWebSocket.send(new Gson().toJson(MessageBean.createHeartBeatMessage()));
             mHeartBeatScheduledFuture = mHeartBeatScheduledExecutorService.schedule(mHeartBeatRunnable, HEART_BEAT_INTERVAL, TimeUnit.MILLISECONDS);
         }
     };
@@ -502,6 +505,43 @@ public enum IMClient {
     /**
      * Author: QinHao
      * Email:cqflqinhao@126.com
+     * Date:2020/2/21 17:21
+     * Description:真正发送消息
+     *
+     * @param messageBean 消息对象
+     */
+    private void doSend(final MessageBean messageBean) {
+        messageBean.setFromUserId(mUserId);
+        if (messageBean.getType() == MessageType.CHAT.getValue()
+                || messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
+            insert2Database(messageBean, true);
+//            // 创建一个唯一索引作为 ACK Key,将其 json 串做 Base64 加密,得到的加密字符串作为 key
+//            AckKeyBean ackKeyBean = new AckKeyBean(mUserId
+//                    , messageBean.getFromUserId()
+//                    , messageBean.getToUserId()
+//                    , messageBean.getType()
+//                    , messageBean.getSendTimestamp());
+//            String key = CodeUtil.encode(new Gson().toJson(ackKeyBean));
+//            mAckMessageMap.put(key, messageBean);
+//            // 设置一个定时任务,一定时间后如果还没有收到服务端回执,则重新发送
+//            Timer timer = new Timer();
+//            timer.schedule(new RetrySendTimerTask(key), TIME_OUT);
+//            mRetrySendTimerMap.put(key, timer);
+        }
+        mWebSocket.send(new Gson().toJson(messageBean));
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                for (IOnSendMessageListener onSendMessageListener : mOnSendMessageListenerList) {
+                    onSendMessageListener.onSending(messageBean);
+                }
+            }
+        });
+    }
+
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
      * Date:2019/12/5 10:43
      * Description:初始化 IM 服务,建议在 Application 中
      *
@@ -535,7 +575,7 @@ public enum IMClient {
                         for (IOnConnectListener onConnectListener : mOnConnectListenerList) {
                             onConnectListener.onConnected();
                         }
-                        webSocket.send(new Gson().toJson(MessageBean.createHandshakeMessage(userId)));
+                        webSocket.send(new Gson().toJson(MessageBean.createHandshakeMessage()));
                     }
 
                     @Override
@@ -639,34 +679,48 @@ public enum IMClient {
         if (mWebSocket == null) {
             return;
         }
-        messageBean.setFromUserId(mUserId);
-        if (messageBean.getType() == MessageType.CHAT.getValue()
-                || messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
-            insert2Database(messageBean, true);
-//            // 创建一个唯一索引作为 ACK Key,将其 json 串做 Base64 加密,得到的加密字符串作为 key
-//            AckKeyBean ackKeyBean = new AckKeyBean(mUserId
-//                    , messageBean.getFromUserId()
-//                    , messageBean.getToUserId()
-//                    , messageBean.getType()
-//                    , messageBean.getSendTimestamp());
-//            String key = CodeUtil.encode(new Gson().toJson(ackKeyBean));
-//            mAckMessageMap.put(key, messageBean);
-//            // 设置一个定时任务,一定时间后如果还没有收到服务端回执,则重新发送
-//            Timer timer = new Timer();
-//            timer.schedule(new RetrySendTimerTask(key), TIME_OUT);
-//            mRetrySendTimerMap.put(key, timer);
-        }
-        mWebSocket.send(new Gson().toJson(messageBean));
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                for (IOnSendMessageListener onSendMessageListener : mOnSendMessageListenerList) {
-                    onSendMessageListener.onSending(messageBean);
-                }
+        if (messageBean.getContentType() == MessageContentType.VOICE.getValue()) {
+            final VoiceBean voiceBean = new Gson().fromJson(messageBean.getExtend(), VoiceBean.class);
+            File file = new File(voiceBean.getPath());
+            if (!file.exists()) {
+                return;
             }
-        });
-    }
+            uploadVoice(file, voiceBean.getTime(), new QSCallback<UploadVoiceResultBean>() {
+                @Override
+                public void onSuccess(UploadVoiceResultBean data) {
+                    voiceBean.setUrl(data.getUrl());
+                    messageBean.setExtend(new Gson().toJson(voiceBean));
+                    doSend(messageBean);
+                }
 
+                @Override
+                public void onFailure(Exception e) {
+
+                }
+            });
+        } else if (messageBean.getContentType() == MessageContentType.IMAGE.getValue()) {
+            final ImgBean imgBean = new Gson().fromJson(messageBean.getExtend(), ImgBean.class);
+            File file = new File(imgBean.getPath());
+            if (!file.exists()) {
+                return;
+            }
+            uploadImg(file, new QSCallback<UploadImgResultBean>() {
+                @Override
+                public void onSuccess(UploadImgResultBean data) {
+                    imgBean.setUrl(data.getUrl());
+                    messageBean.setExtend(new Gson().toJson(imgBean));
+                    doSend(messageBean);
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+
+                }
+            });
+        } else {
+            doSend(messageBean);
+        }
+    }
 //    private class RetrySendTimerTask extends TimerTask {
 //        private String mKey;
 //
@@ -684,7 +738,7 @@ public enum IMClient {
 //        }
 //    }
 
-    public void uploadVoice(long time, File voice, final QSCallback<UploadVoiceResultBean> qsCallback) {
+    public void uploadVoice(File voice, long time, final QSCallback<UploadVoiceResultBean> qsCallback) {
         OkHttpHelperForQSBoxCommonApi.SINGLETON.uploadVoice(mUserId, time, voice)
                 .transform(new QSApiTransformer<UploadVoiceResultBean>())
                 .enqueue(new Callback<UploadVoiceResultBean>() {
@@ -749,6 +803,10 @@ public enum IMClient {
                 qsCallback.onFailure(e);
             }
         });
+    }
+
+    public String getUserId() {
+        return mUserId;
     }
 
     public GroupChatManager getGroupChatManager() {

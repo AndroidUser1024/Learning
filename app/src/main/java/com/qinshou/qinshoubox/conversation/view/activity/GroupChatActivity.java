@@ -31,25 +31,25 @@ import com.qinshou.commonmodule.widget.TitleBar;
 import com.qinshou.imagemodule.callback.IOnImageChooseResultCallback;
 import com.qinshou.imagemodule.util.ImageChooseUtil;
 import com.qinshou.imagemodule.util.ImagePathUtil;
+import com.qinshou.qinshoubox.R;
+import com.qinshou.qinshoubox.base.QSActivity;
+import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.conversation.bean.UploadImgResultBean;
 import com.qinshou.qinshoubox.conversation.bean.UploadVoiceResultBean;
+import com.qinshou.qinshoubox.conversation.contract.IGroupChatContract;
+import com.qinshou.qinshoubox.conversation.presenter.GroupChatPresenter;
+import com.qinshou.qinshoubox.conversation.view.adapter.RcvMessageAdapter;
 import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatSettingFragment;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
+import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.enums.MessageContentType;
 import com.qinshou.qinshoubox.im.enums.MessageType;
 import com.qinshou.qinshoubox.im.listener.IOnMessageListener;
-import com.qinshou.qinshoubox.im.IMClient;
-import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.base.QSActivity;
-import com.qinshou.qinshoubox.constant.IConstant;
-import com.qinshou.qinshoubox.conversation.contract.IGroupChatContract;
-import com.qinshou.qinshoubox.conversation.presenter.GroupChatPresenter;
 import com.qinshou.qinshoubox.im.listener.IOnSendMessageListener;
 import com.qinshou.qinshoubox.listener.ClearErrorInfoTextWatcher;
-import com.qinshou.qinshoubox.conversation.view.adapter.RcvMessageAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -180,7 +180,10 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
                 if (file == null) {
                     return true;
                 }
-                getPresenter().uploadVoice(recordTime, file);
+                MessageBean messageBean = MessageBean.createVoiceMessage(mGroupChatId
+                        , file.getAbsolutePath()
+                        , recordTime);
+                sendMessage(messageBean);
             }
             return true;
         }
@@ -565,35 +568,6 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
 
     }
 
-    @Override
-    public void uploadVoiceSuccess(UploadVoiceResultBean uploadVoiceResultBean) {
-        MessageBean messageBean = MessageBean.createVoiceMessage(mGroupChatId
-                , uploadVoiceResultBean.getUrl()
-                , uploadVoiceResultBean.getTime());
-        messageBean.setType(MessageType.GROUP_CHAT.getValue());
-        sendMessage(messageBean);
-    }
-
-    @Override
-    public void uploadVoiceFailure(Exception e) {
-
-    }
-
-    @Override
-    public void uploadImgSuccess(UploadImgResultBean uploadImgResultBean) {
-        MessageBean messageBean = MessageBean.createImgMessage(mGroupChatId
-                , uploadImgResultBean.getUrl()
-                , uploadImgResultBean.getSmallUrl());
-        messageBean.setType(MessageType.GROUP_CHAT.getValue());
-        sendMessage(messageBean);
-    }
-
-    @Override
-    public void uploadImgFailure(Exception e) {
-
-    }
-
-
     /**
      * Author: QinHao
      * Email:qinhao@jeejio.com
@@ -608,8 +582,8 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
                 return;
             }
             messageBean = MessageBean.createTextMessage(mGroupChatId, content);
-            messageBean.setType(MessageType.GROUP_CHAT.getValue());
         }
+        messageBean.setType(MessageType.GROUP_CHAT.getValue());
         IMClient.SINGLETON.sendMessage(messageBean);
         mRcvMessageAdapter.getDataList().add(messageBean);
         mRcvMessageAdapter.notifyItemInserted(mRcvMessageAdapter.getDataList().size() - 1);
@@ -731,7 +705,9 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
                             @Override
                             public void onSuccess(File file) {
                                 // 压缩成功后调用，返回压缩后的图片文件
-                                getPresenter().uploadImg(file);
+                                MessageBean messageBean = MessageBean.createImgMessage(mGroupChatId
+                                        , file.getAbsolutePath());
+                                sendMessage(messageBean);
                             }
 
                             @Override

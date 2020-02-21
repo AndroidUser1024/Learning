@@ -29,14 +29,4 @@ public class ChatModel implements IChatContract.IModel {
         Collections.reverse(messageBeanList);
         qsCallback.onSuccess(messageBeanList);
     }
-
-    @Override
-    public void uploadVoice(long time, File voice, QSCallback<UploadVoiceResultBean> qsCallback) {
-        IMClient.SINGLETON.uploadVoice(time, voice,qsCallback);
-    }
-
-    @Override
-    public void uploadImg(File img, QSCallback<UploadImgResultBean> qsCallback) {
-        IMClient.SINGLETON.uploadImg(img, qsCallback);
-    }
 }

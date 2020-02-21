@@ -2,15 +2,12 @@ package com.qinshou.qinshoubox.conversation.presenter;
 
 
 import com.qinshou.commonmodule.base.AbsPresenter;
-import com.qinshou.qinshoubox.conversation.bean.UploadImgResultBean;
-import com.qinshou.qinshoubox.conversation.bean.UploadVoiceResultBean;
-import com.qinshou.qinshoubox.im.bean.MessageBean;
-import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.conversation.contract.IGroupChatContract;
 import com.qinshou.qinshoubox.conversation.model.GroupChatModel;
 import com.qinshou.qinshoubox.conversation.view.activity.GroupChatActivity;
+import com.qinshou.qinshoubox.im.bean.MessageBean;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 
-import java.io.File;
 import java.util.List;
 
 /**
@@ -44,48 +41,6 @@ public class GroupChatPresenter extends AbsPresenter<IGroupChatContract.IView, I
                     return;
                 }
                 getView().getMessageListFailure(e);
-            }
-        });
-    }
-
-    @Override
-    public void uploadVoice(long time, File voice) {
-        getModel().uploadVoice(time, voice, new QSCallback<UploadVoiceResultBean>() {
-            @Override
-            public void onSuccess(UploadVoiceResultBean data) {
-                if (!isViewAttached()) {
-                    return;
-                }
-                getView().uploadVoiceSuccess(data);
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                if (!isViewAttached()) {
-                    return;
-                }
-                getView().uploadVoiceFailure(e);
-            }
-        });
-    }
-
-    @Override
-    public void uploadImg(File img) {
-        getModel().uploadImg(img, new QSCallback<UploadImgResultBean>() {
-            @Override
-            public void onSuccess(UploadImgResultBean data) {
-                if (!isViewAttached()) {
-                    return;
-                }
-                getView().uploadImgSuccess(data);
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                if (!isViewAttached()) {
-                    return;
-                }
-                getView().uploadImgFailure(e);
             }
         });
     }

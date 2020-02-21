@@ -46,46 +46,4 @@ public class ChatPresenter extends AbsPresenter<IChatContract.IView, IChatContra
             }
         });
     }
-
-    @Override
-    public void uploadVoice(long time, File voice) {
-        getModel().uploadVoice(time, voice, new QSCallback<UploadVoiceResultBean>() {
-            @Override
-            public void onSuccess(UploadVoiceResultBean data) {
-                if (!isViewAttached()) {
-                    return;
-                }
-                getView().uploadVoiceSuccess(data);
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                if (!isViewAttached()) {
-                    return;
-                }
-                getView().uploadVoiceFailure(e);
-            }
-        });
-    }
-
-    @Override
-    public void uploadImg(File img) {
-        getModel().uploadImg(img, new QSCallback<UploadImgResultBean>() {
-            @Override
-            public void onSuccess(UploadImgResultBean data) {
-                if (!isViewAttached()) {
-                    return;
-                }
-                getView().uploadImgSuccess(data);
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                if (!isViewAttached()) {
-                    return;
-                }
-                getView().uploadImgFailure(e);
-            }
-        });
-    }
 }

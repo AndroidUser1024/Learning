@@ -32,27 +32,6 @@ public interface IChatContract {
          * @param pageSize 分页加载每页条数
          */
         void getMessageList(String toUserId, int page, int pageSize, QSCallback<List<MessageBean>> qsCallback);
-
-        /**
-         * Author: QinHao
-         * Email:qinhao@jeejio.com
-         * Date:2019/12/30 16:24
-         * Description:上传语音
-         *
-         * @param time  语音时长
-         * @param voice 语音文件
-         */
-        void uploadVoice(long time, File voice, QSCallback<UploadVoiceResultBean> qsCallback);
-
-        /**
-         * Author: QinHao
-         * Email:qinhao@jeejio.com
-         * Date:2019/12/30 16:24
-         * Description:上传图片
-         *
-         * @param img 图片文件
-         */
-        void uploadImg(File img, QSCallback<UploadImgResultBean> qsCallback);
     }
 
     interface IView extends IBaseView {
@@ -75,46 +54,6 @@ public interface IChatContract {
          * @param e 错误信息
          */
         void getMessageListFailure(Exception e);
-
-        /**
-         * Author: QinHao
-         * Email:qinhao@jeejio.com
-         * Date:2019/12/30 16:27
-         * Description:上传语音成功
-         *
-         * @param uploadVoiceResultBean 上传结果
-         */
-        void uploadVoiceSuccess(UploadVoiceResultBean uploadVoiceResultBean);
-
-        /**
-         * Author: QinHao
-         * Email:qinhao@jeejio.com
-         * Date:2019/12/30 16:27
-         * Description:上传语音失败
-         *
-         * @param e 错误信息
-         */
-        void uploadVoiceFailure(Exception e);
-
-        /**
-         * Author: QinHao
-         * Email:qinhao@jeejio.com
-         * Date:2019/12/30 16:27
-         * Description:上传图片
-         *
-         * @param uploadImgResultBean 上传图片结果
-         */
-        void uploadImgSuccess(UploadImgResultBean uploadImgResultBean);
-
-        /**
-         * Author: QinHao
-         * Email:qinhao@jeejio.com
-         * Date:2019/12/30 16:27
-         * Description:上传图片失败
-         *
-         * @param e 错误信息
-         */
-        void uploadImgFailure(Exception e);
     }
 
     interface IPresenter {
@@ -129,25 +68,5 @@ public interface IChatContract {
          * @param pageSize 分页加载每页条数
          */
         void getMessageList(String toUserId, int page, int pageSize);
-
-        /**
-         * Author: QinHao
-         * Email:qinhao@jeejio.com
-         * Date:2019/12/30 16:45
-         * Description:上传语音
-         *
-         * @param voice 语音文件
-         */
-        void uploadVoice(long time, File voice);
-
-        /**
-         * Author: QinHao
-         * Email:qinhao@jeejio.com
-         * Date:2019/12/30 16:45
-         * Description:上传图片
-         *
-         * @param img 图片文件
-         */
-        void uploadImg(File img);
     }
 }

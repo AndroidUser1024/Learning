@@ -7,23 +7,32 @@ package com.qinshou.qinshoubox.conversation.bean;
  * Description:图片类型的消息的扩展字段
  */
 public class ImgBean {
+    private String path;
     private String url;
     private String smallUrl;
 
     public ImgBean() {
     }
 
-    public ImgBean(String url, String smallUrl) {
-        this.url = url;
-        this.smallUrl = smallUrl;
+    public ImgBean(String path) {
+        this.path = path;
     }
 
     @Override
     public String toString() {
-        return "VoiceBean{" +
-                "url='" + url + '\'' +
-                ", smallUrl=" + smallUrl +
+        return "ImgBean{" +
+                "path='" + path + '\'' +
+                ", url='" + url + '\'' +
+                ", smallUrl='" + smallUrl + '\'' +
                 '}';
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public String getUrl() {

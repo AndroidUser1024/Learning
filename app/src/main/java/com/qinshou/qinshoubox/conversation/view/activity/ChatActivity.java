@@ -34,8 +34,6 @@ import com.qinshou.imagemodule.util.ImagePathUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.constant.IConstant;
-import com.qinshou.qinshoubox.conversation.bean.UploadImgResultBean;
-import com.qinshou.qinshoubox.conversation.bean.UploadVoiceResultBean;
 import com.qinshou.qinshoubox.conversation.contract.IChatContract;
 import com.qinshou.qinshoubox.conversation.presenter.ChatPresenter;
 import com.qinshou.qinshoubox.conversation.view.adapter.RcvMessageAdapter;
@@ -185,7 +183,10 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
                 if (file == null) {
                     return true;
                 }
-                getPresenter().uploadVoice(recordTime, file);
+                MessageBean messageBean = MessageBean.createVoiceMessage(mToUserId
+                        , file.getAbsolutePath()
+                        , recordTime);
+                sendMessage(messageBean);
             }
             return true;
         }
@@ -589,32 +590,6 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
 
     }
 
-    @Override
-    public void uploadVoiceSuccess(UploadVoiceResultBean uploadVoiceResultBean) {
-        MessageBean messageBean = MessageBean.createVoiceMessage(mToUserId
-                , uploadVoiceResultBean.getUrl()
-                , uploadVoiceResultBean.getTime());
-        sendMessage(messageBean);
-    }
-
-    @Override
-    public void uploadVoiceFailure(Exception e) {
-
-    }
-
-    @Override
-    public void uploadImgSuccess(UploadImgResultBean uploadImgResultBean) {
-        MessageBean messageBean = MessageBean.createImgMessage(mToUserId
-                , uploadImgResultBean.getUrl()
-                , uploadImgResultBean.getSmallUrl());
-        sendMessage(messageBean);
-    }
-
-    @Override
-    public void uploadImgFailure(Exception e) {
-
-    }
-
     /**
      * Author: QinHao
      * Email:qinhao@jeejio.com
@@ -793,7 +768,9 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
                             @Override
                             public void onSuccess(File file) {
                                 // 压缩成功后调用，返回压缩后的图片文件
-                                getPresenter().uploadImg(file);
+                                MessageBean messageBean = MessageBean.createImgMessage(mToUserId
+                                        , file.getAbsolutePath());
+                                sendMessage(messageBean);
                             }
 
                             @Override

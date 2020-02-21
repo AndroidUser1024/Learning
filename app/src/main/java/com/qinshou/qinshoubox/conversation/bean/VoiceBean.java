@@ -7,20 +7,30 @@ package com.qinshou.qinshoubox.conversation.bean;
  * Description:语音类型的消息的扩展字段
  */
 public class VoiceBean {
+    private String path;
     private String url;
     private long time;
 
-    public VoiceBean(String url, long time) {
-        this.url = url;
+    public VoiceBean(String path, long time) {
+        this.path = path;
         this.time = time;
     }
 
     @Override
     public String toString() {
         return "VoiceBean{" +
-                "url='" + url + '\'' +
+                "path='" + path + '\'' +
+                ", url='" + url + '\'' +
                 ", time=" + time +
                 '}';
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public String getUrl() {
