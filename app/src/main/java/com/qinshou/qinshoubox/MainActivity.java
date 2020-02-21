@@ -17,6 +17,7 @@ import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.homepage.ui.fragment.HomepageFragment;
 import com.qinshou.qinshoubox.im.IMClient;
+import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.me.ui.fragment.MeFragment;
 import com.qinshou.qinshoubox.music.view.fragment.MusicListFragment;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
@@ -130,9 +131,13 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
             tab.setCustomView(view);
             mTlMain.addTab(tab, i == 0);
         }
-        ShowLogUtil.logi("用户信息--->" + UserStatusManager.SINGLETON.getUserBean());
+        UserBean userBean = UserStatusManager.SINGLETON.getUserBean();
+        if (userBean == null) {
+            finish();
+            return;
+        }
         // 连接 IM 服务
-        IMClient.SINGLETON.connect(UserStatusManager.SINGLETON.getUserBean().getId());
+        IMClient.SINGLETON.connect(userBean.getId());
     }
 
     /**
