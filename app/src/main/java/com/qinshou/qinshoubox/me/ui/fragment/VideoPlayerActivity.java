@@ -1,27 +1,30 @@
 package com.qinshou.qinshoubox.me.ui.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.media.MediaMetadataRetriever;
 import android.net.Uri;
+import android.os.Handler;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
-import android.widget.VideoView;
 
-import com.google.android.exoplayer2.DefaultLoadControl;
-import com.google.android.exoplayer2.DefaultRenderersFactory;
+import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.PlaybackParameters;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.source.TrackGroupArray;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
@@ -37,6 +40,7 @@ import com.qinshou.qinshoubox.me.presenter.VideoPlayerPresenter;
 
 import java.io.File;
 
+
 /**
  * Author: QinHao
  * Email:qinhao@jeejio.com
@@ -45,11 +49,120 @@ import java.io.File;
  */
 public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implements IVideoPlayerContract.IView {
 
-    //    private VideoView mVideoView;
-    private PlayerView mPlayerView;
     private ImageButton mIbPlayAndPause;
     private ImageButton mIbFullscreen;
     private RelativeLayout mRelativeLayout;
+    private PlayerView mPlayerView;
+    private ExoPlayer mExoPlayer;
+    private Player.EventListener mEventListener = new Player.EventListener() {
+        @Override
+        public void onTimelineChanged(Timeline timeline, int reason) {
+
+        }
+
+        @Override
+        public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+
+        }
+
+        @Override
+        public void onLoadingChanged(boolean isLoading) {
+
+        }
+
+        @Override
+        public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+            ShowLogUtil.logi("onPlayerStateChanged: " + "playWhenReady--->" + playWhenReady + ",playbackState--->" + playbackState);
+        }
+
+        @Override
+        public void onPlaybackSuppressionReasonChanged(int playbackSuppressionReason) {
+
+        }
+
+        @Override
+        public void onIsPlayingChanged(boolean isPlaying) {
+            ShowLogUtil.logi("onIsPlayingChanged: " + "isPlaying--->" + isPlaying);
+            if (isPlaying) {
+                mIbPlayAndPause.setImageResource(R.drawable.music_play_ib_play_or_pause_src_pause);
+            } else {
+                mIbPlayAndPause.setImageResource(R.drawable.music_play_ib_play_or_pause_src_play);
+            }
+        }
+
+        @Override
+        public void onRepeatModeChanged(int repeatMode) {
+
+        }
+
+        @Override
+        public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
+
+        }
+
+        @Override
+        public void onPlayerError(ExoPlaybackException error) {
+            ShowLogUtil.logi("onPlayerError: " + "error--->" + error);
+        }
+
+        @Override
+        public void onPositionDiscontinuity(int reason) {
+
+        }
+
+        @Override
+        public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+
+        }
+
+        @Override
+        public void onSeekProcessed() {
+
+        }
+    };
+
+    private BroadcastReceiver mScreenBroadcastReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (Intent.ACTION_SCREEN_ON.equals(action)) {
+//                ShowLogUtil.logi("解锁");
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                mExoPlayer.setPlayWhenReady(true);
+//                    }
+//                }, 500);
+            } else if (Intent.ACTION_SCREEN_OFF.equals(action)) {
+                ShowLogUtil.logi("锁屏");
+//                mExoPlayer.setPlayWhenReady(false);
+            }
+        }
+    };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mExoPlayer.setPlayWhenReady(true);
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mExoPlayer.setPlayWhenReady(false);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(mScreenBroadcastReceiver);
+        if (mExoPlayer != null) {
+            mExoPlayer.removeListener(mEventListener);
+            mExoPlayer.release();
+        }
+    }
 
     @Override
     public int getLayoutId() {
@@ -60,92 +173,59 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
     public void initView() {
         mRelativeLayout = findViewByID(R.id.relative_layout);
 //        mVideoView = findViewByID(R.id.video_view);
+        //    private VideoView mVideoView;
         mPlayerView = findViewByID(R.id.player_view);
         mIbPlayAndPause = findViewByID(R.id.ib_play_and_pause);
         mIbFullscreen = findViewByID(R.id.ib_fullscreen);
-
-//        BarChart barChart = findViewByID(R.id.bar_chart);
-//        // 数据描述
-//        barChart.setDescription(null);
-//
-//        XAxis xAxis = barChart.getXAxis();
-//        xAxis.setDrawGridLines(false);
-//        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-//        xAxis.setLabelCount(7,false);
-//        xAxis.setValueFormatter(new ValueFormatter() {
-//            @Override
-//            public String getFormattedValue(float value) {
-//                if (value == 0) {
-//                    return "日期";
-//                }
-//                return "2/" + (int) value;
-//            }
-//        });
-//
-//        YAxis leftYAxis = barChart.getAxisLeft();
-//        // 不绘制网格线
-//        leftYAxis.setDrawGridLines(false);
-//        // 不绘制标签
-//        leftYAxis.setDrawLabels(false);
-//
-//        YAxis rightYAxis = barChart.getAxisRight();
-//        // 不绘制网格线
-//        rightYAxis.setDrawGridLines(false);
-//        // 不绘制标签
-//        rightYAxis.setDrawLabels(false);
-//
-//        List<BarEntry> barEntryList = new ArrayList<>();
-//        barEntryList.add(new BarEntry(0f, 0f));
-//        for (int i = 1; i < 15; i++) {
-//            BarEntry barEntry = new BarEntry(i, new Random().nextFloat());
-//            barEntryList.add(barEntry);
-//        }
-//        BarDataSet barDataSet = new BarDataSet(barEntryList, null);
-//        // 设置柱颜色
-//        barDataSet.setGradientColor(0xFF313B7E, 0xFF6374C6);
-//        barChart.setData(new BarData(barDataSet));
     }
 
 
     @Override
     public void initData() {
-//        String path = getContext().getCacheDir()
-//                + File.separator
-//                + "Video"
-//                + File.separator
-//                + "190319222227698228.mp4";
 //        mVideoView.setVideoPath(path);
 //
 //        MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
 //        mediaMetadataRetriever.setDataSource(path);
 //        Bitmap frameAtTime = mediaMetadataRetriever.getFrameAtTime();
 //        mVideoView.setBackground(new BitmapDrawable(getResources(), frameAtTime));
-//        ExoPlayer exoPlayer = ExoPlayerFactory.newSimpleInstance(
-//                new DefaultRenderersFactory(getContext()),
-//                new DefaultTrackSelector(), new DefaultLoadControl());
-//        ExoPlayer exoPlayer = new ExoPlayer.Builder(getContext()).build();
-        SimpleExoPlayer exoPlayer = new SimpleExoPlayer.Builder(getContext()).build();
-        exoPlayer.setPlayWhenReady(true);
-        mPlayerView.setPlayer(exoPlayer);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Intent.ACTION_SCREEN_ON);
+        intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
+        registerReceiver(mScreenBroadcastReceiver, intentFilter);
 
-        // Produces DataSource instances through which media data is loaded.
-        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext()
-                , Util.getUserAgent(getContext(), SystemUtil.getAppName(getContext())));
-// This is the MediaSource representing the media to be played.
-        String url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+        String path = getContext().getCacheDir()
+                + File.separator
+                + "Video"
+                + File.separator
+                + "190319222227698228.mp4";
+        mExoPlayer = new SimpleExoPlayer.Builder(getContext()).build();
+        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(),
+                Util.getUserAgent(getContext(), "QinshouBox"));
+        // This is the MediaSource representing the media to be played.
         MediaSource videoSource = new ProgressiveMediaSource.Factory(dataSourceFactory)
-                .createMediaSource(Uri.parse(url));
-// Prepare the player with the source.
-        exoPlayer.prepare(videoSource);
+                .createMediaSource(Uri.parse(path));
+        // Prepare the player with the source.
+        mExoPlayer.prepare(videoSource);
+        mExoPlayer.addListener(mEventListener);
+        mPlayerView.setPlayer(mExoPlayer);
     }
 
     @Override
     public void setListener() {
         super.setListener();
-//        mIbPlayAndPause.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                ShowLogUtil.logi("点击");
+        mIbPlayAndPause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mExoPlayer == null) {
+                    return;
+                }
+                if (mExoPlayer.isPlaying()) {
+                    mIbPlayAndPause.setImageResource(R.drawable.music_play_ib_play_or_pause_src_play);
+                    mExoPlayer.setPlayWhenReady(false);
+                } else {
+                    mExoPlayer.setPlayWhenReady(true);
+                    mIbPlayAndPause.setImageResource(R.drawable.music_play_ib_play_or_pause_src_pause);
+                }
 //                if (mVideoView.isPlaying()) {
 //                    // 暂停播放
 //                    mVideoView.pause();
@@ -157,8 +237,8 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
 //                    mIbPlayAndPause.setImageResource(R.drawable.music_play_ib_play_or_pause_src_pause);
 //                    mVideoView.setBackground(null);
 //                }
-//            }
-//        });
+            }
+        });
         mIbFullscreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -197,4 +277,31 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
             StatusBarUtil.setStatusBarColor(getActivity().getWindow(), initStatusBarColor(), false);
         }
     }
+
+//    private void initPlayer() {
+//        String path = getContext().getCacheDir()
+//                + File.separator
+//                + "Video"
+//                + File.separator
+//                + "190319222227698228.mp4";
+//        mExoPlayer = new SimpleExoPlayer.Builder(getContext()).build();
+//        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(),
+//                Util.getUserAgent(getContext(), "QinshouBox"));
+//        // This is the MediaSource representing the media to be played.
+//        MediaSource videoSource = new ProgressiveMediaSource.Factory(dataSourceFactory)
+//                .createMediaSource(Uri.parse(path));
+//        // Prepare the player with the source.
+//        mExoPlayer.prepare(videoSource);
+//        mExoPlayer.addListener(mEventListener);
+//        mPlayerView.setPlayer(mExoPlayer);
+//
+//        mIbPlayAndPause.setImageResource(R.drawable.music_play_ib_play_or_pause_src_play);
+//    }
+//
+//    private void releasePlayer() {
+//        if (mExoPlayer != null) {
+//            mExoPlayer.removeListener(mEventListener);
+//            mExoPlayer.release();
+//        }
+//    }
 }

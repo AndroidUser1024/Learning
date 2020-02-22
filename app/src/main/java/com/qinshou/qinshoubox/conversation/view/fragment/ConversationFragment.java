@@ -122,6 +122,11 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
 
     @Override
     public void initData() {
+    }
+
+    @Override
+    public void onAuthenticated() {
+        super.onAuthenticated();
         updateUnreadCount();
         getPresenter().getConversationList();
     }
