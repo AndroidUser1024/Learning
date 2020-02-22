@@ -19,13 +19,13 @@
 
     </com.qinshou.commonmodule.widget.TitleBar>
 
-    <android.support.v4.view.ViewPager
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
-    </android.support.v4.view.ViewPager>
+    </androidx.viewpager.widget.ViewPager>
 
     <!-- 播放进度条 -->
     <LinearLayout

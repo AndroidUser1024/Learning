@@ -6,12 +6,26 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaMetadataRetriever;
+import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.VideoView;
 
+import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.DefaultRenderersFactory;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.ProgressiveMediaSource;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.util.StatusBarUtil;
 import com.qinshou.commonmodule.util.SystemUtil;
@@ -31,7 +45,8 @@ import java.io.File;
  */
 public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implements IVideoPlayerContract.IView {
 
-    private VideoView mVideoView;
+    //    private VideoView mVideoView;
+    private PlayerView mPlayerView;
     private ImageButton mIbPlayAndPause;
     private ImageButton mIbFullscreen;
     private RelativeLayout mRelativeLayout;
@@ -44,7 +59,8 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
     @Override
     public void initView() {
         mRelativeLayout = findViewByID(R.id.relative_layout);
-        mVideoView = findViewByID(R.id.video_view);
+//        mVideoView = findViewByID(R.id.video_view);
+        mPlayerView = findViewByID(R.id.player_view);
         mIbPlayAndPause = findViewByID(R.id.ib_play_and_pause);
         mIbFullscreen = findViewByID(R.id.ib_fullscreen);
 
@@ -93,40 +109,56 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
 
     @Override
     public void initData() {
-        String path = getContext().getCacheDir()
-                + File.separator
-                + "Video"
-                + File.separator
-                + "190319222227698228.mp4";
-        mVideoView.setVideoPath(path);
+//        String path = getContext().getCacheDir()
+//                + File.separator
+//                + "Video"
+//                + File.separator
+//                + "190319222227698228.mp4";
+//        mVideoView.setVideoPath(path);
+//
+//        MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
+//        mediaMetadataRetriever.setDataSource(path);
+//        Bitmap frameAtTime = mediaMetadataRetriever.getFrameAtTime();
+//        mVideoView.setBackground(new BitmapDrawable(getResources(), frameAtTime));
+//        ExoPlayer exoPlayer = ExoPlayerFactory.newSimpleInstance(
+//                new DefaultRenderersFactory(getContext()),
+//                new DefaultTrackSelector(), new DefaultLoadControl());
+//        ExoPlayer exoPlayer = new ExoPlayer.Builder(getContext()).build();
+        SimpleExoPlayer exoPlayer = new SimpleExoPlayer.Builder(getContext()).build();
+        exoPlayer.setPlayWhenReady(true);
+        mPlayerView.setPlayer(exoPlayer);
 
-        MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
-        mediaMetadataRetriever.setDataSource(path);
-        Bitmap frameAtTime = mediaMetadataRetriever.getFrameAtTime();
-        mVideoView.setBackground(new BitmapDrawable(getResources(), frameAtTime));
-
+        // Produces DataSource instances through which media data is loaded.
+        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext()
+                , Util.getUserAgent(getContext(), SystemUtil.getAppName(getContext())));
+// This is the MediaSource representing the media to be played.
+        String url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+        MediaSource videoSource = new ProgressiveMediaSource.Factory(dataSourceFactory)
+                .createMediaSource(Uri.parse(url));
+// Prepare the player with the source.
+        exoPlayer.prepare(videoSource);
     }
 
     @Override
     public void setListener() {
         super.setListener();
-        mIbPlayAndPause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ShowLogUtil.logi("点击");
-                if (mVideoView.isPlaying()) {
-                    // 暂停播放
-                    mVideoView.pause();
-                    mIbPlayAndPause.setImageResource(R.drawable.music_play_ib_play_or_pause_src_play);
-                    mVideoView.setBackground(null);
-                } else {
-                    // 开始播放
-                    mVideoView.start();
-                    mIbPlayAndPause.setImageResource(R.drawable.music_play_ib_play_or_pause_src_pause);
-                    mVideoView.setBackground(null);
-                }
-            }
-        });
+//        mIbPlayAndPause.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                ShowLogUtil.logi("点击");
+//                if (mVideoView.isPlaying()) {
+//                    // 暂停播放
+//                    mVideoView.pause();
+//                    mIbPlayAndPause.setImageResource(R.drawable.music_play_ib_play_or_pause_src_play);
+//                    mVideoView.setBackground(null);
+//                } else {
+//                    // 开始播放
+//                    mVideoView.start();
+//                    mIbPlayAndPause.setImageResource(R.drawable.music_play_ib_play_or_pause_src_pause);
+//                    mVideoView.setBackground(null);
+//                }
+//            }
+//        });
         mIbFullscreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

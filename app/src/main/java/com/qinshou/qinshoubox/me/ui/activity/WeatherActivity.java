@@ -1,9 +1,9 @@
 package com.qinshou.qinshoubox.me.ui.activity;
 
-import android.databinding.DataBindingUtil;
+import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.qinshou.commonmodule.util.SystemUtil;
 import com.qinshou.qinshoubox.R;

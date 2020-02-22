@@ -52,7 +52,7 @@
     </LinearLayout>
 
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcv_group_chat_member_choose"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/px90"
@@ -110,7 +110,7 @@
         android:textColor="#FF666666"
         android:textSize="@dimen/px30" />
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcv_group_chat_member"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

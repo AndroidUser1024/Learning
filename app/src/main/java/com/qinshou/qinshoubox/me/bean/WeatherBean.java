@@ -1,10 +1,9 @@
 package com.qinshou.qinshoubox.me.bean;
 
-import android.databinding.BaseObservable;
-import android.databinding.Bindable;
+import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
 
 import com.google.gson.annotations.SerializedName;
-import com.qinshou.qinshoubox.BR;
 
 import java.util.List;
 

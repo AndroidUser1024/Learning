@@ -2,10 +2,9 @@ package com.qinshou.qinshoubox.music.view.fragment;
 
 import android.Manifest;
 import android.graphics.Color;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.qinshou.commonmodule.base.AbsMVPFragment;
 import com.qinshou.commonmodule.rcvdecoration.DividerDecoration;
 import com.qinshou.commonmodule.util.DisplayUtil;
 import com.qinshou.commonmodule.util.permissionutil.IOnRequestPermissionResultCallBack;
@@ -17,7 +16,6 @@ import com.qinshou.qinshoubox.music.bean.MusicBean;
 import com.qinshou.qinshoubox.music.contract.IMusicListContract;
 import com.qinshou.qinshoubox.music.presenter.MusicListPresenter;
 import com.qinshou.qinshoubox.music.view.adapter.RcvMusicAdapter;
-import com.scwang.smartrefresh.layout.util.DensityUtil;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package com.qinshou.qinshoubox.conversation.view.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.qinshou.commonmodule.rcvbaseadapter.RcvMultipleBaseAdapter;
 import com.qinshou.qinshoubox.im.bean.MessageBean;

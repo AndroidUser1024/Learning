@@ -14,14 +14,14 @@
 
     </com.qinshou.commonmodule.widget.TitleBar>
 
-    <android.support.design.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <!-- AppBarLayout 里放入跟着向上滑动的布局 -->
         <!-- AppBarLayout 里的布局添加了 app:layout_scrollFlags="scroll" 就会跟着向上滑出去 -->
         <!-- AppBarLayout 里的布局没有添加 app:layout_scrollFlags 属性就会悬停 -->
-        <android.support.design.widget.AppBarLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/abl_status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -29,7 +29,7 @@
             app:elevation="0dp"
             tools:ignore="UnusedAttribute">
 
-            <android.support.v7.widget.Toolbar
+            <androidx.appcompat.widget.Toolbar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:contentInsetStart="0dp"
@@ -111,9 +111,9 @@
                     </LinearLayout>
 
                 </LinearLayout>
-            </android.support.v7.widget.Toolbar>
+            </androidx.appcompat.widget.Toolbar>
 
-            <android.support.design.widget.TabLayout
+            <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tl_friend"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/px100"
@@ -124,18 +124,18 @@
                 app:tabIndicatorHeight="0dp"
                 tools:ignore="UnusedAttribute">
 
-            </android.support.design.widget.TabLayout>
+            </com.google.android.material.tabs.TabLayout>
 
-        </android.support.design.widget.AppBarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
 
-        <android.support.v4.view.ViewPager
+        <androidx.viewpager.widget.ViewPager
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#FFFFFFFF"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        </android.support.v4.view.ViewPager>
+        </androidx.viewpager.widget.ViewPager>
         <!--<android.support.v7.widget.RecyclerView-->
         <!--android:id="@+id/rcv_friend"-->
         <!--android:layout_width="match_parent"-->
@@ -148,5 +148,5 @@
         <!--tools:orientation="vertical">-->
 
         <!--</android.support.v7.widget.RecyclerView>-->
-    </android.support.design.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </LinearLayout>

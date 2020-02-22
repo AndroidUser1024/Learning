@@ -1,6 +1,6 @@
 package com.qinshou.commonmodule.util.permissionutil;
 
-import android.support.v4.app.FragmentManager;
+import androidx.fragment.app.FragmentManager;
 
 /**
  * Description:Android Api 23 以上的系统申请权限的工具类

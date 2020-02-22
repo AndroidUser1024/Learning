@@ -19,7 +19,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/BaseAppTheme"
-        tools:replace="android:name">
+        android:usesCleartextTraffic="true"
+        tools:replace="android:name"
+        tools:ignore="UnusedAttribute">
         <activity
             android:name=".login.view.activity.SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

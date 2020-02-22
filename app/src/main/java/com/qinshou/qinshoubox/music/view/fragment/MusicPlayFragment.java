@@ -3,7 +3,7 @@ package com.qinshou.qinshoubox.music.view.fragment;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
+import androidx.viewpager.widget.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
@@ -13,7 +13,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.qinshou.commonmodule.adapter.VpSingleViewAdapter;
-import com.qinshou.commonmodule.base.AbsMVPFragment;
 import com.qinshou.commonmodule.util.DisplayUtil;
 import com.qinshou.commonmodule.util.MediaPlayerHelper;
 import com.qinshou.qinshoubox.R;
@@ -22,7 +21,6 @@ import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.music.bean.MusicBean;
 import com.qinshou.qinshoubox.music.contract.IMusicPlayContract;
 import com.qinshou.qinshoubox.music.presenter.MusicPlayPresenter;
-import com.scwang.smartrefresh.layout.util.DensityUtil;
 
 import java.util.ArrayList;
 import java.util.List;

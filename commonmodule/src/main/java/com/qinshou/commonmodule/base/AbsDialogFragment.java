@@ -4,17 +4,19 @@ import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+
+import androidx.fragment.app.DialogFragment;
 
 /**
  * Description:DialogFragment 的基类
  * Created by 禽兽先生
  * Created on 2019/1/17
  */
-public abstract class AbsDialogFragment extends android.support.v4.app.DialogFragment {
+public abstract class AbsDialogFragment extends DialogFragment {
     private View rootView;
 
     /**

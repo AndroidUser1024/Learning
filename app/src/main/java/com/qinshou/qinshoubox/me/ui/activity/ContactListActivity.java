@@ -2,7 +2,7 @@ package com.qinshou.qinshoubox.me.ui.activity;
 
 import android.database.Cursor;
 import android.provider.ContactsContract;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.qinshou.commonmodule.base.AbsPresenter;
 import com.qinshou.commonmodule.rcvdecoration.StickyDecoration;

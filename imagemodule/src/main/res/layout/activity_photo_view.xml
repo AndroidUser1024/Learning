@@ -7,7 +7,7 @@
     android:background="#FF000000"
     tools:context="com.qinshou.imagemodule.PhotoViewActivity">
 
-    <android.support.v4.view.ViewPager
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/vp_photo_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

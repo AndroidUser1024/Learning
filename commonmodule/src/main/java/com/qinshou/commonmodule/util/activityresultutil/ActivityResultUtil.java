@@ -1,8 +1,8 @@
 package com.qinshou.commonmodule.util.activityresultutil;
 
 import android.content.Intent;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 
 /**
  * Description:启动需要接收返回结果的 Activity 的工具类

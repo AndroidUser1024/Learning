@@ -2,7 +2,7 @@ package com.qinshou.commonmodule.util.activityresultutil;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 
 /**
  * Description:启动需要返回结果的 Activity 的无界面的代理 Fragment

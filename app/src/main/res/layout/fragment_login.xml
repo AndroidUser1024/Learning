@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cl_root"
@@ -8,7 +8,7 @@
     android:background="@drawable/login_cl_root_bg"
     tools:context="com.qinshou.qinshoubox.me.ui.fragment.LoginOrRegisterFragment">
 
-    <android.support.constraint.Guideline
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guide_line_horizontal"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -135,4 +135,4 @@
             android:text="@string/login_btn_login_or_register_text"
             android:textColor="#FFFFFFFF" />
     </LinearLayout>
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
