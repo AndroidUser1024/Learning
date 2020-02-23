@@ -7,11 +7,15 @@ import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Handler;
+import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
@@ -21,6 +25,7 @@ import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
@@ -177,6 +182,64 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
         mPlayerView = findViewByID(R.id.player_view);
         mIbPlayAndPause = findViewByID(R.id.ib_play_and_pause);
         mIbFullscreen = findViewByID(R.id.ib_fullscreen);
+        mPlayerView.setUseController(false);
+        mPlayerView.setOnTouchListener(new View.OnTouchListener() {
+            private boolean mAdjustBrightness;
+            private boolean mAdjustVolume;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE) {
+                    return false;
+                }
+                float screenWidth = getResources().getDisplayMetrics().widthPixels;
+                float screenHeight = getResources().getDisplayMetrics().heightPixels;
+                float x = event.getX();
+                float y = event.getY();
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        if (x < screenWidth / 2) {
+                            ShowLogUtil.logi("调节亮度");
+                            mAdjustBrightness = true;
+                        } else {
+                            mAdjustVolume = true;
+                            ShowLogUtil.logi("调节音量");
+                        }
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        if (mAdjustBrightness) {
+                            ShowLogUtil.logi("调节亮度");
+                            float brightness = 1 - (y / screenHeight);
+                            if (brightness > 1) {
+                                brightness = 1;
+                            } else if (brightness < 0) {
+                                brightness = 0;
+                            }
+                            Window window = getWindow();
+                            WindowManager.LayoutParams layoutParams = window.getAttributes();
+                            ShowLogUtil.logi("y--->" + y);
+                            ShowLogUtil.logi("brightness--->" + brightness);
+                            ShowLogUtil.logi("(brightness*255f)--->" + (brightness * 255f));
+                            layoutParams.screenBrightness = brightness * 255f;
+                            window.setAttributes(layoutParams);
+                        } else if (mAdjustVolume) {
+                            ShowLogUtil.logi("调节音量");
+                            AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+                            // 获取音量最大值
+                            int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+                            // 通过手指触摸位置与屏幕高度的比例，来计算需要设置的音量
+                            int volume = (int) ((1 - y / screenHeight) * maxVolume);
+                            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0);
+                        }
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        mAdjustBrightness = false;
+                        mAdjustVolume = false;
+                        break;
+                }
+                return true;
+            }
+        });
     }
 
 
@@ -193,20 +256,29 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
         intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
         registerReceiver(mScreenBroadcastReceiver, intentFilter);
 
-        String path = getContext().getCacheDir()
-                + File.separator
-                + "Video"
-                + File.separator
-                + "190319222227698228.mp4";
+//        String path = getContext().getCacheDir()
+//                + File.separator
+//                + "Video"
+//                + File.separator
+//                + "190319222227698228.mp4";
+        String path = "http://vfx.mtime.cn/Video/2019/03/12/mp4/190312083533415853.mp4";
+        String path2 = "http://vfx.mtime.cn/Video/2019/03/09/mp4/190309153658147087.mp4";
         mExoPlayer = new SimpleExoPlayer.Builder(getContext()).build();
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(),
                 Util.getUserAgent(getContext(), "QinshouBox"));
         // This is the MediaSource representing the media to be played.
-        MediaSource videoSource = new ProgressiveMediaSource.Factory(dataSourceFactory)
+        // 设置播放源
+        MediaSource mediaSource = new ProgressiveMediaSource.Factory(dataSourceFactory)
                 .createMediaSource(Uri.parse(path));
+        mExoPlayer.prepare(mediaSource);
+//        MediaSource mediaSource2 = new ProgressiveMediaSource.Factory(dataSourceFactory)
+//                .createMediaSource(Uri.parse(path2));
         // Prepare the player with the source.
-        mExoPlayer.prepare(videoSource);
+        // ConcatenatingMediaSource 可以设置多个播放源
+//        ConcatenatingMediaSource concatenatingMediaSource = new ConcatenatingMediaSource(mediaSource, mediaSource2);
+//        mExoPlayer.prepare(concatenatingMediaSource);
         mExoPlayer.addListener(mEventListener);
+        mExoPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
         mPlayerView.setPlayer(mExoPlayer);
     }
 
