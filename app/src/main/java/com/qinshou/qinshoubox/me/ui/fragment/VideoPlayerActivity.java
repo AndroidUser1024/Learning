@@ -217,10 +217,8 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
                             }
                             Window window = getWindow();
                             WindowManager.LayoutParams layoutParams = window.getAttributes();
-                            ShowLogUtil.logi("y--->" + y);
-                            ShowLogUtil.logi("brightness--->" + brightness);
-                            ShowLogUtil.logi("(brightness*255f)--->" + (brightness * 255f));
-                            layoutParams.screenBrightness = brightness * 255f;
+                            // 调节当前屏幕的亮度,非系统屏幕亮度,取值在 0-1f 之间
+                            layoutParams.screenBrightness = brightness;
                             window.setAttributes(layoutParams);
                         } else if (mAdjustVolume) {
                             ShowLogUtil.logi("调节音量");
