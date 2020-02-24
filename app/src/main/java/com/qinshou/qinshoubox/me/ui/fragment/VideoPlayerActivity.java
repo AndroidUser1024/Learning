@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Handler;
@@ -18,7 +19,10 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -47,6 +51,8 @@ import com.qinshou.qinshoubox.me.presenter.VideoPlayerPresenter;
 
 import java.io.File;
 
+import it.sephiroth.android.library.easing.Linear;
+
 
 /**
  * Author: QinHao
@@ -56,24 +62,44 @@ import java.io.File;
  */
 public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implements IVideoPlayerContract.IView {
 
-    private ImageButton mIbPlayAndPause;
-    private ImageButton mIbFullscreen;
     private RelativeLayout mRelativeLayout;
     private PlayerView mPlayerView;
     private ExoPlayer mExoPlayer;
     /**
+     * 播放按钮
+     */
+    private ImageView mIvPlay;
+    /**
+     * 当前时间
+     */
+    private TextView mTvCurrentTime;
+    /**
+     * 进度
+     */
+    private SeekBar mSeekBar;
+    /**
+     * 总时间
+     */
+    private TextView mTvTotalTime;
+    /**
      * 倍速
      */
     private TextView mTvSpeed;
+    /**
+     * 全屏按钮
+     */
+    private ImageView mIvFullscreen;
+    private LinearLayout mLlBrightness;
+    private ImageView mIvBrightness;
+    private LinearLayout mLlBrightnessValue;
     private Player.EventListener mEventListener = new Player.EventListener() {
         @Override
         public void onTimelineChanged(Timeline timeline, int reason) {
-
+            ShowLogUtil.logi("onTimelineChanged :Timeline--->" + timeline + ",reason--->" + reason);
         }
 
         @Override
         public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-
         }
 
         @Override
@@ -84,6 +110,7 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
         @Override
         public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
             ShowLogUtil.logi("onPlayerStateChanged: " + "playWhenReady--->" + playWhenReady + ",playbackState--->" + playbackState);
+            long duration = mExoPlayer.getDuration();
         }
 
         @Override
@@ -95,9 +122,9 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
         public void onIsPlayingChanged(boolean isPlaying) {
             ShowLogUtil.logi("onIsPlayingChanged: " + "isPlaying--->" + isPlaying);
             if (isPlaying) {
-                mIbPlayAndPause.setImageResource(R.drawable.music_play_ib_play_or_pause_src_pause);
+                mIvPlay.setImageResource(R.drawable.video_player_iv_play_src_2);
             } else {
-                mIbPlayAndPause.setImageResource(R.drawable.music_play_ib_play_or_pause_src_play);
+                mIvPlay.setImageResource(R.drawable.video_player_iv_play_src);
             }
         }
 
@@ -133,32 +160,35 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
     };
 
     private BroadcastReceiver mScreenBroadcastReceiver = new BroadcastReceiver() {
+        private boolean mScreenOff = false;
 
         @Override
         public void onReceive(Context context, Intent intent) {
+            if (mExoPlayer == null) {
+                return;
+            }
             String action = intent.getAction();
             if (TextUtils.equals(Intent.ACTION_SCREEN_OFF, action)) {
                 ShowLogUtil.logi("锁屏");
+                mScreenOff = true;
+                mExoPlayer.setPlayWhenReady(false);
             } else if (TextUtils.equals(Intent.ACTION_SCREEN_ON, action)) {
-                ShowLogUtil.logi("屏幕亮起");
+                ShowLogUtil.logi("亮屏");
+                if (!mScreenOff) {
+                    return;
+                }
+                mScreenOff = false;
+                mExoPlayer.setPlayWhenReady(true);
             } else if (TextUtils.equals(Intent.ACTION_USER_PRESENT, action)) {
-                ShowLogUtil.logi("解锁");
+                ShowLogUtil.logi("用户解锁");
+                if (!mScreenOff) {
+                    return;
+                }
+                mScreenOff = false;
+                mExoPlayer.setPlayWhenReady(true);
             }
         }
     };
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mExoPlayer.setPlayWhenReady(true);
-
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mExoPlayer.setPlayWhenReady(false);
-    }
 
     @Override
     protected void onDestroy() {
@@ -167,6 +197,30 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
         if (mExoPlayer != null) {
             mExoPlayer.removeListener(mEventListener);
             mExoPlayer.release();
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            mIvFullscreen.setImageResource(R.drawable.video_player_iv_fullscreen_src_2);
+            ViewGroup.LayoutParams layoutParams = mRelativeLayout.getLayoutParams();
+            layoutParams.width = SystemUtil.getScreenWidth(getContext());
+            layoutParams.height = SystemUtil.getScreenHeight(getContext());
+            mRelativeLayout.requestLayout();
+            //使内容延伸到状态栏下
+            StatusBarUtil.setStatusBarTranslucent(getActivity().getWindow(), true);
+            //使状态栏透明
+            StatusBarUtil.setStatusBarColor(getActivity().getWindow(), Color.TRANSPARENT, true);
+        } else {
+            mIvFullscreen.setImageResource(R.drawable.video_player_iv_fullscreen_src);
+            ViewGroup.LayoutParams layoutParams = mRelativeLayout.getLayoutParams();
+            layoutParams.width = SystemUtil.getScreenWidth(getContext());
+            layoutParams.height = getResources().getDimensionPixelOffset(R.dimen.px500);
+            mRelativeLayout.requestLayout();
+            StatusBarUtil.setStatusBarTranslucent(getActivity().getWindow(), false);
+            StatusBarUtil.setStatusBarColor(getActivity().getWindow(), initStatusBarColor(), false);
         }
     }
 
@@ -182,20 +236,20 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
         //    private VideoView mVideoView;
         mPlayerView = findViewByID(R.id.player_view);
         mPlayerView.setUseController(false);
-        mIbPlayAndPause = findViewByID(R.id.ib_play_and_pause);
-        mIbFullscreen = findViewByID(R.id.ib_fullscreen);
+        mIvPlay = findViewByID(R.id.iv_play);
+        mTvCurrentTime = findViewByID(R.id.tv_current_time);
+        mSeekBar = findViewByID(R.id.seek_bar);
+        mTvTotalTime = findViewByID(R.id.tv_total_time);
         mTvSpeed = findViewByID(R.id.tv_speed);
+        mIvFullscreen = findViewByID(R.id.iv_fullscreen);
+        mLlBrightness = findViewByID(R.id.ll_brightness);
+        mIvBrightness = findViewByID(R.id.iv_brightness);
+        mLlBrightnessValue = findViewByID(R.id.ll_brightness_value);
     }
 
 
     @Override
     public void initData() {
-//        mVideoView.setVideoPath(path);
-//
-//        MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
-//        mediaMetadataRetriever.setDataSource(path);
-//        Bitmap frameAtTime = mediaMetadataRetriever.getFrameAtTime();
-//        mVideoView.setBackground(new BitmapDrawable(getResources(), frameAtTime));
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Intent.ACTION_SCREEN_ON);
         intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
@@ -210,6 +264,9 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
         String path = "http://vfx.mtime.cn/Video/2019/03/12/mp4/190312083533415853.mp4";
         String path2 = "http://vfx.mtime.cn/Video/2019/03/09/mp4/190309153658147087.mp4";
         mExoPlayer = new SimpleExoPlayer.Builder(getContext()).build();
+        mExoPlayer.addListener(mEventListener);
+        mExoPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
+        mExoPlayer.setPlayWhenReady(true);
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(),
                 Util.getUserAgent(getContext(), "QinshouBox"));
         // This is the MediaSource representing the media to be played.
@@ -223,41 +280,28 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
         // ConcatenatingMediaSource 可以设置多个播放源
 //        ConcatenatingMediaSource concatenatingMediaSource = new ConcatenatingMediaSource(mediaSource, mediaSource2);
 //        mExoPlayer.prepare(concatenatingMediaSource);
-        mExoPlayer.addListener(mEventListener);
-        mExoPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
         mPlayerView.setPlayer(mExoPlayer);
     }
 
     @Override
     public void setListener() {
         super.setListener();
-        mIbPlayAndPause.setOnClickListener(new View.OnClickListener() {
+        mIvPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mExoPlayer == null) {
                     return;
                 }
                 if (mExoPlayer.isPlaying()) {
-                    mIbPlayAndPause.setImageResource(R.drawable.music_play_ib_play_or_pause_src_play);
                     mExoPlayer.setPlayWhenReady(false);
+                    mIvPlay.setImageResource(R.drawable.video_player_iv_play_src);
                 } else {
                     mExoPlayer.setPlayWhenReady(true);
-                    mIbPlayAndPause.setImageResource(R.drawable.music_play_ib_play_or_pause_src_pause);
+                    mIvPlay.setImageResource(R.drawable.video_player_iv_play_src_2);
                 }
-//                if (mVideoView.isPlaying()) {
-//                    // 暂停播放
-//                    mVideoView.pause();
-//                    mIbPlayAndPause.setImageResource(R.drawable.music_play_ib_play_or_pause_src_play);
-//                    mVideoView.setBackground(null);
-//                } else {
-//                    // 开始播放
-//                    mVideoView.start();
-//                    mIbPlayAndPause.setImageResource(R.drawable.music_play_ib_play_or_pause_src_pause);
-//                    mVideoView.setBackground(null);
-//                }
             }
         });
-        mIbFullscreen.setOnClickListener(new View.OnClickListener() {
+        mIvFullscreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -298,46 +342,28 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
                     return false;
                 }
                 float screenWidth = getResources().getDisplayMetrics().widthPixels;
-                float screenHeight = getResources().getDisplayMetrics().heightPixels;
                 float x = event.getX();
                 float y = event.getY();
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         if (x < screenWidth / 2) {
-                            ShowLogUtil.logi("调节亮度");
                             mAdjustBrightness = true;
                         } else {
                             mAdjustVolume = true;
-                            ShowLogUtil.logi("调节音量");
                         }
                         break;
                     case MotionEvent.ACTION_MOVE:
                         if (mAdjustBrightness) {
-                            ShowLogUtil.logi("调节亮度");
-                            float brightness = 1 - (y / screenHeight);
-                            if (brightness > 1) {
-                                brightness = 1;
-                            } else if (brightness < 0) {
-                                brightness = 0;
-                            }
-                            Window window = getWindow();
-                            WindowManager.LayoutParams layoutParams = window.getAttributes();
-                            // 调节当前屏幕的亮度,非系统屏幕亮度,取值在 0-1f 之间
-                            layoutParams.screenBrightness = brightness;
-                            window.setAttributes(layoutParams);
+                            adjustBrightness(y);
                         } else if (mAdjustVolume) {
-                            ShowLogUtil.logi("调节音量");
-                            AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
-                            // 获取音量最大值
-                            int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-                            // 通过手指触摸位置与屏幕高度的比例，来计算需要设置的音量
-                            int volume = (int) ((1 - y / screenHeight) * maxVolume);
-                            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0);
+                            adjustVolume(y);
                         }
                         break;
                     case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
                         mAdjustBrightness = false;
                         mAdjustVolume = false;
+                        mLlBrightness.setVisibility(View.GONE);
                         break;
                 }
                 return true;
@@ -350,52 +376,61 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
 
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            ViewGroup.LayoutParams layoutParams = mRelativeLayout.getLayoutParams();
-            layoutParams.width = SystemUtil.getScreenWidth(getContext());
-            layoutParams.height = SystemUtil.getScreenHeight(getContext());
-            mRelativeLayout.requestLayout();
-            //使内容延伸到状态栏下
-            StatusBarUtil.setStatusBarTranslucent(getActivity().getWindow(), true);
-            //使状态栏透明
-            StatusBarUtil.setStatusBarColor(getActivity().getWindow(), Color.TRANSPARENT, true);
-        } else {
-            ViewGroup.LayoutParams layoutParams = mRelativeLayout.getLayoutParams();
-            layoutParams.width = SystemUtil.getScreenWidth(getContext());
-            layoutParams.height = getResources().getDimensionPixelOffset(R.dimen.px500);
-            mRelativeLayout.requestLayout();
-            StatusBarUtil.setStatusBarTranslucent(getActivity().getWindow(), false);
-            StatusBarUtil.setStatusBarColor(getActivity().getWindow(), initStatusBarColor(), false);
+
+    private void adjustBrightness(float y) {
+        ShowLogUtil.logi("调节亮度");
+        float screenHeight = getResources().getDisplayMetrics().heightPixels;
+        float brightness = 1 - (y / screenHeight);
+        if (brightness > 1) {
+            brightness = 1;
+        } else if (brightness < 0) {
+            brightness = 0;
         }
+        Window window = getWindow();
+        WindowManager.LayoutParams layoutParams = window.getAttributes();
+        // 调节当前屏幕的亮度,非系统屏幕亮度,取值在 0-1f 之间
+        layoutParams.screenBrightness = brightness;
+        window.setAttributes(layoutParams);
+
+        mIvBrightness.setImageResource(R.drawable.video_player_iv_brightness_src);
+        int childCount = mLlBrightnessValue.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View view = mLlBrightnessValue.getChildAt(i);
+            if (!(view instanceof ImageView)) {
+                continue;
+            }
+            if (i < (1 - (y / screenHeight)) * childCount) {
+                ((ImageView) view).setImageDrawable(new ColorDrawable(0xFFFFFFFF));
+            } else {
+                ((ImageView) view).setImageBitmap(null);
+            }
+        }
+        mLlBrightness.setVisibility(View.VISIBLE);
     }
 
-//    private void initPlayer() {
-//        String path = getContext().getCacheDir()
-//                + File.separator
-//                + "Video"
-//                + File.separator
-//                + "190319222227698228.mp4";
-//        mExoPlayer = new SimpleExoPlayer.Builder(getContext()).build();
-//        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(),
-//                Util.getUserAgent(getContext(), "QinshouBox"));
-//        // This is the MediaSource representing the media to be played.
-//        MediaSource videoSource = new ProgressiveMediaSource.Factory(dataSourceFactory)
-//                .createMediaSource(Uri.parse(path));
-//        // Prepare the player with the source.
-//        mExoPlayer.prepare(videoSource);
-//        mExoPlayer.addListener(mEventListener);
-//        mPlayerView.setPlayer(mExoPlayer);
-//
-//        mIbPlayAndPause.setImageResource(R.drawable.music_play_ib_play_or_pause_src_play);
-//    }
-//
-//    private void releasePlayer() {
-//        if (mExoPlayer != null) {
-//            mExoPlayer.removeListener(mEventListener);
-//            mExoPlayer.release();
-//        }
-//    }
+    private void adjustVolume(float y) {
+        ShowLogUtil.logi("调节音量");
+        float screenHeight = getResources().getDisplayMetrics().heightPixels;
+        AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+        // 获取音量最大值
+        int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        // 通过手指触摸位置与屏幕高度的比例，来计算需要设置的音量
+        int volume = (int) ((1 - y / screenHeight) * maxVolume);
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0);
+
+        mIvBrightness.setImageResource(R.drawable.video_player_iv_brightness_src_2);
+        int childCount = mLlBrightnessValue.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View view = mLlBrightnessValue.getChildAt(i);
+            if (!(view instanceof ImageView)) {
+                continue;
+            }
+            if (i < (1 - (y / screenHeight)) * childCount) {
+                ((ImageView) view).setImageDrawable(new ColorDrawable(0xFFFFFFFF));
+            } else {
+                ((ImageView) view).setImageBitmap(null);
+            }
+        }
+        mLlBrightness.setVisibility(View.VISIBLE);
+    }
 }
