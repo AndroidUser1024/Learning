@@ -228,4 +228,8 @@
     <string name="my_qr_code_toast_save_success_text_prefix">已保存二维码名片到</string>
     <string name="my_qr_code_toast_save_failure_text">保存二维码名片失败了</string>
 
+    <!-- 视频播放界面 -->
+    <string name="video_player_tv_speed_text">倍速</string>
+    <string name="video_player_tv_speed_text_2">1.5x</string>
+    <string name="video_player_tv_speed_text_3">2x</string>
 </resources>

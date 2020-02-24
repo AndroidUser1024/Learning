@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
@@ -18,6 +19,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
@@ -59,6 +61,10 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
     private RelativeLayout mRelativeLayout;
     private PlayerView mPlayerView;
     private ExoPlayer mExoPlayer;
+    /**
+     * 倍速
+     */
+    private TextView mTvSpeed;
     private Player.EventListener mEventListener = new Player.EventListener() {
         @Override
         public void onTimelineChanged(Timeline timeline, int reason) {
@@ -131,17 +137,12 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (Intent.ACTION_SCREEN_ON.equals(action)) {
-//                ShowLogUtil.logi("解锁");
-//                new Handler().postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                mExoPlayer.setPlayWhenReady(true);
-//                    }
-//                }, 500);
-            } else if (Intent.ACTION_SCREEN_OFF.equals(action)) {
+            if (TextUtils.equals(Intent.ACTION_SCREEN_OFF, action)) {
                 ShowLogUtil.logi("锁屏");
-//                mExoPlayer.setPlayWhenReady(false);
+            } else if (TextUtils.equals(Intent.ACTION_SCREEN_ON, action)) {
+                ShowLogUtil.logi("屏幕亮起");
+            } else if (TextUtils.equals(Intent.ACTION_USER_PRESENT, action)) {
+                ShowLogUtil.logi("解锁");
             }
         }
     };
@@ -180,64 +181,10 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
 //        mVideoView = findViewByID(R.id.video_view);
         //    private VideoView mVideoView;
         mPlayerView = findViewByID(R.id.player_view);
+        mPlayerView.setUseController(false);
         mIbPlayAndPause = findViewByID(R.id.ib_play_and_pause);
         mIbFullscreen = findViewByID(R.id.ib_fullscreen);
-        mPlayerView.setUseController(false);
-        mPlayerView.setOnTouchListener(new View.OnTouchListener() {
-            private boolean mAdjustBrightness;
-            private boolean mAdjustVolume;
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE) {
-                    return false;
-                }
-                float screenWidth = getResources().getDisplayMetrics().widthPixels;
-                float screenHeight = getResources().getDisplayMetrics().heightPixels;
-                float x = event.getX();
-                float y = event.getY();
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        if (x < screenWidth / 2) {
-                            ShowLogUtil.logi("调节亮度");
-                            mAdjustBrightness = true;
-                        } else {
-                            mAdjustVolume = true;
-                            ShowLogUtil.logi("调节音量");
-                        }
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        if (mAdjustBrightness) {
-                            ShowLogUtil.logi("调节亮度");
-                            float brightness = 1 - (y / screenHeight);
-                            if (brightness > 1) {
-                                brightness = 1;
-                            } else if (brightness < 0) {
-                                brightness = 0;
-                            }
-                            Window window = getWindow();
-                            WindowManager.LayoutParams layoutParams = window.getAttributes();
-                            // 调节当前屏幕的亮度,非系统屏幕亮度,取值在 0-1f 之间
-                            layoutParams.screenBrightness = brightness;
-                            window.setAttributes(layoutParams);
-                        } else if (mAdjustVolume) {
-                            ShowLogUtil.logi("调节音量");
-                            AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
-                            // 获取音量最大值
-                            int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-                            // 通过手指触摸位置与屏幕高度的比例，来计算需要设置的音量
-                            int volume = (int) ((1 - y / screenHeight) * maxVolume);
-                            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0);
-                        }
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        mAdjustBrightness = false;
-                        mAdjustVolume = false;
-                        break;
-                }
-                return true;
-            }
-        });
+        mTvSpeed = findViewByID(R.id.tv_speed);
     }
 
 
@@ -252,6 +199,7 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Intent.ACTION_SCREEN_ON);
         intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
+        intentFilter.addAction(Intent.ACTION_USER_PRESENT);
         registerReceiver(mScreenBroadcastReceiver, intentFilter);
 
 //        String path = getContext().getCacheDir()
@@ -317,6 +265,82 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
                 } else {
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                 }
+            }
+        });
+        mTvSpeed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mExoPlayer == null) {
+                    return;
+                }
+                CharSequence text = mTvSpeed.getText();
+                PlaybackParameters playbackParameters = null;
+                if (TextUtils.equals(text, getString(R.string.video_player_tv_speed_text))) {
+                    mTvSpeed.setText(getString(R.string.video_player_tv_speed_text_2));
+                    playbackParameters = new PlaybackParameters(1.5f);
+                } else if (TextUtils.equals(text, getString(R.string.video_player_tv_speed_text_2))) {
+                    mTvSpeed.setText(getString(R.string.video_player_tv_speed_text_3));
+                    playbackParameters = new PlaybackParameters(2.0f);
+                } else if (TextUtils.equals(text, getString(R.string.video_player_tv_speed_text_3))) {
+                    mTvSpeed.setText(getString(R.string.video_player_tv_speed_text));
+                    playbackParameters = new PlaybackParameters(1.0f);
+                }
+                mExoPlayer.setPlaybackParameters(playbackParameters);
+            }
+        });
+        mPlayerView.setOnTouchListener(new View.OnTouchListener() {
+            private boolean mAdjustBrightness;
+            private boolean mAdjustVolume;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE) {
+                    return false;
+                }
+                float screenWidth = getResources().getDisplayMetrics().widthPixels;
+                float screenHeight = getResources().getDisplayMetrics().heightPixels;
+                float x = event.getX();
+                float y = event.getY();
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        if (x < screenWidth / 2) {
+                            ShowLogUtil.logi("调节亮度");
+                            mAdjustBrightness = true;
+                        } else {
+                            mAdjustVolume = true;
+                            ShowLogUtil.logi("调节音量");
+                        }
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        if (mAdjustBrightness) {
+                            ShowLogUtil.logi("调节亮度");
+                            float brightness = 1 - (y / screenHeight);
+                            if (brightness > 1) {
+                                brightness = 1;
+                            } else if (brightness < 0) {
+                                brightness = 0;
+                            }
+                            Window window = getWindow();
+                            WindowManager.LayoutParams layoutParams = window.getAttributes();
+                            // 调节当前屏幕的亮度,非系统屏幕亮度,取值在 0-1f 之间
+                            layoutParams.screenBrightness = brightness;
+                            window.setAttributes(layoutParams);
+                        } else if (mAdjustVolume) {
+                            ShowLogUtil.logi("调节音量");
+                            AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+                            // 获取音量最大值
+                            int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+                            // 通过手指触摸位置与屏幕高度的比例，来计算需要设置的音量
+                            int volume = (int) ((1 - y / screenHeight) * maxVolume);
+                            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0);
+                        }
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        mAdjustBrightness = false;
+                        mAdjustVolume = false;
+                        break;
+                }
+                return true;
             }
         });
     }
