@@ -93,38 +93,6 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
     private ImageView mIvBrightness;
     private LinearLayout mLlBrightnessValue;
     private Handler mHandler = new Handler();
-    private BroadcastReceiver mScreenBroadcastReceiver = new BroadcastReceiver() {
-        // 如果快速按锁屏键,ACTION_USER_PRESENT 广播可能先于 ACTION_SCREEN_OFF 和 ACTION_SCREEN_ON
-        // 收到,设置一个标志位,记录是否有锁过屏
-        private boolean mScreenOff = false;
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (mExoPlayer == null) {
-                return;
-            }
-            String action = intent.getAction();
-            if (TextUtils.equals(Intent.ACTION_SCREEN_OFF, action)) {
-                ShowLogUtil.logi("锁屏");
-                mScreenOff = true;
-                mExoPlayer.setPlayWhenReady(false);
-            } else if (TextUtils.equals(Intent.ACTION_SCREEN_ON, action)) {
-                ShowLogUtil.logi("亮屏");
-                if (!mScreenOff) {
-                    return;
-                }
-                mScreenOff = false;
-                mExoPlayer.setPlayWhenReady(true);
-            } else if (TextUtils.equals(Intent.ACTION_USER_PRESENT, action)) {
-                ShowLogUtil.logi("用户解锁");
-                if (!mScreenOff) {
-                    return;
-                }
-                mScreenOff = false;
-                mExoPlayer.setPlayWhenReady(true);
-            }
-        }
-    };
     private Player.EventListener mEventListener = new Player.EventListener() {
         @Override
         public void onTimelineChanged(Timeline timeline, int reason) {
@@ -211,12 +179,21 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
             mSeekBar.setMax((int) duration);
             mSeekBar.setProgress((int) currentPosition);
 
-            final int currentTimeMinute = (int) currentPosition / 60 / 1000;
-            final int currentTimeSecond = ((int) currentPosition - currentTimeMinute * 60 * 1000) / 1000;
-            final int totalTimeMinute = (int) duration / 60 / 1000;
-            final int totalTimeSecond = ((int) duration - totalTimeMinute * 60 * 1000) / 1000;
+            final long currentTimeHour = currentPosition / 1000 / 60 / 60;
+            final long currentTimeMinute = currentPosition / 1000 / 60;
+            final long currentTimeSecond = currentPosition / 1000 % 60;
+            final long totalTimeHour = duration / 1000 / 60 / 60;
+            final long totalTimeMinute = duration / 1000 / 60;
+            final long totalTimeSecond = duration / 1000 % 60;
 
             StringBuilder currentTime = new StringBuilder();
+            if (currentTimeHour > 0) {
+                if (currentTimeHour < 10) {
+                    currentTime.append(0);
+                }
+                currentTime.append(currentTimeHour)
+                        .append(":");
+            }
             if (currentTimeMinute < 10) {
                 currentTime.append(0);
             }
@@ -229,6 +206,13 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
             mTvCurrentTime.setText(currentTime);
 
             StringBuilder totalTime = new StringBuilder();
+            if (totalTimeHour > 0) {
+                if (currentTimeHour < 10) {
+                    totalTime.append(0);
+                }
+                totalTime.append(totalTimeHour)
+                        .append(":");
+            }
             if (totalTimeMinute < 10) {
                 totalTime.append(0);
             }
@@ -243,16 +227,35 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
             if (mExoPlayer.isPlaying()) {
                 float speed = mExoPlayer.getPlaybackParameters().speed;
                 long delayMillis = (long) (1000 / speed);
-                ShowLogUtil.logi("delayMillis--->" + delayMillis);
                 mHandler.postDelayed(mUpdateProgressRunnable, delayMillis);
             }
         }
     };
+    private boolean mContinuePlay = false;
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        ShowLogUtil.logi("onRestart");
+        if (mContinuePlay && mExoPlayer != null) {
+            mExoPlayer.setPlayWhenReady(true);
+            mContinuePlay = false;
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        ShowLogUtil.logi("onPause");
+        if (mExoPlayer != null && mExoPlayer.isPlaying()) {
+            mExoPlayer.setPlayWhenReady(false);
+            mContinuePlay = true;
+        }
+    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(mScreenBroadcastReceiver);
         mHandler.removeCallbacks(mUpdateProgressRunnable);
         if (mExoPlayer != null) {
             mExoPlayer.removeListener(mEventListener);
@@ -310,12 +313,6 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
 
     @Override
     public void initData() {
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Intent.ACTION_SCREEN_ON);
-        intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
-        intentFilter.addAction(Intent.ACTION_USER_PRESENT);
-        registerReceiver(mScreenBroadcastReceiver, intentFilter);
-
 //        String path = getContext().getCacheDir()
 //                + File.separator
 //                + "Video"
