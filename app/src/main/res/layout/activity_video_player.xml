@@ -25,7 +25,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/px100"
+            android:layout_height="@dimen/px80"
             android:layout_alignParentBottom="true"
             android:gravity="center_vertical"
             android:orientation="horizontal">
@@ -95,28 +95,28 @@
             android:layout_width="@dimen/px300"
             android:layout_height="@dimen/px300"
             android:layout_centerInParent="true"
-            android:gravity="center"
-            android:orientation="vertical"
             android:alpha="0.7"
             android:background="@drawable/video_player_ll_brightness_bg"
+            android:gravity="center"
+            android:orientation="vertical"
             android:visibility="gone"
             tools:visibility="visible">
 
             <ImageView
-                android:src="@drawable/video_player_iv_brightness_src"
                 android:id="@+id/iv_brightness"
                 android:layout_width="@dimen/px200"
-                android:layout_height="@dimen/px200" />
+                android:layout_height="@dimen/px200"
+                android:src="@drawable/video_player_iv_brightness_src" />
 
             <LinearLayout
-                android:background="#FF000000"
                 android:id="@+id/ll_brightness_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/px1"
                 android:layout_marginTop="@dimen/px20"
+                android:background="#FF000000"
                 android:gravity="center_horizontal"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:padding="@dimen/px1">
 
                 <ImageView
                     android:layout_width="@dimen/px15"

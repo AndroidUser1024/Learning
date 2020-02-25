@@ -92,10 +92,42 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
     private LinearLayout mLlBrightness;
     private ImageView mIvBrightness;
     private LinearLayout mLlBrightnessValue;
+    private Handler mHandler = new Handler();
+    private BroadcastReceiver mScreenBroadcastReceiver = new BroadcastReceiver() {
+        // 如果快速按锁屏键,ACTION_USER_PRESENT 广播可能先于 ACTION_SCREEN_OFF 和 ACTION_SCREEN_ON
+        // 收到,设置一个标志位,记录是否有锁过屏
+        private boolean mScreenOff = false;
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (mExoPlayer == null) {
+                return;
+            }
+            String action = intent.getAction();
+            if (TextUtils.equals(Intent.ACTION_SCREEN_OFF, action)) {
+                ShowLogUtil.logi("锁屏");
+                mScreenOff = true;
+                mExoPlayer.setPlayWhenReady(false);
+            } else if (TextUtils.equals(Intent.ACTION_SCREEN_ON, action)) {
+                ShowLogUtil.logi("亮屏");
+                if (!mScreenOff) {
+                    return;
+                }
+                mScreenOff = false;
+                mExoPlayer.setPlayWhenReady(true);
+            } else if (TextUtils.equals(Intent.ACTION_USER_PRESENT, action)) {
+                ShowLogUtil.logi("用户解锁");
+                if (!mScreenOff) {
+                    return;
+                }
+                mScreenOff = false;
+                mExoPlayer.setPlayWhenReady(true);
+            }
+        }
+    };
     private Player.EventListener mEventListener = new Player.EventListener() {
         @Override
         public void onTimelineChanged(Timeline timeline, int reason) {
-            ShowLogUtil.logi("onTimelineChanged :Timeline--->" + timeline + ",reason--->" + reason);
         }
 
         @Override
@@ -110,7 +142,10 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
         @Override
         public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
             ShowLogUtil.logi("onPlayerStateChanged: " + "playWhenReady--->" + playWhenReady + ",playbackState--->" + playbackState);
-            long duration = mExoPlayer.getDuration();
+            if (playbackState == Player.STATE_READY) {
+                mHandler.removeCallbacks(mUpdateProgressRunnable);
+                mHandler.post(mUpdateProgressRunnable);
+            }
         }
 
         @Override
@@ -123,8 +158,12 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
             ShowLogUtil.logi("onIsPlayingChanged: " + "isPlaying--->" + isPlaying);
             if (isPlaying) {
                 mIvPlay.setImageResource(R.drawable.video_player_iv_play_src_2);
+                mHandler.removeCallbacks(mUpdateProgressRunnable);
+                mHandler.post(mUpdateProgressRunnable);
             } else {
                 mIvPlay.setImageResource(R.drawable.video_player_iv_play_src);
+                mHandler.removeCallbacks(mUpdateProgressRunnable);
+                mHandler.post(mUpdateProgressRunnable);
             }
         }
 
@@ -158,34 +197,54 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
 
         }
     };
-
-    private BroadcastReceiver mScreenBroadcastReceiver = new BroadcastReceiver() {
-        private boolean mScreenOff = false;
-
+    /**
+     * 更新进度条的任务
+     */
+    private Runnable mUpdateProgressRunnable = new Runnable() {
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void run() {
             if (mExoPlayer == null) {
                 return;
             }
-            String action = intent.getAction();
-            if (TextUtils.equals(Intent.ACTION_SCREEN_OFF, action)) {
-                ShowLogUtil.logi("锁屏");
-                mScreenOff = true;
-                mExoPlayer.setPlayWhenReady(false);
-            } else if (TextUtils.equals(Intent.ACTION_SCREEN_ON, action)) {
-                ShowLogUtil.logi("亮屏");
-                if (!mScreenOff) {
-                    return;
-                }
-                mScreenOff = false;
-                mExoPlayer.setPlayWhenReady(true);
-            } else if (TextUtils.equals(Intent.ACTION_USER_PRESENT, action)) {
-                ShowLogUtil.logi("用户解锁");
-                if (!mScreenOff) {
-                    return;
-                }
-                mScreenOff = false;
-                mExoPlayer.setPlayWhenReady(true);
+            long currentPosition = mExoPlayer.getCurrentPosition();
+            long duration = mExoPlayer.getDuration();
+            mSeekBar.setMax((int) duration);
+            mSeekBar.setProgress((int) currentPosition);
+
+            final int currentTimeMinute = (int) currentPosition / 60 / 1000;
+            final int currentTimeSecond = ((int) currentPosition - currentTimeMinute * 60 * 1000) / 1000;
+            final int totalTimeMinute = (int) duration / 60 / 1000;
+            final int totalTimeSecond = ((int) duration - totalTimeMinute * 60 * 1000) / 1000;
+
+            StringBuilder currentTime = new StringBuilder();
+            if (currentTimeMinute < 10) {
+                currentTime.append(0);
+            }
+            currentTime.append(currentTimeMinute)
+                    .append(":");
+            if (currentTimeSecond < 10) {
+                currentTime.append(0);
+            }
+            currentTime.append(currentTimeSecond);
+            mTvCurrentTime.setText(currentTime);
+
+            StringBuilder totalTime = new StringBuilder();
+            if (totalTimeMinute < 10) {
+                totalTime.append(0);
+            }
+            totalTime.append(totalTimeMinute)
+                    .append(":");
+            if (totalTimeSecond < 10) {
+                totalTime.append(0);
+            }
+            totalTime.append(totalTimeSecond);
+            mTvTotalTime.setText(totalTime);
+
+            if (mExoPlayer.isPlaying()) {
+                float speed = mExoPlayer.getPlaybackParameters().speed;
+                long delayMillis = (long) (1000 / speed);
+                ShowLogUtil.logi("delayMillis--->" + delayMillis);
+                mHandler.postDelayed(mUpdateProgressRunnable, delayMillis);
             }
         }
     };
@@ -194,6 +253,7 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(mScreenBroadcastReceiver);
+        mHandler.removeCallbacks(mUpdateProgressRunnable);
         if (mExoPlayer != null) {
             mExoPlayer.removeListener(mEventListener);
             mExoPlayer.release();
@@ -266,7 +326,7 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
         mExoPlayer = new SimpleExoPlayer.Builder(getContext()).build();
         mExoPlayer.addListener(mEventListener);
         mExoPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
-        mExoPlayer.setPlayWhenReady(true);
+//        mExoPlayer.setPlayWhenReady(true);
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(),
                 Util.getUserAgent(getContext(), "QinshouBox"));
         // This is the MediaSource representing the media to be played.
