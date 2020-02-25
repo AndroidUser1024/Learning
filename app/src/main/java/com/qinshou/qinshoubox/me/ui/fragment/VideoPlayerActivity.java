@@ -44,6 +44,8 @@ import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.me.contract.IVideoPlayerContract;
 import com.qinshou.qinshoubox.me.presenter.VideoPlayerPresenter;
 
+import java.io.File;
+
 
 /**
  * Author: QinHao
@@ -131,13 +133,16 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
                 mIvPlay.setImageResource(R.drawable.video_player_iv_play_src_2);
                 mHandler.removeCallbacks(mUpdateProgressRunnable);
                 mHandler.post(mUpdateProgressRunnable);
+
+                mHandler.removeCallbacks(mHideControlRunnable);
+                mHandler.postDelayed(mHideControlRunnable, HIDE_CONTROL_DELAY);
             } else {
                 mIvPlay.setImageResource(R.drawable.video_player_iv_play_src);
                 mHandler.removeCallbacks(mUpdateProgressRunnable);
                 mHandler.post(mUpdateProgressRunnable);
+
+                showControl();
             }
-            mHandler.removeCallbacks(mHideControlRunnable);
-            mHandler.postDelayed(mHideControlRunnable, HIDE_CONTROL_DELAY);
         }
 
         @Override
@@ -247,11 +252,11 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
     };
     private boolean mContinuePlay = false;
     private ObjectAnimator mShowControlAnimator;
+    private ObjectAnimator mHideControlAnimator;
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        ShowLogUtil.logi("onRestart");
         if (mContinuePlay && mExoPlayer != null) {
             mExoPlayer.setPlayWhenReady(true);
             mContinuePlay = false;
@@ -261,7 +266,8 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
     @Override
     protected void onPause() {
         super.onPause();
-        ShowLogUtil.logi("onPause");
+        mHandler.removeCallbacks(mUpdateProgressRunnable);
+        mHandler.removeCallbacks(mHideControlRunnable);
         if (mExoPlayer != null && mExoPlayer.isPlaying()) {
             mExoPlayer.setPlayWhenReady(false);
             mContinuePlay = true;
@@ -272,6 +278,7 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
     protected void onDestroy() {
         super.onDestroy();
         mHandler.removeCallbacks(mUpdateProgressRunnable);
+        mHandler.removeCallbacks(mHideControlRunnable);
         if (mExoPlayer != null) {
             mExoPlayer.removeListener(mEventListener);
             mExoPlayer.release();
@@ -336,13 +343,13 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
 
     @Override
     public void initData() {
-//        String path = getContext().getCacheDir()
-//                + File.separator
-//                + "Video"
-//                + File.separator
-//                + "190319222227698228.mp4";
-        String path = "http://vfx.mtime.cn/Video/2019/03/12/mp4/190312083533415853.mp4";
-        String path2 = "http://vfx.mtime.cn/Video/2019/03/09/mp4/190309153658147087.mp4";
+        String path = getContext().getCacheDir()
+                + File.separator
+                + "Video"
+                + File.separator
+                + "190309153658147087.mp4";
+//        String path = "http://vfx.mtime.cn/Video/2019/03/12/mp4/190312083533415853.mp4";
+//        String path2 = "http://vfx.mtime.cn/Video/2019/03/09/mp4/190309153658147087.mp4";
         mExoPlayer = new SimpleExoPlayer.Builder(getContext()).build();
         mExoPlayer.addListener(mEventListener);
         mExoPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
@@ -381,16 +388,6 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
                 }
             }
         });
-        mIvFullscreen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                } else {
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                }
-            }
-        });
         mTvSpeed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -410,6 +407,18 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
                     playbackParameters = new PlaybackParameters(1.0f);
                 }
                 mExoPlayer.setPlaybackParameters(playbackParameters);
+                showControl();
+            }
+        });
+        mIvFullscreen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                } else {
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                }
+                showControl();
             }
         });
         mPlayerView.setOnTouchListener(new View.OnTouchListener() {
@@ -547,41 +556,44 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
      * Description:显示控制器控件
      */
     private void showControl() {
-        // 动画正在播放中,直接 return
-        if (mShowControlAnimator != null && mShowControlAnimator.isRunning()) {
-            return;
-        }
-        // 已经显示了,再让显示,直接 return
-        if (mLlControl.getY() == (mRelativeLayout.getBottom() - mLlControl.getMeasuredHeight())) {
-            return;
-        }
-        mShowControlAnimator = ObjectAnimator.ofFloat(mLlControl, "y", mRelativeLayout.getBottom(), mRelativeLayout.getBottom() - mLlControl.getMeasuredHeight());
-        mShowControlAnimator.setDuration(ANIMATOR_DURATION);
-        mShowControlAnimator.start();
-        mShowControlAnimator.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
+        ShowLogUtil.logi("显示控制器");
+        mHandler.removeCallbacks(mHideControlRunnable);
+        if (mShowControlAnimator == null) {
+            mShowControlAnimator = ObjectAnimator.ofFloat(mLlControl, "y", mRelativeLayout.getBottom(), mRelativeLayout.getBottom() - mLlControl.getMeasuredHeight());
+            mShowControlAnimator.setDuration(ANIMATOR_DURATION);
+            mShowControlAnimator.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
 
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                if (mExoPlayer != null && mExoPlayer.isPlaying()) {
-                    mHandler.removeCallbacks(mHideControlRunnable);
-                    mHandler.postDelayed(mHideControlRunnable, HIDE_CONTROL_DELAY);
                 }
-            }
 
-            @Override
-            public void onAnimationCancel(Animator animation) {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    if (mExoPlayer != null && mExoPlayer.isPlaying()) {
+                        ShowLogUtil.logi("一秒后自动隐藏");
+                        mHandler.postDelayed(mHideControlRunnable, HIDE_CONTROL_DELAY);
+                    }
+                }
 
-            }
+                @Override
+                public void onAnimationCancel(Animator animation) {
 
-            @Override
-            public void onAnimationRepeat(Animator animation) {
+                }
 
-            }
-        });
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
+        }
+        if (mShowControlAnimator.isRunning()) {
+            return;
+        }
+//        // 已经显示了,再让显示,直接 return
+//        if (mLlControl.getY() == (mRelativeLayout.getBottom() - mLlControl.getMeasuredHeight())) {
+//            return;
+//        }
+        mShowControlAnimator.start();
     }
 
 
@@ -592,8 +604,11 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
      * Description:隐藏控制器控件
      */
     private void hideControl() {
-        ObjectAnimator hideControlAnimator = ObjectAnimator.ofFloat(mLlControl, "y", mRelativeLayout.getBottom() - mLlControl.getMeasuredHeight(), mRelativeLayout.getBottom());
-        hideControlAnimator.setDuration(ANIMATOR_DURATION);
-        hideControlAnimator.start();
+        ShowLogUtil.logi("隐藏控制器");
+        if (mHideControlAnimator == null) {
+            mHideControlAnimator = ObjectAnimator.ofFloat(mLlControl, "y", mRelativeLayout.getBottom() - mLlControl.getMeasuredHeight(), mRelativeLayout.getBottom());
+            mHideControlAnimator.setDuration(ANIMATOR_DURATION);
+        }
+        mHideControlAnimator.start();
     }
 }
