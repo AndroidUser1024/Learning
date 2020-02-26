@@ -61,7 +61,7 @@ public class DataSettingFragment extends QSFragment<DataSettingPresenter> implem
                     // 连接聊天服务
                     IMClient.SINGLETON.disconnect();
                     getPresenter().logout(UserStatusManager.SINGLETON.getUserBean().getUsername());
-                    // 刪除保存到密码,这样下次打开应用就不会自动登录了
+                    // 刪除保存的密码,这样下次打开应用就不会自动登录了
                     SharedPreferencesHelper.SINGLETON.remove(IConstant.SP_KEY_LAST_LOGIN_PASSWORD);
                     // 关闭所有界面,然后再跳转到主界面
                     App.getInstance().exit();

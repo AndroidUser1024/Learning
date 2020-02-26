@@ -22,6 +22,7 @@ import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
+import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.login.contract.ILoginOrRegisterContract;
 import com.qinshou.qinshoubox.login.presenter.LoginOrRegisterPresenter;
@@ -104,6 +105,13 @@ public class LoginOrRegisterFragment extends QSFragment<LoginOrRegisterPresenter
     }
 
     @Override
+    public void onAuthenticated() {
+        super.onAuthenticated();
+        startActivity(new Intent(getContext(), MainActivity.class));
+        finish();
+    }
+
+    @Override
     public void handleEvent(EventBean<Object> eventBean) {
     }
 
@@ -118,8 +126,9 @@ public class LoginOrRegisterFragment extends QSFragment<LoginOrRegisterPresenter
         SharedPreferencesHelper.SINGLETON.putString(IConstant.SP_KEY_LAST_LOGIN_PASSWORD, encrypt);
 
         UserStatusManager.SINGLETON.setUserBean(userBean);
-        startActivity(new Intent(getContext(), MainActivity.class));
-        finish();
+
+        // 连接 IM 服务
+        IMClient.SINGLETON.connect(userBean.getId());
     }
 
     @Override

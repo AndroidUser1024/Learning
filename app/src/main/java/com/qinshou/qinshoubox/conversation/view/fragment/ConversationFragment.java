@@ -1,9 +1,11 @@
 package com.qinshou.qinshoubox.conversation.view.fragment;
 
 import com.google.android.material.tabs.TabLayout;
+
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.View;
 import android.widget.TextView;
 
@@ -122,23 +124,13 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
 
     @Override
     public void initData() {
-    }
-
-    @Override
-    public void onAuthenticated() {
-        super.onAuthenticated();
         updateUnreadCount();
         getPresenter().getConversationList();
     }
 
     @Override
-    public void getConversationListSuccess(List<ConversationBean> conversationBeanList) {
-        mRcvConversationAdapter.setDataList(conversationBeanList);
-    }
-
-    @Override
-    public void getConversationListFailure(Exception e) {
-
+    public void onAuthenticated() {
+        super.onAuthenticated();
     }
 
     @Override
@@ -156,6 +148,16 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
                 updateUnreadCount();
             }
         }
+    }
+
+    @Override
+    public void getConversationListSuccess(List<ConversationBean> conversationBeanList) {
+        mRcvConversationAdapter.setDataList(conversationBeanList);
+    }
+
+    @Override
+    public void getConversationListFailure(Exception e) {
+
     }
 
     /**

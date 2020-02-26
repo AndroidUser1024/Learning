@@ -5,6 +5,7 @@ import com.qinshou.okhttphelper.annotation.Field;
 import com.qinshou.okhttphelper.annotation.Json;
 import com.qinshou.okhttphelper.annotation.Post;
 import com.qinshou.okhttphelper.call.Call;
+import com.qinshou.okhttphelper.enums.LogLevel;
 import com.qinshou.qinshoubox.constant.IUrlConstant;
 import com.qinshou.qinshoubox.conversation.bean.GroupChatDetailBean;
 import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
@@ -20,7 +21,7 @@ import java.util.List;
  * Date: 2019/11/22 13:35
  * Description:QSBox 群聊模块的接口
  */
-@Api(IUrlConstant.DEFAULT_HOST + "/groupChat")
+@Api(value = IUrlConstant.DEFAULT_HOST + "/groupChat",logLevel = LogLevel.BODY)
 public interface QSBoxGroupChatApi {
 
     @Json

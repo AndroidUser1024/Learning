@@ -1,7 +1,9 @@
 package com.qinshou.qinshoubox;
 
 import android.content.Intent;
+
 import com.google.android.material.tabs.TabLayout;
+
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -135,8 +137,6 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
             finish();
             return;
         }
-        // 连接 IM 服务
-        IMClient.SINGLETON.connect(userBean.getId());
     }
 
     /**

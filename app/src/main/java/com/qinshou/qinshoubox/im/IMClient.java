@@ -74,8 +74,8 @@ public enum IMClient {
 
     private static final String TAG = "IMClient";
     private final int TIME_OUT = 10 * 1000;
-    private static final String URL = "ws://www.mrqinshou.com:10086/websocket";
-    //        private static final String URL = "ws://172.16.60.231:10086/websocket";
+//    private static final String URL = "ws://www.mrqinshou.com:10086/websocket";
+            private static final String URL = "ws://172.16.60.231:10086/websocket";
     //    private static final String URL = "ws://192.168.1.109:10086/websocket";
     private Context mContext;
     private WebSocket mWebSocket;
@@ -180,7 +180,6 @@ public enum IMClient {
 
     private void connectSuccess(WebSocket webSocket, String userId) {
         mWebSocket = webSocket;
-        mUserId = userId;
         // 重置重连尝试次数
         mReconnectCount = 0;
         // 移除重连任务
@@ -560,6 +559,7 @@ public enum IMClient {
      * @param userId 用户 id
      */
     public void connect(final String userId) {
+        mUserId = userId;
         new OkHttpClient.Builder()
                 .connectTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
                 .readTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
@@ -575,6 +575,7 @@ public enum IMClient {
                         for (IOnConnectListener onConnectListener : mOnConnectListenerList) {
                             onConnectListener.onConnected();
                         }
+                        Log.i(TAG, "onOpen: messageBean--->" + MessageBean.createHandshakeMessage());
                         webSocket.send(new Gson().toJson(MessageBean.createHandshakeMessage()));
                     }
 

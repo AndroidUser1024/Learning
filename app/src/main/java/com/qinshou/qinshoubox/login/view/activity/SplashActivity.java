@@ -15,6 +15,7 @@ import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
+import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.login.bean.PoemBean;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.login.presenter.SplashPresenter;
@@ -75,6 +76,13 @@ public class SplashActivity extends QSActivity<SplashPresenter> implements ISpla
     }
 
     @Override
+    public void onAuthenticated() {
+        super.onAuthenticated();
+        startActivity(new Intent(getContext(), MainActivity.class));
+        finish();
+    }
+
+    @Override
     public void handleEvent(EventBean<Object> eventBean) {
     }
 
@@ -123,14 +131,17 @@ public class SplashActivity extends QSActivity<SplashPresenter> implements ISpla
     public void loginSuccess(UserBean userBean) {
         ShowLogUtil.logi("loginSuccess" + " : " + "userBean--->" + userBean);
         UserStatusManager.SINGLETON.setUserBean(userBean);
-        startActivity(new Intent(getContext(), MainActivity.class));
-        finish();
+
+        // 连接 IM 服务
+        IMClient.SINGLETON.connect(userBean.getId());
     }
 
     @Override
     public void loginFailure(Exception e) {
         ShowLogUtil.logi("loginFailure" + " : " + "e--->" + e.getMessage());
         toastShort(e.getMessage());
+        // 刪除保存的密码,这样下次打开应用就不会自动登录了
+        SharedPreferencesHelper.SINGLETON.remove(IConstant.SP_KEY_LAST_LOGIN_PASSWORD);
         startActivity(ContainerActivity.getJumpIntent(getContext(), LoginOrRegisterFragment.class));
         finish();
     }

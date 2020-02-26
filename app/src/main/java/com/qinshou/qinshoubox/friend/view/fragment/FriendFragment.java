@@ -1,10 +1,12 @@
 package com.qinshou.qinshoubox.friend.view.fragment;
 
 import com.google.android.material.tabs.TabLayout;
+
 import androidx.viewpager.widget.ViewPager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -270,14 +272,15 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
         }
         mViewPager.setAdapter(new VpSingleViewAdapter(mRecyclerViewList, titleList));
 //        mTlFriend.setupWithViewPager(mViewPager);
+
+        getPresenter().getMyGroupChatList();
+        getPresenter().getFriendList();
+        updateFriendHistoryUnreadCount();
     }
 
     @Override
     public void onAuthenticated() {
         super.onAuthenticated();
-        getPresenter().getMyGroupChatList();
-        getPresenter().getFriendList();
-        updateFriendHistoryUnreadCount();
     }
 
     @Override
