@@ -132,11 +132,6 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
             tab.setCustomView(view);
             mTlMain.addTab(tab, i == 0);
         }
-        UserBean userBean = UserStatusManager.SINGLETON.getUserBean();
-        if (userBean == null) {
-            finish();
-            return;
-        }
     }
 
     /**

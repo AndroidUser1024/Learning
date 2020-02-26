@@ -3,7 +3,9 @@ package com.qinshou.qinshoubox.im;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+
 import androidx.annotation.NonNull;
+
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -16,6 +18,7 @@ import com.qinshou.qinshoubox.conversation.bean.UploadVoiceResultBean;
 import com.qinshou.qinshoubox.conversation.bean.VoiceBean;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.bean.ConversationMessageRelBean;
+import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.FriendStatusBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatStatusBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
@@ -74,8 +77,8 @@ public enum IMClient {
 
     private static final String TAG = "IMClient";
     private final int TIME_OUT = 10 * 1000;
-//    private static final String URL = "ws://www.mrqinshou.com:10086/websocket";
-            private static final String URL = "ws://172.16.60.231:10086/websocket";
+    //    private static final String URL = "ws://www.mrqinshou.com:10086/websocket";
+    private static final String URL = "ws://172.16.60.231:10086/websocket";
     //    private static final String URL = "ws://192.168.1.109:10086/websocket";
     private Context mContext;
     private WebSocket mWebSocket;
@@ -248,6 +251,8 @@ public enum IMClient {
 //                        return;
 //                    }
                     insert2Database(messageBean, false);
+                    int totalUnreadCount = IMClient.SINGLETON.getConversationManager().getTotalUnreadCount();
+                    ShowLogUtil.logi("totalUnreadCount--->" + totalUnreadCount);
                     for (IOnMessageListener onMessageListener : mOnMessageListenerList) {
                         onMessageListener.onMessage(messageBean);
                     }
@@ -328,16 +333,26 @@ public enum IMClient {
                         , friendStatusBean.isNewFriend());
             }
         } else if (friendStatusBean.getStatus() == FriendStatus.AGREE_ADD.getValue()) {
-            Map<String, Object> extend = new HashMap<>();
-            extend.put("status", FriendStatus.AGREE_ADD.getValue());
-            // 创建已经是好友的提示信息的系统消息
-            MessageBean m = MessageBean.createChatSystemMessage(friendStatusBean.getFromUserId()
-                    , mUserId
-                    , extend);
-            handleMessage(m);
             for (IOnFriendStatusListener onFriendStatusListener : mOnFriendStatusListenerList) {
                 onFriendStatusListener.agreeAdd(friendStatusBean.getFromUserId());
             }
+            mFriendManager.getList(new Callback<List<FriendBean>>() {
+                @Override
+                public void onSuccess(List<FriendBean> data) {
+                    Map<String, Object> extend = new HashMap<>();
+                    extend.put("status", FriendStatus.AGREE_ADD.getValue());
+                    // 创建已经是好友的提示信息的系统消息
+                    MessageBean m = MessageBean.createChatSystemMessage(friendStatusBean.getFromUserId()
+                            , mUserId
+                            , extend);
+                    handleMessage(m);
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+
+                }
+            });
         } else if (friendStatusBean.getStatus() == FriendStatus.REFUSE_ADD.getValue()) {
             for (IOnFriendStatusListener onFriendStatusListener : mOnFriendStatusListenerList) {
                 onFriendStatusListener.refuseAdd(friendStatusBean.getFromUserId());
@@ -367,7 +382,6 @@ public enum IMClient {
      */
     private void handleGroupChatStatusMessage(MessageBean messageBean) {
         GroupChatStatusBean groupChatStatusBean = new Gson().fromJson(messageBean.getExtend(), GroupChatStatusBean.class);
-        ShowLogUtil.logi("groupChatStatusBean--->" + groupChatStatusBean);
         Map<String, Object> extend = new HashMap<>();
         extend.put("status", groupChatStatusBean.getStatus());
         extend.put("groupChatId", groupChatStatusBean.getGroupChatId());
@@ -462,6 +476,9 @@ public enum IMClient {
                 conversationBean.setUnreadCount(conversationBean.getUnreadCount() + 1);
             }
         }
+        ShowLogUtil.logi("messageBean--->" + messageBean);
+        ShowLogUtil.logi("send--->" + send);
+        ShowLogUtil.logi("conversationBean--->" + conversationBean);
         mConversationManager.insertOrUpdate(conversationBean);
         // 插入会话与消息关系
         mConversationManager.insertConversationMessageRel(new ConversationMessageRelBean(conversationBean.getId(), messageBean.getPid()));
@@ -624,6 +641,7 @@ public enum IMClient {
                     @Override
                     public void onFailure(WebSocket webSocket, final Throwable t, Response response) {
                         super.onFailure(webSocket, t, response);
+                        t.printStackTrace();
                         Log.i(TAG, "onFailure: t.class--->" + t.getClass() + ",t.message--->" + t.getMessage());
                         // 移除心跳任务
                         if (mHeartBeatScheduledFuture != null) {

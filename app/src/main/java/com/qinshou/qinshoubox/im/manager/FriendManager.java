@@ -111,12 +111,22 @@ public class FriendManager extends AbsManager<String, FriendBean> {
                 .enqueue(new Callback<Object>() {
                     @Override
                     public void onSuccess(Object data) {
-                        Map<String, Object> extend = new HashMap<>();
-                        extend.put("status", FriendStatus.AGREE_ADD.getValue());
-                        // 创建已经是好友的提示信息的系统消息
-                        MessageBean messageBean = MessageBean.createChatSystemMessage(toUserId, getUserId(), extend);
-                        IMClient.SINGLETON.handleMessage(messageBean);
-                        qsCallback.onSuccess(data);
+                        getList(new Callback<List<FriendBean>>() {
+                            @Override
+                            public void onSuccess(List<FriendBean> data) {
+                                Map<String, Object> extend = new HashMap<>();
+                                extend.put("status", FriendStatus.AGREE_ADD.getValue());
+                                // 创建已经是好友的提示信息的系统消息
+                                MessageBean messageBean = MessageBean.createChatSystemMessage(toUserId, getUserId(), extend);
+                                IMClient.SINGLETON.handleMessage(messageBean);
+                                qsCallback.onSuccess(data);
+                            }
+
+                            @Override
+                            public void onFailure(Exception e) {
+
+                            }
+                        });
                     }
 
                     @Override

@@ -61,8 +61,6 @@ public abstract class QSFragment<P extends AbsPresenter> extends AbsMVPFragment<
     @Override
     public void onDisconnected() {
         ShowLogUtil.logi("onDisconnected");
-        startActivity(ContainerActivity.getJumpIntent(getContext(), LoginOrRegisterFragment.class));
-        finish();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
