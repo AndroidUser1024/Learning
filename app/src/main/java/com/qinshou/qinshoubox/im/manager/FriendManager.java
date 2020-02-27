@@ -111,9 +111,9 @@ public class FriendManager extends AbsManager<String, FriendBean> {
                 .enqueue(new Callback<Object>() {
                     @Override
                     public void onSuccess(Object data) {
-                        getList(new Callback<List<FriendBean>>() {
+                        getInfo(toUserId, new Callback<FriendBean>() {
                             @Override
-                            public void onSuccess(List<FriendBean> data) {
+                            public void onSuccess(FriendBean data) {
                                 Map<String, Object> extend = new HashMap<>();
                                 extend.put("status", FriendStatus.AGREE_ADD.getValue());
                                 // 创建已经是好友的提示信息的系统消息
@@ -127,6 +127,22 @@ public class FriendManager extends AbsManager<String, FriendBean> {
 
                             }
                         });
+//                        getList(new Callback<List<FriendBean>>() {
+//                            @Override
+//                            public void onSuccess(List<FriendBean> data) {
+//                                Map<String, Object> extend = new HashMap<>();
+//                                extend.put("status", FriendStatus.AGREE_ADD.getValue());
+//                                // 创建已经是好友的提示信息的系统消息
+//                                MessageBean messageBean = MessageBean.createChatSystemMessage(toUserId, getUserId(), extend);
+//                                IMClient.SINGLETON.handleMessage(messageBean);
+//                                qsCallback.onSuccess(data);
+//                            }
+//
+//                            @Override
+//                            public void onFailure(Exception e) {
+//
+//                            }
+//                        });
                     }
 
                     @Override
@@ -320,5 +336,31 @@ public class FriendManager extends AbsManager<String, FriendBean> {
         OkHttpHelperForQSBoxFriendApi.SINGLETON.getHistory(getUserId(), page, pageSize)
                 .transform(new QSApiTransformer<List<FriendHistoryBean>>())
                 .enqueue(callback);
+    }
+
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2019/12/6 14:54
+     * Description:获取好友申请历史
+     *
+     * @param toUserId 待查询的好友的 id
+     */
+    public void getInfo(String toUserId, Callback<FriendBean> callback) {
+        OkHttpHelperForQSBoxFriendApi.SINGLETON.getInfo(getUserId(), toUserId)
+                .transform(new QSApiTransformer<FriendBean>())
+                .enqueue(new Callback<FriendBean>() {
+                    @Override
+                    public void onSuccess(FriendBean data) {
+                        // 存到缓存
+                        getCache().put(data.getId(), data);
+                        getHandler().post(new SuccessRunnable<FriendBean>(callback, data));
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        getHandler().post(new FailureRunnable<FriendBean>(callback, e));
+                    }
+                });
     }
 }

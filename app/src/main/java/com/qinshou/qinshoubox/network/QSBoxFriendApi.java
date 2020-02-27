@@ -20,7 +20,7 @@ import java.util.List;
  * Date: 19-11-25 下午10:20
  */
 
-@Api(value = IUrlConstant.DEFAULT_HOST + "/friend",logLevel = LogLevel.BODY)
+@Api(value = IUrlConstant.DEFAULT_HOST + "/friend", logLevel = LogLevel.BODY)
 public interface QSBoxFriendApi {
     @Json
     @Post("/add")
@@ -59,4 +59,9 @@ public interface QSBoxFriendApi {
             , @Field(name = "top") Integer top
             , @Field(name = "doNotDisturb") Integer doNotDisturb
             , @Field(name = "blackList") Integer blackList);
+
+    @Json
+    @Post("/getInfo")
+    Call<QinshouResultBean<FriendBean>> getInfo(@Field(name = "fromUserId") String fromUserId
+            , @Field(name = "toUserId") String toUserId);
 }

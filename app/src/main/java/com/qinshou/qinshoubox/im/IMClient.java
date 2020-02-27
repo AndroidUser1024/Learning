@@ -234,6 +234,7 @@ public enum IMClient {
      * @param messageBean 消息实体类
      */
     public void handleMessage(final MessageBean messageBean) {
+        ShowLogUtil.logi("handleMessage--->" + messageBean);
         mHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -251,8 +252,6 @@ public enum IMClient {
 //                        return;
 //                    }
                     insert2Database(messageBean, false);
-                    int totalUnreadCount = IMClient.SINGLETON.getConversationManager().getTotalUnreadCount();
-                    ShowLogUtil.logi("totalUnreadCount--->" + totalUnreadCount);
                     for (IOnMessageListener onMessageListener : mOnMessageListenerList) {
                         onMessageListener.onMessage(messageBean);
                     }
@@ -336,15 +335,13 @@ public enum IMClient {
             for (IOnFriendStatusListener onFriendStatusListener : mOnFriendStatusListenerList) {
                 onFriendStatusListener.agreeAdd(friendStatusBean.getFromUserId());
             }
-            mFriendManager.getList(new Callback<List<FriendBean>>() {
+            mFriendManager.getInfo(friendStatusBean.getFromUserId(), new Callback<FriendBean>() {
                 @Override
-                public void onSuccess(List<FriendBean> data) {
+                public void onSuccess(FriendBean data) {
                     Map<String, Object> extend = new HashMap<>();
                     extend.put("status", FriendStatus.AGREE_ADD.getValue());
                     // 创建已经是好友的提示信息的系统消息
-                    MessageBean m = MessageBean.createChatSystemMessage(friendStatusBean.getFromUserId()
-                            , mUserId
-                            , extend);
+                    MessageBean m = MessageBean.createChatSystemMessage(friendStatusBean.getFromUserId(), mUserId, extend);
                     handleMessage(m);
                 }
 
@@ -353,6 +350,23 @@ public enum IMClient {
 
                 }
             });
+//            mFriendManager.getList(new Callback<List<FriendBean>>() {
+//                @Override
+//                public void onSuccess(List<FriendBean> data) {
+//                    Map<String, Object> extend = new HashMap<>();
+//                    extend.put("status", FriendStatus.AGREE_ADD.getValue());
+//                    // 创建已经是好友的提示信息的系统消息
+//                    MessageBean m = MessageBean.createChatSystemMessage(friendStatusBean.getFromUserId()
+//                            , mUserId
+//                            , extend);
+//                    handleMessage(m);
+//                }
+//
+//                @Override
+//                public void onFailure(Exception e) {
+//
+//                }
+//            });
         } else if (friendStatusBean.getStatus() == FriendStatus.REFUSE_ADD.getValue()) {
             for (IOnFriendStatusListener onFriendStatusListener : mOnFriendStatusListenerList) {
                 onFriendStatusListener.refuseAdd(friendStatusBean.getFromUserId());
@@ -440,7 +454,7 @@ public enum IMClient {
      * @param messageBean 消息对象
      * @param send        true 表示是发送的消息,false 表示是接收的消息
      */
-    private void insert2Database(MessageBean messageBean, boolean send) {
+    private synchronized void insert2Database(MessageBean messageBean, boolean send) {
         mMessageManager.insertOrUpdate(messageBean);
         // 插入或更新会话
         String toUserId;
@@ -476,9 +490,6 @@ public enum IMClient {
                 conversationBean.setUnreadCount(conversationBean.getUnreadCount() + 1);
             }
         }
-        ShowLogUtil.logi("messageBean--->" + messageBean);
-        ShowLogUtil.logi("send--->" + send);
-        ShowLogUtil.logi("conversationBean--->" + conversationBean);
         mConversationManager.insertOrUpdate(conversationBean);
         // 插入会话与消息关系
         mConversationManager.insertConversationMessageRel(new ConversationMessageRelBean(conversationBean.getId(), messageBean.getPid()));
@@ -553,6 +564,38 @@ public enum IMClient {
                 }
             }
         });
+    }
+
+    private void uploadVoice(File voice, long time, final QSCallback<UploadVoiceResultBean> qsCallback) {
+        OkHttpHelperForQSBoxCommonApi.SINGLETON.uploadVoice(mUserId, time, voice)
+                .transform(new QSApiTransformer<UploadVoiceResultBean>())
+                .enqueue(new Callback<UploadVoiceResultBean>() {
+                    @Override
+                    public void onSuccess(UploadVoiceResultBean data) {
+                        qsCallback.onSuccess(data);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        qsCallback.onFailure(e);
+                    }
+                });
+    }
+
+    private void uploadImg(File img, final QSCallback<UploadImgResultBean> qsCallback) {
+        OkHttpHelperForQSBoxCommonApi.SINGLETON.uploadImg(mUserId, img)
+                .transform(new QSApiTransformer<UploadImgResultBean>())
+                .enqueue(new Callback<UploadImgResultBean>() {
+                    @Override
+                    public void onSuccess(UploadImgResultBean data) {
+                        qsCallback.onSuccess(data);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        qsCallback.onFailure(e);
+                    }
+                });
     }
 
     /**
@@ -757,37 +800,6 @@ public enum IMClient {
 //        }
 //    }
 
-    public void uploadVoice(File voice, long time, final QSCallback<UploadVoiceResultBean> qsCallback) {
-        OkHttpHelperForQSBoxCommonApi.SINGLETON.uploadVoice(mUserId, time, voice)
-                .transform(new QSApiTransformer<UploadVoiceResultBean>())
-                .enqueue(new Callback<UploadVoiceResultBean>() {
-                    @Override
-                    public void onSuccess(UploadVoiceResultBean data) {
-                        qsCallback.onSuccess(data);
-                    }
-
-                    @Override
-                    public void onFailure(Exception e) {
-                        qsCallback.onFailure(e);
-                    }
-                });
-    }
-
-    public void uploadImg(File img, final QSCallback<UploadImgResultBean> qsCallback) {
-        OkHttpHelperForQSBoxCommonApi.SINGLETON.uploadImg(mUserId, img)
-                .transform(new QSApiTransformer<UploadImgResultBean>())
-                .enqueue(new Callback<UploadImgResultBean>() {
-                    @Override
-                    public void onSuccess(UploadImgResultBean data) {
-                        qsCallback.onSuccess(data);
-                    }
-
-                    @Override
-                    public void onFailure(Exception e) {
-                        qsCallback.onFailure(e);
-                    }
-                });
-    }
 
     /**
      * Author: QinHao

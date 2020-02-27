@@ -57,6 +57,9 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
                 toUserId = messageBean.getToUserId();
             }
             ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().getByTypeAndToUserId(messageBean.getType(), toUserId);
+            if (conversationBean == null) {
+                return;
+            }
             // 更新会话列表
             updateConversationList(conversationBean);
             // 更新未读数
@@ -119,6 +122,7 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
     public void setListener() {
         super.setListener();
         // 设置聊天监听器,监听收到的消息
+        ShowLogUtil.logi("setListener");
         IMClient.SINGLETON.addOnMessageListener(mOnMessageListener);
     }
 
