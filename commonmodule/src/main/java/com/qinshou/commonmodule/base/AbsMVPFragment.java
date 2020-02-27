@@ -74,12 +74,11 @@ public abstract class AbsMVPFragment<P extends AbsPresenter> extends Fragment im
         }
         //状态栏深色图标
         StatusBarUtil.setStatusBarStyle(getActivity().getWindow(), initStatusBarDark());
-        mRootView = LayoutInflater.from(getContext()).inflate(getLayoutId(), null, false);
         mPresenter = createPresenter();
         if (mPresenter != null) {
             mPresenter.attachView(this);
         }
-        return mRootView;
+        return mRootView = LayoutInflater.from(getContext()).inflate(getLayoutId(), null, false);
     }
 
     @Override

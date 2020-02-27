@@ -3,9 +3,11 @@ package com.qinshou.commonmodule.base;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
@@ -63,7 +65,7 @@ public abstract class AbsMVPActivity<P extends AbsPresenter> extends AppCompatAc
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mRootView = LayoutInflater.from(this).inflate(getLayoutId(), null, false);
+        BaseApplication.getInstance().addActivity(this);
         if (isImmersive()) {
             //使内容延伸到状态栏下
             StatusBarUtil.setStatusBarTranslucent(getActivity().getWindow(), true);
@@ -75,7 +77,7 @@ public abstract class AbsMVPActivity<P extends AbsPresenter> extends AppCompatAc
         }
         //状态栏深色图标
         StatusBarUtil.setStatusBarStyle(getActivity().getWindow(), initStatusBarDark());
-        setContentView(mRootView);
+        setContentView(mRootView = LayoutInflater.from(this).inflate(getLayoutId(), null, false));
 //        mSlideBackLayout = new SlideBackLayout(getContext());
 //        mSlideBackLayout.bindActivity(getActivity());
         mPresenter = createPresenter();
@@ -85,7 +87,6 @@ public abstract class AbsMVPActivity<P extends AbsPresenter> extends AppCompatAc
         initView();
         setListener();
         initData();
-        BaseApplication.getInstance().addActivity(this);
     }
 
     @Override
