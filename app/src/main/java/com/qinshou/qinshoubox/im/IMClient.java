@@ -234,7 +234,6 @@ public enum IMClient {
      * @param messageBean 消息实体类
      */
     public void handleMessage(final MessageBean messageBean) {
-        ShowLogUtil.logi("handleMessage--->" + messageBean);
         mHandler.post(new Runnable() {
             @Override
             public void run() {
