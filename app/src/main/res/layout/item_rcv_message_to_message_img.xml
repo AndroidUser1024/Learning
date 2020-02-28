@@ -77,10 +77,9 @@
 
                 <!-- 图片消息内容 -->
                 <ImageView
-                    android:background="#FFFF0000"
                     android:id="@+id/iv_content"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/px300"
+                    android:layout_height="@dimen/px300"
                     android:maxWidth="@dimen/px300"
                     android:maxHeight="@dimen/px300"
                     android:minHeight="@dimen/px80"
