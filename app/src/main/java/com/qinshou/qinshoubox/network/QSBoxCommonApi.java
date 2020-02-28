@@ -12,6 +12,7 @@ import com.qinshou.okhttphelper.annotation.Url;
 import com.qinshou.okhttphelper.call.Call;
 import com.qinshou.okhttphelper.call.DownloadCall;
 import com.qinshou.okhttphelper.callback.AbsDownloadCallback;
+import com.qinshou.okhttphelper.enums.LogLevel;
 import com.qinshou.qinshoubox.constant.IUrlConstant;
 import com.qinshou.qinshoubox.conversation.bean.UploadImgResultBean;
 import com.qinshou.qinshoubox.conversation.bean.UploadVoiceResultBean;
@@ -25,7 +26,7 @@ import java.io.File;
  * Date: 2019/12/30 16:01
  * Description:通用模块 api
  */
-@Api(value = IUrlConstant.DEFAULT_HOST + "/common")
+@Api(value = IUrlConstant.DEFAULT_HOST + "/common",logLevel = LogLevel.BODY)
 public interface QSBoxCommonApi {
     @Multipart
     @Post(value = "/uploadVoice")

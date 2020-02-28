@@ -7,9 +7,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
@@ -140,6 +142,10 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
      * 是否发送语音的标志位
      */
     private boolean sendVoice = false;
+    /**
+     * 录音中的标志位
+     */
+    private boolean mRecording = false;
     private Handler mHandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
@@ -211,7 +217,7 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
                         public void run() {
                             // 隐藏更多功能布局
                             mLlMore.setVisibility(View.GONE);
-                            mRcvMessage.scrollToPosition(mRcvMessageAdapter.getItemCount() - 1);
+                            rcvMessageScrollToLast();
                         }
                     }, 100);
                     break;
@@ -219,7 +225,7 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
                     if (mLlMore.getVisibility() == View.GONE) {
                         mLlMore.setVisibility(View.VISIBLE);
                         SoftKeyboardUtil.hideSoftKeyboard(getActivity());
-                        mRcvMessage.scrollToPosition(mRcvMessageAdapter.getItemCount() - 1);
+                        rcvMessageScrollToLast();
                     } else {
                         mLlMore.setVisibility(View.GONE);
                     }
@@ -255,14 +261,37 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
                     MediaRecorderHelper.SINGLETON.startRecordAudio(file, new MediaRecorderHelper.IOnMediaRecorderListener() {
                         @Override
                         public void onStart() {
+                            mRecording = true;
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    rcvMessageScrollToLast();
+                                    showSendVoiceLayout();
+                                }
+                            });
                         }
 
                         @Override
                         public void onError(String errorInfo) {
+                            mRecording = false;
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    hideSendVoiceLayout();
+                                }
+                            });
                         }
 
                         @Override
                         public void onStop(final File file, final long recordTime) {
+                            ShowLogUtil.logi("onStop: file--->" + file.getAbsolutePath() + ",recordTime--->" + recordTime);
+                            mRecording = false;
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    hideSendVoiceLayout();
+                                }
+                            });
                             mHandler.removeCallbacks(mStopRecordRunnable);
                             Map<String, Object> map = new HashMap<>();
                             map.put("file", file);
@@ -279,11 +308,14 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
                     mHandler.postDelayed(mStopRecordRunnable, VOICE_MAX_TIME);
                     break;
                 case MotionEvent.ACTION_MOVE:
+                    if (!mRecording) {
+                        break;
+                    }
                     mBtnPressToSpeech.setSelected(true);
                     x = event.getRawX();
                     y = event.getRawY();
                     // 触摸点在屏幕高度 3/4 以上时,显示取消发送语音的界面
-                    if (y < SystemUtil.getRealScreenHeight(getContext()) / 4 * 3) {
+                    if (y < SystemUtil.getRealScreenHeight(getContext()) / 5 * 4) {
                         showCancelSendVoiceLayout(x, y);
                     } else {
                         showSendVoiceLayout();
@@ -291,11 +323,6 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
                     break;
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_CANCEL:
-                    mLlSendVoicePrompt.setVisibility(View.GONE);
-                    mIvCancelSend.setVisibility(View.GONE);
-                    mBtnPressToSpeech.setText(getString(R.string.chat_btn_press_to_speech_text));
-                    mBtnPressToSpeech.setSelected(false);
-                    MediaRecorderHelper.SINGLETON.stopRecord();
                     x = event.getRawX();
                     y = event.getRawY();
                     if (x > mIvCancelSend.getLeft()
@@ -325,7 +352,7 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
             mRcvMessageAdapter.getDataList().add(messageBean);
             mRcvMessageAdapter.notifyItemInserted(mRcvMessageAdapter.getDataList().size() - 1);
             // 消息列表滚动到底部
-            mRcvMessage.scrollToPosition(mRcvMessageAdapter.getItemCount() - 1);
+            rcvMessageScrollToLast();
 
             // 重置未读数
             ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().getByTypeAndToUserId(MessageType.GROUP_CHAT.getValue(), mGroupChatId);
@@ -473,15 +500,9 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
                 if (!hasFocus) {
                     return;
                 }
-                // 延时 100ms 再将 RecyclerView 消息列表滚动到底部
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        // 隐藏更多功能布局
-                        mLlMore.setVisibility(View.GONE);
-                        mRcvMessage.scrollToPosition(mRcvMessageAdapter.getItemCount() - 1);
-                    }
-                }, 100);
+                // 隐藏更多功能布局
+                mLlMore.setVisibility(View.GONE);
+                rcvMessageScrollToLast();
             }
         });
         mRcvMessage.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -551,7 +572,7 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
         mRcvMessageAdapter.notifyItemRangeInserted(0, messageBeanList.size());
         if (mPage == IConstant.PAGE_START) {
             // 消息列表滚动到底部
-            mRcvMessage.scrollToPosition(mRcvMessageAdapter.getItemCount() - 1);
+            rcvMessageScrollToLast();
         } else {
             if (messageBeanList.size() == 0) {
                 toastShort(getString(R.string.chat_toast_no_more_message_text));
@@ -586,7 +607,7 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
         mRcvMessageAdapter.getDataList().add(messageBean);
         mRcvMessageAdapter.notifyItemInserted(mRcvMessageAdapter.getDataList().size() - 1);
         // 消息列表滚动到底部
-        mRcvMessage.scrollToPosition(mRcvMessageAdapter.getItemCount() - 1);
+        rcvMessageScrollToLast();
         mEtContent.setText("");
         // 更新会话列表
         ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().getByTypeAndToUserId(messageBean.getType(), messageBean.getToUserId());
@@ -628,6 +649,28 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
     /**
      * Author: QinHao
      * Email:qinhao@jeejio.com
+     * Date:2019/12/17 18:16
+     * Description:消息列表滚动到底部
+     */
+    private void rcvMessageScrollToLast() {
+        // 延时 100ms 再将 RecyclerView 消息列表滚动到底部
+        mRcvMessage.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                RecyclerView.LayoutManager layoutManager = mRcvMessage.getLayoutManager();
+                if (!(layoutManager instanceof LinearLayoutManager)) {
+                    return;
+                }
+                // 滚动到最后一个 item,并设置偏移量为 RecyclerView 的整体高度,但是如果一个 item
+                // 的高度比 RecyclerView 还要高,这里就还是会显示不全
+                ((LinearLayoutManager) layoutManager).scrollToPositionWithOffset(mRcvMessageAdapter.getItemCount() - 1, -10000);
+            }
+        }, 100);
+    }
+
+    /**
+     * Author: QinHao
+     * Email:qinhao@jeejio.com
      * Date:2019/10/24 15:19
      * Description:显示取消发送语音的布局,即发送语音时,手指上滑后的布局
      *
@@ -661,6 +704,23 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
         mLlVolume.setBackgroundResource(R.drawable.chat_ll_volume_bg);
         mTvCancelSendPrompt.setText(getString(R.string.chat_tv_cancel_send_voice_prompt_text));
         mIvCancelSend.setVisibility(View.GONE);
+    }
+
+    /**
+     * Author: QinHao
+     * Email:qinhao@jeejio.com
+     * Date:2019/12/25 16:19
+     * Description:隐藏发送语音的布局
+     */
+    private void hideSendVoiceLayout() {
+        mLlSendVoicePrompt.setBackgroundColor(0x00000000);
+        mLlVolume.setBackgroundResource(R.drawable.chat_ll_volume_bg);
+        mTvCancelSendPrompt.setText(getString(R.string.chat_tv_cancel_send_voice_prompt_text));
+        mLlSendVoicePrompt.setVisibility(View.GONE);
+        mIvCancelSend.setVisibility(View.GONE);
+
+        mBtnPressToSpeech.setText(getString(R.string.chat_btn_press_to_speech_text));
+        mBtnPressToSpeech.setSelected(false);
     }
 
     /**

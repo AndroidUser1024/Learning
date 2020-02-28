@@ -7,9 +7,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
@@ -216,7 +218,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
                         public void run() {
                             // 隐藏更多功能布局
                             mLlMore.setVisibility(View.GONE);
-                            mRcvMessage.scrollToPosition(mRcvMessageAdapter.getItemCount() - 1);
+                            rcvMessageScrollToLast();
                         }
                     }, 100);
                     break;
@@ -224,7 +226,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
                     if (mLlMore.getVisibility() == View.GONE) {
                         mLlMore.setVisibility(View.VISIBLE);
                         SoftKeyboardUtil.hideSoftKeyboard(getActivity());
-                        mRcvMessage.scrollToPosition(mRcvMessageAdapter.getItemCount() - 1);
+                        rcvMessageScrollToLast();
                     } else {
                         mLlMore.setVisibility(View.GONE);
                     }
@@ -349,7 +351,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
             mRcvMessageAdapter.getDataList().add(messageBean);
             mRcvMessageAdapter.notifyItemInserted(mRcvMessageAdapter.getDataList().size() - 1);
             // 消息列表滚动到底部
-            mRcvMessage.scrollToPosition(mRcvMessageAdapter.getItemCount() - 1);
+            rcvMessageScrollToLast();
 
             // 重置未读数
             ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().getByTypeAndToUserId(MessageType.CHAT.getValue(), mToUserId);
@@ -489,15 +491,8 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
                 if (!hasFocus) {
                     return;
                 }
-                // 延时 100ms 再将 RecyclerView 消息列表滚动到底部
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        // 隐藏更多功能布局
-                        mLlMore.setVisibility(View.GONE);
-                        mRcvMessage.scrollToPosition(mRcvMessageAdapter.getItemCount() - 1);
-                    }
-                }, 100);
+                rcvMessageScrollToLast();
+                mLlMore.setVisibility(View.GONE);
             }
         });
         mRcvMessage.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -571,6 +566,9 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
 
     @Override
     public void getMessageListSuccess(List<MessageBean> messageBeanList) {
+        for (MessageBean messageBean : messageBeanList) {
+            ShowLogUtil.logi("messageBean--->" + messageBean);
+        }
         mRcvMessageAdapter.getDataList().addAll(0, messageBeanList);
         mRcvMessageAdapter.notifyItemRangeInserted(0, messageBeanList.size());
         if (mPage == IConstant.PAGE_START) {
@@ -609,7 +607,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
         mRcvMessageAdapter.getDataList().add(messageBean);
         mRcvMessageAdapter.notifyItemInserted(mRcvMessageAdapter.getDataList().size() - 1);
         // 消息列表滚动到底部
-        mRcvMessage.scrollToPosition(mRcvMessageAdapter.getItemCount() - 1);
+        rcvMessageScrollToLast();
         mEtContent.setText("");
         // 更新会话列表
         ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().getByTypeAndToUserId(messageBean.getType(), messageBean.getToUserId());
@@ -665,7 +663,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
                 }
                 // 滚动到最后一个 item,并设置偏移量为 RecyclerView 的整体高度,但是如果一个 item
                 // 的高度比 RecyclerView 还要高,这里就还是会显示不全
-                ((LinearLayoutManager) layoutManager).scrollToPositionWithOffset(mRcvMessageAdapter.getItemCount() - 1, -mRcvMessage.getMeasuredHeight());
+                ((LinearLayoutManager) layoutManager).scrollToPositionWithOffset(mRcvMessageAdapter.getItemCount() - 1, -10000);
             }
         }, 100);
     }
