@@ -2,10 +2,10 @@ package com.qinshou.qinshoubox.music.model;
 
 
 import com.qinshou.qinshoubox.music.contract.IMusicPlayContract;
-import com.qinshou.qinshoubox.music.view.fragment.MusicPlayFragment;
+import com.qinshou.qinshoubox.music.view.activity.MusicPlayActivity;
 
 /**
- * Description:{@link MusicPlayFragment} 的 CameraModel
+ * Description:{@link MusicPlayActivity} 的 CameraModel
  * Author: QinHao
  * Date: 2019/4/4 18:34
  */

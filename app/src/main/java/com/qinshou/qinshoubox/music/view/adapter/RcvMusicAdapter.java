@@ -1,15 +1,13 @@
 package com.qinshou.qinshoubox.music.view.adapter;
 
 import android.content.Context;
-import android.os.Bundle;
 
-import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.rcvbaseadapter.RcvBaseAdapter;
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemClickListener;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.music.bean.MusicBean;
-import com.qinshou.qinshoubox.music.view.fragment.MusicPlayFragment;
+import com.qinshou.qinshoubox.music.view.activity.MusicPlayActivity;
 
 import java.util.ArrayList;
 
@@ -26,10 +24,7 @@ public class RcvMusicAdapter extends RcvBaseAdapter<MusicBean> {
             @Override
             public void onItemClick(BaseViewHolder holder, MusicBean itemData, int position) {
                 ArrayList<MusicBean> musicList = new ArrayList<>(getDataList());
-                Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList("MusicList", musicList);
-                bundle.putInt("index", position);
-                getContext().startActivity(ContainerActivity.getJumpIntent(getContext(), MusicPlayFragment.class, bundle));
+                MusicPlayActivity.start(getContext(), musicList, position);
             }
         });
     }

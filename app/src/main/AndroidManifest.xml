@@ -15,14 +15,14 @@
     <application
         android:name=".App"
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:hardwareAccelerated="true"
         android:supportsRtl="true"
         android:theme="@style/BaseAppTheme"
         android:usesCleartextTraffic="true"
-        tools:replace="android:name"
-        tools:ignore="UnusedAttribute">
+        tools:ignore="UnusedAttribute"
+        tools:replace="android:name">
         <activity
             android:name=".login.view.activity.SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -43,6 +43,10 @@
         <activity
             android:name=".WebActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <!-- 音乐播放界面 -->
+        <activity
+            android:name=".music.view.activity.MusicPlayActivity"
             android:screenOrientation="portrait" />
         <!-- 拼图游戏界面 -->
         <activity

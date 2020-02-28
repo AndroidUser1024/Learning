@@ -1,9 +1,12 @@
-package com.qinshou.qinshoubox.music.view.fragment;
+package com.qinshou.qinshoubox.music.view.activity;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.os.Bundle;
+import android.content.Context;
+import android.content.Intent;
+
 import androidx.viewpager.widget.ViewPager;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
@@ -15,8 +18,10 @@ import android.widget.TextView;
 import com.qinshou.commonmodule.adapter.VpSingleViewAdapter;
 import com.qinshou.commonmodule.util.DisplayUtil;
 import com.qinshou.commonmodule.util.MediaPlayerHelper;
+import com.qinshou.commonmodule.util.ShowLogUtil;
+import com.qinshou.commonmodule.widget.TitleBar;
 import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.base.QSFragment;
+import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.music.bean.MusicBean;
 import com.qinshou.qinshoubox.music.contract.IMusicPlayContract;
@@ -30,10 +35,11 @@ import java.util.List;
  * Author: QinHao
  * Date: 2019/4/4 18:32
  */
-public class MusicPlayFragment extends QSFragment<MusicPlayPresenter> implements IMusicPlayContract.IMusicPlayView {
+public class MusicPlayActivity extends QSActivity<MusicPlayPresenter> implements IMusicPlayContract.IMusicPlayView {
 
-    private TextView mTvTitle;  //音乐标题
-    private ImageButton mIbShare;   //分享按钮
+    private static final String MUSIC_LIST = "MusicList";
+    private static final String INDEX = "Index";
+    private TitleBar mTitleBar;
     private ViewPager mViewPager;   //音乐播放界面中间的 ViewPager,目前准备放唱片 View 和歌词 View
     private ImageView mIvDiskRod;   //唱片杆
     private ImageView mIvDisk;  //唱片
@@ -52,9 +58,19 @@ public class MusicPlayFragment extends QSFragment<MusicPlayPresenter> implements
     private ObjectAnimator mIvDiskAnimator; //唱片旋转动画
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    public void finish() {
+        super.finish();
         MediaPlayerHelper.SINGLETON.stop();
+    }
+
+    @Override
+    public boolean initStatusBarDark() {
+        return false;
+    }
+
+    @Override
+    public boolean isImmersive() {
+        return true;
     }
 
     @Override
@@ -64,8 +80,7 @@ public class MusicPlayFragment extends QSFragment<MusicPlayPresenter> implements
 
     @Override
     public void initView() {
-        mTvTitle = findViewByID(R.id.tv_title);
-        mIbShare = findViewByID(R.id.ib_share);
+        mTitleBar = findViewByID(R.id.title_bar);
         mViewPager = findViewByID(R.id.view_pager);
         List<View> viewList = new ArrayList<>();
         List<String> titleList = new ArrayList<>();
@@ -109,7 +124,18 @@ public class MusicPlayFragment extends QSFragment<MusicPlayPresenter> implements
     @Override
     public void setListener() {
         super.setListener();
-        mIbShare.setOnClickListener(mOnClickListener);
+        mTitleBar.setLeftImageOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        mTitleBar.setRightImageOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         mIbPrevious.setOnClickListener(mOnClickListener);
         mIbPlayAndPause.setOnClickListener(mOnClickListener);
         mIbNext.setOnClickListener(mOnClickListener);
@@ -136,12 +162,8 @@ public class MusicPlayFragment extends QSFragment<MusicPlayPresenter> implements
 
     @Override
     public void initData() {
-        Bundle bundle = getArguments();
-        if (bundle == null) {
-            return;
-        }
-        mMusicBeanList = bundle.getParcelableArrayList("MusicList");
-        mIndex = bundle.getInt("index");
+        mMusicBeanList = getIntent().getParcelableArrayListExtra(MUSIC_LIST);
+        mIndex = getIntent().getIntExtra(INDEX, 0);
         if (mMusicBeanList == null) {
             return;
         }
@@ -178,7 +200,7 @@ public class MusicPlayFragment extends QSFragment<MusicPlayPresenter> implements
      */
     private void playMusic() {
         MusicBean musicBean = mMusicBeanList.get(mIndex);
-        mTvTitle.setText(musicBean.getName());
+        mTitleBar.setTitleText(musicBean.getName());
         mIvDisk.setImageResource(R.drawable.music_play_iv_disk_src_default);
         MediaPlayerHelper.SINGLETON.playMusic(musicBean.getPath(), new MediaPlayerHelper.IOnMediaPlayerListener() {
             @Override
@@ -325,5 +347,12 @@ public class MusicPlayFragment extends QSFragment<MusicPlayPresenter> implements
             mIndex++;
         }
         playMusic();
+    }
+
+    public static void start(Context context, ArrayList<MusicBean> musicBeanList, int index) {
+        Intent intent = new Intent(context, MusicPlayActivity.class);
+        intent.putParcelableArrayListExtra(MUSIC_LIST, musicBeanList);
+        intent.putExtra(INDEX, index);
+        context.startActivity(intent);
     }
 }

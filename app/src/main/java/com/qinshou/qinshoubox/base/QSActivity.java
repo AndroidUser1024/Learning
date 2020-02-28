@@ -1,6 +1,5 @@
 package com.qinshou.qinshoubox.base;
 
-import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.base.AbsMVPActivity;
 import com.qinshou.commonmodule.base.AbsPresenter;
 import com.qinshou.commonmodule.util.ShowLogUtil;
@@ -8,7 +7,6 @@ import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.listener.IOnConnectListener;
-import com.qinshou.qinshoubox.login.view.fragment.LoginOrRegisterFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

@@ -11,6 +11,7 @@
     <com.qinshou.commonmodule.widget.TitleBar
         style="@style/TitleBarBaseStyle"
         android:background="#00000000"
+        android:layout_marginTop="@dimen/px70"
         app:leftImageResource="@drawable/common_iv_back_src_white"
         app:rightImageResource="@drawable/common_iv_share_src_white"
         app:titleText="音乐标题"
