@@ -63,6 +63,8 @@
         <item>星期五</item>
         <item>星期六</item>
     </string-array>
+    <string name="conversation_tv_last_msg_content_text_image">[图片]</string>
+    <string name="conversation_tv_last_msg_content_text_voice">[语音]</string>
 
     <!-- 好友界面 -->
     <string name="friend_tv_title_text">好友</string>

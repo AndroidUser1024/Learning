@@ -371,6 +371,9 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
         @Override
         public void onSending(MessageBean messageBean) {
             ShowLogUtil.logi("onSending: pid--->" + messageBean.getPid() + ",id--->" + messageBean.getId());
+            // 更新会话列表
+            ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().getByTypeAndToUserId(messageBean.getType(), messageBean.getToUserId());
+            EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_LIST, conversationBean));
         }
 
         @Override
@@ -384,6 +387,9 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
                     break;
                 }
             }
+            // 更新会话列表
+            ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().getByTypeAndToUserId(messageBean.getType(), messageBean.getToUserId());
+            EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_LIST, conversationBean));
         }
 
         @Override
@@ -397,6 +403,9 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
                     break;
                 }
             }
+            // 更新会话列表
+            ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().getByTypeAndToUserId(messageBean.getType(), messageBean.getToUserId());
+            EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_LIST, conversationBean));
         }
     };
 
@@ -609,9 +618,6 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
         // 消息列表滚动到底部
         rcvMessageScrollToLast();
         mEtContent.setText("");
-        // 更新会话列表
-        ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().getByTypeAndToUserId(messageBean.getType(), messageBean.getToUserId());
-        EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_LIST, conversationBean));
     }
 
     /**

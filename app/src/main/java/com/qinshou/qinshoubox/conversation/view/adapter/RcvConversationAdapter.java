@@ -14,6 +14,7 @@ import com.qinshou.qinshoubox.conversation.view.activity.GroupChatActivity;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
+import com.qinshou.qinshoubox.im.enums.MessageContentType;
 import com.qinshou.qinshoubox.im.enums.MessageType;
 
 import org.greenrobot.eventbus.EventBus;
@@ -41,7 +42,13 @@ public class RcvConversationAdapter extends RcvSingleBaseAdapter<ConversationBea
     public void bindViewHolder(final BaseViewHolder baseViewHolder, final ConversationBean conversationBean, final int position) {
         ImageLoadUtil.SINGLETON.loadImage(getContext(), conversationBean.getHeadImgSmall(), baseViewHolder.getImageView(R.id.iv_head_img));
         baseViewHolder.setTvText(R.id.tv_title, conversationBean.getTitle());
-        baseViewHolder.setTvText(R.id.tv_last_msg_content, conversationBean.getLastMsgContent());
+        if (conversationBean.getLastMsgContentType() == MessageContentType.TEXT.getValue()) {
+            baseViewHolder.setTvText(R.id.tv_last_msg_content, conversationBean.getLastMsgContent());
+        } else if (conversationBean.getLastMsgContentType() == MessageContentType.IMAGE.getValue()) {
+            baseViewHolder.setTvText(R.id.tv_last_msg_content, getContext().getString(R.string.conversation_tv_last_msg_content_text_image));
+        } else if (conversationBean.getLastMsgContentType() == MessageContentType.VOICE.getValue()) {
+            baseViewHolder.setTvText(R.id.tv_last_msg_content, getContext().getString(R.string.conversation_tv_last_msg_content_text_voice));
+        }
 
         // 根据是否置顶设置背景颜色
         baseViewHolder.setBackgroundColor(R.id.root_view, conversationBean.getTop() == 1
