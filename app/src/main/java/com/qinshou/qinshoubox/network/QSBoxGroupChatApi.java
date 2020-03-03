@@ -4,7 +4,7 @@ import com.qinshou.okhttphelper.annotation.Api;
 import com.qinshou.okhttphelper.annotation.Field;
 import com.qinshou.okhttphelper.annotation.Json;
 import com.qinshou.okhttphelper.annotation.Post;
-import com.qinshou.okhttphelper.call.ICall;
+import com.qinshou.okhttphelper.call.AbsCall;
 import com.qinshou.okhttphelper.enums.LogLevel;
 import com.qinshou.qinshoubox.constant.IUrlConstant;
 import com.qinshou.qinshoubox.conversation.bean.GroupChatDetailBean;
@@ -26,46 +26,46 @@ public interface QSBoxGroupChatApi {
 
     @Json
     @Post("/create")
-    ICall<QinshouResultBean<GroupChatBean>> create(@Field(name = "fromUserId") String fromUserId
+    AbsCall<QinshouResultBean<GroupChatBean>> create(@Field(name = "fromUserId") String fromUserId
             , @Field(name = "toUserIdList") List<String> toUserIdList
             , @Field(name = "nickname") String nickname
             , @Field(name = "headImg") String headImg);
 
     @Json
     @Post("/getMyGroupChatList")
-    ICall<QinshouResultBean<List<GroupChatBean>>> getMyGroupChatList(@Field(name = "fromUserId") String fromUserId);
+    AbsCall<QinshouResultBean<List<GroupChatBean>>> getMyGroupChatList(@Field(name = "fromUserId") String fromUserId);
 
     @Json
     @Post("/getDetail")
-    ICall<QinshouResultBean<GroupChatDetailBean>> getDetail(@Field(name = "groupChatId") String groupChatId
+    AbsCall<QinshouResultBean<GroupChatDetailBean>> getDetail(@Field(name = "groupChatId") String groupChatId
             , @Field(name = "fromUserId") String fromUserId);
 
     @Json
     @Post("/getMemberList")
-    ICall<QinshouResultBean<List<UserDetailBean>>> getMemberList(@Field(name = "groupChatId") String groupChatId
+    AbsCall<QinshouResultBean<List<UserDetailBean>>> getMemberList(@Field(name = "groupChatId") String groupChatId
             , @Field(name = "fromUserId") String fromUserId);
 
     @Json
     @Post("/addMember")
-    ICall<QinshouResultBean<Object>> addMember(@Field(name = "groupChatId") String groupChatId
+    AbsCall<QinshouResultBean<Object>> addMember(@Field(name = "groupChatId") String groupChatId
             , @Field(name = "fromUserId") String fromUserId
             , @Field(name = "toUserIdList") List<String> toUserIdList);
 
     @Json
     @Post("/deleteMember")
-    ICall<QinshouResultBean<Object>> deleteMember(@Field(name = "groupChatId") String groupChatId
+    AbsCall<QinshouResultBean<Object>> deleteMember(@Field(name = "groupChatId") String groupChatId
             , @Field(name = "fromUserId") String fromUserId
             , @Field(name = "toUserIdList") List<String> toUserIdList);
 
     @Json
     @Post("/setNickname")
-    ICall<QinshouResultBean<Object>> setNickname(@Field(name = "groupChatId") String groupChatId
+    AbsCall<QinshouResultBean<Object>> setNickname(@Field(name = "groupChatId") String groupChatId
             , @Field(name = "userId") String userId
             , @Field(name = "nickname") String nickname);
 
     @Json
     @Post("/setInfo")
-    ICall<QinshouResultBean<Object>> setInfo(@Field(name = "groupChatId") String groupChatId
+    AbsCall<QinshouResultBean<Object>> setInfo(@Field(name = "groupChatId") String groupChatId
             , @Field(name = "userId") String userId
             , @Field(name = "nicknameInGroupChat") String nicknameInGroupChat
             , @Field(name = "top") Integer top
@@ -74,6 +74,6 @@ public interface QSBoxGroupChatApi {
 
     @Json
     @Post("/exit")
-    ICall<QinshouResultBean<Object>> exit(@Field(name = "groupChatId") String groupChatId
+    AbsCall<QinshouResultBean<Object>> exit(@Field(name = "groupChatId") String groupChatId
             , @Field(name = "userId") String userId);
 }

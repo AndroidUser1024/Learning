@@ -6,7 +6,7 @@ import android.widget.ProgressBar;
 
 import com.qinshou.commonmodule.base.AbsMVPFragment;
 import com.qinshou.commonmodule.util.ShowLogUtil;
-import com.qinshou.okhttphelper.call.ICall;
+import com.qinshou.okhttphelper.call.AbsCall;
 import com.qinshou.okhttphelper.callback.AbsDownloadCallback;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.R;
@@ -33,7 +33,7 @@ public class TestFragment extends AbsMVPFragment<TestPresenter> implements ITest
     private SwitchButton mSbWaveSideBarWave;
     private SwitchButton mSbWaveSideBarItemSelectedPopupWindow;
     private WaveSideBar mWaveSideBar;
-    private ICall mCall;
+    private AbsCall mCall;
     @Override
     public int getLayoutId() {
         return R.layout.fragment_test;

@@ -2,13 +2,14 @@ package com.qinshou.okhttphelperprocessor;
 
 
 import com.google.auto.service.AutoService;
+import com.google.gson.reflect.TypeToken;
 import com.qinshou.okhttphelper.annotation.Download;
 import com.qinshou.okhttphelper.annotation.DownloadCallback;
 import com.qinshou.okhttphelper.annotation.FileTarget;
 import com.qinshou.okhttphelper.annotation.Url;
+import com.qinshou.okhttphelper.call.AbsCall;
 import com.qinshou.okhttphelper.call.CallImpl;
 import com.qinshou.okhttphelper.call.DownloadCallImpl;
-import com.qinshou.okhttphelper.call.ICall;
 import com.qinshou.okhttphelper.enums.LogLevel;
 import com.qinshou.okhttphelper.interceptor.DownloadInterceptor;
 import com.qinshou.okhttphelper.util.RequestFactory;
@@ -266,12 +267,12 @@ public class OkHttpHelperProcessor extends AbstractProcessor {
         builder.addStatement("$T request = $T.newGetRequest($L,headerMap,parameterMap)", Request.class, RequestFactory.class, url);
         // 获取泛型
         String resultType = element.getReturnType().toString();
-        resultType = resultType.replace(ICall.class.getName(), "")
+        resultType = resultType.replace(AbsCall.class.getName(), "")
                 .replaceFirst("<", "")
                 .replaceFirst(">", "");
-        builder.addStatement("$T type = new com.google.gson.reflect.TypeToken<" + resultType + ">(){}.getType()", Type.class);
+        builder.addStatement("$T type = new $T<" + resultType + ">(){}.getType()", Type.class, TypeToken.class);
         // 创建 Call 对象
-        builder.addStatement("CallImpl<" + resultType + "> call = new $T(mOkHttpClient,request,type)", CallImpl.class);
+        builder.addStatement("$T<" + resultType + "> call = new $T(mOkHttpClient,request,type)", CallImpl.class, CallImpl.class);
         builder.addStatement("return call");
         return builder.build();
     }
@@ -342,12 +343,12 @@ public class OkHttpHelperProcessor extends AbstractProcessor {
         }
         // 获取泛型
         String resultType = element.getReturnType().toString();
-        resultType = resultType.replace(ICall.class.getName(), "")
+        resultType = resultType.replace(AbsCall.class.getName(), "")
                 .replaceFirst("<", "")
                 .replaceFirst(">", "");
-        builder.addStatement("$T type = new com.google.gson.reflect.TypeToken<" + resultType + ">(){}.getType()", Type.class);
+        builder.addStatement("$T type = new $T<" + resultType + ">(){}.getType()", Type.class, TypeToken.class);
         // 创建 Call 对象
-        builder.addStatement("CallImpl<" + resultType + "> call = new $T(mOkHttpClient,request,type)", CallImpl.class);
+        builder.addStatement("$T<" + resultType + "> call = new $T(mOkHttpClient,request,type)", CallImpl.class, CallImpl.class);
         builder.addStatement("return call");
         return builder.build();
     }
@@ -369,7 +370,6 @@ public class OkHttpHelperProcessor extends AbstractProcessor {
                 .addModifiers(Modifier.PUBLIC);
         // 方法模版构造器设置返回值
         builder.returns(TypeName.get(element.getReturnType()));
-        info("TypeName.get(element.getReturnType())--->" + TypeName.get(element.getReturnType()));
         // 获取参数列表
         List<? extends VariableElement> parameterList = ((ExecutableElement) element).getParameters();
         String urlParameterName = null;
@@ -392,7 +392,7 @@ public class OkHttpHelperProcessor extends AbstractProcessor {
             }
         }
         if (needDownloadCallback) {
-            builder.addStatement("$T downloadCall = null;", ICall.class);
+            builder.addStatement("$T downloadCall = null;", AbsCall.class);
             builder.addCode("if(" + downloadCallbackParameterName + "!=null){\n");
             builder.addStatement("  $T okHttpClient = mOkHttpClient.newBuilder().addInterceptor(new $T(" + downloadCallbackParameterName + "," + fileParameterName + ")).build()"
                     , OkHttpClient.class, DownloadInterceptor.class);
@@ -404,7 +404,7 @@ public class OkHttpHelperProcessor extends AbstractProcessor {
             builder.addStatement("}");
         } else {
             builder.addStatement("$T request = $T.newGetDownloadRequest($L)", Request.class, RequestFactory.class, urlParameterName);
-            builder.addStatement("DownloadCallImpl downloadCall = new $T(mOkHttpClient,request," + fileParameterName + ")", DownloadCallImpl.class);
+            builder.addStatement("$T downloadCall = new $T(mOkHttpClient,request," + fileParameterName + ")", DownloadCallImpl.class, DownloadCallImpl.class);
         }
         builder.addStatement("return downloadCall");
         return builder.build();

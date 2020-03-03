@@ -4,7 +4,7 @@ import com.qinshou.okhttphelper.annotation.Api;
 import com.qinshou.okhttphelper.annotation.Field;
 import com.qinshou.okhttphelper.annotation.Json;
 import com.qinshou.okhttphelper.annotation.Post;
-import com.qinshou.okhttphelper.call.ICall;
+import com.qinshou.okhttphelper.call.AbsCall;
 import com.qinshou.okhttphelper.enums.LogLevel;
 import com.qinshou.qinshoubox.constant.IUrlConstant;
 import com.qinshou.qinshoubox.friend.bean.FriendHistoryBean;
@@ -24,7 +24,7 @@ import java.util.List;
 public interface QSBoxFriendApi {
     @Json
     @Post("/add")
-    ICall<QinshouResultBean<Object>> add(@Field(name = "fromUserId") String fromUserId
+    AbsCall<QinshouResultBean<Object>> add(@Field(name = "fromUserId") String fromUserId
             , @Field(name = "toUserId") String toUserId
             , @Field(name = "remark") String remark
             , @Field(name = "additionalMsg") String additionalMsg
@@ -32,28 +32,28 @@ public interface QSBoxFriendApi {
 
     @Json
     @Post("/agreeAdd")
-    ICall<QinshouResultBean<Object>> agreeAdd(@Field(name = "fromUserId") String fromUserId
+    AbsCall<QinshouResultBean<Object>> agreeAdd(@Field(name = "fromUserId") String fromUserId
             , @Field(name = "toUserId") String toUserId
             , @Field(name = "remark") String remark);
 
     @Json
     @Post("/getHistory")
-    ICall<QinshouResultBean<List<FriendHistoryBean>>> getHistory(@Field(name = "userId") String userId
+    AbsCall<QinshouResultBean<List<FriendHistoryBean>>> getHistory(@Field(name = "userId") String userId
             , @Field(name = "page") int page
             , @Field(name = "pageSize") int pageSize);
 
     @Json
     @Post("/getList")
-    ICall<QinshouResultBean<List<FriendBean>>> getList(@Field(name = "userId") String userId);
+    AbsCall<QinshouResultBean<List<FriendBean>>> getList(@Field(name = "userId") String userId);
 
     @Json
     @Post("/delete")
-    ICall<QinshouResultBean<Object>> delete(@Field(name = "fromUserId") String fromUserId
+    AbsCall<QinshouResultBean<Object>> delete(@Field(name = "fromUserId") String fromUserId
             , @Field(name = "toUserId") String toUserId);
 
     @Json
     @Post("/setInfo")
-    ICall<QinshouResultBean<Object>> setInfo(@Field(name = "fromUserId") String fromUserId
+    AbsCall<QinshouResultBean<Object>> setInfo(@Field(name = "fromUserId") String fromUserId
             , @Field(name = "toUserId") String toUserId
             , @Field(name = "remark") String remark
             , @Field(name = "top") Integer top
@@ -62,6 +62,6 @@ public interface QSBoxFriendApi {
 
     @Json
     @Post("/getInfo")
-    ICall<QinshouResultBean<FriendBean>> getInfo(@Field(name = "fromUserId") String fromUserId
+    AbsCall<QinshouResultBean<FriendBean>> getInfo(@Field(name = "fromUserId") String fromUserId
             , @Field(name = "toUserId") String toUserId);
 }

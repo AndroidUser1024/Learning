@@ -9,7 +9,7 @@ import com.qinshou.okhttphelper.annotation.Get;
 import com.qinshou.okhttphelper.annotation.Multipart;
 import com.qinshou.okhttphelper.annotation.Post;
 import com.qinshou.okhttphelper.annotation.Url;
-import com.qinshou.okhttphelper.call.ICall;
+import com.qinshou.okhttphelper.call.AbsCall;
 import com.qinshou.okhttphelper.callback.AbsDownloadCallback;
 import com.qinshou.okhttphelper.enums.LogLevel;
 import com.qinshou.qinshoubox.constant.IUrlConstant;
@@ -29,20 +29,20 @@ import java.io.File;
 public interface QSBoxCommonApi {
     @Multipart
     @Post(value = "/uploadVoice")
-    ICall<QinshouResultBean<UploadVoiceResultBean>> uploadVoice(@Field(name = "userId") String userId
+    AbsCall<QinshouResultBean<UploadVoiceResultBean>> uploadVoice(@Field(name = "userId") String userId
             , @Field(name = "time") long time
             , @Field(name = "voice") File voice);
 
     @Multipart
     @Post(value = "/uploadImg")
-    ICall<QinshouResultBean<UploadImgResultBean>> uploadImg(@Field(name = "userId") String userId
+    AbsCall<QinshouResultBean<UploadImgResultBean>> uploadImg(@Field(name = "userId") String userId
             , @Field(name = "img") File img);
 
     @Download
     @Get()
-    ICall download(@Url String url, @FileTarget File file);
+    AbsCall download(@Url String url, @FileTarget File file);
 
     @Download
     @Get()
-    ICall download(@Url String url, @FileTarget File file, @DownloadCallback AbsDownloadCallback downloadCallback);
+    AbsCall download(@Url String url, @FileTarget File file, @DownloadCallback AbsDownloadCallback downloadCallback);
 }
