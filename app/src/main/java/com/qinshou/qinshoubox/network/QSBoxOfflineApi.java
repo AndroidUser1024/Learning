@@ -4,7 +4,7 @@ import com.qinshou.okhttphelper.annotation.Api;
 import com.qinshou.okhttphelper.annotation.Field;
 import com.qinshou.okhttphelper.annotation.Json;
 import com.qinshou.okhttphelper.annotation.Post;
-import com.qinshou.okhttphelper.call.Call;
+import com.qinshou.okhttphelper.call.ICall;
 import com.qinshou.qinshoubox.constant.IUrlConstant;
 import com.qinshou.qinshoubox.homepage.bean.QinshouResultBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
@@ -22,9 +22,9 @@ public interface QSBoxOfflineApi {
 
     @Json
     @Post("/getOfflineMessageList")
-    Call<QinshouResultBean<List<MessageBean>>> getOfflineMessageList(@Field(name = "userId") String userId);
+    ICall<QinshouResultBean<List<MessageBean>>> getOfflineMessageList(@Field(name = "userId") String userId);
 
     @Json
     @Post("/deleteOfflineMessageList")
-    Call<QinshouResultBean<Object>> deleteOfflineMessageList(@Field(name = "userId") String userId);
+    ICall<QinshouResultBean<Object>> deleteOfflineMessageList(@Field(name = "userId") String userId);
 }

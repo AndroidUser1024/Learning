@@ -58,6 +58,7 @@ public class DownloadResponseBody extends ResponseBody {
                 }
                 totalBytesRead += bytesRead;
                 int progress = (int) (totalBytesRead * 100 / responseBody.contentLength());
+                System.out.println("progress--->" + progress);
                 if (mDownloadCallback != null) {
                     mDownloadCallback.onProgress(progress);
                     if (totalBytesRead == responseBody.contentLength()) {

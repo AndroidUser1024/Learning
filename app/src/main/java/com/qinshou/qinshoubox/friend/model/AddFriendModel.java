@@ -5,7 +5,6 @@ import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.friend.contract.IAddFriendContract;
 import com.qinshou.qinshoubox.friend.view.fragment.AddFriendFragment;
-import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxUserApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;

@@ -10,6 +10,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
+import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -20,24 +21,26 @@ import okhttp3.Response;
  * Date: 2019/7/4 17:07
  * Description:转换回调接口传值泛型后的请求调用者
  */
-public class TransformCall<I, O> {
+public class TransformCallImpl<I, O> implements ICall<O> {
     private OkHttpClient mOkHttpClient;
     private Request mRequest;
-    private ResponseTransformer<I, O> mResponseTransformer;
     private Type mType;
+    private ResponseTransformer<I, O> mResponseTransformer;
+    private Call mCall;
 
-    public TransformCall(OkHttpClient okHttpClient, Request request, ResponseTransformer<I, O> responseTransformer, Type type) {
+    public TransformCallImpl(OkHttpClient okHttpClient, Request request, Type type, ResponseTransformer<I, O> responseTransformer) {
         mOkHttpClient = okHttpClient;
         mRequest = request;
-        mResponseTransformer = responseTransformer;
         mType = type;
+        mResponseTransformer = responseTransformer;
     }
 
     public void enqueue(final Callback<O> callback) {
         if (mOkHttpClient == null || mRequest == null) {
             return;
         }
-        mOkHttpClient.newCall(mRequest).enqueue(new okhttp3.Callback() {
+        mCall = mOkHttpClient.newCall(mRequest);
+        mCall.enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(okhttp3.Call call, IOException e) {
                 Method post = null;
@@ -105,6 +108,18 @@ public class TransformCall<I, O> {
                 }
             }
         });
+    }
+
+    @Override
+    public <O1> TransformCallImpl<O, O1> transform(ResponseTransformer<O, O1> responseTransformer) {
+        return null;
+    }
+
+    @Override
+    public void cancel() {
+        if (mCall != null) {
+            mCall.cancel();
+        }
     }
 
     /**

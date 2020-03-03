@@ -565,36 +565,16 @@ public enum IMClient {
         });
     }
 
-    private void uploadVoice(File voice, long time, final QSCallback<UploadVoiceResultBean> qsCallback) {
+    private void uploadVoice(File voice, long time, final Callback<UploadVoiceResultBean> callback) {
         OkHttpHelperForQSBoxCommonApi.SINGLETON.uploadVoice(mUserId, time, voice)
                 .transform(new QSApiTransformer<UploadVoiceResultBean>())
-                .enqueue(new Callback<UploadVoiceResultBean>() {
-                    @Override
-                    public void onSuccess(UploadVoiceResultBean data) {
-                        qsCallback.onSuccess(data);
-                    }
-
-                    @Override
-                    public void onFailure(Exception e) {
-                        qsCallback.onFailure(e);
-                    }
-                });
+                .enqueue(callback);
     }
 
-    private void uploadImg(File img, final QSCallback<UploadImgResultBean> qsCallback) {
+    private void uploadImg(File img, final Callback<UploadImgResultBean> callback) {
         OkHttpHelperForQSBoxCommonApi.SINGLETON.uploadImg(mUserId, img)
                 .transform(new QSApiTransformer<UploadImgResultBean>())
-                .enqueue(new Callback<UploadImgResultBean>() {
-                    @Override
-                    public void onSuccess(UploadImgResultBean data) {
-                        qsCallback.onSuccess(data);
-                    }
-
-                    @Override
-                    public void onFailure(Exception e) {
-                        qsCallback.onFailure(e);
-                    }
-                });
+                .enqueue(callback);
     }
 
     /**
@@ -746,7 +726,7 @@ public enum IMClient {
             if (!file.exists()) {
                 return;
             }
-            uploadVoice(file, voiceBean.getTime(), new QSCallback<UploadVoiceResultBean>() {
+            uploadVoice(file, voiceBean.getTime(), new Callback<UploadVoiceResultBean>() {
                 @Override
                 public void onSuccess(UploadVoiceResultBean data) {
                     voiceBean.setUrl(data.getUrl());
@@ -765,7 +745,7 @@ public enum IMClient {
             if (!file.exists()) {
                 return;
             }
-            uploadImg(file, new QSCallback<UploadImgResultBean>() {
+            uploadImg(file, new Callback<UploadImgResultBean>() {
                 @Override
                 public void onSuccess(UploadImgResultBean data) {
                     imgBean.setUrl(data.getUrl());
@@ -807,8 +787,8 @@ public enum IMClient {
      * Date:2020/1/3 14:13
      * Description:下载文件,重载
      */
-    public void download(String url, final File file, final QSCallback<File> qsCallback) {
-        download(url, file, null, qsCallback);
+    public void download(String url, final File file, final Callback<File> callback) {
+        download(url, file, null, callback);
     }
 
     /**
@@ -820,20 +800,10 @@ public enum IMClient {
      * @param url              下载地址
      * @param file             下载文件目标地址
      * @param downloadCallback 下载进度回调
-     * @param qsCallback       下载结果回调
+     * @param callback       下载结果回调
      */
-    public void download(String url, final File file, AbsDownloadCallback downloadCallback, final QSCallback<File> qsCallback) {
-        OkHttpHelperForQSBoxCommonApi.SINGLETON.download(url, file, downloadCallback).enqueue(new Callback<File>() {
-            @Override
-            public void onSuccess(File data) {
-                qsCallback.onSuccess(data);
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                qsCallback.onFailure(e);
-            }
-        });
+    public void download(String url, final File file, AbsDownloadCallback downloadCallback, final Callback<File> callback) {
+        OkHttpHelperForQSBoxCommonApi.SINGLETON.download(url, file, downloadCallback).enqueue(callback);
     }
 
     public String getUserId() {

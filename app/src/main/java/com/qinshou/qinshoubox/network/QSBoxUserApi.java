@@ -5,7 +5,7 @@ import com.qinshou.okhttphelper.annotation.Field;
 import com.qinshou.okhttphelper.annotation.Json;
 import com.qinshou.okhttphelper.annotation.Multipart;
 import com.qinshou.okhttphelper.annotation.Post;
-import com.qinshou.okhttphelper.call.Call;
+import com.qinshou.okhttphelper.call.ICall;
 import com.qinshou.qinshoubox.constant.IUrlConstant;
 import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.homepage.bean.QinshouResultBean;
@@ -23,30 +23,30 @@ import java.io.File;
 public interface QSBoxUserApi {
     @Json
     @Post("/register")
-    Call<QinshouResultBean<UserBean>> register(@Field(name = "username") String username
+    ICall<QinshouResultBean<UserBean>> register(@Field(name = "username") String username
             , @Field(name = "password") String password);
 
     @Json
     @Post("/login")
-    Call<QinshouResultBean<UserBean>> login(@Field(name = "username") String username
+    ICall<QinshouResultBean<UserBean>> login(@Field(name = "username") String username
             , @Field(name = "password") String password);
 
     @Json
     @Post("/logout")
-    Call<QinshouResultBean<UserBean>> logout(@Field(name = "username") String username);
+    ICall<QinshouResultBean<UserBean>> logout(@Field(name = "username") String username);
 
     @Json
     @Post("/setInfo")
-    Call<QinshouResultBean<UserBean>> setInfo(@Field(name = "id") String userId
+    ICall<QinshouResultBean<UserBean>> setInfo(@Field(name = "id") String userId
             , @Field(name = "nickname") String nickname);
 
     @Multipart
     @Post("/setHeadImg")
-    Call<QinshouResultBean<UserBean>> setHeadImg(@Field(name = "id") String userId
+    ICall<QinshouResultBean<UserBean>> setHeadImg(@Field(name = "id") String userId
             , @Field(name = "headImg") File headImg);
 
     @Json
     @Post("/getUserDetail")
-    Call<QinshouResultBean<UserDetailBean>> getUserDetail(@Field(name = "fromUserId") String fromUserId
+    ICall<QinshouResultBean<UserDetailBean>> getUserDetail(@Field(name = "fromUserId") String fromUserId
             , @Field(name = "keyword") String keyword);
 }

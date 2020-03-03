@@ -12,6 +12,7 @@ import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.commonmodule.util.MediaPlayerHelper;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.okhttphelper.callback.AbsDownloadCallback;
+import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.conversation.bean.VoiceBean;
 import com.qinshou.qinshoubox.im.IMClient;
@@ -154,7 +155,7 @@ public class RcvMessageAdapterToMessageVoiceItemView extends AbsRcvMessageAdapte
             public void onFailure(Exception e) {
                 ShowLogUtil.logi("onFailure: e--->" + e.getMessage());
             }
-        }, new QSCallback<File>() {
+        }, new Callback<File>() {
             @Override
             public void onSuccess(File data) {
                 MediaPlayerHelper.SINGLETON.playMusic(data.getAbsolutePath(), onMediaPlayerListener);

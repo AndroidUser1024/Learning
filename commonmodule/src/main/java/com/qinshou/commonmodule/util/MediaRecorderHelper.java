@@ -146,8 +146,11 @@ public enum MediaRecorderHelper {
             if (mMediaRecorder == null || mOnMediaRecorderListener == null) {
                 return;
             }
-            int maxAmplitude = mMediaRecorder.getMaxAmplitude();
-            mOnMediaRecorderListener.onVolumeChange(maxAmplitude);
+            try {
+                int maxAmplitude = mMediaRecorder.getMaxAmplitude();
+                mOnMediaRecorderListener.onVolumeChange(maxAmplitude);
+            } catch (IllegalStateException ignoreException) {
+            }
             // 每隔 100ms 获取一次
             mHandler.postDelayed(this, 100);
         }

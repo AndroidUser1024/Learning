@@ -10,6 +10,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
+import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -20,26 +21,25 @@ import okhttp3.Response;
  * Date: 2019/7/4 9:22
  * Description:请求调用者
  */
-public class Call<T> {
+public class CallImpl<T> implements ICall<T> {
     private OkHttpClient mOkHttpClient;
     private Request mRequest;
     private Type mType;
+    private Call mCall;
 
-    public Call(OkHttpClient okHttpClient, Request request, Type type) {
+    public CallImpl(OkHttpClient okHttpClient, Request request, Type type) {
         mOkHttpClient = okHttpClient;
         mRequest = request;
         mType = type;
     }
 
-    public <O> TransformCall<T, O> transform(ResponseTransformer<T, O> responseTransformer) {
-        return new TransformCall<>(mOkHttpClient, mRequest, responseTransformer, mType);
-    }
-
+    @Override
     public void enqueue(final Callback<T> callback) {
         if (mOkHttpClient == null || mRequest == null) {
             return;
         }
-        mOkHttpClient.newCall(mRequest).enqueue(new okhttp3.Callback() {
+        mCall = mOkHttpClient.newCall(mRequest);
+        mCall.enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(okhttp3.Call call, IOException e) {
                 Method post = null;
@@ -102,6 +102,18 @@ public class Call<T> {
                 successCallback(post, handler, callback, t);
             }
         });
+    }
+
+    @Override
+    public <O> TransformCallImpl<T, O> transform(ResponseTransformer<T, O> responseTransformer) {
+        return new TransformCallImpl<>(mOkHttpClient, mRequest, mType, responseTransformer);
+    }
+
+    @Override
+    public void cancel() {
+        if (mCall != null) {
+            mCall.cancel();
+        }
     }
 
     /**

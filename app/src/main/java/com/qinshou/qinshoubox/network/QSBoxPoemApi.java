@@ -2,7 +2,7 @@ package com.qinshou.qinshoubox.network;
 
 import com.qinshou.okhttphelper.annotation.Api;
 import com.qinshou.okhttphelper.annotation.Get;
-import com.qinshou.okhttphelper.call.Call;
+import com.qinshou.okhttphelper.call.ICall;
 import com.qinshou.qinshoubox.constant.IUrlConstant;
 import com.qinshou.qinshoubox.homepage.bean.QinshouResultBean;
 import com.qinshou.qinshoubox.login.bean.PoemBean;
@@ -17,5 +17,5 @@ import com.qinshou.qinshoubox.login.bean.PoemBean;
 @Api(IUrlConstant.DEFAULT_HOST + "/poem")
 public interface QSBoxPoemApi {
     @Get("/getRandomOne")
-    Call<QinshouResultBean<PoemBean>> getRandomOne();
+    ICall<QinshouResultBean<PoemBean>> getRandomOne();
 }

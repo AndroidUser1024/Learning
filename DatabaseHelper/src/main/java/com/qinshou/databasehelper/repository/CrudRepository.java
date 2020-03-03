@@ -6,7 +6,7 @@ import java.util.Optional;
  * Author: QinHao
  * Email:qinhao@jeejio.com
  * Date: 2019/11/29 19:05
- * Description:类描述
+ * Description:
  */
 public interface CrudRepository<T, ID> extends Repository<T, ID> {
     T save(T t);

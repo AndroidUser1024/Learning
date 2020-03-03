@@ -6,8 +6,6 @@ import com.qinshou.qinshoubox.friend.contract.IFriendHistoryContract;
 import com.qinshou.qinshoubox.friend.view.fragment.FriendHistoryFragment;
 import com.qinshou.qinshoubox.homepage.bean.PageResultBean;
 import com.qinshou.qinshoubox.im.IMClient;
-import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxFriendApi;
-import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 
 import java.util.List;
 

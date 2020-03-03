@@ -3,13 +3,11 @@ package com.qinshou.qinshoubox.network;
 import com.qinshou.okhttphelper.annotation.Api;
 import com.qinshou.okhttphelper.annotation.Get;
 import com.qinshou.okhttphelper.annotation.Query;
-import com.qinshou.okhttphelper.call.Call;
+import com.qinshou.okhttphelper.call.ICall;
 import com.qinshou.qinshoubox.constant.IUrlConstant;
 import com.qinshou.qinshoubox.homepage.bean.NewsBean;
 import com.qinshou.qinshoubox.homepage.bean.PageResultBean;
 import com.qinshou.qinshoubox.homepage.bean.QinshouResultBean;
-
-import java.util.List;
 
 /**
  * Author: QinHao
@@ -20,5 +18,5 @@ import java.util.List;
 @Api(IUrlConstant.DEFAULT_HOST + IUrlConstant.NEWS_API)
 public interface QSBoxNewsApi {
     @Get("/getList")
-    Call<QinshouResultBean<PageResultBean<NewsBean>>> getList(@Query(name = "page") int page, @Query(name = "pageSize") int pageSize);
+    ICall<QinshouResultBean<PageResultBean<NewsBean>>> getList(@Query(name = "page") int page, @Query(name = "pageSize") int pageSize);
 }

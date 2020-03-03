@@ -2,7 +2,9 @@ package com.qinshou.qinshoubox.conversation.view.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
+
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,6 +14,7 @@ import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.commonmodule.util.MediaPlayerHelper;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.okhttphelper.callback.AbsDownloadCallback;
+import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.conversation.bean.VoiceBean;
 import com.qinshou.qinshoubox.im.IMClient;
@@ -33,8 +36,8 @@ public class RcvMessageAdapterFromMessageVoiceItemView extends AbsRcvMessageAdap
     private final RecyclerView mRecyclerView;
     private final RcvMessageAdapterToMessageVoiceItemView mRcvMessageAdapterToMessageVoiceItemView;
 
-    public RcvMessageAdapterFromMessageVoiceItemView(Context context,String groupChatId, RecyclerView rcvMessage, RcvMessageAdapterToMessageVoiceItemView rcvMessageAdapterToMessageVoiceItemView) {
-        super(context, R.layout.item_rcv_message_from_message_voice,groupChatId);
+    public RcvMessageAdapterFromMessageVoiceItemView(Context context, String groupChatId, RecyclerView rcvMessage, RcvMessageAdapterToMessageVoiceItemView rcvMessageAdapterToMessageVoiceItemView) {
+        super(context, R.layout.item_rcv_message_from_message_voice, groupChatId);
         mRecyclerView = rcvMessage;
         mRcvMessageAdapterToMessageVoiceItemView = rcvMessageAdapterToMessageVoiceItemView;
     }
@@ -167,7 +170,7 @@ public class RcvMessageAdapterFromMessageVoiceItemView extends AbsRcvMessageAdap
             public void onFailure(Exception e) {
                 ShowLogUtil.logi("onFailure: e--->" + e.getMessage());
             }
-        }, new QSCallback<File>() {
+        }, new Callback<File>() {
             @Override
             public void onSuccess(File data) {
                 MediaPlayerHelper.SINGLETON.playMusic(data.getAbsolutePath(), onMediaPlayerListener);

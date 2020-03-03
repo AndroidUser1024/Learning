@@ -3,7 +3,7 @@ package com.qinshou.qinshoubox.network;
 import com.qinshou.okhttphelper.annotation.Api;
 import com.qinshou.okhttphelper.annotation.Get;
 import com.qinshou.okhttphelper.annotation.Query;
-import com.qinshou.okhttphelper.call.Call;
+import com.qinshou.okhttphelper.call.ICall;
 import com.qinshou.qinshoubox.constant.IUrlConstant;
 import com.qinshou.qinshoubox.homepage.bean.PageResultBean;
 import com.qinshou.qinshoubox.homepage.bean.QinshouResultBean;
@@ -17,9 +17,9 @@ import java.util.List;
  * Date: 2019/10/16 16:49
  * Description:类描述
  */
-@Api(IUrlConstant.DEFAULT_HOST +IUrlConstant.WALLPAPER_API)
+@Api(IUrlConstant.DEFAULT_HOST + IUrlConstant.WALLPAPER_API)
 public interface QSBoxWallpaperApi {
 
     @Get("/getList")
-    Call<QinshouResultBean<PageResultBean<WallpaperBean>>> getWallpaperList(@Query(name = "page") int page, @Query(name = "pageSize") int pageSize);
+    ICall<QinshouResultBean<PageResultBean<WallpaperBean>>> getWallpaperList(@Query(name = "page") int page, @Query(name = "pageSize") int pageSize);
 }

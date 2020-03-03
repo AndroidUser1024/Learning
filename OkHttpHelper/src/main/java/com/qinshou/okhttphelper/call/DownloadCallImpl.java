@@ -9,10 +9,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.RandomAccessFile;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
+import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -24,12 +26,13 @@ import okhttp3.ResponseBody;
  * Date: 2020/1/3 9:35
  * Description:类描述
  */
-public class DownloadCall {
+public class DownloadCallImpl implements ICall<File> {
     private OkHttpClient mOkHttpClient;
     private Request mRequest;
     private File mFile;
+    private Call mCall;
 
-    public DownloadCall(OkHttpClient okHttpClient, Request request, File file) {
+    public DownloadCallImpl(OkHttpClient okHttpClient, Request request, File file) {
         mOkHttpClient = okHttpClient;
         mRequest = request;
         mFile = file;
@@ -39,7 +42,8 @@ public class DownloadCall {
         if (mOkHttpClient == null || mRequest == null) {
             return;
         }
-        mOkHttpClient.newCall(mRequest).enqueue(new okhttp3.Callback() {
+        mCall = mOkHttpClient.newCall(mRequest);
+        mCall.enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(okhttp3.Call call, IOException e) {
                 Method post = null;
@@ -91,19 +95,14 @@ public class DownloadCall {
                     failureCallback(post, handler, callback, new NullPointerException("The file to save is null"));
                 }
                 InputStream inputStream = response.body().byteStream();
-                FileOutputStream fileOutputStream = null;
                 try {
-                    if (!mFile.getParentFile().exists()) {
-                        mFile.getParentFile().mkdirs();
-                    }
-                    mFile.createNewFile();
-                    fileOutputStream = new FileOutputStream(mFile);
+                    RandomAccessFile randomAccessFile = new RandomAccessFile(mFile, "rwd");
+                    randomAccessFile.seek(randomAccessFile.length());
                     byte[] bytes = new byte[1024 * 1024];
                     int len;
                     while ((len = inputStream.read(bytes)) != -1) {
-                        fileOutputStream.write(bytes, 0, len);
+                        randomAccessFile.write(bytes, 0, len);
                     }
-                    fileOutputStream.flush();
                     successCallback(post, handler, callback, mFile);
                 } catch (IOException e) {
                     failureCallback(post, handler, callback, e);
@@ -115,16 +114,21 @@ public class DownloadCall {
                             e.printStackTrace();
                         }
                     }
-                    if (fileOutputStream != null) {
-                        try {
-                            fileOutputStream.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
                 }
             }
         });
+    }
+
+    @Override
+    public <O> TransformCallImpl<File, O> transform(ResponseTransformer<File, O> responseTransformer) {
+        return null;
+    }
+
+    @Override
+    public void cancel() {
+        if (mCall != null) {
+            mCall.cancel();
+        }
     }
 
     /**
