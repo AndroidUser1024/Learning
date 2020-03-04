@@ -20,12 +20,16 @@ public class DownloadResponseBody extends ResponseBody {
     // BufferedSource 是 okio 库中的输入流，这里就当作 inputStream 来使用。
     private BufferedSource bufferedSource;
     private File mFile;
+    private long totalBytesRead = 0L;
+    private long totalBytes = 0L;
 
-    public DownloadResponseBody(ResponseBody responseBody, AbsDownloadCallback downloadCallback, File file) {
+    public DownloadResponseBody(ResponseBody responseBody, AbsDownloadCallback downloadCallback, File file, long start) {
         this.responseBody = responseBody;
         this.mDownloadCallback = downloadCallback;
         mDownloadCallback.onStart(responseBody.contentLength());
         mFile = file;
+        totalBytesRead = start;
+        totalBytes = responseBody.contentLength() + start;
     }
 
     @Override
@@ -48,7 +52,6 @@ public class DownloadResponseBody extends ResponseBody {
 
     private Source source(Source source) {
         return new ForwardingSource(source) {
-            long totalBytesRead = 0L;
 
             @Override
             public long read(Buffer sink, long byteCount) throws IOException {
@@ -57,7 +60,7 @@ public class DownloadResponseBody extends ResponseBody {
                     return bytesRead;
                 }
                 totalBytesRead += bytesRead;
-                int progress = (int) (totalBytesRead * 100 / responseBody.contentLength());
+                int progress = (int) (totalBytesRead * 100 / totalBytes);
                 System.out.println("progress--->" + progress);
                 if (mDownloadCallback != null) {
                     mDownloadCallback.onProgress(progress);

@@ -120,7 +120,7 @@ public class TestFragment extends AbsMVPFragment<TestPresenter> implements ITest
                         e.printStackTrace();
                     }
                 }
-                mCall = OkHttpHelperForQSBoxCommonApi.SINGLETON.download(url, file, new AbsDownloadCallback() {
+                mCall = OkHttpHelperForQSBoxCommonApi.SINGLETON.download(url, file.length(),file, new AbsDownloadCallback() {
                     @Override
                     public void onStart(long length) {
                         ShowLogUtil.logi("onStart: " + "length--->" + length);
@@ -129,6 +129,7 @@ public class TestFragment extends AbsMVPFragment<TestPresenter> implements ITest
                     @Override
                     public void onProgress(int progress) {
                         ShowLogUtil.logi("onProgress: " + "progress--->" + progress);
+                        progressBar.setProgress(progress);
                     }
 
                     @Override

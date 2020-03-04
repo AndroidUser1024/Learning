@@ -1,7 +1,6 @@
 package com.qinshou.okhttphelper.interceptor;
 
 
-
 import com.qinshou.okhttphelper.callback.AbsDownloadCallback;
 import com.qinshou.okhttphelper.response.DownloadResponseBody;
 
@@ -56,10 +55,16 @@ import okhttp3.ResponseBody;
 public class DownloadInterceptor implements Interceptor {
     private AbsDownloadCallback mDownloadCallback;
     private File mFile;
+    private long mStart;
 
-    public DownloadInterceptor(AbsDownloadCallback downloadCallback,File file) {
+    public DownloadInterceptor(AbsDownloadCallback downloadCallback, File file) {
+        this(downloadCallback, file, 0);
+    }
+
+    public DownloadInterceptor(AbsDownloadCallback downloadCallback, File file, long start) {
         mDownloadCallback = downloadCallback;
         mFile = file;
+        mStart = start;
     }
 
     @Override
@@ -69,6 +74,6 @@ public class DownloadInterceptor implements Interceptor {
         if (responseBody == null) {
             return response;
         }
-        return response.newBuilder().body(new DownloadResponseBody(responseBody, mDownloadCallback,mFile)).build();
+        return response.newBuilder().body(new DownloadResponseBody(responseBody, mDownloadCallback, mFile, mStart)).build();
     }
 }

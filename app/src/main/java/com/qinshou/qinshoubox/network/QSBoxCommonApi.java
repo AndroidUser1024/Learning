@@ -8,6 +8,7 @@ import com.qinshou.okhttphelper.annotation.FileTarget;
 import com.qinshou.okhttphelper.annotation.Get;
 import com.qinshou.okhttphelper.annotation.Multipart;
 import com.qinshou.okhttphelper.annotation.Post;
+import com.qinshou.okhttphelper.annotation.Range;
 import com.qinshou.okhttphelper.annotation.Url;
 import com.qinshou.okhttphelper.call.AbsCall;
 import com.qinshou.okhttphelper.callback.AbsDownloadCallback;
@@ -45,4 +46,8 @@ public interface QSBoxCommonApi {
     @Download
     @Get()
     AbsCall download(@Url String url, @FileTarget File file, @DownloadCallback AbsDownloadCallback downloadCallback);
+
+    @Download
+    @Get()
+    AbsCall download(@Url String url, @Range long start, @FileTarget File file, @DownloadCallback AbsDownloadCallback downloadCallback);
 }

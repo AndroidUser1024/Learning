@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken;
 import com.qinshou.okhttphelper.annotation.Download;
 import com.qinshou.okhttphelper.annotation.DownloadCallback;
 import com.qinshou.okhttphelper.annotation.FileTarget;
+import com.qinshou.okhttphelper.annotation.Range;
 import com.qinshou.okhttphelper.annotation.Url;
 import com.qinshou.okhttphelper.call.AbsCall;
 import com.qinshou.okhttphelper.call.CallImpl;
@@ -56,6 +57,8 @@ import javax.lang.model.element.Modifier;
 import javax.lang.model.element.Name;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.TypeKind;
+import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.tools.Diagnostic;
 
@@ -370,12 +373,21 @@ public class OkHttpHelperProcessor extends AbstractProcessor {
                 .addModifiers(Modifier.PUBLIC);
         // 方法模版构造器设置返回值
         builder.returns(TypeName.get(element.getReturnType()));
+        // 创建一个 map 来保存请求头
+        builder.addStatement("$T<String, String> headerMap = new $T<>()", Map.class, HashMap.class);
+        // 获取 Header 注解数组
+        Header[] headerAnnotationArray = element.getAnnotationsByType(Header.class);
+        // 将所有 Header 注解添加到 map 中
+        for (Header header : headerAnnotationArray) {
+            builder.addStatement("headerMap.put($S,$S)", header.name(), header.value());
+        }
         // 获取参数列表
         List<? extends VariableElement> parameterList = ((ExecutableElement) element).getParameters();
         String urlParameterName = null;
         String fileParameterName = null;
         String downloadCallbackParameterName = null;
         boolean needDownloadCallback = false;
+        String rangeStartParameterName = null;
         for (VariableElement variableElement : parameterList) {
             // 获取参数名
             Name parameterName = variableElement.getSimpleName();
@@ -389,21 +401,32 @@ public class OkHttpHelperProcessor extends AbstractProcessor {
             } else if (variableElement.getAnnotation(DownloadCallback.class) != null) {
                 needDownloadCallback = true;
                 downloadCallbackParameterName = parameterName.toString();
+            } else if (variableElement.getAnnotation(Range.class) != null) {
+                if (variableElement.asType().getKind() != TypeKind.LONG) {
+                    throw new IllegalArgumentException("Parameter " + parameterName + "'s type must be long");
+                }
+                builder.addStatement("headerMap.put($S,\"bytes=\"+$L+\"-\")", "RANGE", parameterName.toString());
+                rangeStartParameterName = parameterName.toString();
             }
         }
         if (needDownloadCallback) {
-            builder.addStatement("$T downloadCall = null;", AbsCall.class);
+            builder.addStatement("$T downloadCall = null", AbsCall.class);
             builder.addCode("if(" + downloadCallbackParameterName + "!=null){\n");
-            builder.addStatement("  $T okHttpClient = mOkHttpClient.newBuilder().addInterceptor(new $T(" + downloadCallbackParameterName + "," + fileParameterName + ")).build()"
-                    , OkHttpClient.class, DownloadInterceptor.class);
-            builder.addStatement("  $T request = $T.newGetDownloadRequest($L)", Request.class, RequestFactory.class, urlParameterName);
-            builder.addStatement("  downloadCall = new $T(okHttpClient,request," + fileParameterName + ")", DownloadCallImpl.class);
+            if (rangeStartParameterName == null) {
+                builder.addStatement(" $T okHttpClient = mOkHttpClient.newBuilder().addInterceptor(new $T(" + downloadCallbackParameterName + "," + fileParameterName + ")).build()"
+                        , OkHttpClient.class, DownloadInterceptor.class);
+            } else {
+                builder.addStatement(" $T okHttpClient = mOkHttpClient.newBuilder().addInterceptor(new $T(" + downloadCallbackParameterName + "," + fileParameterName + "," + rangeStartParameterName + ")).build()"
+                        , OkHttpClient.class, DownloadInterceptor.class);
+            }
+            builder.addStatement(" $T request = $T.newGetDownloadRequest($L,headerMap)", Request.class, RequestFactory.class, urlParameterName);
+            builder.addStatement(" downloadCall = new $T(okHttpClient,request," + fileParameterName + ")", DownloadCallImpl.class);
             builder.addCode("} else {\n");
-            builder.addStatement("  $T request = $T.newGetDownloadRequest($L)", Request.class, RequestFactory.class, urlParameterName);
-            builder.addStatement("  downloadCall = new $T(mOkHttpClient,request," + fileParameterName + ")", DownloadCallImpl.class);
+            builder.addStatement(" $T request = $T.newGetDownloadRequest($L,headerMap)", Request.class, RequestFactory.class, urlParameterName);
+            builder.addStatement(" downloadCall = new $T(mOkHttpClient,request," + fileParameterName + ")", DownloadCallImpl.class);
             builder.addStatement("}");
         } else {
-            builder.addStatement("$T request = $T.newGetDownloadRequest($L)", Request.class, RequestFactory.class, urlParameterName);
+            builder.addStatement("$T request = $T.newGetDownloadRequest($L,headerMap)", Request.class, RequestFactory.class, urlParameterName);
             builder.addStatement("$T downloadCall = new $T(mOkHttpClient,request," + fileParameterName + ")", DownloadCallImpl.class, DownloadCallImpl.class);
         }
         builder.addStatement("return downloadCall");

@@ -175,10 +175,19 @@ public class RequestFactory {
      * @param url 请求地址
      * @return 用于发起请求的对象
      */
-    public static Request newGetDownloadRequest(String url) {
+    public static Request newGetDownloadRequest(String url, Map<String, String> headerMap) {
+        // 添加请求头
+        Request.Builder requestBuilder = new Request.Builder();
+        requestBuilder.addHeader("Accept-Encoding", "dentity");
+        for (String key : headerMap.keySet()) {
+            String value = headerMap.get(key);
+            if (key == null || value == null) {
+                continue;
+            }
+            requestBuilder.addHeader(key, value);
+        }
         // 创建Request
-        return new Request.Builder()
-                .addHeader("Accept-Encoding", "dentity")
+        return requestBuilder
                 .url(url)
                 .get()
                 .build();
