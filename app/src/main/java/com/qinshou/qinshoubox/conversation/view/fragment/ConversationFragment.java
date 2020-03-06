@@ -193,18 +193,12 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
                     mRcvConversationAdapter.notifyItemChanged(index);
                 } else {
                     // 如果该会话不在第一个,放到第一个
-//                    conversationBeanList.remove(index);
-//                    conversationBeanList.add(0, conversationBean);
-//                    mRcvConversationAdapter.notifyItemMoved(index, 0);
-//                    mRcvConversationAdapter.notifyItemChanged(0);
                     conversationBeanList.remove(index);
                     conversationBeanList.add(0, conversationBean);
                     mRcvConversationAdapter.notifyItemRangeChanged(0, index - 0 + 1);
                 }
             } else {
                 // 原来的会话列表中没有该会话,则添加到第一个
-//                conversationBeanList.add(0, conversationBean);
-//                mRcvConversationAdapter.notifyItemInserted(0);
                 conversationBeanList.add(0, conversationBean);
                 mRcvConversationAdapter.notifyItemRangeChanged(0, conversationBeanList.size() - 0 + 1);
             }
@@ -233,18 +227,12 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
                     mRcvConversationAdapter.notifyItemChanged(index);
                 } else {
                     // 如果该会话不在非置顶会话第一个,放到非置顶会话第一个
-//                    conversationBeanList.remove(index);
-//                    conversationBeanList.add(firstNotTopIndex, conversationBean);
-//                    mRcvConversationAdapter.notifyItemMoved(index, firstNotTopIndex);
-//                    mRcvConversationAdapter.notifyItemChanged(firstNotTopIndex);
                     conversationBeanList.remove(index);
                     conversationBeanList.add(firstNotTopIndex, conversationBean);
                     mRcvConversationAdapter.notifyItemRangeChanged(firstNotTopIndex, index - firstNotTopIndex + 1);
                 }
             } else {
                 // 原来的会话列表中没有该会话,则添加到非置顶会话第一个
-//                conversationBeanList.add(firstNotTopIndex, conversationBean);
-//                mRcvConversationAdapter.notifyItemInserted(firstNotTopIndex);
                 conversationBeanList.add(firstNotTopIndex, conversationBean);
                 mRcvConversationAdapter.notifyItemRangeChanged(firstNotTopIndex, conversationBeanList.size() - firstNotTopIndex + 1);
             }
