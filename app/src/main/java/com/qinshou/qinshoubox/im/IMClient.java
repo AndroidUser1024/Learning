@@ -462,23 +462,24 @@ public enum IMClient {
             // 发送的消息, conversation 的目标 id 为接收方 id
             // 群聊的发送方永远是自己,接收方永远是群 id,所以群聊类型的消息,conversation 的目标 id 为永远为群 id
             toUserId = messageBean.getToUserId();
-            lastMsgTimestamp = messageBean.getSendTimestamp();
         } else {
             // 接收的消息, conversation 的目标 id 为发送方 id
             toUserId = messageBean.getFromUserId();
+        }
+        if (send) {
+            lastMsgTimestamp = messageBean.getSendTimestamp();
+        } else {
             lastMsgTimestamp = messageBean.getReceiveTimestamp();
         }
         ConversationBean conversationBean = mConversationManager.getByTypeAndToUserId(messageBean.getType(), toUserId);
         if (conversationBean == null) {
             conversationBean = new ConversationBean();
         }
-        // 发送的消息, conversation 的目标 id 为接收方 id
-        // 群聊的发送方永远是自己,接收方永远是群 id,所以群聊类型的消息,conversation 的目标 id 为永远为群 id
         conversationBean.setToUserId(toUserId);
+        conversationBean.setLastMsgTimestamp(lastMsgTimestamp);
         conversationBean.setType(messageBean.getType());
         conversationBean.setLastMsgContentType(messageBean.getContentType());
         conversationBean.setLastMsgContent(messageBean.getContent());
-        conversationBean.setLastMsgTimestamp(lastMsgTimestamp);
         conversationBean.setLastMsgPid(messageBean.getPid());
         if (!send) {
             if (conversationBean.getUnreadCount() == -1) {
@@ -800,7 +801,7 @@ public enum IMClient {
      * @param url              下载地址
      * @param file             下载文件目标地址
      * @param downloadCallback 下载进度回调
-     * @param callback       下载结果回调
+     * @param callback         下载结果回调
      */
     public void download(String url, final File file, AbsDownloadCallback downloadCallback, final Callback<File> callback) {
         OkHttpHelperForQSBoxCommonApi.SINGLETON.download(url, file, downloadCallback).enqueue(callback);
