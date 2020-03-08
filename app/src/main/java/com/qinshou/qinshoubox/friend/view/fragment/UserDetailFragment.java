@@ -13,6 +13,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.qinshou.commonmodule.ContainerActivity;
+import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.util.activityresultutil.ActivityResultUtil;
 import com.qinshou.commonmodule.util.activityresultutil.OnActivityResultCallBack;
 import com.qinshou.commonmodule.widget.TitleBar;
@@ -185,9 +186,7 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
                         } else {
                             mTvRemarkOrNickname.setText(remark);
                         }
-                        if (mUserDetailBean.getFriendStatus() == 1) {
-                            getPresenter().setRemark(mUserDetailBean.getId(), remark);
-                        }
+                        getPresenter().setRemark(mUserDetailBean.getId(), remark);
                     }
                 });
             }
@@ -213,8 +212,9 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
 
     @Override
     public void getUserDetailSuccess(UserDetailBean userDetailBean) {
+        ShowLogUtil.logi("userDetailBean--->" + userDetailBean);
         mUserDetailBean = userDetailBean;
-        if (userDetailBean.getFriendStatus() == 1) {
+        if (userDetailBean.getStatus() == 1 || userDetailBean.getStatus() == 3) {
             showFriendUI(userDetailBean);
         } else {
             if (userDetailBean.getReceive() == 1) {

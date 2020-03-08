@@ -3,6 +3,7 @@ package com.qinshou.qinshoubox.friend.contract;
 import com.qinshou.commonmodule.base.IBaseModel;
 import com.qinshou.commonmodule.base.IBaseView;
 import com.qinshou.okhttphelper.callback.Callback;
+import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
@@ -31,7 +32,7 @@ public interface IFriendContract {
          * Date:2019/12/5 17:44
          * Description:获取好友列表
          */
-        void getFriendList(Callback<List<FriendBean>> callback);
+        void getFriendList(Callback<List<UserDetailBean>> callback);
     }
 
     interface IView extends IBaseView {
@@ -57,7 +58,7 @@ public interface IFriendContract {
          * Date:2019/12/5 17:44
          * Description:获取好友列表成功
          */
-        void getFriendListSuccess(List<FriendBean> userBeanList);
+        void getFriendListSuccess(List<UserDetailBean> userDetailBeanList);
 
         /**
          * Author: QinHao

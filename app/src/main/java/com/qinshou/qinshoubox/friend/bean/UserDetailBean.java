@@ -15,10 +15,6 @@ public class UserDetailBean {
      */
     private String username;
     /**
-     * 密码
-     */
-    private String password;
-    /**
      * 昵称
      */
     private String nickname;
@@ -47,12 +43,6 @@ public class UserDetailBean {
      */
     private int gender;
     /**
-     * 搜索目标用户与发起搜索的用户的关系
-     * 0 互相不为好友或对方不是你好友
-     * 1 互为好友或对方是你好友
-     */
-    private int friendStatus;
-    /**
      * 用户来源
      * 当关系为非好友时,该字段表示搜索来源
      * 1 通过用户名搜索到的
@@ -71,6 +61,14 @@ public class UserDetailBean {
      * -5 对方通过群聊添加
      */
     private int source;
+    /**
+     * 搜索目标用户与发起搜索的用户的关系
+     * 0: 非好友
+     * 1: 对方是你好友,但你不是对方好友
+     * 2: 你是对方好友,但对方不是你好友
+     * 3: 互为好友
+     */
+    private int status;
     /**
      * 是否有收到添加好友的请求
      */
@@ -116,7 +114,6 @@ public class UserDetailBean {
         return "UserDetailBean{" +
                 "id='" + id + '\'' +
                 ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
                 ", nickname='" + nickname + '\'' +
                 ", headImg='" + headImg + '\'' +
                 ", headImgSmall='" + headImgSmall + '\'' +
@@ -124,8 +121,8 @@ public class UserDetailBean {
                 ", email='" + email + '\'' +
                 ", signature='" + signature + '\'' +
                 ", gender=" + gender +
-                ", friendStatus=" + friendStatus +
                 ", source=" + source +
+                ", status=" + status +
                 ", receive=" + receive +
                 ", remark='" + remark + '\'' +
                 ", additionalMsg='" + additionalMsg + '\'' +
@@ -152,14 +149,6 @@ public class UserDetailBean {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getNickname() {
@@ -218,20 +207,20 @@ public class UserDetailBean {
         this.gender = gender;
     }
 
-    public int getFriendStatus() {
-        return friendStatus;
-    }
-
-    public void setFriendStatus(int friendStatus) {
-        this.friendStatus = friendStatus;
-    }
-
     public int getSource() {
         return source;
     }
 
     public void setSource(int source) {
         this.source = source;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public int getReceive() {

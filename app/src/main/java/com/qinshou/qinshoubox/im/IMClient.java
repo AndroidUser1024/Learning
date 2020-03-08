@@ -16,6 +16,7 @@ import com.qinshou.qinshoubox.conversation.bean.ImgBean;
 import com.qinshou.qinshoubox.conversation.bean.UploadImgResultBean;
 import com.qinshou.qinshoubox.conversation.bean.UploadVoiceResultBean;
 import com.qinshou.qinshoubox.conversation.bean.VoiceBean;
+import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.bean.ConversationMessageRelBean;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
@@ -77,9 +78,9 @@ public enum IMClient {
 
     private static final String TAG = "IMClient";
     private final int TIME_OUT = 10 * 1000;
-    private static final String URL = "ws://www.mrqinshou.com:10086/websocket";
+//    private static final String URL = "ws://www.mrqinshou.com:10086/websocket";
     //    private static final String URL = "ws://172.16.60.231:10086/websocket";
-    //    private static final String URL = "ws://192.168.1.109:10086/websocket";
+        private static final String URL = "ws://192.168.1.109:10086/websocket";
     private Context mContext;
     private WebSocket mWebSocket;
     private Handler mHandler = new Handler(Looper.getMainLooper());
@@ -334,9 +335,9 @@ public enum IMClient {
             for (IOnFriendStatusListener onFriendStatusListener : mOnFriendStatusListenerList) {
                 onFriendStatusListener.agreeAdd(friendStatusBean.getFromUserId());
             }
-            mFriendManager.getInfo(friendStatusBean.getFromUserId(), new Callback<FriendBean>() {
+            mFriendManager.getInfo(friendStatusBean.getFromUserId(), new Callback<UserDetailBean>() {
                 @Override
-                public void onSuccess(FriendBean data) {
+                public void onSuccess(UserDetailBean data) {
                     Map<String, Object> extend = new HashMap<>();
                     extend.put("status", FriendStatus.AGREE_ADD.getValue());
                     // 创建已经是好友的提示信息的系统消息

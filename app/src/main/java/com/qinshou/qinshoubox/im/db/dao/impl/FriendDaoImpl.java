@@ -21,14 +21,23 @@ public class FriendDaoImpl extends AbsDaoImpl<FriendBean> implements IFriendDao 
 
     @Override
     public int insert(FriendBean friendBean) {
-        String sql = "INSERT INTO friend" +
-                " (id,nickname,headImg,headImgSmall,signature,remark,top,doNotDisturb,blackList)" +
+        String sql = "INSERT INTO friend(" +
+                " id" +
+                " ,status" +
+                " ,remark" +
+                " ,top" +
+                " ,doNotDisturb" +
+                " ,blackList" +
+                ")" +
                 " VALUES" +
-                " (%s,%s,%s,%s,%s,%s,%s,%s,%s)";
-        sql = String.format(sql, getStringValue(friendBean.getId()), getStringValue(friendBean.getNickname())
-                , getStringValue(friendBean.getHeadImg()), getStringValue(friendBean.getHeadImgSmall())
-                , getStringValue(friendBean.getSignature()), getStringValue(friendBean.getRemark())
-                , friendBean.getTop(), friendBean.getDoNotDisturb(), friendBean.getBlackList());
+                " (%s,%s,%s,%s,%s,%s)";
+        sql = String.format(sql
+                , getStringValue(friendBean.getId())
+                , friendBean.getStatus()
+                , getStringValue(friendBean.getRemark())
+                , friendBean.getTop()
+                , friendBean.getDoNotDisturb()
+                , friendBean.getBlackList());
         getSQLiteDatabase().execSQL(sql);
         return 1;
     }
@@ -36,14 +45,19 @@ public class FriendDaoImpl extends AbsDaoImpl<FriendBean> implements IFriendDao 
     @Override
     public int update(FriendBean friendBean) {
         String sql = "UPDATE friend SET" +
-                " nickname=%s,headImg=%s,headImgSmall=%s" +
-                " ,signature=%s,remark=%s,top=%s" +
-                " ,doNotDisturb=%s,blackList=%s" +
+                " status=%s" +
+                " ,remark=%s" +
+                " ,top=%s" +
+                " ,doNotDisturb=%s" +
+                " ,blackList=%s" +
                 " WHERE id=%s";
-        sql = String.format(sql, getStringValue(friendBean.getNickname()), getStringValue(friendBean.getHeadImg())
-                , getStringValue(friendBean.getHeadImgSmall()), getStringValue(friendBean.getSignature())
-                , getStringValue(friendBean.getRemark()), friendBean.getTop(), friendBean.getDoNotDisturb()
-                , friendBean.getBlackList(), getStringValue(friendBean.getId()));
+        sql = String.format(sql
+                , friendBean.getStatus()
+                , getStringValue(friendBean.getRemark())
+                , friendBean.getTop()
+                , friendBean.getDoNotDisturb()
+                , friendBean.getBlackList()
+                , getStringValue(friendBean.getId()));
         getSQLiteDatabase().execSQL(sql);
         return 1;
     }
@@ -52,7 +66,12 @@ public class FriendDaoImpl extends AbsDaoImpl<FriendBean> implements IFriendDao 
     @Override
     public FriendBean selectById(String id) {
         String sql = "SELECT" +
-                " f.id,f.nickname,f.headImg,f.headImgSmall,f.signature,f.remark,f.top,f.doNotDisturb,f.blackList" +
+                " f.id" +
+                ",f.status" +
+                ",f.remark" +
+                ",f.top" +
+                ",f.doNotDisturb" +
+                ",f.blackList" +
                 " FROM friend AS f" +
                 " WHERE f.id=%s";
         sql = String.format(sql, getStringValue(id));
@@ -61,10 +80,7 @@ public class FriendDaoImpl extends AbsDaoImpl<FriendBean> implements IFriendDao 
             if (cursor.moveToNext()) {
                 FriendBean friendBean = new FriendBean();
                 friendBean.setId(cursor.getString(cursor.getColumnIndex("id")));
-                friendBean.setNickname(cursor.getString(cursor.getColumnIndex("nickname")));
-                friendBean.setHeadImg(cursor.getString(cursor.getColumnIndex("headImg")));
-                friendBean.setHeadImgSmall(cursor.getString(cursor.getColumnIndex("headImgSmall")));
-                friendBean.setSignature(cursor.getString(cursor.getColumnIndex("signature")));
+                friendBean.setStatus(cursor.getInt(cursor.getColumnIndex("status")));
                 friendBean.setRemark(cursor.getString(cursor.getColumnIndex("remark")));
                 friendBean.setTop(cursor.getInt(cursor.getColumnIndex("top")));
                 friendBean.setDoNotDisturb(cursor.getInt(cursor.getColumnIndex("doNotDisturb")));

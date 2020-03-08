@@ -3,6 +3,7 @@ package com.qinshou.qinshoubox.im.manager;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.friend.bean.FriendHistoryBean;
+import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
@@ -29,12 +30,13 @@ import java.util.Map;
  * Date: 2019/11/28 14:18
  * Description:好友管理者
  */
-public class FriendManager extends AbsManager<String, FriendBean> {
+public class FriendManager extends AbsManager<String, UserDetailBean> {
 
     public FriendManager(String userId, DatabaseHelper databaseHelper) {
 //        super(userId, new MemoryCache<String, FriendBean>());
 //        super(userId, new FriendDatabaseCache(databaseHelper));
-        super(userId, new FriendDoubleCache(new MemoryCache<String, FriendBean>(), new FriendDatabaseCache(databaseHelper)));
+        super(userId, new FriendDoubleCache(new MemoryCache<String, UserDetailBean>()
+                , new FriendDatabaseCache(databaseHelper)));
     }
 
     /**
@@ -46,27 +48,28 @@ public class FriendManager extends AbsManager<String, FriendBean> {
      * @param id 用户 id
      */
     public FriendBean getById(String id) {
-        FriendBean friendBean = getCache().get(id);
-        if (friendBean == null) {
-            ShowLogUtil.logi("从网络拿");
-        }
-        return friendBean;
+//        FriendBean friendBean = getCache().get(id);
+//        if (friendBean == null) {
+//            ShowLogUtil.logi("从网络拿");
+//        }
+//        return friendBean;
+        return null;
     }
 
-    public void getList(final Callback<List<FriendBean>> callback) {
+    public void getList(final Callback<List<UserDetailBean>> callback) {
         OkHttpHelperForQSBoxFriendApi.SINGLETON.getList(getUserId())
-                .transform(new QSApiTransformer<List<FriendBean>>())
-                .enqueue(new Callback<List<FriendBean>>() {
+                .transform(new QSApiTransformer<List<UserDetailBean>>())
+                .enqueue(new Callback<List<UserDetailBean>>() {
                     @Override
-                    public void onSuccess(final List<FriendBean> data) {
+                    public void onSuccess(final List<UserDetailBean> data) {
                         getExecutorService().submit(new Runnable() {
                             @Override
                             public void run() {
-                                for (FriendBean friendBean : data) {
-                                    // 存到缓存
-                                    getCache().put(friendBean.getId(), friendBean);
-                                }
-                                getHandler().post(new SuccessRunnable<List<FriendBean>>(callback, data));
+//                                for (FriendBean friendBean : data) {
+//                                    // 存到缓存
+//                                    getCache().put(friendBean.getId(), friendBean);
+//                                }
+                                getHandler().post(new SuccessRunnable<List<UserDetailBean>>(callback, data));
                             }
                         });
 
@@ -111,9 +114,9 @@ public class FriendManager extends AbsManager<String, FriendBean> {
                 .enqueue(new Callback<Object>() {
                     @Override
                     public void onSuccess(Object data) {
-                        getInfo(toUserId, new Callback<FriendBean>() {
+                        getInfo(toUserId, new Callback<UserDetailBean>() {
                             @Override
-                            public void onSuccess(FriendBean data) {
+                            public void onSuccess(UserDetailBean data) {
                                 Map<String, Object> extend = new HashMap<>();
                                 extend.put("status", FriendStatus.AGREE_ADD.getValue());
                                 // 创建已经是好友的提示信息的系统消息
@@ -203,7 +206,7 @@ public class FriendManager extends AbsManager<String, FriendBean> {
                                 // 更新缓存
                                 FriendBean friendBean = getById(toUserId);
                                 friendBean.setRemark(remark);
-                                getCache().put(friendBean.getId(), friendBean);
+//                                getCache().put(friendBean.getId(), friendBean);
 
                                 getHandler().post(new SuccessRunnable<>(callback, data));
                             }
@@ -238,7 +241,7 @@ public class FriendManager extends AbsManager<String, FriendBean> {
                                 // 更新缓存
                                 FriendBean friendBean = getById(toUserId);
                                 friendBean.setTop(top);
-                                getCache().put(friendBean.getId(), friendBean);
+//                                getCache().put(friendBean.getId(), friendBean);
 
                                 getHandler().post(new SuccessRunnable<>(callback, data));
                             }
@@ -274,7 +277,7 @@ public class FriendManager extends AbsManager<String, FriendBean> {
                                 // 更新缓存
                                 FriendBean friendBean = getById(toUserId);
                                 friendBean.setDoNotDisturb(doNotDisturb);
-                                getCache().put(friendBean.getId(), friendBean);
+//                                getCache().put(friendBean.getId(), friendBean);
 
                                 getHandler().post(new SuccessRunnable<>(callback, data));
                             }
@@ -309,7 +312,7 @@ public class FriendManager extends AbsManager<String, FriendBean> {
                                 // 更新缓存
                                 FriendBean friendBean = getById(toUserId);
                                 friendBean.setBlackList(blackList);
-                                getCache().put(friendBean.getId(), friendBean);
+//                                getCache().put(friendBean.getId(), friendBean);
 
                                 getHandler().post(new SuccessRunnable<>(callback, data));
                             }
@@ -346,20 +349,20 @@ public class FriendManager extends AbsManager<String, FriendBean> {
      *
      * @param toUserId 待查询的好友的 id
      */
-    public void getInfo(String toUserId, Callback<FriendBean> callback) {
+    public void getInfo(String toUserId, Callback<UserDetailBean> callback) {
         OkHttpHelperForQSBoxFriendApi.SINGLETON.getInfo(getUserId(), toUserId)
-                .transform(new QSApiTransformer<FriendBean>())
-                .enqueue(new Callback<FriendBean>() {
+                .transform(new QSApiTransformer<UserDetailBean>())
+                .enqueue(new Callback<UserDetailBean>() {
                     @Override
-                    public void onSuccess(FriendBean data) {
+                    public void onSuccess(UserDetailBean data) {
                         // 存到缓存
-                        getCache().put(data.getId(), data);
-                        getHandler().post(new SuccessRunnable<FriendBean>(callback, data));
+//                        getCache().put(data.getId(), data);
+                        getHandler().post(new SuccessRunnable<UserDetailBean>(callback, data));
                     }
 
                     @Override
                     public void onFailure(Exception e) {
-                        getHandler().post(new FailureRunnable<FriendBean>(callback, e));
+                        getHandler().post(new FailureRunnable<UserDetailBean>(callback, e));
                     }
                 });
     }

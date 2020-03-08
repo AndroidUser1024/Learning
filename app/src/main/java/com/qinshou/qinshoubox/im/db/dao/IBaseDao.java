@@ -6,5 +6,5 @@ package com.qinshou.qinshoubox.im.db.dao;
  * Date: 2019/12/5 9:15
  * Description:类描述
  */
-public interface IBaseDao {
+public interface IBaseDao<T> {
 }

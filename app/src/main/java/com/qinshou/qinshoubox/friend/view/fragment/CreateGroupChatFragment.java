@@ -14,6 +14,7 @@ import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.friend.bean.GroupChatMemberForCreateBean;
+import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.friend.contract.ICreateGroupChatContract;
 import com.qinshou.qinshoubox.friend.presenter.CreateGroupChatPresenter;
 import com.qinshou.qinshoubox.friend.view.adapter.RcvGroupChatMemberForCreateAdapter;
@@ -151,14 +152,14 @@ public class CreateGroupChatFragment extends QSFragment<CreateGroupChatPresenter
     }
 
     @Override
-    public void getFriendListSuccess(List<FriendBean> friendBeanList) {
+    public void getFriendListSuccess(List<UserDetailBean> userDetailBeanList) {
         List<GroupChatMemberForCreateBean> groupChatMemberForCreateBeanList = new ArrayList<>();
-        for (FriendBean friendBean : friendBeanList) {
+        for (UserDetailBean userDetailBean : userDetailBeanList) {
             GroupChatMemberForCreateBean groupChatMemberForCreateBean = new GroupChatMemberForCreateBean();
-            groupChatMemberForCreateBean.setId(friendBean.getId());
-            groupChatMemberForCreateBean.setHeadImgSmall(friendBean.getHeadImgSmall());
-            groupChatMemberForCreateBean.setRemark(friendBean.getRemark());
-            groupChatMemberForCreateBean.setNickname(friendBean.getNickname());
+            groupChatMemberForCreateBean.setId(userDetailBean.getId());
+//            groupChatMemberForCreateBean.setHeadImgSmall(friendBean.getHeadImgSmall());
+            groupChatMemberForCreateBean.setRemark(userDetailBean.getRemark());
+//            groupChatMemberForCreateBean.setNickname(friendBean.getNickname());
             groupChatMemberForCreateBeanList.add(groupChatMemberForCreateBean);
         }
         mRcvGroupChatMemberForCreateAdapter.setDataList(groupChatMemberForCreateBeanList);

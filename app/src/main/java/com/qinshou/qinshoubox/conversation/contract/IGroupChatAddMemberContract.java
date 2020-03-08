@@ -25,7 +25,7 @@ public interface IGroupChatAddMemberContract {
          * Date:2019/12/2 18:12
          * Description:获取好友列表
          */
-        void getFriendList(Callback<List<FriendBean>> callback);
+        void getFriendList(Callback<List<UserDetailBean>> callback);
 
         /**
          * Author: QinHao
@@ -56,7 +56,7 @@ public interface IGroupChatAddMemberContract {
          * Date:2019/12/2 18:13
          * Description:获取好友列表成功
          */
-        void getFriendListSuccess(List<FriendBean> friendBeanList);
+        void getFriendListSuccess(List<UserDetailBean> userDetailBeanList);
 
         /**
          * Author: QinHao
