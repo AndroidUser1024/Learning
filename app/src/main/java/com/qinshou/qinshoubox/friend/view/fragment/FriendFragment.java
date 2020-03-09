@@ -306,7 +306,6 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
 
     @Override
     public void getFriendListSuccess(List<UserDetailBean> userDetailBeanList) {
-        ShowLogUtil.logi("userDetailBeanList--->" + userDetailBeanList);
         mRcvFriendAdapter.setDataList(userDetailBeanList);
     }
 

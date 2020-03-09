@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
  * Description:所有 Dao 实现类的基类
  */
 public abstract class AbsDaoImpl<T> {
+    public final String TAG = getClass().getSimpleName();
     private SQLiteDatabase mSQLiteDatabase;
 
     public AbsDaoImpl(SQLiteDatabase SQLiteDatabase) {

@@ -26,8 +26,8 @@ import java.util.List;
  */
 public class RcvMessageAdapterFromMessageSystemItemView extends AbsRcvMessageAdapterFromMessageItemView {
 
-    public RcvMessageAdapterFromMessageSystemItemView(Context context,String groupChatId) {
-        super(context, R.layout.item_rcv_message_from_message_system,groupChatId);
+    public RcvMessageAdapterFromMessageSystemItemView(Context context, String groupChatId) {
+        super(context, R.layout.item_rcv_message_from_message_system, groupChatId);
     }
 
     @Override
@@ -59,10 +59,10 @@ public class RcvMessageAdapterFromMessageSystemItemView extends AbsRcvMessageAda
     }
 
     private void showFriendStatusText(BaseViewHolder baseViewHolder, MessageBean messageBean) {
-        FriendBean friendBean = IMClient.SINGLETON.getFriendManager().getById(messageBean.getFromUserId());
-        String content = getContext().getResources().getString(R.string.chat_agree_add_text, TextUtils.isEmpty(friendBean.getRemark())
-                ? ""
-                : friendBean.getRemark());
+        UserDetailBean userDetailBean = IMClient.SINGLETON.getFriendManager().getById(messageBean.getFromUserId());
+        String content = getContext().getResources().getString(R.string.chat_agree_add_text, TextUtils.isEmpty(userDetailBean.getRemark())
+                ? userDetailBean.getNickname()
+                : userDetailBean.getRemark());
         baseViewHolder.setTvText(R.id.tv_content, content);
     }
 

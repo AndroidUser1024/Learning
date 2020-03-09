@@ -40,6 +40,7 @@ import com.qinshou.qinshoubox.conversation.contract.IChatContract;
 import com.qinshou.qinshoubox.conversation.presenter.ChatPresenter;
 import com.qinshou.qinshoubox.conversation.view.adapter.RcvMessageAdapter;
 import com.qinshou.qinshoubox.conversation.view.fragment.ChatSettingFragment;
+import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
@@ -543,12 +544,12 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
         if (TextUtils.isEmpty(mToUserId)) {
             return;
         }
-        FriendBean friendBean = IMClient.SINGLETON.getFriendManager().getById(mToUserId);
-        if (friendBean != null) {
+        UserDetailBean userDetailBean = IMClient.SINGLETON.getFriendManager().getById(mToUserId);
+        if (userDetailBean != null) {
             // 对方的昵称
-            mTitleBar.setTitleText(TextUtils.isEmpty(friendBean.getRemark())
-                    ? ""
-                    : friendBean.getRemark());
+            mTitleBar.setTitleText(TextUtils.isEmpty(userDetailBean.getRemark())
+                    ? userDetailBean.getNickname()
+                    : userDetailBean.getRemark());
         }
         // 加载消息列表
         getPresenter().getMessageList(mToUserId, mPage, IConstant.PAGE_SIZE);
@@ -557,14 +558,14 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
     @Override
     public void handleEvent(EventBean<Object> eventBean) {
         if (eventBean.getType() == EventBean.Type.REFRESH_FRIEND_LIST) {
-            FriendBean friendBean = IMClient.SINGLETON.getFriendManager().getById(mToUserId);
-            if (friendBean == null) {
+            UserDetailBean userDetailBean = IMClient.SINGLETON.getFriendManager().getById(mToUserId);
+            if (userDetailBean == null) {
                 return;
             }
             // 对方的昵称
-            mTitleBar.setTitleText(TextUtils.isEmpty(friendBean.getRemark())
-                    ? ""
-                    : friendBean.getRemark());
+            mTitleBar.setTitleText(TextUtils.isEmpty(userDetailBean.getRemark())
+                    ? userDetailBean.getNickname()
+                    : userDetailBean.getRemark());
         } else if (eventBean.getType() == EventBean.Type.REFRESH_MESSAGE_LIST) {
             // 清空列表
             mRcvMessageAdapter.setDataList(new ArrayList<MessageBean>());

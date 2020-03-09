@@ -5,6 +5,7 @@ import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.contract.IChatSettingContract;
 import com.qinshou.qinshoubox.conversation.model.ChatSettingModel;
 import com.qinshou.qinshoubox.conversation.view.fragment.ChatSettingFragment;
+import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 
@@ -22,9 +23,9 @@ public class ChatSettingPresenter extends AbsPresenter<IChatSettingContract.IVie
 
     @Override
     public void getFriend(String id) {
-        getModel().getFriend(id, new Callback<FriendBean>() {
+        getModel().getFriend(id, new Callback<UserDetailBean>() {
             @Override
-            public void onSuccess(FriendBean data) {
+            public void onSuccess(UserDetailBean data) {
                 if (!isViewAttached()) {
                     return;
                 }

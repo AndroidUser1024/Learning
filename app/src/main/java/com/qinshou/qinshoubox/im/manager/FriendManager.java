@@ -47,13 +47,12 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
      *
      * @param id 用户 id
      */
-    public FriendBean getById(String id) {
-//        FriendBean friendBean = getCache().get(id);
-//        if (friendBean == null) {
-//            ShowLogUtil.logi("从网络拿");
-//        }
-//        return friendBean;
-        return null;
+    public UserDetailBean getById(String id) {
+        UserDetailBean userDetailBean = getCache().get(id);
+        if (userDetailBean == null) {
+            ShowLogUtil.logi("从网络拿");
+        }
+        return userDetailBean;
     }
 
     public void getList(final Callback<List<UserDetailBean>> callback) {
@@ -65,10 +64,10 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
                         getExecutorService().submit(new Runnable() {
                             @Override
                             public void run() {
-//                                for (FriendBean friendBean : data) {
-//                                    // 存到缓存
-//                                    getCache().put(friendBean.getId(), friendBean);
-//                                }
+                                for (UserDetailBean userDetailBean : data) {
+                                    // 存到缓存
+                                    getCache().put(userDetailBean.getId(), userDetailBean);
+                                }
                                 getHandler().post(new SuccessRunnable<List<UserDetailBean>>(callback, data));
                             }
                         });
@@ -204,9 +203,9 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
                             @Override
                             public void run() {
                                 // 更新缓存
-                                FriendBean friendBean = getById(toUserId);
-                                friendBean.setRemark(remark);
-//                                getCache().put(friendBean.getId(), friendBean);
+                                UserDetailBean userDetailBean = getById(toUserId);
+                                userDetailBean.setRemark(remark);
+                                getCache().put(userDetailBean.getId(), userDetailBean);
 
                                 getHandler().post(new SuccessRunnable<>(callback, data));
                             }
@@ -239,9 +238,9 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
                             @Override
                             public void run() {
                                 // 更新缓存
-                                FriendBean friendBean = getById(toUserId);
-                                friendBean.setTop(top);
-//                                getCache().put(friendBean.getId(), friendBean);
+                                UserDetailBean userDetailBean = getById(toUserId);
+                                userDetailBean.setTop(top);
+                                getCache().put(userDetailBean.getId(), userDetailBean);
 
                                 getHandler().post(new SuccessRunnable<>(callback, data));
                             }
@@ -275,9 +274,9 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
                             @Override
                             public void run() {
                                 // 更新缓存
-                                FriendBean friendBean = getById(toUserId);
-                                friendBean.setDoNotDisturb(doNotDisturb);
-//                                getCache().put(friendBean.getId(), friendBean);
+                                UserDetailBean userDetailBean = getById(toUserId);
+                                userDetailBean.setDoNotDisturb(doNotDisturb);
+                                getCache().put(userDetailBean.getId(), userDetailBean);
 
                                 getHandler().post(new SuccessRunnable<>(callback, data));
                             }
@@ -310,9 +309,9 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
                             @Override
                             public void run() {
                                 // 更新缓存
-                                FriendBean friendBean = getById(toUserId);
-                                friendBean.setBlackList(blackList);
-//                                getCache().put(friendBean.getId(), friendBean);
+                                UserDetailBean userDetailBean = getById(toUserId);
+                                userDetailBean.setBlackList(blackList);
+                                getCache().put(userDetailBean.getId(), userDetailBean);
 
                                 getHandler().post(new SuccessRunnable<>(callback, data));
                             }
@@ -356,7 +355,7 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
                     @Override
                     public void onSuccess(UserDetailBean data) {
                         // 存到缓存
-//                        getCache().put(data.getId(), data);
+                        getCache().put(data.getId(), data);
                         getHandler().post(new SuccessRunnable<UserDetailBean>(callback, data));
                     }
 

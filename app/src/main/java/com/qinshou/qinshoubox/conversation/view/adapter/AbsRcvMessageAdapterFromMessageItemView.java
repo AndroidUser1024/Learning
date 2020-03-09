@@ -42,9 +42,9 @@ public abstract class AbsRcvMessageAdapterFromMessageItemView extends BaseItemVi
         setTime(baseViewHolder, messageBean, i);
         // 头像
         if (messageBean.getType() == MessageType.CHAT.getValue()) {
-            FriendBean friendBean = IMClient.SINGLETON.getFriendManager().getById(messageBean.getFromUserId());
-            if (friendBean != null) {
-//                ImageLoadUtil.SINGLETON.loadImage(getContext(), friendBean.getHeadImgSmall(), baseViewHolder.getImageView(R.id.iv_head_img));
+            UserDetailBean userDetailBean = IMClient.SINGLETON.getFriendManager().getById(messageBean.getFromUserId());
+            if (userDetailBean != null) {
+                ImageLoadUtil.SINGLETON.loadImage(getContext(), userDetailBean.getHeadImgSmall(), baseViewHolder.getImageView(R.id.iv_head_img));
             }
         } else if (messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
             if (!TextUtils.isEmpty(mGroupChatId)) {
@@ -56,10 +56,6 @@ public abstract class AbsRcvMessageAdapterFromMessageItemView extends BaseItemVi
 //        baseViewHolder.setVisibility(R.id.tv_nickname, messageBean.getType() == MessageBean.Type.CHAT.getValue() || ((RcvMessageAdapter) getRcvBaseAdapter()).isNotShowNickname()
 //                ? View.GONE
 //                : View.VISIBLE);
-        // 先给昵称设置为sysAccount
-//        baseViewHolder.setTvText(R.id.tv_nickname, messageBean.getFromUsername());
-        // 加载用户信息
-//        loadUserInfo(messageBean, baseViewHolder.getTextView(R.id.tv_nickname), baseViewHolder.getImageView(R.id.iv_head_img));
     }
 
     /**

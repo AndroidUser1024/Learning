@@ -1,7 +1,9 @@
 package com.qinshou.qinshoubox.im.db.dao.impl;
 
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.db.dao.IFriendDao;
@@ -38,7 +40,12 @@ public class FriendDaoImpl extends AbsDaoImpl<FriendBean> implements IFriendDao 
                 , friendBean.getTop()
                 , friendBean.getDoNotDisturb()
                 , friendBean.getBlackList());
-        getSQLiteDatabase().execSQL(sql);
+        try {
+            getSQLiteDatabase().execSQL(sql);
+        } catch (SQLException e) {
+            Log.e(TAG, "insert: " + "e--->" + e.getMessage());
+            return 0;
+        }
         return 1;
     }
 
@@ -58,7 +65,12 @@ public class FriendDaoImpl extends AbsDaoImpl<FriendBean> implements IFriendDao 
                 , friendBean.getDoNotDisturb()
                 , friendBean.getBlackList()
                 , getStringValue(friendBean.getId()));
-        getSQLiteDatabase().execSQL(sql);
+        try {
+            getSQLiteDatabase().execSQL(sql);
+        } catch (SQLException e) {
+            Log.e(TAG, "update: " + "e--->" + e.getMessage());
+            return 0;
+        }
         return 1;
     }
 

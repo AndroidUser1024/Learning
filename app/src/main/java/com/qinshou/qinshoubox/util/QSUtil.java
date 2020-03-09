@@ -8,6 +8,7 @@ import android.os.Environment;
 import android.os.Vibrator;
 import android.text.TextUtils;
 
+import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
@@ -130,14 +131,14 @@ public class QSUtil {
      */
     public static void showNotification(Context context, final MessageBean messageBean) {
         String content = messageBean.getContent();
-        FriendBean friendBean = IMClient.SINGLETON.getFriendManager().getById(messageBean.getFromUserId());
+        UserDetailBean userDetailBean = IMClient.SINGLETON.getFriendManager().getById(messageBean.getFromUserId());
         String title = null;
-        if (friendBean == null) {
+        if (userDetailBean == null) {
             title = messageBean.getFromUserId();
         } else {
-            title = TextUtils.isEmpty(friendBean.getRemark())
-                    ? ""
-                    : friendBean.getRemark();
+            title = TextUtils.isEmpty(userDetailBean.getRemark())
+                    ? userDetailBean.getNickname()
+                    : userDetailBean.getRemark();
         }
         NotificationUtil.showNotification(context
                 , messageBean.getPid()

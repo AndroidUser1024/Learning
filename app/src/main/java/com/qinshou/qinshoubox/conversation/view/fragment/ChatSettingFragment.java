@@ -15,6 +15,7 @@ import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.conversation.contract.IChatSettingContract;
 import com.qinshou.qinshoubox.conversation.presenter.ChatSettingPresenter;
 import com.qinshou.qinshoubox.conversation.view.dialog.ClearChatHistoryDialog;
+import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.friend.view.fragment.UserDetailFragment;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.IMClient;
@@ -53,7 +54,7 @@ public class ChatSettingFragment extends QSFragment<ChatSettingPresenter> implem
      * 加入黑名单开关
      */
     private SwitchButton mSwtBlackList;
-    private FriendBean mFriendBean;
+    private UserDetailBean mUserDetailBean;
 
     @Override
     public int getLayoutId() {
@@ -89,7 +90,7 @@ public class ChatSettingFragment extends QSFragment<ChatSettingPresenter> implem
                 if (!fromUser) {
                     return;
                 }
-                getPresenter().setTop(mFriendBean.getId(), checked ? 1 : 0);
+                getPresenter().setTop(mUserDetailBean.getId(), checked ? 1 : 0);
             }
         });
         mSwtDoNotDisturb.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
@@ -98,7 +99,7 @@ public class ChatSettingFragment extends QSFragment<ChatSettingPresenter> implem
                 if (!fromUser) {
                     return;
                 }
-                getPresenter().setDoNotDisturb(mFriendBean.getId(), checked ? 1 : 0);
+                getPresenter().setDoNotDisturb(mUserDetailBean.getId(), checked ? 1 : 0);
             }
         });
         mSwtBlackList.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
@@ -107,23 +108,23 @@ public class ChatSettingFragment extends QSFragment<ChatSettingPresenter> implem
                 if (!fromUser) {
                     return;
                 }
-                getPresenter().setBlackList(mFriendBean.getId(), checked ? 1 : 0);
+                getPresenter().setBlackList(mUserDetailBean.getId(), checked ? 1 : 0);
             }
         });
         findViewByID(R.id.ll_clear_chat_history).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String nickname = TextUtils.isEmpty(mFriendBean.getRemark())
-                        ? ""
-                        : mFriendBean.getRemark();
-                ClearChatHistoryDialog.newInstance(MessageType.CHAT, mFriendBean.getId(), nickname)
+                String nickname = TextUtils.isEmpty(mUserDetailBean.getRemark())
+                        ? mUserDetailBean.getNickname()
+                        : mUserDetailBean.getRemark();
+                ClearChatHistoryDialog.newInstance(MessageType.CHAT, mUserDetailBean.getId(), nickname)
                         .show(getChildFragmentManager(), "ClearChatHistoryDialog");
             }
         });
         mIvHeadImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UserDetailFragment.start(getContext(), mFriendBean.getId());
+                UserDetailFragment.start(getContext(), mUserDetailBean.getId());
             }
         });
         // 发起群聊
@@ -149,15 +150,15 @@ public class ChatSettingFragment extends QSFragment<ChatSettingPresenter> implem
 
 
     @Override
-    public void getFriendSuccess(FriendBean friendBean) {
-        mFriendBean = friendBean;
-//        ImageLoadUtil.SINGLETON.loadImage(getContext(), friendBean.getHeadImgSmall(), mIvHeadImg);
-        mTvNickname.setText(TextUtils.isEmpty(friendBean.getRemark())
-                ? ""
-                : friendBean.getRemark());
-        mSwtTop.setChecked(friendBean.getTop() == 1);
-        mSwtDoNotDisturb.setChecked(friendBean.getDoNotDisturb() == 1);
-        mSwtBlackList.setChecked(friendBean.getBlackList() == 1);
+    public void getFriendSuccess(UserDetailBean userDetailBean) {
+        mUserDetailBean = userDetailBean;
+        ImageLoadUtil.SINGLETON.loadImage(getContext(), mUserDetailBean.getHeadImgSmall(), mIvHeadImg);
+        mTvNickname.setText(TextUtils.isEmpty(mUserDetailBean.getRemark())
+                ? mUserDetailBean.getNickname()
+                : mUserDetailBean.getRemark());
+        mSwtTop.setChecked(mUserDetailBean.getTop() == 1);
+        mSwtDoNotDisturb.setChecked(mUserDetailBean.getDoNotDisturb() == 1);
+        mSwtBlackList.setChecked(mUserDetailBean.getBlackList() == 1);
     }
 
     @Override
@@ -216,6 +217,6 @@ public class ChatSettingFragment extends QSFragment<ChatSettingPresenter> implem
         if (eventBean.getType() != EventBean.Type.REFRESH_FRIEND_LIST) {
             return;
         }
-        getPresenter().getFriend(mFriendBean.getId());
+        getPresenter().getFriend(mUserDetailBean.getId());
     }
 }

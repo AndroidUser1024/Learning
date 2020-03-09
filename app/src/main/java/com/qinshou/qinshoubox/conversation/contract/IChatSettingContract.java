@@ -4,7 +4,7 @@ import com.qinshou.commonmodule.base.IBaseModel;
 import com.qinshou.commonmodule.base.IBaseView;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.view.fragment.ChatSettingFragment;
-import com.qinshou.qinshoubox.im.bean.FriendBean;
+import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 
 /**
  * Author: QinHao
@@ -23,7 +23,7 @@ public interface IChatSettingContract {
          * @param id         好友 id
          * @param callback 回调接口
          */
-        void getFriend(String id, Callback<FriendBean> callback);
+        void getFriend(String id, Callback<UserDetailBean> callback);
 
         /**
          * Author: QinHao
@@ -69,9 +69,9 @@ public interface IChatSettingContract {
          * Date:2019/11/29 17:42
          * Description:获取好友信息成功
          *
-         * @param friendBean 好友信息实体类
+         * @param userDetailBean 好友信息实体类
          */
-        void getFriendSuccess(FriendBean friendBean);
+        void getFriendSuccess(UserDetailBean userDetailBean);
 
         /**
          * Author: QinHao

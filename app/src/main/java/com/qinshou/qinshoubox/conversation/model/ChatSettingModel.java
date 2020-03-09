@@ -4,6 +4,7 @@ package com.qinshou.qinshoubox.conversation.model;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.contract.IChatSettingContract;
 import com.qinshou.qinshoubox.conversation.view.fragment.ChatSettingFragment;
+import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
@@ -17,9 +18,9 @@ import com.qinshou.qinshoubox.im.bean.FriendBean;
 public class ChatSettingModel implements IChatSettingContract.IModel {
 
     @Override
-    public void getFriend(String id, Callback<FriendBean> callback) {
-        FriendBean friendBean = IMClient.SINGLETON.getFriendManager().getById(id);
-        callback.onSuccess(friendBean);
+    public void getFriend(String id, Callback<UserDetailBean> callback) {
+        UserDetailBean userDetailBean = IMClient.SINGLETON.getFriendManager().getById(id);
+        callback.onSuccess(userDetailBean);
     }
 
     @Override

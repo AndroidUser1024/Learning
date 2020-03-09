@@ -1,5 +1,6 @@
 package com.qinshou.qinshoubox.im.cache;
 
+import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.db.DatabaseHelper;

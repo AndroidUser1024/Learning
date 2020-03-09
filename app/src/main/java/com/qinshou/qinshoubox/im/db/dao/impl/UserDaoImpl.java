@@ -3,6 +3,7 @@ package com.qinshou.qinshoubox.im.db.dao.impl;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.db.dao.IUserDao;
@@ -46,6 +47,7 @@ public class UserDaoImpl extends AbsDaoImpl<UserDetailBean> implements IUserDao 
         try {
             getSQLiteDatabase().execSQL(sql);
         } catch (SQLException e) {
+            Log.e(TAG, "insert: " + "e--->" + e.getMessage());
             return 0;
         }
         return 1;
@@ -60,6 +62,7 @@ public class UserDaoImpl extends AbsDaoImpl<UserDetailBean> implements IUserDao 
         try {
             getSQLiteDatabase().execSQL(sql);
         } catch (SQLException e) {
+            Log.e(TAG, "delete: " + "e--->" + e.getMessage());
             return 0;
         }
         return 1;
@@ -90,7 +93,8 @@ public class UserDaoImpl extends AbsDaoImpl<UserDetailBean> implements IUserDao 
                 , getStringValue(userDetailBean.getId()));
         try {
             getSQLiteDatabase().execSQL(sql);
-        } catch (SQLException E) {
+        } catch (SQLException e) {
+            Log.e(TAG, "update: " + "e--->" + e.getMessage());
             return 0;
         }
         return 1;

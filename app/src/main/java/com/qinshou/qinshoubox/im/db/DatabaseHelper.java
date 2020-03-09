@@ -11,12 +11,14 @@ import com.qinshou.qinshoubox.im.db.dao.IFriendDao;
 import com.qinshou.qinshoubox.im.db.dao.IGroupChatDao;
 import com.qinshou.qinshoubox.im.db.dao.IGroupChatMemberDao;
 import com.qinshou.qinshoubox.im.db.dao.IMessageDao;
+import com.qinshou.qinshoubox.im.db.dao.IUserDao;
 import com.qinshou.qinshoubox.im.db.dao.impl.ConversationDaoImpl;
 import com.qinshou.qinshoubox.im.db.dao.impl.ConversationMessageRelDaoImpl;
 import com.qinshou.qinshoubox.im.db.dao.impl.FriendDaoImpl;
 import com.qinshou.qinshoubox.im.db.dao.impl.GroupChatDaoImpl;
 import com.qinshou.qinshoubox.im.db.dao.impl.GroupChatMemberDaoImpl;
 import com.qinshou.qinshoubox.im.db.dao.impl.MessageDaoImpl;
+import com.qinshou.qinshoubox.im.db.dao.impl.UserDaoImpl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,65 +31,6 @@ import java.util.Map;
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final int DB_VERSION = 1;
-    //    private final String CREATE_FRIEND_TABLE_SQL = "CREATE TABLE IF NOT EXISTS friend(" +
-//            " id TEXT PRIMARY KEY" +
-//            " ,nickname TEXT" +
-//            " ,headImg TEXT" +
-//            " ,headImgSmall TEXT" +
-//            " ,signature TEXT" +
-//            " ,remark TEXT" +
-//            " ,top INTEGER" +
-//            " ,doNotDisturb INTEGER" +
-//            " ,blackList INTEGER" +
-//            " )";
-//    private final String CREATE_GROUP_CHAT_TABLE_SQL = "CREATE TABLE IF NOT EXISTS group_chat(" +
-//            " id TEXT PRIMARY KEY" +
-//            " ,ownerId TEXT" +
-//            " ,nickname TEXT" +
-//            " ,headImg TEXT" +
-//            " ,headImgSmall TEXT" +
-//            " ,nicknameDefault TEXT" +
-//            " ,nicknameInGroupChat TEXT" +
-//            " ,top INTEGER" +
-//            " ,doNotDisturb INTEGER" +
-//            " ,showGroupChatMemberNickname INTEGER" +
-//            " )";
-//    private final String CREATE_MESSAGE_TABLE_SQL = "CREATE TABLE IF NOT EXISTS message(" +
-//            " pid INTEGER PRIMARY KEY AUTOINCREMENT" +
-//            " ,id TEXT" +
-//            " ,fromUserId TEXT" +
-//            " ,toUserId TEXT" +
-//            " ,type INTEGER" +
-//            " ,contentType INTEGER" +
-//            " ,content TEXT" +
-//            " ,sendTimestamp INTEGER" +
-//            " ,receiveTimestamp INTEGER" +
-//            " ,status INTEGER" +
-//            " ,extend TEXT" +
-//            " )";
-//    private final String CREATE_CONVERSATION_TABLE_SQL = "CREATE TABLE IF NOT EXISTS conversation(" +
-//            " id INTEGER PRIMARY KEY AUTOINCREMENT" +
-//            " ,toUserId TEXT" +
-//            " ,type INTEGER" +
-//            " ,lastMsgContentType INTEGER" +
-//            " ,lastMsgContent TEXT" +
-//            " ,lastMsgTimestamp INTEGER" +
-//            " ,lastMsgPid INTEGER" +
-//            " ,unreadCount INTEGER" +
-//            " )";
-//    private final String CREATE_CONVERSATION_MESSAGE_REL_TABLE_SQL = "CREATE TABLE IF NOT EXISTS conversation_message_rel(" +
-//            " id INTEGER PRIMARY KEY AUTOINCREMENT" +
-//            " ,conversationId INTEGER" +
-//            " ,messagePid INTEGER" +
-//            " )";
-//    private final String CREATE_GROUP_CHAT_MEMBER_TABLE_SQL = "CREATE TABLE IF NOT EXISTS group_chat_member(" +
-//            " groupChatId TEXT" +
-//            ",userId TEXT" +
-//            ",nickname TEXT" +
-//            ",headImg TEXT" +
-//            ",headImgSmall TEXT" +
-//            ",nicknameInGroupChat TEXT" +
-//            " )";
     private final String CREATE_USER_TABLE_SQL = "CREATE TABLE IF NOT EXISTS user(" +
             " id TEXT PRIMARY KEY" +
             " ,username TEXT" +
@@ -172,6 +115,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         super(context, name, factory, version);
         // 获取数据库可读可写的操作对象
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        mDaoMap.put(IUserDao.class, new UserDaoImpl(sqLiteDatabase));
         mDaoMap.put(IFriendDao.class, new FriendDaoImpl(sqLiteDatabase));
         mDaoMap.put(IGroupChatDao.class, new GroupChatDaoImpl(sqLiteDatabase));
         mDaoMap.put(IGroupChatMemberDao.class, new GroupChatMemberDaoImpl(sqLiteDatabase));
