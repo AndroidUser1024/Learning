@@ -25,7 +25,6 @@ public class DemoFragment extends QSFragment<DemoPresenter> implements IDemoCont
 
     @Override
     public void setListener() {
-        super.setListener();
     }
 
     @Override

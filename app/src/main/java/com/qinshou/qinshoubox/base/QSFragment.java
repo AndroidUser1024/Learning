@@ -1,5 +1,13 @@
 package com.qinshou.qinshoubox.base;
 
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.base.AbsMVPFragment;
 import com.qinshou.commonmodule.base.AbsPresenter;
@@ -20,17 +28,19 @@ import org.greenrobot.eventbus.ThreadMode;
  * Created on 2018/11/13
  */
 public abstract class QSFragment<P extends AbsPresenter> extends AbsMVPFragment<P> implements IOnConnectListener {
+    @Nullable
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
-        IMClient.SINGLETON.removeOnConnectListener(this);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        EventBus.getDefault().register(this);
+        IMClient.SINGLETON.addOnConnectListener(this);
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
-    public void setListener() {
-        EventBus.getDefault().register(this);
-        IMClient.SINGLETON.addOnConnectListener(this);
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(this);
+        IMClient.SINGLETON.removeOnConnectListener(this);
     }
 
     @Override

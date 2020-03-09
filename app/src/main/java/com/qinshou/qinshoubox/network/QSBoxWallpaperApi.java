@@ -17,7 +17,7 @@ import java.util.List;
  * Date: 2019/10/16 16:49
  * Description:类描述
  */
-@Api(IUrlConstant.DEFAULT_HOST + IUrlConstant.WALLPAPER_API)
+@Api(IUrlConstant.DEFAULT_HOST + "/wallpaper")
 public interface QSBoxWallpaperApi {
 
     @Get("/getList")

@@ -142,16 +142,16 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
                 ",c.lastMsgTimestamp" +
                 ",c.lastMsgPid" +
                 ",c.unreadCount" +
-                ",f.nickname AS fNickname" +
-                ",f.headImgSmall AS fHeadImgSmall" +
-                ",f.remark AS fRemark" +
-                ",f.top AS fTop" +
-                ",f.doNotDisturb AS fDoNotDisturb" +
-                ",gc.nickname AS gcNickname" +
-                ",gc.headImgSmall AS gcHeadImgSmall" +
-                ",gc.nicknameDefault AS gcNicknameDefault" +
-                ",gc.top AS gcTop" +
-                ",gc.doNotDisturb AS gcDoNotDisturb" +
+//                ",f.nickname AS fNickname" +
+//                ",f.headImgSmall AS fHeadImgSmall" +
+//                ",f.remark AS fRemark" +
+//                ",f.top AS fTop" +
+//                ",f.doNotDisturb AS fDoNotDisturb" +
+//                ",gc.nickname AS gcNickname" +
+//                ",gc.headImgSmall AS gcHeadImgSmall" +
+//                ",gc.nicknameDefault AS gcNicknameDefault" +
+//                ",gc.top AS gcTop" +
+//                ",gc.doNotDisturb AS gcDoNotDisturb" +
                 " FROM conversation AS c" +
                 " LEFT OUTER JOIN friend AS f ON f.id=c.toUserId AND c.type=2001" +
                 " LEFT OUTER JOIN group_chat AS gc ON gc.id=c.toUserId AND c.type=3001" +
@@ -169,29 +169,29 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
                 conversationBean.setLastMsgTimestamp(cursor.getLong(cursor.getColumnIndex("lastMsgTimestamp")));
                 conversationBean.setLastMsgPid(cursor.getInt(cursor.getColumnIndex("lastMsgPid")));
                 conversationBean.setUnreadCount(cursor.getInt(cursor.getColumnIndex("unreadCount")));
-                if (conversationBean.getType() == MessageType.CHAT.getValue()) {
-                    // 单聊
-                    String remark = cursor.getString(cursor.getColumnIndex("fRemark"));
-                    if (!TextUtils.isEmpty(remark)) {
-                        conversationBean.setTitle(remark);
-                    } else {
-                        conversationBean.setTitle(cursor.getString(cursor.getColumnIndex("fNickname")));
-                    }
-                    conversationBean.setHeadImgSmall(cursor.getString(cursor.getColumnIndex("fHeadImgSmall")));
-                    conversationBean.setTop(cursor.getInt(cursor.getColumnIndex("fTop")));
-                    conversationBean.setDoNotDisturb(cursor.getInt(cursor.getColumnIndex("fDoNotDisturb")));
-                } else if (conversationBean.getType() == MessageType.GROUP_CHAT.getValue()) {
-                    // 群聊
-                    String nickname = cursor.getString(cursor.getColumnIndex("gcNickname"));
-                    if (!TextUtils.isEmpty(nickname)) {
-                        conversationBean.setTitle(nickname);
-                    } else {
-                        conversationBean.setTitle(cursor.getString(cursor.getColumnIndex("gcNicknameDefault")));
-                    }
-                    conversationBean.setHeadImgSmall(cursor.getString(cursor.getColumnIndex("gcHeadImgSmall")));
-                    conversationBean.setTop(cursor.getInt(cursor.getColumnIndex("gcTop")));
-                    conversationBean.setDoNotDisturb(cursor.getInt(cursor.getColumnIndex("gcDoNotDisturb")));
-                }
+//                if (conversationBean.getType() == MessageType.CHAT.getValue()) {
+//                    // 单聊
+//                    String remark = cursor.getString(cursor.getColumnIndex("fRemark"));
+//                    if (!TextUtils.isEmpty(remark)) {
+//                        conversationBean.setTitle(remark);
+//                    } else {
+//                        conversationBean.setTitle(cursor.getString(cursor.getColumnIndex("fNickname")));
+//                    }
+//                    conversationBean.setHeadImgSmall(cursor.getString(cursor.getColumnIndex("fHeadImgSmall")));
+//                    conversationBean.setTop(cursor.getInt(cursor.getColumnIndex("fTop")));
+//                    conversationBean.setDoNotDisturb(cursor.getInt(cursor.getColumnIndex("fDoNotDisturb")));
+//                } else if (conversationBean.getType() == MessageType.GROUP_CHAT.getValue()) {
+//                    // 群聊
+//                    String nickname = cursor.getString(cursor.getColumnIndex("gcNickname"));
+//                    if (!TextUtils.isEmpty(nickname)) {
+//                        conversationBean.setTitle(nickname);
+//                    } else {
+//                        conversationBean.setTitle(cursor.getString(cursor.getColumnIndex("gcNicknameDefault")));
+//                    }
+//                    conversationBean.setHeadImgSmall(cursor.getString(cursor.getColumnIndex("gcHeadImgSmall")));
+//                    conversationBean.setTop(cursor.getInt(cursor.getColumnIndex("gcTop")));
+//                    conversationBean.setDoNotDisturb(cursor.getInt(cursor.getColumnIndex("gcDoNotDisturb")));
+//                }
                 return conversationBean;
             }
         } finally {
@@ -213,16 +213,16 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
                 ",c.lastMsgTimestamp" +
                 ",c.lastMsgPid" +
                 ",c.unreadCount" +
-                ",f.nickname AS fNickname" +
-                ",f.headImgSmall AS fHeadImgSmall" +
-                ",f.remark AS fRemark" +
-                ",f.top AS fTop" +
-                ",f.doNotDisturb AS fDoNotDisturb" +
-                ",gc.nickname AS gcNickname" +
-                ",gc.headImgSmall AS gcHeadImgSmall" +
-                ",gc.nicknameDefault AS gcNicknameDefault" +
-                ",gc.top AS gcTop" +
-                ",gc.doNotDisturb AS gcDoNotDisturb" +
+//                ",f.nickname AS fNickname" +
+//                ",f.headImgSmall AS fHeadImgSmall" +
+//                ",f.remark AS fRemark" +
+//                ",f.top AS fTop" +
+//                ",f.doNotDisturb AS fDoNotDisturb" +
+//                ",gc.nickname AS gcNickname" +
+//                ",gc.headImgSmall AS gcHeadImgSmall" +
+//                ",gc.nicknameDefault AS gcNicknameDefault" +
+//                ",gc.top AS gcTop" +
+//                ",gc.doNotDisturb AS gcDoNotDisturb" +
                 " FROM conversation AS c" +
                 " LEFT OUTER JOIN friend AS f ON f.id=c.toUserId AND c.type=2001" +
                 " LEFT OUTER JOIN group_chat AS gc ON gc.id=c.toUserId AND c.type=3001";
@@ -239,29 +239,29 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
                 conversationBean.setLastMsgTimestamp(cursor.getLong(cursor.getColumnIndex("lastMsgTimestamp")));
                 conversationBean.setLastMsgPid(cursor.getInt(cursor.getColumnIndex("lastMsgPid")));
                 conversationBean.setUnreadCount(cursor.getInt(cursor.getColumnIndex("unreadCount")));
-                if (conversationBean.getType() == MessageType.CHAT.getValue()) {
-                    // 单聊
-                    String remark = cursor.getString(cursor.getColumnIndex("fRemark"));
-                    if (!TextUtils.isEmpty(remark)) {
-                        conversationBean.setTitle(remark);
-                    } else {
-                        conversationBean.setTitle(cursor.getString(cursor.getColumnIndex("fNickname")));
-                    }
-                    conversationBean.setHeadImgSmall(cursor.getString(cursor.getColumnIndex("fHeadImgSmall")));
-                    conversationBean.setTop(cursor.getInt(cursor.getColumnIndex("fTop")));
-                    conversationBean.setDoNotDisturb(cursor.getInt(cursor.getColumnIndex("fDoNotDisturb")));
-                } else if (conversationBean.getType() == MessageType.GROUP_CHAT.getValue()) {
-                    // 群聊
-                    String nickname = cursor.getString(cursor.getColumnIndex("gcNickname"));
-                    if (!TextUtils.isEmpty(nickname)) {
-                        conversationBean.setTitle(nickname);
-                    } else {
-                        conversationBean.setTitle(cursor.getString(cursor.getColumnIndex("gcNicknameDefault")));
-                    }
-                    conversationBean.setHeadImgSmall(cursor.getString(cursor.getColumnIndex("gcHeadImgSmall")));
-                    conversationBean.setTop(cursor.getInt(cursor.getColumnIndex("gcTop")));
-                    conversationBean.setDoNotDisturb(cursor.getInt(cursor.getColumnIndex("gcDoNotDisturb")));
-                }
+//                if (conversationBean.getType() == MessageType.CHAT.getValue()) {
+//                    // 单聊
+//                    String remark = cursor.getString(cursor.getColumnIndex("fRemark"));
+//                    if (!TextUtils.isEmpty(remark)) {
+//                        conversationBean.setTitle(remark);
+//                    } else {
+//                        conversationBean.setTitle(cursor.getString(cursor.getColumnIndex("fNickname")));
+//                    }
+//                    conversationBean.setHeadImgSmall(cursor.getString(cursor.getColumnIndex("fHeadImgSmall")));
+//                    conversationBean.setTop(cursor.getInt(cursor.getColumnIndex("fTop")));
+//                    conversationBean.setDoNotDisturb(cursor.getInt(cursor.getColumnIndex("fDoNotDisturb")));
+//                } else if (conversationBean.getType() == MessageType.GROUP_CHAT.getValue()) {
+//                    // 群聊
+//                    String nickname = cursor.getString(cursor.getColumnIndex("gcNickname"));
+//                    if (!TextUtils.isEmpty(nickname)) {
+//                        conversationBean.setTitle(nickname);
+//                    } else {
+//                        conversationBean.setTitle(cursor.getString(cursor.getColumnIndex("gcNicknameDefault")));
+//                    }
+//                    conversationBean.setHeadImgSmall(cursor.getString(cursor.getColumnIndex("gcHeadImgSmall")));
+//                    conversationBean.setTop(cursor.getInt(cursor.getColumnIndex("gcTop")));
+//                    conversationBean.setDoNotDisturb(cursor.getInt(cursor.getColumnIndex("gcDoNotDisturb")));
+//                }
                 conversationBeanList.add(conversationBean);
             }
         } finally {
@@ -283,16 +283,16 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
                 ",c.lastMsgTimestamp" +
                 ",c.lastMsgPid" +
                 ",c.unreadCount" +
-                ",f.nickname AS fNickname" +
-                ",f.headImgSmall AS fHeadImgSmall" +
-                ",f.remark AS fRemark" +
-                ",f.top AS fTop" +
-                ",f.doNotDisturb AS fDoNotDisturb" +
-                ",gc.nickname AS gcNickname" +
-                ",gc.headImgSmall AS gcHeadImgSmall" +
-                ",gc.nicknameDefault AS gcNicknameDefault" +
-                ",gc.top AS gcTop" +
-                ",gc.doNotDisturb AS gcDoNotDisturb" +
+//                ",f.nickname AS fNickname" +
+//                ",f.headImgSmall AS fHeadImgSmall" +
+//                ",f.remark AS fRemark" +
+//                ",f.top AS fTop" +
+//                ",f.doNotDisturb AS fDoNotDisturb" +
+//                ",gc.nickname AS gcNickname" +
+//                ",gc.headImgSmall AS gcHeadImgSmall" +
+//                ",gc.nicknameDefault AS gcNicknameDefault" +
+//                ",gc.top AS gcTop" +
+//                ",gc.doNotDisturb AS gcDoNotDisturb" +
                 " FROM conversation AS c" +
                 " LEFT OUTER JOIN friend AS f ON f.id=c.toUserId AND c.type=2001" +
                 " LEFT OUTER JOIN group_chat AS gc ON gc.id=c.toUserId AND c.type=3001" +
@@ -310,29 +310,29 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
                 conversationBean.setLastMsgTimestamp(cursor.getLong(cursor.getColumnIndex("lastMsgTimestamp")));
                 conversationBean.setLastMsgPid(cursor.getInt(cursor.getColumnIndex("lastMsgPid")));
                 conversationBean.setUnreadCount(cursor.getInt(cursor.getColumnIndex("unreadCount")));
-                if (conversationBean.getType() == MessageType.CHAT.getValue()) {
-                    // 单聊
-                    String remark = cursor.getString(cursor.getColumnIndex("fRemark"));
-                    if (!TextUtils.isEmpty(remark)) {
-                        conversationBean.setTitle(remark);
-                    } else {
-                        conversationBean.setTitle(cursor.getString(cursor.getColumnIndex("fNickname")));
-                    }
-                    conversationBean.setHeadImgSmall(cursor.getString(cursor.getColumnIndex("fHeadImgSmall")));
-                    conversationBean.setTop(cursor.getInt(cursor.getColumnIndex("fTop")));
-                    conversationBean.setDoNotDisturb(cursor.getInt(cursor.getColumnIndex("fDoNotDisturb")));
-                } else if (conversationBean.getType() == MessageType.GROUP_CHAT.getValue()) {
-                    // 群聊
-                    String nickname = cursor.getString(cursor.getColumnIndex("gcNickname"));
-                    if (!TextUtils.isEmpty(nickname)) {
-                        conversationBean.setTitle(nickname);
-                    } else {
-                        conversationBean.setTitle(cursor.getString(cursor.getColumnIndex("gcNicknameDefault")));
-                    }
-                    conversationBean.setHeadImgSmall(cursor.getString(cursor.getColumnIndex("gcHeadImgSmall")));
-                    conversationBean.setTop(cursor.getInt(cursor.getColumnIndex("gcTop")));
-                    conversationBean.setDoNotDisturb(cursor.getInt(cursor.getColumnIndex("gcDoNotDisturb")));
-                }
+//                if (conversationBean.getType() == MessageType.CHAT.getValue()) {
+//                    // 单聊
+//                    String remark = cursor.getString(cursor.getColumnIndex("fRemark"));
+//                    if (!TextUtils.isEmpty(remark)) {
+//                        conversationBean.setTitle(remark);
+//                    } else {
+//                        conversationBean.setTitle(cursor.getString(cursor.getColumnIndex("fNickname")));
+//                    }
+//                    conversationBean.setHeadImgSmall(cursor.getString(cursor.getColumnIndex("fHeadImgSmall")));
+//                    conversationBean.setTop(cursor.getInt(cursor.getColumnIndex("fTop")));
+//                    conversationBean.setDoNotDisturb(cursor.getInt(cursor.getColumnIndex("fDoNotDisturb")));
+//                } else if (conversationBean.getType() == MessageType.GROUP_CHAT.getValue()) {
+//                    // 群聊
+//                    String nickname = cursor.getString(cursor.getColumnIndex("gcNickname"));
+//                    if (!TextUtils.isEmpty(nickname)) {
+//                        conversationBean.setTitle(nickname);
+//                    } else {
+//                        conversationBean.setTitle(cursor.getString(cursor.getColumnIndex("gcNicknameDefault")));
+//                    }
+//                    conversationBean.setHeadImgSmall(cursor.getString(cursor.getColumnIndex("gcHeadImgSmall")));
+//                    conversationBean.setTop(cursor.getInt(cursor.getColumnIndex("gcTop")));
+//                    conversationBean.setDoNotDisturb(cursor.getInt(cursor.getColumnIndex("gcDoNotDisturb")));
+//                }
                 conversationBeanList.add(conversationBean);
             }
         } finally {
@@ -354,20 +354,21 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
                 ",c.lastMsgTimestamp" +
                 ",c.lastMsgPid" +
                 ",c.unreadCount" +
-                ",f.nickname AS fNickname" +
-                ",f.headImgSmall AS fHeadImgSmall" +
-                ",f.remark AS fRemark" +
-                ",f.top AS fTop" +
-                ",f.doNotDisturb AS fDoNotDisturb" +
-                ",gc.nickname AS gcNickname" +
-                ",gc.headImgSmall AS gcHeadImgSmall" +
-                ",gc.nicknameDefault AS gcNicknameDefault" +
-                ",gc.top AS gcTop" +
-                ",gc.doNotDisturb AS gcDoNotDisturb" +
+//                ",f.nickname AS fNickname" +
+//                ",f.headImgSmall AS fHeadImgSmall" +
+//                ",f.remark AS fRemark" +
+//                ",f.top AS fTop" +
+//                ",f.doNotDisturb AS fDoNotDisturb" +
+//                ",gc.nickname AS gcNickname" +
+//                ",gc.headImgSmall AS gcHeadImgSmall" +
+//                ",gc.nicknameDefault AS gcNicknameDefault" +
+//                ",gc.top AS gcTop" +
+//                ",gc.doNotDisturb AS gcDoNotDisturb" +
                 " FROM conversation AS c" +
                 " LEFT OUTER JOIN friend AS f ON f.id=c.toUserId AND c.type=2001" +
                 " LEFT OUTER JOIN group_chat AS gc ON gc.id=c.toUserId AND c.type=3001" +
-                " ORDER BY fTop OR gcTop DESC,c.lastMsgTimestamp DESC";
+//                " ORDER BY fTop OR gcTop DESC,c.lastMsgTimestamp DESC"
+                "";
         List<ConversationBean> conversationBeanList = new ArrayList<>();
         Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
         try {
@@ -381,29 +382,29 @@ public class ConversationDaoImpl extends AbsDaoImpl<ConversationBean> implements
                 conversationBean.setLastMsgTimestamp(cursor.getLong(cursor.getColumnIndex("lastMsgTimestamp")));
                 conversationBean.setLastMsgPid(cursor.getInt(cursor.getColumnIndex("lastMsgPid")));
                 conversationBean.setUnreadCount(cursor.getInt(cursor.getColumnIndex("unreadCount")));
-                if (conversationBean.getType() == MessageType.CHAT.getValue()) {
-                    // 单聊
-                    String remark = cursor.getString(cursor.getColumnIndex("fRemark"));
-                    if (!TextUtils.isEmpty(remark)) {
-                        conversationBean.setTitle(remark);
-                    } else {
-                        conversationBean.setTitle(cursor.getString(cursor.getColumnIndex("fNickname")));
-                    }
-                    conversationBean.setHeadImgSmall(cursor.getString(cursor.getColumnIndex("fHeadImgSmall")));
-                    conversationBean.setTop(cursor.getInt(cursor.getColumnIndex("fTop")));
-                    conversationBean.setDoNotDisturb(cursor.getInt(cursor.getColumnIndex("fDoNotDisturb")));
-                } else if (conversationBean.getType() == MessageType.GROUP_CHAT.getValue()) {
-                    // 群聊
-                    String nickname = cursor.getString(cursor.getColumnIndex("gcNickname"));
-                    if (!TextUtils.isEmpty(nickname)) {
-                        conversationBean.setTitle(nickname);
-                    } else {
-                        conversationBean.setTitle(cursor.getString(cursor.getColumnIndex("gcNicknameDefault")));
-                    }
-                    conversationBean.setHeadImgSmall(cursor.getString(cursor.getColumnIndex("gcHeadImgSmall")));
-                    conversationBean.setTop(cursor.getInt(cursor.getColumnIndex("gcTop")));
-                    conversationBean.setDoNotDisturb(cursor.getInt(cursor.getColumnIndex("gcDoNotDisturb")));
-                }
+//                if (conversationBean.getType() == MessageType.CHAT.getValue()) {
+//                    // 单聊
+//                    String remark = cursor.getString(cursor.getColumnIndex("fRemark"));
+//                    if (!TextUtils.isEmpty(remark)) {
+//                        conversationBean.setTitle(remark);
+//                    } else {
+//                        conversationBean.setTitle(cursor.getString(cursor.getColumnIndex("fNickname")));
+//                    }
+//                    conversationBean.setHeadImgSmall(cursor.getString(cursor.getColumnIndex("fHeadImgSmall")));
+//                    conversationBean.setTop(cursor.getInt(cursor.getColumnIndex("fTop")));
+//                    conversationBean.setDoNotDisturb(cursor.getInt(cursor.getColumnIndex("fDoNotDisturb")));
+//                } else if (conversationBean.getType() == MessageType.GROUP_CHAT.getValue()) {
+//                    // 群聊
+//                    String nickname = cursor.getString(cursor.getColumnIndex("gcNickname"));
+//                    if (!TextUtils.isEmpty(nickname)) {
+//                        conversationBean.setTitle(nickname);
+//                    } else {
+//                        conversationBean.setTitle(cursor.getString(cursor.getColumnIndex("gcNicknameDefault")));
+//                    }
+//                    conversationBean.setHeadImgSmall(cursor.getString(cursor.getColumnIndex("gcHeadImgSmall")));
+//                    conversationBean.setTop(cursor.getInt(cursor.getColumnIndex("gcTop")));
+//                    conversationBean.setDoNotDisturb(cursor.getInt(cursor.getColumnIndex("gcDoNotDisturb")));
+//                }
                 conversationBeanList.add(conversationBean);
             }
         } finally {

@@ -460,7 +460,6 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void setListener() {
-        super.setListener();
         IMClient.SINGLETON.addOnMessageListener(mOnMessageListener);
         IMClient.SINGLETON.addOnSendMessageListener(mOnSendMessageListener);
         mTitleBar.setLeftImageOnClickListener(new View.OnClickListener() {
@@ -548,7 +547,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
         if (friendBean != null) {
             // 对方的昵称
             mTitleBar.setTitleText(TextUtils.isEmpty(friendBean.getRemark())
-                    ? friendBean.getNickname()
+                    ? ""
                     : friendBean.getRemark());
         }
         // 加载消息列表
@@ -564,7 +563,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
             }
             // 对方的昵称
             mTitleBar.setTitleText(TextUtils.isEmpty(friendBean.getRemark())
-                    ? friendBean.getNickname()
+                    ? ""
                     : friendBean.getRemark());
         } else if (eventBean.getType() == EventBean.Type.REFRESH_MESSAGE_LIST) {
             // 清空列表

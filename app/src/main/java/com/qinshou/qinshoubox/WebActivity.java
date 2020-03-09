@@ -90,7 +90,6 @@ public class WebActivity extends QSActivity<WebPresenter> implements IWebContrac
 
     @Override
     public void setListener() {
-        super.setListener();
         mRefreshLayout.setOnRefreshListener(new RefreshLayout.IOnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshLayout) {

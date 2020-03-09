@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class GroupChatAddMemberModel implements IGroupChatAddMemberContract.IModel {
     @Override
-    public void getFriendList(Callback<List<FriendBean>> callback) {
+    public void getFriendList(Callback<List<UserDetailBean>> callback) {
         IMClient.SINGLETON.getFriendManager().getList(callback);
     }
 

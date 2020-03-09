@@ -1,5 +1,6 @@
 package com.qinshou.qinshoubox.im.cache;
 
+import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 
 /**
@@ -8,25 +9,26 @@ import com.qinshou.qinshoubox.im.bean.FriendBean;
  * Date: 2020/1/4 19:55
  * Description:FriendBean 双重缓存
  */
-public class FriendDoubleCache extends AbsDoubleCache<String, FriendBean> {
+public class FriendDoubleCache extends AbsDoubleCache<String, UserDetailBean> {
 
-    public FriendDoubleCache(MemoryCache<String, FriendBean> memoryCache, AbsDatabaseCache<String, FriendBean> databaseCache) {
+    public FriendDoubleCache(MemoryCache<String, UserDetailBean> memoryCache
+            , AbsDatabaseCache<String, UserDetailBean> databaseCache) {
         super(memoryCache, databaseCache);
     }
 
     @Override
-    public void put(String key, FriendBean value) {
+    public void put(String key, UserDetailBean value) {
         getMemoryCache().put(key, value);
         getDatabaseCache().put(key, value);
     }
 
     @Override
-    public FriendBean get(String key) {
-        FriendBean friendBean = getMemoryCache().get(key);
-        if (friendBean == null) {
-            friendBean = getDatabaseCache().get(key);
-            getMemoryCache().put(key, friendBean);
+    public UserDetailBean get(String key) {
+        UserDetailBean userDetailBean = getMemoryCache().get(key);
+        if (userDetailBean == null) {
+            userDetailBean = getDatabaseCache().get(key);
+            getMemoryCache().put(key, userDetailBean);
         }
-        return friendBean;
+        return userDetailBean;
     }
 }

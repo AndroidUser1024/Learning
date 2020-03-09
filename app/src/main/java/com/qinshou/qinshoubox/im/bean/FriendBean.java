@@ -5,7 +5,7 @@ package com.qinshou.qinshoubox.im.bean;
  * Author: QinHao
  * Email:cqflqinhao@126.com
  * Date: 2019/12/04 23:05
- * Description:好友实体类
+ * Description:好友关系实体类
  */
 public class FriendBean {
     /**
@@ -13,21 +13,9 @@ public class FriendBean {
      */
     private String id;
     /**
-     * 昵称
+     * 好友状态
      */
-    private String nickname;
-    /**
-     * 头像
-     */
-    private String headImg;
-    /**
-     * 小头像
-     */
-    private String headImgSmall;
-    /**
-     * 个性签名
-     */
-    private String signature;
+    private int status;
     /**
      * 备注
      */
@@ -48,14 +36,20 @@ public class FriendBean {
     public FriendBean() {
     }
 
+    public FriendBean(String id, int status, String remark, int top, int doNotDisturb, int blackList) {
+        this.id = id;
+        this.status = status;
+        this.remark = remark;
+        this.top = top;
+        this.doNotDisturb = doNotDisturb;
+        this.blackList = blackList;
+    }
+
     @Override
     public String toString() {
         return "FriendBean{" +
-                "id=" + id +
-                ", nickname='" + nickname + '\'' +
-                ", headImg='" + headImg + '\'' +
-                ", headImgSmall='" + headImgSmall + '\'' +
-                ", signature='" + signature + '\'' +
+                "id='" + id + '\'' +
+                ", status=" + status +
                 ", remark='" + remark + '\'' +
                 ", top=" + top +
                 ", doNotDisturb=" + doNotDisturb +
@@ -71,36 +65,12 @@ public class FriendBean {
         this.id = id;
     }
 
-    public String getNickname() {
-        return nickname;
+    public int getStatus() {
+        return status;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getHeadImg() {
-        return headImg;
-    }
-
-    public void setHeadImg(String headImg) {
-        this.headImg = headImg;
-    }
-
-    public String getHeadImgSmall() {
-        return headImgSmall;
-    }
-
-    public void setHeadImgSmall(String headImgSmall) {
-        this.headImgSmall = headImgSmall;
-    }
-
-    public String getSignature() {
-        return signature;
-    }
-
-    public void setSignature(String signature) {
-        this.signature = signature;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public String getRemark() {

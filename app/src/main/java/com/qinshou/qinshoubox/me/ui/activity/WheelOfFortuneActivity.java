@@ -45,7 +45,6 @@ public class WheelOfFortuneActivity extends QSActivity<AbsPresenter> {
 
     @Override
     public void setListener() {
-        super.setListener();
     }
 
     @Override

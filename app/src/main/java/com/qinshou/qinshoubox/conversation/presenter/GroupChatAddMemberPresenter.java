@@ -25,9 +25,9 @@ public class GroupChatAddMemberPresenter extends AbsPresenter<IGroupChatAddMembe
 
     @Override
     public void getFriendList() {
-        getModel().getFriendList(new Callback<List<FriendBean>>() {
+        getModel().getFriendList(new Callback<List<UserDetailBean>>() {
             @Override
-            public void onSuccess(List<FriendBean> data) {
+            public void onSuccess(List<UserDetailBean> data) {
                 if (!isViewAttached()) {
                     return;
                 }

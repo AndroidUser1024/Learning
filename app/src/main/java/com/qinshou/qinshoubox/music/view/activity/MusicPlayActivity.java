@@ -123,7 +123,6 @@ public class MusicPlayActivity extends QSActivity<MusicPlayPresenter> implements
 
     @Override
     public void setListener() {
-        super.setListener();
         mTitleBar.setLeftImageOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

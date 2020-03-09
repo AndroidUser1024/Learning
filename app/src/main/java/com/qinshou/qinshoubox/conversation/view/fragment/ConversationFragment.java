@@ -120,7 +120,6 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
 
     @Override
     public void setListener() {
-        super.setListener();
         // 设置聊天监听器,监听收到的消息
         ShowLogUtil.logi("setListener");
         IMClient.SINGLETON.addOnMessageListener(mOnMessageListener);

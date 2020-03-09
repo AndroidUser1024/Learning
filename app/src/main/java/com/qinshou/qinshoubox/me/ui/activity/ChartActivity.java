@@ -39,7 +39,6 @@ public class ChartActivity extends QSActivity<AbsPresenter> {
 
     @Override
     public void setListener() {
-        super.setListener();
     }
 
     @Override

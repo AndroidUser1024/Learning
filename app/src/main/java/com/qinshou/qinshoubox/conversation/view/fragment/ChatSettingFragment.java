@@ -71,7 +71,6 @@ public class ChatSettingFragment extends QSFragment<ChatSettingPresenter> implem
 
     @Override
     public void setListener() {
-        super.setListener();
         ((TitleBar) findViewByID(R.id.title_bar)).setLeftImageOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,7 +114,7 @@ public class ChatSettingFragment extends QSFragment<ChatSettingPresenter> implem
             @Override
             public void onClick(View v) {
                 String nickname = TextUtils.isEmpty(mFriendBean.getRemark())
-                        ? mFriendBean.getNickname()
+                        ? ""
                         : mFriendBean.getRemark();
                 ClearChatHistoryDialog.newInstance(MessageType.CHAT, mFriendBean.getId(), nickname)
                         .show(getChildFragmentManager(), "ClearChatHistoryDialog");
@@ -152,8 +151,10 @@ public class ChatSettingFragment extends QSFragment<ChatSettingPresenter> implem
     @Override
     public void getFriendSuccess(FriendBean friendBean) {
         mFriendBean = friendBean;
-        ImageLoadUtil.SINGLETON.loadImage(getContext(), friendBean.getHeadImgSmall(), mIvHeadImg);
-        mTvNickname.setText(TextUtils.isEmpty(friendBean.getRemark()) ? friendBean.getNickname() : friendBean.getRemark());
+//        ImageLoadUtil.SINGLETON.loadImage(getContext(), friendBean.getHeadImgSmall(), mIvHeadImg);
+        mTvNickname.setText(TextUtils.isEmpty(friendBean.getRemark())
+                ? ""
+                : friendBean.getRemark());
         mSwtTop.setChecked(friendBean.getTop() == 1);
         mSwtDoNotDisturb.setChecked(friendBean.getDoNotDisturb() == 1);
         mSwtBlackList.setChecked(friendBean.getBlackList() == 1);

@@ -48,7 +48,6 @@ public class MusicListFragment extends QSFragment<MusicListPresenter> implements
 
     @Override
     public void setListener() {
-        super.setListener();
     }
 
     @Override

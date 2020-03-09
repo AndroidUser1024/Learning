@@ -1,5 +1,9 @@
 package com.qinshou.qinshoubox.base;
 
+import android.os.Bundle;
+
+import androidx.annotation.Nullable;
+
 import com.qinshou.commonmodule.base.AbsMVPActivity;
 import com.qinshou.commonmodule.base.AbsPresenter;
 import com.qinshou.commonmodule.util.ShowLogUtil;
@@ -19,16 +23,17 @@ import org.greenrobot.eventbus.ThreadMode;
  */
 public abstract class QSActivity<P extends AbsPresenter> extends AbsMVPActivity<P> implements IOnConnectListener {
     @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+        IMClient.SINGLETON.addOnConnectListener(this);
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
         IMClient.SINGLETON.removeOnConnectListener(this);
-    }
-
-    @Override
-    public void setListener() {
-        EventBus.getDefault().register(this);
-        IMClient.SINGLETON.addOnConnectListener(this);
     }
 
     @Override

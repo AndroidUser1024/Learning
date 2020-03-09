@@ -44,7 +44,7 @@ public abstract class AbsRcvMessageAdapterFromMessageItemView extends BaseItemVi
         if (messageBean.getType() == MessageType.CHAT.getValue()) {
             FriendBean friendBean = IMClient.SINGLETON.getFriendManager().getById(messageBean.getFromUserId());
             if (friendBean != null) {
-                ImageLoadUtil.SINGLETON.loadImage(getContext(), friendBean.getHeadImgSmall(), baseViewHolder.getImageView(R.id.iv_head_img));
+//                ImageLoadUtil.SINGLETON.loadImage(getContext(), friendBean.getHeadImgSmall(), baseViewHolder.getImageView(R.id.iv_head_img));
             }
         } else if (messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
             if (!TextUtils.isEmpty(mGroupChatId)) {

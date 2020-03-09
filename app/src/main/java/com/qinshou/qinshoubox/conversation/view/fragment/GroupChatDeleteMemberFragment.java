@@ -63,7 +63,6 @@ public class GroupChatDeleteMemberFragment extends QSFragment<GroupChatDeleteMem
 
     @Override
     public void setListener() {
-        super.setListener();
         mTvFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

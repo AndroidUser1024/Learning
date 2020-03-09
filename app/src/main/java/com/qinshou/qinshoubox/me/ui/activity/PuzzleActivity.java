@@ -93,7 +93,6 @@ public class PuzzleActivity extends QSActivity<AbsPresenter> {
 
     @Override
     public void setListener() {
-        super.setListener();
         btnChooseImg.setOnClickListener(mOnClickListener);
         btnChooseDifficulty.setOnClickListener(mOnClickListener);
         btnShowOriginImg.setOnClickListener(mOnClickListener);

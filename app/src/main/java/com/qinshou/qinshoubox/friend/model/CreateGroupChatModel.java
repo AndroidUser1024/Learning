@@ -1,6 +1,7 @@
 package com.qinshou.qinshoubox.friend.model;
 
 import com.qinshou.okhttphelper.callback.Callback;
+import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.friend.contract.ICreateGroupChatContract;
 import com.qinshou.qinshoubox.friend.view.fragment.CreateGroupChatFragment;
 import com.qinshou.qinshoubox.im.IMClient;
@@ -21,7 +22,7 @@ import java.util.List;
 public class CreateGroupChatModel implements ICreateGroupChatContract.IModel {
 
     @Override
-    public void getFriendList(Callback<List<FriendBean>> callback) {
+    public void getFriendList(Callback<List<UserDetailBean>> callback) {
         IMClient.SINGLETON.getFriendManager().getList(callback);
     }
 

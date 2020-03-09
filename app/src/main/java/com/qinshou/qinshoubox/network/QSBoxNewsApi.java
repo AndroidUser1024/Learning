@@ -15,7 +15,7 @@ import com.qinshou.qinshoubox.homepage.bean.QinshouResultBean;
  * Date: 2019/11/27 19:52
  * Description:新闻模块的接口
  */
-@Api(IUrlConstant.DEFAULT_HOST + IUrlConstant.NEWS_API)
+@Api(IUrlConstant.DEFAULT_HOST + "/news")
 public interface QSBoxNewsApi {
     @Get("/getList")
     AbsCall<QinshouResultBean<PageResultBean<NewsBean>>> getList(@Query(name = "page") int page, @Query(name = "pageSize") int pageSize);

@@ -136,7 +136,7 @@ public class QSUtil {
             title = messageBean.getFromUserId();
         } else {
             title = TextUtils.isEmpty(friendBean.getRemark())
-                    ? friendBean.getNickname()
+                    ? ""
                     : friendBean.getRemark();
         }
         NotificationUtil.showNotification(context

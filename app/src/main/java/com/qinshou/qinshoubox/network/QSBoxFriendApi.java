@@ -8,6 +8,7 @@ import com.qinshou.okhttphelper.call.AbsCall;
 import com.qinshou.okhttphelper.enums.LogLevel;
 import com.qinshou.qinshoubox.constant.IUrlConstant;
 import com.qinshou.qinshoubox.friend.bean.FriendHistoryBean;
+import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.homepage.bean.PageResultBean;
 import com.qinshou.qinshoubox.homepage.bean.QinshouResultBean;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
@@ -44,7 +45,7 @@ public interface QSBoxFriendApi {
 
     @Json
     @Post("/getList")
-    AbsCall<QinshouResultBean<List<FriendBean>>> getList(@Field(name = "userId") String userId);
+    AbsCall<QinshouResultBean<List<UserDetailBean>>> getList(@Field(name = "userId") String userId);
 
     @Json
     @Post("/delete")
@@ -62,6 +63,6 @@ public interface QSBoxFriendApi {
 
     @Json
     @Post("/getInfo")
-    AbsCall<QinshouResultBean<FriendBean>> getInfo(@Field(name = "fromUserId") String fromUserId
+    AbsCall<QinshouResultBean<UserDetailBean>> getInfo(@Field(name = "fromUserId") String fromUserId
             , @Field(name = "toUserId") String toUserId);
 }

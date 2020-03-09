@@ -110,7 +110,6 @@ public class HomepageFragment extends QSFragment<HomepagePresenter> implements I
 
     @Override
     public void setListener() {
-        super.setListener();
         mRefreshLayout.setOnRefreshLoadMoreListener(new RefreshLayout.IOnRefreshLoadMoreListener() {
             @Override
             public void onRefresh(RefreshLayout refreshLayout) {

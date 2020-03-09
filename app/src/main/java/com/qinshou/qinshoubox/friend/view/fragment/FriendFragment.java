@@ -185,7 +185,6 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
 
     @Override
     public void setListener() {
-        super.setListener();
         IMClient.SINGLETON.addOnFriendStatusListener(mOnFriendStatusListener);
         IMClient.SINGLETON.addOnGroupChatStatusListener(mOnGroupChatStatusListener);
         findViewByID(R.id.ll_new_friend).setOnClickListener(new View.OnClickListener() {
@@ -306,8 +305,9 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
     }
 
     @Override
-    public void getFriendListSuccess(List<FriendBean> friendBeanList) {
-        mRcvFriendAdapter.setDataList(friendBeanList);
+    public void getFriendListSuccess(List<UserDetailBean> userDetailBeanList) {
+        ShowLogUtil.logi("userDetailBeanList--->" + userDetailBeanList);
+        mRcvFriendAdapter.setDataList(userDetailBeanList);
     }
 
     @Override

@@ -50,7 +50,6 @@ public class SplashActivity extends QSActivity<SplashPresenter> implements ISpla
 
     @Override
     public void setListener() {
-        super.setListener();
         mCountDownView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

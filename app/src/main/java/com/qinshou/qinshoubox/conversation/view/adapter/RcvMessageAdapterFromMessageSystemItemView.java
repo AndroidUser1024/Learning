@@ -61,7 +61,7 @@ public class RcvMessageAdapterFromMessageSystemItemView extends AbsRcvMessageAda
     private void showFriendStatusText(BaseViewHolder baseViewHolder, MessageBean messageBean) {
         FriendBean friendBean = IMClient.SINGLETON.getFriendManager().getById(messageBean.getFromUserId());
         String content = getContext().getResources().getString(R.string.chat_agree_add_text, TextUtils.isEmpty(friendBean.getRemark())
-                ? friendBean.getNickname()
+                ? ""
                 : friendBean.getRemark());
         baseViewHolder.setTvText(R.id.tv_content, content);
     }

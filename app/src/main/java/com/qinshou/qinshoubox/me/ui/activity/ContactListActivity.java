@@ -46,7 +46,6 @@ public class ContactListActivity extends QSActivity<AbsPresenter> {
 
     @Override
     public void setListener() {
-        super.setListener();
     }
 
     @Override
