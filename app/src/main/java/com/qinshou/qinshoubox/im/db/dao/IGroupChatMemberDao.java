@@ -15,10 +15,8 @@ public interface IGroupChatMemberDao extends IBaseDao {
 //    String sql = "CREATE TABLE IF NOT EXISTS group_chat_member(" +
 //            " groupChatId TEXT" +
 //            ",userId TEXT" +
-//            ",nickname TEXT" +
-//            ",headImg TEXT" +
-//            ",headImgSmall TEXT" +
 //            ",nicknameInGroupChat TEXT" +
+//            ",status INTEGER" +
 //            " )"
 
     // insert
@@ -26,16 +24,12 @@ public interface IGroupChatMemberDao extends IBaseDao {
 //            " (" +
 //            "groupChatId" +
 //            ",userId" +
-//            ",nickname" +
-//            ",headImg" +
-//            ",headImgSmall" +
 //            ",nicknameInGroupChat" +
+//            ",status INTEGER" +
 //            ")" +
 //            " VALUES" +
 //            " (" +
 //            "%s" +
-//            ",%s" +
-//            ",%s" +
 //            ",%s" +
 //            ",%s" +
 //            ",%s" +
@@ -44,10 +38,8 @@ public interface IGroupChatMemberDao extends IBaseDao {
 
     // update
 //    String sql = "UPDATE group_chat_member SET" +
-//            " nickname=%s" +
-//            ",headImg=%s" +
-//            ",headImgSmall=%s" +
-//            ",nicknameInGroupChat=%s" +
+//            " nicknameInGroupChat=%s" +
+//            " status=%s" +
 //            " WHERE" +
 //            " groupChatId=%s" +
 //            " AND" +
@@ -56,10 +48,8 @@ public interface IGroupChatMemberDao extends IBaseDao {
 
     //    String sql = "SELECT" +
 //            " gcm.userId" +
-//            ",gcm.nickname" +
-//            ",gcm.headImg" +
-//            ",gcm.headImgSmall" +
 //            ",gcm.nicknameInGroupChat" +
+//            ",gcm.status" +
 //            ",f.remark" +
 //            " FROM group_chat_member AS gcm" +
 //            " LEFT OUTER JOIN friend AS f ON gcm.userId=f.id" +
@@ -69,9 +59,6 @@ public interface IGroupChatMemberDao extends IBaseDao {
 
     //    String sql = "SELECT" +
 //            " gcm.userId" +
-//            ",gcm.nickname" +
-//            ",gcm.headImg" +
-//            ",gcm.headImgSmall" +
 //            ",gcm.nicknameInGroupChat" +
 //            ",f.remark" +
 //            " FROM group_chat_member AS gcm" +

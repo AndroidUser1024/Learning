@@ -15,21 +15,19 @@ import com.qinshou.qinshoubox.im.db.dao.IUserDao;
  */
 public class FriendDatabaseCache extends AbsDatabaseCache<String, UserDetailBean> {
 
-    private IUserDao mUserDao;
     private IFriendDao mFriendDao;
+    private IUserDao mUserDao;
 
     public FriendDatabaseCache(DatabaseHelper databaseHelper) {
         super(databaseHelper);
-        mUserDao = databaseHelper.getDao(IUserDao.class);
         mFriendDao = databaseHelper.getDao(IFriendDao.class);
+        mUserDao = databaseHelper.getDao(IUserDao.class);
     }
 
     @Override
     public void put(String key, UserDetailBean value) {
-        // 更新数据库
-        if (mUserDao.existsById(value.getId())) {
-            mUserDao.update(value);
-        } else {
+        // 用户数据不存在才存,但是这里不更新用户数据库
+        if (!mUserDao.existsById(value.getId())) {
             mUserDao.insert(value);
         }
         FriendBean friendBean = new FriendBean(value.getId()

@@ -174,6 +174,8 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
                             @Override
                             public void run() {
                                 for (UserDetailBean userDetailBean : data) {
+                                    // 0 表示已不在该群聊中,1 表示在群聊中
+                                    userDetailBean.setStatus(1);
                                     IMClient.SINGLETON.getGroupChatMemberManager().put(groupChatId, userDetailBean);
                                 }
                             }

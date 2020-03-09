@@ -62,11 +62,14 @@ public class UserDetailBean {
      */
     private int source;
     /**
-     * 搜索目标用户与发起搜索的用户的关系
+     * status 表示搜索目标用户与发起搜索的用户的关系
      * 0: 非好友
      * 1: 对方是你好友,但你不是对方好友
      * 2: 你是对方好友,但对方不是你好友
      * 3: 互为好友
+     *
+     * status 表示群聊关系时
+     * 0 表示已不在该群聊中,1 表示在群聊中
      */
     private int status;
     /**

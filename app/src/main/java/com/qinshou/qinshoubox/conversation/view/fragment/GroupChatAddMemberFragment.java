@@ -120,9 +120,9 @@ public class GroupChatAddMemberFragment extends QSFragment<GroupChatAddMemberPre
             }
             GroupChatMemberForCreateBean groupChatMemberForCreateBean = new GroupChatMemberForCreateBean();
             groupChatMemberForCreateBean.setId(userDetailBean.getId());
-//            groupChatMemberForCreateBean.setHeadImgSmall(friendBean.getHeadImgSmall());
+            groupChatMemberForCreateBean.setHeadImgSmall(userDetailBean.getHeadImgSmall());
             groupChatMemberForCreateBean.setRemark(userDetailBean.getRemark());
-//            groupChatMemberForCreateBean.setNickname(friendBean.getNickname());
+            groupChatMemberForCreateBean.setNickname(userDetailBean.getNickname());
             groupChatMemberForCreateBeanList.add(groupChatMemberForCreateBean);
         }
         mRcvGroupChatMemberForCreateAdapter.setDataList(groupChatMemberForCreateBeanList);

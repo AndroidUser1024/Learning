@@ -15,7 +15,8 @@ import com.qinshou.qinshoubox.im.db.DatabaseHelper;
 public class GroupChatMemberManager extends AbsManager<String, UserDetailBean> {
 
     public GroupChatMemberManager(String userId, DatabaseHelper databaseHelper) {
-        super(userId, new GroupChatMemberDoubleCache(new MemoryCache<String, UserDetailBean>(), new GroupChatMemberDatabaseCache(databaseHelper)));
+        super(userId
+                , new GroupChatMemberDoubleCache(new MemoryCache<String, UserDetailBean>(), new GroupChatMemberDatabaseCache(databaseHelper)));
     }
 
     public void put(String groupChatId, UserDetailBean userDetailBean) {

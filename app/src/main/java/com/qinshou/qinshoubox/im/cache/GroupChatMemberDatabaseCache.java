@@ -3,6 +3,7 @@ package com.qinshou.qinshoubox.im.cache;
 import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.db.DatabaseHelper;
 import com.qinshou.qinshoubox.im.db.dao.IGroupChatMemberDao;
+import com.qinshou.qinshoubox.im.db.dao.IUserDao;
 
 /**
  * Author: QinHao
@@ -13,10 +14,12 @@ import com.qinshou.qinshoubox.im.db.dao.IGroupChatMemberDao;
 public class GroupChatMemberDatabaseCache extends AbsDatabaseCache<String, UserDetailBean> {
 
     private IGroupChatMemberDao mGroupChatMemberDao;
+    private IUserDao mUserDao;
 
     public GroupChatMemberDatabaseCache(DatabaseHelper databaseHelper) {
         super(databaseHelper);
         mGroupChatMemberDao = databaseHelper.getDao(IGroupChatMemberDao.class);
+        mUserDao = databaseHelper.getDao(IUserDao.class);
     }
 
     @Override
@@ -27,6 +30,10 @@ public class GroupChatMemberDatabaseCache extends AbsDatabaseCache<String, UserD
         }
         String groupChatId = split[0];
         String userId = split[1];
+        // 用户数据不存在才存,但是这里不更新用户数据库
+        if (!mUserDao.existsById(value.getId())) {
+            mUserDao.insert(value);
+        }
         if (mGroupChatMemberDao.existsByGroupChatIdAndUserId(groupChatId, userId)) {
             mGroupChatMemberDao.update(groupChatId, value);
         } else {
