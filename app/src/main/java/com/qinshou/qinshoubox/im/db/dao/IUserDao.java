@@ -21,12 +21,56 @@ public interface IUserDao extends IBaseDao<UserDetailBean> {
     //            " ,signature TEXT" +
     //            " ,gender INTEGER" +
     //            ")"
-    // INSERT INTO user () VALUES ()
+
+    //    String sql = "INSERT INTO user(" +
+//            " id" +
+//            " ,username" +
+//            " ,nickname" +
+//            " ,headImg" +
+//            " ,headImgSmall" +
+//            " ,phoneNumber" +
+//            " ,email" +
+//            " ,signature" +
+//            " ,gender" +
+//            ")" +
+//            " VALUES" +
+//            " (%s,%s,%s,%s,%s,%s,%s,%s,%s)";
     int insert(UserDetailBean userDetailBean);
 
+    //    String sql = "DELETE FROM user" +
+//            " WHERE" +
+//            " id=%s";
     int delete(String id);
 
+    //    String sql = "UPDATE user SET" +
+//            " username=%s" +
+//            " ,nickname=%s" +
+//            " ,headImg=%s" +
+//            " ,headImgSmall=%s" +
+//            " ,phoneNumber=%s" +
+//            " ,email=%s" +
+//            " ,signature=%s" +
+//            " ,gender=%s" +
+//            " WHERE" +
+//            " id=%s";
     int update(UserDetailBean userDetailBean);
 
+    //    String sql = "SELECT" +
+//            " u.id" +
+//            " ,u.username" +
+//            " ,u.nickname" +
+//            " ,u.headImg" +
+//            " ,u.headImgSmall" +
+//            " ,u.phoneNumber" +
+//            " ,u.email" +
+//            " ,u.signature" +
+//            " ,u.gender" +
+//            " FROM user AS u" +
+//            " WHERE" +
+//            " u.id=%s";
     UserDetailBean selectById(String id);
+
+    // existsById
+    // SELECT COUNT(id) AS count FROM friend WHERE id=#{id};
+    boolean existsById(String id);
 }

@@ -4,6 +4,7 @@ import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.db.DatabaseHelper;
 import com.qinshou.qinshoubox.im.db.dao.IFriendDao;
+import com.qinshou.qinshoubox.im.db.dao.IUserDao;
 
 /**
  * Author: QinHao
@@ -13,27 +14,47 @@ import com.qinshou.qinshoubox.im.db.dao.IFriendDao;
  */
 public class FriendDatabaseCache extends AbsDatabaseCache<String, UserDetailBean> {
 
+    private IUserDao mUserDao;
     private IFriendDao mFriendDao;
 
     public FriendDatabaseCache(DatabaseHelper databaseHelper) {
         super(databaseHelper);
+        mUserDao = databaseHelper.getDao(IUserDao.class);
         mFriendDao = databaseHelper.getDao(IFriendDao.class);
     }
 
     @Override
     public void put(String key, UserDetailBean value) {
-//        FriendBean friendBean = new FriendBean(value.getId());
         // 更新数据库
-//        if (mFriendDao.existsById(key)) {
-//            mFriendDao.update(value);
-//        } else {
-//            mFriendDao.insert(value);
-//        }
+        if (mUserDao.existsById(value.getId())) {
+            mUserDao.update(value);
+        } else {
+            mUserDao.insert(value);
+        }
+        FriendBean friendBean = new FriendBean(value.getId()
+                , value.getStatus()
+                , value.getRemark()
+                , value.getTop()
+                , value.getDoNotDisturb()
+                , value.getBlackList());
+        if (mFriendDao.existsById(friendBean.getId())) {
+            mFriendDao.update(friendBean);
+        } else {
+            mFriendDao.insert(friendBean);
+        }
     }
 
     @Override
     public UserDetailBean get(String key) {
-//        return mFriendDao.selectById(key);
-        return null;
+        UserDetailBean userDetailBean = mUserDao.selectById(key);
+        FriendBean friendBean = mFriendDao.selectById(key);
+        if (userDetailBean != null && friendBean != null) {
+            userDetailBean.setStatus(friendBean.getStatus());
+            userDetailBean.setRemark(friendBean.getRemark());
+            userDetailBean.setTop(friendBean.getTop());
+            userDetailBean.setDoNotDisturb(friendBean.getDoNotDisturb());
+            userDetailBean.setBlackList(friendBean.getBlackList());
+        }
+        return userDetailBean;
     }
 }

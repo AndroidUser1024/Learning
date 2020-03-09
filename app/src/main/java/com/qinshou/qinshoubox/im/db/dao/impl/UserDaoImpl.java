@@ -95,6 +95,7 @@ public class UserDaoImpl extends AbsDaoImpl<UserDetailBean> implements IUserDao 
         }
         return 1;
     }
+
     @Override
     public UserDetailBean selectById(String id) {
         String sql = "SELECT" +
@@ -126,11 +127,33 @@ public class UserDaoImpl extends AbsDaoImpl<UserDetailBean> implements IUserDao 
                 userDetailBean.setGender(cursor.getInt(cursor.getColumnIndex("gender")));
 
             }
-        }finally {
+        } finally {
             if (cursor != null) {
                 cursor.close();
             }
         }
         return null;
+    }
+
+    @Override
+    public boolean existsById(String id) {
+        String sql = "SELECT" +
+                " COUNT(id)" +
+                " FROM friend" +
+                " WHERE" +
+                " id=%s";
+        sql = String.format(sql, getStringValue(id));
+        Cursor cursor = getSQLiteDatabase().rawQuery(sql, new String[]{});
+        try {
+            if (cursor.moveToNext()) {
+                int count = cursor.getInt(cursor.getColumnIndex("COUNT(id)"));
+                return count > 0;
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return false;
     }
 }
