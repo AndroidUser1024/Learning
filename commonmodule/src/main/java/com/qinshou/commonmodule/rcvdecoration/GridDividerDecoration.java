@@ -1,13 +1,14 @@
 package com.qinshou.commonmodule.rcvdecoration;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.view.View;
+
 import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.view.View;
 
 /**
  * Description:
@@ -40,7 +41,7 @@ public class GridDividerDecoration extends RecyclerView.ItemDecoration {
     }
 
     public GridDividerDecoration(Orientation orientation, int width) {
-        this(orientation, width, Color.BLACK);
+        this(orientation, width, 0xFF000000);
     }
 
     public GridDividerDecoration(Orientation orientation, int width, @ColorInt int color) {
@@ -51,35 +52,14 @@ public class GridDividerDecoration extends RecyclerView.ItemDecoration {
     }
 
     @Override
-    public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+    public void onDraw(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
         if (parent.getLayoutManager() == null) {
             return;
         }
-//        if (mOrientation == Orientation.VERTICAL) {
-//        drawVertical(c, parent);
-//        } else if (mOrientation == Orientation.HORIZONTAL) {
-        drawHorizontal(c, parent);
-//        }
+        drawDivider(c, parent);
     }
 
-    private void drawVertical(Canvas canvas, RecyclerView parent) {
-        //Decoration 的左边位置
-        int left = parent.getLeft() + mMarginLeft;
-        //Decoration 的右边位置
-        int right = parent.getRight() - mMarginRight;
-        //获取 RecyclerView 的 Item 数量
-        int childCount = parent.getChildCount();
-        for (int i = 0; i < childCount - 1; i++) {
-            View childView = parent.getChildAt(i);
-            //Decoration 的底边位置
-            int top = childView.getBottom();
-            //Decoration 的顶边位置
-            int bottom = top + mWidth;
-            canvas.drawRect(left, top, right, bottom, mPaint);
-        }
-    }
-
-    private void drawHorizontal(Canvas canvas, RecyclerView parent) {
+    private void drawDivider(Canvas canvas, RecyclerView parent) {
         //获取 RecyclerView 的 Item 数量
         int childCount = parent.getChildCount();
         for (int i = 0; i < childCount - 1; i++) {
@@ -116,7 +96,7 @@ public class GridDividerDecoration extends RecyclerView.ItemDecoration {
     }
 
     @Override
-    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+    public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
         int position = parent.getChildAdapterPosition(view); //获取当前itemView的位置
         RecyclerView.Adapter adapter = parent.getAdapter();
         if (adapter == null) {
@@ -124,20 +104,12 @@ public class GridDividerDecoration extends RecyclerView.ItemDecoration {
         }
         GridLayoutManager gridLayoutManager = (GridLayoutManager) parent.getLayoutManager();
         int spanCount = gridLayoutManager.getSpanCount() / gridLayoutManager.getSpanSizeLookup().getSpanSize(position);
-//        if (mOrientation == Orientation.VERTICAL) {
-//            //outRect 相当于 Item 的整体绘制区域,设置 left、top、right、bottom 相当于设置左上右下的内间距
-//            //如设置 outRect.top = 5 则相当于设置 paddingTop 为 5px。
-//            if (position < adapter.getItemCount() - 1) {
-//                outRect.top = mWidth;
-//            }
-//        } else if (mOrientation == Orientation.HORIZONTAL) {
         if ((position + 1) % spanCount != 0) {
             outRect.right = mWidth;
         }
         if (position < adapter.getItemCount() - spanCount) {
             outRect.bottom = mWidth;
         }
-//        }
     }
 
     public void setMargin(int left, int top, int right, int bottom) {

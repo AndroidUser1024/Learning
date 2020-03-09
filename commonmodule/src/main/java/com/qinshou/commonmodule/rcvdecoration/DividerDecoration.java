@@ -1,13 +1,13 @@
 package com.qinshou.commonmodule.rcvdecoration;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.view.View;
+
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import android.view.View;
 
 /**
  * Description:RecyclerView 分隔线样式的 Decoration
@@ -29,6 +29,10 @@ public class DividerDecoration extends RecyclerView.ItemDecoration {
     private int mMarginTop;
     private int mMarginRight;
     private int mMarginBottom;
+    /**
+     * 是否显示最后一个 item 的分隔线
+     */
+    private boolean mShowLast = false;
 
     public DividerDecoration() {
         this(Orientation.VERTICAL);
@@ -40,7 +44,7 @@ public class DividerDecoration extends RecyclerView.ItemDecoration {
     }
 
     public DividerDecoration(Orientation orientation, int width) {
-        this(orientation, width, Color.BLACK);
+        this(orientation, width, 0xFF000000);
     }
 
     public DividerDecoration(Orientation orientation, int width, @ColorInt int color) {
@@ -69,7 +73,10 @@ public class DividerDecoration extends RecyclerView.ItemDecoration {
         int right = parent.getRight() - mMarginRight;
         //获取 RecyclerView 的 Item 数量
         int childCount = parent.getChildCount();
-        for (int i = 0; i < childCount - 1; i++) {
+        for (int i = 0; i < childCount; i++) {
+            if (i == childCount - 1 && !mShowLast) {
+                break;
+            }
             View childView = parent.getChildAt(i);
             //Decoration 的底边位置
             int top = childView.getBottom();
@@ -87,6 +94,9 @@ public class DividerDecoration extends RecyclerView.ItemDecoration {
         //获取 RecyclerView 的 Item 数量
         int childCount = parent.getChildCount();
         for (int i = 0; i < childCount - 1; i++) {
+            if (i == childCount - 1 && !mShowLast) {
+                break;
+            }
             View childView = parent.getChildAt(i);
             //Decoration 的左边位置
             int left = childView.getRight();
@@ -121,5 +131,9 @@ public class DividerDecoration extends RecyclerView.ItemDecoration {
         this.mMarginTop = top;
         this.mMarginRight = right;
         this.mMarginBottom = bottom;
+    }
+
+    public void setShowLast(boolean showLast) {
+        mShowLast = showLast;
     }
 }
