@@ -15,6 +15,7 @@ import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 /**
  * Author: QinHao
@@ -61,6 +62,17 @@ public class TransformCallImpl<I, O> extends AbsCall<O> {
                 }
             }
         });
+    }
+
+    @Override
+    public O execute() throws Exception {
+        Response response = getCall().execute();
+        ResponseBody responseBody = response.body();
+        if (responseBody == null) {
+            return null;
+        }
+        I i = new Gson().fromJson(responseBody.string(), mType);
+        return mResponseTransformer.transform(i);
     }
 
     @Override

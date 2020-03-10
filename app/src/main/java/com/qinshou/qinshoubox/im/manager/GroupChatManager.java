@@ -17,6 +17,7 @@ import com.qinshou.qinshoubox.listener.SuccessRunnable;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxGroupChatApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -72,28 +73,50 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
      * Description:获取我的群列表
      */
     public void getGroupChatList(final Callback<List<GroupChatBean>> callback) {
-        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.getMyGroupChatList(getUserId())
-                .transform(new QSApiTransformer<List<GroupChatBean>>())
-                .enqueue(new Callback<List<GroupChatBean>>() {
-                    @Override
-                    public void onSuccess(final List<GroupChatBean> data) {
-                        getExecutorService().submit(new Runnable() {
-                            @Override
-                            public void run() {
-                                for (GroupChatBean groupChatBean : data) {
-                                    getCache().put(groupChatBean.getId(), groupChatBean);
-                                    getMemberList(groupChatBean.getId(), null);
-                                }
-                                getHandler().post(new SuccessRunnable<>(callback, data));
-                            }
-                        });
-                    }
+//        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.getMyGroupChatList(getUserId())
+//                .transform(new QSApiTransformer<List<GroupChatBean>>())
+//                .enqueue(new Callback<List<GroupChatBean>>() {
+//                    @Override
+//                    public void onSuccess(final List<GroupChatBean> data) {
+//                        getExecutorService().submit(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                for (GroupChatBean groupChatBean : data) {
+//                                    getCache().put(groupChatBean.getId(), groupChatBean);
+//                                    getMemberList(groupChatBean.getId(), null);
+//                                }
+//                                getHandler().post(new SuccessRunnable<>(callback, data));
+//                            }
+//                        });
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Exception e) {
+//                        getHandler().post(new FailureRunnable<>(callback, e));
+//                    }
+//                });
+    }
 
-                    @Override
-                    public void onFailure(Exception e) {
-                        getHandler().post(new FailureRunnable<>(callback, e));
-                    }
-                });
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2020/1/6 17:57
+     * Description:同步获取我的群列表
+     */
+    public List<GroupChatBean> getGroupChatList() {
+        try {
+            List<GroupChatBean> groupChatBeanList = OkHttpHelperForQSBoxGroupChatApi.SINGLETON.getMyGroupChatList(getUserId())
+                    .transform(new QSApiTransformer<List<GroupChatBean>>())
+                    .execute();
+            for (GroupChatBean groupChatBean : groupChatBeanList) {
+                getCache().put(groupChatBean.getId(), groupChatBean);
+                getMemberListFromServer(groupChatBean.getId());
+            }
+            return groupChatBeanList;
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
+
     }
 
     /**
@@ -162,33 +185,57 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
      * @param groupChatId 群 id
      */
     public void getMemberList(final String groupChatId, final QSCallback<List<UserDetailBean>> qsCallback) {
-        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.getMemberList(groupChatId, getUserId())
-                .transform(new QSApiTransformer<List<UserDetailBean>>())
-                .enqueue(new Callback<List<UserDetailBean>>() {
-                    @Override
-                    public void onSuccess(final List<UserDetailBean> data) {
-                        if (qsCallback != null) {
-                            qsCallback.onSuccess(data);
-                        }
-                        getExecutorService().submit(new Runnable() {
-                            @Override
-                            public void run() {
-                                for (UserDetailBean userDetailBean : data) {
-                                    // 0 表示已不在该群聊中,1 表示在群聊中
-                                    userDetailBean.setStatus(1);
-                                    IMClient.SINGLETON.getGroupChatMemberManager().put(groupChatId, userDetailBean);
-                                }
-                            }
-                        });
-                    }
+//        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.getMemberList(groupChatId, getUserId())
+//                .transform(new QSApiTransformer<List<UserDetailBean>>())
+//                .enqueue(new Callback<List<UserDetailBean>>() {
+//                    @Override
+//                    public void onSuccess(final List<UserDetailBean> data) {
+//                        if (qsCallback != null) {
+//                            qsCallback.onSuccess(data);
+//                        }
+//                        getExecutorService().submit(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                for (UserDetailBean userDetailBean : data) {
+//                                    // 0 表示已不在该群聊中,1 表示在群聊中
+//                                    userDetailBean.setStatus(1);
+//                                    IMClient.SINGLETON.getGroupChatMemberManager().put(groupChatId, userDetailBean);
+//                                }
+//                            }
+//                        });
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Exception e) {
+//                        if (qsCallback != null) {
+//                            qsCallback.onFailure(e);
+//                        }
+//                    }
+//                });
+    }
 
-                    @Override
-                    public void onFailure(Exception e) {
-                        if (qsCallback != null) {
-                            qsCallback.onFailure(e);
-                        }
-                    }
-                });
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2020/1/6 17:57
+     * Description:同步获取群成员列表
+     *
+     * @param groupChatId 群 id
+     */
+    public List<UserDetailBean> getMemberListFromServer(final String groupChatId) {
+        try {
+            List<UserDetailBean> userDetailBeanList = OkHttpHelperForQSBoxGroupChatApi.SINGLETON.getMemberList(groupChatId, getUserId())
+                    .transform(new QSApiTransformer<List<UserDetailBean>>())
+                    .execute();
+            for (UserDetailBean userDetailBean : userDetailBeanList) {
+                // 0 表示已不在该群聊中,1 表示在群聊中
+                userDetailBean.setStatus(1);
+                IMClient.SINGLETON.getGroupChatMemberManager().put(groupChatId, userDetailBean);
+            }
+            return userDetailBeanList;
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
     }
 
     /**

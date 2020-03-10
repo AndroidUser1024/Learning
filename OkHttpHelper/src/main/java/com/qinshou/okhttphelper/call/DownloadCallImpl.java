@@ -44,7 +44,6 @@ public class DownloadCallImpl extends AbsCall<File> {
 
             @Override
             public void onResponse(okhttp3.Call call, Response response) {
-
                 if (response.body() == null) {
                     CallbackUtil.failureCallback(callback, new Exception(("Response's body is null")));
                     return;
@@ -75,6 +74,24 @@ public class DownloadCallImpl extends AbsCall<File> {
                 }
             }
         });
+    }
+
+    @Override
+    public File execute() throws Exception {
+        Response response = getCall().execute();
+        ResponseBody responseBody = response.body();
+        if (responseBody == null) {
+            return null;
+        }
+        InputStream inputStream = responseBody.byteStream();
+        RandomAccessFile randomAccessFile = new RandomAccessFile(mFile, "rwd");
+        randomAccessFile.seek(randomAccessFile.length());
+        byte[] bytes = new byte[1024 * 1024];
+        int len;
+        while ((len = inputStream.read(bytes)) != -1) {
+            randomAccessFile.write(bytes, 0, len);
+        }
+        return mFile;
     }
 
     @Override

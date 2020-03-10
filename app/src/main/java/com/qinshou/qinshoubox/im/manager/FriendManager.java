@@ -20,6 +20,7 @@ import com.qinshou.qinshoubox.listener.SuccessRunnable;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxFriendApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,8 +34,6 @@ import java.util.Map;
 public class FriendManager extends AbsManager<String, UserDetailBean> {
 
     public FriendManager(String userId, DatabaseHelper databaseHelper) {
-//        super(userId, new MemoryCache<String, FriendBean>());
-//        super(userId, new FriendDatabaseCache(databaseHelper));
         super(userId, new FriendDoubleCache(new MemoryCache<String, UserDetailBean>()
                 , new FriendDatabaseCache(databaseHelper)));
     }
@@ -56,29 +55,51 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
     }
 
     public void getList(final Callback<List<UserDetailBean>> callback) {
-        OkHttpHelperForQSBoxFriendApi.SINGLETON.getList(getUserId())
-                .transform(new QSApiTransformer<List<UserDetailBean>>())
-                .enqueue(new Callback<List<UserDetailBean>>() {
-                    @Override
-                    public void onSuccess(final List<UserDetailBean> data) {
-                        getExecutorService().submit(new Runnable() {
-                            @Override
-                            public void run() {
-                                for (UserDetailBean userDetailBean : data) {
-                                    // 存到缓存
-                                    getCache().put(userDetailBean.getId(), userDetailBean);
-                                }
-                                getHandler().post(new SuccessRunnable<List<UserDetailBean>>(callback, data));
-                            }
-                        });
+//        OkHttpHelperForQSBoxFriendApi.SINGLETON.getList(getUserId())
+//                .transform(new QSApiTransformer<List<UserDetailBean>>())
+//                .enqueue(new Callback<List<UserDetailBean>>() {
+//                    @Override
+//                    public void onSuccess(final List<UserDetailBean> data) {
+//                        getExecutorService().submit(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                for (UserDetailBean userDetailBean : data) {
+//                                    // 存到缓存
+//                                    getCache().put(userDetailBean.getId(), userDetailBean);
+//                                }
+//                                getHandler().post(new SuccessRunnable<List<UserDetailBean>>(callback, data));
+//                            }
+//                        });
+//
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Exception e) {
+//                        getHandler().post(new FailureRunnable<>(callback, e));
+//                    }
+//                });
+    }
 
-                    }
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2019/12/6 11:50
+     * Description:同步获取添加好友列表
+     */
+    public List<UserDetailBean> getListFromServer() {
+        try {
+            List<UserDetailBean> userDetailBeanList = OkHttpHelperForQSBoxFriendApi.SINGLETON.getList(getUserId())
+                    .transform(new QSApiTransformer<List<UserDetailBean>>())
+                    .execute();
+            for (UserDetailBean userDetailBean : userDetailBeanList) {
+                // 存到缓存
+                getCache().put(userDetailBean.getId(), userDetailBean);
+            }
+            return userDetailBeanList;
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
 
-                    @Override
-                    public void onFailure(Exception e) {
-                        getHandler().post(new FailureRunnable<>(callback, e));
-                    }
-                });
     }
 
     /**
@@ -129,22 +150,6 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
 
                             }
                         });
-//                        getList(new Callback<List<FriendBean>>() {
-//                            @Override
-//                            public void onSuccess(List<FriendBean> data) {
-//                                Map<String, Object> extend = new HashMap<>();
-//                                extend.put("status", FriendStatus.AGREE_ADD.getValue());
-//                                // 创建已经是好友的提示信息的系统消息
-//                                MessageBean messageBean = MessageBean.createChatSystemMessage(toUserId, getUserId(), extend);
-//                                IMClient.SINGLETON.handleMessage(messageBean);
-//                                qsCallback.onSuccess(data);
-//                            }
-//
-//                            @Override
-//                            public void onFailure(Exception e) {
-//
-//                            }
-//                        });
                     }
 
                     @Override

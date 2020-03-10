@@ -15,6 +15,7 @@ import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 /**
  * Author: QinHao
@@ -60,6 +61,16 @@ public class CallImpl<T> extends AbsCall<T> {
                 CallbackUtil.successCallback(callback, t);
             }
         });
+    }
+
+    @Override
+    public T execute() throws IOException {
+        Response response = getCall().execute();
+        ResponseBody responseBody = response.body();
+        if (responseBody == null) {
+            return null;
+        }
+        return new Gson().fromJson(responseBody.string(), mType);
     }
 
     @Override

@@ -21,7 +21,7 @@ import java.util.List;
  * Date: 2019/11/22 13:35
  * Description:QSBox 群聊模块的接口
  */
-@Api(value = IUrlConstant.DEFAULT_HOST + "/groupChat", logLevel = LogLevel.BODY)
+@Api(value = IUrlConstant.DEFAULT_HOST + "/groupChat", logLevel = LogLevel.BASIC)
 public interface QSBoxGroupChatApi {
 
     @Json

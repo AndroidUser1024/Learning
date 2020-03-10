@@ -2,7 +2,10 @@ package com.qinshou.okhttphelper.call;
 
 import com.qinshou.okhttphelper.callback.Callback;
 
+import java.io.IOException;
+
 import okhttp3.Call;
+import okhttp3.Response;
 
 /**
  * Author: QinHao
@@ -16,13 +19,22 @@ public abstract class AbsCall<T> {
     public AbsCall(Call call) {
         mCall = call;
     }
+
     /**
      * Author: MrQinshou
      * Email:cqflqinhao@126.com
      * Date:2020-03-03 20:39
-     * Description:发起请求
+     * Description:发起异步请求
      */
     public abstract void enqueue(Callback<T> callback);
+
+    /**
+     * Author: MrQinshou
+     * Email:cqflqinhao@126.com
+     * Date:2020-03-03 20:39
+     * Description:发起同步请求
+     */
+    public abstract T execute() throws Exception;
 
     /**
      * Author: MrQinshou
