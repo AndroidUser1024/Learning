@@ -21,14 +21,14 @@ public enum MediaPlayerHelper {
     SINGLETON;
 
     private static final String TAG = "MediaPlayerHelper";
+    private static final long DEFAULT_CALCULATE_PROGRESS_INTERVAL = 500;
     private MediaPlayer mMediaPlayer;
     private ExecutorService mExecutorService;
-    private ExecutorService mProgressRunnableExecutorService;
-    private boolean calculateProgress = false;  //开始计算播放进度的标志位,用于开始计算播放进度的线程
+    private Handler mHandler = new Handler();
+    private ProgressRunnable mProgressRunnable;
 
     MediaPlayerHelper() {
         mExecutorService = Executors.newSingleThreadExecutor();
-        mProgressRunnableExecutorService = Executors.newSingleThreadExecutor();
         mMediaPlayer = new MediaPlayer();
     }
 
@@ -55,10 +55,8 @@ public enum MediaPlayerHelper {
             @Override
             public void run() {
                 try {
-                    if (calculateProgress) {
-                        //如果上一个计算播放进度的线程还在跑,则把标志位置为 false,停止上一个线程
-                        calculateProgress = false;
-                    }
+                    // 移除之前的计算播放进度任务
+                    mHandler.removeCallbacks(mProgressRunnable);
                     stop();
                     if (TextUtils.isEmpty(path)) {
                         if (onMediaPlayerListener != null) {
@@ -67,27 +65,29 @@ public enum MediaPlayerHelper {
                         return;
                     }
                     mMediaPlayer = new MediaPlayer();
-                    //设置播放源
+                    // 设置播放源
                     mMediaPlayer.setDataSource(path);
-                    //设置音量
+                    // 设置音量
                     mMediaPlayer.setVolume(1f, 1f);
-                    //异步准备播放器
+                    // 异步准备播放器
                     mMediaPlayer.prepareAsync();
                     mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                         @Override
                         public void onPrepared(MediaPlayer mediaPlayer) {
-                            //开始播放
+                            // 开始播放
                             start();
                             if (onMediaPlayerListener != null) {
                                 onMediaPlayerListener.onStart(mediaPlayer.getDuration());
                             }
-                            mProgressRunnableExecutorService.submit(new ProgressRunnable(onMediaPlayerListener));
+                            // 计算播放进度
+                            mProgressRunnable = new ProgressRunnable(onMediaPlayerListener);
+                            mHandler.postDelayed(mProgressRunnable, DEFAULT_CALCULATE_PROGRESS_INTERVAL);
                         }
                     });
                     mMediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
                         @Override
                         public boolean onError(MediaPlayer mp, int what, int extra) {
-                            //播放失败,停止播放,释放播放器
+                            // 播放失败,停止播放,释放播放器
                             Log.i(TAG, "onError:what--->" + what + ",extra--->" + extra);
                             stop();
                             if (onMediaPlayerListener != null) {
@@ -99,7 +99,7 @@ public enum MediaPlayerHelper {
                     mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         @Override
                         public void onCompletion(MediaPlayer mp) {
-                            //播放完成,停止播放,释放播放器
+                            // 播放完成,停止播放,释放播放器
                             stop();
                             if (onMediaPlayerListener != null) {
                                 onMediaPlayerListener.onComplete();
@@ -114,11 +114,11 @@ public enum MediaPlayerHelper {
                     });
                 } catch (IOException e) {
                     e.printStackTrace();
-                    //停止播放, 释放播放器
+                    // 停止播放, 释放播放器
                     stop();
                 } catch (IllegalStateException e) {
                     e.printStackTrace();
-                    //停止播放, 释放播放器
+                    // 停止播放, 释放播放器
                     stop();
                 }
             }
@@ -148,10 +148,8 @@ public enum MediaPlayerHelper {
             @Override
             public void run() {
                 try {
-                    if (calculateProgress) {
-                        //如果上一个计算播放进度的线程还在跑,则把标志位置为 false,停止上一个线程
-                        calculateProgress = false;
-                    }
+                    // 移除之前的计算播放进度任务
+                    mHandler.removeCallbacks(mProgressRunnable);
                     stop();
                     if (assetFileDescriptor == null) {
                         if (onMediaPlayerListener != null) {
@@ -160,27 +158,29 @@ public enum MediaPlayerHelper {
                         return;
                     }
                     mMediaPlayer = new MediaPlayer();
-                    //设置播放源
+                    // 设置播放源
                     mMediaPlayer.setDataSource(assetFileDescriptor.getFileDescriptor(), assetFileDescriptor.getStartOffset(), assetFileDescriptor.getLength());
-                    //设置音量
+                    // 设置音量
                     mMediaPlayer.setVolume(1f, 1f);
-                    //异步准备播放器
+                    // 异步准备播放器
                     mMediaPlayer.prepareAsync();
                     mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                         @Override
                         public void onPrepared(MediaPlayer mediaPlayer) {
-                            //开始播放
+                            // 开始播放
                             start();
                             if (onMediaPlayerListener != null) {
                                 onMediaPlayerListener.onStart(mediaPlayer.getDuration());
                             }
-                            mProgressRunnableExecutorService.submit(new ProgressRunnable(onMediaPlayerListener));
+                            // 计算播放进度
+                            mProgressRunnable = new ProgressRunnable(onMediaPlayerListener);
+                            mHandler.postDelayed(mProgressRunnable, DEFAULT_CALCULATE_PROGRESS_INTERVAL);
                         }
                     });
                     mMediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
                         @Override
                         public boolean onError(MediaPlayer mp, int what, int extra) {
-                            //播放失败,停止播放,释放播放器
+                            // 播放失败,停止播放,释放播放器
                             Log.i(TAG, "onError:what--->" + what + ",extra--->" + extra);
                             stop();
                             if (onMediaPlayerListener != null) {
@@ -192,7 +192,7 @@ public enum MediaPlayerHelper {
                     mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         @Override
                         public void onCompletion(MediaPlayer mp) {
-                            //播放完成,停止播放,释放播放器
+                            // 播放完成,停止播放,释放播放器
                             stop();
                             if (onMediaPlayerListener != null) {
                                 onMediaPlayerListener.onComplete();
@@ -201,11 +201,11 @@ public enum MediaPlayerHelper {
                     });
                 } catch (IOException e) {
                     e.printStackTrace();
-                    //停止播放, 释放播放器
+                    // 停止播放, 释放播放器
                     stop();
                 } catch (IllegalStateException e) {
                     e.printStackTrace();
-                    //停止播放, 释放播放器
+                    // 停止播放, 释放播放器
                     stop();
                 }
             }
@@ -225,10 +225,8 @@ public enum MediaPlayerHelper {
             @Override
             public void run() {
                 try {
-                    if (calculateProgress) {
-                        //如果上一个计算播放进度的线程还在跑,则把标志位置为 false,停止上一个线程
-                        calculateProgress = false;
-                    }
+                    // 移除之前的计算播放进度任务
+                    mHandler.removeCallbacks(mProgressRunnable);
                     stop();
                     if (TextUtils.isEmpty(path)) {
                         if (onMediaPlayerListener != null) {
@@ -238,27 +236,29 @@ public enum MediaPlayerHelper {
                     }
                     mMediaPlayer = new MediaPlayer();
                     mMediaPlayer.setDisplay(surfaceHolder);
-                    //设置播放源
+                    // 设置播放源
                     mMediaPlayer.setDataSource(path);
-                    //设置音量
+                    // 设置音量
                     mMediaPlayer.setVolume(1f, 1f);
-                    //异步准备播放器
+                    // 异步准备播放器
                     mMediaPlayer.prepareAsync();
                     mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                         @Override
                         public void onPrepared(MediaPlayer mediaPlayer) {
-                            //开始播放
+                            // 开始播放
                             start();
                             if (onMediaPlayerListener != null) {
                                 onMediaPlayerListener.onStart(mediaPlayer.getDuration());
                             }
-                            mProgressRunnableExecutorService.submit(new ProgressRunnable(onMediaPlayerListener));
+                            // 计算播放进度
+                            mProgressRunnable = new ProgressRunnable(onMediaPlayerListener);
+                            mHandler.postDelayed(mProgressRunnable, DEFAULT_CALCULATE_PROGRESS_INTERVAL);
                         }
                     });
                     mMediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
                         @Override
                         public boolean onError(MediaPlayer mp, int what, int extra) {
-                            //播放失败,停止播放,释放播放器
+                            // 播放失败,停止播放,释放播放器
                             Log.i(TAG, "onError:what--->" + what + ",extra--->" + extra);
                             stop();
                             if (onMediaPlayerListener != null) {
@@ -270,7 +270,7 @@ public enum MediaPlayerHelper {
                     mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         @Override
                         public void onCompletion(MediaPlayer mp) {
-                            //播放完成,停止播放,释放播放器
+                            // 播放完成,停止播放,释放播放器
                             stop();
                             if (onMediaPlayerListener != null) {
                                 onMediaPlayerListener.onComplete();
@@ -287,11 +287,11 @@ public enum MediaPlayerHelper {
                     });
                 } catch (IOException e) {
                     e.printStackTrace();
-                    //停止播放, 释放播放器
+                    // 停止播放, 释放播放器
                     stop();
                 } catch (IllegalStateException e) {
                     e.printStackTrace();
-                    //停止播放, 释放播放器
+                    // 停止播放, 释放播放器
                     stop();
                 }
             }
@@ -304,14 +304,21 @@ public enum MediaPlayerHelper {
      * date:2019/4/4 19:09
      */
     public void stop() {
-        if (mMediaPlayer != null) {
-            //停止播放
-            mMediaPlayer.stop();
-            //释放播放器
-            mMediaPlayer.release();
-            // 置空对象
-            mMediaPlayer = null;
+        // 移除之前的计算播放进度任务
+        mHandler.removeCallbacks(mProgressRunnable);
+        mProgressRunnable = null;
+        if (mMediaPlayer == null) {
+            return;
         }
+        // 停止播放
+        mMediaPlayer.stop();
+        // 释放播放器
+        mMediaPlayer.release();
+        // 注销所有监听器
+        mMediaPlayer.setOnPreparedListener(null);
+        mMediaPlayer.setOnErrorListener(null);
+        mMediaPlayer.setOnCompletionListener(null);
+        mMediaPlayer = null;
     }
 
     /**
@@ -342,7 +349,7 @@ public enum MediaPlayerHelper {
             mMediaPlayer.start();
         } catch (IllegalStateException e) {
             e.printStackTrace();
-            //停止播放, 释放播放器
+            // 停止播放, 释放播放器
             stop();
         }
     }
@@ -383,22 +390,22 @@ public enum MediaPlayerHelper {
 
         @Override
         public void run() {
-            calculateProgress = true;
-            while (calculateProgress) {
-                if (mOnMediaPlayerListener == null || mMediaPlayer == null) {
-                    return;
-                }
-                if (isPlaying()) {
-                    final int progress = mMediaPlayer.getCurrentPosition();
-                    final int totalProgress = mMediaPlayer.getDuration();
-                    final int currentTimeMinute = mMediaPlayer.getCurrentPosition() / 60 / 1000;
-                    final int currentTimeSecond = (mMediaPlayer.getCurrentPosition() - currentTimeMinute * 60 * 1000) / 1000;
-                    final int totalTimeMinute = mMediaPlayer.getDuration() / 60 / 1000;
-                    final int totalTimeSecond = (mMediaPlayer.getDuration() - totalTimeMinute * 60 * 1000) / 1000;
-
-                    mOnMediaPlayerListener.onProgress(progress, totalProgress, currentTimeMinute, currentTimeSecond, totalTimeMinute, totalTimeSecond);
-                }
+            if (mMediaPlayer == null || mOnMediaPlayerListener == null) {
+                return;
             }
+            int currentPosition = mMediaPlayer.getCurrentPosition();
+            int duration = mMediaPlayer.getDuration();
+            final int currentTimeHour = currentPosition / 1000 / 60 / 60;
+            final int currentTimeMinute = currentPosition / 1000 / 60;
+            final int currentTimeSecond = currentPosition / 1000 % 60;
+            final int totalTimeHour = duration / 1000 / 60 / 60;
+            final int totalTimeMinute = duration / 1000 / 60;
+            final int totalTimeSecond = duration / 1000 % 60;
+
+            mOnMediaPlayerListener.onProgress(currentPosition, duration
+                    , currentTimeHour, currentTimeMinute, currentTimeSecond
+                    , totalTimeHour, totalTimeMinute, totalTimeSecond);
+            mHandler.postDelayed(this, DEFAULT_CALCULATE_PROGRESS_INTERVAL);
         }
     }
 
@@ -414,7 +421,9 @@ public enum MediaPlayerHelper {
 
         void onComplete();
 
-        void onProgress(int progress, int totalProgress, int currentTimeMinute, int currentTimeSecond, int totalTimeMinute, int totalTimeSecond);
+        void onProgress(int currentPosition, int duration
+                , int currentHour, int currentTimeMinute, int currentTimeSecond
+                , int totalTimeHour, int totalTimeMinute, int totalTimeSecond);
 
         void onBufferingUpdate(int percent);
     }
