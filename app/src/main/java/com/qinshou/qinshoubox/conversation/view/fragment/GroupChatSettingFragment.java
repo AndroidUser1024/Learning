@@ -3,11 +3,12 @@ package com.qinshou.qinshoubox.conversation.view.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
@@ -191,7 +192,7 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
     public void getGroupChatDetailSuccess(GroupChatDetailBean groupChatDetailBean) {
         mGroupChatDetailBean = groupChatDetailBean;
         mTitleBar.setTitleText(getString(R.string.group_chat_setting_title, "" + groupChatDetailBean.getMemberList().size()));
-        List list = new ArrayList(groupChatDetailBean.getMemberList());
+        List<Object> list = new ArrayList<Object>(groupChatDetailBean.getMemberList());
         list.add(GroupChatMemberFunction.ADD_MEMBER);
         if (TextUtils.equals(groupChatDetailBean.getOwnerId(), UserStatusManager.SINGLETON.getUserBean().getId())) {
             list.add(GroupChatMemberFunction.DELETE_MEMBER);
