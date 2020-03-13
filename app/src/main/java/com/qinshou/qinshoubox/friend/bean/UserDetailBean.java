@@ -1,22 +1,33 @@
 package com.qinshou.qinshoubox.friend.bean;
 
+import com.qinshou.commonmodule.db.Column;
+import com.qinshou.commonmodule.db.Id;
+import com.qinshou.commonmodule.db.Table;
+
 /**
  * Description:获取用户详情接口的映射类
  * Author: QinHao
  * Date: 2019/11/19 10:11
  */
+@Table(name = "user")
 public class UserDetailBean {
+    @Id(autoIncrement = true)
+    @Column(type = Column.Type.INTEGER)
+    private int pid;
     /**
      * Id
      */
+    @Column
     private String id;
     /**
      * 用户名
      */
+    @Column
     private String username;
     /**
      * 昵称
      */
+    @Column
     private String nickname;
     /**
      * 头像
@@ -41,6 +52,7 @@ public class UserDetailBean {
     /**
      * 性别,1 是男,2 是女
      */
+    @Column(type = Column.Type.INTEGER)
     private int gender;
     /**
      * 用户来源
@@ -67,7 +79,7 @@ public class UserDetailBean {
      * 1: 对方是你好友,但你不是对方好友
      * 2: 你是对方好友,但对方不是你好友
      * 3: 互为好友
-     *
+     * <p>
      * status 表示群聊关系时
      * 0 表示已不在该群聊中,1 表示在群聊中
      */

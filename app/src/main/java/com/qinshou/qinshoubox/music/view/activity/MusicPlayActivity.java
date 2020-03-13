@@ -238,11 +238,11 @@ public class MusicPlayActivity extends QSActivity<MusicPlayPresenter> implements
             }
 
             @Override
-            public void onProgress(final int progress, int totalProgress, final int currentTimeMinute, final int currentTimeSecond, final int totalTimeMinute, final int totalTimeSecond) {
+            public void onProgress(int currentPosition, int duration, int currentHour, int currentTimeMinute, int currentTimeSecond, int totalTimeHour, int totalTimeMinute, int totalTimeSecond) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mSbPlayProgress.setProgress(progress);
+                        mSbPlayProgress.setProgress(currentPosition);
                         StringBuilder stringBuilder = new StringBuilder();
                         if (currentTimeMinute < 10) {
                             stringBuilder.append(0);
@@ -268,7 +268,6 @@ public class MusicPlayActivity extends QSActivity<MusicPlayPresenter> implements
                         mTvTotalTime.setText(stringBuilder);
                     }
                 });
-
             }
 
             @Override
