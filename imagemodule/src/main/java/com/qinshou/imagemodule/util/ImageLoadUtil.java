@@ -115,7 +115,7 @@ public enum ImageLoadUtil {
      * @param imageView 显示图片的 ImageView
      */
     public void loadImage(Context context, Object model, ImageView imageView) {
-        loadImage(context, model, imageView, null, null);
+        loadImage(context, model, imageView, mRequestOptions, null);
     }
 
     /**
