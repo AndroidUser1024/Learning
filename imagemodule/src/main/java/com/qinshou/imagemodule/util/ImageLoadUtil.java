@@ -1,27 +1,33 @@
 package com.qinshou.imagemodule.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import android.os.Build;
+import android.util.Log;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.qinshou.imagemodule.R;
-import com.qinshou.imagemodule.callback.IOnGetImgCallback;
+import com.qinshou.imagemodule.callback.Callback;
 
 /**
  * Author: QinHao
- * Email:cqflqinhao@126.com
+ * Email:qinhao@jeejio.com
  * Date: 2019/7/3 19:16
  * Description:图片加载工具类
  */
 public enum ImageLoadUtil {
-    SINGLETON;  //单例
+    SINGLETON;
 
+    private final String TAG = "ImageLoadUtil";
     private RequestOptions mRequestOptions;
 
     ImageLoadUtil() {
@@ -31,7 +37,24 @@ public enum ImageLoadUtil {
 
     /**
      * Author: QinHao
-     * Email:cqflqinhao@126.com
+     * Email:qinhao@jeejio.com
+     * Date:2020/3/16 9:33
+     * Description:预检查 context
+     */
+    private boolean checkContext(Context context) {
+        if (context == null) {
+            return false;
+        }
+        if (context instanceof Activity && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && ((Activity) context).isDestroyed()) {
+            Log.i(TAG, "context is illegal argument");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Author: QinHao
+     * Email:qinhao@jeejio.com
      * Date:2019/10/22 15:31
      * Description:设置加载占位图,在 Application 初始时设置
      *
@@ -44,7 +67,7 @@ public enum ImageLoadUtil {
 
     /**
      * Author: QinHao
-     * Email:cqflqinhao@126.com
+     * Email:qinhao@jeejio.com
      * Date:2019/10/22 15:31
      * Description:设置加载占位图,在 Application 初始时设置
      *
@@ -57,7 +80,7 @@ public enum ImageLoadUtil {
 
     /**
      * Author: QinHao
-     * Email:cqflqinhao@126.com
+     * Email:qinhao@jeejio.com
      * Date:2019/10/22 15:31
      * Description:设置加载错误图,在 Application 初始时设置
      *
@@ -70,7 +93,7 @@ public enum ImageLoadUtil {
 
     /**
      * Author: QinHao
-     * Email:cqflqinhao@126.com
+     * Email:qinhao@jeejio.com
      * Date:2019/10/22 15:31
      * Description:设置加载错误图,在 Application 初始时设置
      *
@@ -83,21 +106,7 @@ public enum ImageLoadUtil {
 
     /**
      * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/22 15:29
-     * Description:加载图片
-     *
-     * @param context   上下文
-     * @param url       图片来源
-     * @param imageView 显示图片的 ImageView
-     */
-    public void loadImage(Context context, String url, ImageView imageView) {
-        loadImage(context, url, imageView, mRequestOptions);
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
+     * Email:qinhao@jeejio.com
      * Date:2019/10/22 15:29
      * Description:加载图片
      *
@@ -106,76 +115,43 @@ public enum ImageLoadUtil {
      * @param imageView 显示图片的 ImageView
      */
     public void loadImage(Context context, Object model, ImageView imageView) {
-        loadImage(context, model, imageView, mRequestOptions);
+        loadImage(context, model, imageView, null, null);
     }
 
     /**
      * Author: QinHao
-     * Email:cqflqinhao@126.com
+     * Email:qinhao@jeejio.com
      * Date:2019/10/22 15:29
      * Description:异步获取图片
      *
-     * @param context            上下文
-     * @param url                图片来源,可以是 url,资源 id,文件地址等
-     * @param onGetImageCallback 回调接口
+     * @param context  上下文
+     * @param model    图片来源,可以是 url,资源 id,文件地址等
+     * @param callback 回调接口
      */
-    public void getImage(Context context, String url, final IOnGetImgCallback onGetImageCallback) {
-        Glide.with(context).load(url).apply(mRequestOptions).into(new SimpleTarget<Drawable>() {
-            @Override
-            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                onGetImageCallback.onSuccess(resource);
-            }
-
-            @Override
-            public void onLoadFailed(@Nullable Drawable errorDrawable) {
-                super.onLoadFailed(errorDrawable);
-                onGetImageCallback.onSuccess(errorDrawable);
-            }
-        });
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/22 15:29
-     * Description:异步获取图片
-     *
-     * @param context            上下文
-     * @param model              图片来源,可以是 url,资源 id,文件地址等
-     * @param onGetImageCallback 回调接口
-     */
-    public void getImage(Context context, Object model, final IOnGetImgCallback onGetImageCallback) {
+    public void getImage(Context context, Object model, final Callback callback) {
+        if (!checkContext(context)) {
+            return;
+        }
+        if (callback == null) {
+            return;
+        }
         Glide.with(context).load(model).into(new SimpleTarget<Drawable>() {
             @Override
             public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                onGetImageCallback.onSuccess(resource);
+                callback.onSuccess(resource);
             }
 
             @Override
             public void onLoadFailed(@Nullable Drawable errorDrawable) {
                 super.onLoadFailed(errorDrawable);
-                onGetImageCallback.onSuccess(errorDrawable);
+                callback.onSuccess(errorDrawable);
             }
         });
     }
 
     /**
      * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/22 15:29
-     * Description:加载圆形图片
-     *
-     * @param context   上下文
-     * @param url       图片来源
-     * @param imageView 显示图片的 ImageView
-     */
-    public void loadCircleImage(Context context, String url, ImageView imageView) {
-        loadImage(context, url, imageView, mRequestOptions.clone().circleCrop());
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
+     * Email:qinhao@jeejio.com
      * Date:2019/10/22 15:29
      * Description:加载圆形图片
      *
@@ -184,30 +160,12 @@ public enum ImageLoadUtil {
      * @param imageView 显示图片的 ImageView
      */
     public void loadCircleImage(Context context, Object model, ImageView imageView) {
-        loadImage(context, model, imageView, mRequestOptions.clone().circleCrop());
+        loadImage(context, model, imageView, mRequestOptions.clone().circleCrop(), null);
     }
 
     /**
      * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/22 15:29
-     * Description:加载图片
-     *
-     * @param context        上下文
-     * @param url            图片来源
-     * @param imageView      显示图片的 ImageView
-     * @param requestOptions 特殊处理的选项
-     */
-    public void loadImage(Context context, String url, ImageView imageView, RequestOptions requestOptions) {
-        Glide.with(context)
-                .load(url)
-                .apply(requestOptions)
-                .into(imageView);
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
+     * Email:qinhao@jeejio.com
      * Date:2019/10/22 15:29
      * Description:加载图片
      *
@@ -217,9 +175,28 @@ public enum ImageLoadUtil {
      * @param requestOptions 特殊处理的选项
      */
     public void loadImage(Context context, Object model, ImageView imageView, RequestOptions requestOptions) {
+        loadImage(context, model, imageView, requestOptions, null);
+    }
+
+    /**
+     * Author: QinHao
+     * Email:qinhao@jeejio.com
+     * Date:2020/1/2 11:49
+     * Description:加载图片
+     *
+     * @param context        上下文
+     * @param model          图片来源,可以是 url,资源 id,文件地址等
+     * @param imageView      显示图片的 ImageView
+     * @param requestOptions 特殊处理的选项
+     */
+    public void loadImage(Context context, Object model, ImageView imageView, RequestOptions requestOptions, RequestBuilder<Drawable> thumbnail) {
+        if (!checkContext(context)) {
+            return;
+        }
         Glide.with(context)
                 .load(model)
                 .apply(requestOptions)
+                .thumbnail(thumbnail)
                 .into(imageView);
     }
 }

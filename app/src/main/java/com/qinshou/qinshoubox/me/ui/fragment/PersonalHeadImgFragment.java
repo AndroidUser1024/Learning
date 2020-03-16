@@ -22,7 +22,7 @@ import com.qinshou.commonmodule.util.activityresultutil.OnActivityResultCallBack
 import com.qinshou.commonmodule.util.permissionutil.IOnRequestPermissionResultCallBack;
 import com.qinshou.commonmodule.util.permissionutil.PermissionUtil;
 import com.qinshou.commonmodule.widget.TitleBar;
-import com.qinshou.imagemodule.callback.IOnGetImgCallback;
+import com.qinshou.imagemodule.callback.Callback;
 import com.qinshou.imagemodule.callback.IOnImageChooseResultCallback;
 import com.qinshou.imagemodule.callback.IOnImageCropResultCallback;
 import com.qinshou.imagemodule.util.BitmapUtil;
@@ -382,7 +382,7 @@ public class PersonalHeadImgFragment extends QSFragment<PersonalHeadImgPresenter
      * Description:保存图片到手机
      */
     private void saveImage() {
-        ImageLoadUtil.SINGLETON.getImage(getContext(), UserStatusManager.SINGLETON.getUserBean().getHeadImg(), new IOnGetImgCallback() {
+        ImageLoadUtil.SINGLETON.getImage(getContext(), UserStatusManager.SINGLETON.getUserBean().getHeadImg(), new Callback() {
             @Override
             public void onSuccess(Drawable drawable) {
                 Bitmap bitmap = BitmapUtil.drawable2Bitmap(drawable);

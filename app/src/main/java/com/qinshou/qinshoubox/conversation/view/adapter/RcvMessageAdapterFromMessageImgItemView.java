@@ -7,8 +7,7 @@ import android.widget.ImageView;
 
 import com.google.gson.Gson;
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
-import com.qinshou.commonmodule.util.ShowLogUtil;
-import com.qinshou.imagemodule.callback.IOnGetImgCallback;
+import com.qinshou.imagemodule.callback.Callback;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.conversation.bean.ImgBean;
@@ -39,7 +38,7 @@ public class RcvMessageAdapterFromMessageImgItemView extends AbsRcvMessageAdapte
     public void bindViewHolder(final BaseViewHolder baseViewHolder, final MessageBean messageBean, int position) {
         super.bindViewHolder(baseViewHolder, messageBean, position);
         ImgBean imgBean = new Gson().fromJson(messageBean.getExtend(), ImgBean.class);
-        ImageLoadUtil.SINGLETON.getImage(getContext(), imgBean.getSmallUrl(), new IOnGetImgCallback() {
+        ImageLoadUtil.SINGLETON.getImage(getContext(), imgBean.getSmallUrl(), new Callback() {
             @Override
             public void onSuccess(Drawable drawable) {
                 // 获取图片宽高
