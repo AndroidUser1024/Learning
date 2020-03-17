@@ -1,4 +1,4 @@
-package com.qinshou.qinshoubox.friend.bean;
+package com.qinshou.qinshoubox.im.bean;
 
 import com.qinshou.commonmodule.db.Column;
 import com.qinshou.commonmodule.db.Id;

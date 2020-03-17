@@ -179,9 +179,9 @@ public class MessageBean {
      *
      * @return 类型为握手消息的消息对象
      */
-    public static MessageBean createHandshakeMessage() {
+    public static MessageBean createHandshakeMessage(String fromUserId) {
         MessageBean messageBean = new MessageBean();
-        messageBean.fromUserId = IMClient.SINGLETON.getUserId();
+        messageBean.fromUserId = fromUserId;
         messageBean.sendTimestamp = System.currentTimeMillis();
         messageBean.type = MessageType.HANDSHAKE.getValue();
         return messageBean;
@@ -199,7 +199,7 @@ public class MessageBean {
      */
     public static MessageBean createTextMessage(String toUserId, String content) {
         MessageBean messageBean = new MessageBean();
-        messageBean.fromUserId = IMClient.SINGLETON.getUserId();
+        messageBean.fromUserId = IMClient.SINGLETON.getUserDetailBean().getId();
         messageBean.toUserId = toUserId;
         messageBean.content = content;
         messageBean.sendTimestamp = System.currentTimeMillis();
@@ -221,7 +221,7 @@ public class MessageBean {
      */
     public static MessageBean createVoiceMessage(String toUserId, String path, long time) {
         MessageBean messageBean = new MessageBean();
-        messageBean.fromUserId = IMClient.SINGLETON.getUserId();
+        messageBean.fromUserId = IMClient.SINGLETON.getUserDetailBean().getId();
         messageBean.toUserId = toUserId;
         messageBean.sendTimestamp = System.currentTimeMillis();
         messageBean.contentType = MessageContentType.VOICE.getValue();
@@ -242,7 +242,7 @@ public class MessageBean {
      */
     public static MessageBean createImgMessage(String toUserId, String path) {
         MessageBean messageBean = new MessageBean();
-        messageBean.fromUserId = IMClient.SINGLETON.getUserId();
+        messageBean.fromUserId = IMClient.SINGLETON.getUserDetailBean().getId();
         messageBean.toUserId = toUserId;
         messageBean.sendTimestamp = System.currentTimeMillis();
         messageBean.contentType = MessageContentType.IMAGE.getValue();
@@ -253,7 +253,7 @@ public class MessageBean {
 
     public static MessageBean createClientReceiptMessage() {
         MessageBean messageBean = new MessageBean();
-        messageBean.fromUserId = IMClient.SINGLETON.getUserId();
+        messageBean.fromUserId = IMClient.SINGLETON.getUserDetailBean().getId();
         messageBean.sendTimestamp = System.currentTimeMillis();
         messageBean.type = MessageType.CLIENT_RECEIPT.getValue();
         return messageBean;
@@ -269,7 +269,7 @@ public class MessageBean {
      */
     public static MessageBean createHeartBeatMessage() {
         MessageBean messageBean = new MessageBean();
-        messageBean.fromUserId = IMClient.SINGLETON.getUserId();
+        messageBean.fromUserId = IMClient.SINGLETON.getUserDetailBean().getId();
         messageBean.sendTimestamp = System.currentTimeMillis();
         messageBean.type = MessageType.HEART_BEAT.getValue();
         return messageBean;

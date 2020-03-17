@@ -4,24 +4,19 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 
-import androidx.annotation.NonNull;
-
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.okhttphelper.callback.AbsDownloadCallback;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.bean.ImgBean;
 import com.qinshou.qinshoubox.conversation.bean.UploadImgResultBean;
 import com.qinshou.qinshoubox.conversation.bean.UploadVoiceResultBean;
 import com.qinshou.qinshoubox.conversation.bean.VoiceBean;
-import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
+import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.bean.ConversationMessageRelBean;
-import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.FriendStatusBean;
-import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatStatusBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.bean.ServerReceiptBean;
@@ -37,28 +32,22 @@ import com.qinshou.qinshoubox.im.listener.IOnFriendStatusListener;
 import com.qinshou.qinshoubox.im.listener.IOnGroupChatStatusListener;
 import com.qinshou.qinshoubox.im.listener.IOnMessageListener;
 import com.qinshou.qinshoubox.im.listener.IOnSendMessageListener;
-import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.im.manager.ConversationManager;
 import com.qinshou.qinshoubox.im.manager.FriendManager;
 import com.qinshou.qinshoubox.im.manager.GroupChatManager;
 import com.qinshou.qinshoubox.im.manager.GroupChatMemberManager;
 import com.qinshou.qinshoubox.im.manager.MessageManager;
+import com.qinshou.qinshoubox.im.manager.PingManager;
+import com.qinshou.qinshoubox.im.manager.ReconnectManager;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxCommonApi;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxOfflineApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 
-import java.io.EOFException;
 import java.io.File;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -90,124 +79,34 @@ public enum IMClient {
     private List<IOnFriendStatusListener> mOnFriendStatusListenerList = new ArrayList<>();
     private List<IOnGroupChatStatusListener> mOnGroupChatStatusListenerList = new ArrayList<>();
     private List<IOnSendMessageListener> mOnSendMessageListenerList = new ArrayList<>();
-    private String mUserId;
+    private UserDetailBean mUserDetailBean;
     private FriendManager mFriendManager;
     private GroupChatManager mGroupChatManager;
+    private GroupChatMemberManager mGroupChatMemberManager;
     private MessageManager mMessageManager;
     private ConversationManager mConversationManager;
-    private GroupChatMemberManager mGroupChatMemberManager;
+    private PingManager mPingManager;
+    private ReconnectManager mReconnectManager;
     //    private Map<String, MessageBean> mAckMessageMap = new HashMap<>();
 //    private Map<String, Timer> mRetrySendTimerMap = new HashMap<>();
-
-    /**
-     * 发送心跳间隔
-     */
-    private final long HEART_BEAT_INTERVAL = 60 * 1000;
-    /**
-     * 发送心跳任务的线程池
-     */
-    private ScheduledExecutorService mHeartBeatScheduledExecutorService = Executors.newSingleThreadScheduledExecutor(
-            new ThreadFactory() {
-                @Override
-                public Thread newThread(@NonNull Runnable r) {
-                    Thread thread = new Thread(r);
-                    thread.setName("Reconnect Thread");
-                    thread.setDaemon(true);
-                    return thread;
-                }
-            }
-    );
-    /**
-     * 心跳任务的线程
-     */
-    private ScheduledFuture<?> mHeartBeatScheduledFuture;
-    /**
-     * 心跳任务
-     */
-    private Runnable mHeartBeatRunnable = new Runnable() {
-
-        @Override
-        public void run() {
-            if (mWebSocket == null) {
-                return;
-            }
-            Log.i(TAG, "发送心跳");
-            mWebSocket.send(new Gson().toJson(MessageBean.createHeartBeatMessage()));
-            mHeartBeatScheduledFuture = mHeartBeatScheduledExecutorService.schedule(mHeartBeatRunnable, HEART_BEAT_INTERVAL, TimeUnit.MILLISECONDS);
-        }
-    };
-
-    /**
-     * 重连任务的线程池
-     */
-    private ScheduledExecutorService mReconnectScheduledExecutorService = Executors.newSingleThreadScheduledExecutor(
-            new ThreadFactory() {
-                @Override
-                public Thread newThread(@NonNull Runnable r) {
-                    Thread thread = new Thread(r);
-                    thread.setName("Reconnect Thread");
-                    thread.setDaemon(true);
-                    return thread;
-                }
-            }
-    );
-    /**
-     * 重连任务的线程
-     */
-    private ScheduledFuture<?> mReconnectScheduledFuture;
-    /**
-     * 最大重连次数
-     */
-    private final int MAX_RECONNECT_COUNT = 10000;
-    /**
-     * 重连次数计数器
-     */
-    private int mReconnectCount;
-    /**
-     * 重连任务
-     */
-    private Runnable mReconnectRunnable = new Runnable() {
-
-        @Override
-        public void run() {
-            if (mReconnectCount >= MAX_RECONNECT_COUNT) {
-                Log.i(TAG, "重连了 " + MAX_RECONNECT_COUNT + " 次都没有连上,不再重连了");
-                return;
-            }
-            mReconnectCount++;
-            Log.i(TAG, "即将开始第 " + mReconnectCount + " 次重连");
-            connect(mUserId);
-        }
-    };
 
     IMClient() {
     }
 
-    private void connectSuccess(WebSocket webSocket, String userId) {
+    private void connectSuccess(WebSocket webSocket) {
         mWebSocket = webSocket;
-        // 重置重连尝试次数
-        mReconnectCount = 0;
-        // 移除重连任务
-        if (mReconnectScheduledFuture != null) {
-            mReconnectScheduledFuture.cancel(true);
-            mReconnectScheduledFuture = null;
-        }
-        // 开启心跳任务
-        mHeartBeatScheduledFuture = mHeartBeatScheduledExecutorService.schedule(mHeartBeatRunnable, HEART_BEAT_INTERVAL, TimeUnit.MILLISECONDS);
         // 初始化数据库
-        DatabaseHelper databaseHelper = new DatabaseHelper(mContext, userId);
-        // 创建好友管理者
-        mFriendManager = new FriendManager(userId, databaseHelper);
-        // 创建群组管理者
-        mGroupChatManager = new GroupChatManager(userId, databaseHelper);
-        // 创建消息管理者
-        mMessageManager = new MessageManager(userId, databaseHelper);
-        // 创建会话管理者
-        mConversationManager = new ConversationManager(userId, databaseHelper);
-        // 创建群成员管理者
-        mGroupChatMemberManager = new GroupChatMemberManager(userId, databaseHelper);
+        DatabaseHelper databaseHelper = new DatabaseHelper(mContext, mUserDetailBean.getId());
+        mFriendManager = new FriendManager(databaseHelper);
+        mGroupChatManager = new GroupChatManager(databaseHelper);
+        mGroupChatMemberManager = new GroupChatMemberManager(databaseHelper);
+        mMessageManager = new MessageManager(databaseHelper);
+        mConversationManager = new ConversationManager(databaseHelper);
+        mPingManager = new PingManager();
+        mPingManager.start(mWebSocket);
+        mReconnectManager = new ReconnectManager();
         // 拉取离线消息
-        OkHttpHelperForQSBoxOfflineApi.SINGLETON.getOfflineMessageList(userId)
+        OkHttpHelperForQSBoxOfflineApi.SINGLETON.getOfflineMessageList(mUserDetailBean.getId())
                 .transform(new QSApiTransformer<List<MessageBean>>())
                 .enqueue(new Callback<List<MessageBean>>() {
                     @Override
@@ -216,7 +115,7 @@ public enum IMClient {
                             handleMessage(messageBean);
                         }
                         // 通知后台删除离线消息
-                        OkHttpHelperForQSBoxOfflineApi.SINGLETON.deleteOfflineMessageList(mUserId)
+                        OkHttpHelperForQSBoxOfflineApi.SINGLETON.deleteOfflineMessageList(mUserDetailBean.getId())
                                 .enqueue(null);
                     }
 
@@ -351,7 +250,7 @@ public enum IMClient {
                     Map<String, Object> extend = new HashMap<>();
                     extend.put("status", FriendStatus.AGREE_ADD.getValue());
                     // 创建已经是好友的提示信息的系统消息
-                    MessageBean m = MessageBean.createChatSystemMessage(friendStatusBean.getFromUserId(), mUserId, extend);
+                    MessageBean m = MessageBean.createChatSystemMessage(friendStatusBean.getFromUserId(), mUserDetailBean.getId(), extend);
                     handleMessage(m);
                 }
 
@@ -496,6 +395,8 @@ public enum IMClient {
      * Description:释放资源
      */
     private void release() {
+        mWebSocket = null;
+        mUserDetailBean = null;
         mFriendManager = null;
         mGroupChatManager = null;
         mMessageManager = null;
@@ -510,16 +411,13 @@ public enum IMClient {
 //        }
 //        mAckMessageMap.clear();
 //        mRetrySendTimerMap.clear();
-        mUserId = null;
-        // 移除重连任务
-        if (mReconnectScheduledFuture != null) {
-            mReconnectScheduledFuture.cancel(true);
-            mReconnectScheduledFuture = null;
+        if (mPingManager != null) {
+            mPingManager.release();
+            mPingManager = null;
         }
-        // 移除心跳任务
-        if (mHeartBeatScheduledFuture != null) {
-            mHeartBeatScheduledFuture.cancel(true);
-            mHeartBeatScheduledFuture = null;
+        if (mReconnectManager != null) {
+            mReconnectManager.release();
+            mReconnectManager = null;
         }
     }
 
@@ -532,7 +430,7 @@ public enum IMClient {
      * @param messageBean 消息对象
      */
     private void doSend(final MessageBean messageBean) {
-        messageBean.setFromUserId(mUserId);
+        messageBean.setFromUserId(mUserDetailBean.getId());
         if (messageBean.getType() == MessageType.CHAT.getValue()
                 || messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
             insert2Database(messageBean, true);
@@ -561,13 +459,13 @@ public enum IMClient {
     }
 
     private void uploadVoice(File voice, long time, final Callback<UploadVoiceResultBean> callback) {
-        OkHttpHelperForQSBoxCommonApi.SINGLETON.uploadVoice(mUserId, time, voice)
+        OkHttpHelperForQSBoxCommonApi.SINGLETON.uploadVoice(mUserDetailBean.getId(), time, voice)
                 .transform(new QSApiTransformer<UploadVoiceResultBean>())
                 .enqueue(callback);
     }
 
     private void uploadImg(File img, final Callback<UploadImgResultBean> callback) {
-        OkHttpHelperForQSBoxCommonApi.SINGLETON.uploadImg(mUserId, img)
+        OkHttpHelperForQSBoxCommonApi.SINGLETON.uploadImg(mUserDetailBean.getId(), img)
                 .transform(new QSApiTransformer<UploadImgResultBean>())
                 .enqueue(callback);
     }
@@ -593,7 +491,6 @@ public enum IMClient {
      * @param userId 用户 id
      */
     public void connect(final String userId) {
-        mUserId = userId;
         new OkHttpClient.Builder()
                 .connectTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
                 .readTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
@@ -609,8 +506,8 @@ public enum IMClient {
                         for (IOnConnectListener onConnectListener : mOnConnectListenerList) {
                             onConnectListener.onConnected();
                         }
-                        Log.i(TAG, "onOpen: messageBean--->" + MessageBean.createHandshakeMessage());
-                        webSocket.send(new Gson().toJson(MessageBean.createHandshakeMessage()));
+                        Log.i(TAG, "onOpen: messageBean--->" + MessageBean.createHandshakeMessage(userId));
+                        webSocket.send(new Gson().toJson(MessageBean.createHandshakeMessage(userId)));
                     }
 
                     @Override
@@ -619,8 +516,8 @@ public enum IMClient {
                         Log.i(TAG, "onMessage: text--->" + text);
                         final MessageBean messageBean = new Gson().fromJson(text, MessageBean.class);
                         if (messageBean.getType() == MessageType.HANDSHAKE_SUCCESS.getValue()) {
-//                    UserBean userBean = new Gson().fromJson(messageBean.getExtend(), UserBean.class);
-                            connectSuccess(webSocket, userId);
+                            mUserDetailBean = new Gson().fromJson(messageBean.getExtend(), UserDetailBean.class);
+                            connectSuccess(webSocket);
                             for (IOnConnectListener onConnectListener : mOnConnectListenerList) {
                                 onConnectListener.onAuthenticated();
                             }
@@ -661,22 +558,12 @@ public enum IMClient {
                         t.printStackTrace();
                         Log.i(TAG, "onFailure: t.class--->" + t.getClass() + ",t.message--->" + t.getMessage());
                         // 移除心跳任务
-                        if (mHeartBeatScheduledFuture != null) {
-                            mHeartBeatScheduledFuture.cancel(true);
-                            mHeartBeatScheduledFuture = null;
+                        mPingManager.release();
+                        if (mReconnectManager != null && mReconnectManager.start(t)) {
+                            return;
                         }
-                        if ((t instanceof SocketException) || (t instanceof EOFException)) {
-                            // 自动重连
-                            mReconnectScheduledFuture = mReconnectScheduledExecutorService.schedule(mReconnectRunnable, TIME_OUT, TimeUnit.MILLISECONDS);
-                        } else if (t instanceof SocketTimeoutException) {
-                            if (mReconnectCount != 0) {
-                                // 如果是重连中的超时,则继续重连,不用通知用户
-                                mReconnectScheduledFuture = mReconnectScheduledExecutorService.schedule(mReconnectRunnable, TIME_OUT, TimeUnit.MILLISECONDS);
-                                return;
-                            }
-                            for (IOnConnectListener onConnectListener : mOnConnectListenerList) {
-                                onConnectListener.onConnectFailure(new Exception(t));
-                            }
+                        for (IOnConnectListener onConnectListener : mOnConnectListenerList) {
+                            onConnectListener.onConnectFailure(new Exception(t));
                         }
                     }
                 });
@@ -801,8 +688,8 @@ public enum IMClient {
         OkHttpHelperForQSBoxCommonApi.SINGLETON.download(url, file, downloadCallback).enqueue(callback);
     }
 
-    public String getUserId() {
-        return mUserId;
+    public UserDetailBean getUserDetailBean() {
+        return mUserDetailBean;
     }
 
     public GroupChatManager getGroupChatManager() {

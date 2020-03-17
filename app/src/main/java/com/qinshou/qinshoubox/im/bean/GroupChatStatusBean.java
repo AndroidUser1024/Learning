@@ -1,7 +1,5 @@
 package com.qinshou.qinshoubox.im.bean;
 
-import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
-
 import java.util.List;
 
 /**

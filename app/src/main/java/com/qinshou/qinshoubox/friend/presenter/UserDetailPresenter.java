@@ -3,7 +3,7 @@ package com.qinshou.qinshoubox.friend.presenter;
 
 import com.qinshou.commonmodule.base.AbsPresenter;
 import com.qinshou.okhttphelper.callback.Callback;
-import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
+import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.friend.contract.IUserDetailContract;
 import com.qinshou.qinshoubox.friend.model.UserDetailModel;
 import com.qinshou.qinshoubox.friend.view.fragment.UserDetailFragment;

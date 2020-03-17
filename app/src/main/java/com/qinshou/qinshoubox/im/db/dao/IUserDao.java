@@ -1,6 +1,6 @@
 package com.qinshou.qinshoubox.im.db.dao;
 
-import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
+import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 
 /**
  * Author: QinHao

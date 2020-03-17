@@ -20,7 +20,6 @@ import java.util.concurrent.Executors;
  * Description:管理者的基类
  */
 public abstract class AbsManager<K, V> {
-    private String mUserId;
     private final ICache<K, V> mCache;
     /**
      * 线程池,线程数量不定,适合执行大量耗时较少的任务
@@ -32,13 +31,8 @@ public abstract class AbsManager<K, V> {
     private Handler mHandler = new Handler(Looper.getMainLooper());
 
 
-    public AbsManager(String userId, ICache<K, V> cache) {
-        mUserId = userId;
+    public AbsManager(ICache<K, V> cache) {
         mCache = cache;
-    }
-
-    public String getUserId() {
-        return mUserId;
     }
 
     public ICache<K, V> getCache() {

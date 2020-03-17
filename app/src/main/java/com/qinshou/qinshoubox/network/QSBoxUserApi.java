@@ -7,7 +7,7 @@ import com.qinshou.okhttphelper.annotation.Multipart;
 import com.qinshou.okhttphelper.annotation.Post;
 import com.qinshou.okhttphelper.call.AbsCall;
 import com.qinshou.qinshoubox.constant.IUrlConstant;
-import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
+import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.homepage.bean.QinshouResultBean;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 

@@ -5,8 +5,7 @@ import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.contract.IGroupChatAddMemberContract;
 import com.qinshou.qinshoubox.conversation.model.GroupChatAddMemberModel;
 import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatAddMemberFragment;
-import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
-import com.qinshou.qinshoubox.im.bean.FriendBean;
+import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 import java.util.List;

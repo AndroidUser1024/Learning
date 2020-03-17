@@ -25,7 +25,7 @@ public class ConversationManager {
      */
     private IConversationMessageRelDao mConversationMessageRelDao;
 
-    public ConversationManager(String userId, DatabaseHelper databaseHelper) {
+    public ConversationManager(DatabaseHelper databaseHelper) {
         mConversationDao = databaseHelper.getDao(IConversationDao.class);
         mConversationMessageRelDao = databaseHelper.getDao(IConversationMessageRelDao.class);
     }

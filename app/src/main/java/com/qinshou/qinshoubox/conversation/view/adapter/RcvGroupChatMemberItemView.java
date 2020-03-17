@@ -7,8 +7,7 @@ import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.commonmodule.rcvbaseadapter.itemview.BaseItemView;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
-import com.qinshou.qinshoubox.login.bean.UserBean;
+import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 
 /**
  * Author: QinHao

@@ -46,11 +46,10 @@ public class MessageManager {
      */
     private Handler mHandler = new Handler(Looper.getMainLooper());
 
-    public MessageManager(String userId, DatabaseHelper databaseHelper) {
+    public MessageManager(DatabaseHelper databaseHelper) {
         mMessageDao = databaseHelper.getDao(IMessageDao.class);
         mConversationDao = databaseHelper.getDao(IConversationDao.class);
         mConversationMessageRelDao = databaseHelper.getDao(IConversationMessageRelDao.class);
-        mUserId = userId;
     }
 
     public void insertOrUpdate(MessageBean messageBean) {

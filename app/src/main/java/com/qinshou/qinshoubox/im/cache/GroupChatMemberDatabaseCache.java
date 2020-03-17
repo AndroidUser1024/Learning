@@ -1,6 +1,6 @@
 package com.qinshou.qinshoubox.im.cache;
 
-import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
+import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.db.DatabaseHelper;
 import com.qinshou.qinshoubox.im.db.dao.IGroupChatMemberDao;
 import com.qinshou.qinshoubox.im.db.dao.IUserDao;

@@ -1,10 +1,8 @@
 package com.qinshou.qinshoubox;
 
-import androidx.core.app.Person;
-
 import com.qinshou.commonmodule.db.SqlUtil;
 import com.qinshou.commonmodule.db.Where;
-import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
+import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 
 import org.junit.Test;
 

@@ -24,7 +24,7 @@ import com.qinshou.qinshoubox.conversation.presenter.GroupChatSettingPresenter;
 import com.qinshou.qinshoubox.conversation.view.adapter.RcvGroupChatMemberAdapter;
 import com.qinshou.qinshoubox.conversation.view.dialog.ClearChatHistoryDialog;
 import com.qinshou.qinshoubox.conversation.view.dialog.ExitGroupChatDialog;
-import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
+import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.friend.view.fragment.UserDetailFragment;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.enums.MessageType;

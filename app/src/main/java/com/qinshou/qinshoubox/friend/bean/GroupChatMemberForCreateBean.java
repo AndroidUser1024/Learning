@@ -1,6 +1,8 @@
 package com.qinshou.qinshoubox.friend.bean;
 
 
+import com.qinshou.qinshoubox.im.bean.UserDetailBean;
+
 /**
  * Author: QinHao
  * Email:qinhao@jeejio.com

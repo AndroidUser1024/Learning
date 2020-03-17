@@ -8,12 +8,10 @@ import android.os.Environment;
 import android.os.Vibrator;
 import android.text.TextUtils;
 
-import com.qinshou.qinshoubox.friend.bean.UserDetailBean;
+import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.IMClient;
-import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.enums.MessageType;
-import com.qinshou.qinshoubox.im.manager.FriendManager;
 
 import java.io.File;
 
