@@ -5,6 +5,8 @@ import com.qinshou.qinshoubox.im.db.DatabaseHelper;
 import com.qinshou.qinshoubox.im.db.dao.IGroupChatMemberDao;
 import com.qinshou.qinshoubox.im.db.dao.IUserDao;
 
+import java.util.Collection;
+
 /**
  * Author: QinHao
  * Email:qinhao@jeejio.com
@@ -50,5 +52,15 @@ public class GroupChatMemberDatabaseCache extends AbsDatabaseCache<String, UserD
         String groupChatId = split[0];
         String userId = split[1];
         return mGroupChatMemberDao.selectByGroupChatIdAndUserId(groupChatId, userId);
+    }
+
+    @Override
+    public UserDetailBean remove(String key) {
+        return null;
+    }
+
+    @Override
+    public Collection<UserDetailBean> getValues() {
+        return null;
     }
 }

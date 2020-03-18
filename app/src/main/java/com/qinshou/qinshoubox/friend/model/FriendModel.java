@@ -18,7 +18,7 @@ import java.util.List;
 public class FriendModel implements IFriendContract.IModel {
     @Override
     public void getMyGroupChatList(final Callback<List<GroupChatBean>> callback) {
-        IMClient.SINGLETON.getGroupChatManager().getGroupChatList(callback);
+        IMClient.SINGLETON.getGroupChatManager().getList(callback);
     }
 
     @Override

@@ -31,6 +31,7 @@ import java.util.Map;
  * Description:好友管理者
  */
 public class FriendManager extends AbsManager<String, UserDetailBean> {
+    private boolean mLoaded = false;
 
     public FriendManager(DatabaseHelper databaseHelper) {
         super(new FriendDoubleCache(new MemoryCache<String, UserDetailBean>()
@@ -54,6 +55,23 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
     }
 
     public void getList(final Callback<List<UserDetailBean>> callback) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (!mLoaded) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (getCache().getValues() == null) {
+                    callback.onSuccess(new ArrayList<>());
+                } else {
+                    callback.onSuccess(new ArrayList<>(getCache().getValues()));
+                }
+            }
+        }).start();
 //        OkHttpHelperForQSBoxFriendApi.SINGLETON.getList(getUserId())
 //                .transform(new QSApiTransformer<List<UserDetailBean>>())
 //                .enqueue(new Callback<List<UserDetailBean>>() {
@@ -85,7 +103,7 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
      * Date:2019/12/6 11:50
      * Description:同步获取添加好友列表
      */
-    public List<UserDetailBean> getListFromServer() {
+    public List<UserDetailBean> getList() {
         try {
             String userId = IMClient.SINGLETON.getUserDetailBean().getId();
             List<UserDetailBean> userDetailBeanList = OkHttpHelperForQSBoxFriendApi.SINGLETON.getList(userId)
@@ -98,6 +116,8 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
             return userDetailBeanList;
         } catch (Exception e) {
             return new ArrayList<>();
+        } finally {
+            mLoaded = true;
         }
 
     }
@@ -346,7 +366,8 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
      * @param page     分页加载当前页码
      * @param pageSize 分页加载每一页的条数
      */
-    public void getHistory(int page, int pageSize, Callback<List<FriendHistoryBean>> callback) {String userId = IMClient.SINGLETON.getUserDetailBean().getId();
+    public void getHistory(int page, int pageSize, Callback<List<FriendHistoryBean>> callback) {
+        String userId = IMClient.SINGLETON.getUserDetailBean().getId();
         OkHttpHelperForQSBoxFriendApi.SINGLETON.getHistory(userId, page, pageSize)
                 .transform(new QSApiTransformer<List<FriendHistoryBean>>())
                 .enqueue(callback);

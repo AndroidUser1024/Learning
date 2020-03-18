@@ -20,7 +20,7 @@ public class UserDaoImpl extends AbsDaoImpl<UserDetailBean> implements IUserDao 
     }
 
     @Override
-    public int insert(UserDetailBean userDetailBean) {
+    public synchronized int insert(UserDetailBean userDetailBean) {
         String sql = "INSERT INTO user(" +
                 " id" +
                 " ,username" +

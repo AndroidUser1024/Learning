@@ -1,6 +1,10 @@
 package com.qinshou.qinshoubox.im.cache;
 
+import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
+import com.qinshou.qinshoubox.im.bean.UserDetailBean;
+
+import java.util.Collection;
 
 /**
  * Author: QinHao
@@ -28,5 +32,19 @@ public class GroupChatDoubleCache extends AbsDoubleCache<String, GroupChatBean> 
             getMemoryCache().put(key, groupChatBean);
         }
         return groupChatBean;
+    }
+
+    @Override
+    public GroupChatBean remove(String key) {
+        return null;
+    }
+
+    @Override
+    public Collection<GroupChatBean> getValues() {
+        Collection<GroupChatBean> values = getMemoryCache().getValues();
+        if (values == null || values.size() == 0) {
+            values = getDatabaseCache().getValues();
+        }
+        return values;
     }
 }
