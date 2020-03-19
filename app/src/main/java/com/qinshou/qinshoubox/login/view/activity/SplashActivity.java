@@ -5,8 +5,11 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import com.jeejio.dbmodule.DatabaseManager;
+import com.jeejio.dbmodule.dao.IBaseDao;
+import com.jeejio.dbmodule.util.Limit;
+import com.jeejio.dbmodule.util.OrderBy;
 import com.qinshou.commonmodule.ContainerActivity;
-import com.qinshou.commonmodule.base.AbsMVPActivity;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.widget.CountDownView;
@@ -16,17 +19,19 @@ import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.IMClient;
+import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.login.bean.PoemBean;
 import com.qinshou.qinshoubox.login.bean.UserBean;
-import com.qinshou.qinshoubox.login.presenter.SplashPresenter;
 import com.qinshou.qinshoubox.login.contract.ISplashContract;
+import com.qinshou.qinshoubox.login.presenter.SplashPresenter;
 import com.qinshou.qinshoubox.login.view.fragment.LoginOrRegisterFragment;
 import com.qinshou.qinshoubox.util.EncryptUtil;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
+import java.util.List;
+
 /**
  * Description:闪屏界面
- * Author: QinHao
  * Date: 2019/4/4 19:24
  */
 public class SplashActivity extends QSActivity<SplashPresenter> implements ISplashContract.ISplashView {
@@ -72,6 +77,23 @@ public class SplashActivity extends QSActivity<SplashPresenter> implements ISpla
     @Override
     public void initData() {
         getPresenter().getRandomPoem();
+        IBaseDao<UserDetailBean> userDetailBeanDao = DatabaseManager.getInstance().getDaoByClass(UserDetailBean.class);
+//        for (int i = 0; i < 1000; i++) {
+//            UserDetailBean userDetailBean = new UserDetailBean();
+//            userDetailBean.setId(i + "");
+//            userDetailBean.setUsername("cqflqinhao" + i + i + i + i);
+//            userDetailBean.setNickname("Mr禽兽" + i + "号");
+//            userDetailBean.setGender(i % 2);
+//            userDetailBeanDao.insert(userDetailBean);
+//        }
+
+        List<UserDetailBean> userDetailBeanList = userDetailBeanDao.selectList(new OrderBy.Builder().Asc("gender").build()
+                , new Limit(100));
+        for (int i = 0; i < userDetailBeanList.size(); i++) {
+            ShowLogUtil.logi("userDetailBeanList.get(i)--->" + userDetailBeanList.get(i));
+        }
+//        UserDetailBean userDetailBean = userDetailBeanDao.selectById("998");
+//        userDetailBeanDao.delete(userDetailBean);
     }
 
     @Override

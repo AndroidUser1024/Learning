@@ -71,6 +71,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 
     implementation project(':commonmodule')
+    implementation project(':dbmodule')
     implementation project(':imagemodule')
     implementation project(':pushmodule')
     implementation project(':qrcodemodule')

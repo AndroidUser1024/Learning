@@ -1,6 +1,5 @@
 package com.qinshou.qinshoubox.im.manager;
 
-import com.qinshou.commonmodule.db.Id;
 import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.cache.GroupChatMemberDatabaseCache;
 import com.qinshou.qinshoubox.im.cache.GroupChatMemberDoubleCache;

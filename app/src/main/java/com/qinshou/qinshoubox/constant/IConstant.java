@@ -34,7 +34,7 @@ public interface IConstant {
      * 存放图片文件的文件夹名
      */
     String IMG_DIR = "Img";
-    String DATABASE_NAME = "QinshouBox.db";
+    String DATABASE_NAME = "QinshouBox";
     int DATABASE_VERSION = 1;
     //天气界面
     String LAST_CHOOSE_CITY = "lastChooseCity";

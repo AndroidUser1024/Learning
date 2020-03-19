@@ -1,8 +1,9 @@
 package com.qinshou.qinshoubox.im.bean;
 
-import com.qinshou.commonmodule.db.Column;
-import com.qinshou.commonmodule.db.Id;
-import com.qinshou.commonmodule.db.Table;
+
+import com.jeejio.dbmodule.annotation.Column;
+import com.jeejio.dbmodule.annotation.Id;
+import com.jeejio.dbmodule.annotation.Table;
 
 /**
  * Description:获取用户详情接口的映射类
@@ -11,12 +12,10 @@ import com.qinshou.commonmodule.db.Table;
  */
 @Table(name = "user")
 public class UserDetailBean {
-    @Id(autoIncrement = true)
-    @Column(type = Column.Type.INTEGER)
-    private int pid;
     /**
      * Id
      */
+    @Id
     @Column
     private String id;
     /**
@@ -32,10 +31,12 @@ public class UserDetailBean {
     /**
      * 头像
      */
+    @Column
     private String headImg;
     /**
      * 头像,缩略图
      */
+    @Column
     private String headImgSmall;
     /**
      * 手机号
