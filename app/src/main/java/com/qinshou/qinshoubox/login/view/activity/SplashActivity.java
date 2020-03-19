@@ -7,6 +7,8 @@ import android.widget.TextView;
 
 import com.jeejio.dbmodule.DatabaseManager;
 import com.jeejio.dbmodule.dao.IBaseDao;
+import com.jeejio.dbmodule.util.Limit;
+import com.jeejio.dbmodule.util.OrderBy;
 import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.commonmodule.util.ShowLogUtil;
@@ -26,9 +28,10 @@ import com.qinshou.qinshoubox.login.view.fragment.LoginOrRegisterFragment;
 import com.qinshou.qinshoubox.util.EncryptUtil;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
+import java.util.List;
+
 /**
  * Description:闪屏界面
- * Author: QinHao
  * Date: 2019/4/4 19:24
  */
 public class SplashActivity extends QSActivity<SplashPresenter> implements ISplashContract.ISplashView {
@@ -80,23 +83,17 @@ public class SplashActivity extends QSActivity<SplashPresenter> implements ISpla
 //            userDetailBean.setId(i + "");
 //            userDetailBean.setUsername("cqflqinhao" + i + i + i + i);
 //            userDetailBean.setNickname("Mr禽兽" + i + "号");
+//            userDetailBean.setGender(i % 2);
 //            userDetailBeanDao.insert(userDetailBean);
 //        }
-//
-//        List<UserDetailBean> userDetailBeanList = userDetailBeanDao.selectList();
-//        for (int i = 0; i < userDetailBeanList.size(); i++) {
-//            ShowLogUtil.logi("userDetailBeanList.get(i)--->" + userDetailBeanList.get(i));
-//        }
 
-//        UserDetailBean userDetailBean = userDetailBeanDao.selectById("999");
-//        ShowLogUtil.logi("userDetailBean--->" + userDetailBean);
-//        userDetailBean.setGender(100);
-//        userDetailBeanDao.update(userDetailBean);
-//        userDetailBean = userDetailBeanDao.selectById("999");
-//        ShowLogUtil.logi("userDetailBean--->" + userDetailBean);
-
-        UserDetailBean userDetailBean = userDetailBeanDao.selectById("998");
-        userDetailBeanDao.delete(userDetailBean);
+        List<UserDetailBean> userDetailBeanList = userDetailBeanDao.selectList(new OrderBy.Builder().Asc("gender").build()
+                , new Limit(100));
+        for (int i = 0; i < userDetailBeanList.size(); i++) {
+            ShowLogUtil.logi("userDetailBeanList.get(i)--->" + userDetailBeanList.get(i));
+        }
+//        UserDetailBean userDetailBean = userDetailBeanDao.selectById("998");
+//        userDetailBeanDao.delete(userDetailBean);
     }
 
     @Override

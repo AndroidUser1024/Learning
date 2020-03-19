@@ -1,5 +1,7 @@
 package com.jeejio.dbmodule.dao;
 
+import com.jeejio.dbmodule.util.QueryCondition;
+
 import java.util.List;
 
 /**
@@ -20,4 +22,6 @@ public interface IBaseDao<T> {
     T selectById(Object id);
 
     List<T> selectList();
+
+    List<T> selectList(QueryCondition... queryConditionArray);
 }

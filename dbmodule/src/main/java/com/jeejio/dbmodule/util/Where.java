@@ -6,16 +6,18 @@ package com.jeejio.dbmodule.util;
  * Date: 2020/3/18 18:40
  * Description:Where 子句
  */
-public class Where {
+public class Where implements QueryCondition {
     private String mSql;
 
-    public Where(Builder builder) {
+    private Where(Builder builder) {
         mSql = builder.mStringBuilder.toString();
     }
 
+    @Override
     public String getSql() {
         return mSql;
     }
+
 
     public static class Builder {
         private StringBuilder mStringBuilder = new StringBuilder(" WHERE ");

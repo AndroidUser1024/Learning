@@ -11,6 +11,7 @@ import com.jeejio.dbmodule.annotation.Column;
 import com.jeejio.dbmodule.bean.ColumnInfoBean;
 import com.jeejio.dbmodule.bean.IdColumnInfoBean;
 import com.jeejio.dbmodule.dao.IBaseDao;
+import com.jeejio.dbmodule.util.QueryCondition;
 import com.jeejio.dbmodule.util.SqlUtil;
 import com.jeejio.dbmodule.util.Where;
 
@@ -147,7 +148,51 @@ public class DefaultDaoImpl<T> implements IBaseDao<T> {
         List<T> tList = new ArrayList<>();
         Cursor cursor = null;
         try {
-            String sql = SqlUtil.getQuerySql(mClass, null);
+            String sql = SqlUtil.getQuerySql(mClass);
+            cursor = mSQLiteDatabase.rawQuery(sql, new String[]{});
+            while (cursor.moveToNext()) {
+                T t = mClass.newInstance();
+                // 主键
+                IdColumnInfoBean idColumnInfo = DatabaseManager.getInstance().getIdByClass(mClass);
+                Field idField = mClass.getDeclaredField(idColumnInfo.getFieldName());
+                if (!idField.isAccessible()) {
+                    idField.setAccessible(true);
+                }
+                if (idColumnInfo.getType() == Column.Type.TEXT) {
+                    idField.set(t, cursor.getString(cursor.getColumnIndex(idColumnInfo.getColumnName())));
+                } else {
+                    idField.set(t, cursor.getInt(cursor.getColumnIndex(idColumnInfo.getColumnName())));
+                }
+                // 其余列
+                for (ColumnInfoBean columnInfoBean : DatabaseManager.getInstance().getColumnByClass(mClass)) {
+                    Field field = mClass.getDeclaredField(columnInfoBean.getFieldName());
+                    if (!field.isAccessible()) {
+                        field.setAccessible(true);
+                    }
+                    if (columnInfoBean.getType() == Column.Type.TEXT) {
+                        field.set(t, cursor.getString(cursor.getColumnIndex(columnInfoBean.getColumnName())));
+                    } else {
+                        field.set(t, cursor.getInt(cursor.getColumnIndex(columnInfoBean.getColumnName())));
+                    }
+                }
+                tList.add(t);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "selectList" + " : " + "mClass--->" + mClass + ",e--->" + e.getMessage());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return tList;
+    }
+
+    @Override
+    public List<T> selectList(QueryCondition... queryConditionArray) {
+        List<T> tList = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            String sql = SqlUtil.getQuerySql(mClass, queryConditionArray);
             cursor = mSQLiteDatabase.rawQuery(sql, new String[]{});
             while (cursor.moveToNext()) {
                 T t = mClass.newInstance();

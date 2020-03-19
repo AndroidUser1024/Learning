@@ -155,4 +155,8 @@ public class DatabaseManager {
     public <T> IBaseDao<T> getDaoByClass(Class<T> clazz) {
         return (IBaseDao<T>) mDaoMap.get(clazz);
     }
+
+    public void executeSql(String sql) {
+
+    }
 }

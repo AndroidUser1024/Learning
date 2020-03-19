@@ -200,13 +200,13 @@ public class SqlUtil {
      * @param clazz 需要查询的对象的 class
      * @return 自动生成的 sql
      */
-    public static String getQuerySql(Class<?> clazz, @Nullable Where where) {
+    public static String getQuerySql(Class<?> clazz, QueryCondition... queryConditionArray) {
         StringBuilder sql = new StringBuilder();
         // 主键
         IdColumnInfoBean idColumnInfo = DatabaseManager.getInstance().getIdByClass(clazz);
         sql.append("SELECT * FROM ").append(idColumnInfo.getTableName());
-        if (where != null) {
-            sql.append(where.getSql());
+        for (QueryCondition queryCondition : queryConditionArray) {
+            sql.append(queryCondition.getSql());
         }
         printSql(sql.toString());
         return sql.toString();
