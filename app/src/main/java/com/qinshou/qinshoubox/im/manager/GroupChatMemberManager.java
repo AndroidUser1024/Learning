@@ -7,6 +7,8 @@ import com.qinshou.qinshoubox.im.cache.GroupChatMemberDoubleCache;
 import com.qinshou.qinshoubox.im.cache.MemoryCache;
 import com.qinshou.qinshoubox.im.db.DatabaseHelper;
 
+import java.util.List;
+
 /**
  * Author: QinHao
  * Email:qinhao@jeejio.com

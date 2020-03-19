@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemClickListener;
+import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.conversation.contract.IGroupChatAddMemberContract;
@@ -112,6 +113,7 @@ public class GroupChatAddMemberFragment extends QSFragment<GroupChatAddMemberPre
 
     @Override
     public void getFriendListSuccess(List<UserDetailBean> userDetailBeanList) {
+        ShowLogUtil.logi("getFriendListSuccess--->"+userDetailBeanList);
         List<GroupChatMemberForCreateBean> groupChatMemberForCreateBeanList = new ArrayList<>();
         for (UserDetailBean userDetailBean : userDetailBeanList) {
             if (TextUtils.equals(userDetailBean.getId(), UserStatusManager.SINGLETON.getUserBean().getId())) {
@@ -134,6 +136,7 @@ public class GroupChatAddMemberFragment extends QSFragment<GroupChatAddMemberPre
 
     @Override
     public void getMemberListSuccess(List<UserDetailBean> userDetailBeanList) {
+        ShowLogUtil.logi("getMemberListSuccess--->"+userDetailBeanList);
         outer:
         for (GroupChatMemberForCreateBean groupChatMemberForCreateBean : mRcvGroupChatMemberForCreateAdapter.getDataList()) {
             for (UserDetailBean userDetailBean : userDetailBeanList) {

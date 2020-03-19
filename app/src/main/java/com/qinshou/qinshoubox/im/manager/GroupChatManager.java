@@ -85,9 +85,9 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
                     }
                 }
                 if (getCache().getValues() == null) {
-                    callback.onSuccess(new ArrayList<>());
+                    getHandler().post(new SuccessRunnable<>(callback, new ArrayList<>()));
                 } else {
-                    callback.onSuccess(new ArrayList<>(getCache().getValues()));
+                    getHandler().post(new SuccessRunnable<>(callback, new ArrayList<>(getCache().getValues())));
                 }
             }
         }).start();
@@ -208,33 +208,34 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
      * @param groupChatId 群 id
      */
     public void getMemberList(final String groupChatId, final QSCallback<List<UserDetailBean>> qsCallback) {
-//        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.getMemberList(groupChatId, userId)
-//                .transform(new QSApiTransformer<List<UserDetailBean>>())
-//                .enqueue(new Callback<List<UserDetailBean>>() {
-//                    @Override
-//                    public void onSuccess(final List<UserDetailBean> data) {
-//                        if (qsCallback != null) {
-//                            qsCallback.onSuccess(data);
-//                        }
-//                        getExecutorService().submit(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                for (UserDetailBean userDetailBean : data) {
-//                                    // 0 表示已不在该群聊中,1 表示在群聊中
-//                                    userDetailBean.setStatus(1);
-//                                    IMClient.SINGLETON.getGroupChatMemberManager().put(groupChatId, userDetailBean);
-//                                }
-//                            }
-//                        });
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Exception e) {
-//                        if (qsCallback != null) {
-//                            qsCallback.onFailure(e);
-//                        }
-//                    }
-//                });
+        String userId = IMClient.SINGLETON.getUserDetailBean().getId();
+        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.getMemberList(groupChatId, userId)
+                .transform(new QSApiTransformer<List<UserDetailBean>>())
+                .enqueue(new Callback<List<UserDetailBean>>() {
+                    @Override
+                    public void onSuccess(final List<UserDetailBean> data) {
+                        if (qsCallback != null) {
+                            qsCallback.onSuccess(data);
+                        }
+                        getExecutorService().submit(new Runnable() {
+                            @Override
+                            public void run() {
+                                for (UserDetailBean userDetailBean : data) {
+                                    // 0 表示已不在该群聊中,1 表示在群聊中
+                                    userDetailBean.setStatus(1);
+                                    IMClient.SINGLETON.getGroupChatMemberManager().put(groupChatId, userDetailBean);
+                                }
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        if (qsCallback != null) {
+                            qsCallback.onFailure(e);
+                        }
+                    }
+                });
     }
 
     /**
