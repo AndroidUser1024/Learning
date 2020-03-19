@@ -6,7 +6,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.qinshou.commonmodule.ContainerActivity;
-import com.qinshou.commonmodule.base.AbsMVPActivity;
+import com.qinshou.commonmodule.db.DatabaseManager;
+import com.qinshou.commonmodule.db.dao.IBaseDao;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.widget.CountDownView;
@@ -16,6 +17,7 @@ import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.IMClient;
+import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.login.bean.PoemBean;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.login.presenter.SplashPresenter;
@@ -72,6 +74,29 @@ public class SplashActivity extends QSActivity<SplashPresenter> implements ISpla
     @Override
     public void initData() {
         getPresenter().getRandomPoem();
+        IBaseDao<UserDetailBean> userDetailBeanDao = DatabaseManager.getInstance().getDaoByClass(UserDetailBean.class);
+//        for (int i = 0; i < 1000; i++) {
+//            UserDetailBean userDetailBean = new UserDetailBean();
+//            userDetailBean.setId(i + "");
+//            userDetailBean.setUsername("cqflqinhao" + i + i + i + i);
+//            userDetailBean.setNickname("Mr禽兽" + i + "号");
+//            userDetailBeanDao.insert(userDetailBean);
+//        }
+//
+//        List<UserDetailBean> userDetailBeanList = userDetailBeanDao.selectList();
+//        for (int i = 0; i < userDetailBeanList.size(); i++) {
+//            ShowLogUtil.logi("userDetailBeanList.get(i)--->" + userDetailBeanList.get(i));
+//        }
+
+//        UserDetailBean userDetailBean = userDetailBeanDao.selectById("999");
+//        ShowLogUtil.logi("userDetailBean--->" + userDetailBean);
+//        userDetailBean.setGender(100);
+//        userDetailBeanDao.update(userDetailBean);
+//        userDetailBean = userDetailBeanDao.selectById("999");
+//        ShowLogUtil.logi("userDetailBean--->" + userDetailBean);
+
+        UserDetailBean userDetailBean = userDetailBeanDao.selectById("998");
+        userDetailBeanDao.delete(userDetailBean);
     }
 
     @Override

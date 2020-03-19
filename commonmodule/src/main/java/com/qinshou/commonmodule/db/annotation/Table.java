@@ -1,4 +1,4 @@
-package com.qinshou.commonmodule.db;
+package com.qinshou.commonmodule.db.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -9,10 +9,10 @@ import java.lang.annotation.Target;
  * Author: QinHao
  * Email:qinhao@jeejio.com
  * Date: 2020/3/12 17:54
- * Description:该注解用于定义该成员变量对应的列为主键
+ * Description:该注解用于用于建立实体类与表名的对应关系
  */
-@Target(ElementType.FIELD)
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Id {
-    boolean autoIncrement() default false;
+public @interface Table {
+    String name() default "";
 }

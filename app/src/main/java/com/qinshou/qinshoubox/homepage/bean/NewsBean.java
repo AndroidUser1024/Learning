@@ -1,8 +1,17 @@
 package com.qinshou.qinshoubox.homepage.bean;
 
+import com.qinshou.commonmodule.db.annotation.Column;
+import com.qinshou.commonmodule.db.annotation.Id;
+import com.qinshou.commonmodule.db.annotation.Table;
+
+@Table(name = "news")
 public class NewsBean {
+    @Id(autoIncrement = true)
+    @Column
     private Integer id;
+    @Column
     private String href;
+    @Column(name = "img_small")
     private String imgSmall;
     private String imgBig;
     private String titleChinese;

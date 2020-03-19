@@ -1,4 +1,4 @@
-package com.qinshou.commonmodule.db;
+package com.qinshou.commonmodule.db.annotation;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

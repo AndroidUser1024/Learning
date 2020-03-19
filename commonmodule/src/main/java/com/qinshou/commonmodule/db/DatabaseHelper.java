@@ -5,13 +5,14 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.qinshou.commonmodule.db.util.SqlUtil;
+
 /**
  * Description:
  * Created by 禽兽先生
  * Created on 2017/6/26
  */
-
-class DatabaseHelper extends SQLiteOpenHelper {
+public class DatabaseHelper extends SQLiteOpenHelper {
     private Class<?>[] mClassArray;
 
     /**

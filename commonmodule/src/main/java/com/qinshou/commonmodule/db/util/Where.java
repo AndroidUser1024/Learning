@@ -1,5 +1,11 @@
-package com.qinshou.commonmodule.db;
+package com.qinshou.commonmodule.db.util;
 
+/**
+ * Author: QinHao
+ * Email:qinhao@jeejio.com
+ * Date: 2020/3/18 18:40
+ * Description:Where 子句
+ */
 public class Where {
     private String mSql;
 

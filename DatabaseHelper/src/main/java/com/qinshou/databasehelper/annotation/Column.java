@@ -1,7 +1,4 @@
 package com.qinshou.databasehelper.annotation;
-
-import com.qinshou.databasehelper.enums.ColumnType;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -10,17 +7,16 @@ import java.lang.annotation.Target;
 /**
  * Author: QinHao
  * Email:qinhao@jeejio.com
- * Date: 2019/11/21 17:39
- * Description:该注解用于标识列
+ * Date: 2020/3/12 17:54
+ * Description:该注解用于建立成员变量与列名的对应关系
  */
-@Retention(RetentionPolicy.CLASS)
 @Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface Column {
+    enum Type{
+        NULL,INTEGER,REAL,TEXT, BLOB
+    }
+    Type type() default Type.TEXT;
+
     String name() default "";
-
-    ColumnType columnType() default ColumnType.TEXT;
-
-    boolean id() default false;
-
-    boolean generateId() default false;
 }

@@ -3,7 +3,7 @@ package com.qinshou.databasehelperporcessor;
 import com.google.auto.service.AutoService;
 import com.qinshou.databasehelper.annotation.Column;
 import com.qinshou.databasehelper.annotation.Table;
-import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.ClassName;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -54,127 +54,12 @@ public class DatabaseHelperProcessor extends AbstractProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
-//        // 获取所有使用了 Repository 注解的类
-//        Set<? extends Element> elementAnnotatedWithRepository = roundEnvironment.getElementsAnnotatedWith(Repository.class);
-//        for (Element repositoryElement : elementAnnotatedWithRepository) {
-//            if (repositoryElement.getKind() != ElementKind.INTERFACE
-//                    || !(repositoryElement instanceof TypeElement)) {
-//                continue;
-//            }
-//            List<? extends TypeMirror> interfaces = ((TypeElement) repositoryElement).getInterfaces();
-//            boolean extendCrudRepository = false;
-//            for (TypeMirror typeMirror : interfaces) {
-//                if (TextUtil.equals(mTypeUtils.asElement(typeMirror).toString(), CrudRepository.class.getName())) {
-//                    extendCrudRepository = true;
-//                }
-//            }
-//            if (!extendCrudRepository) {
-//                continue;
-//            }
-//            String packageName = mElementUtils.getPackageOf(repositoryElement).getQualifiedName().toString();
-//            ClassName className = ClassName.get(packageName, repositoryElement.getSimpleName() + "Impl");
-//            TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(className)
-//                    .addModifiers(Modifier.PUBLIC)
-//                    .addSuperinterface(TypeName.get(repositoryElement.asType()));
-//            // 创建文件
-//            JavaFile javaFile = JavaFile.builder(packageName, typeSpecBuilder.build()).build();
-//            try {
-//                javaFile.writeTo(mFiler);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
         // 获取所有使用了 Repository 注解的类
         Set<? extends Element> elementAnnotatedWithTable = roundEnvironment.getElementsAnnotatedWith(Table.class);
         for (Element tableElement : elementAnnotatedWithTable) {
-            if (tableElement.getKind() != ElementKind.CLASS
-                    || !(tableElement instanceof TypeElement)) {
-                continue;
-            }
-            info("tableElement--->" + tableElement.getSimpleName());
-            List<String> columnNameList = new ArrayList<>();
-            List<String> columnTypeList = new ArrayList<>();
-            int idIndex = -1;
-            boolean generateId = false;
-            for (Element element : tableElement.getEnclosedElements()) {
-                if (element.getKind() != ElementKind.FIELD || element.getAnnotation(Column.class) == null) {
-                    continue;
-                }
-                // 建表语句
-                Column column = element.getAnnotation(Column.class);
-                String columnName = TextUtil.isEmpty(column.name()) ? element.getSimpleName().toString() : column.name();
-                columnNameList.add(columnName);
-                columnTypeList.add(column.columnType().name());
-                if (column.id() && idIndex == -1) {
-                    // 主键
-                    idIndex = columnNameList.indexOf(columnName);
-                    // 自增主键
-                    if (column.generateId()) {
-                        generateId = true;
-                    }
-                }
-
-            }
-
-            Table table = tableElement.getAnnotation(Table.class);
-            String tableName = "";
-            if (TextUtil.isEmpty(table.name())) {
-                tableName = tableElement.getSimpleName().toString();
-            } else {
-                tableName = table.name();
-            }
-            // Create 建表语句
-            StringBuilder createTableSql = new StringBuilder();
-            createTableSql.append("CREATE TABLE IF NOT EXIST ")
-                    .append(tableName)
-                    .append(" (");
-            for (int i = 0; i < columnNameList.size(); i++) {
-                createTableSql.append(columnNameList.get(i))
-                        .append(" ")
-                        .append(columnTypeList.get(i));
-                if (i == idIndex) {
-                    createTableSql.append(" PRIMARY KEY");
-                    if (generateId) {
-                        createTableSql.append(" AUTOINCREMENT");
-                    }
-                }
-                if (i != columnNameList.size() - 1) {
-                    createTableSql.append(",");
-                }
-            }
-            createTableSql.append(");");
-            info("createTableSql--->" + createTableSql);
-
-            // Insert 语句
-            StringBuilder insertSql = new StringBuilder();
-            insertSql.append(" INSERT INTO ")
-                    .append(tableName)
-                    .append(" (");
-            for (int i = 0; i < columnNameList.size(); i++) {
-                if (generateId && i == idIndex) {
-                    continue;
-                }
-                insertSql.append(columnNameList.get(i));
-                if (i != columnNameList.size() - 1) {
-                    insertSql.append(",");
-                }
-            }
-            insertSql.append(") VALUES (");
-            for (int i = 0; i < columnNameList.size(); i++) {
-                if (generateId && i == idIndex) {
-                    continue;
-                }
-                insertSql.append("'")
-                        .append(columnNameList.get(i))
-                        .append("'");
-                if (i != columnNameList.size() - 1) {
-                    insertSql.append(",");
-                }
-            }
-            insertSql.append(");");
-            info("insertSql--->" + insertSql);
-//            String packageName = mElementUtils.getPackageOf(tableElement).getQualifiedName().toString();
-//            ClassName className = ClassName.get(packageName, tableElement.getSimpleName() + "Impl");
+            String packageName = mElementUtils.getPackageOf(tableElement).getQualifiedName().toString();
+            info(packageName);
+            ClassName className = ClassName.get(packageName, tableElement.getSimpleName() + "Impl");
 //            TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(className)
 //                    .addModifiers(Modifier.PUBLIC)
 //                    .addSuperinterface(TypeName.get(tableElement.asType()));

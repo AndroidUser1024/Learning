@@ -2,8 +2,12 @@ package com.qinshou.qinshoubox;
 
 import com.qinshou.commonmodule.base.BaseApplication;
 import com.qinshou.commonmodule.crash.CrashHandler;
+import com.qinshou.commonmodule.db.DatabaseManager;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
+import com.qinshou.qinshoubox.constant.IConstant;
+import com.qinshou.qinshoubox.homepage.bean.NewsBean;
 import com.qinshou.qinshoubox.im.IMClient;
+import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 
 /**
  * Description:
@@ -17,7 +21,11 @@ public class App extends BaseApplication {
     public void onCreate() {
         super.onCreate();
         //初始化数据库
-//        DatabaseManager.getInstance().init(this, IConstant.DATABASE_NAME, IConstant.DATABASE_VERSION, new Class[]{CaseBean.class});
+        DatabaseManager.getInstance().init(this
+                , IConstant.DATABASE_NAME
+                , IConstant.DATABASE_VERSION
+                , UserDetailBean.class
+                , NewsBean.class);
 //        //初始化友盟推送
 //        PushHelper.init(this, IConstant.UMENG_KEY, IConstant.UMENG_SECRET);
 //        //初始化第三方分享
