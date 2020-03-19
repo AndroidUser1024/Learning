@@ -1,8 +1,9 @@
 package com.qinshou.qinshoubox.im.bean;
 
-import com.qinshou.commonmodule.db.annotation.Column;
-import com.qinshou.commonmodule.db.annotation.Id;
-import com.qinshou.commonmodule.db.annotation.Table;
+
+import com.jeejio.dbmodule.annotation.Column;
+import com.jeejio.dbmodule.annotation.Id;
+import com.jeejio.dbmodule.annotation.Table;
 
 /**
  * Description:获取用户详情接口的映射类
