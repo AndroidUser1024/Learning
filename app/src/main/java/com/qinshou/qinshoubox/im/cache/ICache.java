@@ -1,5 +1,7 @@
 package com.qinshou.qinshoubox.im.cache;
 
+import java.util.Collection;
+
 /**
  * Author: QinHao
  * Email:qinhao@jeejio.com
@@ -10,4 +12,8 @@ public interface ICache<K, V> {
     void put(K key, V value);
 
     V get(K key);
+
+    V remove(K key);
+
+    Collection<V> getValues();
 }

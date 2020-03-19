@@ -2,6 +2,8 @@ package com.qinshou.qinshoubox.im.cache;
 
 import android.util.LruCache;
 
+import java.util.Collection;
+
 /**
  * Author: QinHao
  * Email:qinhao@jeejio.com
@@ -25,5 +27,15 @@ public class MemoryCache<K, V> implements ICache<K, V> {
     @Override
     public V get(K key) {
         return mLruCache.get(key);
+    }
+
+    @Override
+    public V remove(K key) {
+        return mLruCache.remove(key);
+    }
+
+    @Override
+    public Collection<V> getValues() {
+        return mLruCache.snapshot().values();
     }
 }

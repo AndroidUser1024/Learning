@@ -6,6 +6,8 @@ import com.qinshou.qinshoubox.im.db.DatabaseHelper;
 import com.qinshou.qinshoubox.im.db.dao.IFriendDao;
 import com.qinshou.qinshoubox.im.db.dao.IUserDao;
 
+import java.util.Collection;
+
 /**
  * Author: QinHao
  * Email:cqflqinhao@126.com
@@ -54,5 +56,15 @@ public class FriendDatabaseCache extends AbsDatabaseCache<String, UserDetailBean
             userDetailBean.setBlackList(friendBean.getBlackList());
         }
         return userDetailBean;
+    }
+
+    @Override
+    public UserDetailBean remove(String key) {
+        return null;
+    }
+
+    @Override
+    public Collection<UserDetailBean> getValues() {
+        return null;
     }
 }

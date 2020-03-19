@@ -2,6 +2,8 @@ package com.qinshou.qinshoubox.im.cache;
 
 import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 
+import java.util.Collection;
+
 /**
  * Author: QinHao
  * Email:cqflqinhao@126.com
@@ -29,5 +31,19 @@ public class FriendDoubleCache extends AbsDoubleCache<String, UserDetailBean> {
             getMemoryCache().put(key, userDetailBean);
         }
         return userDetailBean;
+    }
+
+    @Override
+    public UserDetailBean remove(String key) {
+        return null;
+    }
+
+    @Override
+    public Collection<UserDetailBean> getValues() {
+        Collection<UserDetailBean> values = getMemoryCache().getValues();
+        if (values == null || values.size() == 0) {
+            values = getDatabaseCache().getValues();
+        }
+        return values;
     }
 }

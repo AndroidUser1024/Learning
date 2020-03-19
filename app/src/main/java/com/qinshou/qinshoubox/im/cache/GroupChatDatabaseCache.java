@@ -4,6 +4,8 @@ import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 import com.qinshou.qinshoubox.im.db.DatabaseHelper;
 import com.qinshou.qinshoubox.im.db.dao.IGroupChatDao;
 
+import java.util.Collection;
+
 /**
  * Author: QinHao
  * Email:cqflqinhao@126.com
@@ -32,5 +34,15 @@ public class GroupChatDatabaseCache extends AbsDatabaseCache<String, GroupChatBe
     @Override
     public GroupChatBean get(String key) {
         return mGroupChatDao.selectById(key);
+    }
+
+    @Override
+    public GroupChatBean remove(String key) {
+        return null;
+    }
+
+    @Override
+    public Collection<GroupChatBean> getValues() {
+        return null;
     }
 }

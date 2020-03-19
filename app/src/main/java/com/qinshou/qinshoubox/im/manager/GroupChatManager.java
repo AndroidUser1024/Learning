@@ -27,6 +27,7 @@ import java.util.List;
  * Description:群管理者
  */
 public class GroupChatManager extends AbsManager<String, GroupChatBean> {
+    private boolean mLoaded = false;
 
     public GroupChatManager(DatabaseHelper databaseHelper) {
         super(new GroupChatDoubleCache(new MemoryCache<String, GroupChatBean>(), new GroupChatDatabaseCache(databaseHelper)));
@@ -72,7 +73,24 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
      * Date:2020/1/6 17:57
      * Description:获取我的群列表
      */
-    public void getGroupChatList(final Callback<List<GroupChatBean>> callback) {
+    public void getList(final Callback<List<GroupChatBean>> callback) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (!mLoaded) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (getCache().getValues() == null) {
+                    callback.onSuccess(new ArrayList<>());
+                } else {
+                    callback.onSuccess(new ArrayList<>(getCache().getValues()));
+                }
+            }
+        }).start();
 //        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.getMyGroupChatList(getUserId())
 //                .transform(new QSApiTransformer<List<GroupChatBean>>())
 //                .enqueue(new Callback<List<GroupChatBean>>() {
@@ -103,7 +121,7 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
      * Date:2020/1/6 17:57
      * Description:同步获取我的群列表
      */
-    public List<GroupChatBean> getGroupChatList() {
+    public List<GroupChatBean> getList() {
         try {
             String userId = IMClient.SINGLETON.getUserDetailBean().getId();
             List<GroupChatBean> groupChatBeanList = OkHttpHelperForQSBoxGroupChatApi.SINGLETON.getMyGroupChatList(userId)
@@ -111,11 +129,13 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
                     .execute();
             for (GroupChatBean groupChatBean : groupChatBeanList) {
                 getCache().put(groupChatBean.getId(), groupChatBean);
-                getMemberListFromServer(groupChatBean.getId());
+                getMemberList(groupChatBean.getId());
             }
             return groupChatBeanList;
         } catch (Exception e) {
             return new ArrayList<>();
+        } finally {
+            mLoaded = true;
         }
 
     }
@@ -225,7 +245,7 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
      *
      * @param groupChatId 群 id
      */
-    public List<UserDetailBean> getMemberListFromServer(final String groupChatId) {
+    public List<UserDetailBean> getMemberList(final String groupChatId) {
         try {
             String userId = IMClient.SINGLETON.getUserDetailBean().getId();
             List<UserDetailBean> userDetailBeanList = OkHttpHelperForQSBoxGroupChatApi.SINGLETON.getMemberList(groupChatId, userId)

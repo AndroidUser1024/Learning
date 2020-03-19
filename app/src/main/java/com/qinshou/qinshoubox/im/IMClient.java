@@ -127,10 +127,8 @@ public enum IMClient {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Log.i(TAG, "time--->" + System.currentTimeMillis());
-                mFriendManager.getListFromServer();
-                mGroupChatManager.getGroupChatList();
-                Log.i(TAG, "time--->" + System.currentTimeMillis());
+                mFriendManager.getList();
+                mGroupChatManager.getList();
             }
         }).start();
     }

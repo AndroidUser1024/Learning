@@ -2,6 +2,8 @@ package com.qinshou.qinshoubox.im.cache;
 
 import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 
+import java.util.Collection;
+
 /**
  * Author: QinHao
  * Email:cqflqinhao@126.com
@@ -27,5 +29,15 @@ public class GroupChatMemberDoubleCache extends AbsDoubleCache<String, UserDetai
             userDetailBean = getDatabaseCache().get(key);
         }
         return userDetailBean;
+    }
+
+    @Override
+    public UserDetailBean remove(String key) {
+        return null;
+    }
+
+    @Override
+    public Collection<UserDetailBean> getValues() {
+        return null;
     }
 }
