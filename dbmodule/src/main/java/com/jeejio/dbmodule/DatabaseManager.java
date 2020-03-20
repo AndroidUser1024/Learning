@@ -1,8 +1,11 @@
 package com.jeejio.dbmodule;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 
 import com.jeejio.dbmodule.annotation.Column;
@@ -16,6 +19,7 @@ import com.jeejio.dbmodule.dao.impl.DefaultDaoImpl;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -156,7 +160,63 @@ public class DatabaseManager {
         return (IBaseDao<T>) mDaoMap.get(clazz);
     }
 
-    public void executeSql(String sql) {
+    /**
+     * Author: QinHao
+     * Email:qinhao@jeejio.com
+     * Date:2020/3/20 9:10
+     * Description:执行自定义 sql
+     */
+    public int executeSql(String sql) {
+        try {
+            mSqLiteDatabase.execSQL(sql);
+        } catch (SQLException e) {
+            return 0;
+        }
+        return 1;
+    }
 
+    /**
+     * Author: QinHao
+     * Email:qinhao@jeejio.com
+     * Date:2020/3/20 9:10
+     * Description:执行自定义 sql
+     */
+    public List<Map<String, Object>> rawQuery(String sql) {
+        List<Map<String, Object>> list = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = mSqLiteDatabase.rawQuery(sql, new String[]{});
+            while (cursor.moveToNext()) {
+                Map<String, Object> map = new HashMap<>();
+                String[] columnNameArray = cursor.getColumnNames();
+                for (String columnName : columnNameArray) {
+                    int columnIndex = cursor.getColumnIndex(columnName);
+                    switch (cursor.getType(columnIndex)) {
+                        case Cursor.FIELD_TYPE_NULL:
+                            map.put(columnName, null);
+                            break;
+                        case Cursor.FIELD_TYPE_INTEGER:
+                            map.put(columnName, cursor.getInt(columnIndex));
+                            break;
+                        case Cursor.FIELD_TYPE_FLOAT:
+                            map.put(columnName, cursor.getFloat(columnIndex));
+                            break;
+                        case Cursor.FIELD_TYPE_STRING:
+                            map.put(columnName, cursor.getString(columnIndex));
+                            break;
+                        case Cursor.FIELD_TYPE_BLOB:
+                            map.put(columnName, cursor.getBlob(columnIndex));
+                            break;
+                    }
+                }
+                list.add(map);
+            }
+        } catch (SQLException ignored) {
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return list;
     }
 }
