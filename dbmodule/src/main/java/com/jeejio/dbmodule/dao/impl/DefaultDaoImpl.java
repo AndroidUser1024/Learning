@@ -61,6 +61,17 @@ public class DefaultDaoImpl<T> implements IBaseDao<T> {
     }
 
     @Override
+    public T insert(T t) {
+        try {
+            String sql = SqlUtil.getInsertSql(t);
+            mSQLiteDatabase.execSQL(sql);
+        } catch (Exception e) {
+            Log.e(TAG, "insert" + " : " + "mClass--->" + mClass + ",e--->" + e.getMessage());
+        }
+        return t;
+    }
+
+    @Override
     public int deleteById(Object id) {
         // 主键
         IdColumnInfoBean idColumnInfo = DatabaseManager.getInstance().getIdByClass(mClass);

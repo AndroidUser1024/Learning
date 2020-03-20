@@ -13,7 +13,7 @@ import java.util.List;
 public interface IBaseDao<T> {
     T save(T t);
 
-//    T insert(T t);
+    T insert(T t);
 
     int deleteById(Object id);
 
