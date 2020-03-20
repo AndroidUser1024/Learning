@@ -160,7 +160,7 @@ public class SqlUtil {
      * @param obj 需要更新的对象
      * @return 自动生成的 sql
      */
-    public static String getUpdateSql(Object obj, @Nullable Where where) throws NoSuchFieldException, IllegalAccessException {
+    public static String getUpdateSql(Object obj, QueryCondition... queryConditionArray) throws NoSuchFieldException, IllegalAccessException {
         StringBuilder sql = new StringBuilder();
         Class<?> clazz = obj.getClass();
         // 主键
@@ -184,8 +184,8 @@ public class SqlUtil {
         if (start != -1) {
             sql.delete(start, start + ",".length());
         }
-        if (where != null) {
-            sql.append(where.getSql());
+        for (QueryCondition queryCondition : queryConditionArray) {
+            sql.append(queryCondition.getSql());
         }
         printSql(sql.toString());
         return sql.toString();

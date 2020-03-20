@@ -36,12 +36,26 @@ public class DefaultDaoImpl<T> implements IBaseDao<T> {
     }
 
     @Override
-    public T insert(T t) {
+    public synchronized T save(T t) {
         try {
-            String sql = SqlUtil.getInsertSql(t);
-            mSQLiteDatabase.execSQL(sql);
+            IdColumnInfoBean idColumnInfo = DatabaseManager.getInstance().getIdByClass(mClass);
+            Field idField = mClass.getDeclaredField(idColumnInfo.getFieldName());
+            if (!idField.isAccessible()) {
+                idField.setAccessible(true);
+            }
+            Object id = idField.get(t);
+            // 先根据 id 判断该数据是否存在,存在则修改,不存在则新增
+            if (existsById(id)) {
+                String sql = SqlUtil.getUpdateSql(t, new Where.Builder()
+                        .equal(idColumnInfo.getColumnName(), id)
+                        .build());
+                mSQLiteDatabase.execSQL(sql);
+            } else {
+                String sql = SqlUtil.getInsertSql(t);
+                mSQLiteDatabase.execSQL(sql);
+            }
         } catch (Exception e) {
-            Log.e(TAG, "insert" + " : " + "mClass--->" + mClass + ",e--->" + e.getMessage());
+            Log.e(TAG, "save" + " : " + "mClass--->" + mClass + ",e--->" + e.getMessage());
         }
         return t;
     }
@@ -88,14 +102,24 @@ public class DefaultDaoImpl<T> implements IBaseDao<T> {
             if (!idField.isAccessible()) {
                 idField.setAccessible(true);
             }
-            String sql = SqlUtil.getUpdateSql(t, new Where.Builder()
+            this.update(t, new Where.Builder()
                     .equal(idColumnInfo.getColumnName(), idField.get(t))
                     .build());
-            mSQLiteDatabase.execSQL(sql);
         } catch (Exception e) {
             Log.e(TAG, "update" + " : " + "mClass--->" + mClass + ",e--->" + e.getMessage());
         }
         return t;
+    }
+
+    @Override
+    public T update(T t, QueryCondition... queryConditionArray) {
+        try {
+            String sql = SqlUtil.getUpdateSql(t, queryConditionArray);
+            mSQLiteDatabase.execSQL(sql);
+        } catch (Exception e) {
+            Log.e(TAG, "update" + " : " + "mClass--->" + mClass + ",e--->" + e.getMessage());
+        }
+        return null;
     }
 
     @Override
@@ -229,5 +253,35 @@ public class DefaultDaoImpl<T> implements IBaseDao<T> {
             }
         }
         return tList;
+    }
+
+    @Override
+    public boolean existsById(Object id) {
+        // 主键
+        IdColumnInfoBean idColumnInfo = DatabaseManager.getInstance().getIdByClass(mClass);
+        StringBuilder sql = new StringBuilder();
+
+        sql.append("SELECT")
+                .append(" COUNT(").append(idColumnInfo.getColumnName()).append(") AS count")
+                .append(" FROM ")
+                .append(idColumnInfo.getTableName())
+                .append(" WHERE ");
+        if (id instanceof String) {
+            sql.append(idColumnInfo.getColumnName()).append("=\"").append(id).append("\"");
+        } else {
+            sql.append(idColumnInfo.getColumnName()).append("=").append(id).append("");
+        }
+        Cursor cursor = mSQLiteDatabase.rawQuery(sql.toString(), new String[]{});
+        try {
+            if (cursor.moveToNext()) {
+                int count = cursor.getInt(cursor.getColumnIndex("count"));
+                return count > 0;
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return false;
     }
 }

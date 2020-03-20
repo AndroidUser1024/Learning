@@ -11,7 +11,9 @@ import java.util.List;
  * Description:该接口定义了一些操作持久化类的基本方法
  */
 public interface IBaseDao<T> {
-    T insert(T t);
+    T save(T t);
+
+//    T insert(T t);
 
     int deleteById(Object id);
 
@@ -19,9 +21,13 @@ public interface IBaseDao<T> {
 
     T update(T t);
 
+    T update(T t, QueryCondition... queryConditionArray);
+
     T selectById(Object id);
 
     List<T> selectList();
 
     List<T> selectList(QueryCondition... queryConditionArray);
+
+    boolean existsById(Object id);
 }
