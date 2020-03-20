@@ -23,8 +23,8 @@ import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
  */
 public class RcvMessageAdapterFromMessageImgItemView extends AbsRcvMessageAdapterFromMessageItemView {
 
-    public RcvMessageAdapterFromMessageImgItemView(Context context,String groupChatId) {
-        super(context, R.layout.item_rcv_message_from_message_img,groupChatId);
+    public RcvMessageAdapterFromMessageImgItemView(Context context, String groupChatId) {
+        super(context, R.layout.item_rcv_message_from_message_img, groupChatId);
     }
 
     @Override
@@ -38,7 +38,14 @@ public class RcvMessageAdapterFromMessageImgItemView extends AbsRcvMessageAdapte
     public void bindViewHolder(final BaseViewHolder baseViewHolder, final MessageBean messageBean, int position) {
         super.bindViewHolder(baseViewHolder, messageBean, position);
         ImgBean imgBean = new Gson().fromJson(messageBean.getExtend(), ImgBean.class);
-        ImageLoadUtil.SINGLETON.getImage(getContext(), imgBean.getSmallUrl(), new Callback() {
+        String url = imgBean.getPath();
+        if (TextUtils.isEmpty(url)) {
+            url = imgBean.getSmallUrl();
+        }
+        if (TextUtils.isEmpty(url)) {
+            return;
+        }
+        ImageLoadUtil.SINGLETON.getImage(getContext(), url, new Callback() {
             @Override
             public void onSuccess(Drawable drawable) {
                 // 获取图片宽高

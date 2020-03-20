@@ -7,6 +7,7 @@ import android.os.Looper;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.okhttphelper.callback.AbsDownloadCallback;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.bean.ImgBean;
@@ -622,6 +623,7 @@ public enum IMClient {
             uploadImg(file, new Callback<UploadImgResultBean>() {
                 @Override
                 public void onSuccess(UploadImgResultBean data) {
+                    imgBean.setPath("");
                     imgBean.setUrl(data.getUrl());
                     imgBean.setSmallUrl(data.getSmallUrl());
                     messageBean.setExtend(new Gson().toJson(imgBean));
@@ -630,7 +632,6 @@ public enum IMClient {
 
                 @Override
                 public void onFailure(Exception e) {
-
                 }
             });
         } else {

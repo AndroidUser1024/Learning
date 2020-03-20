@@ -33,7 +33,7 @@ public class App extends BaseApplication {
         // 初始化共享参数帮助者类
         SharedPreferencesHelper.SINGLETON.init(this);
         // 初始化全局异常处理者类
-        CrashHandler.SINGLETON.init(this);
+//        CrashHandler.SINGLETON.init(this);
         IMClient.SINGLETON.init(this);
     }
 }

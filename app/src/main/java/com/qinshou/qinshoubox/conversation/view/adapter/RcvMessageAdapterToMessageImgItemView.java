@@ -39,7 +39,14 @@ public class RcvMessageAdapterToMessageImgItemView extends AbsRcvMessageAdapterT
     public void bindViewHolder(final BaseViewHolder baseViewHolder, final MessageBean messageBean, final int i) {
         super.bindViewHolder(baseViewHolder, messageBean, i);
         ImgBean imgBean = new Gson().fromJson(messageBean.getExtend(), ImgBean.class);
-        ImageLoadUtil.SINGLETON.getImage(getContext(), imgBean.getSmallUrl(), new Callback() {
+        String url = imgBean.getPath();
+        if (TextUtils.isEmpty(url)) {
+            url = imgBean.getSmallUrl();
+        }
+        if (TextUtils.isEmpty(url)) {
+            return;
+        }
+        ImageLoadUtil.SINGLETON.getImage(getContext(), url, new Callback() {
             @Override
             public void onSuccess(Drawable drawable) {
                 // 获取图片宽高
