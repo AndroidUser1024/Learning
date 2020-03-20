@@ -38,6 +38,10 @@ public class GroupChatMemberDoubleCache extends AbsDoubleCache<String, UserDetai
 
     @Override
     public Collection<UserDetailBean> getValues() {
-        return null;
+        Collection<UserDetailBean> values = getMemoryCache().getValues();
+        if (values == null || values.size() == 0) {
+            values = getDatabaseCache().getValues();
+        }
+        return values;
     }
 }

@@ -66,9 +66,9 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
                     }
                 }
                 if (getCache().getValues() == null) {
-                    callback.onSuccess(new ArrayList<>());
+                    getHandler().post(new SuccessRunnable<>(callback, new ArrayList<>()));
                 } else {
-                    callback.onSuccess(new ArrayList<>(getCache().getValues()));
+                    getHandler().post(new SuccessRunnable<>(callback, new ArrayList<>(getCache().getValues())));
                 }
             }
         }).start();

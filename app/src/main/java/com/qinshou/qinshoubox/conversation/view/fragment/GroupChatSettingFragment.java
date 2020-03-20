@@ -24,10 +24,12 @@ import com.qinshou.qinshoubox.conversation.presenter.GroupChatSettingPresenter;
 import com.qinshou.qinshoubox.conversation.view.adapter.RcvGroupChatMemberAdapter;
 import com.qinshou.qinshoubox.conversation.view.dialog.ClearChatHistoryDialog;
 import com.qinshou.qinshoubox.conversation.view.dialog.ExitGroupChatDialog;
+import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.friend.view.fragment.UserDetailFragment;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.enums.MessageType;
+import com.qinshou.qinshoubox.im.listener.IOnGroupChatStatusListener;
 import com.qinshou.qinshoubox.me.ui.widget.SwitchButton;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
@@ -99,6 +101,37 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
             }
         }
     };
+    private IOnGroupChatStatusListener mOnGroupChatStatusListener = new IOnGroupChatStatusListener() {
+        @Override
+        public void add(String groupChatId, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
+        }
+
+        @Override
+        public void delete(String groupChatId, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
+        }
+
+        @Override
+        public void otherAdd(String groupChatId, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
+            getPresenter().getGroupChatDetail(mGroupChatDetailBean.getId());
+        }
+
+        @Override
+        public void otherDelete(String groupChatId, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
+            getPresenter().getGroupChatDetail(mGroupChatDetailBean.getId());
+        }
+
+        @Override
+        public void nicknameChanged(String groupChatId, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
+
+        }
+    };
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        IMClient.SINGLETON.removeOnGroupChatStatusListener(mOnGroupChatStatusListener);
+    }
 
     @Override
     public int getLayoutId() {
@@ -166,6 +199,7 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
         findViewByID(R.id.ll_nickname_in_group_chat).setOnClickListener(mOnClickListener);
         findViewByID(R.id.ll_clear_chat_history).setOnClickListener(mOnClickListener);
         findViewByID(R.id.btn_exit).setOnClickListener(mOnClickListener);
+        IMClient.SINGLETON.addOnGroupChatStatusListener(mOnGroupChatStatusListener);
     }
 
     @Override
