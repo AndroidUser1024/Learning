@@ -1,5 +1,7 @@
 package com.qinshou.qinshoubox.im.bean;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Author: QinHao
  * Email:cqflqinhao@126.com
@@ -8,9 +10,9 @@ package com.qinshou.qinshoubox.im.bean;
  */
 public class FriendStatusBean {
     private int status;
-    private String fromUserId;
-    private String additionalMsg;
     private boolean newFriend;
+    @SerializedName("fromUser")
+    private UserDetailBean mUserDetailBean;
 
     public FriendStatusBean() {
     }
@@ -19,9 +21,8 @@ public class FriendStatusBean {
     public String toString() {
         return "FriendStatusBean{" +
                 "status=" + status +
-                ", fromUserId=" + fromUserId +
-                ", additionalMsg='" + additionalMsg + '\'' +
                 ", newFriend=" + newFriend +
+                ", mUserDetailBean=" + mUserDetailBean +
                 '}';
     }
 
@@ -33,27 +34,19 @@ public class FriendStatusBean {
         this.status = status;
     }
 
-    public String getFromUserId() {
-        return fromUserId;
-    }
-
-    public void setFromUserId(String fromUserId) {
-        this.fromUserId = fromUserId;
-    }
-
-    public String getAdditionalMsg() {
-        return additionalMsg;
-    }
-
-    public void setAdditionalMsg(String additionalMsg) {
-        this.additionalMsg = additionalMsg;
-    }
-
     public boolean isNewFriend() {
         return newFriend;
     }
 
     public void setNewFriend(boolean newFriend) {
         this.newFriend = newFriend;
+    }
+
+    public UserDetailBean getUserDetailBean() {
+        return mUserDetailBean;
+    }
+
+    public void setUserDetailBean(UserDetailBean userDetailBean) {
+        mUserDetailBean = userDetailBean;
     }
 }

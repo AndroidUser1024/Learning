@@ -66,7 +66,7 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
      */
     private IOnFriendStatusListener mOnFriendStatusListener = new IOnFriendStatusListener() {
         @Override
-        public void add(String fromUserId, String additionalMsg, boolean newFriend) {
+        public void add(UserDetailBean fromUser, boolean newFriend) {
             if (!newFriend) {
                 return;
             }
@@ -93,25 +93,25 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
         }
 
         @Override
-        public void agreeAdd(String fromUserId) {
+        public void agreeAdd(UserDetailBean fromUser) {
             getPresenter().getFriendList();
         }
 
         @Override
-        public void refuseAdd(String fromUserId) {
+        public void refuseAdd(UserDetailBean fromUser) {
         }
 
         @Override
-        public void delete(String fromUserId) {
+        public void delete(UserDetailBean fromUser) {
             getPresenter().getFriendList();
         }
 
         @Override
-        public void online(String fromUserId) {
+        public void online(UserDetailBean fromUser) {
         }
 
         @Override
-        public void offline(String fromUserId) {
+        public void offline(UserDetailBean fromUser) {
         }
     };
 

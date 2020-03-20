@@ -39,6 +39,7 @@ import com.qinshou.qinshoubox.im.manager.GroupChatMemberManager;
 import com.qinshou.qinshoubox.im.manager.MessageManager;
 import com.qinshou.qinshoubox.im.manager.PingManager;
 import com.qinshou.qinshoubox.im.manager.ReconnectManager;
+import com.qinshou.qinshoubox.listener.SuccessRunnable;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxCommonApi;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxOfflineApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
@@ -69,8 +70,8 @@ public enum IMClient {
     private static final String TAG = "IMClient";
     private final int TIME_OUT = 10 * 1000;
     //    private static final String URL = "ws://www.mrqinshou.com:10086/websocket";
-    //    private static final String URL = "ws://172.16.60.231:10086/websocket";
-    private static final String URL = "ws://192.168.1.109:10086/websocket";
+    private static final String URL = "ws://172.16.60.231:10086/websocket";
+    //    private static final String URL = "ws://192.168.1.109:10086/websocket";
     private Context mContext;
     private WebSocket mWebSocket;
     private Handler mHandler = new Handler(Looper.getMainLooper());
@@ -234,44 +235,37 @@ public enum IMClient {
         FriendStatusBean friendStatusBean = new Gson().fromJson(messageBean.getExtend(), FriendStatusBean.class);
         if (friendStatusBean.getStatus() == FriendStatus.ADD.getValue()) {
             for (IOnFriendStatusListener onFriendStatusListener : mOnFriendStatusListenerList) {
-                onFriendStatusListener.add(friendStatusBean.getFromUserId()
-                        , friendStatusBean.getAdditionalMsg()
+                onFriendStatusListener.add(friendStatusBean.getUserDetailBean()
                         , friendStatusBean.isNewFriend());
             }
         } else if (friendStatusBean.getStatus() == FriendStatus.AGREE_ADD.getValue()) {
             for (IOnFriendStatusListener onFriendStatusListener : mOnFriendStatusListenerList) {
-                onFriendStatusListener.agreeAdd(friendStatusBean.getFromUserId());
+                onFriendStatusListener.agreeAdd(friendStatusBean.getUserDetailBean());
             }
-            mFriendManager.getInfo(friendStatusBean.getFromUserId(), new Callback<UserDetailBean>() {
-                @Override
-                public void onSuccess(UserDetailBean data) {
-                    Map<String, Object> extend = new HashMap<>();
-                    extend.put("status", FriendStatus.AGREE_ADD.getValue());
-                    // 创建已经是好友的提示信息的系统消息
-                    MessageBean m = MessageBean.createChatSystemMessage(friendStatusBean.getFromUserId(), mUserDetailBean.getId(), extend);
-                    handleMessage(m);
-                }
 
-                @Override
-                public void onFailure(Exception e) {
+            // 存到缓存
+            mFriendManager.getCache().put(friendStatusBean.getUserDetailBean().getId(), friendStatusBean.getUserDetailBean());
 
-                }
-            });
+            Map<String, Object> extend = new HashMap<>();
+            extend.put("status", FriendStatus.AGREE_ADD.getValue());
+            // 创建已经是好友的提示信息的系统消息
+            MessageBean m = MessageBean.createChatSystemMessage(friendStatusBean.getUserDetailBean().getId(), mUserDetailBean.getId(), extend);
+            handleMessage(m);
         } else if (friendStatusBean.getStatus() == FriendStatus.REFUSE_ADD.getValue()) {
             for (IOnFriendStatusListener onFriendStatusListener : mOnFriendStatusListenerList) {
-                onFriendStatusListener.refuseAdd(friendStatusBean.getFromUserId());
+                onFriendStatusListener.refuseAdd(friendStatusBean.getUserDetailBean());
             }
         } else if (friendStatusBean.getStatus() == FriendStatus.DELETE.getValue()) {
             for (IOnFriendStatusListener onFriendStatusListener : mOnFriendStatusListenerList) {
-                onFriendStatusListener.delete(friendStatusBean.getFromUserId());
+                onFriendStatusListener.delete(friendStatusBean.getUserDetailBean());
             }
         } else if (friendStatusBean.getStatus() == FriendStatus.ONLINE.getValue()) {
             for (IOnFriendStatusListener onFriendStatusListener : mOnFriendStatusListenerList) {
-                onFriendStatusListener.online(friendStatusBean.getFromUserId());
+                onFriendStatusListener.online(friendStatusBean.getUserDetailBean());
             }
         } else if (friendStatusBean.getStatus() == FriendStatus.OFFLINE.getValue()) {
             for (IOnFriendStatusListener onFriendStatusListener : mOnFriendStatusListenerList) {
-                onFriendStatusListener.offline(friendStatusBean.getFromUserId());
+                onFriendStatusListener.offline(friendStatusBean.getUserDetailBean());
             }
         }
     }

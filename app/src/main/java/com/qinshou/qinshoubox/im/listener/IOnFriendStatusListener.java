@@ -1,5 +1,7 @@
 package com.qinshou.qinshoubox.im.listener;
 
+import com.qinshou.qinshoubox.im.bean.UserDetailBean;
+
 /**
  * Author: QinHao
  * Email:cqflqinhao@126.com
@@ -7,15 +9,15 @@ package com.qinshou.qinshoubox.im.listener;
  * Description:好友状态监听器
  */
 public interface IOnFriendStatusListener {
-    void add(String fromUserId, String additionalMsg, boolean newFriend);
+    void add(UserDetailBean fromUser, boolean newFriend);
 
-    void agreeAdd(String fromUserId);
+    void agreeAdd(UserDetailBean fromUser);
 
-    void refuseAdd(String fromUserId);
+    void refuseAdd(UserDetailBean fromUser);
 
-    void delete(String fromUserId);
+    void delete(UserDetailBean fromUser);
 
-    void online(String fromUserId);
+    void online(UserDetailBean fromUser);
 
-    void offline(String fromUserId);
+    void offline(UserDetailBean fromUser);
 }

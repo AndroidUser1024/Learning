@@ -7,6 +7,7 @@ import android.widget.ImageView;
 
 import com.google.gson.Gson;
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
+import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.imagemodule.callback.Callback;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.R;

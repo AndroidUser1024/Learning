@@ -3,6 +3,7 @@ package com.qinshou.qinshoubox.friend.view.fragment;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.text.TextUtils;
 import android.view.View;
 
@@ -18,6 +19,7 @@ import com.qinshou.qinshoubox.friend.presenter.FriendHistoryPresenter;
 import com.qinshou.qinshoubox.friend.view.adapter.RcvFriendHistoryAdapter;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.IMClient;
+import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.enums.FriendRelStatus;
 import com.qinshou.qinshoubox.im.listener.IOnFriendStatusListener;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
@@ -48,7 +50,7 @@ public class FriendHistoryFragment extends QSFragment<FriendHistoryPresenter> im
     private int mPage = IConstant.PAGE_START;
     private IOnFriendStatusListener mOnFriendStatusListener = new IOnFriendStatusListener() {
         @Override
-        public void add(String fromUserId, String additionalMsg, boolean newFriend) {
+        public void add(UserDetailBean fromUser, boolean newFriend) {
             getPresenter().getFriendHistory(mPage, IConstant.PAGE_SIZE);
             // 已经在当前页,查看到了好友申请,就不用保存申请历史未读数了
             String key = String.format(IConstant.SP_KEY_FRIEND_HISTORY_UNREAD_COUNT, UserStatusManager.SINGLETON.getUserBean().getId());
@@ -57,23 +59,23 @@ public class FriendHistoryFragment extends QSFragment<FriendHistoryPresenter> im
         }
 
         @Override
-        public void agreeAdd(String fromUserId) {
+        public void agreeAdd(UserDetailBean fromUser) {
         }
 
         @Override
-        public void refuseAdd(String fromUserId) {
+        public void refuseAdd(UserDetailBean fromUser) {
         }
 
         @Override
-        public void delete(String fromUserId) {
+        public void delete(UserDetailBean fromUser) {
         }
 
         @Override
-        public void online(String fromUserId) {
+        public void online(UserDetailBean fromUser) {
         }
 
         @Override
-        public void offline(String fromUserId) {
+        public void offline(UserDetailBean fromUser) {
         }
     };
 

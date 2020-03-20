@@ -100,31 +100,32 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
     private UserDetailBean mUserDetailBean;
     private IOnFriendStatusListener mOnFriendStatusListener = new IOnFriendStatusListener() {
         @Override
-        public void add(String fromUserId, String additionalMsg, boolean newFriend) {
+        public void add(UserDetailBean fromUser, boolean newFriend) {
         }
 
         @Override
-        public void agreeAdd(String fromUserId) {
-            if (TextUtils.equals(fromUserId, mUserDetailBean.getId())) {
+        public void agreeAdd(UserDetailBean fromUser) {
+            ShowLogUtil.logi("agreeAdd--->" + fromUser);
+            if (TextUtils.equals(fromUser.getId(), mUserDetailBean.getId())) {
                 // 监听到发起的添加请求被同意了,更新 UI
                 showFriendUI(mUserDetailBean);
             }
         }
 
         @Override
-        public void refuseAdd(String fromUserId) {
+        public void refuseAdd(UserDetailBean fromUser) {
         }
 
         @Override
-        public void delete(String fromUserId) {
+        public void delete(UserDetailBean fromUser) {
         }
 
         @Override
-        public void online(String fromUserId) {
+        public void online(UserDetailBean fromUser) {
         }
 
         @Override
-        public void offline(String fromUserId) {
+        public void offline(UserDetailBean fromUser) {
         }
     };
 
