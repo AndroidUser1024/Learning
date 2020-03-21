@@ -37,9 +37,8 @@ public interface IGroupChatSettingContract {
          *
          * @param groupChatId 群 Id
          * @param top         0 表示不置顶,1 表示置顶
-         * @param callback    回调接口
          */
-        void setTop(String groupChatId, int top, Callback<Object> callback);
+        void setTop(String groupChatId, int top, QSCallback<Object> qsCallback);
 
         /**
          * Author: QinHao
@@ -49,9 +48,8 @@ public interface IGroupChatSettingContract {
          *
          * @param groupChatId  群 Id
          * @param doNotDisturb 0 表示非免打扰,1 表示免打扰
-         * @param callback     回调接口
          */
-        void setDoNotDisturb(String groupChatId, int doNotDisturb, Callback<Object> callback);
+        void setDoNotDisturb(String groupChatId, int doNotDisturb, QSCallback<Object> qsCallback);
 
         /**
          * Author: QinHao
@@ -61,9 +59,8 @@ public interface IGroupChatSettingContract {
          *
          * @param groupChatId                 群 Id
          * @param showGroupChatMemberNickname 0 表示不显示,1 表示显示
-         * @param callback                    回调接口
          */
-        void setShowGroupChatMemberNickname(String groupChatId, int showGroupChatMemberNickname, Callback<Object> callback);
+        void setShowGroupChatMemberNickname(String groupChatId, int showGroupChatMemberNickname, QSCallback<Object> qsCallback);
 
         /**
          * Author: QinHao
@@ -73,7 +70,7 @@ public interface IGroupChatSettingContract {
          *
          * @param groupChatId 群 Id
          */
-        void exit(String groupChatId, Callback<Object> callBack);
+        void exit(String groupChatId, QSCallback<Object> qsCallback);
     }
 
     interface IView extends IBaseView {

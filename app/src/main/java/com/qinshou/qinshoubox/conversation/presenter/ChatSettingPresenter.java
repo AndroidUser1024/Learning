@@ -6,6 +6,7 @@ import com.qinshou.qinshoubox.conversation.contract.IChatSettingContract;
 import com.qinshou.qinshoubox.conversation.model.ChatSettingModel;
 import com.qinshou.qinshoubox.conversation.view.fragment.ChatSettingFragment;
 import com.qinshou.qinshoubox.im.bean.UserDetailBean;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 /**
  * Author: QinHao
@@ -21,7 +22,7 @@ public class ChatSettingPresenter extends AbsPresenter<IChatSettingContract.IVie
 
     @Override
     public void getFriend(String id) {
-        getModel().getFriend(id, new Callback<UserDetailBean>() {
+        getModel().getFriend(id, new QSCallback<UserDetailBean>() {
             @Override
             public void onSuccess(UserDetailBean data) {
                 if (!isViewAttached()) {
@@ -42,7 +43,7 @@ public class ChatSettingPresenter extends AbsPresenter<IChatSettingContract.IVie
 
     @Override
     public void setTop(String toUserId, int top) {
-        getModel().setTop(toUserId, top, new Callback<Object>() {
+        getModel().setTop(toUserId, top, new QSCallback<Object>() {
             @Override
             public void onSuccess(Object data) {
                 if (!isViewAttached()) {
@@ -63,7 +64,7 @@ public class ChatSettingPresenter extends AbsPresenter<IChatSettingContract.IVie
 
     @Override
     public void setDoNotDisturb(String toUserId, int doNotDisturb) {
-        getModel().setDoNotDisturb(toUserId, doNotDisturb, new Callback<Object>() {
+        getModel().setDoNotDisturb(toUserId, doNotDisturb, new QSCallback<Object>() {
             @Override
             public void onSuccess(Object data) {
                 if (!isViewAttached()) {
@@ -84,7 +85,7 @@ public class ChatSettingPresenter extends AbsPresenter<IChatSettingContract.IVie
 
     @Override
     public void setBlackList(String toUserId, int blackList) {
-        getModel().setBlackList(toUserId, blackList, new Callback<Object>() {
+        getModel().setBlackList(toUserId, blackList, new QSCallback<Object>() {
             @Override
             public void onSuccess(Object data) {
                 if (!isViewAttached()) {

@@ -23,7 +23,7 @@ public interface IGroupChatAddMemberContract {
          * Date:2019/12/2 18:12
          * Description:获取好友列表
          */
-        void getFriendList(Callback<List<UserDetailBean>> callback);
+        void getFriendList(QSCallback<List<UserDetailBean>> qsCallback);
 
         /**
          * Author: QinHao
@@ -44,7 +44,7 @@ public interface IGroupChatAddMemberContract {
          * @param groupChatId     群 id
          * @param addMemberIdList 待添加的群成员的 id 列表
          */
-        void addMember(String groupChatId, List<String> addMemberIdList, Callback<Object> callback);
+        void addMember(String groupChatId, List<String> addMemberIdList, QSCallback<Object> qsCallback);
     }
 
     interface IView extends IBaseView {

@@ -7,6 +7,7 @@ import com.qinshou.qinshoubox.friend.contract.IFriendContract;
 import com.qinshou.qinshoubox.friend.model.FriendModel;
 import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class FriendPresenter extends AbsPresenter<IFriendContract.IView, IFriend
 
     @Override
     public void getMyGroupChatList() {
-        getModel().getMyGroupChatList(new Callback<List<GroupChatBean>>() {
+        getModel().getMyGroupChatList(new QSCallback<List<GroupChatBean>>() {
             @Override
             public void onSuccess(List<GroupChatBean> data) {
                 if (!isViewAttached()) {
@@ -45,7 +46,7 @@ public class FriendPresenter extends AbsPresenter<IFriendContract.IView, IFriend
 
     @Override
     public void getFriendList() {
-        getModel().getFriendList(new Callback<List<UserDetailBean>>() {
+        getModel().getFriendList(new QSCallback<List<UserDetailBean>>() {
             @Override
             public void onSuccess(List<UserDetailBean> data) {
                 if (!isViewAttached()) {

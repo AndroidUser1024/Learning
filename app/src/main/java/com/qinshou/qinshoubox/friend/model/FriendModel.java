@@ -6,6 +6,7 @@ import com.qinshou.qinshoubox.friend.contract.IFriendContract;
 import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 import java.util.List;
 
@@ -17,12 +18,12 @@ import java.util.List;
  */
 public class FriendModel implements IFriendContract.IModel {
     @Override
-    public void getMyGroupChatList(final Callback<List<GroupChatBean>> callback) {
-        IMClient.SINGLETON.getGroupChatManager().getList(callback);
+    public void getMyGroupChatList(final QSCallback<List<GroupChatBean>> qsCallback) {
+        IMClient.SINGLETON.getGroupChatManager().getList(qsCallback);
     }
 
     @Override
-    public void getFriendList(final Callback<List<UserDetailBean>> qsCallback) {
+    public void getFriendList(final QSCallback<List<UserDetailBean>> qsCallback) {
         IMClient.SINGLETON.getFriendManager().getList(qsCallback);
     }
 }

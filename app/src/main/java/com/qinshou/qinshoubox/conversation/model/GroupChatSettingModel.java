@@ -22,22 +22,22 @@ public class GroupChatSettingModel implements IGroupChatSettingContract.IModel {
     }
 
     @Override
-    public void setTop(String groupChatId, int top, Callback<Object> callback) {
-        IMClient.SINGLETON.getGroupChatManager().setTop(groupChatId, top, callback);
+    public void setTop(String groupChatId, int top, QSCallback<Object> qsCallback) {
+        IMClient.SINGLETON.getGroupChatManager().setTop(groupChatId, top, qsCallback);
     }
 
     @Override
-    public void setDoNotDisturb(String groupChatId, int doNotDisturb, Callback<Object> callback) {
-        IMClient.SINGLETON.getGroupChatManager().setDoNotDisturb(groupChatId, doNotDisturb, callback);
+    public void setDoNotDisturb(String groupChatId, int doNotDisturb, QSCallback<Object> qsCallback) {
+        IMClient.SINGLETON.getGroupChatManager().setDoNotDisturb(groupChatId, doNotDisturb, qsCallback);
     }
 
     @Override
-    public void setShowGroupChatMemberNickname(String groupChatId, int showGroupChatMemberNickname, Callback<Object> callback) {
-        IMClient.SINGLETON.getGroupChatManager().setShowGroupChatMemberNickname(groupChatId, showGroupChatMemberNickname, callback);
+    public void setShowGroupChatMemberNickname(String groupChatId, int showGroupChatMemberNickname, QSCallback<Object> qsCallback) {
+        IMClient.SINGLETON.getGroupChatManager().setShowGroupChatMemberNickname(groupChatId, showGroupChatMemberNickname, qsCallback);
     }
 
     @Override
-    public void exit(String groupChatId, Callback<Object> callBack) {
-        IMClient.SINGLETON.getGroupChatManager().exit(groupChatId, callBack);
+    public void exit(String groupChatId, QSCallback<Object> qsCallback) {
+        IMClient.SINGLETON.getGroupChatManager().exit(groupChatId, qsCallback);
     }
 }

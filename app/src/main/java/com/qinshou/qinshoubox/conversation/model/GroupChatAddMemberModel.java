@@ -17,8 +17,8 @@ import java.util.List;
  */
 public class GroupChatAddMemberModel implements IGroupChatAddMemberContract.IModel {
     @Override
-    public void getFriendList(Callback<List<UserDetailBean>> callback) {
-        IMClient.SINGLETON.getFriendManager().getList(callback);
+    public void getFriendList(QSCallback<List<UserDetailBean>> qsCallback) {
+        IMClient.SINGLETON.getFriendManager().getList(qsCallback);
     }
 
     @Override
@@ -27,7 +27,7 @@ public class GroupChatAddMemberModel implements IGroupChatAddMemberContract.IMod
     }
 
     @Override
-    public void addMember(String groupChatId, List<String> addMemberIdList, Callback<Object> callback) {
-        IMClient.SINGLETON.getGroupChatManager().addMember(groupChatId, addMemberIdList, callback);
+    public void addMember(String groupChatId, List<String> addMemberIdList, QSCallback<Object> qsCallback) {
+        IMClient.SINGLETON.getGroupChatManager().addMember(groupChatId, addMemberIdList, qsCallback);
     }
 }

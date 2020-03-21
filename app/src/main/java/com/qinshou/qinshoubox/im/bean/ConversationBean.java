@@ -1,17 +1,29 @@
 package com.qinshou.qinshoubox.im.bean;
 
 
+import com.jeejio.dbmodule.annotation.Column;
+import com.jeejio.dbmodule.annotation.Id;
+import com.jeejio.dbmodule.annotation.Table;
+
 /**
  * Author: QinHao
  * Email:cqflqinhao@126.com
  * Date: 2019/12/04 23:04
  * Description:会话实体类
  */
+@Table(name = "conversation")
 public class ConversationBean {
     /**
      * 自增长 Id
      */
+    @Id(autoIncrement = true)
+    @Column(type = Column.Type.INTEGER)
     private int id;
+    /**
+     * 未读数
+     */
+    @Column(type = Column.Type.INTEGER)
+    private int unreadCount;
     /**
      * 私聊就是对方的用户 id,群聊就是群的 id
      */
@@ -20,6 +32,14 @@ public class ConversationBean {
      * 会话类型
      */
     private int type;
+    /**
+     * 对方的小头像
+     */
+    private String headImgSmall;
+    /**
+     * 会话标题
+     */
+    private String title;
     /**
      * 最后一条消息的内容
      */
@@ -33,23 +53,6 @@ public class ConversationBean {
      */
     private long lastMsgTimestamp;
     /**
-     * 最后一条消息的 pid，通常情况下不会用到，当 lastMsgContent，lastMsgContentType，lastMsgTimestamp
-     * 不够用的情况下可以使用该字段找到具体消息
-     */
-    private int lastMsgPid;
-    /**
-     * 未读数
-     */
-    private int unreadCount;
-    /**
-     * 对方的小头像
-     */
-    private String headImgSmall;
-    /**
-     * 会话标题
-     */
-    private String title;
-    /**
      * 是否置顶,0 是非置顶,1 是置顶
      */
     private int top;
@@ -57,6 +60,10 @@ public class ConversationBean {
      * 是否免打扰,0 是非免打扰,1 是免打扰
      */
     private int doNotDisturb;
+    /**
+     * 最后一条消息发送状态 -1 发送失败   0 发送中    1 发送成功
+     */
+    private int lastMsgStatus;
 
     public ConversationBean() {
     }
@@ -65,17 +72,17 @@ public class ConversationBean {
     public String toString() {
         return "ConversationBean{" +
                 "id=" + id +
+                ", unreadCount=" + unreadCount +
                 ", toUserId='" + toUserId + '\'' +
                 ", type=" + type +
+                ", headImgSmall='" + headImgSmall + '\'' +
+                ", title='" + title + '\'' +
                 ", lastMsgContent='" + lastMsgContent + '\'' +
                 ", lastMsgContentType=" + lastMsgContentType +
                 ", lastMsgTimestamp=" + lastMsgTimestamp +
-                ", lastMsgPid=" + lastMsgPid +
-                ", unreadCount=" + unreadCount +
-                ", headImgSmall='" + headImgSmall + '\'' +
-                ", title='" + title + '\'' +
                 ", top=" + top +
                 ", doNotDisturb=" + doNotDisturb +
+                ", lastMsgStatus=" + lastMsgStatus +
                 '}';
     }
 
@@ -85,6 +92,14 @@ public class ConversationBean {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getUnreadCount() {
+        return unreadCount;
+    }
+
+    public void setUnreadCount(int unreadCount) {
+        this.unreadCount = unreadCount;
     }
 
     public String getToUserId() {
@@ -101,6 +116,22 @@ public class ConversationBean {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public String getHeadImgSmall() {
+        return headImgSmall;
+    }
+
+    public void setHeadImgSmall(String headImgSmall) {
+        this.headImgSmall = headImgSmall;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getLastMsgContent() {
@@ -127,39 +158,6 @@ public class ConversationBean {
         this.lastMsgTimestamp = lastMsgTimestamp;
     }
 
-    public int getLastMsgPid() {
-        return lastMsgPid;
-    }
-
-    public void setLastMsgPid(int lastMsgPid) {
-        this.lastMsgPid = lastMsgPid;
-    }
-
-    public int getUnreadCount() {
-        return unreadCount;
-    }
-
-    public void setUnreadCount(int unreadCount) {
-
-        this.unreadCount = unreadCount;
-    }
-
-    public String getHeadImgSmall() {
-        return headImgSmall;
-    }
-
-    public void setHeadImgSmall(String headImgSmall) {
-        this.headImgSmall = headImgSmall;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public int getTop() {
         return top;
     }
@@ -174,5 +172,13 @@ public class ConversationBean {
 
     public void setDoNotDisturb(int doNotDisturb) {
         this.doNotDisturb = doNotDisturb;
+    }
+
+    public int getLastMsgStatus() {
+        return lastMsgStatus;
+    }
+
+    public void setLastMsgStatus(int lastMsgStatus) {
+        this.lastMsgStatus = lastMsgStatus;
     }
 }

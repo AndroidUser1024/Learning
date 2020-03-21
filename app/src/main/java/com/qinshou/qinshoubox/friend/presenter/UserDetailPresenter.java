@@ -23,7 +23,7 @@ public class UserDetailPresenter extends AbsPresenter<IUserDetailContract.IView,
 
     @Override
     public void getUserDetail(String keyword) {
-        getModel().getUserDetail(keyword, new Callback<UserDetailBean>() {
+        getModel().getUserDetail(keyword, new QSCallback<UserDetailBean>() {
             @Override
             public void onSuccess(UserDetailBean data) {
                 if (!isViewAttached()) {
@@ -86,7 +86,7 @@ public class UserDetailPresenter extends AbsPresenter<IUserDetailContract.IView,
 
     @Override
     public void setRemark(String toUserId, String remark) {
-        getModel().setRemark(toUserId, remark, new Callback<Object>() {
+        getModel().setRemark(toUserId, remark, new QSCallback<Object>() {
             @Override
             public void onSuccess(Object data) {
                 if (!isViewAttached()) {

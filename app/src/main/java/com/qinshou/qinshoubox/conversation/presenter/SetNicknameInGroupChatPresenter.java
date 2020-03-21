@@ -6,6 +6,7 @@ import com.qinshou.qinshoubox.conversation.contract.ISetNicknameInGroupChatContr
 import com.qinshou.qinshoubox.conversation.model.SetNicknameInGroupChatModel;
 import com.qinshou.qinshoubox.conversation.view.fragment.SetGroupChatNicknameFragment;
 import com.qinshou.qinshoubox.conversation.view.fragment.SetNicknameInGroupChatFragment;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 /**
  * Author: QinHao
@@ -21,7 +22,7 @@ public class SetNicknameInGroupChatPresenter extends AbsPresenter<ISetNicknameIn
 
     @Override
     public void setNicknameInGroupChat(String groupChatId, String nicknameInGroupChat) {
-        getModel().setNicknameInGroupChat(groupChatId, nicknameInGroupChat, new Callback<Object>() {
+        getModel().setNicknameInGroupChat(groupChatId, nicknameInGroupChat, new QSCallback<Object>() {
             @Override
             public void onSuccess(Object data) {
                 if (!isViewAttached()) {

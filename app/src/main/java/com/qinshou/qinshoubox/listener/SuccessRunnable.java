@@ -1,7 +1,7 @@
 package com.qinshou.qinshoubox.listener;
 
 
-import com.qinshou.okhttphelper.callback.Callback;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 /**
  * Author: QinHao
@@ -10,19 +10,19 @@ import com.qinshou.okhttphelper.callback.Callback;
  * Description:调用某个方法成功后在主线程中的回调
  */
 public class SuccessRunnable<T> implements Runnable {
-    private Callback<T> mCallback;
+    private QSCallback<T> mQSCallback;
     private T mData;
 
-    public SuccessRunnable(Callback<T> callback, T data) {
-        mCallback = callback;
+    public SuccessRunnable(QSCallback<T> qsCallback, T data) {
+        mQSCallback = qsCallback;
         mData = data;
     }
 
     @Override
     public void run() {
-        if (mCallback == null) {
+        if (mQSCallback == null) {
             return;
         }
-        mCallback.onSuccess(mData);
+        mQSCallback.onSuccess(mData);
     }
 }

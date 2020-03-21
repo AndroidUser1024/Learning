@@ -1,10 +1,9 @@
 package com.qinshou.qinshoubox.im.cache;
 
-import com.qinshou.qinshoubox.im.bean.UserDetailBean;
+import com.jeejio.dbmodule.dao.IBaseDao;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
-import com.qinshou.qinshoubox.im.db.DatabaseHelper;
-import com.qinshou.qinshoubox.im.db.dao.IFriendDao;
-import com.qinshou.qinshoubox.im.db.dao.IUserDao;
+import com.qinshou.qinshoubox.im.bean.UserBean;
+import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 
 import java.util.Collection;
 
@@ -16,45 +15,44 @@ import java.util.Collection;
  */
 public class FriendDatabaseCache extends AbsDatabaseCache<String, UserDetailBean> {
 
-    private IFriendDao mFriendDao;
-    private IUserDao mUserDao;
+    private IBaseDao<UserBean> mUserDao;
+    private IBaseDao<FriendBean> mFriendDao;
 
-    public FriendDatabaseCache(DatabaseHelper databaseHelper) {
-        super(databaseHelper);
-        mFriendDao = databaseHelper.getDao(IFriendDao.class);
-        mUserDao = databaseHelper.getDao(IUserDao.class);
+    public FriendDatabaseCache() {
+        super();
     }
 
     @Override
     public void put(String key, UserDetailBean value) {
-        // 用户数据不存在才存,但是这里不更新用户数据库
-        if (!mUserDao.existsById(value.getId())) {
-            mUserDao.insert(value);
-        }
-        FriendBean friendBean = new FriendBean(value.getId()
-                , value.getStatus()
-                , value.getRemark()
-                , value.getTop()
-                , value.getDoNotDisturb()
-                , value.getBlackList());
-        if (mFriendDao.existsById(friendBean.getId())) {
-            mFriendDao.update(friendBean);
-        } else {
-            mFriendDao.insert(friendBean);
-        }
+//        // 用户数据不存在才存,但是这里不更新用户数据库
+//        if (!mUserDao.existsById(value.getId())) {
+//            mUserDao.insert(value);
+//        }
+//        FriendBean friendBean = new FriendBean(value.getId()
+//                , value.getStatus()
+//                , value.getRemark()
+//                , value.getTop()
+//                , value.getDoNotDisturb()
+//                , value.getBlackList());
+//        if (mFriendDao.existsById(friendBean.getId())) {
+//            mFriendDao.update(friendBean);
+//        } else {
+//            mFriendDao.insert(friendBean);
+//        }
     }
 
     @Override
     public UserDetailBean get(String key) {
-        UserDetailBean userDetailBean = mUserDao.selectById(key);
-        FriendBean friendBean = mFriendDao.selectById(key);
-        if (userDetailBean != null && friendBean != null) {
-            userDetailBean.setStatus(friendBean.getStatus());
-            userDetailBean.setRemark(friendBean.getRemark());
-            userDetailBean.setTop(friendBean.getTop());
-            userDetailBean.setDoNotDisturb(friendBean.getDoNotDisturb());
-            userDetailBean.setBlackList(friendBean.getBlackList());
-        }
+        UserDetailBean userDetailBean = new UserDetailBean();
+//        UserDetailBean userDetailBean = mUserDao.selectById(key);
+//        FriendBean friendBean = mFriendDao.selectById(key);
+//        if (userDetailBean != null && friendBean != null) {
+//            userDetailBean.setStatus(friendBean.getStatus());
+//            userDetailBean.setRemark(friendBean.getRemark());
+//            userDetailBean.setTop(friendBean.getTop());
+//            userDetailBean.setDoNotDisturb(friendBean.getDoNotDisturb());
+//            userDetailBean.setBlackList(friendBean.getBlackList());
+//        }
         return userDetailBean;
     }
 

@@ -1,36 +1,48 @@
 package com.qinshou.qinshoubox.im.bean;
 
 
+import com.jeejio.dbmodule.annotation.Column;
+import com.jeejio.dbmodule.annotation.Id;
+import com.jeejio.dbmodule.annotation.Table;
+
 /**
  * Author: QinHao
  * Email:cqflqinhao@126.com
  * Date: 2019/12/04 23:05
  * Description:好友关系实体类
  */
+@Table(name = "friend")
 public class FriendBean {
     /**
      * 好友的 id
      */
+    @Id
+    @Column
     private String id;
     /**
      * 好友状态
      */
+    @Column(type = Column.Type.INTEGER)
     private int status;
     /**
      * 备注
      */
+    @Column
     private String remark;
     /**
      * 是否置顶,0 是非置顶,1 是置顶
      */
+    @Column(type = Column.Type.INTEGER)
     private int top;
     /**
      * 是否免打扰,0 是非免打扰,1 是免打扰
      */
+    @Column(type = Column.Type.INTEGER)
     private int doNotDisturb;
     /**
      * 是否加入了黑名单,0 是没有加入,1 是加入了
      */
+    @Column(type = Column.Type.INTEGER)
     private int blackList;
 
     public FriendBean() {

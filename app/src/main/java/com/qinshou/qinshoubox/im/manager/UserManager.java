@@ -1,6 +1,14 @@
 package com.qinshou.qinshoubox.im.manager;
 
 
+import com.qinshou.okhttphelper.callback.Callback;
+import com.qinshou.qinshoubox.im.IMClient;
+import com.qinshou.qinshoubox.im.bean.UserBean;
+import com.qinshou.qinshoubox.im.bean.UserDetailBean;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
+import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxUserApi;
+import com.qinshou.qinshoubox.transformer.QSApiTransformer;
+
 /**
  * Author: QinHao
  * Email:qinhao@jeejio.com
@@ -9,19 +17,20 @@ package com.qinshou.qinshoubox.im.manager;
  */
 public class UserManager {
 
-//    public void getUser(String keyword, final QSCallback<UserBean> qsCallback) {
-//        OkHttpHelperForQSBoxUserApi.SINGLETON.getUserDetail(IMClient.SINGLETON.getUserId(), keyword)
-//                .transform(new QSApiTransformer<UserBean>())
-//                .enqueue(new Callback<UserBean>() {
-//                    @Override
-//                    public void onSuccess(UserBean data) {
-//                        qsCallback.onSuccess(data);
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Exception e) {
-//                        qsCallback.onFailure(e);
-//                    }
-//                });
-//    }
+    public void getUser(String keyword, final QSCallback<UserDetailBean> qsCallback) {
+        String userId = IMClient.SINGLETON.getUserDetailBean().getId();
+        OkHttpHelperForQSBoxUserApi.SINGLETON.getUserDetail(userId, keyword)
+                .transform(new QSApiTransformer<UserDetailBean>())
+                .enqueue(new Callback<UserDetailBean>() {
+                    @Override
+                    public void onSuccess(UserDetailBean data) {
+                        qsCallback.onSuccess(data);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        qsCallback.onFailure(e);
+                    }
+                });
+    }
 }

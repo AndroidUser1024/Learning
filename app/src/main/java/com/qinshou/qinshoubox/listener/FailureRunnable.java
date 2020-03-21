@@ -2,6 +2,7 @@ package com.qinshou.qinshoubox.listener;
 
 
 import com.qinshou.okhttphelper.callback.Callback;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 /**
  * Author: QinHao
@@ -10,19 +11,19 @@ import com.qinshou.okhttphelper.callback.Callback;
  * Description:调用某个方法失败后在主线程中的回调
  */
 public class FailureRunnable<T> implements Runnable {
-    private Callback<T> mCallback;
+    private QSCallback<T> mQSCallback;
     private Exception mException;
 
-    public FailureRunnable(Callback<T> callback, Exception exception) {
-        mCallback = callback;
+    public FailureRunnable(QSCallback<T> qsCallback, Exception exception) {
+        mQSCallback = qsCallback;
         mException = exception;
     }
 
     @Override
     public void run() {
-        if (mCallback == null) {
+        if (mQSCallback == null) {
             return;
         }
-        mCallback.onFailure(mException);
+        mQSCallback.onFailure(mException);
     }
 }

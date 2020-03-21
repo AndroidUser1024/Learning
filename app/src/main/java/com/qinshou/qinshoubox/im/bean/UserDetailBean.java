@@ -1,42 +1,31 @@
 package com.qinshou.qinshoubox.im.bean;
 
 
-import com.jeejio.dbmodule.annotation.Column;
-import com.jeejio.dbmodule.annotation.Id;
-import com.jeejio.dbmodule.annotation.Table;
-
 /**
  * Description:获取用户详情接口的映射类
  * Author: QinHao
  * Date: 2019/11/19 10:11
  */
-@Table(name = "user")
 public class UserDetailBean {
     /**
      * Id
      */
-    @Id
-    @Column
     private String id;
     /**
      * 用户名
      */
-    @Column
     private String username;
     /**
      * 昵称
      */
-    @Column
     private String nickname;
     /**
      * 头像
      */
-    @Column
     private String headImg;
     /**
      * 头像,缩略图
      */
-    @Column
     private String headImgSmall;
     /**
      * 手机号
@@ -53,7 +42,6 @@ public class UserDetailBean {
     /**
      * 性别,1 是男,2 是女
      */
-    @Column(type = Column.Type.INTEGER)
     private int gender;
     /**
      * 用户来源

@@ -6,6 +6,7 @@ import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ public interface IFriendContract {
          * Date:2019/12/5 17:44
          * Description:获取群列表
          */
-        void getMyGroupChatList(Callback<List<GroupChatBean>> callback);
+        void getMyGroupChatList(QSCallback<List<GroupChatBean>> qsCallback);
 
         /**
          * Author: QinHao
@@ -31,7 +32,7 @@ public interface IFriendContract {
          * Date:2019/12/5 17:44
          * Description:获取好友列表
          */
-        void getFriendList(Callback<List<UserDetailBean>> callback);
+        void getFriendList(QSCallback<List<UserDetailBean>> qsCallback);
     }
 
     interface IView extends IBaseView {

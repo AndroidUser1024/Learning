@@ -2,6 +2,9 @@ package com.qinshou.qinshoubox.im.bean;
 
 
 import com.google.gson.Gson;
+import com.jeejio.dbmodule.annotation.Column;
+import com.jeejio.dbmodule.annotation.Id;
+import com.jeejio.dbmodule.annotation.Table;
 import com.qinshou.qinshoubox.conversation.bean.ImgBean;
 import com.qinshou.qinshoubox.conversation.bean.VoiceBean;
 import com.qinshou.qinshoubox.im.IMClient;
@@ -17,50 +20,62 @@ import java.util.Map;
  * Date: 2019/12/04 23:05
  * Description:消息实体类
  */
+@Table
 public class MessageBean {
     /**
      * 自增长 id
      */
+    @Id(autoIncrement = true)
+    @Column(type = Column.Type.INTEGER)
     private int pid;
     /**
      * Id
      */
+    @Column
     private String id;
     /**
      * 发送者的 id
      */
+    @Column
     private String fromUserId;
     /**
      * 接收者的 id
      */
+    @Column
     private String toUserId;
     /**
      * 消息类型
      */
+    @Column(type = Column.Type.INTEGER)
     private int type;
     /**
      * 消息内容类型
      */
+    @Column(type = Column.Type.INTEGER)
     private int contentType;
     /**
      * 消息内容
      */
+    @Column
     private String content;
     /**
      * 发送时间戳
      */
+    @Column(type = Column.Type.INTEGER)
     private long sendTimestamp;
     /**
      * 发送时间戳
      */
+    @Column(type = Column.Type.INTEGER)
     private long receiveTimestamp;
     /**
      * 消息状态
      */
+    @Column(type = Column.Type.INTEGER)
     private int status;
     /**
      * 扩展字段
-     */
+     */@Column
     private String extend;
 
     public MessageBean() {

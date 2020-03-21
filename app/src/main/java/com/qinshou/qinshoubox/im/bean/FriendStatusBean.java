@@ -1,7 +1,5 @@
 package com.qinshou.qinshoubox.im.bean;
 
-import com.google.gson.annotations.SerializedName;
-
 /**
  * Author: QinHao
  * Email:cqflqinhao@126.com

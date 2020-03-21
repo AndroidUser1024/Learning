@@ -3,17 +3,14 @@ package com.qinshou.qinshoubox.im.manager;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.friend.bean.FriendHistoryBean;
-import com.qinshou.qinshoubox.im.bean.FriendStatusBean;
-import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.IMClient;
-import com.qinshou.qinshoubox.im.bean.ConversationBean;
+import com.qinshou.qinshoubox.im.bean.FriendStatusBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
+import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.cache.FriendDatabaseCache;
 import com.qinshou.qinshoubox.im.cache.FriendDoubleCache;
 import com.qinshou.qinshoubox.im.cache.MemoryCache;
-import com.qinshou.qinshoubox.im.db.DatabaseHelper;
 import com.qinshou.qinshoubox.im.enums.FriendStatus;
-import com.qinshou.qinshoubox.im.enums.MessageType;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.listener.FailureRunnable;
 import com.qinshou.qinshoubox.listener.SuccessRunnable;
@@ -21,9 +18,7 @@ import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxFriendApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Author: QinHao
@@ -34,69 +29,8 @@ import java.util.Map;
 public class FriendManager extends AbsManager<String, UserDetailBean> {
     private boolean mLoaded = false;
 
-    public FriendManager(DatabaseHelper databaseHelper) {
-        super(new FriendDoubleCache(new MemoryCache<String, UserDetailBean>()
-                , new FriendDatabaseCache(databaseHelper)));
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2020/1/6 15:37
-     * Description:获取好友
-     *
-     * @param id 用户 id
-     */
-    public UserDetailBean getById(String id) {
-        UserDetailBean userDetailBean = getCache().get(id);
-        if (userDetailBean == null) {
-            ShowLogUtil.logi("从网络拿");
-        }
-        return userDetailBean;
-    }
-
-    public void getList(final Callback<List<UserDetailBean>> callback) {
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                while (!mLoaded) {
-//                    try {
-//                        Thread.sleep(500);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//                if (getCache().getValues() == null) {
-//                    getHandler().post(new SuccessRunnable<>(callback, new ArrayList<>()));
-//                } else {
-//                    getHandler().post(new SuccessRunnable<>(callback, new ArrayList<>(getCache().getValues())));
-//                }
-//            }
-//        }).start();
-        String userId = IMClient.SINGLETON.getUserDetailBean().getId();
-        OkHttpHelperForQSBoxFriendApi.SINGLETON.getList(userId)
-                .transform(new QSApiTransformer<List<UserDetailBean>>())
-                .enqueue(new Callback<List<UserDetailBean>>() {
-                    @Override
-                    public void onSuccess(final List<UserDetailBean> data) {
-                        getExecutorService().submit(new Runnable() {
-                            @Override
-                            public void run() {
-                                for (UserDetailBean userDetailBean : data) {
-                                    // 存到缓存
-                                    getCache().put(userDetailBean.getId(), userDetailBean);
-                                }
-                                getHandler().post(new SuccessRunnable<List<UserDetailBean>>(callback, data));
-                            }
-                        });
-
-                    }
-
-                    @Override
-                    public void onFailure(Exception e) {
-                        getHandler().post(new FailureRunnable<>(callback, e));
-                    }
-                });
+    public FriendManager() {
+        super(new FriendDoubleCache(new MemoryCache<>(), new FriendDatabaseCache()));
     }
 
     /**
@@ -122,6 +56,42 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
             mLoaded = true;
         }
 
+    }
+
+    public void getList(final QSCallback<List<UserDetailBean>> qsCallback) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (!mLoaded) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (getCache().getValues() == null) {
+                    getHandler().post(new SuccessRunnable<>(qsCallback, new ArrayList<>()));
+                } else {
+                    getHandler().post(new SuccessRunnable<>(qsCallback, new ArrayList<>(getCache().getValues())));
+                }
+            }
+        }).start();
+    }
+
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2020/1/6 15:37
+     * Description:获取好友
+     *
+     * @param id 用户 id
+     */
+    public UserDetailBean getById(String id) {
+        UserDetailBean userDetailBean = getCache().get(id);
+        if (userDetailBean == null) {
+            ShowLogUtil.logi("从网络拿");
+        }
+        return userDetailBean;
     }
 
     /**
@@ -158,7 +128,7 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
                 .enqueue(new Callback<Object>() {
                     @Override
                     public void onSuccess(Object data) {
-                        getInfo(toUserId, new Callback<UserDetailBean>() {
+                        getInfo(toUserId, new QSCallback<UserDetailBean>() {
                             @Override
                             public void onSuccess(UserDetailBean data) {
                                 FriendStatusBean friendStatusBean = new FriendStatusBean();
@@ -199,10 +169,10 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
                     @Override
                     public void onSuccess(Object data) {
                         ConversationManager conversationManager = IMClient.SINGLETON.getConversationManager();
-                        ConversationBean conversationBean = conversationManager.getByTypeAndToUserId(MessageType.CHAT.getValue(), toUserId);
-                        if (conversationBean != null) {
-                            conversationManager.deleteById(conversationBean.getId());
-                        }
+//                        ConversationBean conversationBean = conversationManager.getByTypeAndToUserId(MessageType.CHAT.getValue(), toUserId);
+//                        if (conversationBean != null) {
+////                            conversationManager.deleteById(conversationBean.getId());
+//                        }
 
                         qsCallback.onSuccess(data);
                     }
@@ -223,7 +193,7 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
      * @param toUserId 目标好友的 id
      * @param remark   目标好友的新备注
      */
-    public void setRemark(final String toUserId, final String remark, final Callback<Object> callback) {
+    public void setRemark(final String toUserId, final String remark, final QSCallback<Object> qsCallback) {
         String userId = IMClient.SINGLETON.getUserDetailBean().getId();
         OkHttpHelperForQSBoxFriendApi.SINGLETON.setInfo(userId, toUserId, remark, null, null, null)
                 .transform(new QSApiTransformer<Object>())
@@ -238,14 +208,14 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
                                 userDetailBean.setRemark(remark);
                                 getCache().put(userDetailBean.getId(), userDetailBean);
 
-                                getHandler().post(new SuccessRunnable<>(callback, data));
+                                getHandler().post(new SuccessRunnable<>(qsCallback, data));
                             }
                         });
                     }
 
                     @Override
                     public void onFailure(Exception e) {
-                        getHandler().post(new FailureRunnable<>(callback, e));
+                        getHandler().post(new FailureRunnable<>(qsCallback, e));
                     }
                 });
     }
@@ -259,7 +229,7 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
      * @param toUserId 目标用户的 id
      * @param top      是否置顶,0 是非置顶,1 是置顶
      */
-    public void setTop(final String toUserId, final int top, final Callback<Object> callback) {
+    public void setTop(final String toUserId, final int top, final QSCallback<Object> qsCallback) {
         String userId = IMClient.SINGLETON.getUserDetailBean().getId();
         OkHttpHelperForQSBoxFriendApi.SINGLETON.setInfo(userId, toUserId, null, top, null, null)
                 .transform(new QSApiTransformer<Object>())
@@ -274,7 +244,7 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
                                 userDetailBean.setTop(top);
                                 getCache().put(userDetailBean.getId(), userDetailBean);
 
-                                getHandler().post(new SuccessRunnable<>(callback, data));
+                                getHandler().post(new SuccessRunnable<>(qsCallback, data));
                             }
                         });
 
@@ -282,7 +252,7 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
 
                     @Override
                     public void onFailure(Exception e) {
-                        getHandler().post(new FailureRunnable<>(callback, e));
+                        getHandler().post(new FailureRunnable<>(qsCallback, e));
                     }
                 });
     }
@@ -296,7 +266,7 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
      * @param toUserId     目标用户的 id
      * @param doNotDisturb 是否免打扰,0 是非免打扰,1 是免打扰
      */
-    public void setDoNotDisturb(final String toUserId, final int doNotDisturb, final Callback<Object> callback) {
+    public void setDoNotDisturb(final String toUserId, final int doNotDisturb, final QSCallback<Object> qsCallback) {
         String userId = IMClient.SINGLETON.getUserDetailBean().getId();
         OkHttpHelperForQSBoxFriendApi.SINGLETON.setInfo(userId, toUserId, null, null, doNotDisturb, null)
                 .transform(new QSApiTransformer<Object>())
@@ -311,14 +281,14 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
                                 userDetailBean.setDoNotDisturb(doNotDisturb);
                                 getCache().put(userDetailBean.getId(), userDetailBean);
 
-                                getHandler().post(new SuccessRunnable<>(callback, data));
+                                getHandler().post(new SuccessRunnable<>(qsCallback, data));
                             }
                         });
                     }
 
                     @Override
                     public void onFailure(Exception e) {
-                        getHandler().post(new FailureRunnable<>(callback, e));
+                        getHandler().post(new FailureRunnable<>(qsCallback, e));
                     }
                 });
     }
@@ -332,7 +302,7 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
      * @param toUserId  目标用户的 id
      * @param blackList 是否加入黑名单,0 是不加入,1 是加入
      */
-    public void setBlackList(final String toUserId, final int blackList, final Callback<Object> callback) {
+    public void setBlackList(final String toUserId, final int blackList, final QSCallback<Object> qsCallback) {
         String userId = IMClient.SINGLETON.getUserDetailBean().getId();
         OkHttpHelperForQSBoxFriendApi.SINGLETON.setInfo(userId, toUserId, null, null, null, blackList)
                 .transform(new QSApiTransformer<Object>())
@@ -347,14 +317,14 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
                                 userDetailBean.setBlackList(blackList);
                                 getCache().put(userDetailBean.getId(), userDetailBean);
 
-                                getHandler().post(new SuccessRunnable<>(callback, data));
+                                getHandler().post(new SuccessRunnable<>(qsCallback, data));
                             }
                         });
                     }
 
                     @Override
                     public void onFailure(Exception e) {
-                        getHandler().post(new FailureRunnable<>(callback, e));
+                        getHandler().post(new FailureRunnable<>(qsCallback, e));
                     }
                 });
     }
@@ -383,7 +353,7 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
      *
      * @param toUserId 待查询的好友的 id
      */
-    public void getInfo(String toUserId, Callback<UserDetailBean> callback) {
+    public void getInfo(String toUserId, QSCallback<UserDetailBean> qsCallback) {
         String userId = IMClient.SINGLETON.getUserDetailBean().getId();
         OkHttpHelperForQSBoxFriendApi.SINGLETON.getInfo(userId, toUserId)
                 .transform(new QSApiTransformer<UserDetailBean>())
@@ -392,12 +362,12 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
                     public void onSuccess(UserDetailBean data) {
                         // 存到缓存
                         getCache().put(data.getId(), data);
-                        getHandler().post(new SuccessRunnable<UserDetailBean>(callback, data));
+                        getHandler().post(new SuccessRunnable<UserDetailBean>(qsCallback, data));
                     }
 
                     @Override
                     public void onFailure(Exception e) {
-                        getHandler().post(new FailureRunnable<UserDetailBean>(callback, e));
+                        getHandler().post(new FailureRunnable<UserDetailBean>(qsCallback, e));
                     }
                 });
     }

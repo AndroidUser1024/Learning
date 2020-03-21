@@ -7,6 +7,7 @@ import com.qinshou.qinshoubox.friend.contract.ICreateGroupChatContract;
 import com.qinshou.qinshoubox.friend.model.CreateGroupChatModel;
 import com.qinshou.qinshoubox.friend.view.fragment.CreateGroupChatFragment;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class CreateGroupChatPresenter extends AbsPresenter<ICreateGroupChatContr
 
     @Override
     public void getFriendList() {
-        getModel().getFriendList(new Callback<List<UserDetailBean>>() {
+        getModel().getFriendList(new QSCallback<List<UserDetailBean>>() {
             @Override
             public void onSuccess(List<UserDetailBean> data) {
                 if (!isViewAttached()) {
@@ -45,7 +46,7 @@ public class CreateGroupChatPresenter extends AbsPresenter<ICreateGroupChatContr
 
     @Override
     public void createGroupChat(List<String> memberIdList, String nickname, String headImg) {
-        getModel().createGroupChat(memberIdList, nickname, headImg, new Callback<GroupChatBean>() {
+        getModel().createGroupChat(memberIdList, nickname, headImg, new QSCallback<GroupChatBean>() {
             @Override
             public void onSuccess(GroupChatBean data) {
                 if (!isViewAttached()) {

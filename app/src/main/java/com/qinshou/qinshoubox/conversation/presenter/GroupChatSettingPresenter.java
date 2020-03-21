@@ -44,7 +44,7 @@ public class GroupChatSettingPresenter extends AbsPresenter<IGroupChatSettingCon
 
     @Override
     public void setTop(String groupChatId, int top) {
-        getModel().setTop(groupChatId, top, new Callback<Object>() {
+        getModel().setTop(groupChatId, top, new QSCallback<Object>() {
             @Override
             public void onSuccess(Object data) {
                 if (!isViewAttached()) {
@@ -65,7 +65,7 @@ public class GroupChatSettingPresenter extends AbsPresenter<IGroupChatSettingCon
 
     @Override
     public void setDoNotDisturb(String groupChatId, int doNotDisturb) {
-        getModel().setDoNotDisturb(groupChatId, doNotDisturb, new Callback<Object>() {
+        getModel().setDoNotDisturb(groupChatId, doNotDisturb, new QSCallback<Object>() {
             @Override
             public void onSuccess(Object data) {
                 if (!isViewAttached()) {
@@ -86,7 +86,7 @@ public class GroupChatSettingPresenter extends AbsPresenter<IGroupChatSettingCon
 
     @Override
     public void setShowGroupChatMemberNickname(String groupChatId, int showGroupChatMemberNickname) {
-        getModel().setShowGroupChatMemberNickname(groupChatId, showGroupChatMemberNickname, new Callback<Object>() {
+        getModel().setShowGroupChatMemberNickname(groupChatId, showGroupChatMemberNickname, new QSCallback<Object>() {
             @Override
             public void onSuccess(Object data) {
                 if (!isViewAttached()) {
@@ -107,7 +107,7 @@ public class GroupChatSettingPresenter extends AbsPresenter<IGroupChatSettingCon
 
     @Override
     public void exit(String groupChatId) {
-        getModel().exit(groupChatId, new Callback<Object>() {
+        getModel().exit(groupChatId, new QSCallback<Object>() {
             @Override
             public void onSuccess(Object data) {
                 if (!isViewAttached()) {

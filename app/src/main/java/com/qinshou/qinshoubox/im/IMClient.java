@@ -7,20 +7,24 @@ import android.os.Looper;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.jeejio.dbmodule.DatabaseManager;
 import com.qinshou.okhttphelper.callback.AbsDownloadCallback;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.bean.ImgBean;
 import com.qinshou.qinshoubox.conversation.bean.UploadImgResultBean;
 import com.qinshou.qinshoubox.conversation.bean.UploadVoiceResultBean;
 import com.qinshou.qinshoubox.conversation.bean.VoiceBean;
-import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.bean.ConversationMessageRelBean;
+import com.qinshou.qinshoubox.im.bean.FriendBean;
+import com.qinshou.qinshoubox.im.bean.GroupChatBean;
+import com.qinshou.qinshoubox.im.bean.GroupChatMemberBean;
+import com.qinshou.qinshoubox.im.bean.UserBean;
+import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.bean.FriendStatusBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatStatusBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.bean.ServerReceiptBean;
-import com.qinshou.qinshoubox.im.db.DatabaseHelper;
 import com.qinshou.qinshoubox.im.enums.FriendStatus;
 import com.qinshou.qinshoubox.im.enums.GroupChatStatus;
 import com.qinshou.qinshoubox.im.enums.MessageContentType;
@@ -39,15 +43,14 @@ import com.qinshou.qinshoubox.im.manager.GroupChatMemberManager;
 import com.qinshou.qinshoubox.im.manager.MessageManager;
 import com.qinshou.qinshoubox.im.manager.PingManager;
 import com.qinshou.qinshoubox.im.manager.ReconnectManager;
+import com.qinshou.qinshoubox.im.manager.UserManager;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxCommonApi;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxOfflineApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -81,11 +84,12 @@ public enum IMClient {
     private List<IOnGroupChatStatusListener> mOnGroupChatStatusListenerList = new ArrayList<>();
     private List<IOnSendMessageListener> mOnSendMessageListenerList = new ArrayList<>();
     private UserDetailBean mUserDetailBean;
+    private ConversationManager mConversationManager;
+    private MessageManager mMessageManager;
+    private UserManager mUserManager;
     private FriendManager mFriendManager;
     private GroupChatManager mGroupChatManager;
     private GroupChatMemberManager mGroupChatMemberManager;
-    private MessageManager mMessageManager;
-    private ConversationManager mConversationManager;
     private PingManager mPingManager;
     private ReconnectManager mReconnectManager;
     //    private Map<String, MessageBean> mAckMessageMap = new HashMap<>();
@@ -97,12 +101,20 @@ public enum IMClient {
     private void connectSuccess(WebSocket webSocket) {
         mWebSocket = webSocket;
         // 初始化数据库
-        DatabaseHelper databaseHelper = new DatabaseHelper(mContext, mUserDetailBean.getId());
-        mFriendManager = new FriendManager(databaseHelper);
-        mGroupChatManager = new GroupChatManager(databaseHelper);
-        mGroupChatMemberManager = new GroupChatMemberManager(databaseHelper);
-        mMessageManager = new MessageManager(databaseHelper);
-        mConversationManager = new ConversationManager(databaseHelper);
+        DatabaseManager.getInstance().init(mContext, mUserDetailBean.getId(), 1
+                , ConversationBean.class
+                , MessageBean.class
+                , ConversationMessageRelBean.class
+                , UserBean.class
+                , FriendBean.class
+                , GroupChatBean.class
+                , GroupChatMemberBean.class);
+        mConversationManager = new ConversationManager();
+        mMessageManager = new MessageManager();
+        mUserManager = new UserManager();
+        mFriendManager = new FriendManager();
+        mGroupChatManager = new GroupChatManager();
+        mGroupChatMemberManager = new GroupChatMemberManager();
         mPingManager = new PingManager();
         mPingManager.start(mWebSocket);
         mReconnectManager = new ReconnectManager();
@@ -330,45 +342,45 @@ public enum IMClient {
      * @param send        true 表示是发送的消息,false 表示是接收的消息
      */
     private synchronized void insert2Database(MessageBean messageBean, boolean send) {
-        mMessageManager.insertOrUpdate(messageBean);
-        // 插入或更新会话
-        String toUserId;
-        long lastMsgTimestamp;
-        if (send || messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
-            // 发送的消息, conversation 的目标 id 为接收方 id
-            // 群聊的发送方永远是自己,接收方永远是群 id,所以群聊类型的消息,conversation 的目标 id 为永远为群 id
-            toUserId = messageBean.getToUserId();
-        } else {
-            // 接收的消息, conversation 的目标 id 为发送方 id
-            toUserId = messageBean.getFromUserId();
-        }
-        if (send) {
-            lastMsgTimestamp = messageBean.getSendTimestamp();
-        } else {
-            lastMsgTimestamp = messageBean.getReceiveTimestamp();
-        }
-        ConversationBean conversationBean = mConversationManager.getByTypeAndToUserId(messageBean.getType(), toUserId);
-        if (conversationBean == null) {
-            conversationBean = new ConversationBean();
-        }
-        conversationBean.setToUserId(toUserId);
-        conversationBean.setLastMsgTimestamp(lastMsgTimestamp);
-        conversationBean.setType(messageBean.getType());
-        conversationBean.setLastMsgContentType(messageBean.getContentType());
-        conversationBean.setLastMsgContent(messageBean.getContent());
-        conversationBean.setLastMsgPid(messageBean.getPid());
-        if (!send) {
-            if (conversationBean.getUnreadCount() == -1) {
-                // 如果被标记过未读,则设置未读数为 1
-                conversationBean.setUnreadCount(1);
-            } else {
-                // 否则在原有的未读数上 +1
-                conversationBean.setUnreadCount(conversationBean.getUnreadCount() + 1);
-            }
-        }
-        mConversationManager.insertOrUpdate(conversationBean);
-        // 插入会话与消息关系
-        mConversationManager.insertConversationMessageRel(new ConversationMessageRelBean(conversationBean.getId(), messageBean.getPid()));
+//        mMessageManager.insertOrUpdate(messageBean);
+//        // 插入或更新会话
+//        String toUserId;
+//        long lastMsgTimestamp;
+//        if (send || messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
+//            // 发送的消息, conversation 的目标 id 为接收方 id
+//            // 群聊的发送方永远是自己,接收方永远是群 id,所以群聊类型的消息,conversation 的目标 id 为永远为群 id
+//            toUserId = messageBean.getToUserId();
+//        } else {
+//            // 接收的消息, conversation 的目标 id 为发送方 id
+//            toUserId = messageBean.getFromUserId();
+//        }
+//        if (send) {
+//            lastMsgTimestamp = messageBean.getSendTimestamp();
+//        } else {
+//            lastMsgTimestamp = messageBean.getReceiveTimestamp();
+//        }
+//        ConversationBean conversationBean = mConversationManager.getByTypeAndToUserId(messageBean.getType(), toUserId);
+//        if (conversationBean == null) {
+//            conversationBean = new ConversationBean();
+//        }
+//        conversationBean.setToUserId(toUserId);
+//        conversationBean.setLastMsgTimestamp(lastMsgTimestamp);
+//        conversationBean.setType(messageBean.getType());
+//        conversationBean.setLastMsgContentType(messageBean.getContentType());
+//        conversationBean.setLastMsgContent(messageBean.getContent());
+//        conversationBean.setLastMsgPid(messageBean.getPid());
+//        if (!send) {
+//            if (conversationBean.getUnreadCount() == -1) {
+//                // 如果被标记过未读,则设置未读数为 1
+//                conversationBean.setUnreadCount(1);
+//            } else {
+//                // 否则在原有的未读数上 +1
+//                conversationBean.setUnreadCount(conversationBean.getUnreadCount() + 1);
+//            }
+//        }
+//        mConversationManager.insertOrUpdate(conversationBean);
+//        // 插入会话与消息关系
+//        mConversationManager.insertConversationMessageRel(new ConversationMessageRelBean(conversationBean.getId(), messageBean.getPid()));
     }
 
     /**
@@ -380,10 +392,12 @@ public enum IMClient {
     private void release() {
         mWebSocket = null;
         mUserDetailBean = null;
+        mConversationManager = null;
+        mMessageManager = null;
+        mUserManager = null;
         mFriendManager = null;
         mGroupChatManager = null;
-        mMessageManager = null;
-        mConversationManager = null;
+        mGroupChatMemberManager = null;
         mOnConnectListenerList.clear();
         mOnFriendStatusListenerList.clear();
         mOnGroupChatStatusListenerList.clear();
@@ -675,20 +689,24 @@ public enum IMClient {
         return mUserDetailBean;
     }
 
-    public GroupChatManager getGroupChatManager() {
-        return mGroupChatManager;
-    }
-
-    public FriendManager getFriendManager() {
-        return mFriendManager;
+    public ConversationManager getConversationManager() {
+        return mConversationManager;
     }
 
     public MessageManager getMessageManager() {
         return mMessageManager;
     }
 
-    public ConversationManager getConversationManager() {
-        return mConversationManager;
+    public UserManager getUserManager() {
+        return mUserManager;
+    }
+
+    public FriendManager getFriendManager() {
+        return mFriendManager;
+    }
+
+    public GroupChatManager getGroupChatManager() {
+        return mGroupChatManager;
     }
 
     public GroupChatMemberManager getGroupChatMemberManager() {

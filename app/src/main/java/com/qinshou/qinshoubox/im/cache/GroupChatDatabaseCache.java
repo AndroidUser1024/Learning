@@ -1,8 +1,7 @@
 package com.qinshou.qinshoubox.im.cache;
 
+import com.jeejio.dbmodule.dao.IBaseDao;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
-import com.qinshou.qinshoubox.im.db.DatabaseHelper;
-import com.qinshou.qinshoubox.im.db.dao.IGroupChatDao;
 
 import java.util.Collection;
 
@@ -14,11 +13,10 @@ import java.util.Collection;
  */
 public class GroupChatDatabaseCache extends AbsDatabaseCache<String, GroupChatBean> {
 
-    private IGroupChatDao mGroupChatDao;
+    private IBaseDao<GroupChatBean> mGroupChatDao;
 
-    public GroupChatDatabaseCache(DatabaseHelper databaseHelper) {
-        super(databaseHelper);
-        mGroupChatDao = databaseHelper.getDao(IGroupChatDao.class);
+    public GroupChatDatabaseCache() {
+        super();
     }
 
     @Override

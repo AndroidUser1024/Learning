@@ -19,10 +19,8 @@ import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
  */
 public class UserDetailModel implements IUserDetailContract.IModel {
     @Override
-    public void getUserDetail(String keyword, Callback<UserDetailBean> callback) {
-        OkHttpHelperForQSBoxUserApi.SINGLETON.getUserDetail(UserStatusManager.SINGLETON.getUserBean().getId(), keyword)
-                .transform(new QSApiTransformer<UserDetailBean>())
-                .enqueue(callback);
+    public void getUserDetail(String keyword, QSCallback<UserDetailBean> qsCallback) {
+        IMClient.SINGLETON.getUserManager().getUser(keyword, qsCallback);
     }
 
     @Override
@@ -36,7 +34,7 @@ public class UserDetailModel implements IUserDetailContract.IModel {
     }
 
     @Override
-    public void setRemark(String toUserId, String remark, Callback<Object> callback) {
-        IMClient.SINGLETON.getFriendManager().setRemark(toUserId, remark, callback);
+    public void setRemark(String toUserId, String remark, QSCallback<Object> qsCallback) {
+        IMClient.SINGLETON.getFriendManager().setRemark(toUserId, remark, qsCallback);
     }
 }

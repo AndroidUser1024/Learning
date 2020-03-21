@@ -3,13 +3,12 @@ package com.qinshou.qinshoubox.im.manager;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.bean.GroupChatDetailBean;
-import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
+import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.cache.GroupChatDatabaseCache;
 import com.qinshou.qinshoubox.im.cache.GroupChatDoubleCache;
 import com.qinshou.qinshoubox.im.cache.MemoryCache;
-import com.qinshou.qinshoubox.im.db.DatabaseHelper;
 import com.qinshou.qinshoubox.im.listener.IOnGroupChatStatusListener;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.listener.FailureRunnable;
@@ -29,8 +28,8 @@ import java.util.List;
 public class GroupChatManager extends AbsManager<String, GroupChatBean> {
     private boolean mLoaded = false;
 
-    public GroupChatManager(DatabaseHelper databaseHelper) {
-        super(new GroupChatDoubleCache(new MemoryCache<String, GroupChatBean>(), new GroupChatDatabaseCache(databaseHelper)));
+    public GroupChatManager() {
+        super(new GroupChatDoubleCache(new MemoryCache<>(), new GroupChatDatabaseCache()));
         IMClient.SINGLETON.addOnGroupChatStatusListener(new IOnGroupChatStatusListener() {
             @Override
             public void add(String groupChatId, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
@@ -73,47 +72,47 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
      * Date:2020/1/6 17:57
      * Description:获取我的群列表
      */
-    public void getList(final Callback<List<GroupChatBean>> callback) {
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                while (!mLoaded) {
-//                    try {
-//                        Thread.sleep(500);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
+    public void getList(final QSCallback<List<GroupChatBean>> qsCallback) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (!mLoaded) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (getCache().getValues() == null) {
+                    getHandler().post(new SuccessRunnable<>(qsCallback, new ArrayList<>()));
+                } else {
+                    getHandler().post(new SuccessRunnable<>(qsCallback, new ArrayList<>(getCache().getValues())));
+                }
+            }
+        }).start();
+//        String userId = IMClient.SINGLETON.getUserDetailBean().getId();
+//        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.getMyGroupChatList(userId)
+//                .transform(new QSApiTransformer<List<GroupChatBean>>())
+//                .enqueue(new Callback<List<GroupChatBean>>() {
+//                    @Override
+//                    public void onSuccess(final List<GroupChatBean> data) {
+//                        getExecutorService().submit(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                for (GroupChatBean groupChatBean : data) {
+//                                    getCache().put(groupChatBean.getId(), groupChatBean);
+//                                    getMemberList(groupChatBean.getId(), null);
+//                                }
+//                                getHandler().post(new SuccessRunnable<>(callback, data));
+//                            }
+//                        });
 //                    }
-//                }
-//                if (getCache().getValues() == null) {
-//                    getHandler().post(new SuccessRunnable<>(callback, new ArrayList<>()));
-//                } else {
-//                    getHandler().post(new SuccessRunnable<>(callback, new ArrayList<>(getCache().getValues())));
-//                }
-//            }
-//        }).start();
-        String userId = IMClient.SINGLETON.getUserDetailBean().getId();
-        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.getMyGroupChatList(userId)
-                .transform(new QSApiTransformer<List<GroupChatBean>>())
-                .enqueue(new Callback<List<GroupChatBean>>() {
-                    @Override
-                    public void onSuccess(final List<GroupChatBean> data) {
-                        getExecutorService().submit(new Runnable() {
-                            @Override
-                            public void run() {
-                                for (GroupChatBean groupChatBean : data) {
-                                    getCache().put(groupChatBean.getId(), groupChatBean);
-                                    getMemberList(groupChatBean.getId(), null);
-                                }
-                                getHandler().post(new SuccessRunnable<>(callback, data));
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onFailure(Exception e) {
-                        getHandler().post(new FailureRunnable<>(callback, e));
-                    }
-                });
+//
+//                    @Override
+//                    public void onFailure(Exception e) {
+//                        getHandler().post(new FailureRunnable<>(callback, e));
+//                    }
+//                });
     }
 
     /**
@@ -151,11 +150,21 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
      * @param nickname     群昵称
      * @param headImg      群头像
      */
-    public void create(List<String> toUserIdList, String nickname, String headImg, Callback<GroupChatBean> callback) {
+    public void create(List<String> toUserIdList, String nickname, String headImg, QSCallback<GroupChatBean> qsCallback) {
         String userId = IMClient.SINGLETON.getUserDetailBean().getId();
         OkHttpHelperForQSBoxGroupChatApi.SINGLETON.create(userId, toUserIdList, nickname, headImg)
                 .transform(new QSApiTransformer<GroupChatBean>())
-                .enqueue(callback);
+                .enqueue(new Callback<GroupChatBean>() {
+                    @Override
+                    public void onSuccess(GroupChatBean data) {
+                        qsCallback.onSuccess(data);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        qsCallback.onFailure(e);
+                    }
+                });
     }
 
     /**
@@ -272,11 +281,21 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
      *
      * @param groupChatId 待添加的群成员的 Id 集合
      */
-    public void addMember(String groupChatId, List<String> toUserIdList, final Callback<Object> callback) {
+    public void addMember(String groupChatId, List<String> toUserIdList, final QSCallback<Object> qsCallback) {
         String userId = IMClient.SINGLETON.getUserDetailBean().getId();
         OkHttpHelperForQSBoxGroupChatApi.SINGLETON.addMember(groupChatId, userId, toUserIdList)
                 .transform(new QSApiTransformer<Object>())
-                .enqueue(callback);
+                .enqueue(new Callback<Object>() {
+                    @Override
+                    public void onSuccess(Object data) {
+                        qsCallback.onSuccess(data);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        qsCallback.onFailure(e);
+                    }
+                });
     }
 
     /**
@@ -303,7 +322,7 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
      * @param groupChatId 群 id
      * @param nickname    群昵称
      */
-    public void setNickname(final String groupChatId, final String nickname, final Callback<Object> callback) {
+    public void setNickname(final String groupChatId, final String nickname, final QSCallback<Object> qsCallback) {
         String userId = IMClient.SINGLETON.getUserDetailBean().getId();
         OkHttpHelperForQSBoxGroupChatApi.SINGLETON.setNickname(groupChatId, userId, nickname)
                 .transform(new QSApiTransformer<Object>())
@@ -318,14 +337,14 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
                                 groupChatBean.setNickname(nickname);
                                 getCache().put(groupChatBean.getId(), groupChatBean);
 
-                                getHandler().post(new SuccessRunnable<Object>(callback, data));
+                                getHandler().post(new SuccessRunnable<>(qsCallback, data));
                             }
                         });
                     }
 
                     @Override
                     public void onFailure(Exception e) {
-                        getHandler().post(new FailureRunnable<>(callback, e));
+                        getHandler().post(new FailureRunnable<>(qsCallback, e));
                     }
                 });
     }
@@ -339,7 +358,7 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
      * @param groupChatId         群 id
      * @param nicknameInGroupChat 在本群中的昵称
      */
-    public void setNicknameInGroupChat(final String groupChatId, final String nicknameInGroupChat, final Callback<Object> callback) {
+    public void setNicknameInGroupChat(final String groupChatId, final String nicknameInGroupChat, final QSCallback<Object> qsCallback) {
         String userId = IMClient.SINGLETON.getUserDetailBean().getId();
         OkHttpHelperForQSBoxGroupChatApi.SINGLETON.setInfo(groupChatId, userId, nicknameInGroupChat, null, null, null)
                 .transform(new QSApiTransformer<Object>())
@@ -354,14 +373,14 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
                                 groupChatBean.setNicknameInGroupChat(nicknameInGroupChat);
                                 getCache().put(groupChatBean.getId(), groupChatBean);
 
-                                getHandler().post(new SuccessRunnable<Object>(callback, data));
+                                getHandler().post(new SuccessRunnable<Object>(qsCallback, data));
                             }
                         });
                     }
 
                     @Override
                     public void onFailure(Exception e) {
-                        getHandler().post(new FailureRunnable<>(callback, e));
+                        getHandler().post(new FailureRunnable<>(qsCallback, e));
                     }
                 });
     }
@@ -375,7 +394,7 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
      * @param groupChatId 群 id
      * @param top         0 表示不置顶,1 表示置顶
      */
-    public void setTop(final String groupChatId, final int top, final Callback<Object> callback) {
+    public void setTop(final String groupChatId, final int top, final QSCallback<Object> qsCallback) {
         String userId = IMClient.SINGLETON.getUserDetailBean().getId();
         OkHttpHelperForQSBoxGroupChatApi.SINGLETON.setInfo(groupChatId, userId, null, top, null, null)
                 .transform(new QSApiTransformer<Object>())
@@ -390,14 +409,14 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
                                 groupChatBean.setTop(top);
                                 getCache().put(groupChatBean.getId(), groupChatBean);
 
-                                getHandler().post(new SuccessRunnable<Object>(callback, data));
+                                getHandler().post(new SuccessRunnable<Object>(qsCallback, data));
                             }
                         });
                     }
 
                     @Override
                     public void onFailure(Exception e) {
-                        getHandler().post(new FailureRunnable<>(callback, e));
+                        getHandler().post(new FailureRunnable<>(qsCallback, e));
                     }
                 });
     }
@@ -411,7 +430,7 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
      * @param groupChatId  群 id
      * @param doNotDisturb 0 表示非免打扰,1 表示免打扰
      */
-    public void setDoNotDisturb(final String groupChatId, final int doNotDisturb, final Callback<Object> callback) {
+    public void setDoNotDisturb(final String groupChatId, final int doNotDisturb, final QSCallback<Object> qsCallback) {
         String userId = IMClient.SINGLETON.getUserDetailBean().getId();
         OkHttpHelperForQSBoxGroupChatApi.SINGLETON.setInfo(groupChatId, userId, null, null, doNotDisturb, null)
                 .transform(new QSApiTransformer<Object>())
@@ -426,14 +445,14 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
                                 groupChatBean.setDoNotDisturb(doNotDisturb);
                                 getCache().put(groupChatBean.getId(), groupChatBean);
 
-                                getHandler().post(new SuccessRunnable<Object>(callback, data));
+                                getHandler().post(new SuccessRunnable<>(qsCallback, data));
                             }
                         });
                     }
 
                     @Override
                     public void onFailure(Exception e) {
-                        getHandler().post(new FailureRunnable<>(callback, e));
+                        getHandler().post(new FailureRunnable<>(qsCallback, e));
                     }
                 });
     }
@@ -447,7 +466,7 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
      * @param groupChatId                 群 id
      * @param showGroupChatMemberNickname 0 表示不显示,1 表示显示
      */
-    public void setShowGroupChatMemberNickname(final String groupChatId, final int showGroupChatMemberNickname, final Callback<Object> callback) {
+    public void setShowGroupChatMemberNickname(final String groupChatId, final int showGroupChatMemberNickname, final QSCallback<Object> qsCallback) {
         String userId = IMClient.SINGLETON.getUserDetailBean().getId();
         OkHttpHelperForQSBoxGroupChatApi.SINGLETON.setInfo(groupChatId, userId, null, null, null, showGroupChatMemberNickname)
                 .transform(new QSApiTransformer<Object>())
@@ -462,14 +481,14 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
                                 groupChatBean.setShowGroupChatMemberNickname(showGroupChatMemberNickname);
                                 getCache().put(groupChatBean.getId(), groupChatBean);
 
-                                getHandler().post(new SuccessRunnable<Object>(callback, data));
+                                getHandler().post(new SuccessRunnable<>(qsCallback, data));
                             }
                         });
                     }
 
                     @Override
                     public void onFailure(Exception e) {
-                        getHandler().post(new FailureRunnable<>(callback, e));
+                        getHandler().post(new FailureRunnable<>(qsCallback, e));
                     }
                 });
     }
@@ -482,10 +501,20 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
      *
      * @param groupChatId 群 id
      */
-    public void exit(String groupChatId, Callback<Object> callBack) {
+    public void exit(String groupChatId, QSCallback<Object> qsCallback) {
         String userId = IMClient.SINGLETON.getUserDetailBean().getId();
         OkHttpHelperForQSBoxGroupChatApi.SINGLETON.exit(groupChatId, userId)
                 .transform(new QSApiTransformer<Object>())
-                .enqueue(callBack);
+                .enqueue(new Callback<Object>() {
+                    @Override
+                    public void onSuccess(Object data) {
+                        qsCallback.onSuccess(data);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        qsCallback.onFailure(e);
+                    }
+                });
     }
 }

@@ -2,12 +2,9 @@ package com.qinshou.qinshoubox.im.manager;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.LruCache;
 
 
 import com.qinshou.qinshoubox.im.cache.ICache;
-import com.qinshou.qinshoubox.im.cache.MemoryCache;
-import com.qinshou.qinshoubox.im.db.DatabaseHelper;
 
 
 import java.util.concurrent.ExecutorService;

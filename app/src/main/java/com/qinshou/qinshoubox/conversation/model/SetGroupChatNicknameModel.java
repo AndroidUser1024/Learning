@@ -4,6 +4,7 @@ import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.contract.ISetGroupChatNicknameContract;
 import com.qinshou.qinshoubox.conversation.view.fragment.SetGroupChatNicknameFragment;
 import com.qinshou.qinshoubox.im.IMClient;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 /**
  * Author: QinHao
@@ -13,7 +14,7 @@ import com.qinshou.qinshoubox.im.IMClient;
  */
 public class SetGroupChatNicknameModel implements ISetGroupChatNicknameContract.IModel {
     @Override
-    public void setGroupChatNickname(String groupChatId, String nickname, Callback<Object> callback) {
-        IMClient.SINGLETON.getGroupChatManager().setNickname(groupChatId, nickname, callback);
+    public void setGroupChatNickname(String groupChatId, String nickname, QSCallback<Object> qsCallback) {
+        IMClient.SINGLETON.getGroupChatManager().setNickname(groupChatId, nickname, qsCallback);
     }
 }

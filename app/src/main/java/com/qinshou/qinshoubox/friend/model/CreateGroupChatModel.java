@@ -6,6 +6,7 @@ import com.qinshou.qinshoubox.friend.contract.ICreateGroupChatContract;
 import com.qinshou.qinshoubox.friend.view.fragment.CreateGroupChatFragment;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 import java.util.List;
 
@@ -18,12 +19,12 @@ import java.util.List;
 public class CreateGroupChatModel implements ICreateGroupChatContract.IModel {
 
     @Override
-    public void getFriendList(Callback<List<UserDetailBean>> callback) {
-        IMClient.SINGLETON.getFriendManager().getList(callback);
+    public void getFriendList(QSCallback<List<UserDetailBean>> qsCallback) {
+        IMClient.SINGLETON.getFriendManager().getList(qsCallback);
     }
 
     @Override
-    public void createGroupChat( List<String> memberIdList, String nickname, String headImg, Callback<GroupChatBean> callback) {
-        IMClient.SINGLETON.getGroupChatManager().create( memberIdList, nickname, headImg, callback);
+    public void createGroupChat( List<String> memberIdList, String nickname, String headImg, QSCallback<GroupChatBean> qsCallback) {
+        IMClient.SINGLETON.getGroupChatManager().create( memberIdList, nickname, headImg, qsCallback);
     }
 }

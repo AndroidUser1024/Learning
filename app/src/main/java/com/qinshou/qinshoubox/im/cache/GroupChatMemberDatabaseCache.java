@@ -1,9 +1,9 @@
 package com.qinshou.qinshoubox.im.cache;
 
+import com.jeejio.dbmodule.dao.IBaseDao;
+import com.qinshou.qinshoubox.im.bean.GroupChatMemberBean;
+import com.qinshou.qinshoubox.im.bean.UserBean;
 import com.qinshou.qinshoubox.im.bean.UserDetailBean;
-import com.qinshou.qinshoubox.im.db.DatabaseHelper;
-import com.qinshou.qinshoubox.im.db.dao.IGroupChatMemberDao;
-import com.qinshou.qinshoubox.im.db.dao.IUserDao;
 
 import java.util.Collection;
 
@@ -15,43 +15,43 @@ import java.util.Collection;
  */
 public class GroupChatMemberDatabaseCache extends AbsDatabaseCache<String, UserDetailBean> {
 
-    private IGroupChatMemberDao mGroupChatMemberDao;
-    private IUserDao mUserDao;
+    private IBaseDao<UserBean> mUserDao;
+    private IBaseDao<GroupChatMemberBean> mGroupChatMemberDao;
 
-    public GroupChatMemberDatabaseCache(DatabaseHelper databaseHelper) {
-        super(databaseHelper);
-        mGroupChatMemberDao = databaseHelper.getDao(IGroupChatMemberDao.class);
-        mUserDao = databaseHelper.getDao(IUserDao.class);
+    public GroupChatMemberDatabaseCache() {
+        super();
     }
 
     @Override
     public void put(String key, UserDetailBean value) {
-        String[] split = key.split("_");
-        if (split.length < 2) {
-            return;
-        }
-        String groupChatId = split[0];
-        String userId = split[1];
-        // 用户数据不存在才存,但是这里不更新用户数据库
-        if (!mUserDao.existsById(value.getId())) {
-            mUserDao.insert(value);
-        }
-        if (mGroupChatMemberDao.existsByGroupChatIdAndUserId(groupChatId, userId)) {
-            mGroupChatMemberDao.update(groupChatId, value);
-        } else {
-            mGroupChatMemberDao.insert(groupChatId, value);
-        }
+//        String[] split = key.split("_");
+//        if (split.length < 2) {
+//            return;
+//        }
+//        String groupChatId = split[0];
+//        String userId = split[1];
+//        // 用户数据不存在才存,但是这里不更新用户数据库
+//        if (!mUserDao.existsById(value.getId())) {
+//            mUserDao.insert(value);
+//        }
+//        if (mGroupChatMemberDao.existsByGroupChatIdAndUserId(groupChatId, userId)) {
+//            mGroupChatMemberDao.update(groupChatId, value);
+//        } else {
+//            mGroupChatMemberDao.insert(groupChatId, value);
+//        }
     }
 
     @Override
     public UserDetailBean get(String key) {
-        String[] split = key.split("_");
-        if (split.length < 2) {
-            return null;
-        }
-        String groupChatId = split[0];
-        String userId = split[1];
-        return mGroupChatMemberDao.selectByGroupChatIdAndUserId(groupChatId, userId);
+        UserDetailBean userDetailBean = new UserDetailBean();
+//        String[] split = key.split("_");
+//        if (split.length < 2) {
+//            return null;
+//        }
+//        String groupChatId = split[0];
+//        String userId = split[1];
+//        return mGroupChatMemberDao.selectByGroupChatIdAndUserId(groupChatId, userId);
+        return userDetailBean;
     }
 
     @Override

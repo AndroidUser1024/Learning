@@ -4,9 +4,6 @@ import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.cache.GroupChatMemberDatabaseCache;
 import com.qinshou.qinshoubox.im.cache.GroupChatMemberDoubleCache;
 import com.qinshou.qinshoubox.im.cache.MemoryCache;
-import com.qinshou.qinshoubox.im.db.DatabaseHelper;
-
-import java.util.List;
 
 /**
  * Author: QinHao
@@ -16,8 +13,8 @@ import java.util.List;
  */
 public class GroupChatMemberManager extends AbsManager<String, UserDetailBean> {
 
-    public GroupChatMemberManager(DatabaseHelper databaseHelper) {
-        super(new GroupChatMemberDoubleCache(new MemoryCache<String, UserDetailBean>(), new GroupChatMemberDatabaseCache(databaseHelper)));
+    public GroupChatMemberManager() {
+        super(new GroupChatMemberDoubleCache(new MemoryCache<>(), new GroupChatMemberDatabaseCache()));
     }
 
     public void put(String groupChatId, UserDetailBean userDetailBean) {

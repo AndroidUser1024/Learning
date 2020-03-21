@@ -4,6 +4,7 @@ import com.qinshou.commonmodule.base.IBaseModel;
 import com.qinshou.commonmodule.base.IBaseView;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.view.fragment.SetGroupChatNicknameFragment;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 /**
  * Author: QinHao
@@ -22,7 +23,7 @@ public interface ISetGroupChatNicknameContract {
          * @param groupChatId 群 Id
          * @param nickname    群昵称
          */
-        void setGroupChatNickname(String groupChatId, String nickname, Callback<Object> callback);
+        void setGroupChatNickname(String groupChatId, String nickname, QSCallback<Object> qsCallback);
     }
 
     interface IView extends IBaseView {

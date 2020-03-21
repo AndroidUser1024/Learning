@@ -24,7 +24,7 @@ public interface IUserDetailContract {
          *
          * @param keyword 关键字,用户 id/用户名/手机号/邮箱
          */
-        void getUserDetail(String keyword, Callback<UserDetailBean> callback);
+        void getUserDetail(String keyword, QSCallback<UserDetailBean> qsCallback);
 
         /**
          * Author: QinHao
@@ -56,7 +56,7 @@ public interface IUserDetailContract {
          * @param toUserId 待修改的用户 id
          * @param remark   备注
          */
-        void setRemark(String toUserId, String remark, Callback<Object> callback);
+        void setRemark(String toUserId, String remark, QSCallback<Object> qsCallback);
     }
 
     interface IView extends IBaseView {

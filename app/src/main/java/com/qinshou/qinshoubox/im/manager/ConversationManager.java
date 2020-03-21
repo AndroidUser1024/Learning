@@ -1,11 +1,11 @@
 package com.qinshou.qinshoubox.im.manager;
 
 
+import com.jeejio.dbmodule.DatabaseManager;
+import com.jeejio.dbmodule.dao.IBaseDao;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.bean.ConversationMessageRelBean;
-import com.qinshou.qinshoubox.im.db.DatabaseHelper;
-import com.qinshou.qinshoubox.im.db.dao.IConversationDao;
-import com.qinshou.qinshoubox.im.db.dao.IConversationMessageRelDao;
+import com.qinshou.qinshoubox.im.bean.MessageBean;
 
 import java.util.List;
 
@@ -16,65 +16,66 @@ import java.util.List;
  * Description:会话管理者
  */
 public class ConversationManager {
-    /**
-     * 会话 Dao
-     */
-    private IConversationDao mConversationDao;
-    /**
-     * 会话和消息关系 Dao
-     */
-    private IConversationMessageRelDao mConversationMessageRelDao;
+    private IBaseDao<ConversationBean> mConversationDao;
+    private IBaseDao<MessageBean> mMessageDao;
+    private IBaseDao<ConversationMessageRelBean> mConversationMessageRelDao;
 
-    public ConversationManager(DatabaseHelper databaseHelper) {
-        mConversationDao = databaseHelper.getDao(IConversationDao.class);
-        mConversationMessageRelDao = databaseHelper.getDao(IConversationMessageRelDao.class);
+    public ConversationManager() {
+        mConversationDao = DatabaseManager.getInstance().getDaoByClass(ConversationBean.class);
+        mMessageDao = DatabaseManager.getInstance().getDaoByClass(MessageBean.class);
+        mConversationMessageRelDao = DatabaseManager.getInstance().getDaoByClass(ConversationMessageRelBean.class);
     }
 
     public void insertOrUpdate(ConversationBean conversationBean) {
-        if (mConversationDao.existsById(conversationBean.getId())) {
-            mConversationDao.update(conversationBean);
-        } else {
-            mConversationDao.insert(conversationBean);
-        }
+//        if (mConversationDao.existsById(conversationBean.getId())) {
+//            mConversationDao.update(conversationBean);
+//        } else {
+//            mConversationDao.insert(conversationBean);
+//        }
     }
 
     public void insertConversationMessageRel(ConversationMessageRelBean conversationMessageRelBean) {
-        if (!mConversationMessageRelDao.existsByConversationIdAndMessagePid(conversationMessageRelBean)) {
-            mConversationMessageRelDao.insert(conversationMessageRelBean);
-        }
+//        if (!mConversationMessageRelDao.existsByConversationIdAndMessagePid(conversationMessageRelBean)) {
+//            mConversationMessageRelDao.insert(conversationMessageRelBean);
+//        }
     }
 
     public void deleteById(int id) {
-        mConversationDao.deleteById(id);
+//        mConversationDao.deleteById(id);
     }
 
     public List<ConversationBean> getList() {
-        return mConversationDao.selectList();
+//        return mConversationDao.selectList();
+        return null;
     }
 
     public List<ConversationBean> getListOrderByLastMsgTimeDesc() {
-        return mConversationDao.selectListOrderByLastMsgTimeDesc();
+//        return mConversationDao.selectListOrderByLastMsgTimeDesc();
+        return null;
     }
 
     public List<ConversationBean> getListOrderByTopDescAndLastMsgTimeDesc() {
-        return mConversationDao.selectListOrderByTopDescAndLastMsgTimeDesc();
+//        return mConversationDao.selectListOrderByTopDescAndLastMsgTimeDesc();
+        return null;
     }
 
     public ConversationBean getByTypeAndToUserId(int type, String toUserId) {
-        return mConversationDao.selectByTypeAndToUserId(type, toUserId);
+//        return mConversationDao.selectByTypeAndToUserId(type, toUserId);
+        return null;
     }
 
     public int getTotalUnreadCount() {
-        return mConversationDao.getTotalUnreadCount();
+//        return mConversationDao.getTotalUnreadCount();
+        return 0;
     }
 
     public void setUnreadCount(int unreadCount, int id) {
-        ConversationBean conversationBean = mConversationDao.selectById(id);
-        if (conversationBean == null) {
-            return;
-        }
-        conversationBean.setUnreadCount(unreadCount);
-        mConversationDao.update(conversationBean);
+//        ConversationBean conversationBean = mConversationDao.selectById(id);
+//        if (conversationBean == null) {
+//            return;
+//        }
+//        conversationBean.setUnreadCount(unreadCount);
+//        mConversationDao.update(conversationBean);
     }
 
     /**
@@ -87,15 +88,15 @@ public class ConversationManager {
      * @param toUserId 对方 id
      */
     public int clear(int type, String toUserId) {
-        ConversationBean conversationBean = mConversationDao.selectByTypeAndToUserId(type, toUserId);
-        if (conversationBean == null) {
-            return 0;
-        }
-        mConversationMessageRelDao.deleteByConversationId(conversationBean.getId());
-        conversationBean.setLastMsgPid(0);
-        conversationBean.setLastMsgContent("");
-        conversationBean.setLastMsgContentType(0);
-        mConversationDao.update(conversationBean);
+//        ConversationBean conversationBean = mConversationDao.selectByTypeAndToUserId(type, toUserId);
+//        if (conversationBean == null) {
+//            return 0;
+//        }
+//        mConversationMessageRelDao.deleteByConversationId(conversationBean.getId());
+//        conversationBean.setLastMsgPid(0);
+//        conversationBean.setLastMsgContent("");
+//        conversationBean.setLastMsgContentType(0);
+//        mConversationDao.update(conversationBean);
         return 1;
     }
 }

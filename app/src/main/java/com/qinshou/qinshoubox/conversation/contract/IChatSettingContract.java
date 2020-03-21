@@ -2,9 +2,9 @@ package com.qinshou.qinshoubox.conversation.contract;
 
 import com.qinshou.commonmodule.base.IBaseModel;
 import com.qinshou.commonmodule.base.IBaseView;
-import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.view.fragment.ChatSettingFragment;
 import com.qinshou.qinshoubox.im.bean.UserDetailBean;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 /**
  * Author: QinHao
@@ -21,9 +21,9 @@ public interface IChatSettingContract {
          * Description:获取好友信息
          *
          * @param id         好友 id
-         * @param callback 回调接口
+         * @param qsCallback 回调接口
          */
-        void getFriend(String id, Callback<UserDetailBean> callback);
+        void getFriend(String id, QSCallback<UserDetailBean> qsCallback);
 
         /**
          * Author: QinHao
@@ -33,9 +33,9 @@ public interface IChatSettingContract {
          *
          * @param toUserId   好友的用户 id
          * @param top        0 表示不置顶,1 表示置顶
-         * @param callback 回调接口
+         * @param qsCallback 回调接口
          */
-        void setTop(String toUserId, int top, Callback<Object> callback);
+        void setTop(String toUserId, int top, QSCallback<Object> qsCallback);
 
         /**
          * Author: QinHao
@@ -45,9 +45,9 @@ public interface IChatSettingContract {
          *
          * @param toUserId     好友的用户 id
          * @param doNotDisturb 0 表示非免打扰,1 表示免打扰
-         * @param callback   回调接口
+         * @param qsCallback   回调接口
          */
-        void setDoNotDisturb(String toUserId, int doNotDisturb, Callback<Object> callback);
+        void setDoNotDisturb(String toUserId, int doNotDisturb, QSCallback<Object> qsCallback);
 
         /**
          * Author: QinHao
@@ -57,9 +57,9 @@ public interface IChatSettingContract {
          *
          * @param toUserId   好友的用户 id
          * @param blackList  0 表示从黑名单中移除,1 表示加入黑名单
-         * @param callback 回调接口
+         * @param qsCallback 回调接口
          */
-        void setBlackList(String toUserId, int blackList, Callback<Object> callback);
+        void setBlackList(String toUserId, int blackList, QSCallback<Object> qsCallback);
     }
 
     interface IView extends IBaseView {

@@ -24,7 +24,7 @@ public class GroupChatAddMemberPresenter extends AbsPresenter<IGroupChatAddMembe
 
     @Override
     public void getFriendList() {
-        getModel().getFriendList(new Callback<List<UserDetailBean>>() {
+        getModel().getFriendList(new QSCallback<List<UserDetailBean>>() {
             @Override
             public void onSuccess(List<UserDetailBean> data) {
                 if (!isViewAttached()) {
@@ -66,7 +66,7 @@ public class GroupChatAddMemberPresenter extends AbsPresenter<IGroupChatAddMembe
 
     @Override
     public void addMember(String groupChatId, List<String> addMemberIdList) {
-        getModel().addMember(groupChatId, addMemberIdList, new Callback<Object>() {
+        getModel().addMember(groupChatId, addMemberIdList, new QSCallback<Object>() {
             @Override
             public void onSuccess(Object data) {
                 if (!isViewAttached()) {
