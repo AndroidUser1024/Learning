@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.qinshoubox.R;
+import com.qinshou.qinshoubox.conversation.bean.GroupChatDetailBean;
 import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.GroupChatStatusBean;
@@ -14,6 +15,7 @@ import com.qinshou.qinshoubox.im.enums.FriendStatus;
 import com.qinshou.qinshoubox.im.enums.GroupChatStatus;
 import com.qinshou.qinshoubox.im.enums.MessageContentType;
 import com.qinshou.qinshoubox.im.enums.MessageType;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 import java.util.List;
@@ -74,6 +76,8 @@ public class RcvMessageAdapterFromMessageSystemItemView extends AbsRcvMessageAda
             showGroupChatDeleteUI(baseViewHolder, groupChatStatusBean);
         } else if (groupChatStatusBean.getStatus() == GroupChatStatus.OTHER_DELETE.getValue()) {
             showGroupChatOtherDeleteUI(baseViewHolder, groupChatStatusBean);
+        } else if (groupChatStatusBean.getStatus() == GroupChatStatus.NICKNAME_CHANGED.getValue()) {
+            showGroupChatNicknameChangedUI(baseViewHolder, groupChatStatusBean);
         }
     }
 
@@ -195,5 +199,38 @@ public class RcvMessageAdapterFromMessageSystemItemView extends AbsRcvMessageAda
         }
         stringBuilder.append("移除群聊");
         baseViewHolder.setTvText(R.id.tv_content, stringBuilder);
+    }
+
+    private void showGroupChatNicknameChangedUI(BaseViewHolder baseViewHolder, GroupChatStatusBean groupChatStatusBean) {
+        IMClient.SINGLETON.getGroupChatManager().getDetail(groupChatStatusBean.getGroupChatId(), new QSCallback<GroupChatDetailBean>() {
+            @Override
+            public void onSuccess(GroupChatDetailBean data) {
+                StringBuilder stringBuilder = new StringBuilder();
+                UserDetailBean fromUser = groupChatStatusBean.getFromUser();
+                // 操作人如果是自己,显示你
+                if (TextUtils.equals(fromUser.getId(), UserStatusManager.SINGLETON.getUserBean().getId())) {
+                    stringBuilder.append("你");
+                } else {
+                    // 操作人是别人,优先显示备注,然后是群昵称,然后是昵称
+                    if (!TextUtils.isEmpty(fromUser.getRemark())) {
+                        stringBuilder.append(fromUser.getRemark());
+                    } else if (!TextUtils.isEmpty(fromUser.getNicknameInGroupChat())) {
+                        stringBuilder.append(fromUser.getNicknameInGroupChat());
+                    } else {
+                        stringBuilder.append(fromUser.getNickname());
+                    }
+                }
+                stringBuilder.append("修改群名为\"")
+                        .append(groupChatStatusBean.getGroupChatNickname())
+                        .append("\"");
+                baseViewHolder.setTvText(R.id.tv_content, stringBuilder);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        });
+
     }
 }

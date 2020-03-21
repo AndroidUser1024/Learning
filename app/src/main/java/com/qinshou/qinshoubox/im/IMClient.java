@@ -7,7 +7,6 @@ import android.os.Looper;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.okhttphelper.callback.AbsDownloadCallback;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.bean.ImgBean;
@@ -40,7 +39,6 @@ import com.qinshou.qinshoubox.im.manager.GroupChatMemberManager;
 import com.qinshou.qinshoubox.im.manager.MessageManager;
 import com.qinshou.qinshoubox.im.manager.PingManager;
 import com.qinshou.qinshoubox.im.manager.ReconnectManager;
-import com.qinshou.qinshoubox.listener.SuccessRunnable;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxCommonApi;
 import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxOfflineApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
@@ -71,8 +69,9 @@ public enum IMClient {
     private static final String TAG = "IMClient";
     private final int TIME_OUT = 10 * 1000;
     //    private static final String URL = "ws://www.mrqinshou.com:10086/websocket";
-    private static final String URL = "ws://172.16.60.231:10086/websocket";
-    //    private static final String URL = "ws://192.168.1.109:10086/websocket";
+//    private static final String URL = "ws://172.16.60.231:10086/websocket";
+//        private static final String URL = "ws://192.168.1.109:10086/websocket";
+    private static final String URL = "ws://192.168.31.199:10086/websocket";
     private Context mContext;
     private WebSocket mWebSocket;
     private Handler mHandler = new Handler(Looper.getMainLooper());
@@ -126,13 +125,13 @@ public enum IMClient {
 
                     }
                 });
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                mFriendManager.getList();
-                mGroupChatManager.getList();
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                mFriendManager.getList();
+//                mGroupChatManager.getList();
+//            }
+//        }).start();
     }
 
     /**
@@ -236,37 +235,33 @@ public enum IMClient {
         FriendStatusBean friendStatusBean = new Gson().fromJson(messageBean.getExtend(), FriendStatusBean.class);
         if (friendStatusBean.getStatus() == FriendStatus.ADD.getValue()) {
             for (IOnFriendStatusListener onFriendStatusListener : mOnFriendStatusListenerList) {
-                onFriendStatusListener.add(friendStatusBean.getUserDetailBean()
+                onFriendStatusListener.add(friendStatusBean.getFromUser()
                         , friendStatusBean.isNewFriend());
             }
         } else if (friendStatusBean.getStatus() == FriendStatus.AGREE_ADD.getValue()) {
             for (IOnFriendStatusListener onFriendStatusListener : mOnFriendStatusListenerList) {
-                onFriendStatusListener.agreeAdd(friendStatusBean.getUserDetailBean());
+                onFriendStatusListener.agreeAdd(friendStatusBean.getFromUser());
             }
-
             // 存到缓存
-            mFriendManager.getCache().put(friendStatusBean.getUserDetailBean().getId(), friendStatusBean.getUserDetailBean());
-
-            Map<String, Object> extend = new HashMap<>();
-            extend.put("status", FriendStatus.AGREE_ADD.getValue());
+            mFriendManager.getCache().put(friendStatusBean.getFromUser().getId(), friendStatusBean.getFromUser());
             // 创建已经是好友的提示信息的系统消息
-            MessageBean m = MessageBean.createChatSystemMessage(friendStatusBean.getUserDetailBean().getId(), mUserDetailBean.getId(), extend);
+            MessageBean m = MessageBean.createChatSystemMessage(friendStatusBean.getFromUser().getId(), mUserDetailBean.getId(), friendStatusBean);
             handleMessage(m);
         } else if (friendStatusBean.getStatus() == FriendStatus.REFUSE_ADD.getValue()) {
             for (IOnFriendStatusListener onFriendStatusListener : mOnFriendStatusListenerList) {
-                onFriendStatusListener.refuseAdd(friendStatusBean.getUserDetailBean());
+                onFriendStatusListener.refuseAdd(friendStatusBean.getFromUser());
             }
         } else if (friendStatusBean.getStatus() == FriendStatus.DELETE.getValue()) {
             for (IOnFriendStatusListener onFriendStatusListener : mOnFriendStatusListenerList) {
-                onFriendStatusListener.delete(friendStatusBean.getUserDetailBean());
+                onFriendStatusListener.delete(friendStatusBean.getFromUser());
             }
         } else if (friendStatusBean.getStatus() == FriendStatus.ONLINE.getValue()) {
             for (IOnFriendStatusListener onFriendStatusListener : mOnFriendStatusListenerList) {
-                onFriendStatusListener.online(friendStatusBean.getUserDetailBean());
+                onFriendStatusListener.online(friendStatusBean.getFromUser());
             }
         } else if (friendStatusBean.getStatus() == FriendStatus.OFFLINE.getValue()) {
             for (IOnFriendStatusListener onFriendStatusListener : mOnFriendStatusListenerList) {
-                onFriendStatusListener.offline(friendStatusBean.getUserDetailBean());
+                onFriendStatusListener.offline(friendStatusBean.getFromUser());
             }
         }
     }
@@ -281,15 +276,10 @@ public enum IMClient {
      */
     private void handleGroupChatStatusMessage(MessageBean messageBean) {
         GroupChatStatusBean groupChatStatusBean = new Gson().fromJson(messageBean.getExtend(), GroupChatStatusBean.class);
-        Map<String, Object> extend = new HashMap<>();
-        extend.put("status", groupChatStatusBean.getStatus());
-        extend.put("groupChatId", groupChatStatusBean.getGroupChatId());
-        extend.put("fromUser", groupChatStatusBean.getFromUser());
-        extend.put("toUserList", groupChatStatusBean.getToUserList());
         // 创建群聊提示信息的系统消息
-        MessageBean m = MessageBean.createChatSystemMessage(groupChatStatusBean.getFromUser().getId()
+        MessageBean m = MessageBean.createGroupChatStatusMessage(groupChatStatusBean.getFromUser().getId()
                 , groupChatStatusBean.getGroupChatId()
-                , extend);
+                , groupChatStatusBean);
         m.setType(MessageType.GROUP_CHAT.getValue());
         handleMessage(m);
         if (groupChatStatusBean.getStatus() == GroupChatStatus.ADD.getValue()) {

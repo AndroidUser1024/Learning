@@ -42,7 +42,7 @@
                 </androidx.recyclerview.widget.RecyclerView>
 
                 <TextView
-                    android:id="@+id/tv_show_occupants"
+                    android:id="@+id/tv_show_more_group_chat_member"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"

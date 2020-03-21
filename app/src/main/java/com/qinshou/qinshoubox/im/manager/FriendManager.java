@@ -3,6 +3,7 @@ package com.qinshou.qinshoubox.im.manager;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.friend.bean.FriendHistoryBean;
+import com.qinshou.qinshoubox.im.bean.FriendStatusBean;
 import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
@@ -55,46 +56,47 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
     }
 
     public void getList(final Callback<List<UserDetailBean>> callback) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (!mLoaded) {
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                while (!mLoaded) {
+//                    try {
+//                        Thread.sleep(500);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//                if (getCache().getValues() == null) {
+//                    getHandler().post(new SuccessRunnable<>(callback, new ArrayList<>()));
+//                } else {
+//                    getHandler().post(new SuccessRunnable<>(callback, new ArrayList<>(getCache().getValues())));
+//                }
+//            }
+//        }).start();
+        String userId = IMClient.SINGLETON.getUserDetailBean().getId();
+        OkHttpHelperForQSBoxFriendApi.SINGLETON.getList(userId)
+                .transform(new QSApiTransformer<List<UserDetailBean>>())
+                .enqueue(new Callback<List<UserDetailBean>>() {
+                    @Override
+                    public void onSuccess(final List<UserDetailBean> data) {
+                        getExecutorService().submit(new Runnable() {
+                            @Override
+                            public void run() {
+                                for (UserDetailBean userDetailBean : data) {
+                                    // 存到缓存
+                                    getCache().put(userDetailBean.getId(), userDetailBean);
+                                }
+                                getHandler().post(new SuccessRunnable<List<UserDetailBean>>(callback, data));
+                            }
+                        });
+
                     }
-                }
-                if (getCache().getValues() == null) {
-                    getHandler().post(new SuccessRunnable<>(callback, new ArrayList<>()));
-                } else {
-                    getHandler().post(new SuccessRunnable<>(callback, new ArrayList<>(getCache().getValues())));
-                }
-            }
-        }).start();
-//        OkHttpHelperForQSBoxFriendApi.SINGLETON.getList(getUserId())
-//                .transform(new QSApiTransformer<List<UserDetailBean>>())
-//                .enqueue(new Callback<List<UserDetailBean>>() {
-//                    @Override
-//                    public void onSuccess(final List<UserDetailBean> data) {
-//                        getExecutorService().submit(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                for (UserDetailBean userDetailBean : data) {
-//                                    // 存到缓存
-//                                    getCache().put(userDetailBean.getId(), userDetailBean);
-//                                }
-//                                getHandler().post(new SuccessRunnable<List<UserDetailBean>>(callback, data));
-//                            }
-//                        });
-//
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Exception e) {
-//                        getHandler().post(new FailureRunnable<>(callback, e));
-//                    }
-//                });
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        getHandler().post(new FailureRunnable<>(callback, e));
+                    }
+                });
     }
 
     /**
@@ -159,10 +161,10 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
                         getInfo(toUserId, new Callback<UserDetailBean>() {
                             @Override
                             public void onSuccess(UserDetailBean data) {
-                                Map<String, Object> extend = new HashMap<>();
-                                extend.put("status", FriendStatus.AGREE_ADD.getValue());
+                                FriendStatusBean friendStatusBean = new FriendStatusBean();
+                                friendStatusBean.setStatus(FriendStatus.AGREE_ADD.getValue());
                                 // 创建已经是好友的提示信息的系统消息
-                                MessageBean messageBean = MessageBean.createChatSystemMessage(toUserId, userId, extend);
+                                MessageBean messageBean = MessageBean.createChatSystemMessage(toUserId, userId, friendStatusBean);
                                 IMClient.SINGLETON.handleMessage(messageBean);
                                 qsCallback.onSuccess(data);
                             }

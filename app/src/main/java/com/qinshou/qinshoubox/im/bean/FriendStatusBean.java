@@ -11,8 +11,7 @@ import com.google.gson.annotations.SerializedName;
 public class FriendStatusBean {
     private int status;
     private boolean newFriend;
-    @SerializedName("fromUser")
-    private UserDetailBean mUserDetailBean;
+    private UserDetailBean fromUser;
 
     public FriendStatusBean() {
     }
@@ -22,7 +21,7 @@ public class FriendStatusBean {
         return "FriendStatusBean{" +
                 "status=" + status +
                 ", newFriend=" + newFriend +
-                ", mUserDetailBean=" + mUserDetailBean +
+                ", fromUser=" + fromUser +
                 '}';
     }
 
@@ -42,11 +41,11 @@ public class FriendStatusBean {
         this.newFriend = newFriend;
     }
 
-    public UserDetailBean getUserDetailBean() {
-        return mUserDetailBean;
+    public UserDetailBean getFromUser() {
+        return fromUser;
     }
 
-    public void setUserDetailBean(UserDetailBean userDetailBean) {
-        mUserDetailBean = userDetailBean;
+    public void setFromUser(UserDetailBean fromUser) {
+        this.fromUser = fromUser;
     }
 }

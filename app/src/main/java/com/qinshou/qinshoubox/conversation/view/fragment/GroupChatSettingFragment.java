@@ -50,6 +50,10 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
     private TitleBar mTitleBar;
     private RcvGroupChatMemberAdapter mRcvGroupChatMemberAdapter;
     /**
+     * 查看更多群成员
+     */
+    private TextView mTvShowMoreGroupChatMember;
+    /**
      * 群昵称
      */
     private TextView mTvNickname;
@@ -144,6 +148,8 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
         RecyclerView rcvGroupChatMember = findViewByID(R.id.rcv_group_chat_member);
         rcvGroupChatMember.setLayoutManager(new GridLayoutManager(getContext(), 5));
         rcvGroupChatMember.setAdapter(mRcvGroupChatMemberAdapter = new RcvGroupChatMemberAdapter(getContext()));
+        mTvShowMoreGroupChatMember = findViewByID(R.id.tv_show_more_group_chat_member);
+
         mTvNickname = findViewByID(R.id.tv_nickname);
 
         mSwtTop = findViewByID(R.id.swt_top);
@@ -226,12 +232,35 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
     public void getGroupChatDetailSuccess(GroupChatDetailBean groupChatDetailBean) {
         mGroupChatDetailBean = groupChatDetailBean;
         mTitleBar.setTitleText(getString(R.string.group_chat_setting_title, "" + groupChatDetailBean.getMemberList().size()));
-        List<Object> list = new ArrayList<Object>(groupChatDetailBean.getMemberList());
-        list.add(GroupChatMemberFunction.ADD_MEMBER);
+        List<Object> list;
+        List<UserDetailBean> memberList = groupChatDetailBean.getMemberList();
         if (TextUtils.equals(groupChatDetailBean.getOwnerId(), UserStatusManager.SINGLETON.getUserBean().getId())) {
+            if (memberList.size() > 13) {
+                list = new ArrayList<>(memberList.subList(0, 13));
+            } else {
+                list = new ArrayList<>(memberList);
+            }
+            list.add(GroupChatMemberFunction.ADD_MEMBER);
             list.add(GroupChatMemberFunction.DELETE_MEMBER);
+        } else {
+            if (memberList.size() > 14) {
+                list = new ArrayList<>(memberList.subList(0, 14));
+            } else {
+                list = new ArrayList<>(memberList);
+            }
+            list.add(GroupChatMemberFunction.ADD_MEMBER);
         }
         mRcvGroupChatMemberAdapter.setDataList(list);
+        if (TextUtils.equals(IMClient.SINGLETON.getUserDetailBean().getId(), groupChatDetailBean.getOwnerId())) {
+            mTvShowMoreGroupChatMember.setVisibility(mGroupChatDetailBean.getMemberCount() >= 13
+                    ? View.VISIBLE
+                    : View.GONE);
+        } else {
+            mTvShowMoreGroupChatMember.setVisibility(mGroupChatDetailBean.getMemberCount() >= 14
+                    ? View.VISIBLE
+                    : View.GONE);
+        }
+
         mTvNickname.setText(TextUtils.isEmpty(groupChatDetailBean.getNickname())
                 ? getString(R.string.group_chat_setting_tv_nickname_text)
                 : groupChatDetailBean.getNickname());

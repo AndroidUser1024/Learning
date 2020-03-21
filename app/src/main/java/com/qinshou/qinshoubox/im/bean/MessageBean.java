@@ -281,13 +281,33 @@ public class MessageBean {
      * Date:2019/12/25 22:09
      * Description:创建单聊的系统消息
      */
-    public static MessageBean createChatSystemMessage(String fromUserId, String toUserId, Map<String, Object> map) {
+    public static MessageBean createChatSystemMessage(String fromUserId, String toUserId, FriendStatusBean friendStatusBean) {
         MessageBean messageBean = new MessageBean();
         messageBean.fromUserId = fromUserId;
         messageBean.toUserId = toUserId;
         messageBean.type = MessageType.CHAT.getValue();
         messageBean.contentType = MessageContentType.SYSTEM.getValue();
-        messageBean.extend = new Gson().toJson(map);
+        messageBean.extend = new Gson().toJson(friendStatusBean);
+        messageBean.sendTimestamp = System.currentTimeMillis();
+        messageBean.status = MessageStatus.SENDED.getValue();
+        return messageBean;
+    }
+
+    /**
+     * Author: MrQinshou
+     * Email:cqflqinhao@126.com
+     * Date:2020/03/21 15:01
+     * Description:创建群聊的系统消息
+     */
+    public static MessageBean createGroupChatStatusMessage(String fromUserId
+            , String toUserId
+            , GroupChatStatusBean groupChatStatusBean) {
+        MessageBean messageBean = new MessageBean();
+        messageBean.fromUserId = fromUserId;
+        messageBean.toUserId = toUserId;
+        messageBean.type = MessageType.GROUP_CHAT.getValue();
+        messageBean.contentType = MessageContentType.SYSTEM.getValue();
+        messageBean.extend = new Gson().toJson(groupChatStatusBean);
         messageBean.sendTimestamp = System.currentTimeMillis();
         messageBean.status = MessageStatus.SENDED.getValue();
         return messageBean;

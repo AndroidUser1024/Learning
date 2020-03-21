@@ -54,6 +54,10 @@ public class GroupChatDetailBean {
      * 群聊会话是否显示成员昵称,1 为显示,0 为不显示
      */
     private int showGroupChatMemberNickname;
+    /**
+     * 群成员个数
+     */
+    private int memberCount;
 
     public GroupChatDetailBean() {
     }
@@ -72,6 +76,7 @@ public class GroupChatDetailBean {
                 ", top=" + top +
                 ", doNotDisturb=" + doNotDisturb +
                 ", showGroupChatMemberNickname=" + showGroupChatMemberNickname +
+                ", memberCount=" + memberCount +
                 '}';
     }
 
@@ -161,5 +166,13 @@ public class GroupChatDetailBean {
 
     public void setShowGroupChatMemberNickname(int showGroupChatMemberNickname) {
         this.showGroupChatMemberNickname = showGroupChatMemberNickname;
+    }
+
+    public int getMemberCount() {
+        return memberCount;
+    }
+
+    public void setMemberCount(int memberCount) {
+        this.memberCount = memberCount;
     }
 }

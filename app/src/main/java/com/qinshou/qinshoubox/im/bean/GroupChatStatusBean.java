@@ -18,6 +18,10 @@ public class GroupChatStatusBean {
      */
     private String groupChatId;
     /**
+     * 目标群聊 id
+     */
+    private String groupChatNickname;
+    /**
      * 发起该操作的人
      */
     private UserDetailBean fromUser;
@@ -34,8 +38,9 @@ public class GroupChatStatusBean {
         return "GroupChatStatusBean{" +
                 "status=" + status +
                 ", groupChatId='" + groupChatId + '\'' +
-                ", fromUser='" + fromUser + '\'' +
-                ", toUserList='" + toUserList + '\'' +
+                ", groupChatNickname='" + groupChatNickname + '\'' +
+                ", fromUser=" + fromUser +
+                ", toUserList=" + toUserList +
                 '}';
     }
 
@@ -53,6 +58,14 @@ public class GroupChatStatusBean {
 
     public void setGroupChatId(String groupChatId) {
         this.groupChatId = groupChatId;
+    }
+
+    public String getGroupChatNickname() {
+        return groupChatNickname;
+    }
+
+    public void setGroupChatNickname(String groupChatNickname) {
+        this.groupChatNickname = groupChatNickname;
     }
 
     public UserDetailBean getFromUser() {
