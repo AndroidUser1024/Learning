@@ -46,13 +46,9 @@ public class DefaultDaoImpl<T> implements IBaseDao<T> {
             Object id = idField.get(t);
             // 先根据 id 判断该数据是否存在,存在则修改,不存在则新增
             if (existsById(id)) {
-                String sql = SqlUtil.getUpdateSql(t, new Where.Builder()
-                        .equal(idColumnInfo.getColumnName(), id)
-                        .build());
-                mSQLiteDatabase.execSQL(sql);
+                return update(t);
             } else {
-                String sql = SqlUtil.getInsertSql(t);
-                mSQLiteDatabase.execSQL(sql);
+                return insert(t);
             }
         } catch (Exception e) {
             Log.e(TAG, "save" + " : " + "mClass--->" + mClass + ",e--->" + e.getMessage());
@@ -62,11 +58,31 @@ public class DefaultDaoImpl<T> implements IBaseDao<T> {
 
     @Override
     public T insert(T t) {
+        Cursor cursor = null;
         try {
             String sql = SqlUtil.getInsertSql(t);
             mSQLiteDatabase.execSQL(sql);
+
+            IdColumnInfoBean idColumnInfo = DatabaseManager.getInstance().getIdByClass(mClass);
+            Field idField = mClass.getDeclaredField(idColumnInfo.getFieldName());
+            if (!idField.isAccessible()) {
+                idField.setAccessible(true);
+            }
+            sql = "SELECT" +
+                    " MAX(" + idColumnInfo.getColumnName() + ") AS lastInsertId" +
+                    " FROM" +
+                    " " + idColumnInfo.getTableName();
+            cursor = mSQLiteDatabase.rawQuery(sql, new String[]{});
+            if (cursor.moveToFirst()) {
+                int lastInsertId = cursor.getInt(cursor.getColumnIndex("lastInsertId"));
+                idField.set(t, lastInsertId);
+            }
         } catch (Exception e) {
             Log.e(TAG, "insert" + " : " + "mClass--->" + mClass + ",e--->" + e.getMessage());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
         return t;
     }
@@ -105,6 +121,18 @@ public class DefaultDaoImpl<T> implements IBaseDao<T> {
     }
 
     @Override
+    public int delete(QueryCondition... queryConditionArray) {
+        try {
+            String sql = SqlUtil.getDeleteSql(mClass, queryConditionArray);
+            mSQLiteDatabase.execSQL(sql);
+        } catch (SQLException e) {
+            Log.e(TAG, "delete" + " : " + "mClass--->" + mClass + ",e--->" + e.getMessage());
+            return 0;
+        }
+        return 1;
+    }
+
+    @Override
     public T update(T t) {
         // 主键
         IdColumnInfoBean idColumnInfo = DatabaseManager.getInstance().getIdByClass(mClass);
@@ -131,6 +159,49 @@ public class DefaultDaoImpl<T> implements IBaseDao<T> {
             Log.e(TAG, "update" + " : " + "mClass--->" + mClass + ",e--->" + e.getMessage());
         }
         return null;
+    }
+
+    @Override
+    public T select(QueryCondition... queryConditionArray) {
+        T t = null;
+        Cursor cursor = null;
+        try {
+            t = mClass.newInstance();
+            String sql = SqlUtil.getQuerySql(mClass, queryConditionArray);
+            cursor = mSQLiteDatabase.rawQuery(sql, new String[]{});
+            if (cursor.moveToNext()) {
+                // 主键
+                IdColumnInfoBean idColumnInfo = DatabaseManager.getInstance().getIdByClass(mClass);
+                Field idField = mClass.getDeclaredField(idColumnInfo.getFieldName());
+                if (!idField.isAccessible()) {
+                    idField.setAccessible(true);
+                }
+                if (idColumnInfo.getType() == Column.Type.TEXT) {
+                    idField.set(t, cursor.getString(cursor.getColumnIndex(idColumnInfo.getColumnName())));
+                } else {
+                    idField.set(t, cursor.getInt(cursor.getColumnIndex(idColumnInfo.getColumnName())));
+                }
+                // 其余列
+                for (ColumnInfoBean columnInfoBean : DatabaseManager.getInstance().getColumnByClass(mClass)) {
+                    Field field = mClass.getDeclaredField(columnInfoBean.getFieldName());
+                    if (!field.isAccessible()) {
+                        field.setAccessible(true);
+                    }
+                    if (columnInfoBean.getType() == Column.Type.TEXT) {
+                        field.set(t, cursor.getString(cursor.getColumnIndex(columnInfoBean.getColumnName())));
+                    } else {
+                        field.set(t, cursor.getInt(cursor.getColumnIndex(columnInfoBean.getColumnName())));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "select" + " : " + "mClass--->" + mClass + ",e--->" + e.getMessage());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return t;
     }
 
     @Override

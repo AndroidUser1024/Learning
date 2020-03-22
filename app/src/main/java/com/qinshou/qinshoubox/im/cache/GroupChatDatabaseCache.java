@@ -1,5 +1,6 @@
 package com.qinshou.qinshoubox.im.cache;
 
+import com.jeejio.dbmodule.DatabaseManager;
 import com.jeejio.dbmodule.dao.IBaseDao;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 
@@ -16,17 +17,13 @@ public class GroupChatDatabaseCache extends AbsDatabaseCache<String, GroupChatBe
     private IBaseDao<GroupChatBean> mGroupChatDao;
 
     public GroupChatDatabaseCache() {
-        super();
+        mGroupChatDao = DatabaseManager.getInstance().getDaoByClass(GroupChatBean.class);
     }
 
     @Override
     public void put(String key, GroupChatBean value) {
         // 更新数据库
-        if (mGroupChatDao.existsById(key)) {
-            mGroupChatDao.update(value);
-        } else {
-            mGroupChatDao.insert(value);
-        }
+        mGroupChatDao.save(value);
     }
 
     @Override
@@ -36,11 +33,12 @@ public class GroupChatDatabaseCache extends AbsDatabaseCache<String, GroupChatBe
 
     @Override
     public GroupChatBean remove(String key) {
+        mGroupChatDao.deleteById(key);
         return null;
     }
 
     @Override
     public Collection<GroupChatBean> getValues() {
-        return null;
+        return mGroupChatDao.selectList();
     }
 }

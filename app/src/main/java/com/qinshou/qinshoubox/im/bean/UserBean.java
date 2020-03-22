@@ -42,6 +42,14 @@ public class UserBean {
     public UserBean() {
     }
 
+    public UserBean(String id, String username, String nickname, String headImg, String headImgSmall) {
+        this.id = id;
+        this.username = username;
+        this.nickname = nickname;
+        this.headImg = headImg;
+        this.headImgSmall = headImgSmall;
+    }
+
     @Override
     public String toString() {
         return "UserBean{" +

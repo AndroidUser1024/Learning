@@ -20,12 +20,6 @@ public class App extends BaseApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        //初始化数据库
-        DatabaseManager.getInstance().init(this
-                , IConstant.DATABASE_NAME
-                , IConstant.DATABASE_VERSION
-                , UserDetailBean.class
-                , NewsBean.class);
 //        //初始化友盟推送
 //        PushHelper.init(this, IConstant.UMENG_KEY, IConstant.UMENG_SECRET);
 //        //初始化第三方分享

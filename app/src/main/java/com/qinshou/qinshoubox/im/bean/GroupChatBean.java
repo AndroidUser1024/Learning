@@ -17,6 +17,7 @@ public class GroupChatBean {
      * Id
      */
     @Id
+    @Column
     private String id;
     /**
      * 群主 Id

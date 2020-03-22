@@ -27,10 +27,12 @@ public class ConversationBean {
     /**
      * 私聊就是对方的用户 id,群聊就是群的 id
      */
+    @Column
     private String toUserId;
     /**
      * 会话类型
      */
+    @Column(type = Column.Type.INTEGER)
     private int type;
     /**
      * 对方的小头像

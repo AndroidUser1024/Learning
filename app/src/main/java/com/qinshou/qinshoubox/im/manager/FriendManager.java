@@ -39,23 +39,26 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
      * Date:2019/12/6 11:50
      * Description:同步获取添加好友列表
      */
-    public List<UserDetailBean> getList() {
-        try {
-            String userId = IMClient.SINGLETON.getUserDetailBean().getId();
-            List<UserDetailBean> userDetailBeanList = OkHttpHelperForQSBoxFriendApi.SINGLETON.getList(userId)
-                    .transform(new QSApiTransformer<List<UserDetailBean>>())
-                    .execute();
-            for (UserDetailBean userDetailBean : userDetailBeanList) {
-                // 存到缓存
-                getCache().put(userDetailBean.getId(), userDetailBean);
+    public void getList() {
+        getExecutorService().submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String userId = IMClient.SINGLETON.getUserDetailBean().getId();
+                    List<UserDetailBean> userDetailBeanList = OkHttpHelperForQSBoxFriendApi.SINGLETON.getList(userId)
+                            .transform(new QSApiTransformer<List<UserDetailBean>>())
+                            .execute();
+                    for (UserDetailBean userDetailBean : userDetailBeanList) {
+                        // 存到缓存
+                        getCache().put(userDetailBean.getId(), userDetailBean);
+                    }
+                } catch (Exception e) {
+                    getList();
+                    return;
+                }
+                mLoaded = true;
             }
-            return userDetailBeanList;
-        } catch (Exception e) {
-            return new ArrayList<>();
-        } finally {
-            mLoaded = true;
-        }
-
+        });
     }
 
     public void getList(final QSCallback<List<UserDetailBean>> qsCallback) {
@@ -134,8 +137,8 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
                                 FriendStatusBean friendStatusBean = new FriendStatusBean();
                                 friendStatusBean.setStatus(FriendStatus.AGREE_ADD.getValue());
                                 // 创建已经是好友的提示信息的系统消息
-                                MessageBean messageBean = MessageBean.createChatSystemMessage(toUserId, userId, friendStatusBean);
-                                IMClient.SINGLETON.handleMessage(messageBean);
+//                                MessageBean messageBean = MessageBean.createChatSystemMessage(toUserId, userId, friendStatusBean);
+//                                IMClient.SINGLETON.handleMessage(messageBean);
                                 qsCallback.onSuccess(data);
                             }
 

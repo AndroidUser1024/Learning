@@ -31,7 +31,7 @@ public class OrderBy implements QueryCondition {
             return this;
         }
 
-        public Builder Desc(String columnName, Object columnValue) {
+        public Builder Desc(String columnName) {
             mStringBuilder.append(columnName).append(" DESC,");
             return this;
         }

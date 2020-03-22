@@ -30,32 +30,6 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
 
     public GroupChatManager() {
         super(new GroupChatDoubleCache(new MemoryCache<>(), new GroupChatDatabaseCache()));
-        IMClient.SINGLETON.addOnGroupChatStatusListener(new IOnGroupChatStatusListener() {
-            @Override
-            public void add(String groupChatId, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
-                getDetail(groupChatId, null);
-            }
-
-            @Override
-            public void delete(String groupChatId, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
-
-            }
-
-            @Override
-            public void otherAdd(String groupChatId, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
-                getDetail(groupChatId, null);
-            }
-
-            @Override
-            public void otherDelete(String groupChatId, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
-                getDetail(groupChatId, null);
-            }
-
-            @Override
-            public void nicknameChanged(String groupChatId, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
-                getDetail(groupChatId, null);
-            }
-        });
     }
 
     public GroupChatBean getById(String id) {
@@ -90,29 +64,6 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
                 }
             }
         }).start();
-//        String userId = IMClient.SINGLETON.getUserDetailBean().getId();
-//        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.getMyGroupChatList(userId)
-//                .transform(new QSApiTransformer<List<GroupChatBean>>())
-//                .enqueue(new Callback<List<GroupChatBean>>() {
-//                    @Override
-//                    public void onSuccess(final List<GroupChatBean> data) {
-//                        getExecutorService().submit(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                for (GroupChatBean groupChatBean : data) {
-//                                    getCache().put(groupChatBean.getId(), groupChatBean);
-//                                    getMemberList(groupChatBean.getId(), null);
-//                                }
-//                                getHandler().post(new SuccessRunnable<>(callback, data));
-//                            }
-//                        });
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Exception e) {
-//                        getHandler().post(new FailureRunnable<>(callback, e));
-//                    }
-//                });
     }
 
     /**
@@ -121,23 +72,26 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
      * Date:2020/1/6 17:57
      * Description:同步获取我的群列表
      */
-    public List<GroupChatBean> getList() {
-        try {
-            String userId = IMClient.SINGLETON.getUserDetailBean().getId();
-            List<GroupChatBean> groupChatBeanList = OkHttpHelperForQSBoxGroupChatApi.SINGLETON.getMyGroupChatList(userId)
-                    .transform(new QSApiTransformer<List<GroupChatBean>>())
-                    .execute();
-            for (GroupChatBean groupChatBean : groupChatBeanList) {
-                getCache().put(groupChatBean.getId(), groupChatBean);
-                getMemberList(groupChatBean.getId());
+    public void getList() {
+        getExecutorService().submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String userId = IMClient.SINGLETON.getUserDetailBean().getId();
+                    List<GroupChatBean> groupChatBeanList = OkHttpHelperForQSBoxGroupChatApi.SINGLETON.getMyGroupChatList(userId)
+                            .transform(new QSApiTransformer<List<GroupChatBean>>())
+                            .execute();
+                    for (GroupChatBean groupChatBean : groupChatBeanList) {
+                        getCache().put(groupChatBean.getId(), groupChatBean);
+                        getMemberList(groupChatBean.getId());
+                    }
+                } catch (Exception e) {
+                    getList();
+                    return;
+                }
+                mLoaded = true;
             }
-            return groupChatBeanList;
-        } catch (Exception e) {
-            return new ArrayList<>();
-        } finally {
-            mLoaded = true;
-        }
-
+        });
     }
 
     /**

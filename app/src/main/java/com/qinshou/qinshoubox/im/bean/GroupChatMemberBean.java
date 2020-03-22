@@ -1,6 +1,7 @@
 package com.qinshou.qinshoubox.im.bean;
 
 import com.jeejio.dbmodule.annotation.Column;
+import com.jeejio.dbmodule.annotation.Id;
 import com.jeejio.dbmodule.annotation.Table;
 
 /**
@@ -11,6 +12,12 @@ import com.jeejio.dbmodule.annotation.Table;
  */
 @Table(name = "group_chat_member")
 public class GroupChatMemberBean {
+    /**
+     * 自增长 id
+     */
+    @Id(autoIncrement = true)
+    @Column(type = Column.Type.INTEGER)
+    private int id;
     /**
      * 群 id
      */

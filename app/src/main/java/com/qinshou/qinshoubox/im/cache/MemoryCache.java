@@ -2,6 +2,8 @@ package com.qinshou.qinshoubox.im.cache;
 
 import android.util.LruCache;
 
+import com.qinshou.commonmodule.util.ShowLogUtil;
+
 import java.util.Collection;
 
 /**
@@ -21,6 +23,7 @@ public class MemoryCache<K, V> implements ICache<K, V> {
 
     @Override
     public void put(K key, V value) {
+        ShowLogUtil.logi("存,key--->" + key + ",value--->" + value);
         mLruCache.put(key, value);
     }
 

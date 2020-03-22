@@ -39,6 +39,7 @@ public class SqlUtil {
     public static String getCreateTableSql(Class<?> clazz) throws IllegalStateException {
         StringBuilder sql = new StringBuilder();
         IdColumnInfoBean idColumnInfo = DatabaseManager.getInstance().getIdByClass(clazz);
+        printSql("clazz--->" + clazz);
         sql.append("CREATE TABLE IF NOT EXISTS ").append(idColumnInfo.getTableName()).append("(");
         // 主键
         if (idColumnInfo.isAutoIncrement()) {
@@ -139,13 +140,13 @@ public class SqlUtil {
      * @param clazz 需要删除的对象的 class
      * @return 自动生成的 sql
      */
-    public static String getDeleteSql(Class<?> clazz, @Nullable Where where) {
+    public static String getDeleteSql(Class<?> clazz, QueryCondition... queryConditionArray) {
         StringBuilder sql = new StringBuilder();
         // 主键
         IdColumnInfoBean idColumnInfo = DatabaseManager.getInstance().getIdByClass(clazz);
         sql.append("DELETE FROM ").append(idColumnInfo.getTableName());
-        if (where != null) {
-            sql.append(where.getSql());
+        for (QueryCondition queryCondition : queryConditionArray) {
+            sql.append(queryCondition.getSql());
         }
         printSql(sql.toString());
         return sql.toString();

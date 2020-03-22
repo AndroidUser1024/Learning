@@ -19,9 +19,13 @@ public interface IBaseDao<T> {
 
     int delete(T t);
 
+    int delete(QueryCondition... queryConditionArray);
+
     T update(T t);
 
     T update(T t, QueryCondition... queryConditionArray);
+
+    T select(QueryCondition... queryConditionArray);
 
     T selectById(Object id);
 

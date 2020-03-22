@@ -3,7 +3,6 @@ package com.qinshou.qinshoubox.im;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -17,14 +16,14 @@ import com.qinshou.qinshoubox.conversation.bean.VoiceBean;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.bean.ConversationMessageRelBean;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
+import com.qinshou.qinshoubox.im.bean.FriendStatusBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatMemberBean;
-import com.qinshou.qinshoubox.im.bean.UserBean;
-import com.qinshou.qinshoubox.im.bean.UserDetailBean;
-import com.qinshou.qinshoubox.im.bean.FriendStatusBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatStatusBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.bean.ServerReceiptBean;
+import com.qinshou.qinshoubox.im.bean.UserBean;
+import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.enums.FriendStatus;
 import com.qinshou.qinshoubox.im.enums.GroupChatStatus;
 import com.qinshou.qinshoubox.im.enums.MessageContentType;
@@ -73,8 +72,8 @@ public enum IMClient {
     private final int TIME_OUT = 10 * 1000;
     //    private static final String URL = "ws://www.mrqinshou.com:10086/websocket";
 //    private static final String URL = "ws://172.16.60.231:10086/websocket";
-//        private static final String URL = "ws://192.168.1.109:10086/websocket";
-    private static final String URL = "ws://192.168.31.199:10086/websocket";
+        private static final String URL = "ws://192.168.1.109:10086/websocket";
+//    private static final String URL = "ws://192.168.31.199:10086/websocket";
     private Context mContext;
     private WebSocket mWebSocket;
     private Handler mHandler = new Handler(Looper.getMainLooper());
@@ -137,13 +136,8 @@ public enum IMClient {
 
                     }
                 });
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                mFriendManager.getList();
-//                mGroupChatManager.getList();
-//            }
-//        }).start();
+        mFriendManager.getList();
+        mGroupChatManager.getList();
     }
 
     /**
@@ -215,7 +209,7 @@ public enum IMClient {
                         if (select != null) {
                             select.setId(serverReceiptBean.getId());
                             select.setStatus(MessageStatus.FAILURE.getValue());
-                            mMessageManager.insertOrUpdate(select);
+                            mMessageManager.save(select);
                         }
                         for (IOnSendMessageListener onSendMessageListener : mOnSendMessageListenerList) {
                             onSendMessageListener.onSendFailure(select, serverReceiptBean.getFailureCode());
@@ -224,7 +218,7 @@ public enum IMClient {
                         if (select != null) {
                             select.setId(serverReceiptBean.getId());
                             select.setStatus(MessageStatus.SENDED.getValue());
-                            mMessageManager.insertOrUpdate(select);
+                            mMessageManager.save(select);
                         }
                         for (IOnSendMessageListener onSendMessageListener : mOnSendMessageListenerList) {
                             onSendMessageListener.onSendSuccess(select);
@@ -256,9 +250,9 @@ public enum IMClient {
             }
             // 存到缓存
             mFriendManager.getCache().put(friendStatusBean.getFromUser().getId(), friendStatusBean.getFromUser());
-            // 创建已经是好友的提示信息的系统消息
-            MessageBean m = MessageBean.createChatSystemMessage(friendStatusBean.getFromUser().getId(), mUserDetailBean.getId(), friendStatusBean);
-            handleMessage(m);
+//            // 创建已经是好友的提示信息的系统消息
+//            MessageBean m = MessageBean.createChatSystemMessage(friendStatusBean.getFromUser().getId(), mUserDetailBean.getId(), friendStatusBean);
+//            handleMessage(m);
         } else if (friendStatusBean.getStatus() == FriendStatus.REFUSE_ADD.getValue()) {
             for (IOnFriendStatusListener onFriendStatusListener : mOnFriendStatusListenerList) {
                 onFriendStatusListener.refuseAdd(friendStatusBean.getFromUser());
@@ -342,45 +336,41 @@ public enum IMClient {
      * @param send        true 表示是发送的消息,false 表示是接收的消息
      */
     private synchronized void insert2Database(MessageBean messageBean, boolean send) {
-//        mMessageManager.insertOrUpdate(messageBean);
+        mMessageManager.save(messageBean);
 //        // 插入或更新会话
-//        String toUserId;
-//        long lastMsgTimestamp;
-//        if (send || messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
-//            // 发送的消息, conversation 的目标 id 为接收方 id
-//            // 群聊的发送方永远是自己,接收方永远是群 id,所以群聊类型的消息,conversation 的目标 id 为永远为群 id
-//            toUserId = messageBean.getToUserId();
-//        } else {
-//            // 接收的消息, conversation 的目标 id 为发送方 id
-//            toUserId = messageBean.getFromUserId();
-//        }
-//        if (send) {
-//            lastMsgTimestamp = messageBean.getSendTimestamp();
-//        } else {
-//            lastMsgTimestamp = messageBean.getReceiveTimestamp();
-//        }
-//        ConversationBean conversationBean = mConversationManager.getByTypeAndToUserId(messageBean.getType(), toUserId);
-//        if (conversationBean == null) {
-//            conversationBean = new ConversationBean();
-//        }
-//        conversationBean.setToUserId(toUserId);
-//        conversationBean.setLastMsgTimestamp(lastMsgTimestamp);
-//        conversationBean.setType(messageBean.getType());
-//        conversationBean.setLastMsgContentType(messageBean.getContentType());
-//        conversationBean.setLastMsgContent(messageBean.getContent());
-//        conversationBean.setLastMsgPid(messageBean.getPid());
-//        if (!send) {
-//            if (conversationBean.getUnreadCount() == -1) {
-//                // 如果被标记过未读,则设置未读数为 1
-//                conversationBean.setUnreadCount(1);
-//            } else {
-//                // 否则在原有的未读数上 +1
-//                conversationBean.setUnreadCount(conversationBean.getUnreadCount() + 1);
-//            }
-//        }
-//        mConversationManager.insertOrUpdate(conversationBean);
-//        // 插入会话与消息关系
-//        mConversationManager.insertConversationMessageRel(new ConversationMessageRelBean(conversationBean.getId(), messageBean.getPid()));
+        String toUserId;
+        long lastMsgTimestamp;
+        if (send || messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
+            // 发送的消息, conversation 的目标 id 为接收方 id
+            // 群聊的发送方永远是自己,接收方永远是群 id,所以群聊类型的消息,conversation 的目标 id 为永远为群 id
+            toUserId = messageBean.getToUserId();
+        } else {
+            // 接收的消息, conversation 的目标 id 为发送方 id
+            toUserId = messageBean.getFromUserId();
+        }
+        if (send) {
+            lastMsgTimestamp = messageBean.getSendTimestamp();
+        } else {
+            lastMsgTimestamp = messageBean.getReceiveTimestamp();
+        }
+        ConversationBean conversationBean = mConversationManager.getByTypeAndToUserId(messageBean.getType(), toUserId);
+        if (conversationBean == null) {
+            conversationBean = new ConversationBean();
+        }
+        conversationBean.setToUserId(toUserId);
+        conversationBean.setType(messageBean.getType());
+        if (!send) {
+            if (conversationBean.getUnreadCount() == -1) {
+                // 如果被标记过未读,则设置未读数为 1
+                conversationBean.setUnreadCount(1);
+            } else {
+                // 否则在原有的未读数上 +1
+                conversationBean.setUnreadCount(conversationBean.getUnreadCount() + 1);
+            }
+        }
+        mConversationManager.save(conversationBean);
+        // 插入会话与消息关系
+        mConversationManager.insertConversationMessageRel(new ConversationMessageRelBean(conversationBean.getId(), messageBean.getPid()));
     }
 
     /**
@@ -552,7 +542,6 @@ public enum IMClient {
                     @Override
                     public void onFailure(WebSocket webSocket, final Throwable t, Response response) {
                         super.onFailure(webSocket, t, response);
-                        t.printStackTrace();
                         Log.i(TAG, "onFailure: t.class--->" + t.getClass() + ",t.message--->" + t.getMessage());
                         // 移除心跳任务
                         mPingManager.release();
