@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.conversation.bean.GroupChatDetailBean;
 import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.GroupChatStatusBean;
@@ -15,7 +14,6 @@ import com.qinshou.qinshoubox.im.enums.FriendStatus;
 import com.qinshou.qinshoubox.im.enums.GroupChatStatus;
 import com.qinshou.qinshoubox.im.enums.MessageContentType;
 import com.qinshou.qinshoubox.im.enums.MessageType;
-import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 import java.util.List;

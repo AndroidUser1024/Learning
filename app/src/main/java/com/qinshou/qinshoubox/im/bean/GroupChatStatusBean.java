@@ -1,7 +1,5 @@
 package com.qinshou.qinshoubox.im.bean;
 
-import com.qinshou.qinshoubox.conversation.bean.GroupChatDetailBean;
-
 import java.util.List;
 
 /**
@@ -18,7 +16,7 @@ public class GroupChatStatusBean {
     /**
      * 目标群聊 id
      */
-    private GroupChatBean groupChat;
+    private GroupChatDetailBean groupChat;
     /**
      * 发起该操作的人
      */
@@ -49,11 +47,11 @@ public class GroupChatStatusBean {
         this.status = status;
     }
 
-    public GroupChatBean getGroupChat() {
+    public GroupChatDetailBean getGroupChat() {
         return groupChat;
     }
 
-    public void setGroupChat(GroupChatBean groupChat) {
+    public void setGroupChat(GroupChatDetailBean groupChat) {
         this.groupChat = groupChat;
     }
 

@@ -73,6 +73,20 @@ public class GroupChatBean {
     public GroupChatBean() {
     }
 
+    public GroupChatBean(String id, String ownerId, String nickname, String headImg, String headImgSmall, String nicknameDefault, String nicknameInGroupChat, int top, int doNotDisturb, int showGroupChatMemberNickname, int memberCount) {
+        this.id = id;
+        this.ownerId = ownerId;
+        this.nickname = nickname;
+        this.headImg = headImg;
+        this.headImgSmall = headImgSmall;
+        this.nicknameDefault = nicknameDefault;
+        this.nicknameInGroupChat = nicknameInGroupChat;
+        this.top = top;
+        this.doNotDisturb = doNotDisturb;
+        this.showGroupChatMemberNickname = showGroupChatMemberNickname;
+        this.memberCount = memberCount;
+    }
+
     @Override
     public String toString() {
         return "GroupChatBean{" +

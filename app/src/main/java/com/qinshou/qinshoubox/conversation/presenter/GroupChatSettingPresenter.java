@@ -1,8 +1,7 @@
 package com.qinshou.qinshoubox.conversation.presenter;
 
 import com.qinshou.commonmodule.base.AbsPresenter;
-import com.qinshou.okhttphelper.callback.Callback;
-import com.qinshou.qinshoubox.conversation.bean.GroupChatDetailBean;
+import com.qinshou.qinshoubox.im.bean.GroupChatDetailBean;
 import com.qinshou.qinshoubox.conversation.contract.IGroupChatSettingContract;
 import com.qinshou.qinshoubox.conversation.model.GroupChatSettingModel;
 import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatSettingFragment;

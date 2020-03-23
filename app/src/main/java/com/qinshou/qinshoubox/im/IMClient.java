@@ -18,6 +18,7 @@ import com.qinshou.qinshoubox.im.bean.ConversationMessageRelBean;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.FriendStatusBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
+import com.qinshou.qinshoubox.im.bean.GroupChatDetailBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatMemberBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatStatusBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
@@ -284,73 +285,84 @@ public enum IMClient {
      */
     private void handleGroupChatStatusMessage(MessageBean messageBean) {
         GroupChatStatusBean groupChatStatusBean = new Gson().fromJson(messageBean.getExtend(), GroupChatStatusBean.class);
-        GroupChatBean groupChatBean = groupChatStatusBean.getGroupChat();
+        GroupChatDetailBean groupChatDetailBean = groupChatStatusBean.getGroupChat();
+        GroupChatBean groupChatBean = new GroupChatBean(groupChatDetailBean.getId()
+                , groupChatDetailBean.getOwnerId()
+                , groupChatDetailBean.getNickname()
+                , groupChatDetailBean.getHeadImg()
+                , groupChatDetailBean.getHeadImgSmall()
+                , groupChatDetailBean.getNicknameDefault()
+                , groupChatDetailBean.getNicknameInGroupChat()
+                , groupChatDetailBean.getTop()
+                , groupChatDetailBean.getDoNotDisturb()
+                , groupChatDetailBean.getShowGroupChatMemberNickname()
+                , groupChatDetailBean.getMemberCount());
         if (groupChatStatusBean.getStatus() == GroupChatStatus.ADD.getValue()) {
-            mGroupChatManager.getCache().put(groupChatBean.getId(), groupChatBean);
+            mGroupChatManager.getCache().put(groupChatDetailBean.getId(), groupChatBean);
 
             // 创建群聊提示信息的系统消息
             MessageBean m = MessageBean.createGroupChatStatusMessage(groupChatStatusBean.getFromUser().getId()
-                    , groupChatBean.getId()
+                    , groupChatDetailBean.getId()
                     , groupChatStatusBean);
             m.setType(MessageType.GROUP_CHAT.getValue());
             handleMessage(m);
 
             for (IOnGroupChatStatusListener onGroupChatStatusListener : mOnGroupChatStatusListenerList) {
-                onGroupChatStatusListener.add(groupChatBean, groupChatStatusBean.getFromUser(), groupChatStatusBean.getToUserList());
+                onGroupChatStatusListener.add(groupChatDetailBean, groupChatStatusBean.getFromUser(), groupChatStatusBean.getToUserList());
             }
         } else if (groupChatStatusBean.getStatus() == GroupChatStatus.DELETE.getValue()) {
             // 创建群聊提示信息的系统消息
             MessageBean m = MessageBean.createGroupChatStatusMessage(groupChatStatusBean.getFromUser().getId()
-                    , groupChatBean.getId()
+                    , groupChatDetailBean.getId()
                     , groupChatStatusBean);
             m.setType(MessageType.GROUP_CHAT.getValue());
             handleMessage(m);
 
             for (IOnGroupChatStatusListener onGroupChatStatusListener : mOnGroupChatStatusListenerList) {
-                onGroupChatStatusListener.delete(groupChatBean, groupChatStatusBean.getFromUser(), groupChatStatusBean.getToUserList());
+                onGroupChatStatusListener.delete(groupChatDetailBean, groupChatStatusBean.getFromUser(), groupChatStatusBean.getToUserList());
             }
         } else if (groupChatStatusBean.getStatus() == GroupChatStatus.OTHER_ADD.getValue()) {
             for (UserDetailBean userDetailBean : groupChatStatusBean.getToUserList()) {
                 // 存群成员到缓存中
-                mGroupChatMemberManager.put(groupChatBean.getId(), userDetailBean);
+                mGroupChatMemberManager.put(groupChatDetailBean.getId(), userDetailBean);
             }
 
             // 创建群聊提示信息的系统消息
             MessageBean m = MessageBean.createGroupChatStatusMessage(groupChatStatusBean.getFromUser().getId()
-                    , groupChatBean.getId()
+                    , groupChatDetailBean.getId()
                     , groupChatStatusBean);
             m.setType(MessageType.GROUP_CHAT.getValue());
             handleMessage(m);
 
             for (IOnGroupChatStatusListener onGroupChatStatusListener : mOnGroupChatStatusListenerList) {
-                onGroupChatStatusListener.otherAdd(groupChatBean, groupChatStatusBean.getFromUser(), groupChatStatusBean.getToUserList());
+                onGroupChatStatusListener.otherAdd(groupChatDetailBean, groupChatStatusBean.getFromUser(), groupChatStatusBean.getToUserList());
             }
         } else if (groupChatStatusBean.getStatus() == GroupChatStatus.OTHER_DELETE.getValue()) {
             for (UserDetailBean userDetailBean : groupChatStatusBean.getToUserList()) {
                 // 删除群成员缓存
-                mGroupChatMemberManager.remove(groupChatBean.getId(), userDetailBean);
+                mGroupChatMemberManager.remove(groupChatDetailBean.getId(), userDetailBean);
             }
 
             // 创建群聊提示信息的系统消息
             MessageBean m = MessageBean.createGroupChatStatusMessage(groupChatStatusBean.getFromUser().getId()
-                    , groupChatBean.getId()
+                    , groupChatDetailBean.getId()
                     , groupChatStatusBean);
             m.setType(MessageType.GROUP_CHAT.getValue());
             handleMessage(m);
 
             for (IOnGroupChatStatusListener onGroupChatStatusListener : mOnGroupChatStatusListenerList) {
-                onGroupChatStatusListener.otherDelete(groupChatBean, groupChatStatusBean.getFromUser(), groupChatStatusBean.getToUserList());
+                onGroupChatStatusListener.otherDelete(groupChatDetailBean, groupChatStatusBean.getFromUser(), groupChatStatusBean.getToUserList());
             }
         } else if (groupChatStatusBean.getStatus() == GroupChatStatus.NICKNAME_CHANGED.getValue()) {
             // 创建群聊提示信息的系统消息
             MessageBean m = MessageBean.createGroupChatStatusMessage(groupChatStatusBean.getFromUser().getId()
-                    , groupChatBean.getId()
+                    , groupChatDetailBean.getId()
                     , groupChatStatusBean);
             m.setType(MessageType.GROUP_CHAT.getValue());
             handleMessage(m);
 
             for (IOnGroupChatStatusListener onGroupChatStatusListener : mOnGroupChatStatusListenerList) {
-                onGroupChatStatusListener.nicknameChanged(groupChatBean, groupChatStatusBean.getFromUser(), groupChatStatusBean.getToUserList());
+                onGroupChatStatusListener.nicknameChanged(groupChatDetailBean, groupChatStatusBean.getFromUser(), groupChatStatusBean.getToUserList());
             }
         }
     }

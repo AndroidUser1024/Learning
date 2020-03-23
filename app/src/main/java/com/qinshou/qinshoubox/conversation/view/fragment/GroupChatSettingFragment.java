@@ -17,7 +17,7 @@ import com.qinshou.commonmodule.widget.TitleBar;
 import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
-import com.qinshou.qinshoubox.conversation.bean.GroupChatDetailBean;
+import com.qinshou.qinshoubox.im.bean.GroupChatDetailBean;
 import com.qinshou.qinshoubox.conversation.contract.IGroupChatSettingContract;
 import com.qinshou.qinshoubox.conversation.enums.GroupChatMemberFunction;
 import com.qinshou.qinshoubox.conversation.presenter.GroupChatSettingPresenter;
@@ -108,25 +108,25 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
     };
     private IOnGroupChatStatusListener mOnGroupChatStatusListener = new IOnGroupChatStatusListener() {
         @Override
-        public void add(GroupChatBean groupChat, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
+        public void add(GroupChatDetailBean groupChat, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
         }
 
         @Override
-        public void delete(GroupChatBean groupChat, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
+        public void delete(GroupChatDetailBean groupChat, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
         }
 
         @Override
-        public void otherAdd(GroupChatBean groupChat, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
+        public void otherAdd(GroupChatDetailBean groupChat, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
             getPresenter().getGroupChatDetail(groupChat.getId());
         }
 
         @Override
-        public void otherDelete(GroupChatBean groupChat, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
+        public void otherDelete(GroupChatDetailBean groupChat, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
             getPresenter().getGroupChatDetail(groupChat.getId());
         }
 
         @Override
-        public void nicknameChanged(GroupChatBean groupChat, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
+        public void nicknameChanged(GroupChatDetailBean groupChat, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
 
         }
     };

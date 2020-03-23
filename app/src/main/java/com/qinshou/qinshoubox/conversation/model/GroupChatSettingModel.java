@@ -1,12 +1,10 @@
 package com.qinshou.qinshoubox.conversation.model;
 
-import com.qinshou.okhttphelper.callback.Callback;
-import com.qinshou.qinshoubox.conversation.bean.GroupChatDetailBean;
+import com.qinshou.qinshoubox.im.bean.GroupChatDetailBean;
 import com.qinshou.qinshoubox.conversation.contract.IGroupChatSettingContract;
 import com.qinshou.qinshoubox.conversation.view.fragment.GroupChatSettingFragment;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
-import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 
 
 /**

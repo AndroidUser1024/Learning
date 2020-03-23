@@ -7,7 +7,7 @@ import com.qinshou.okhttphelper.annotation.Post;
 import com.qinshou.okhttphelper.call.AbsCall;
 import com.qinshou.okhttphelper.enums.LogLevel;
 import com.qinshou.qinshoubox.constant.IUrlConstant;
-import com.qinshou.qinshoubox.conversation.bean.GroupChatDetailBean;
+import com.qinshou.qinshoubox.im.bean.GroupChatDetailBean;
 import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.homepage.bean.QinshouResultBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;

@@ -1,6 +1,4 @@
-package com.qinshou.qinshoubox.conversation.bean;
-
-import com.qinshou.qinshoubox.im.bean.UserDetailBean;
+package com.qinshou.qinshoubox.im.bean;
 
 import java.util.List;
 
@@ -35,10 +33,6 @@ public class GroupChatDetailBean {
      */
     private String nicknameDefault;
     /**
-     * 群成员,前 15 个
-     */
-    private List<UserDetailBean> memberList;
-    /**
      * 在本群中的昵称
      */
     private String nicknameInGroupChat;
@@ -58,6 +52,10 @@ public class GroupChatDetailBean {
      * 群成员个数
      */
     private int memberCount;
+    /**
+     * 群成员,前 15 个
+     */
+    private List<UserDetailBean> memberList;
 
     public GroupChatDetailBean() {
     }
@@ -71,12 +69,12 @@ public class GroupChatDetailBean {
                 ", headImg='" + headImg + '\'' +
                 ", headImgSmall='" + headImgSmall + '\'' +
                 ", nicknameDefault='" + nicknameDefault + '\'' +
-                ", memberList=" + memberList +
                 ", nicknameInGroupChat='" + nicknameInGroupChat + '\'' +
                 ", top=" + top +
                 ", doNotDisturb=" + doNotDisturb +
                 ", showGroupChatMemberNickname=" + showGroupChatMemberNickname +
                 ", memberCount=" + memberCount +
+                ", memberList=" + memberList +
                 '}';
     }
 
@@ -128,14 +126,6 @@ public class GroupChatDetailBean {
         this.nicknameDefault = nicknameDefault;
     }
 
-    public List<UserDetailBean> getMemberList() {
-        return memberList;
-    }
-
-    public void setMemberList(List<UserDetailBean> memberList) {
-        this.memberList = memberList;
-    }
-
     public String getNicknameInGroupChat() {
         return nicknameInGroupChat;
     }
@@ -174,5 +164,13 @@ public class GroupChatDetailBean {
 
     public void setMemberCount(int memberCount) {
         this.memberCount = memberCount;
+    }
+
+    public List<UserDetailBean> getMemberList() {
+        return memberList;
+    }
+
+    public void setMemberList(List<UserDetailBean> memberList) {
+        this.memberList = memberList;
     }
 }

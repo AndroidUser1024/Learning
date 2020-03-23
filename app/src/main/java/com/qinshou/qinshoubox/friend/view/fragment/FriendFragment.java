@@ -20,7 +20,7 @@ import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.constant.IConstant;
-import com.qinshou.qinshoubox.conversation.bean.GroupChatDetailBean;
+import com.qinshou.qinshoubox.im.bean.GroupChatDetailBean;
 import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.friend.contract.IFriendContract;
 import com.qinshou.qinshoubox.friend.presenter.FriendPresenter;
@@ -121,29 +121,29 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
      */
     private IOnGroupChatStatusListener mOnGroupChatStatusListener = new IOnGroupChatStatusListener() {
         @Override
-        public void add(GroupChatBean groupChat, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
+        public void add(GroupChatDetailBean groupChat, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
             ShowLogUtil.logi("add" + " : " + "groupChat--->" + groupChat + ",fromUser--->" + fromUser + ",toUserList--->" + toUserList);
             getPresenter().getMyGroupChatList();
         }
 
         @Override
-        public void delete(GroupChatBean groupChat, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
+        public void delete(GroupChatDetailBean groupChat, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
             ShowLogUtil.logi("delete" + " : " + "groupChat--->" + groupChat + ",fromUser--->" + fromUser + ",toUserList--->" + toUserList);
             getPresenter().getMyGroupChatList();
         }
 
         @Override
-        public void otherAdd(GroupChatBean groupChat, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
+        public void otherAdd(GroupChatDetailBean groupChat, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
             ShowLogUtil.logi("otherAdd" + " : " + "groupChat--->" + groupChat + ",fromUser--->" + fromUser + ",toUserList--->" + toUserList);
         }
 
         @Override
-        public void otherDelete(GroupChatBean groupChat, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
+        public void otherDelete(GroupChatDetailBean groupChat, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
             ShowLogUtil.logi("otherDelete" + " : " + "groupChat--->" + groupChat + ",fromUser--->" + fromUser + ",toUserList--->" + toUserList);
         }
 
         @Override
-        public void nicknameChanged(GroupChatBean groupChat, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
+        public void nicknameChanged(GroupChatDetailBean groupChat, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
             ShowLogUtil.logi("nicknameChanged" + " : " + "groupChat--->" + groupChat + ",fromUser--->" + fromUser + ",toUserList--->" + toUserList);
             getPresenter().getMyGroupChatList();
         }

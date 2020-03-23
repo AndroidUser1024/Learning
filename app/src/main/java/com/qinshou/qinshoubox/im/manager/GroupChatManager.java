@@ -2,14 +2,13 @@ package com.qinshou.qinshoubox.im.manager;
 
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.okhttphelper.callback.Callback;
-import com.qinshou.qinshoubox.conversation.bean.GroupChatDetailBean;
+import com.qinshou.qinshoubox.im.bean.GroupChatDetailBean;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.cache.GroupChatDatabaseCache;
 import com.qinshou.qinshoubox.im.cache.GroupChatDoubleCache;
 import com.qinshou.qinshoubox.im.cache.MemoryCache;
-import com.qinshou.qinshoubox.im.listener.IOnGroupChatStatusListener;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.listener.FailureRunnable;
 import com.qinshou.qinshoubox.listener.SuccessRunnable;
