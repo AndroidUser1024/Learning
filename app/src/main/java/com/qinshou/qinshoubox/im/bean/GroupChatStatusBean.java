@@ -1,5 +1,7 @@
 package com.qinshou.qinshoubox.im.bean;
 
+import com.qinshou.qinshoubox.conversation.bean.GroupChatDetailBean;
+
 import java.util.List;
 
 /**
@@ -16,11 +18,7 @@ public class GroupChatStatusBean {
     /**
      * 目标群聊 id
      */
-    private String groupChatId;
-    /**
-     * 目标群聊 id
-     */
-    private String groupChatNickname;
+    private GroupChatBean groupChat;
     /**
      * 发起该操作的人
      */
@@ -37,8 +35,7 @@ public class GroupChatStatusBean {
     public String toString() {
         return "GroupChatStatusBean{" +
                 "status=" + status +
-                ", groupChatId='" + groupChatId + '\'' +
-                ", groupChatNickname='" + groupChatNickname + '\'' +
+                ", groupChat=" + groupChat +
                 ", fromUser=" + fromUser +
                 ", toUserList=" + toUserList +
                 '}';
@@ -52,20 +49,12 @@ public class GroupChatStatusBean {
         this.status = status;
     }
 
-    public String getGroupChatId() {
-        return groupChatId;
+    public GroupChatBean getGroupChat() {
+        return groupChat;
     }
 
-    public void setGroupChatId(String groupChatId) {
-        this.groupChatId = groupChatId;
-    }
-
-    public String getGroupChatNickname() {
-        return groupChatNickname;
-    }
-
-    public void setGroupChatNickname(String groupChatNickname) {
-        this.groupChatNickname = groupChatNickname;
+    public void setGroupChat(GroupChatBean groupChat) {
+        this.groupChat = groupChat;
     }
 
     public UserDetailBean getFromUser() {

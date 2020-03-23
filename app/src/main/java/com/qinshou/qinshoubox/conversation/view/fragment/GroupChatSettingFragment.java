@@ -25,6 +25,7 @@ import com.qinshou.qinshoubox.conversation.view.adapter.RcvGroupChatMemberAdapte
 import com.qinshou.qinshoubox.conversation.view.dialog.ClearChatHistoryDialog;
 import com.qinshou.qinshoubox.conversation.view.dialog.ExitGroupChatDialog;
 import com.qinshou.qinshoubox.im.IMClient;
+import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.friend.view.fragment.UserDetailFragment;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
@@ -107,25 +108,25 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
     };
     private IOnGroupChatStatusListener mOnGroupChatStatusListener = new IOnGroupChatStatusListener() {
         @Override
-        public void add(String groupChatId, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
+        public void add(GroupChatBean groupChat, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
         }
 
         @Override
-        public void delete(String groupChatId, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
+        public void delete(GroupChatBean groupChat, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
         }
 
         @Override
-        public void otherAdd(String groupChatId, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
-            getPresenter().getGroupChatDetail(mGroupChatDetailBean.getId());
+        public void otherAdd(GroupChatBean groupChat, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
+            getPresenter().getGroupChatDetail(groupChat.getId());
         }
 
         @Override
-        public void otherDelete(String groupChatId, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
-            getPresenter().getGroupChatDetail(mGroupChatDetailBean.getId());
+        public void otherDelete(GroupChatBean groupChat, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
+            getPresenter().getGroupChatDetail(groupChat.getId());
         }
 
         @Override
-        public void nicknameChanged(String groupChatId, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
+        public void nicknameChanged(GroupChatBean groupChat, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
 
         }
     };

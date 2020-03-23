@@ -1,17 +1,13 @@
 package com.qinshou.qinshoubox.conversation.model;
 
 
-import com.qinshou.qinshoubox.conversation.bean.UploadImgResultBean;
-import com.qinshou.qinshoubox.conversation.bean.UploadResultBean;
-import com.qinshou.qinshoubox.conversation.bean.UploadVoiceResultBean;
+import com.qinshou.qinshoubox.conversation.contract.IChatContract;
+import com.qinshou.qinshoubox.conversation.view.activity.ChatActivity;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.enums.MessageType;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
-import com.qinshou.qinshoubox.conversation.contract.IChatContract;
-import com.qinshou.qinshoubox.conversation.view.activity.ChatActivity;
 
-import java.io.File;
 import java.util.Collections;
 import java.util.List;
 

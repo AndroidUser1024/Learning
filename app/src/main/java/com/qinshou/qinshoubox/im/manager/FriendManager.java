@@ -4,12 +4,14 @@ import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.friend.bean.FriendHistoryBean;
 import com.qinshou.qinshoubox.im.IMClient;
+import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.FriendStatusBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.cache.FriendDatabaseCache;
 import com.qinshou.qinshoubox.im.cache.FriendDoubleCache;
 import com.qinshou.qinshoubox.im.cache.MemoryCache;
+import com.qinshou.qinshoubox.im.enums.FriendRelStatus;
 import com.qinshou.qinshoubox.im.enums.FriendStatus;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.listener.FailureRunnable;
@@ -131,28 +133,29 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
                 .enqueue(new Callback<Object>() {
                     @Override
                     public void onSuccess(Object data) {
-                        getInfo(toUserId, new QSCallback<UserDetailBean>() {
+                        getExecutorService().submit(new Runnable() {
                             @Override
-                            public void onSuccess(UserDetailBean data) {
+                            public void run() {
+                                UserDetailBean userDetailBean = new UserDetailBean();
+                                userDetailBean.setId(toUserId);
+                                userDetailBean.setStatus(FriendRelStatus.BOTH.getValue());
+                                userDetailBean.setRemark(remark);
+                                // 存到缓存
+                                getCache().put(userDetailBean.getId(), userDetailBean);
+                                getHandler().post(new SuccessRunnable<>(qsCallback, data));
+
                                 FriendStatusBean friendStatusBean = new FriendStatusBean();
                                 friendStatusBean.setStatus(FriendStatus.AGREE_ADD.getValue());
                                 // 创建已经是好友的提示信息的系统消息
                                 MessageBean messageBean = MessageBean.createChatSystemMessage(toUserId, userId, friendStatusBean);
-                                ShowLogUtil.logi("messageBean--->" + messageBean);
                                 IMClient.SINGLETON.handleMessage(messageBean);
-                                qsCallback.onSuccess(data);
-                            }
-
-                            @Override
-                            public void onFailure(Exception e) {
-
                             }
                         });
                     }
 
                     @Override
                     public void onFailure(Exception e) {
-
+                        qsCallback.onFailure(e);
                     }
                 });
     }
@@ -173,7 +176,7 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
                     @Override
                     public void onSuccess(Object data) {
                         ConversationManager conversationManager = IMClient.SINGLETON.getConversationManager();
-//                        ConversationBean conversationBean = conversationManager.getByTypeAndToUserId(MessageType.CHAT.getValue(), toUserId);
+//                        ConversationBean conversationBean = conversationManager.selectByTypeAndToUserId(MessageType.CHAT.getValue(), toUserId);
 //                        if (conversationBean != null) {
 ////                            conversationManager.deleteById(conversationBean.getId());
 //                        }

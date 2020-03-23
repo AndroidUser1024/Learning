@@ -21,6 +21,10 @@ public class GroupChatMemberManager extends AbsManager<String, UserDetailBean> {
         getCache().put(groupChatId + "_" + userDetailBean.getId(), userDetailBean);
     }
 
+    public void remove(String groupChatId, UserDetailBean userDetailBean) {
+        getCache().remove(groupChatId + "_" + userDetailBean.getId());
+    }
+
     public UserDetailBean getByGroupChatIdAndUserId(String groupChatId, String userId) {
         return getCache().get(groupChatId + "_" + userId);
     }

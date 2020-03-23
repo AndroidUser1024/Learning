@@ -47,7 +47,6 @@ public class GroupChatMemberDatabaseCache extends AbsDatabaseCache<String, UserD
         GroupChatMemberBean groupChatMemberBean = new GroupChatMemberBean();
         groupChatMemberBean.setGroupChatId(groupChatId);
         groupChatMemberBean.setUserId(userId);
-        groupChatMemberBean.setStatus(1);
         groupChatMemberBean.setNicknameInGroupChat(value.getNicknameInGroupChat());
 
         List<Map<String, Object>> list = DatabaseManager.getInstance().rawQuery("SELECT" +
@@ -90,7 +89,6 @@ public class GroupChatMemberDatabaseCache extends AbsDatabaseCache<String, UserD
                 .equal("userId", userId)
                 .build());
         if (groupChatMemberBean != null) {
-            userDetailBean.setStatus(groupChatMemberBean.getStatus());
             userDetailBean.setNicknameInGroupChat(groupChatMemberBean.getNicknameInGroupChat());
         }
         return userDetailBean;
@@ -104,12 +102,11 @@ public class GroupChatMemberDatabaseCache extends AbsDatabaseCache<String, UserD
         }
         String groupChatId = split[0];
         String userId = split[1];
-        GroupChatMemberBean groupChatMemberBean = mGroupChatMemberDao.select(new Where.Builder()
+        mGroupChatMemberDao.delete(new Where.Builder()
                 .equal("groupChatId", groupChatId)
+                .and()
                 .equal("userId", userId)
                 .build());
-        groupChatMemberBean.setStatus(0);
-        mGroupChatMemberDao.update(groupChatMemberBean);
         return null;
     }
 

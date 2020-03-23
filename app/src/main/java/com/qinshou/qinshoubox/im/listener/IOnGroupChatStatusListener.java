@@ -1,5 +1,6 @@
 package com.qinshou.qinshoubox.im.listener;
 
+import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 
 import java.util.List;
@@ -11,13 +12,13 @@ import java.util.List;
  * Description:群状态监听器
  */
 public interface IOnGroupChatStatusListener {
-    void add(String groupChatId, UserDetailBean fromUser, List<UserDetailBean> toUserList);
+    void add(GroupChatBean groupChat, UserDetailBean fromUser, List<UserDetailBean> toUserList);
 
-    void delete(String groupChatId, UserDetailBean fromUser, List<UserDetailBean> toUserList);
+    void delete(GroupChatBean groupChat, UserDetailBean fromUser, List<UserDetailBean> toUserList);
 
-    void otherAdd(String groupChatId, UserDetailBean fromUser, List<UserDetailBean> toUserList);
+    void otherAdd(GroupChatBean groupChat, UserDetailBean fromUser, List<UserDetailBean> toUserList);
 
-    void otherDelete(String groupChatId, UserDetailBean fromUser, List<UserDetailBean> toUserList);
+    void otherDelete(GroupChatBean groupChat, UserDetailBean fromUser, List<UserDetailBean> toUserList);
 
-    void nicknameChanged(String groupChatId, UserDetailBean fromUser, List<UserDetailBean> toUserList);
+    void nicknameChanged(GroupChatBean groupChat, UserDetailBean fromUser, List<UserDetailBean> toUserList);
 }

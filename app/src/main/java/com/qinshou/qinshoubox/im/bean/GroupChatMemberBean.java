@@ -15,7 +15,7 @@ public class GroupChatMemberBean {
     /**
      * 自增长 id
      */
-    @Id(autoIncrement = true,useGeneratedKeys = true)
+    @Id(autoIncrement = true, useGeneratedKeys = true)
     @Column(type = Column.Type.INTEGER)
     private int id;
     /**
@@ -33,11 +33,6 @@ public class GroupChatMemberBean {
      */
     @Column
     private String nicknameInGroupChat;
-    /**
-     * 成员状态,0 已不在该群中,1 在群聊中
-     */
-    @Column(type = Column.Type.INTEGER)
-    private int status;
 
     public GroupChatMemberBean() {
     }
@@ -48,7 +43,6 @@ public class GroupChatMemberBean {
                 "groupChatId='" + groupChatId + '\'' +
                 ", userId='" + userId + '\'' +
                 ", nicknameInGroupChat='" + nicknameInGroupChat + '\'' +
-                ", status=" + status +
                 '}';
     }
 
@@ -74,13 +68,5 @@ public class GroupChatMemberBean {
 
     public void setNicknameInGroupChat(String nicknameInGroupChat) {
         this.nicknameInGroupChat = nicknameInGroupChat;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
     }
 }

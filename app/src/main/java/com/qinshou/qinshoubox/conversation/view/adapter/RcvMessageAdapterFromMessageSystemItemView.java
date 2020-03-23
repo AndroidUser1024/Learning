@@ -202,35 +202,24 @@ public class RcvMessageAdapterFromMessageSystemItemView extends AbsRcvMessageAda
     }
 
     private void showGroupChatNicknameChangedUI(BaseViewHolder baseViewHolder, GroupChatStatusBean groupChatStatusBean) {
-        IMClient.SINGLETON.getGroupChatManager().getDetail(groupChatStatusBean.getGroupChatId(), new QSCallback<GroupChatDetailBean>() {
-            @Override
-            public void onSuccess(GroupChatDetailBean data) {
-                StringBuilder stringBuilder = new StringBuilder();
-                UserDetailBean fromUser = groupChatStatusBean.getFromUser();
-                // 操作人如果是自己,显示你
-                if (TextUtils.equals(fromUser.getId(), UserStatusManager.SINGLETON.getUserBean().getId())) {
-                    stringBuilder.append("你");
-                } else {
-                    // 操作人是别人,优先显示备注,然后是群昵称,然后是昵称
-                    if (!TextUtils.isEmpty(fromUser.getRemark())) {
-                        stringBuilder.append(fromUser.getRemark());
-                    } else if (!TextUtils.isEmpty(fromUser.getNicknameInGroupChat())) {
-                        stringBuilder.append(fromUser.getNicknameInGroupChat());
-                    } else {
-                        stringBuilder.append(fromUser.getNickname());
-                    }
-                }
-                stringBuilder.append("修改群名为\"")
-                        .append(groupChatStatusBean.getGroupChatNickname())
-                        .append("\"");
-                baseViewHolder.setTvText(R.id.tv_content, stringBuilder);
+        StringBuilder stringBuilder = new StringBuilder();
+        UserDetailBean fromUser = groupChatStatusBean.getFromUser();
+        // 操作人如果是自己,显示你
+        if (TextUtils.equals(fromUser.getId(), UserStatusManager.SINGLETON.getUserBean().getId())) {
+            stringBuilder.append("你");
+        } else {
+            // 操作人是别人,优先显示备注,然后是群昵称,然后是昵称
+            if (!TextUtils.isEmpty(fromUser.getRemark())) {
+                stringBuilder.append(fromUser.getRemark());
+            } else if (!TextUtils.isEmpty(fromUser.getNicknameInGroupChat())) {
+                stringBuilder.append(fromUser.getNicknameInGroupChat());
+            } else {
+                stringBuilder.append(fromUser.getNickname());
             }
-
-            @Override
-            public void onFailure(Exception e) {
-
-            }
-        });
-
+        }
+        stringBuilder.append("修改群名为\"")
+                .append(groupChatStatusBean.getGroupChat().getNickname())
+                .append("\"");
+        baseViewHolder.setTvText(R.id.tv_content, stringBuilder);
     }
 }

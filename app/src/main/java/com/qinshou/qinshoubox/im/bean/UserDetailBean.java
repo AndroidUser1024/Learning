@@ -69,8 +69,6 @@ public class UserDetailBean {
      * 2: 你是对方好友,但对方不是你好友
      * 3: 互为好友
      * <p>
-     * status 表示群聊关系时
-     * 0 表示已不在该群聊中,1 表示在群聊中
      */
     private int status;
     /**

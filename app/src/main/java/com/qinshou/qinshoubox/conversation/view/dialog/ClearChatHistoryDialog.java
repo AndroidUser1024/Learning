@@ -60,11 +60,9 @@ public class ClearChatHistoryDialog extends AbsDialogFragment {
                     return;
                 }
                 Toast.makeText(getContext(), getString(R.string.chat_setting_toast_clear_chat_history_success_text), Toast.LENGTH_SHORT).show();
-                // 刷新消息列表
-                EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_MESSAGE_LIST, null));
-                // 刷新会话列表
-                ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().getByTypeAndToUserId(messageType.getValue(), toUserId);
-                EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_LIST, conversationBean));
+                // 发送事件,更新聊天界面和会话界面 UI
+                ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().selectByTypeAndToUserId(messageType.getValue(), toUserId);
+                EventBus.getDefault().post(new EventBean<>(EventBean.Type.CLEAR_CHAT_HISTORY, conversationBean));
                 // 对话框消失
                 dismiss();
             }
@@ -91,7 +89,6 @@ public class ClearChatHistoryDialog extends AbsDialogFragment {
         }
         return dialog;
     }
-
 
     public static ClearChatHistoryDialog newInstance(MessageType messageType, String toUsername, String toNickname) {
         Bundle bundle = new Bundle();

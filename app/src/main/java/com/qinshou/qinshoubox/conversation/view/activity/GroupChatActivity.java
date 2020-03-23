@@ -355,7 +355,7 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
             rcvMessageScrollToLast();
 
             // 重置未读数
-            ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().getByTypeAndToUserId(MessageType.GROUP_CHAT.getValue(), mGroupChatId);
+            ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().selectByTypeAndToUserId(MessageType.GROUP_CHAT.getValue(), mGroupChatId);
             if (conversationBean != null) {
                 IMClient.SINGLETON.getConversationManager().setUnreadCount(0, conversationBean.getId());
                 // 通知会话列表刷新未读数
@@ -372,7 +372,7 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
         public void onSending(MessageBean messageBean) {
             ShowLogUtil.logi("onSending: pid--->" + messageBean.getPid() + ",id--->" + messageBean.getId());
             // 更新会话列表
-            ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().getByTypeAndToUserId(messageBean.getType(), messageBean.getToUserId());
+            ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().selectByTypeAndToUserId(messageBean.getType(), messageBean.getToUserId());
             EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_LIST, conversationBean));
         }
 
@@ -388,7 +388,7 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
                 }
             }
             // 更新会话列表
-            ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().getByTypeAndToUserId(messageBean.getType(), messageBean.getToUserId());
+            ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().selectByTypeAndToUserId(messageBean.getType(), messageBean.getToUserId());
             EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_LIST, conversationBean));
         }
 
@@ -404,7 +404,7 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
                 }
             }
             // 更新会话列表
-            ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().getByTypeAndToUserId(messageBean.getType(), messageBean.getToUserId());
+            ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().selectByTypeAndToUserId(messageBean.getType(), messageBean.getToUserId());
             EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_LIST, conversationBean));
         }
     };
@@ -569,6 +569,7 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
                     ? groupChatBean.getNicknameDefault()
                     : groupChatBean.getNickname());
         } else if (eventBean.getType() == EventBean.Type.REFRESH_MESSAGE_LIST) {
+        } else if (eventBean.getType() == EventBean.Type.CLEAR_CHAT_HISTORY) {
             // 清空列表
             mRcvMessageAdapter.setDataList(new ArrayList<MessageBean>());
         }

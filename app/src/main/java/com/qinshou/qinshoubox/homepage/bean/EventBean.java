@@ -59,5 +59,9 @@ public class EventBean<T> {
          * 更新好友申请历史未读数
          */
         REFRESH_FRIEND_HISTORY_UNREAD_COUNT,
+        /**
+         * 清空聊天历史
+         */
+        CLEAR_CHAT_HISTORY,
     }
 }

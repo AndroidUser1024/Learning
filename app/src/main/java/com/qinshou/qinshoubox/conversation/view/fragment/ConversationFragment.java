@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -56,8 +57,7 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
             } else if (messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
                 toUserId = messageBean.getToUserId();
             }
-            ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().getByTypeAndToUserId(messageBean.getType(), toUserId);
-            ShowLogUtil.logi("conversationBean--->" + conversationBean);
+            ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().selectByTypeAndToUserId(messageBean.getType(), toUserId);
             if (conversationBean == null) {
                 return;
             }
@@ -150,6 +150,8 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
                 // 更新未读数
                 updateUnreadCount();
             }
+        } else if (eventBean.getType() == EventBean.Type.CLEAR_CHAT_HISTORY) {
+            clearChatHistory((ConversationBean) eventBean.getData());
         }
     }
 
@@ -251,6 +253,27 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
             mTvUnreadCountInTlMain.setText("" + totalUnreadCount);
         } else {
             mTvUnreadCountInTlMain.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2020/3/23 16:45
+     * Description:清空聊天历史
+     *
+     * @param data 目标会话
+     */
+    private void clearChatHistory(ConversationBean data) {
+        List<ConversationBean> conversationBeanList = mRcvConversationAdapter.getDataList();
+        for (int i = 0; i < conversationBeanList.size(); i++) {
+            ConversationBean conversationBean = conversationBeanList.get(i);
+            if (conversationBean.getType() == data.getType() && TextUtils.equals(conversationBean.getToUserId(), data.getToUserId())) {
+                conversationBean.setLastMsgContent("");
+                conversationBean.setLastMsgPid(0);
+                mRcvConversationAdapter.notifyItemChanged(i);
+                break;
+            }
         }
     }
 }
