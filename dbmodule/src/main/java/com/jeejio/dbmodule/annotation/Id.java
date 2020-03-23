@@ -15,4 +15,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Id {
     boolean autoIncrement() default false;
+
+    boolean useGeneratedKeys() default false;
 }

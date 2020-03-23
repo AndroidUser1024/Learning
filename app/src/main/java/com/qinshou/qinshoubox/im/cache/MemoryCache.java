@@ -23,7 +23,6 @@ public class MemoryCache<K, V> implements ICache<K, V> {
 
     @Override
     public void put(K key, V value) {
-        ShowLogUtil.logi("存,key--->" + key + ",value--->" + value);
         mLruCache.put(key, value);
     }
 

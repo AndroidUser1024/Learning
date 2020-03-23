@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.jeejio.dbmodule.DatabaseManager;
+import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.okhttphelper.callback.AbsDownloadCallback;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.bean.ImgBean;
@@ -71,8 +72,8 @@ public enum IMClient {
     private static final String TAG = "IMClient";
     private final int TIME_OUT = 10 * 1000;
     //    private static final String URL = "ws://www.mrqinshou.com:10086/websocket";
-//    private static final String URL = "ws://172.16.60.231:10086/websocket";
-        private static final String URL = "ws://192.168.1.109:10086/websocket";
+    private static final String URL = "ws://172.16.60.231:10086/websocket";
+    //        private static final String URL = "ws://192.168.1.109:10086/websocket";
 //    private static final String URL = "ws://192.168.31.199:10086/websocket";
     private Context mContext;
     private WebSocket mWebSocket;
@@ -251,8 +252,8 @@ public enum IMClient {
             // 存到缓存
             mFriendManager.getCache().put(friendStatusBean.getFromUser().getId(), friendStatusBean.getFromUser());
 //            // 创建已经是好友的提示信息的系统消息
-//            MessageBean m = MessageBean.createChatSystemMessage(friendStatusBean.getFromUser().getId(), mUserDetailBean.getId(), friendStatusBean);
-//            handleMessage(m);
+            MessageBean m = MessageBean.createChatSystemMessage(friendStatusBean.getFromUser().getId(), mUserDetailBean.getId(), friendStatusBean);
+            handleMessage(m);
         } else if (friendStatusBean.getStatus() == FriendStatus.REFUSE_ADD.getValue()) {
             for (IOnFriendStatusListener onFriendStatusListener : mOnFriendStatusListenerList) {
                 onFriendStatusListener.refuseAdd(friendStatusBean.getFromUser());
@@ -359,6 +360,8 @@ public enum IMClient {
         }
         conversationBean.setToUserId(toUserId);
         conversationBean.setType(messageBean.getType());
+        conversationBean.setLastMsgTimestamp(lastMsgTimestamp);
+        conversationBean.setLastMsgPid(messageBean.getPid());
         if (!send) {
             if (conversationBean.getUnreadCount() == -1) {
                 // 如果被标记过未读,则设置未读数为 1

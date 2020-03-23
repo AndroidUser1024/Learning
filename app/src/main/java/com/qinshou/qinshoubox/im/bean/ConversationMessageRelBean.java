@@ -16,7 +16,7 @@ public class ConversationMessageRelBean {
     /**
      * 自增长 id
      */
-    @Id(autoIncrement = true)
+    @Id(autoIncrement = true,useGeneratedKeys = true)
     @Column(type = Column.Type.INTEGER)
     private int id;
     /**

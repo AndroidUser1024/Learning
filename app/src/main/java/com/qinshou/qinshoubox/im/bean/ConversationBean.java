@@ -16,7 +16,7 @@ public class ConversationBean {
     /**
      * 自增长 Id
      */
-    @Id(autoIncrement = true)
+    @Id(autoIncrement = true, useGeneratedKeys = true)
     @Column(type = Column.Type.INTEGER)
     private int id;
     /**
@@ -25,15 +25,25 @@ public class ConversationBean {
     @Column(type = Column.Type.INTEGER)
     private int unreadCount;
     /**
+     * 会话类型
+     */
+    @Column(type = Column.Type.INTEGER)
+    private int type;
+    /**
      * 私聊就是对方的用户 id,群聊就是群的 id
      */
     @Column
     private String toUserId;
     /**
-     * 会话类型
+     * 最后一条消息的时间
+     */
+    @Column(type = Column.Type.LONG)
+    private long lastMsgTimestamp;
+    /**
+     * 最后一条消息的 pid
      */
     @Column(type = Column.Type.INTEGER)
-    private int type;
+    private int lastMsgPid;
     /**
      * 对方的小头像
      */
@@ -50,10 +60,6 @@ public class ConversationBean {
      * 最后一条消息的类型
      */
     private int lastMsgContentType;
-    /**
-     * 最后一条消息的时间
-     */
-    private long lastMsgTimestamp;
     /**
      * 是否置顶,0 是非置顶,1 是置顶
      */
@@ -75,13 +81,14 @@ public class ConversationBean {
         return "ConversationBean{" +
                 "id=" + id +
                 ", unreadCount=" + unreadCount +
-                ", toUserId='" + toUserId + '\'' +
                 ", type=" + type +
+                ", toUserId='" + toUserId + '\'' +
+                ", lastMsgTimestamp=" + lastMsgTimestamp +
+                ", lastMsgPid=" + lastMsgPid +
                 ", headImgSmall='" + headImgSmall + '\'' +
                 ", title='" + title + '\'' +
                 ", lastMsgContent='" + lastMsgContent + '\'' +
                 ", lastMsgContentType=" + lastMsgContentType +
-                ", lastMsgTimestamp=" + lastMsgTimestamp +
                 ", top=" + top +
                 ", doNotDisturb=" + doNotDisturb +
                 ", lastMsgStatus=" + lastMsgStatus +
@@ -104,6 +111,14 @@ public class ConversationBean {
         this.unreadCount = unreadCount;
     }
 
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
     public String getToUserId() {
         return toUserId;
     }
@@ -112,12 +127,20 @@ public class ConversationBean {
         this.toUserId = toUserId;
     }
 
-    public int getType() {
-        return type;
+    public long getLastMsgTimestamp() {
+        return lastMsgTimestamp;
     }
 
-    public void setType(int type) {
-        this.type = type;
+    public void setLastMsgTimestamp(long lastMsgTimestamp) {
+        this.lastMsgTimestamp = lastMsgTimestamp;
+    }
+
+    public int getLastMsgPid() {
+        return lastMsgPid;
+    }
+
+    public void setLastMsgPid(int lastMsgPid) {
+        this.lastMsgPid = lastMsgPid;
     }
 
     public String getHeadImgSmall() {
@@ -150,14 +173,6 @@ public class ConversationBean {
 
     public void setLastMsgContentType(int lastMsgContentType) {
         this.lastMsgContentType = lastMsgContentType;
-    }
-
-    public long getLastMsgTimestamp() {
-        return lastMsgTimestamp;
-    }
-
-    public void setLastMsgTimestamp(long lastMsgTimestamp) {
-        this.lastMsgTimestamp = lastMsgTimestamp;
     }
 
     public int getTop() {

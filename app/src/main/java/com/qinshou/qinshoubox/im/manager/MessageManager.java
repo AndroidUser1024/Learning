@@ -78,8 +78,8 @@ public class MessageManager {
             messageBean.setType((int) map.get("type"));
             messageBean.setContentType((int) map.get("contentType"));
             messageBean.setContent((String) map.get("content"));
-            messageBean.setSendTimestamp((long) map.get("sendTimestamp"));
-            messageBean.setReceiveTimestamp((long) map.get("receiveTimestamp"));
+            messageBean.setSendTimestamp((long) map.get("sendTimestamp_Long"));
+            messageBean.setReceiveTimestamp((long) map.get("receiveTimestamp_Long"));
             messageBean.setStatus((int) map.get("status"));
             messageBean.setExtend((String) map.get("extend"));
             messageBeanList.add(messageBean);

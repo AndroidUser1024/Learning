@@ -64,6 +64,10 @@ public class DefaultDaoImpl<T> implements IBaseDao<T> {
             mSQLiteDatabase.execSQL(sql);
 
             IdColumnInfoBean idColumnInfo = DatabaseManager.getInstance().getIdByClass(mClass);
+            // 如果不是自增长 id 或者不需要返回自增长 id,在这里就可以返回了
+            if (!idColumnInfo.isAutoIncrement() || !idColumnInfo.isUseGeneratedKeys()) {
+                return t;
+            }
             Field idField = mClass.getDeclaredField(idColumnInfo.getFieldName());
             if (!idField.isAccessible()) {
                 idField.setAccessible(true);
@@ -79,6 +83,7 @@ public class DefaultDaoImpl<T> implements IBaseDao<T> {
             }
         } catch (Exception e) {
             Log.e(TAG, "insert" + " : " + "mClass--->" + mClass + ",e--->" + e.getMessage());
+            e.printStackTrace();
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -176,10 +181,12 @@ public class DefaultDaoImpl<T> implements IBaseDao<T> {
                 if (!idField.isAccessible()) {
                     idField.setAccessible(true);
                 }
-                if (idColumnInfo.getType() == Column.Type.TEXT) {
-                    idField.set(t, cursor.getString(cursor.getColumnIndex(idColumnInfo.getColumnName())));
-                } else {
+                if (idColumnInfo.getType() == Column.Type.INTEGER) {
                     idField.set(t, cursor.getInt(cursor.getColumnIndex(idColumnInfo.getColumnName())));
+                } else if (idColumnInfo.getType() == Column.Type.LONG) {
+                    idField.set(t, cursor.getLong(cursor.getColumnIndex(idColumnInfo.getColumnName())));
+                } else {
+                    idField.set(t, cursor.getString(cursor.getColumnIndex(idColumnInfo.getColumnName())));
                 }
                 // 其余列
                 for (ColumnInfoBean columnInfoBean : DatabaseManager.getInstance().getColumnByClass(mClass)) {
@@ -187,10 +194,12 @@ public class DefaultDaoImpl<T> implements IBaseDao<T> {
                     if (!field.isAccessible()) {
                         field.setAccessible(true);
                     }
-                    if (columnInfoBean.getType() == Column.Type.TEXT) {
-                        field.set(t, cursor.getString(cursor.getColumnIndex(columnInfoBean.getColumnName())));
-                    } else {
+                    if (columnInfoBean.getType() == Column.Type.INTEGER) {
                         field.set(t, cursor.getInt(cursor.getColumnIndex(columnInfoBean.getColumnName())));
+                    } else if (columnInfoBean.getType() == Column.Type.LONG) {
+                        field.set(t, cursor.getLong(cursor.getColumnIndex(columnInfoBean.getColumnName())));
+                    } else {
+                        field.set(t, cursor.getString(cursor.getColumnIndex(columnInfoBean.getColumnName())));
                     }
                 }
             }
@@ -221,10 +230,12 @@ public class DefaultDaoImpl<T> implements IBaseDao<T> {
                 if (!idField.isAccessible()) {
                     idField.setAccessible(true);
                 }
-                if (idColumnInfo.getType() == Column.Type.TEXT) {
-                    idField.set(t, cursor.getString(cursor.getColumnIndex(idColumnInfo.getColumnName())));
-                } else {
+                if (idColumnInfo.getType() == Column.Type.INTEGER) {
                     idField.set(t, cursor.getInt(cursor.getColumnIndex(idColumnInfo.getColumnName())));
+                } else if (idColumnInfo.getType() == Column.Type.LONG) {
+                    idField.set(t, cursor.getLong(cursor.getColumnIndex(idColumnInfo.getColumnName())));
+                } else {
+                    idField.set(t, cursor.getString(cursor.getColumnIndex(idColumnInfo.getColumnName())));
                 }
                 // 其余列
                 for (ColumnInfoBean columnInfoBean : DatabaseManager.getInstance().getColumnByClass(mClass)) {
@@ -232,10 +243,12 @@ public class DefaultDaoImpl<T> implements IBaseDao<T> {
                     if (!field.isAccessible()) {
                         field.setAccessible(true);
                     }
-                    if (columnInfoBean.getType() == Column.Type.TEXT) {
-                        field.set(t, cursor.getString(cursor.getColumnIndex(columnInfoBean.getColumnName())));
-                    } else {
+                    if (columnInfoBean.getType() == Column.Type.INTEGER) {
                         field.set(t, cursor.getInt(cursor.getColumnIndex(columnInfoBean.getColumnName())));
+                    } else if (columnInfoBean.getType() == Column.Type.LONG) {
+                        field.set(t, cursor.getLong(cursor.getColumnIndex(columnInfoBean.getColumnName())));
+                    } else {
+                        field.set(t, cursor.getString(cursor.getColumnIndex(columnInfoBean.getColumnName())));
                     }
                 }
             }
@@ -264,10 +277,12 @@ public class DefaultDaoImpl<T> implements IBaseDao<T> {
                 if (!idField.isAccessible()) {
                     idField.setAccessible(true);
                 }
-                if (idColumnInfo.getType() == Column.Type.TEXT) {
-                    idField.set(t, cursor.getString(cursor.getColumnIndex(idColumnInfo.getColumnName())));
-                } else {
+                if (idColumnInfo.getType() == Column.Type.INTEGER) {
                     idField.set(t, cursor.getInt(cursor.getColumnIndex(idColumnInfo.getColumnName())));
+                } else if (idColumnInfo.getType() == Column.Type.LONG) {
+                    idField.set(t, cursor.getLong(cursor.getColumnIndex(idColumnInfo.getColumnName())));
+                } else {
+                    idField.set(t, cursor.getString(cursor.getColumnIndex(idColumnInfo.getColumnName())));
                 }
                 // 其余列
                 for (ColumnInfoBean columnInfoBean : DatabaseManager.getInstance().getColumnByClass(mClass)) {
@@ -275,10 +290,12 @@ public class DefaultDaoImpl<T> implements IBaseDao<T> {
                     if (!field.isAccessible()) {
                         field.setAccessible(true);
                     }
-                    if (columnInfoBean.getType() == Column.Type.TEXT) {
-                        field.set(t, cursor.getString(cursor.getColumnIndex(columnInfoBean.getColumnName())));
-                    } else {
+                    if (columnInfoBean.getType() == Column.Type.INTEGER) {
                         field.set(t, cursor.getInt(cursor.getColumnIndex(columnInfoBean.getColumnName())));
+                    } else if (columnInfoBean.getType() == Column.Type.LONG) {
+                        field.set(t, cursor.getLong(cursor.getColumnIndex(columnInfoBean.getColumnName())));
+                    } else {
+                        field.set(t, cursor.getString(cursor.getColumnIndex(columnInfoBean.getColumnName())));
                     }
                 }
                 tList.add(t);
@@ -308,10 +325,12 @@ public class DefaultDaoImpl<T> implements IBaseDao<T> {
                 if (!idField.isAccessible()) {
                     idField.setAccessible(true);
                 }
-                if (idColumnInfo.getType() == Column.Type.TEXT) {
-                    idField.set(t, cursor.getString(cursor.getColumnIndex(idColumnInfo.getColumnName())));
-                } else {
+                if (idColumnInfo.getType() == Column.Type.INTEGER) {
                     idField.set(t, cursor.getInt(cursor.getColumnIndex(idColumnInfo.getColumnName())));
+                } else if (idColumnInfo.getType() == Column.Type.LONG) {
+                    idField.set(t, cursor.getLong(cursor.getColumnIndex(idColumnInfo.getColumnName())));
+                } else {
+                    idField.set(t, cursor.getString(cursor.getColumnIndex(idColumnInfo.getColumnName())));
                 }
                 // 其余列
                 for (ColumnInfoBean columnInfoBean : DatabaseManager.getInstance().getColumnByClass(mClass)) {
@@ -319,10 +338,12 @@ public class DefaultDaoImpl<T> implements IBaseDao<T> {
                     if (!field.isAccessible()) {
                         field.setAccessible(true);
                     }
-                    if (columnInfoBean.getType() == Column.Type.TEXT) {
-                        field.set(t, cursor.getString(cursor.getColumnIndex(columnInfoBean.getColumnName())));
-                    } else {
+                    if (columnInfoBean.getType() == Column.Type.INTEGER) {
                         field.set(t, cursor.getInt(cursor.getColumnIndex(columnInfoBean.getColumnName())));
+                    } else if (columnInfoBean.getType() == Column.Type.LONG) {
+                        field.set(t, cursor.getLong(cursor.getColumnIndex(columnInfoBean.getColumnName())));
+                    } else {
+                        field.set(t, cursor.getString(cursor.getColumnIndex(columnInfoBean.getColumnName())));
                     }
                 }
                 tList.add(t);
@@ -349,7 +370,7 @@ public class DefaultDaoImpl<T> implements IBaseDao<T> {
                 .append(idColumnInfo.getTableName())
                 .append(" WHERE ");
         if (id instanceof String) {
-            sql.append(idColumnInfo.getColumnName()).append("=\"").append(id).append("\"");
+            sql.append(idColumnInfo.getColumnName()).append("=\'").append(id).append("\'");
         } else {
             sql.append(idColumnInfo.getColumnName()).append("=").append(id).append("");
         }

@@ -20,12 +20,12 @@ import java.util.Map;
  * Date: 2019/12/04 23:05
  * Description:消息实体类
  */
-@Table
+@Table(name = "message")
 public class MessageBean {
     /**
      * 自增长 id
      */
-    @Id(autoIncrement = true)
+    @Id(autoIncrement = true,useGeneratedKeys = true)
     @Column(type = Column.Type.INTEGER)
     private int pid;
     /**
@@ -61,12 +61,12 @@ public class MessageBean {
     /**
      * 发送时间戳
      */
-    @Column(type = Column.Type.INTEGER)
+    @Column(type = Column.Type.LONG)
     private long sendTimestamp;
     /**
      * 发送时间戳
      */
-    @Column(type = Column.Type.INTEGER)
+    @Column(type = Column.Type.LONG)
     private long receiveTimestamp;
     /**
      * 消息状态

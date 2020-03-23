@@ -105,7 +105,6 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
 
         @Override
         public void agreeAdd(UserDetailBean fromUser) {
-            ShowLogUtil.logi("agreeAdd--->" + fromUser);
             if (TextUtils.equals(fromUser.getId(), mUserDetailBean.getId())) {
                 // 监听到发起的添加请求被同意了,更新 UI
                 showFriendUI(mUserDetailBean);

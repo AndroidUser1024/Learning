@@ -88,7 +88,7 @@ public class SqlUtil {
             }
             Object value = field.get(obj);
             if (idColumnInfo.getType() == Column.Type.TEXT && value != null) {
-                columnValueList.add("\"" + value + "\"");
+                columnValueList.add("\'" + value + "\'");
             } else {
                 columnValueList.add(value);
             }
@@ -102,7 +102,7 @@ public class SqlUtil {
             }
             Object value = field.get(obj);
             if (columnInfoBean.getType() == Column.Type.TEXT && value != null) {
-                columnValueList.add("\"" + value + "\"");
+                columnValueList.add("\'" + value + "\'");
             } else {
                 columnValueList.add(value);
             }
@@ -175,7 +175,7 @@ public class SqlUtil {
             }
             Object value = field.get(obj);
             if (columnInfoBean.getType() == Column.Type.TEXT && value != null) {
-                sql.append(columnInfoBean.getColumnName()).append("=\"").append(value).append("\"").append(",");
+                sql.append(columnInfoBean.getColumnName()).append("=\'").append(value).append("\'").append(",");
             } else {
                 sql.append(columnInfoBean.getColumnName()).append("=").append(value).append(",");
             }

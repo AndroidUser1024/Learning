@@ -137,8 +137,9 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
                                 FriendStatusBean friendStatusBean = new FriendStatusBean();
                                 friendStatusBean.setStatus(FriendStatus.AGREE_ADD.getValue());
                                 // 创建已经是好友的提示信息的系统消息
-//                                MessageBean messageBean = MessageBean.createChatSystemMessage(toUserId, userId, friendStatusBean);
-//                                IMClient.SINGLETON.handleMessage(messageBean);
+                                MessageBean messageBean = MessageBean.createChatSystemMessage(toUserId, userId, friendStatusBean);
+                                ShowLogUtil.logi("messageBean--->" + messageBean);
+                                IMClient.SINGLETON.handleMessage(messageBean);
                                 qsCallback.onSuccess(data);
                             }
 

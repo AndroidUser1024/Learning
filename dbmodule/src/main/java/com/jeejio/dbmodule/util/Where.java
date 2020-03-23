@@ -24,7 +24,7 @@ public class Where implements QueryCondition {
 
         public Builder equal(String columnName, Object columnValue) {
             if (columnValue instanceof String) {
-                mStringBuilder.append(columnName).append("=\"").append(columnValue).append("\"");
+                mStringBuilder.append(columnName).append("=\'").append(columnValue).append("\'");
             } else {
                 mStringBuilder.append(columnName).append("=").append(columnValue).append("");
             }
@@ -33,7 +33,7 @@ public class Where implements QueryCondition {
 
         public Builder notEqual(String columnName, Object columnValue) {
             if (columnValue instanceof String) {
-                mStringBuilder.append(columnName).append("!=\"").append(columnValue).append("\"");
+                mStringBuilder.append(columnName).append("!=\'").append(columnValue).append("\'");
             } else {
                 mStringBuilder.append(columnName).append("!=").append(columnValue).append("");
             }
@@ -42,7 +42,7 @@ public class Where implements QueryCondition {
 
         public Builder greaterThan(String columnName, Object columnValue) {
             if (columnValue instanceof String) {
-                mStringBuilder.append(columnName).append(">\"").append(columnValue).append("\"");
+                mStringBuilder.append(columnName).append(">\'").append(columnValue).append("\'");
             } else {
                 mStringBuilder.append(columnName).append(">").append(columnValue).append("");
             }
@@ -51,7 +51,7 @@ public class Where implements QueryCondition {
 
         public Builder greaterThanOrEqual(String columnName, Object columnValue) {
             if (columnValue instanceof String) {
-                mStringBuilder.append(columnName).append(">=\"").append(columnValue).append("\"");
+                mStringBuilder.append(columnName).append(">=\'").append(columnValue).append("\'");
             } else {
                 mStringBuilder.append(columnName).append(">=").append(columnValue).append("");
             }
@@ -60,7 +60,7 @@ public class Where implements QueryCondition {
 
         public Builder lessThan(String columnName, Object columnValue) {
             if (columnValue instanceof String) {
-                mStringBuilder.append(columnName).append("<\"").append(columnValue).append("\"");
+                mStringBuilder.append(columnName).append("<\'").append(columnValue).append("\'");
             } else {
                 mStringBuilder.append(columnName).append("<").append(columnValue).append("");
             }
@@ -69,7 +69,7 @@ public class Where implements QueryCondition {
 
         public Builder lessThanOrEqual(String columnName, Object columnValue) {
             if (columnValue instanceof String) {
-                mStringBuilder.append(columnName).append("<=\"").append(columnValue).append("\"");
+                mStringBuilder.append(columnName).append("<=\'").append(columnValue).append("\'");
             } else {
                 mStringBuilder.append(columnName).append("<=").append(columnValue).append("");
             }

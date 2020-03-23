@@ -11,13 +11,19 @@ import com.jeejio.dbmodule.annotation.Column;
  */
 public class IdColumnInfoBean extends ColumnInfoBean {
     private boolean autoIncrement;
+    private boolean useGeneratedKeys;
 
-    public IdColumnInfoBean(String tableName, String columnName, String fieldName, Column.Type type, boolean autoIncrement) {
+    public IdColumnInfoBean(String tableName, String columnName, String fieldName, Column.Type type, boolean autoIncrement, boolean useGeneratedKeys) {
         super(tableName, columnName, fieldName, type);
         this.autoIncrement = autoIncrement;
+        this.useGeneratedKeys = useGeneratedKeys;
     }
 
     public boolean isAutoIncrement() {
         return autoIncrement;
+    }
+
+    public boolean isUseGeneratedKeys() {
+        return useGeneratedKeys;
     }
 }

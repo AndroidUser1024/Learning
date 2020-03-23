@@ -30,6 +30,7 @@ import java.util.Map;
  */
 
 public class DatabaseManager {
+    private final String TAG = DatabaseManager.class.getSimpleName();
 
     private SQLiteDatabase mSqLiteDatabase;
     /**
@@ -142,7 +143,7 @@ public class DatabaseManager {
                 columnInfoBeanList.add(new ColumnInfoBean(tableName, columnName, field.getName(), column.type()));
             } else {
                 // 非主键
-                mIdMap.put(clazz, new IdColumnInfoBean(tableName, columnName, field.getName(), column.type(), id.autoIncrement()));
+                mIdMap.put(clazz, new IdColumnInfoBean(tableName, columnName, field.getName(), column.type(), id.autoIncrement(), id.useGeneratedKeys()));
             }
         }
         mColumnMap.put(clazz, columnInfoBeanList);
@@ -167,6 +168,7 @@ public class DatabaseManager {
      * Description:执行自定义 sql
      */
     public int executeSql(String sql) {
+        Log.i(TAG, "sql--->" + sql);
         try {
             mSqLiteDatabase.execSQL(sql);
         } catch (SQLException e) {
@@ -182,6 +184,7 @@ public class DatabaseManager {
      * Description:执行自定义 sql
      */
     public List<Map<String, Object>> rawQuery(String sql) {
+        Log.i(TAG, "sql--->" + sql);
         List<Map<String, Object>> list = new ArrayList<>();
         Cursor cursor = null;
         try {
@@ -197,6 +200,8 @@ public class DatabaseManager {
                             break;
                         case Cursor.FIELD_TYPE_INTEGER:
                             map.put(columnName, cursor.getInt(columnIndex));
+                            map.put(columnName + "_Int", cursor.getInt(columnIndex));
+                            map.put(columnName + "_Long", cursor.getLong(columnIndex));
                             break;
                         case Cursor.FIELD_TYPE_FLOAT:
                             map.put(columnName, cursor.getFloat(columnIndex));
