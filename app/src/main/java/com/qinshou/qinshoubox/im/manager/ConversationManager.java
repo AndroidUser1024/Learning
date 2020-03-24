@@ -256,8 +256,7 @@ public class ConversationManager {
                 " LEFT OUTER JOIN friend AS f ON f.id=c.toUserId AND c.type=" + MessageType.CHAT.getValue() +
                 " LEFT OUTER JOIN group_chat AS gc ON gc.id=c.toUserId AND c.type=" + MessageType.GROUP_CHAT.getValue() +
                 " ORDER BY" +
-                " fTop DESC" +
-                ",gcTop DESC" +
+                " fTop OR gcTop DESC" +
                 ",c.lastMsgTimestamp DESC");
         List<ConversationBean> conversationBeanList = new ArrayList<>();
         for (Map<String, Object> map : list) {

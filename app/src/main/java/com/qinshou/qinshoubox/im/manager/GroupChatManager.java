@@ -82,7 +82,6 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
                             .execute();
                     for (GroupChatBean groupChatBean : groupChatBeanList) {
                         getCache().put(groupChatBean.getId(), groupChatBean);
-                        getMemberList(groupChatBean.getId());
                     }
                 } catch (Exception e) {
                     getList();
@@ -110,6 +109,7 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
                 .enqueue(new Callback<GroupChatBean>() {
                     @Override
                     public void onSuccess(GroupChatBean data) {
+                        getCache().put(data.getId(), data);
                         qsCallback.onSuccess(data);
                     }
 
@@ -184,8 +184,6 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
                             @Override
                             public void run() {
                                 for (UserDetailBean userDetailBean : data) {
-                                    // 0 表示已不在该群聊中,1 表示在群聊中
-                                    userDetailBean.setStatus(1);
                                     IMClient.SINGLETON.getGroupChatMemberManager().put(groupChatId, userDetailBean);
                                 }
                             }
@@ -199,31 +197,6 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
                         }
                     }
                 });
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2020/1/6 17:57
-     * Description:同步获取群成员列表
-     *
-     * @param groupChatId 群 id
-     */
-    public List<UserDetailBean> getMemberList(final String groupChatId) {
-        try {
-            String userId = IMClient.SINGLETON.getUserDetailBean().getId();
-            List<UserDetailBean> userDetailBeanList = OkHttpHelperForQSBoxGroupChatApi.SINGLETON.getMemberList(groupChatId, userId)
-                    .transform(new QSApiTransformer<List<UserDetailBean>>())
-                    .execute();
-            for (UserDetailBean userDetailBean : userDetailBeanList) {
-                // 0 表示已不在该群聊中,1 表示在群聊中
-                userDetailBean.setStatus(1);
-                IMClient.SINGLETON.getGroupChatMemberManager().put(groupChatId, userDetailBean);
-            }
-            return userDetailBeanList;
-        } catch (Exception e) {
-            return new ArrayList<>();
-        }
     }
 
     /**
@@ -461,6 +434,7 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
                 .enqueue(new Callback<Object>() {
                     @Override
                     public void onSuccess(Object data) {
+                        getCache().remove(groupChatId);
                         qsCallback.onSuccess(data);
                     }
 

@@ -35,6 +35,8 @@ public class FriendDoubleCache extends AbsDoubleCache<String, UserDetailBean> {
 
     @Override
     public UserDetailBean remove(String key) {
+        getMemoryCache().remove(key);
+        getDatabaseCache().remove(key);
         return null;
     }
 

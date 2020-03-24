@@ -34,6 +34,8 @@ public class GroupChatDoubleCache extends AbsDoubleCache<String, GroupChatBean> 
 
     @Override
     public GroupChatBean remove(String key) {
+        getMemoryCache().remove(key);
+        getDatabaseCache().remove(key);
         return null;
     }
 

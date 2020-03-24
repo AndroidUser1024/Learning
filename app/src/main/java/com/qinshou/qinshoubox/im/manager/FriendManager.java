@@ -4,6 +4,7 @@ import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.friend.bean.FriendHistoryBean;
 import com.qinshou.qinshoubox.im.IMClient;
+import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.FriendStatusBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
@@ -13,6 +14,7 @@ import com.qinshou.qinshoubox.im.cache.FriendDoubleCache;
 import com.qinshou.qinshoubox.im.cache.MemoryCache;
 import com.qinshou.qinshoubox.im.enums.FriendRelStatus;
 import com.qinshou.qinshoubox.im.enums.FriendStatus;
+import com.qinshou.qinshoubox.im.enums.MessageType;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.listener.FailureRunnable;
 import com.qinshou.qinshoubox.listener.SuccessRunnable;
@@ -175,11 +177,14 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
                 .enqueue(new Callback<Object>() {
                     @Override
                     public void onSuccess(Object data) {
+                        // 移除缓存
+                        getCache().remove(toUserId);
+
                         ConversationManager conversationManager = IMClient.SINGLETON.getConversationManager();
-//                        ConversationBean conversationBean = conversationManager.selectByTypeAndToUserId(MessageType.CHAT.getValue(), toUserId);
-//                        if (conversationBean != null) {
-////                            conversationManager.deleteById(conversationBean.getId());
-//                        }
+                        ConversationBean conversationBean = conversationManager.selectByTypeAndToUserId(MessageType.CHAT.getValue(), toUserId);
+                        if (conversationBean != null) {
+                            conversationManager.deleteById(conversationBean.getId());
+                        }
 
                         qsCallback.onSuccess(data);
                     }
