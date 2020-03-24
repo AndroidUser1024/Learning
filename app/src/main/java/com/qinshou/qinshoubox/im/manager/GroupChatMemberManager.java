@@ -19,14 +19,6 @@ public class GroupChatMemberManager extends AbsManager<String, UserDetailBean> {
         super(new GroupChatMemberDoubleCache(new MemoryCache<>(), new GroupChatMemberDatabaseCache()));
     }
 
-    public void put(String groupChatId, UserDetailBean userDetailBean) {
-        getCache().put(groupChatId + "_" + userDetailBean.getId(), userDetailBean);
-    }
-
-    public void remove(String groupChatId, UserDetailBean userDetailBean) {
-        getCache().remove(groupChatId + "_" + userDetailBean.getId());
-    }
-
     public void getByGroupChatIdAndUserId(String groupChatId, String userId, QSCallback<UserDetailBean> qsCallback) {
         UserDetailBean userDetailBean = getCache().get(groupChatId + "_" + userId);
         if (userDetailBean != null) {

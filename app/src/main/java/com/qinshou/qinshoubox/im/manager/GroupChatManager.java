@@ -1,14 +1,20 @@
 package com.qinshou.qinshoubox.im.manager;
 
+import android.text.TextUtils;
+
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.im.bean.GroupChatDetailBean;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
+import com.qinshou.qinshoubox.im.bean.GroupChatStatusBean;
+import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.cache.GroupChatDatabaseCache;
 import com.qinshou.qinshoubox.im.cache.GroupChatDoubleCache;
 import com.qinshou.qinshoubox.im.cache.MemoryCache;
+import com.qinshou.qinshoubox.im.enums.GroupChatStatus;
+import com.qinshou.qinshoubox.im.enums.MessageType;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.listener.FailureRunnable;
 import com.qinshou.qinshoubox.listener.SuccessRunnable;
@@ -109,7 +115,29 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
                 .enqueue(new Callback<GroupChatBean>() {
                     @Override
                     public void onSuccess(GroupChatBean data) {
+                        // 更新缓存
                         getCache().put(data.getId(), data);
+
+                        // 创建群聊提示信息的系统消息
+                        GroupChatStatusBean groupChatStatusBean = new GroupChatStatusBean();
+                        groupChatStatusBean.setStatus(GroupChatStatus.OTHER_ADD.getValue());
+                        groupChatStatusBean.setFromUser(IMClient.SINGLETON.getUserDetailBean());
+                        List<UserDetailBean> userDetailBeanList = new ArrayList<>();
+                        for (String toUserId : toUserIdList) {
+                            if (TextUtils.equals(toUserId, userId)) {
+                                // 不包括自己
+                                continue;
+                            }
+                            userDetailBeanList.add(IMClient.SINGLETON.getFriendManager().getById(toUserId));
+                        }
+                        groupChatStatusBean.setToUserList(userDetailBeanList);
+
+                        MessageBean m = MessageBean.createGroupChatStatusMessage(userId
+                                , data.getId()
+                                , groupChatStatusBean);
+                        m.setType(MessageType.GROUP_CHAT.getValue());
+                        IMClient.SINGLETON.handleMessage(m);
+
                         qsCallback.onSuccess(data);
                     }
 
@@ -146,7 +174,13 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
                         groupChatBean.setTop(data.getTop());
                         groupChatBean.setDoNotDisturb(data.getDoNotDisturb());
                         groupChatBean.setShowGroupChatMemberNickname(data.getShowGroupChatMemberNickname());
+                        // 更新群缓存
                         getCache().put(groupChatBean.getId(), groupChatBean);
+                        // 更新群成员缓存
+                        for (UserDetailBean userDetailBean : data.getMemberList()) {
+                            IMClient.SINGLETON.getGroupChatMemberManager().getCache().put(data.getId() + "_" + userDetailBean.getId()
+                                    , userDetailBean);
+                        }
 
                         if (qsCallback != null) {
                             qsCallback.onSuccess(data);
@@ -181,7 +215,8 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
                             @Override
                             public void run() {
                                 for (UserDetailBean userDetailBean : data) {
-                                    IMClient.SINGLETON.getGroupChatMemberManager().put(groupChatId, userDetailBean);
+                                    IMClient.SINGLETON.getGroupChatMemberManager().getCache().put(groupChatId + "_" + userDetailBean.getId()
+                                            , userDetailBean);
                                 }
                                 getHandler().post(new SuccessRunnable<>(qsCallback, data));
                             }

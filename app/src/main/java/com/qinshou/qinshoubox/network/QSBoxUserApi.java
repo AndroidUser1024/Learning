@@ -20,7 +20,7 @@ import java.io.File;
  * Date: 2019/11/16 13:27
  * Description:类描述
  */
-@Api(value = IUrlConstant.DEFAULT_HOST + "/user",logLevel = LogLevel.BODY)
+@Api(value = IUrlConstant.DEFAULT_HOST + "/user",logLevel = LogLevel.BASIC)
 public interface QSBoxUserApi {
     @Json
     @Post("/register")

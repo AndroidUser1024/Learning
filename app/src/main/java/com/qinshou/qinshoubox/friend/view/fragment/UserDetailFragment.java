@@ -211,7 +211,6 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
 
     @Override
     public void getUserDetailSuccess(UserDetailBean userDetailBean) {
-        ShowLogUtil.logi("userDetailBean--->" + userDetailBean);
         mUserDetailBean = userDetailBean;
         if (userDetailBean.getStatus() == 1 || userDetailBean.getStatus() == 3) {
             showFriendUI(userDetailBean);

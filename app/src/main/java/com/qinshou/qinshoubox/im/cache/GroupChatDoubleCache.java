@@ -1,5 +1,6 @@
 package com.qinshou.qinshoubox.im.cache;
 
+import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 
 import java.util.Collection;
@@ -18,6 +19,8 @@ public class GroupChatDoubleCache extends AbsDoubleCache<String, GroupChatBean> 
 
     @Override
     public void put(String key, GroupChatBean value) {
+        ShowLogUtil.logi("key--->" + key);
+        ShowLogUtil.logi("value--->" + value);
         getMemoryCache().put(key, value);
         getDatabaseCache().put(key, value);
     }

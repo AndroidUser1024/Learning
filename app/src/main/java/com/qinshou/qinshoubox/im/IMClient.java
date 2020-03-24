@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.jeejio.dbmodule.DatabaseManager;
+import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.okhttphelper.callback.AbsDownloadCallback;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.bean.ImgBean;
@@ -72,8 +73,8 @@ public enum IMClient {
     private static final String TAG = "IMClient";
     private final int TIME_OUT = 10 * 1000;
     //    private static final String URL = "ws://www.mrqinshou.com:10086/websocket";
-    private static final String URL = "ws://172.16.60.231:10086/websocket";
-    //        private static final String URL = "ws://192.168.1.109:10086/websocket";
+//    private static final String URL = "ws://172.16.60.231:10086/websocket";
+            private static final String URL = "ws://192.168.1.109:10086/websocket";
 //    private static final String URL = "ws://192.168.31.199:10086/websocket";
     private Context mContext;
     private WebSocket mWebSocket;
@@ -324,6 +325,11 @@ public enum IMClient {
                 onGroupChatStatusListener.delete(groupChatDetailBean, groupChatStatusBean.getFromUser(), groupChatStatusBean.getToUserList());
             }
         } else if (groupChatStatusBean.getStatus() == GroupChatStatus.OTHER_ADD.getValue()) {
+            for (UserDetailBean userDetailBean : groupChatStatusBean.getToUserList()) {
+                // 删除群成员缓存
+                mGroupChatMemberManager.getCache().put(groupChatBean.getId() + "_" + userDetailBean.getId()
+                        , userDetailBean);
+            }
             // 创建群聊提示信息的系统消息
             MessageBean m = MessageBean.createGroupChatStatusMessage(groupChatStatusBean.getFromUser().getId()
                     , groupChatBean.getId()
@@ -337,7 +343,7 @@ public enum IMClient {
         } else if (groupChatStatusBean.getStatus() == GroupChatStatus.OTHER_DELETE.getValue()) {
             for (UserDetailBean userDetailBean : groupChatStatusBean.getToUserList()) {
                 // 删除群成员缓存
-                mGroupChatMemberManager.remove(groupChatBean.getId(), userDetailBean);
+                mGroupChatMemberManager.getCache().remove(groupChatBean.getId() + "_" + userDetailBean.getId());
             }
 
             // 创建群聊提示信息的系统消息

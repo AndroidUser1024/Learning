@@ -2,6 +2,7 @@ package com.qinshou.qinshoubox.conversation.view.fragment;
 
 import com.google.android.material.tabs.TabLayout;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -64,7 +65,7 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
             // 更新会话列表
             updateConversationList(conversationBean);
             // 更新未读数
-            updateUnreadCount();
+            updateUnreadCount(conversationBean);
             // 如果免打扰,则不震动,不显示通知
             if (conversationBean.getDoNotDisturb() == 1) {
                 return;
@@ -127,7 +128,7 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
 
     @Override
     public void initData() {
-        updateUnreadCount();
+        updateUnreadCount(null);
         getPresenter().getConversationList();
     }
 
@@ -139,16 +140,16 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
     @Override
     public void handleEvent(EventBean<Object> eventBean) {
         if (eventBean.getType() == EventBean.Type.REFRESH_CONVERSATION_UNREAD_COUNT) {
-            updateUnreadCount();
+            updateUnreadCount((ConversationBean) eventBean.getData());
         } else if (eventBean.getType() == EventBean.Type.REFRESH_CONVERSATION_LIST) {
             if (eventBean.getData() == null) {
                 getPresenter().getConversationList();
                 // 更新未读数
-                updateUnreadCount();
+                updateUnreadCount((ConversationBean) eventBean.getData());
             } else if (eventBean.getData() instanceof ConversationBean) {
                 updateConversationList((ConversationBean) eventBean.getData());
                 // 更新未读数
-                updateUnreadCount();
+                updateUnreadCount((ConversationBean) eventBean.getData());
             }
         } else if (eventBean.getType() == EventBean.Type.CLEAR_CHAT_HISTORY) {
             clearChatHistory((ConversationBean) eventBean.getData());
@@ -245,14 +246,27 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
      * Email:cqflqinhao@126.com
      * Date:2019/12/6 19:12
      * Description:更新未读数
+     *
+     * @param conversationBean
      */
-    private void updateUnreadCount() {
+    private void updateUnreadCount(@Nullable ConversationBean conversationBean) {
         int totalUnreadCount = IMClient.SINGLETON.getConversationManager().getTotalUnreadCount();
         if (totalUnreadCount > 0) {
             mTvUnreadCountInTlMain.setVisibility(View.VISIBLE);
             mTvUnreadCountInTlMain.setText("" + totalUnreadCount);
         } else {
             mTvUnreadCountInTlMain.setVisibility(View.GONE);
+        }
+        if (conversationBean == null) {
+            return;
+        }
+        for (int i = 0; i < mRcvConversationAdapter.getDataList().size(); i++) {
+            ConversationBean c = mRcvConversationAdapter.getDataList().get(i);
+            if (c.getId() == conversationBean.getId()) {
+                c.setUnreadCount(conversationBean.getUnreadCount());
+                mRcvConversationAdapter.notifyItemChanged(i);
+                break;
+            }
         }
     }
 

@@ -546,6 +546,14 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
 
     @Override
     public void initData() {
+        // 重置未读数
+        ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().selectByTypeAndToUserId(MessageType.GROUP_CHAT.getValue(), mGroupChatId);
+        if (conversationBean != null) {
+            IMClient.SINGLETON.getConversationManager().setUnreadCount(0, conversationBean.getId());
+            // 通知会话列表刷新未读数
+            conversationBean.setUnreadCount(0);
+            EventBus.getDefault().post(new EventBean<ConversationBean>(EventBean.Type.REFRESH_CONVERSATION_LIST, conversationBean));
+        }
         GroupChatBean groupChatBean = IMClient.SINGLETON.getGroupChatManager().getById(mGroupChatId);
         if (groupChatBean != null) {
             // 群昵称

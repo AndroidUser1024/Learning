@@ -6,6 +6,7 @@ import com.qinshou.commonmodule.base.IBaseView;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.friend.view.fragment.AddFriendFragment;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 /**
  * Author: QinHao
@@ -21,10 +22,10 @@ public interface IAddFriendContract {
          * Date:2019/9/6 9:34
          * Description:获取用户信息
          *
-         * @param keyword  系统账号/手机号/邮箱
-         * @param callback 回调接口
+         * @param keyword    系统账号/手机号/邮箱
+         * @param qsCallback 回调接口
          */
-        void getUserDetail(String keyword, Callback<UserDetailBean> callback);
+        void getUserDetail(String keyword, QSCallback<UserDetailBean> qsCallback);
     }
 
     interface IView extends IBaseView {
@@ -58,6 +59,6 @@ public interface IAddFriendContract {
          *
          * @param keyword 系统账号/手机号/邮箱
          */
-        void getUserDetail( String keyword);
+        void getUserDetail(String keyword);
     }
 }

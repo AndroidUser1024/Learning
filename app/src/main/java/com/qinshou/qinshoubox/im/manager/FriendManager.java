@@ -138,7 +138,10 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
                         getExecutorService().submit(new Runnable() {
                             @Override
                             public void run() {
-                                UserDetailBean userDetailBean = new UserDetailBean();
+                                UserDetailBean userDetailBean = getCache().get(toUserId);
+                                if (userDetailBean == null) {
+                                    userDetailBean = new UserDetailBean();
+                                }
                                 userDetailBean.setId(toUserId);
                                 userDetailBean.setStatus(FriendRelStatus.BOTH.getValue());
                                 userDetailBean.setRemark(remark);

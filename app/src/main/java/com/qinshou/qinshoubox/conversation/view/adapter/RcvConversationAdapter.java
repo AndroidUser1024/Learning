@@ -72,7 +72,6 @@ public class RcvConversationAdapter extends RcvSingleBaseAdapter<ConversationBea
                 swipeMenuLayout.quickClose();
                 IMClient.SINGLETON.getConversationManager().setUnreadCount(0, conversationBean.getId());
                 conversationBean.setUnreadCount(0);
-                notifyItemChanged(position);
                 EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_UNREAD_COUNT, conversationBean));
                 // 跳转到对应聊天界面
                 if (conversationBean.getType() == MessageType.CHAT.getValue()) {
@@ -91,7 +90,6 @@ public class RcvConversationAdapter extends RcvSingleBaseAdapter<ConversationBea
                     swipeMenuLayout.quickClose();
                     IMClient.SINGLETON.getConversationManager().setUnreadCount(0, conversationBean.getId());
                     conversationBean.setUnreadCount(0);
-                    notifyItemChanged(position);
                     EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_UNREAD_COUNT, conversationBean));
                 }
             });
@@ -104,7 +102,6 @@ public class RcvConversationAdapter extends RcvSingleBaseAdapter<ConversationBea
                     swipeMenuLayout.quickClose();
                     IMClient.SINGLETON.getConversationManager().setUnreadCount(-1, conversationBean.getId());
                     conversationBean.setUnreadCount(-1);
-                    notifyItemChanged(position);
                     EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_UNREAD_COUNT, conversationBean));
                 }
             });
@@ -115,7 +112,6 @@ public class RcvConversationAdapter extends RcvSingleBaseAdapter<ConversationBea
                 swipeMenuLayout.quickClose();
                 IMClient.SINGLETON.getConversationManager().deleteById(conversationBean.getId());
                 getDataList().remove(conversationBean);
-                notifyItemRemoved(position);
                 EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_UNREAD_COUNT, conversationBean));
             }
         });

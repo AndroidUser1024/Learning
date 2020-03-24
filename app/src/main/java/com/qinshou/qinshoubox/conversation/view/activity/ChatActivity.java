@@ -175,7 +175,6 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
                         break;
                 }
             } else if (msg.what == MESSAGE_WHAT_SEND_VOICE) {
-                ShowLogUtil.logi("发送语音: sendVoice--->" + sendVoice);
                 if (!sendVoice) {
                     return true;
                 }
@@ -542,6 +541,14 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
         mToUserId = intent.getStringExtra(TO_USER_ID);
         if (TextUtils.isEmpty(mToUserId)) {
             return;
+        }
+        // 重置未读数
+        ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().selectByTypeAndToUserId(MessageType.CHAT.getValue(), mToUserId);
+        if (conversationBean != null) {
+            IMClient.SINGLETON.getConversationManager().setUnreadCount(0, conversationBean.getId());
+            // 通知会话列表刷新未读数
+            conversationBean.setUnreadCount(0);
+            EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_LIST, conversationBean));
         }
         UserDetailBean userDetailBean = IMClient.SINGLETON.getFriendManager().getById(mToUserId);
         if (userDetailBean != null) {

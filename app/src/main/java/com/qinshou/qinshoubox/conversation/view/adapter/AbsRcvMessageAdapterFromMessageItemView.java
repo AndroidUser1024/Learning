@@ -51,7 +51,6 @@ public abstract class AbsRcvMessageAdapterFromMessageItemView extends BaseItemVi
                 IMClient.SINGLETON.getGroupChatMemberManager().getByGroupChatIdAndUserId(mGroupChatId, messageBean.getFromUserId(), new QSCallback<UserDetailBean>() {
                     @Override
                     public void onSuccess(UserDetailBean data) {
-                        ShowLogUtil.logi("data--->" + data);
                         ImageLoadUtil.SINGLETON.loadImage(getContext(), data.getHeadImgSmall(), baseViewHolder.getImageView(R.id.iv_head_img));
                     }
 

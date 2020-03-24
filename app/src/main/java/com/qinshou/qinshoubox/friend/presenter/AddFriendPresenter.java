@@ -7,6 +7,7 @@ import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.friend.contract.IAddFriendContract;
 import com.qinshou.qinshoubox.friend.model.AddFriendModel;
 import com.qinshou.qinshoubox.friend.view.fragment.AddFriendFragment;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 /**
  * Author: QinHao
@@ -22,7 +23,7 @@ public class AddFriendPresenter extends AbsPresenter<IAddFriendContract.IView, I
 
     @Override
     public void getUserDetail(String keyword) {
-        getModel().getUserDetail(keyword, new Callback<UserDetailBean>() {
+        getModel().getUserDetail(keyword, new QSCallback<UserDetailBean>() {
             @Override
             public void onSuccess(UserDetailBean userDetailBean) {
                 if (!isViewAttached()) {
