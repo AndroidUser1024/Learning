@@ -53,6 +53,10 @@ public class GroupChatDetailBean {
      */
     private int memberCount;
     /**
+     * 加入群聊的时间
+     */
+    private String addTimestamp;
+    /**
      * 群成员,前 15 个
      */
     private List<UserDetailBean> memberList;
@@ -74,6 +78,7 @@ public class GroupChatDetailBean {
                 ", doNotDisturb=" + doNotDisturb +
                 ", showGroupChatMemberNickname=" + showGroupChatMemberNickname +
                 ", memberCount=" + memberCount +
+                ", addTimestamp=" + addTimestamp +
                 ", memberList=" + memberList +
                 '}';
     }
@@ -164,6 +169,14 @@ public class GroupChatDetailBean {
 
     public void setMemberCount(int memberCount) {
         this.memberCount = memberCount;
+    }
+
+    public String getAddTimestamp() {
+        return addTimestamp;
+    }
+
+    public void setAddTimestamp(String addTimestamp) {
+        this.addTimestamp = addTimestamp;
     }
 
     public List<UserDetailBean> getMemberList() {

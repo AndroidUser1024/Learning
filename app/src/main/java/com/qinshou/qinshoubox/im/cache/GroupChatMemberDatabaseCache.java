@@ -3,6 +3,7 @@ package com.qinshou.qinshoubox.im.cache;
 import com.jeejio.dbmodule.DatabaseManager;
 import com.jeejio.dbmodule.dao.IBaseDao;
 import com.jeejio.dbmodule.util.Where;
+import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatMemberBean;
 import com.qinshou.qinshoubox.im.bean.UserBean;
 import com.qinshou.qinshoubox.im.bean.UserDetailBean;
@@ -20,15 +21,17 @@ import java.util.Map;
 public class GroupChatMemberDatabaseCache extends AbsDatabaseCache<String, UserDetailBean> {
 
     private IBaseDao<UserBean> mUserDao;
+    private IBaseDao<FriendBean> mFriendDao;
     private IBaseDao<GroupChatMemberBean> mGroupChatMemberDao;
 
     public GroupChatMemberDatabaseCache() {
         mUserDao = DatabaseManager.getInstance().getDaoByClass(UserBean.class);
+        mFriendDao = DatabaseManager.getInstance().getDaoByClass(FriendBean.class);
         mGroupChatMemberDao = DatabaseManager.getInstance().getDaoByClass(GroupChatMemberBean.class);
     }
 
     @Override
-    public void put(String key, UserDetailBean value) {
+    public synchronized void put(String key, UserDetailBean value) {
         String[] split = key.split("_");
         if (split.length < 2) {
             return;
@@ -53,8 +56,8 @@ public class GroupChatMemberDatabaseCache extends AbsDatabaseCache<String, UserD
                 " COUNT(id) AS count" +
                 " FROM group_chat_member" +
                 " WHERE" +
-                " groupChatId=" + groupChatId + "" +
-                " AND userId=" + userId);
+                " groupChatId=\'" + groupChatId + "\'" +
+                " AND userId=\'" + userId + "\'");
         if (list.size() > 0) {
             Object count = list.get(0).get("count");
             if (count instanceof Integer && (int) count > 0) {
@@ -76,16 +79,23 @@ public class GroupChatMemberDatabaseCache extends AbsDatabaseCache<String, UserD
         String userId = split[1];
 
         UserBean userBean = mUserDao.selectById(userId);
-        if (userBean != null) {
-            userDetailBean.setId(userBean.getId());
-            userDetailBean.setUsername(userBean.getUsername());
-            userDetailBean.setNickname(userBean.getNickname());
-            userDetailBean.setHeadImg(userBean.getHeadImg());
-            userDetailBean.setHeadImgSmall(userBean.getHeadImgSmall());
+        if (userBean == null) {
+            return null;
+        }
+        userDetailBean.setId(userBean.getId());
+        userDetailBean.setUsername(userBean.getUsername());
+        userDetailBean.setNickname(userBean.getNickname());
+        userDetailBean.setHeadImg(userBean.getHeadImg());
+        userDetailBean.setHeadImgSmall(userBean.getHeadImgSmall());
+
+        FriendBean friendBean = mFriendDao.selectById(userId);
+        if (friendBean != null) {
+            userDetailBean.setRemark(friendBean.getRemark());
         }
 
         GroupChatMemberBean groupChatMemberBean = mGroupChatMemberDao.select(new Where.Builder()
                 .equal("groupChatId", groupChatId)
+                .and()
                 .equal("userId", userId)
                 .build());
         if (groupChatMemberBean != null) {

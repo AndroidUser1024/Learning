@@ -1,9 +1,11 @@
 package com.qinshou.qinshoubox.im.manager;
 
+import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.cache.GroupChatMemberDatabaseCache;
 import com.qinshou.qinshoubox.im.cache.GroupChatMemberDoubleCache;
 import com.qinshou.qinshoubox.im.cache.MemoryCache;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 /**
  * Author: QinHao
@@ -25,7 +27,22 @@ public class GroupChatMemberManager extends AbsManager<String, UserDetailBean> {
         getCache().remove(groupChatId + "_" + userDetailBean.getId());
     }
 
-    public UserDetailBean getByGroupChatIdAndUserId(String groupChatId, String userId) {
-        return getCache().get(groupChatId + "_" + userId);
+    public void getByGroupChatIdAndUserId(String groupChatId, String userId, QSCallback<UserDetailBean> qsCallback) {
+        UserDetailBean userDetailBean = getCache().get(groupChatId + "_" + userId);
+        if (userDetailBean != null) {
+            qsCallback.onSuccess(userDetailBean);
+        }
+        IMClient.SINGLETON.getUserManager().getUser(userId, groupChatId, new QSCallback<UserDetailBean>() {
+            @Override
+            public void onSuccess(UserDetailBean data) {
+                getCache().put(groupChatId + "_" + data.getId(), data);
+                qsCallback.onSuccess(data);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        });
     }
 }

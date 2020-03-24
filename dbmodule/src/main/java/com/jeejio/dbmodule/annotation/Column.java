@@ -21,4 +21,6 @@ public @interface Column {
     Type type() default Type.TEXT;
 
     String name() default "";
+
+    boolean primaryKey() default false;
 }

@@ -6,6 +6,7 @@ import com.qinshou.okhttphelper.annotation.Json;
 import com.qinshou.okhttphelper.annotation.Multipart;
 import com.qinshou.okhttphelper.annotation.Post;
 import com.qinshou.okhttphelper.call.AbsCall;
+import com.qinshou.okhttphelper.enums.LogLevel;
 import com.qinshou.qinshoubox.constant.IUrlConstant;
 import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.homepage.bean.QinshouResultBean;
@@ -19,7 +20,7 @@ import java.io.File;
  * Date: 2019/11/16 13:27
  * Description:类描述
  */
-@Api(IUrlConstant.DEFAULT_HOST + "/user")
+@Api(value = IUrlConstant.DEFAULT_HOST + "/user",logLevel = LogLevel.BODY)
 public interface QSBoxUserApi {
     @Json
     @Post("/register")
@@ -47,6 +48,12 @@ public interface QSBoxUserApi {
 
     @Json
     @Post("/getUserDetail")
-    AbsCall<QinshouResultBean<UserDetailBean>> getUserDetail(@Field(name = "fromUserId") String fromUserId
-            , @Field(name = "keyword") String keyword);
+    AbsCall<QinshouResultBean<UserDetailBean>> getUserDetail(@Field(name = "keyword") String keyword
+            , @Field(name = "fromUserId") String fromUserId);
+
+    @Json
+    @Post("/getUserDetail")
+    AbsCall<QinshouResultBean<UserDetailBean>> getUserDetail(@Field(name = "keyword") String keyword
+            , @Field(name = "fromUserId") String fromUserId
+            , @Field(name = "groupChatId") String groupChatId);
 }

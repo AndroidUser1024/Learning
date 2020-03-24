@@ -361,7 +361,7 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
      * Author: QinHao
      * Email:cqflqinhao@126.com
      * Date:2019/12/6 14:54
-     * Description:获取好友申请历史
+     * Description:获取单个好友信息
      *
      * @param toUserId 待查询的好友的 id
      */

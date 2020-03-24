@@ -6,12 +6,14 @@ import android.view.View;
 
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.commonmodule.rcvbaseadapter.itemview.BaseItemView;
+import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.enums.MessageType;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 import java.text.SimpleDateFormat;
@@ -46,8 +48,19 @@ public abstract class AbsRcvMessageAdapterFromMessageItemView extends BaseItemVi
             }
         } else if (messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
             if (!TextUtils.isEmpty(mGroupChatId)) {
-                UserDetailBean userDetailBean = IMClient.SINGLETON.getGroupChatMemberManager().getByGroupChatIdAndUserId(mGroupChatId, messageBean.getFromUserId());
-                ImageLoadUtil.SINGLETON.loadImage(getContext(), userDetailBean.getHeadImgSmall(), baseViewHolder.getImageView(R.id.iv_head_img));
+                IMClient.SINGLETON.getGroupChatMemberManager().getByGroupChatIdAndUserId(mGroupChatId, messageBean.getFromUserId(), new QSCallback<UserDetailBean>() {
+                    @Override
+                    public void onSuccess(UserDetailBean data) {
+                        ShowLogUtil.logi("data--->" + data);
+                        ImageLoadUtil.SINGLETON.loadImage(getContext(), data.getHeadImgSmall(), baseViewHolder.getImageView(R.id.iv_head_img));
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+
+                    }
+                });
+
             }
         }
 //        // 单聊不显示昵称,群聊可以设置是否显示昵称

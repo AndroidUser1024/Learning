@@ -351,6 +351,9 @@ public enum IMClient {
                 onGroupChatStatusListener.otherDelete(groupChatDetailBean, groupChatStatusBean.getFromUser(), groupChatStatusBean.getToUserList());
             }
         } else if (groupChatStatusBean.getStatus() == GroupChatStatus.NICKNAME_CHANGED.getValue()) {
+            // 更新缓存
+            mGroupChatManager.getCache().put(groupChatBean.getId(), groupChatBean);
+
             // 创建群聊提示信息的系统消息
             MessageBean m = MessageBean.createGroupChatStatusMessage(groupChatStatusBean.getFromUser().getId()
                     , groupChatBean.getId()

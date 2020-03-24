@@ -177,15 +177,13 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
                 .enqueue(new Callback<List<UserDetailBean>>() {
                     @Override
                     public void onSuccess(final List<UserDetailBean> data) {
-                        if (qsCallback != null) {
-                            qsCallback.onSuccess(data);
-                        }
                         getExecutorService().submit(new Runnable() {
                             @Override
                             public void run() {
                                 for (UserDetailBean userDetailBean : data) {
                                     IMClient.SINGLETON.getGroupChatMemberManager().put(groupChatId, userDetailBean);
                                 }
+                                getHandler().post(new SuccessRunnable<>(qsCallback, data));
                             }
                         });
                     }

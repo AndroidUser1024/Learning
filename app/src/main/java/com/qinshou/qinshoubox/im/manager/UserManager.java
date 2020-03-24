@@ -26,8 +26,32 @@ public class UserManager {
 
     public void getUser(String keyword, final QSCallback<UserDetailBean> qsCallback) {
         String userId = IMClient.SINGLETON.getUserDetailBean().getId();
-        OkHttpHelperForQSBoxUserApi.SINGLETON.getUserDetail(userId, keyword)
-                .transform(new QSApiTransformer<UserDetailBean>())
+        OkHttpHelperForQSBoxUserApi.SINGLETON.getUserDetail(keyword, userId)
+                .transform(new QSApiTransformer<>())
+                .enqueue(new Callback<UserDetailBean>() {
+                    @Override
+                    public void onSuccess(UserDetailBean data) {
+                        UserBean userBean = new UserBean(data.getId()
+                                , data.getUsername()
+                                , data.getNickname()
+                                , data.getHeadImgSmall()
+                                , data.getHeadImg());
+                        mUserDao.save(userBean);
+
+                        qsCallback.onSuccess(data);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        qsCallback.onFailure(e);
+                    }
+                });
+    }
+
+    public void getUser(String keyword, String groupChatId, final QSCallback<UserDetailBean> qsCallback) {
+        String userId = IMClient.SINGLETON.getUserDetailBean().getId();
+        OkHttpHelperForQSBoxUserApi.SINGLETON.getUserDetail(keyword, userId, groupChatId)
+                .transform(new QSApiTransformer<>())
                 .enqueue(new Callback<UserDetailBean>() {
                     @Override
                     public void onSuccess(UserDetailBean data) {

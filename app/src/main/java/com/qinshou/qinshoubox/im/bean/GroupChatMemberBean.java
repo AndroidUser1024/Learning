@@ -15,7 +15,7 @@ public class GroupChatMemberBean {
     /**
      * 自增长 id
      */
-    @Id(autoIncrement = true, useGeneratedKeys = true)
+    @Id(autoIncrement = true)
     @Column(type = Column.Type.INTEGER)
     private int id;
     /**
@@ -40,10 +40,19 @@ public class GroupChatMemberBean {
     @Override
     public String toString() {
         return "GroupChatMemberBean{" +
-                "groupChatId='" + groupChatId + '\'' +
+                "id=" + id +
+                ", groupChatId='" + groupChatId + '\'' +
                 ", userId='" + userId + '\'' +
                 ", nicknameInGroupChat='" + nicknameInGroupChat + '\'' +
                 '}';
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getGroupChatId() {

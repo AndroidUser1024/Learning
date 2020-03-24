@@ -88,6 +88,10 @@ public class UserDetailBean {
      */
     private String nicknameInGroupChat;
     /**
+     * 加入群聊的时间
+     */
+    private String addTimestamp;
+    /**
      * 是否在线,0 为不在线,1 为在线
      */
     private int online;
@@ -129,6 +133,7 @@ public class UserDetailBean {
                 ", remark='" + remark + '\'' +
                 ", additionalMsg='" + additionalMsg + '\'' +
                 ", nicknameInGroupChat='" + nicknameInGroupChat + '\'' +
+                ", addTimestamp=" + addTimestamp +
                 ", online=" + online +
                 ", lastLogoutTimestamp=" + lastLogoutTimestamp +
                 ", top=" + top +
@@ -255,6 +260,14 @@ public class UserDetailBean {
 
     public void setNicknameInGroupChat(String nicknameInGroupChat) {
         this.nicknameInGroupChat = nicknameInGroupChat;
+    }
+
+    public String getAddTimestamp() {
+        return addTimestamp;
+    }
+
+    public void setAddTimestamp(String addTimestamp) {
+        this.addTimestamp = addTimestamp;
     }
 
     public int getOnline() {
