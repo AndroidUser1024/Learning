@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.qinshou.commonmodule.util.SystemUtil;
 import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.databinding.ActivityWeatherBinding;
 import com.qinshou.qinshoubox.me.bean.WeatherBean;
 
 
@@ -17,17 +16,13 @@ import com.qinshou.qinshoubox.me.bean.WeatherBean;
  * Created on 2018/11/8
  */
 public class WeatherActivity extends AppCompatActivity {
-    private ActivityWeatherBinding mActivityWeatherBinding;
     private WeatherBean mWeatherBean;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mActivityWeatherBinding = DataBindingUtil.setContentView(this, R.layout.activity_weather);
-        mWeatherBean = new WeatherBean();
-        mActivityWeatherBinding.setWeatherBean(mWeatherBean);
+        setContentView(R.layout.activity_weather);
         queryWeather();
-
     }
 
     private void queryWeather() {
