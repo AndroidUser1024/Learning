@@ -1,0 +1,105 @@
+import groovy.json.JsonSlurper
+
+task assembleAndUpload {
+    dependsOn 'assembleDebug'
+    doLast {
+        android.applicationVariants.all { variant ->
+            if ("debug".equalsIgnoreCase(variant.name)) {
+                def apk = variant.outputs[0].outputFile
+                println("apk--->" + apk)
+
+                def twoHyphens = "--"
+                def boundary = "*********"
+                def end = "\r\n"
+
+                def connection = new URL("https://www.pgyer.com/apiv2/app/upload").openConnection()
+                connection.setRequestMethod('POST')
+                connection.setRequestProperty("Connection", "Keep-Alive")
+                connection.setRequestProperty("Charset", "UTF-8")
+                connection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary)
+                connection.setDoInput(true)
+                connection.setDoOutput(true)
+
+                def stringBuilder = new StringBuilder()
+                // api_key
+                stringBuilder.append(twoHyphens).append(boundary).append(end)
+                stringBuilder.append("Content-Disposition: form-data; name=_api_key")
+                stringBuilder.append(end).append(end)
+                stringBuilder.append("1cd54a5f4e2340a35f5290a44b755e45").append(end)
+
+                // 安装方式,2 为密码安装,3 为邀请安装
+                stringBuilder.append(twoHyphens).append(boundary).append(end)
+                stringBuilder.append("Content-Disposition: form-data; name=buildInstallType")
+                stringBuilder.append(end).append(end)
+                stringBuilder.append(2).append(end)
+
+                // App 安装密码
+                stringBuilder.append(twoHyphens).append(boundary).append(end)
+                stringBuilder.append("Content-Disposition: form-data; name=buildPassword")
+                stringBuilder.append(end).append(end)
+                stringBuilder.append("mrqinshou").append(end)
+
+                // 更新日志
+                stringBuilder.append(twoHyphens).append(boundary).append(end)
+                stringBuilder.append("Content-Disposition: form-data; name=buildUpdateDescription")
+                stringBuilder.append(end).append(end)
+                stringBuilder.append("更新日志").append(end)
+
+                // 应用名称
+//                stringBuilder.append(twoHyphens).append(boundary).append(end)
+//                stringBuilder.append("Content-Disposition: form-data; name=buildName")
+//                stringBuilder.append(end).append(end)
+//                stringBuilder.append("禽兽盒子").append(end)
+
+//            // 是否设置安装有效期,1 为设置有效期,如果设置为 1 则需要传递 buildInstallStartDate 和 buildInstallEndDate 参数
+//            // 2 为长期有效,不填写则同上一次设置
+//            stringBuilder.append(twoHyphens).append(boundary).append(end)
+//            stringBuilder.append("Content-Disposition: form-data; name=buildInstallDate")
+//            stringBuilder.append(end).append(end)
+//            stringBuilder.append("禽兽盒子").append(end)
+//
+//            // 安装有效期开始时间,字符串型,如:2020-03-26
+//            stringBuilder.append(twoHyphens).append(boundary).append(end)
+//            stringBuilder.append("Content-Disposition: form-data; name=buildInstallStartDate")
+//            stringBuilder.append(end).append(end)
+//            stringBuilder.append("2020-03-26").append(end)
+//
+//            // 安装有效期结束时间,字符串型,如:2020-03-27
+//            stringBuilder.append(twoHyphens).append(boundary).append(end)
+//            stringBuilder.append("Content-Disposition: form-data; name=buildInstallEndDate")
+//            stringBuilder.append(end).append(end)
+//            stringBuilder.append("2020-03-27").append(end)
+
+                // 需要上传的 apk 文件,该参数需要放到最后
+                stringBuilder.append(twoHyphens).append(boundary).append(end)
+                stringBuilder.append("Content-Disposition: form-data; name=file;filename=").append(apk.getName())
+                stringBuilder.append(end).append(end)
+
+                def dataOutputStream = new DataOutputStream(connection.getOutputStream())
+                dataOutputStream.writeBytes(stringBuilder.toString())
+                dataOutputStream.flush()
+                stringBuilder.delete(0, stringBuilder.length())
+
+                def fileInputStream = new FileInputStream(apk)
+                byte[] byteArray = new byte[1024]
+                int length
+                while ((length = fileInputStream.read(byteArray)) != -1) {
+                    dataOutputStream.write(byteArray, 0, length)
+                }
+                stringBuilder.append(end)
+                stringBuilder.append(twoHyphens).append(boundary).append(end)
+                dataOutputStream.writeBytes(stringBuilder.toString())
+
+                dataOutputStream.flush()
+                fileInputStream.close()
+                dataOutputStream.close()
+                connection.connect()
+
+                def text = connection.getContent().text
+                def response = new JsonSlurper().parseText(text)
+
+                println(text)
+            }
+        }
+    }
+}
