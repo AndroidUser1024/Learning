@@ -65,6 +65,7 @@ public class PingManager {
     public void start(WebSocket webSocket) {
         mWebSocket = webSocket;
         // 开启心跳任务
+        release();
         mHeartBeatScheduledFuture = mHeartBeatScheduledExecutorService.schedule(mHeartBeatRunnable, HEART_BEAT_INTERVAL, TimeUnit.MILLISECONDS);
     }
 
