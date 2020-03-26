@@ -56,13 +56,18 @@ public class InfiniteCycleViewPagerAdapter extends PagerAdapter {
         this.setData(viewList, null);
     }
 
-    public void setData(List<View> viewList, List<String> stringList) {
+    public void setData(final List<View> viewList, List<String> stringList) {
         this.mViewList = viewList;
         this.mStringList = stringList;
         notifyDataSetChanged();
 //        mViewPager.setOffscreenPageLimit(2);
         //currentItem 不要设置 Integer.MAX_VALUE/2,会阻塞主线程,也没有必要设置那么大
-        mViewPager.setCurrentItem(viewList.size() * 100, false);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                mViewPager.setCurrentItem(viewList.size() * 100, false);
+            }
+        }).start();
     }
 
     @Override

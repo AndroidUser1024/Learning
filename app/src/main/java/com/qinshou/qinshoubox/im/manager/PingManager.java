@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.google.gson.Gson;
+import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 
 import java.util.concurrent.Executors;
@@ -63,6 +64,7 @@ public class PingManager {
     };
 
     public void start(WebSocket webSocket) {
+        ShowLogUtil.logi("开启心跳任务");
         mWebSocket = webSocket;
         // 开启心跳任务
         release();
