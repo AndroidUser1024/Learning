@@ -2,8 +2,11 @@ package com.qinshou.commonmodule.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+
 import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
+
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -49,7 +52,6 @@ public class ViewPagerPoints extends LinearLayout {
 
     private LayoutParams itemParams;
     private LayoutParams currentItemParams;
-    private ViewPager.OnPageChangeListener mOnPageChangeListener;
 
     public int getCount() {
         return count;
@@ -164,24 +166,45 @@ public class ViewPagerPoints extends LinearLayout {
      * Date:2017/9/22
      */
     public void setupWithViewPager(final ViewPager viewPager) {
-        if (mOnPageChangeListener == null) {
-            mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
-                @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-                }
+            }
 
-                @Override
-                public void onPageSelected(int position) {
-                    setCurrentItem(position % count);
-                }
+            @Override
+            public void onPageSelected(int position) {
+                setCurrentItem(position % count);
+            }
 
-                @Override
-                public void onPageScrollStateChanged(int state) {
+            @Override
+            public void onPageScrollStateChanged(int state) {
 
-                }
-            };
-            viewPager.addOnPageChangeListener(mOnPageChangeListener);
-        }
+            }
+        });
+    }
+
+    /**
+     * Description:与 ViewPager 状态同步
+     * Date:2017/9/22
+     */
+    public void setupWithViewPager2(final ViewPager2 viewPager2) {
+        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                setCurrentItem(position % count);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                super.onPageScrollStateChanged(state);
+            }
+        });
     }
 }

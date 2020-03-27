@@ -9,6 +9,8 @@
     tools:context="com.qinshou.qinshoubox.homepage.ui.fragment.HomepageFragment">
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nested_scroll_view"
+        android:fillViewport="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="none">
