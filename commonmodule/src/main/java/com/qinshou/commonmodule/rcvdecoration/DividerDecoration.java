@@ -3,6 +3,7 @@ package com.qinshou.commonmodule.rcvdecoration;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.os.Build;
 import android.view.View;
 
 import androidx.annotation.ColorInt;
@@ -16,42 +17,50 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 
 public class DividerDecoration extends RecyclerView.ItemDecoration {
-    public enum Orientation {
-        HORIZONTAL,
-        VERTICAL,
-    }
-
-    private Orientation mOrientation;
+    /**
+     * 绘制分隔线的方向
+     */
+    private Builder.Orientation mOrientation;
+    /**
+     * 分隔线宽度
+     */
     private int mWidth;
-    private Paint mPaint;
-
+    /**
+     * 分隔线距离左边的距离,垂直方向时有效
+     */
     private int mMarginLeft;
+    /**
+     * 分隔线距离顶部的距离,水平方向时有效
+     */
     private int mMarginTop;
+    /**
+     * 分隔线距离右边的距离,垂直方向时有效
+     */
     private int mMarginRight;
+    /**
+     * 分隔线距离底部的距离,水平方向时有效
+     */
     private int mMarginBottom;
     /**
      * 是否显示最后一个 item 的分隔线
      */
-    private boolean mShowLast = false;
+    private boolean mShowLast;
+    private Paint mPaint;
+
+    public DividerDecoration(Builder builder) {
+        mOrientation = builder.mOrientation;
+        mWidth = builder.mWidth;
+        mMarginLeft = builder.mMarginLeft;
+        mMarginTop = builder.mMarginTop;
+        mMarginRight = builder.mMarginRight;
+        mMarginBottom = builder.mMarginBottom;
+        mShowLast = builder.mShowLast;
+        mPaint = new Paint();
+        mPaint.setColor(builder.mColor);
+    }
 
     public DividerDecoration() {
-        this(Orientation.VERTICAL);
-    }
-
-    public DividerDecoration(Orientation orientation) {
-        this(orientation, 1);
-
-    }
-
-    public DividerDecoration(Orientation orientation, int width) {
-        this(orientation, width, 0xFF000000);
-    }
-
-    public DividerDecoration(Orientation orientation, int width, @ColorInt int color) {
-        mOrientation = orientation;
-        mWidth = width;
-        mPaint = new Paint();
-        mPaint.setColor(color);
+        this(new Builder());
     }
 
     @Override
@@ -59,9 +68,9 @@ public class DividerDecoration extends RecyclerView.ItemDecoration {
         if (parent.getLayoutManager() == null) {
             return;
         }
-        if (mOrientation == Orientation.VERTICAL) {
+        if (mOrientation == Builder.Orientation.VERTICAL) {
             drawVertical(c, parent);
-        } else if (mOrientation == Orientation.HORIZONTAL) {
+        } else if (mOrientation == Builder.Orientation.HORIZONTAL) {
             drawHorizontal(c, parent);
         }
     }
@@ -113,27 +122,76 @@ public class DividerDecoration extends RecyclerView.ItemDecoration {
         if (adapter == null) {
             return;
         }
-        if (mOrientation == Orientation.VERTICAL) {
+        if (mOrientation == Builder.Orientation.VERTICAL) {
             //outRect 相当于 Item 的整体绘制区域,设置 left、top、right、bottom 相当于设置左上右下的内间距
             //如设置 outRect.top = 5 则相当于设置 paddingTop 为 5px。
             if (position < adapter.getItemCount()) {
                 outRect.bottom = mWidth;
             }
-        } else if (mOrientation == Orientation.HORIZONTAL) {
+        } else if (mOrientation == Builder.Orientation.HORIZONTAL) {
             if (position < adapter.getItemCount()) {
                 outRect.right = mWidth;
             }
         }
     }
 
-    public void setMargin(int left, int top, int right, int bottom) {
-        this.mMarginLeft = left;
-        this.mMarginTop = top;
-        this.mMarginRight = right;
-        this.mMarginBottom = bottom;
-    }
+    public static class Builder {
+        private Builder.Orientation mOrientation;
+        private int mWidth = 1;
+        private int mColor = 0xFF000000;
+        private int mMarginLeft = 0;
+        private int mMarginTop = 0;
+        private int mMarginRight = 0;
+        private int mMarginBottom = 0;
+        private boolean mShowLast = false;
 
-    public void setShowLast(boolean showLast) {
-        mShowLast = showLast;
+        public enum Orientation {
+            HORIZONTAL,
+            VERTICAL,
+        }
+
+        public Builder setOrientation(Orientation orientation) {
+            mOrientation = orientation;
+            return this;
+        }
+
+        public Builder setWidth(int width) {
+            mWidth = width;
+            return this;
+        }
+
+        public Builder setColor(int color) {
+            mColor = color;
+            return this;
+        }
+
+        public Builder setMarginLeft(int marginLeft) {
+            mMarginLeft = marginLeft;
+            return this;
+        }
+
+        public Builder setMarginTop(int marginTop) {
+            mMarginTop = marginTop;
+            return this;
+        }
+
+        public Builder setMarginRight(int marginRight) {
+            mMarginRight = marginRight;
+            return this;
+        }
+
+        public Builder setMarginBottom(int marginBottom) {
+            mMarginBottom = marginBottom;
+            return this;
+        }
+
+        public Builder setShowLast(boolean showLast) {
+            mShowLast = showLast;
+            return this;
+        }
+
+        public DividerDecoration build() {
+            return new DividerDecoration(this);
+        }
     }
 }

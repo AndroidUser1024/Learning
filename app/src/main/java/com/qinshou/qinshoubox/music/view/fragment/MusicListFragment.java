@@ -2,6 +2,7 @@ package com.qinshou.qinshoubox.music.view.fragment;
 
 import android.Manifest;
 import android.graphics.Color;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -41,8 +42,11 @@ public class MusicListFragment extends QSFragment<MusicListPresenter> implements
         mRcvMusicAdapter = new RcvMusicAdapter(getContext());
         rcvMusic.setAdapter(mRcvMusicAdapter);
         //设置 RecyclerView ItemDecoration
-        DividerDecoration dividerDecoration = new DividerDecoration(DividerDecoration.Orientation.VERTICAL, 1, Color.parseColor("#FF999999"));
-        dividerDecoration.setMargin(DisplayUtil.dp2px(getContext(), 50), 0, 0, 0);
+        DividerDecoration dividerDecoration = new DividerDecoration.Builder()
+                .setWidth(getResources().getDimensionPixelSize(R.dimen.px1))
+                .setColor(0xFF999999)
+                .setMarginTop(getResources().getDimensionPixelOffset(R.dimen.px50))
+                .build();
         rcvMusic.addItemDecoration(dividerDecoration);
     }
 

@@ -2,10 +2,12 @@ package com.qinshou.commonmodule.rcvbaseadapter.baseholder;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+
 import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.StringRes;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.Button;
@@ -50,7 +52,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     public TextView getTextView(int textViewId) {
         TextView textView = (TextView) mViewSparseArray.get(textViewId);
         if (textView == null) {
-            textView = (TextView) mItemView.findViewById(textViewId);
+            textView = mItemView.findViewById(textViewId);
             mViewSparseArray.put(textViewId, textView);
         }
         return textView;
@@ -59,7 +61,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     public ImageView getImageView(int imageViewId) {
         ImageView imageView = (ImageView) mViewSparseArray.get(imageViewId);
         if (imageView == null) {
-            imageView = (ImageView) mItemView.findViewById(imageViewId);
+            imageView = mItemView.findViewById(imageViewId);
             mViewSparseArray.put(imageViewId, imageView);
         }
         return imageView;
@@ -81,7 +83,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * Description:设置 TextView 文本
      * Date:2018/3/9
      */
-    public BaseViewHolder setTvText(int viewId, String text) {
+    public BaseViewHolder setTvText(int viewId, CharSequence text) {
         TextView mTextView = findViewById(viewId);
         if (mTextView != null) {
             mTextView.setText(text);
@@ -102,22 +104,10 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     }
 
     /**
-     * Description:设置 TextView 文本
-     * Date:2018/3/9
-     */
-    public BaseViewHolder setTvText(int viewId, CharSequence text) {
-        TextView mTextView = findViewById(viewId);
-        if (mTextView != null) {
-            mTextView.setText(text);
-        }
-        return this;
-    }
-
-    /**
      * Description:设置 Button 文本
      * Date:2018/3/9
      */
-    public BaseViewHolder setBtnText(int viewId, String text) {
+    public BaseViewHolder setBtnText(int viewId, CharSequence text) {
         Button mButton = findViewById(viewId);
         if (mButton != null) {
             mButton.setText(text);

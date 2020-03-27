@@ -100,7 +100,10 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
     public void initView() {
         RecyclerView rcvConversation = findViewByID(R.id.rcv_conversation);
         rcvConversation.setLayoutManager(new LinearLayoutManager(getContext()));
-        rcvConversation.addItemDecoration(new DividerDecoration(DividerDecoration.Orientation.VERTICAL, getResources().getDimensionPixelSize(R.dimen.px1), 0xFFF2F2F2));
+        rcvConversation.addItemDecoration(new DividerDecoration.Builder()
+                .setWidth(getResources().getDimensionPixelSize(R.dimen.px1))
+                .setColor(0xFFF2F2F2)
+                .build());
         ((DefaultItemAnimator) rcvConversation.getItemAnimator()).setSupportsChangeAnimations(false);
         rcvConversation.setAdapter(mRcvConversationAdapter = new RcvConversationAdapter(getContext()));
 
