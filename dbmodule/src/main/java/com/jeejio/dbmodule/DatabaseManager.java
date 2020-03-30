@@ -169,7 +169,7 @@ public class DatabaseManager {
      * Description:执行自定义 sql
      */
     public int executeSql(String sql) {
-//        Log.i(TAG, "sql--->" + sql);
+        Log.i(TAG, "sql--->" + sql);
         try {
             mSqLiteDatabase.execSQL(sql);
         } catch (SQLException e) {

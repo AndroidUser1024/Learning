@@ -218,7 +218,6 @@ public class DefaultDaoImpl<T> implements IBaseDao<T> {
         T t = null;
         Cursor cursor = null;
         try {
-            t = mClass.newInstance();
             // 主键
             IdColumnInfoBean idColumnInfo = DatabaseManager.getInstance().getIdByClass(mClass);
             String sql = SqlUtil.getQuerySql(mClass, new Where.Builder()
@@ -226,6 +225,7 @@ public class DefaultDaoImpl<T> implements IBaseDao<T> {
                     .build());
             cursor = mSQLiteDatabase.rawQuery(sql, new String[]{});
             if (cursor.moveToNext()) {
+                t = mClass.newInstance();
                 Field idField = mClass.getDeclaredField(idColumnInfo.getFieldName());
                 if (!idField.isAccessible()) {
                     idField.setAccessible(true);
