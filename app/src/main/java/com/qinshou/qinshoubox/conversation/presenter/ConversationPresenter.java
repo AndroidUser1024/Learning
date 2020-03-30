@@ -4,6 +4,7 @@ package com.qinshou.qinshoubox.conversation.presenter;
 import com.qinshou.commonmodule.base.AbsPresenter;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
+import com.qinshou.qinshoubox.im.bean.ConversationDetailBean;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.conversation.contract.IConversationContract;
 import com.qinshou.qinshoubox.conversation.model.ConversationModel;
@@ -25,9 +26,9 @@ public class ConversationPresenter extends AbsPresenter<IConversationContract.IV
 
     @Override
     public void getConversationList() {
-        getModel().getConversationList(new Callback<List<ConversationBean>>() {
+        getModel().getConversationList(new Callback<List<ConversationDetailBean>>() {
             @Override
-            public void onSuccess(List<ConversationBean> data) {
+            public void onSuccess(List<ConversationDetailBean> data) {
                 if (!isViewAttached()) {
                     return;
                 }

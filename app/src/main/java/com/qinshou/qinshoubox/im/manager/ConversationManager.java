@@ -3,21 +3,17 @@ package com.qinshou.qinshoubox.im.manager;
 
 import android.text.TextUtils;
 
-import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.jeejio.dbmodule.DatabaseManager;
 import com.jeejio.dbmodule.dao.IBaseDao;
-import com.jeejio.dbmodule.util.OrderBy;
-import com.jeejio.dbmodule.util.Where;
+import com.jeejio.dbmodule.condition.Where;
 import com.qinshou.commonmodule.util.ShowLogUtil;
-import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
+import com.qinshou.qinshoubox.im.bean.ConversationDetailBean;
 import com.qinshou.qinshoubox.im.bean.ConversationMessageRelBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.enums.MessageType;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -62,8 +58,8 @@ public class ConversationManager {
         mConversationDao.deleteById(id);
     }
 
-    public List<ConversationBean> getList() {
-        List<Map<String, Object>> list = DatabaseManager.getInstance().rawQuery("SELECT" +
+    public List<ConversationDetailBean> getList() {
+        String sql = "SELECT" +
                 " c.id" +
                 ",c.unreadCount" +
                 ",c.type" +
@@ -87,66 +83,12 @@ public class ConversationManager {
                 " LEFT OUTER JOIN message AS m ON m.pid=c.lastMsgPid" +
                 " LEFT OUTER JOIN user AS u ON u.id=c.toUserId AND c.type=" + MessageType.CHAT.getValue() +
                 " LEFT OUTER JOIN friend AS f ON f.id=c.toUserId AND c.type=" + MessageType.CHAT.getValue() +
-                " LEFT OUTER JOIN group_chat AS gc ON gc.id=c.toUserId AND c.type=" + MessageType.GROUP_CHAT.getValue());
-        List<ConversationBean> conversationBeanList = new ArrayList<>();
-        for (Map<String, Object> map : list) {
-            ConversationBean conversationBean = new ConversationBean();
-            conversationBean.setId((int) map.get("id"));
-            conversationBean.setUnreadCount((int) map.get("unreadCount"));
-            conversationBean.setType((int) map.get("type"));
-            conversationBean.setToUserId((String) map.get("toUserId"));
-            conversationBean.setLastMsgTimestamp((long) map.get("lastMsgTimestamp_Long"));
-            conversationBean.setLastMsgPid((int) map.get("lastMsgPid"));
-            conversationBean.setLastMsgContent((String) map.get("content"));
-            Object contentType = map.get("contentType");
-            if (contentType != null) {
-                conversationBean.setLastMsgContentType((int) contentType);
-            }
-            Object status = map.get("status");
-            if (status != null) {
-                conversationBean.setLastMsgStatus((int) status);
-            }
-
-            if (conversationBean.getType() == MessageType.CHAT.getValue()) {
-                conversationBean.setHeadImgSmall((String) map.get("uHeadImgSmall"));
-                Object fTop = map.get("fTop");
-                if (fTop != null) {
-                    conversationBean.setTop((int) fTop);
-                }
-                Object fDoNotDisturb = map.get("fDoNotDisturb");
-                if (fDoNotDisturb != null) {
-                    conversationBean.setDoNotDisturb((int) fDoNotDisturb);
-                }
-                String remark = (String) map.get("fRemark");
-                if (TextUtils.isEmpty(remark)) {
-                    conversationBean.setTitle((String) map.get("uNickname"));
-                } else {
-                    conversationBean.setTitle(remark);
-                }
-            } else if (conversationBean.getType() == MessageType.GROUP_CHAT.getValue()) {
-                conversationBean.setHeadImgSmall((String) map.get("gcHeadImgSmall"));
-                Object gcTop = map.get("gcTop");
-                if (gcTop != null) {
-                    conversationBean.setTop((int) gcTop);
-                }
-                Object gcDoNotDisturb = map.get("gcDoNotDisturb");
-                if (gcDoNotDisturb != null) {
-                    conversationBean.setDoNotDisturb((int) gcDoNotDisturb);
-                }
-                String groupChatNickname = (String) map.get("gcNickname");
-                if (TextUtils.isEmpty(groupChatNickname)) {
-                    conversationBean.setTitle((String) map.get("gcNicknameDefault"));
-                } else {
-                    conversationBean.setTitle(groupChatNickname);
-                }
-            }
-            conversationBeanList.add(conversationBean);
-        }
-        return conversationBeanList;
+                " LEFT OUTER JOIN group_chat AS gc ON gc.id=c.toUserId AND c.type=" + MessageType.GROUP_CHAT.getValue();
+        return DatabaseManager.getInstance().rawQueryList(sql, ConversationDetailBean.class);
     }
 
-    public List<ConversationBean> getListOrderByLastMsgTimeDesc() {
-        List<Map<String, Object>> list = DatabaseManager.getInstance().rawQuery("SELECT" +
+    public List<ConversationDetailBean> getListOrderByLastMsgTimeDesc() {
+        String sql = "SELECT" +
                 " c.id" +
                 ",c.unreadCount" +
                 ",c.type" +
@@ -171,75 +113,21 @@ public class ConversationManager {
                 " LEFT OUTER JOIN user AS u ON u.id=c.toUserId AND c.type=" + MessageType.CHAT.getValue() +
                 " LEFT OUTER JOIN friend AS f ON f.id=c.toUserId AND c.type=" + MessageType.CHAT.getValue() +
                 " LEFT OUTER JOIN group_chat AS gc ON gc.id=c.toUserId AND c.type=" + MessageType.GROUP_CHAT.getValue() +
-                " ORDER BY c.lastMsgTimestamp DESC");
-        List<ConversationBean> conversationBeanList = new ArrayList<>();
-        for (Map<String, Object> map : list) {
-            ConversationBean conversationBean = new ConversationBean();
-            conversationBean.setId((int) map.get("id"));
-            conversationBean.setUnreadCount((int) map.get("unreadCount"));
-            conversationBean.setType((int) map.get("type"));
-            conversationBean.setToUserId((String) map.get("toUserId"));
-            conversationBean.setLastMsgTimestamp((long) map.get("lastMsgTimestamp_Long"));
-            conversationBean.setLastMsgPid((int) map.get("lastMsgPid"));
-            conversationBean.setLastMsgContent((String) map.get("content"));
-            Object contentType = map.get("contentType");
-            if (contentType != null) {
-                conversationBean.setLastMsgContentType((int) contentType);
-            }
-            Object status = map.get("status");
-            if (status != null) {
-                conversationBean.setLastMsgStatus((int) status);
-            }
-
-            if (conversationBean.getType() == MessageType.CHAT.getValue()) {
-                conversationBean.setHeadImgSmall((String) map.get("uHeadImgSmall"));
-                Object fTop = map.get("fTop");
-                if (fTop != null) {
-                    conversationBean.setTop((int) fTop);
-                }
-                Object fDoNotDisturb = map.get("fDoNotDisturb");
-                if (fDoNotDisturb != null) {
-                    conversationBean.setDoNotDisturb((int) fDoNotDisturb);
-                }
-                String remark = (String) map.get("fRemark");
-                if (TextUtils.isEmpty(remark)) {
-                    conversationBean.setTitle((String) map.get("uNickname"));
-                } else {
-                    conversationBean.setTitle(remark);
-                }
-            } else if (conversationBean.getType() == MessageType.GROUP_CHAT.getValue()) {
-                conversationBean.setHeadImgSmall((String) map.get("gcHeadImgSmall"));
-                Object gcTop = map.get("gcTop");
-                if (gcTop != null) {
-                    conversationBean.setTop((int) gcTop);
-                }
-                Object gcDoNotDisturb = map.get("gcDoNotDisturb");
-                if (gcDoNotDisturb != null) {
-                    conversationBean.setDoNotDisturb((int) gcDoNotDisturb);
-                }
-                String groupChatNickname = (String) map.get("gcNickname");
-                if (TextUtils.isEmpty(groupChatNickname)) {
-                    conversationBean.setTitle((String) map.get("gcNicknameDefault"));
-                } else {
-                    conversationBean.setTitle(groupChatNickname);
-                }
-            }
-            conversationBeanList.add(conversationBean);
-        }
-        return conversationBeanList;
+                " ORDER BY c.lastMsgTimestamp DESC";
+        return DatabaseManager.getInstance().rawQueryList(sql, ConversationDetailBean.class);
     }
 
-    public List<ConversationBean> getListOrderByTopDescAndLastMsgTimeDesc() {
-        List<Map<String, Object>> list = DatabaseManager.getInstance().rawQuery("SELECT" +
+    public List<ConversationDetailBean> getListOrderByTopDescAndLastMsgTimeDesc() {
+        String sql = "SELECT" +
                 " c.id" +
                 ",c.unreadCount" +
                 ",c.type" +
                 ",c.toUserId" +
                 ",c.lastMsgTimestamp" +
                 ",c.lastMsgPid" +
-                ",m.content" +
-                ",m.contentType" +
-                ",m.status" +
+                ",m.content AS lastMsgContent" +
+                ",m.contentType AS lastMsgContentType" +
+                ",m.status AS lastMsgStatus" +
                 ",u.nickname AS uNickname" +
                 ",u.headImgSmall AS uHeadImgSmall" +
                 ",f.remark AS fRemark" +
@@ -257,66 +145,12 @@ public class ConversationManager {
                 " LEFT OUTER JOIN group_chat AS gc ON gc.id=c.toUserId AND c.type=" + MessageType.GROUP_CHAT.getValue() +
                 " ORDER BY" +
                 " fTop OR gcTop DESC" +
-                ",c.lastMsgTimestamp DESC");
-        List<ConversationBean> conversationBeanList = new ArrayList<>();
-        for (Map<String, Object> map : list) {
-            ConversationBean conversationBean = new ConversationBean();
-            conversationBean.setId((int) map.get("id"));
-            conversationBean.setUnreadCount((int) map.get("unreadCount"));
-            conversationBean.setType((int) map.get("type"));
-            conversationBean.setToUserId((String) map.get("toUserId"));
-            conversationBean.setLastMsgTimestamp((long) map.get("lastMsgTimestamp_Long"));
-            conversationBean.setLastMsgPid((int) map.get("lastMsgPid"));
-            conversationBean.setLastMsgContent((String) map.get("content"));
-            Object contentType = map.get("contentType");
-            if (contentType != null) {
-                conversationBean.setLastMsgContentType((int) contentType);
-            }
-            Object status = map.get("status");
-            if (status != null) {
-                conversationBean.setLastMsgStatus((int) status);
-            }
-
-            if (conversationBean.getType() == MessageType.CHAT.getValue()) {
-                conversationBean.setHeadImgSmall((String) map.get("uHeadImgSmall"));
-                Object fTop = map.get("fTop");
-                if (fTop != null) {
-                    conversationBean.setTop((int) fTop);
-                }
-                Object fDoNotDisturb = map.get("fDoNotDisturb");
-                if (fDoNotDisturb != null) {
-                    conversationBean.setDoNotDisturb((int) fDoNotDisturb);
-                }
-                String remark = (String) map.get("fRemark");
-                if (TextUtils.isEmpty(remark)) {
-                    conversationBean.setTitle((String) map.get("uNickname"));
-                } else {
-                    conversationBean.setTitle(remark);
-                }
-            } else if (conversationBean.getType() == MessageType.GROUP_CHAT.getValue()) {
-                conversationBean.setHeadImgSmall((String) map.get("gcHeadImgSmall"));
-                Object gcTop = map.get("gcTop");
-                if (gcTop != null) {
-                    conversationBean.setTop((int) gcTop);
-                }
-                Object gcDoNotDisturb = map.get("gcDoNotDisturb");
-                if (gcDoNotDisturb != null) {
-                    conversationBean.setDoNotDisturb((int) gcDoNotDisturb);
-                }
-                String groupChatNickname = (String) map.get("gcNickname");
-                if (TextUtils.isEmpty(groupChatNickname)) {
-                    conversationBean.setTitle((String) map.get("gcNicknameDefault"));
-                } else {
-                    conversationBean.setTitle(groupChatNickname);
-                }
-            }
-            conversationBeanList.add(conversationBean);
-        }
-        return conversationBeanList;
+                ",c.lastMsgTimestamp DESC";
+        return DatabaseManager.getInstance().rawQueryList(sql, ConversationDetailBean.class);
     }
 
-    public ConversationBean selectById(int id) {
-        List<Map<String, Object>> list = DatabaseManager.getInstance().rawQuery("SELECT" +
+    public ConversationDetailBean selectById(int id) {
+        String sql = "SELECT" +
                 " c.id" +
                 ",c.unreadCount" +
                 ",c.type" +
@@ -342,66 +176,12 @@ public class ConversationManager {
                 " LEFT OUTER JOIN friend AS f ON f.id=c.toUserId AND c.type=" + MessageType.CHAT.getValue() +
                 " LEFT OUTER JOIN group_chat AS gc ON gc.id=c.toUserId AND c.type=" + MessageType.GROUP_CHAT.getValue() +
                 " WHERE" +
-                " c.id=" + id);
-        ConversationBean conversationBean = new ConversationBean();
-        if (list.size() > 0) {
-            Map<String, Object> map = list.get(0);
-
-            conversationBean.setId((int) map.get("id"));
-            conversationBean.setUnreadCount((int) map.get("unreadCount"));
-            conversationBean.setType((int) map.get("type"));
-            conversationBean.setToUserId((String) map.get("toUserId"));
-            conversationBean.setLastMsgTimestamp((long) map.get("lastMsgTimestamp_Long"));
-            conversationBean.setLastMsgPid((int) map.get("lastMsgPid"));
-            conversationBean.setLastMsgContent((String) map.get("content"));
-            Object contentType = map.get("contentType");
-            if (contentType != null) {
-                conversationBean.setLastMsgContentType((int) contentType);
-            }
-            Object status = map.get("status");
-            if (status != null) {
-                conversationBean.setLastMsgStatus((int) status);
-            }
-
-            if (conversationBean.getType() == MessageType.CHAT.getValue()) {
-                conversationBean.setHeadImgSmall((String) map.get("uHeadImgSmall"));
-                Object fTop = map.get("fTop");
-                if (fTop != null) {
-                    conversationBean.setTop((int) fTop);
-                }
-                Object fDoNotDisturb = map.get("fDoNotDisturb");
-                if (fDoNotDisturb != null) {
-                    conversationBean.setDoNotDisturb((int) fDoNotDisturb);
-                }
-                String remark = (String) map.get("fRemark");
-                if (TextUtils.isEmpty(remark)) {
-                    conversationBean.setTitle((String) map.get("uNickname"));
-                } else {
-                    conversationBean.setTitle(remark);
-                }
-            } else if (conversationBean.getType() == MessageType.GROUP_CHAT.getValue()) {
-                conversationBean.setHeadImgSmall((String) map.get("gcHeadImgSmall"));
-                Object gcTop = map.get("gcTop");
-                if (gcTop != null) {
-                    conversationBean.setTop((int) gcTop);
-                }
-                Object gcDoNotDisturb = map.get("gcDoNotDisturb");
-                if (gcDoNotDisturb != null) {
-                    conversationBean.setDoNotDisturb((int) gcDoNotDisturb);
-                }
-                String groupChatNickname = (String) map.get("gcNickname");
-                if (TextUtils.isEmpty(groupChatNickname)) {
-                    conversationBean.setTitle((String) map.get("gcNicknameDefault"));
-                } else {
-                    conversationBean.setTitle(groupChatNickname);
-                }
-            }
-        }
-        return conversationBean;
+                " c.id=" + id;
+        return DatabaseManager.getInstance().rawQuery(sql, ConversationDetailBean.class);
     }
 
-    public ConversationBean selectByTypeAndToUserId(int type, String toUserId) {
-        List<Map<String, Object>> list = DatabaseManager.getInstance().rawQuery("SELECT" +
+    public ConversationDetailBean selectDetailByTypeAndToUserId(int type, String toUserId) {
+        String sql = "SELECT" +
                 " c.id" +
                 ",c.unreadCount" +
                 ",c.type" +
@@ -429,61 +209,16 @@ public class ConversationManager {
                 " WHERE" +
                 " c.type=" + type +
                 " AND" +
-                " c.toUserId=\'" + toUserId + "\'");
-        ConversationBean conversationBean = new ConversationBean();
-        if (list.size() > 0) {
-            Map<String, Object> map = list.get(0);
+                " c.toUserId=\'" + toUserId + "\'";
+        return DatabaseManager.getInstance().rawQuery(sql, ConversationDetailBean.class);
+    }
 
-            conversationBean.setId((int) map.get("id"));
-            conversationBean.setUnreadCount((int) map.get("unreadCount"));
-            conversationBean.setType((int) map.get("type"));
-            conversationBean.setToUserId((String) map.get("toUserId"));
-            conversationBean.setLastMsgTimestamp((long) map.get("lastMsgTimestamp_Long"));
-            conversationBean.setLastMsgPid((int) map.get("lastMsgPid"));
-            conversationBean.setLastMsgContent((String) map.get("content"));
-            Object contentType = map.get("contentType");
-            if (contentType != null) {
-                conversationBean.setLastMsgContentType((int) contentType);
-            }
-            Object status = map.get("status");
-            if (status != null) {
-                conversationBean.setLastMsgStatus((int) status);
-            }
-            if (conversationBean.getType() == MessageType.CHAT.getValue()) {
-                conversationBean.setHeadImgSmall((String) map.get("uHeadImgSmall"));
-                Object fTop = map.get("fTop");
-                if (fTop != null) {
-                    conversationBean.setTop((int) fTop);
-                }
-                Object fDoNotDisturb = map.get("fDoNotDisturb");
-                if (fDoNotDisturb != null) {
-                    conversationBean.setDoNotDisturb((int) fDoNotDisturb);
-                }
-                String remark = (String) map.get("fRemark");
-                if (TextUtils.isEmpty(remark)) {
-                    conversationBean.setTitle((String) map.get("uNickname"));
-                } else {
-                    conversationBean.setTitle(remark);
-                }
-            } else if (conversationBean.getType() == MessageType.GROUP_CHAT.getValue()) {
-                conversationBean.setHeadImgSmall((String) map.get("gcHeadImgSmall"));
-                Object gcTop = map.get("gcTop");
-                if (gcTop != null) {
-                    conversationBean.setTop((int) gcTop);
-                }
-                Object gcDoNotDisturb = map.get("gcDoNotDisturb");
-                if (gcDoNotDisturb != null) {
-                    conversationBean.setDoNotDisturb((int) gcDoNotDisturb);
-                }
-                String groupChatNickname = (String) map.get("gcNickname");
-                if (TextUtils.isEmpty(groupChatNickname)) {
-                    conversationBean.setTitle((String) map.get("gcNicknameDefault"));
-                } else {
-                    conversationBean.setTitle(groupChatNickname);
-                }
-            }
-        }
-        return conversationBean;
+    public ConversationBean selectByTypeAndToUserId(int type, String toUserId) {
+        return mConversationDao.select(new Where.Builder()
+                .equal("type", type)
+                .and()
+                .equal("toUserId", toUserId)
+                .build());
     }
 
     public int getTotalUnreadCount() {
@@ -531,7 +266,6 @@ public class ConversationManager {
             return 0;
         }
         conversationBean.setLastMsgPid(0);
-        conversationBean.setLastMsgContent("");
         mConversationDao.update(conversationBean);
         mConversationMessageRelDao.delete(new Where.Builder()
                 .equal("conversationId", conversationBean.getId())

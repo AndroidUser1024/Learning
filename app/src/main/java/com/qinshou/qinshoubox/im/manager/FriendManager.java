@@ -4,8 +4,7 @@ import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.friend.bean.FriendHistoryBean;
 import com.qinshou.qinshoubox.im.IMClient;
-import com.qinshou.qinshoubox.im.bean.ConversationBean;
-import com.qinshou.qinshoubox.im.bean.FriendBean;
+import com.qinshou.qinshoubox.im.bean.ConversationDetailBean;
 import com.qinshou.qinshoubox.im.bean.FriendStatusBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.bean.UserDetailBean;
@@ -184,9 +183,9 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
                         getCache().remove(toUserId);
 
                         ConversationManager conversationManager = IMClient.SINGLETON.getConversationManager();
-                        ConversationBean conversationBean = conversationManager.selectByTypeAndToUserId(MessageType.CHAT.getValue(), toUserId);
-                        if (conversationBean != null) {
-                            conversationManager.deleteById(conversationBean.getId());
+                        ConversationDetailBean conversationDetailBean = conversationManager.selectDetailByTypeAndToUserId(MessageType.CHAT.getValue(), toUserId);
+                        if (conversationDetailBean != null) {
+                            conversationManager.deleteById(conversationDetailBean.getId());
                         }
 
                         qsCallback.onSuccess(data);

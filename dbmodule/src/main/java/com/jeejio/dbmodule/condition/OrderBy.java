@@ -1,4 +1,4 @@
-package com.jeejio.dbmodule.util;
+package com.jeejio.dbmodule.condition;
 
 /**
  * Author: QinHao

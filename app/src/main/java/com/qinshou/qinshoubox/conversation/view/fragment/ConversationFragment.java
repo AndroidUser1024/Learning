@@ -22,7 +22,7 @@ import com.qinshou.qinshoubox.conversation.presenter.ConversationPresenter;
 import com.qinshou.qinshoubox.conversation.view.adapter.RcvConversationAdapter;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.IMClient;
-import com.qinshou.qinshoubox.im.bean.ConversationBean;
+import com.qinshou.qinshoubox.im.bean.ConversationDetailBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.enums.MessageType;
 import com.qinshou.qinshoubox.im.listener.IOnMessageListener;
@@ -58,16 +58,16 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
             } else if (messageBean.getType() == MessageType.GROUP_CHAT.getValue()) {
                 toUserId = messageBean.getToUserId();
             }
-            ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().selectByTypeAndToUserId(messageBean.getType(), toUserId);
-            if (conversationBean == null) {
+            ConversationDetailBean conversationDetailBean = IMClient.SINGLETON.getConversationManager().selectDetailByTypeAndToUserId(messageBean.getType(), toUserId);
+            if (conversationDetailBean == null) {
                 return;
             }
             // 更新会话列表
-            updateConversationList(conversationBean);
+            updateConversationList(conversationDetailBean);
             // 更新未读数
-            updateUnreadCount(conversationBean);
+            updateUnreadCount(conversationDetailBean);
             // 如果免打扰,则不震动,不显示通知
-            if (conversationBean.getDoNotDisturb() == 1) {
+            if (conversationDetailBean.getDoNotDisturb() == 1) {
                 return;
             }
             try {
@@ -143,25 +143,25 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
     @Override
     public void handleEvent(EventBean<Object> eventBean) {
         if (eventBean.getType() == EventBean.Type.REFRESH_CONVERSATION_UNREAD_COUNT) {
-            updateUnreadCount((ConversationBean) eventBean.getData());
+            updateUnreadCount((ConversationDetailBean) eventBean.getData());
         } else if (eventBean.getType() == EventBean.Type.REFRESH_CONVERSATION_LIST) {
             if (eventBean.getData() == null) {
                 getPresenter().getConversationList();
                 // 更新未读数
-                updateUnreadCount((ConversationBean) eventBean.getData());
-            } else if (eventBean.getData() instanceof ConversationBean) {
-                updateConversationList((ConversationBean) eventBean.getData());
+                updateUnreadCount((ConversationDetailBean) eventBean.getData());
+            } else if (eventBean.getData() instanceof ConversationDetailBean) {
+                updateConversationList((ConversationDetailBean) eventBean.getData());
                 // 更新未读数
-                updateUnreadCount((ConversationBean) eventBean.getData());
+                updateUnreadCount((ConversationDetailBean) eventBean.getData());
             }
         } else if (eventBean.getType() == EventBean.Type.CLEAR_CHAT_HISTORY) {
-            clearChatHistory((ConversationBean) eventBean.getData());
+            clearChatHistory((ConversationDetailBean) eventBean.getData());
         }
     }
 
     @Override
-    public void getConversationListSuccess(List<ConversationBean> conversationBeanList) {
-        mRcvConversationAdapter.setDataList(conversationBeanList);
+    public void getConversationListSuccess(List<ConversationDetailBean> conversationDetailBeanList) {
+        mRcvConversationAdapter.setDataList(conversationDetailBeanList);
     }
 
     @Override
@@ -175,17 +175,17 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
      * Date:2019/12/6 18:48
      * Description:更新会话列表
      *
-     * @param conversationBean 需要插入或更新的会话
+     * @param conversationDetailBean 需要插入或更新的会话
      */
-    private void updateConversationList(ConversationBean conversationBean) {
-        List<ConversationBean> conversationBeanList = mRcvConversationAdapter.getDataList();
-        if (conversationBean.getTop() == 1) {
+    private void updateConversationList(ConversationDetailBean conversationDetailBean) {
+        List<ConversationDetailBean> conversationDetailBeanList = mRcvConversationAdapter.getDataList();
+        if (conversationDetailBean.getTop() == 1) {
             // 置顶的会话
             boolean contains = false;
             // 如果会话列表中包含该会话,定义一个变量记录该会话原来的位置
             int index = 0;
-            for (int i = 0; i < conversationBeanList.size(); i++) {
-                if (conversationBeanList.get(i).getId() == conversationBean.getId()) {
+            for (int i = 0; i < conversationDetailBeanList.size(); i++) {
+                if (conversationDetailBeanList.get(i).getId() == conversationDetailBean.getId()) {
                     contains = true;
                     index = i;
                     break;
@@ -194,18 +194,18 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
             if (contains) {
                 if (index == 0) {
                     // 如果该会话本来就在第一个,直接修改
-                    conversationBeanList.set(index, conversationBean);
+                    conversationDetailBeanList.set(index, conversationDetailBean);
                     mRcvConversationAdapter.notifyItemChanged(index);
                 } else {
                     // 如果该会话不在第一个,放到第一个
-                    conversationBeanList.remove(index);
-                    conversationBeanList.add(0, conversationBean);
+                    conversationDetailBeanList.remove(index);
+                    conversationDetailBeanList.add(0, conversationDetailBean);
                     mRcvConversationAdapter.notifyItemRangeChanged(0, index - 0 + 1);
                 }
             } else {
                 // 原来的会话列表中没有该会话,则添加到第一个
-                conversationBeanList.add(0, conversationBean);
-                mRcvConversationAdapter.notifyItemRangeChanged(0, conversationBeanList.size() - 0 + 1);
+                conversationDetailBeanList.add(0, conversationDetailBean);
+                mRcvConversationAdapter.notifyItemRangeChanged(0, conversationDetailBeanList.size() - 0 + 1);
             }
         } else {
             // 非置顶的会话
@@ -213,13 +213,13 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
             // 如果会话列表中包含该会话,定义一个变量记录该会话原来的位置
             int index = 0;
             // 定义一个变量记录非置顶的第一条会话的位置
-            int firstNotTopIndex = conversationBeanList.size();
-            for (int i = 0; i < conversationBeanList.size(); i++) {
+            int firstNotTopIndex = conversationDetailBeanList.size();
+            for (int i = 0; i < conversationDetailBeanList.size(); i++) {
                 // firstNotTopIndex 只修改一次
-                if (conversationBeanList.get(i).getTop() == 0 && firstNotTopIndex == conversationBeanList.size()) {
+                if (conversationDetailBeanList.get(i).getTop() == 0 && firstNotTopIndex == conversationDetailBeanList.size()) {
                     firstNotTopIndex = i;
                 }
-                if (conversationBeanList.get(i).getId() == conversationBean.getId()) {
+                if (conversationDetailBeanList.get(i).getId() == conversationDetailBean.getId()) {
                     contains = true;
                     index = i;
                     break;
@@ -228,18 +228,18 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
             if (contains) {
                 if (index == firstNotTopIndex) {
                     // 如果该会话本来就在非置顶会话的第一个,直接修改
-                    conversationBeanList.set(index, conversationBean);
+                    conversationDetailBeanList.set(index, conversationDetailBean);
                     mRcvConversationAdapter.notifyItemChanged(index);
                 } else {
                     // 如果该会话不在非置顶会话第一个,放到非置顶会话第一个
-                    conversationBeanList.remove(index);
-                    conversationBeanList.add(firstNotTopIndex, conversationBean);
+                    conversationDetailBeanList.remove(index);
+                    conversationDetailBeanList.add(firstNotTopIndex, conversationDetailBean);
                     mRcvConversationAdapter.notifyItemRangeChanged(firstNotTopIndex, index - firstNotTopIndex + 1);
                 }
             } else {
                 // 原来的会话列表中没有该会话,则添加到非置顶会话第一个
-                conversationBeanList.add(firstNotTopIndex, conversationBean);
-                mRcvConversationAdapter.notifyItemRangeChanged(firstNotTopIndex, conversationBeanList.size() - firstNotTopIndex + 1);
+                conversationDetailBeanList.add(firstNotTopIndex, conversationDetailBean);
+                mRcvConversationAdapter.notifyItemRangeChanged(firstNotTopIndex, conversationDetailBeanList.size() - firstNotTopIndex + 1);
             }
         }
     }
@@ -250,9 +250,9 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
      * Date:2019/12/6 19:12
      * Description:更新未读数
      *
-     * @param conversationBean
+     * @param conversationDetailBean
      */
-    private void updateUnreadCount(@Nullable ConversationBean conversationBean) {
+    private void updateUnreadCount(@Nullable ConversationDetailBean conversationDetailBean) {
         int totalUnreadCount = IMClient.SINGLETON.getConversationManager().getTotalUnreadCount();
         if (totalUnreadCount > 0) {
             mTvUnreadCountInTlMain.setVisibility(View.VISIBLE);
@@ -260,13 +260,13 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
         } else {
             mTvUnreadCountInTlMain.setVisibility(View.GONE);
         }
-        if (conversationBean == null) {
+        if (conversationDetailBean == null) {
             return;
         }
         for (int i = 0; i < mRcvConversationAdapter.getDataList().size(); i++) {
-            ConversationBean c = mRcvConversationAdapter.getDataList().get(i);
-            if (c.getId() == conversationBean.getId()) {
-                c.setUnreadCount(conversationBean.getUnreadCount());
+            ConversationDetailBean c = mRcvConversationAdapter.getDataList().get(i);
+            if (c.getId() == conversationDetailBean.getId()) {
+                c.setUnreadCount(conversationDetailBean.getUnreadCount());
                 mRcvConversationAdapter.notifyItemChanged(i);
                 break;
             }
@@ -281,13 +281,13 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
      *
      * @param data 目标会话
      */
-    private void clearChatHistory(ConversationBean data) {
-        List<ConversationBean> conversationBeanList = mRcvConversationAdapter.getDataList();
-        for (int i = 0; i < conversationBeanList.size(); i++) {
-            ConversationBean conversationBean = conversationBeanList.get(i);
-            if (conversationBean.getType() == data.getType() && TextUtils.equals(conversationBean.getToUserId(), data.getToUserId())) {
-                conversationBean.setLastMsgContent("");
-                conversationBean.setLastMsgPid(0);
+    private void clearChatHistory(ConversationDetailBean data) {
+        List<ConversationDetailBean> conversationDetailBeanList = mRcvConversationAdapter.getDataList();
+        for (int i = 0; i < conversationDetailBeanList.size(); i++) {
+            ConversationDetailBean conversationDetailBean = conversationDetailBeanList.get(i);
+            if (conversationDetailBean.getType() == data.getType() && TextUtils.equals(conversationDetailBean.getToUserId(), data.getToUserId())) {
+                conversationDetailBean.setLastMsgContent("");
+                conversationDetailBean.setLastMsgPid(0);
                 mRcvConversationAdapter.notifyItemChanged(i);
                 break;
             }

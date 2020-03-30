@@ -11,9 +11,9 @@ import com.jeejio.dbmodule.annotation.Column;
 import com.jeejio.dbmodule.bean.ColumnInfoBean;
 import com.jeejio.dbmodule.bean.IdColumnInfoBean;
 import com.jeejio.dbmodule.dao.IBaseDao;
-import com.jeejio.dbmodule.util.QueryCondition;
+import com.jeejio.dbmodule.condition.QueryCondition;
 import com.jeejio.dbmodule.util.SqlUtil;
-import com.jeejio.dbmodule.util.Where;
+import com.jeejio.dbmodule.condition.Where;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

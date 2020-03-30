@@ -2,12 +2,11 @@ package com.jeejio.dbmodule.util;
 
 import android.util.Log;
 
-import androidx.annotation.Nullable;
-
 import com.jeejio.dbmodule.DatabaseManager;
 import com.jeejio.dbmodule.annotation.Column;
 import com.jeejio.dbmodule.bean.ColumnInfoBean;
 import com.jeejio.dbmodule.bean.IdColumnInfoBean;
+import com.jeejio.dbmodule.condition.QueryCondition;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

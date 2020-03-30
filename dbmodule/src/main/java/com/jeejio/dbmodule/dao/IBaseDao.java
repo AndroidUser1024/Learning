@@ -1,6 +1,6 @@
 package com.jeejio.dbmodule.dao;
 
-import com.jeejio.dbmodule.util.QueryCondition;
+import com.jeejio.dbmodule.condition.QueryCondition;
 
 import java.util.List;
 

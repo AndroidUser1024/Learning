@@ -14,7 +14,7 @@ import com.qinshou.commonmodule.base.AbsDialogFragment;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.IMClient;
-import com.qinshou.qinshoubox.im.bean.ConversationBean;
+import com.qinshou.qinshoubox.im.bean.ConversationDetailBean;
 import com.qinshou.qinshoubox.im.enums.MessageType;
 
 import org.greenrobot.eventbus.EventBus;
@@ -61,8 +61,8 @@ public class ClearChatHistoryDialog extends AbsDialogFragment {
                 }
                 Toast.makeText(getContext(), getString(R.string.chat_setting_toast_clear_chat_history_success_text), Toast.LENGTH_SHORT).show();
                 // 发送事件,更新聊天界面和会话界面 UI
-                ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().selectByTypeAndToUserId(messageType.getValue(), toUserId);
-                EventBus.getDefault().post(new EventBean<>(EventBean.Type.CLEAR_CHAT_HISTORY, conversationBean));
+                ConversationDetailBean conversationDetailBean = IMClient.SINGLETON.getConversationManager().selectDetailByTypeAndToUserId(messageType.getValue(), toUserId);
+                EventBus.getDefault().post(new EventBean<>(EventBean.Type.CLEAR_CHAT_HISTORY, conversationDetailBean));
                 // 对话框消失
                 dismiss();
             }

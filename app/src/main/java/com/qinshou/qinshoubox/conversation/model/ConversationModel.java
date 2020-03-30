@@ -6,6 +6,7 @@ import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.conversation.contract.IConversationContract;
 import com.qinshou.qinshoubox.conversation.view.fragment.ConversationFragment;
+import com.qinshou.qinshoubox.im.bean.ConversationDetailBean;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ import java.util.List;
  */
 public class ConversationModel implements IConversationContract.IModel {
     @Override
-    public void getConversationList(Callback<List<ConversationBean>> callback) {
+    public void getConversationList(Callback<List<ConversationDetailBean>> callback) {
         callback.onSuccess(IMClient.SINGLETON.getConversationManager().getListOrderByTopDescAndLastMsgTimeDesc());
     }
 }

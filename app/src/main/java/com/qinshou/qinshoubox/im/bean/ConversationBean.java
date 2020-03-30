@@ -44,34 +44,6 @@ public class ConversationBean {
      */
     @Column(type = Column.Type.INTEGER)
     private int lastMsgPid;
-    /**
-     * 对方的小头像
-     */
-    private String headImgSmall;
-    /**
-     * 会话标题
-     */
-    private String title;
-    /**
-     * 最后一条消息的内容
-     */
-    private String lastMsgContent;
-    /**
-     * 最后一条消息的类型
-     */
-    private int lastMsgContentType;
-    /**
-     * 是否置顶,0 是非置顶,1 是置顶
-     */
-    private int top;
-    /**
-     * 是否免打扰,0 是非免打扰,1 是免打扰
-     */
-    private int doNotDisturb;
-    /**
-     * 最后一条消息发送状态 -1 发送失败   0 发送中    1 发送成功
-     */
-    private int lastMsgStatus;
 
     public ConversationBean() {
     }
@@ -85,13 +57,6 @@ public class ConversationBean {
                 ", toUserId='" + toUserId + '\'' +
                 ", lastMsgTimestamp=" + lastMsgTimestamp +
                 ", lastMsgPid=" + lastMsgPid +
-                ", headImgSmall='" + headImgSmall + '\'' +
-                ", title='" + title + '\'' +
-                ", lastMsgContent='" + lastMsgContent + '\'' +
-                ", lastMsgContentType=" + lastMsgContentType +
-                ", top=" + top +
-                ", doNotDisturb=" + doNotDisturb +
-                ", lastMsgStatus=" + lastMsgStatus +
                 '}';
     }
 
@@ -141,61 +106,5 @@ public class ConversationBean {
 
     public void setLastMsgPid(int lastMsgPid) {
         this.lastMsgPid = lastMsgPid;
-    }
-
-    public String getHeadImgSmall() {
-        return headImgSmall;
-    }
-
-    public void setHeadImgSmall(String headImgSmall) {
-        this.headImgSmall = headImgSmall;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getLastMsgContent() {
-        return lastMsgContent;
-    }
-
-    public void setLastMsgContent(String lastMsgContent) {
-        this.lastMsgContent = lastMsgContent;
-    }
-
-    public int getLastMsgContentType() {
-        return lastMsgContentType;
-    }
-
-    public void setLastMsgContentType(int lastMsgContentType) {
-        this.lastMsgContentType = lastMsgContentType;
-    }
-
-    public int getTop() {
-        return top;
-    }
-
-    public void setTop(int top) {
-        this.top = top;
-    }
-
-    public int getDoNotDisturb() {
-        return doNotDisturb;
-    }
-
-    public void setDoNotDisturb(int doNotDisturb) {
-        this.doNotDisturb = doNotDisturb;
-    }
-
-    public int getLastMsgStatus() {
-        return lastMsgStatus;
-    }
-
-    public void setLastMsgStatus(int lastMsgStatus) {
-        this.lastMsgStatus = lastMsgStatus;
     }
 }

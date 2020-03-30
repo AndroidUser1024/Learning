@@ -40,10 +40,10 @@ import com.qinshou.qinshoubox.conversation.contract.IChatContract;
 import com.qinshou.qinshoubox.conversation.presenter.ChatPresenter;
 import com.qinshou.qinshoubox.conversation.view.adapter.RcvMessageAdapter;
 import com.qinshou.qinshoubox.conversation.view.fragment.ChatSettingFragment;
+import com.qinshou.qinshoubox.im.bean.ConversationDetailBean;
 import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.IMClient;
-import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.enums.MessageContentType;
 import com.qinshou.qinshoubox.im.enums.MessageType;
@@ -353,12 +353,12 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
             rcvMessageScrollToLast();
 
             // 重置未读数
-            ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().selectByTypeAndToUserId(MessageType.CHAT.getValue(), mToUserId);
-            if (conversationBean != null) {
-                IMClient.SINGLETON.getConversationManager().setUnreadCount(0, conversationBean.getId());
+            ConversationDetailBean conversationDetailBean = IMClient.SINGLETON.getConversationManager().selectDetailByTypeAndToUserId(MessageType.CHAT.getValue(), mToUserId);
+            if (conversationDetailBean != null) {
+                IMClient.SINGLETON.getConversationManager().setUnreadCount(0, conversationDetailBean.getId());
                 // 通知会话列表刷新未读数
-                conversationBean.setUnreadCount(0);
-                EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_LIST, conversationBean));
+                conversationDetailBean.setUnreadCount(0);
+                EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_LIST, conversationDetailBean));
             }
 
         }
@@ -371,8 +371,8 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
         public void onSending(MessageBean messageBean) {
             ShowLogUtil.logi("onSending: pid--->" + messageBean.getPid() + ",id--->" + messageBean.getId());
             // 更新会话列表
-            ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().selectByTypeAndToUserId(messageBean.getType(), messageBean.getToUserId());
-            EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_LIST, conversationBean));
+            ConversationDetailBean conversationDetailBean = IMClient.SINGLETON.getConversationManager().selectDetailByTypeAndToUserId(messageBean.getType(), messageBean.getToUserId());
+            EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_LIST, conversationDetailBean));
         }
 
         @Override
@@ -386,8 +386,8 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
                     break;
                 }
             }// 更新会话列表
-            ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().selectByTypeAndToUserId(messageBean.getType(), messageBean.getToUserId());
-            EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_LIST, conversationBean));
+            ConversationDetailBean conversationDetailBean = IMClient.SINGLETON.getConversationManager().selectDetailByTypeAndToUserId(messageBean.getType(), messageBean.getToUserId());
+            EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_LIST, conversationDetailBean));
         }
 
         @Override
@@ -402,8 +402,8 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
                 }
             }
             // 更新会话列表
-            ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().selectByTypeAndToUserId(messageBean.getType(), messageBean.getToUserId());
-            EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_LIST, conversationBean));
+            ConversationDetailBean conversationDetailBean = IMClient.SINGLETON.getConversationManager().selectDetailByTypeAndToUserId(messageBean.getType(), messageBean.getToUserId());
+            EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_LIST, conversationDetailBean));
         }
     };
 
@@ -543,12 +543,12 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
             return;
         }
         // 重置未读数
-        ConversationBean conversationBean = IMClient.SINGLETON.getConversationManager().selectByTypeAndToUserId(MessageType.CHAT.getValue(), mToUserId);
-        if (conversationBean != null) {
-            IMClient.SINGLETON.getConversationManager().setUnreadCount(0, conversationBean.getId());
+        ConversationDetailBean conversationDetailBean = IMClient.SINGLETON.getConversationManager().selectDetailByTypeAndToUserId(MessageType.CHAT.getValue(), mToUserId);
+        if (conversationDetailBean != null) {
+            IMClient.SINGLETON.getConversationManager().setUnreadCount(0, conversationDetailBean.getId());
             // 通知会话列表刷新未读数
-            conversationBean.setUnreadCount(0);
-            EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_LIST, conversationBean));
+            conversationDetailBean.setUnreadCount(0);
+            EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_LIST, conversationDetailBean));
         }
         UserDetailBean userDetailBean = IMClient.SINGLETON.getFriendManager().getById(mToUserId);
         if (userDetailBean != null) {

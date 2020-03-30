@@ -17,6 +17,7 @@ import com.jeejio.dbmodule.dao.IBaseDao;
 import com.jeejio.dbmodule.dao.impl.DefaultDaoImpl;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -168,7 +169,7 @@ public class DatabaseManager {
      * Description:执行自定义 sql
      */
     public int executeSql(String sql) {
-        Log.i(TAG, "sql--->" + sql);
+//        Log.i(TAG, "sql--->" + sql);
         try {
             mSqLiteDatabase.execSQL(sql);
         } catch (SQLException e) {
@@ -181,7 +182,10 @@ public class DatabaseManager {
      * Author: QinHao
      * Email:qinhao@jeejio.com
      * Date:2020/3/20 9:10
-     * Description:执行自定义 sql
+     * Description:执行自定义 sql 查询
+     * 返回值是一个集合,集合中的元素是一个 Map
+     * key 是 String 型.默认为列名,如果 sql 中有指定别名则为指定的别名
+     * value 是 Object 型,是查询到的值,如果没有值则为 null,拿到后需要强转为自己需要的类型,注意强转前需要进行非空判断
      */
     public List<Map<String, Object>> rawQuery(String sql) {
         Log.i(TAG, "sql--->" + sql);
@@ -217,6 +221,146 @@ public class DatabaseManager {
                 list.add(map);
             }
         } catch (SQLException ignored) {
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return list;
+    }
+
+    /**
+     * Author: QinHao
+     * Email:qinhao@jeejio.com
+     * Date:2020/3/20 9:10
+     * Description:执行自定义 sql 查询
+     *
+     * @param sql   自定义 sql
+     * @param clazz 装载查询出来的数据的映射类,需要提供无参构造方法,属性名需要与查询出来的数据列名对应
+     */
+    public <T> T rawQuery(String sql, Class<T> clazz) {
+        Log.i(TAG, "sql--->" + sql);
+        T t = null;
+        Cursor cursor = null;
+        try {
+            cursor = mSqLiteDatabase.rawQuery(sql, new String[]{});
+            if (cursor.moveToNext()) {
+                try {
+                    t = clazz.newInstance();
+                } catch (Exception e) {
+                    return t;
+                }
+                String[] columnNameArray = cursor.getColumnNames();
+                for (String columnName : columnNameArray) {
+                    Field field = null;
+                    // 找不到列名对应的变量,直接跳过
+                    try {
+                        field = clazz.getDeclaredField(columnName);
+                    } catch (NoSuchFieldException e) {
+                        continue;
+                    }
+                    if (field == null) {
+                        continue;
+                    }
+                    int columnIndex = cursor.getColumnIndex(columnName);
+                    // 列对应的值为空,直接跳过
+                    if (cursor.getType(columnIndex) == Cursor.FIELD_TYPE_NULL) {
+                        continue;
+                    }
+                    if (!field.isAccessible()) {
+                        field.setAccessible(true);
+                    }
+                    // 根据类型,设置属性的值
+                    Class<?> fieldType = field.getType();
+                    try {
+                        if (fieldType == int.class || fieldType == Integer.class) {
+                            field.set(t, cursor.getInt(columnIndex));
+                        } else if (fieldType == short.class || fieldType == Short.class) {
+                            field.set(t, cursor.getShort(columnIndex));
+                        } else if (fieldType == long.class || fieldType == Long.class) {
+                            field.set(t, cursor.getLong(columnIndex));
+                        } else if (fieldType == float.class || fieldType == Float.class) {
+                            field.set(t, cursor.getFloat(columnIndex));
+                        } else if (fieldType == double.class || fieldType == Double.class) {
+                            field.set(t, cursor.getDouble(columnIndex));
+                        } else if (fieldType == String.class) {
+                            field.set(t, cursor.getString(columnIndex));
+                        }
+                    } catch (IllegalAccessException ignored) {
+                    }
+                }
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return t;
+    }
+
+    /**
+     * Author: QinHao
+     * Email:qinhao@jeejio.com
+     * Date:2020/3/20 9:10
+     * Description:执行自定义 sql 查询
+     *
+     * @param sql   自定义 sql
+     * @param clazz 装载查询出来的数据的映射类,需要提供无参构造方法,属性名需要与查询出来的数据列名对应
+     */
+    public <T> List<T> rawQueryList(String sql, Class<T> clazz) {
+        Log.i(TAG, "sql--->" + sql);
+        List<T> list = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = mSqLiteDatabase.rawQuery(sql, new String[]{});
+            while (cursor.moveToNext()) {
+                T t = null;
+                try {
+                    t = clazz.newInstance();
+                } catch (Exception e) {
+                    return list;
+                }
+                String[] columnNameArray = cursor.getColumnNames();
+                for (String columnName : columnNameArray) {
+                    Field field = null;
+                    // 找不到列名对应的变量,直接跳过
+                    try {
+                        field = clazz.getDeclaredField(columnName);
+                    } catch (NoSuchFieldException e) {
+                        continue;
+                    }
+                    if (field == null) {
+                        continue;
+                    }
+                    // 列对应的值为空,直接跳过
+                    int columnIndex = cursor.getColumnIndex(columnName);
+                    if (cursor.getType(columnIndex) == Cursor.FIELD_TYPE_NULL) {
+                        continue;
+                    }
+                    if (!field.isAccessible()) {
+                        field.setAccessible(true);
+                    }
+                    // 根据类型,设置属性的值
+                    Class<?> fieldType = field.getType();
+                    try {
+                        if (fieldType == int.class || fieldType == Integer.class) {
+                            field.set(t, cursor.getInt(columnIndex));
+                        } else if (fieldType == short.class || fieldType == Short.class) {
+                            field.set(t, cursor.getShort(columnIndex));
+                        } else if (fieldType == long.class || fieldType == Long.class) {
+                            field.set(t, cursor.getLong(columnIndex));
+                        } else if (fieldType == float.class || fieldType == Float.class) {
+                            field.set(t, cursor.getFloat(columnIndex));
+                        } else if (fieldType == double.class || fieldType == Double.class) {
+                            field.set(t, cursor.getDouble(columnIndex));
+                        } else if (fieldType == String.class) {
+                            field.set(t, cursor.getString(columnIndex));
+                        }
+                    } catch (IllegalAccessException ignored) {
+                    }
+                }
+                list.add(t);
+            }
         } finally {
             if (cursor != null) {
                 cursor.close();
