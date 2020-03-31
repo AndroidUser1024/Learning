@@ -1,8 +1,9 @@
 package com.qinshou.commonmodule.util;
 
+import android.content.pm.ApplicationInfo;
 import android.util.Log;
 
-import com.qinshou.commonmodule.BuildConfig;
+import com.qinshou.commonmodule.base.BaseApplication;
 
 
 /**
@@ -33,35 +34,71 @@ import com.qinshou.commonmodule.BuildConfig;
 
 public class ShowLogUtil {
     private static String TAG = "daolema";
-
-    public static void logi(String log) {
-        if (BuildConfig.DEBUG) {
-            Log.i(TAG, log);
-        }
-    }
+    private static final int LENGTH = 1024;
 
     public static void logi(Object log) {
         logi(log.toString());
     }
 
-    private static void logd(String log) {
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, log);
+    public static void logi(String log) {
+        logi(TAG, log);
+    }
+
+    public static void logi(String tag, String log) {
+        if (isDebug()) {
+            int a = log.length() / LENGTH;
+            int b = log.length() % LENGTH;
+            for (int i = 0; i < a; i++) {
+                Log.i(tag, log.substring(i * LENGTH, (i + 1) * LENGTH));
+            }
+            Log.i(tag, log.substring(a * LENGTH, a * LENGTH + b));
         }
     }
 
     public static void logd(Object log) {
-        logd(String.valueOf(log));
+        logd(log.toString());
     }
 
-    private static void loge(String log) {
-        if (BuildConfig.DEBUG) {
-            Log.e(TAG, log);
+    public static void logd(String log) {
+        logd(TAG, log);
+    }
+
+    public static void logd(String tag, String log) {
+        if (isDebug()) {
+            int a = log.length() / LENGTH;
+            int b = log.length() % LENGTH;
+            for (int i = 0; i < a; i++) {
+                Log.d(tag, log.substring(i * LENGTH, (i + 1) * LENGTH));
+            }
+            Log.d(tag, log.substring(a * LENGTH, a * LENGTH + b));
         }
     }
 
     public static void loge(Object log) {
-        loge(String.valueOf(log));
+        loge(log.toString());
     }
 
+    public static void loge(String log) {
+        loge(TAG, log);
+    }
+
+    public static void loge(String tag, String log) {
+        if (isDebug()) {
+            int a = log.length() / LENGTH;
+            int b = log.length() % LENGTH;
+            for (int i = 0; i < a; i++) {
+                Log.e(tag, log.substring(i * LENGTH, (i + 1) * LENGTH));
+            }
+            Log.e(tag, log.substring(a * LENGTH, a * LENGTH + b));
+        }
+    }
+
+    private static boolean isDebug() {
+        try {
+            ApplicationInfo info = BaseApplication.getInstance().getApplicationInfo();
+            return (info.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
