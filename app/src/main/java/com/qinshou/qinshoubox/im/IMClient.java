@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.jeejio.dbmodule.DatabaseManager;
+import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.okhttphelper.callback.AbsDownloadCallback;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.bean.ImgBean;
@@ -116,7 +117,7 @@ public enum IMClient {
         mGroupChatManager = new GroupChatManager();
         mGroupChatMemberManager = new GroupChatMemberManager();
         mPingManager = new PingManager();
-        mPingManager.start(mWebSocket);
+        mPingManager.start();
         mReconnectManager = new ReconnectManager();
         // 拉取离线消息
         OkHttpHelperForQSBoxOfflineApi.SINGLETON.getOfflineMessageList(mUserDetailBean.getId())
@@ -498,10 +499,15 @@ public enum IMClient {
 //            mRetrySendTimerMap.put(key, timer);
         }
         mWebSocket.send(new Gson().toJson(messageBean));
+        if (messageBean.getType() != MessageType.CHAT.getValue()
+                && messageBean.getType() != MessageType.GROUP_CHAT.getValue()) {
+            return;
+        }
         mHandler.post(new Runnable() {
             @Override
             public void run() {
                 for (IOnSendMessageListener onSendMessageListener : mOnSendMessageListenerList) {
+                    ShowLogUtil.logi("onSending--->" + messageBean);
                     onSendMessageListener.onSending(messageBean);
                 }
             }
@@ -608,6 +614,7 @@ public enum IMClient {
                         Log.i(TAG, "onFailure: t.class--->" + t.getClass() + ",t.message--->" + t.getMessage());
                         // 移除心跳任务
                         mPingManager.release();
+                        mReconnectManager.release();
                         if (mReconnectManager != null && mReconnectManager.start(t)) {
                             return;
                         }

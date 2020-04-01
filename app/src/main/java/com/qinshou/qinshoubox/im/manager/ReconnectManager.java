@@ -84,6 +84,7 @@ public class ReconnectManager {
         }
         // 自动重连
         release();
+        mReconnectCount = 0;
         mReconnectScheduledFuture = mReconnectScheduledExecutorService.schedule(mReconnectRunnable, INTERVAL, TimeUnit.MILLISECONDS);
         return true;
     }

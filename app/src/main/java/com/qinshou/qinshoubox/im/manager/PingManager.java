@@ -4,8 +4,8 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.google.gson.Gson;
 import com.qinshou.commonmodule.util.ShowLogUtil;
+import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 
 import java.util.concurrent.Executors;
@@ -13,8 +13,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
-
-import okhttp3.WebSocket;
 
 /**
  * Author: QinHao
@@ -28,7 +26,6 @@ public class PingManager {
      * 发送心跳间隔
      */
     private final long HEART_BEAT_INTERVAL = 60 * 1000;
-    private WebSocket mWebSocket;
     /**
      * 发送心跳任务的线程池
      */
@@ -54,18 +51,14 @@ public class PingManager {
 
         @Override
         public void run() {
-            if (mWebSocket == null) {
-                return;
-            }
             Log.i(TAG, "发送心跳");
-            mWebSocket.send(new Gson().toJson(MessageBean.createHeartBeatMessage()));
+            IMClient.SINGLETON.sendMessage(MessageBean.createHeartBeatMessage());
             mHeartBeatScheduledFuture = mHeartBeatScheduledExecutorService.schedule(mHeartBeatRunnable, HEART_BEAT_INTERVAL, TimeUnit.MILLISECONDS);
         }
     };
 
-    public void start(WebSocket webSocket) {
+    public void start() {
         ShowLogUtil.logi("开启心跳任务");
-        mWebSocket = webSocket;
         // 开启心跳任务
         release();
         mHeartBeatScheduledFuture = mHeartBeatScheduledExecutorService.schedule(mHeartBeatRunnable, HEART_BEAT_INTERVAL, TimeUnit.MILLISECONDS);
