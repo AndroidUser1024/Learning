@@ -3,6 +3,7 @@ package com.qinshou.qinshoubox.friend.view.fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -74,6 +75,12 @@ public class CreateGroupChatFragment extends QSFragment<CreateGroupChatPresenter
 
     @Override
     public void setListener() {
+        findViewByID(R.id.tv_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         mRcvGroupChatMemberForCreateAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {
