@@ -70,14 +70,15 @@ public class HomepageFragment extends QSFragment<HomepagePresenter> implements I
         mViewPagerPoints.setupWithViewPager2(vpWallpaper);
 
         mRefreshLayout = findViewByID(R.id.refresh_layout);
-        RecyclerView rvNews = findViewByID(R.id.rv_news);
+        RecyclerView rcvNews = findViewByID(R.id.rcv_news);
         // RecyclerView 去除焦点
-        rvNews.setFocusableInTouchMode(false);
-        rvNews.setLayoutManager(new LinearLayoutManager(getContext()));
-        rvNews.addItemDecoration(new DividerDecoration());
+        rcvNews.setFocusableInTouchMode(false);
+        rcvNews.setLayoutManager(new LinearLayoutManager(getContext()));
+        rcvNews.addItemDecoration(new DividerDecoration());
+
         mRcvNewsAdapter = new RcvNewsAdapter(getContext());
-        rvNews.setAdapter(mRcvNewsAdapter);
-        rvNews.setNestedScrollingEnabled(false);
+        rcvNews.setAdapter(mRcvNewsAdapter);
+        rcvNews.setNestedScrollingEnabled(false);
     }
 
     @Override
