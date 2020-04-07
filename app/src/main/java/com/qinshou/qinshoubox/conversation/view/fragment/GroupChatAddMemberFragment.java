@@ -63,6 +63,12 @@ public class GroupChatAddMemberFragment extends QSFragment<GroupChatAddMemberPre
 
     @Override
     public void setListener() {
+        findViewByID(R.id.tv_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         mTvFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

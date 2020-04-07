@@ -5,8 +5,8 @@ import android.content.Context;
 import com.qinshou.commonmodule.rcvbaseadapter.RcvMultipleBaseAdapter;
 
 /**
- * Author：WangGuifa
- * Email：wangguifa@jeejio.com
+ * Author：Qinhao
+ * Email：qinhao@jeejio.com
  * Date：2019/8/12 16:31
  * Description：群聊成员适配器
  */

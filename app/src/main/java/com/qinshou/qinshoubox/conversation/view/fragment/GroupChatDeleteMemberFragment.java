@@ -2,9 +2,11 @@ package com.qinshou.qinshoubox.conversation.view.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
@@ -63,6 +65,12 @@ public class GroupChatDeleteMemberFragment extends QSFragment<GroupChatDeleteMem
 
     @Override
     public void setListener() {
+        findViewByID(R.id.tv_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         mTvFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
