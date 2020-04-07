@@ -212,11 +212,11 @@ public class UserDetailFragment extends QSFragment<UserDetailPresenter> implemen
     @Override
     public void getUserDetailSuccess(UserDetailBean userDetailBean) {
         mUserDetailBean = userDetailBean;
-        if (userDetailBean.getStatus() == 1 || userDetailBean.getStatus() == 3) {
-            showFriendUI(userDetailBean);
+        if (userDetailBean.getReceive() == 1) {
+            showWaitAcceptUI(userDetailBean);
         } else {
-            if (userDetailBean.getReceive() == 1) {
-                showWaitAcceptUI(userDetailBean);
+            if (userDetailBean.getStatus() == 1 || userDetailBean.getStatus() == 3) {
+                showFriendUI(userDetailBean);
             } else {
                 showNotFriendUI(userDetailBean);
             }
