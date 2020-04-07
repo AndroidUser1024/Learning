@@ -228,7 +228,9 @@ public class ConversationManager {
                 " WHERE" +
                 " (SELECT doNotDisturb FROM friend AS f WHERE c.type=2001 AND f.id=c.toUserId)=0" +
                 " OR" +
-                " (SELECT doNotDisturb FROM group_chat AS gc WHERE c.type=3001 AND gc.id=c.toUserId)=0");
+                " (SELECT doNotDisturb FROM group_chat AS gc WHERE c.type=3001 AND gc.id=c.toUserId)=0" +
+                " OR" +
+                " (SELECT COUNT(id) FROM group_chat AS gc2 WHERE gc2.id=c.toUserId)=0");
         if (list.size() > 0) {
             Object totalUnreadCount = list.get(0).get("totalUnreadCount");
             if (totalUnreadCount instanceof Integer) {
