@@ -19,8 +19,6 @@ public class GroupChatDoubleCache extends AbsDoubleCache<String, GroupChatBean> 
 
     @Override
     public void put(String key, GroupChatBean value) {
-        ShowLogUtil.logi("key--->" + key);
-        ShowLogUtil.logi("value--->" + value);
         getMemoryCache().put(key, value);
         getDatabaseCache().put(key, value);
     }
@@ -30,7 +28,9 @@ public class GroupChatDoubleCache extends AbsDoubleCache<String, GroupChatBean> 
         GroupChatBean groupChatBean = getMemoryCache().get(key);
         if (groupChatBean == null) {
             groupChatBean = getDatabaseCache().get(key);
-            getMemoryCache().put(key, groupChatBean);
+            if (groupChatBean != null) {
+                getMemoryCache().put(key, groupChatBean);
+            }
         }
         return groupChatBean;
     }

@@ -1,6 +1,7 @@
 package com.qinshou.qinshoubox.conversation.view.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.qinshou.commonmodule.rcvbaseadapter.RcvSingleBaseAdapter;
@@ -41,7 +42,12 @@ public class RcvConversationAdapter extends RcvSingleBaseAdapter<ConversationDet
 
     @Override
     public void bindViewHolder(final BaseViewHolder baseViewHolder, final ConversationDetailBean conversationDetailBean, final int position) {
-        ImageLoadUtil.SINGLETON.loadImage(getContext(), conversationDetailBean.getHeadImgSmall(), baseViewHolder.getImageView(R.id.iv_head_img));
+        ShowLogUtil.logi("conversationDetailBean--->" + conversationDetailBean);
+        if (TextUtils.isEmpty(conversationDetailBean.getHeadImgSmall())) {
+            ImageLoadUtil.SINGLETON.loadImage(getContext(), R.drawable.create_group_iv_head_img_src, baseViewHolder.getImageView(R.id.iv_head_img));
+        } else {
+            ImageLoadUtil.SINGLETON.loadImage(getContext(), conversationDetailBean.getHeadImgSmall(), baseViewHolder.getImageView(R.id.iv_head_img));
+        }
         baseViewHolder.setTvText(R.id.tv_title, conversationDetailBean.getTitle());
         if (conversationDetailBean.getLastMsgContentType() == MessageContentType.TEXT.getValue()) {
             baseViewHolder.setTvText(R.id.tv_last_msg_content, conversationDetailBean.getLastMsgContent());

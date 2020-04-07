@@ -28,7 +28,9 @@ public class FriendDoubleCache extends AbsDoubleCache<String, UserDetailBean> {
         UserDetailBean userDetailBean = getMemoryCache().get(key);
         if (userDetailBean == null) {
             userDetailBean = getDatabaseCache().get(key);
-            getMemoryCache().put(key, userDetailBean);
+            if (userDetailBean != null) {
+                getMemoryCache().put(key, userDetailBean);
+            }
         }
         return userDetailBean;
     }

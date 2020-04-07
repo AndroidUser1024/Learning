@@ -555,7 +555,9 @@ public class GroupChatActivity extends QSActivity<GroupChatPresenter> implements
             EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CONVERSATION_LIST, conversationDetailBean));
         }
         GroupChatBean groupChatBean = IMClient.SINGLETON.getGroupChatManager().getById(mGroupChatId);
-        if (groupChatBean != null) {
+        if (groupChatBean == null) {
+            mTitleBar.setTitleText("群聊");
+        } else {
             // 群昵称
             mTitleBar.setTitleText(TextUtils.isEmpty(groupChatBean.getNickname())
                     ? groupChatBean.getNicknameDefault()

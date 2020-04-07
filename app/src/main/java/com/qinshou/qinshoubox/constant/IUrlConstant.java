@@ -6,8 +6,8 @@ package com.qinshou.qinshoubox.constant;
  * Date: 19-11-25 下午10:21
  */
 public interface IUrlConstant {
-        String DEFAULT_HOST = "http://www.mrqinshou.com:7000";
-//    String DEFAULT_HOST = "http://172.16.60.231:8081";
+//        String DEFAULT_HOST = "http://www.mrqinshou.com:7000";
+    String DEFAULT_HOST = "http://172.16.60.231:8080";
 //    String DEFAULT_HOST = "http://192.168.1.109:8080";
 //    String DEFAULT_HOST = "http://192.168.31.199:8080";
 }
