@@ -66,9 +66,9 @@ public class ConversationManager {
                 ",c.toUserId" +
                 ",c.lastMsgTimestamp" +
                 ",c.lastMsgPid" +
-                ",m.content" +
-                ",m.contentType" +
-                ",m.status" +
+                ",m.content AS lastMsgContent" +
+                ",m.contentType AS lastMsgContentType" +
+                ",m.status AS lastMsgStatus" +
                 ",u.nickname AS uNickname" +
                 ",u.headImgSmall AS uHeadImgSmall" +
                 ",f.remark AS fRemark" +
@@ -95,9 +95,9 @@ public class ConversationManager {
                 ",c.toUserId" +
                 ",c.lastMsgTimestamp" +
                 ",c.lastMsgPid" +
-                ",m.content" +
-                ",m.contentType" +
-                ",m.status" +
+                ",m.content AS lastMsgContent" +
+                ",m.contentType AS lastMsgContentType" +
+                ",m.status AS lastMsgStatus" +
                 ",u.nickname AS uNickname" +
                 ",u.headImgSmall AS uHeadImgSmall" +
                 ",f.remark AS fRemark" +
@@ -157,9 +157,9 @@ public class ConversationManager {
                 ",c.toUserId" +
                 ",c.lastMsgTimestamp" +
                 ",c.lastMsgPid" +
-                ",m.content" +
-                ",m.contentType" +
-                ",m.status" +
+                ",m.content AS lastMsgContent" +
+                ",m.contentType AS lastMsgContentType" +
+                ",m.status AS lastMsgStatus" +
                 ",u.nickname AS uNickname" +
                 ",u.headImgSmall AS uHeadImgSmall" +
                 ",f.remark AS fRemark" +
@@ -188,9 +188,9 @@ public class ConversationManager {
                 ",c.toUserId" +
                 ",c.lastMsgTimestamp" +
                 ",c.lastMsgPid" +
-                ",m.content" +
-                ",m.contentType" +
-                ",m.status" +
+                ",m.content AS lastMsgContent" +
+                ",m.contentType AS lastMsgContentType" +
+                ",m.status AS lastMsgStatus" +
                 ",u.nickname AS uNickname" +
                 ",u.headImgSmall AS uHeadImgSmall" +
                 ",f.remark AS fRemark" +
