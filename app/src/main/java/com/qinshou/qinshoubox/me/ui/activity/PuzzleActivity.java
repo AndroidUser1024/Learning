@@ -4,13 +4,14 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,10 +19,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.qinshou.commonmodule.background.BackgroundManager;
+import com.qinshou.commonmodule.background.Background;
+import com.qinshou.commonmodule.background.State;
 import com.qinshou.commonmodule.base.AbsPresenter;
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemClickListener;
-import com.qinshou.commonmodule.util.BackgroundUtil;
 import com.qinshou.commonmodule.util.SnackbarUtil;
 import com.qinshou.commonmodule.util.SystemUtil;
 import com.qinshou.commonmodule.util.permissionutil.IOnRequestPermissionResultCallBack;
@@ -47,6 +50,10 @@ import java.util.List;
 public class PuzzleActivity extends QSActivity<AbsPresenter> {
     private RecyclerView rvPuzzle;  //拼图块列表容器
     private RvPuzzleAdapter mRvPuzzleAdapter;   //拼图块列表适配器
+
+    @Background(solid = 0xFFFFFF00, strokeColor = 0xFFFF0000, strokeWidth = 5, radius = 10)
+    @Background(state = State.SELECTED, solid = 0xFF00FF00, strokeColor = 0xFFFF0000, strokeWidth = 5, radius = 10)
+    @Background(state = State.PRESSED, solid = 0xFF00FF00, strokeColor = 0xFFFF0000, strokeWidth = 5, radius = 10)
     private Button btnChooseImg;    //选择相册中的图片按钮
     private Button btnChooseDifficulty; //选择难度按钮
     private Button btnShowOriginImg;    //显示原图按钮
@@ -77,18 +84,7 @@ public class PuzzleActivity extends QSActivity<AbsPresenter> {
         btnReset = findViewByID(R.id.btn_reset);
         tvStep = findViewByID(R.id.tv_step);
         tvTime = findViewByID(R.id.tv_time);
-
-        new BackgroundUtil.BackgroundBuilder(btnChooseDifficulty)
-//                .addState(new BackgroundUtil.BackgroundBuilder()
-//                        .setSolid(Color.parseColor("#FFFFFF00"))
-//                        .setCorner(5, 10, 15, 20)
-//                        .setStroke(1, Color.parseColor("#FFFF0000"))
-//                        .getDrawable(), BackgroundUtil.StateBackgroundBuilder.State.PRESSED)
-                .setSolid(Color.parseColor("#FFFFFF00"))
-                .setCorner(5, 10, 15, 20)
-                .setStroke(1, Color.parseColor("#FFFF0000"))
-                .create()
-                .setBackGround();
+        BackgroundManager.SINGLETON.init(this);
     }
 
     @Override
@@ -171,10 +167,13 @@ public class PuzzleActivity extends QSActivity<AbsPresenter> {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.btn_choose_img:
-                    chooseImg();
+//                    chooseImg();
                     break;
                 case R.id.btn_choose_difficulty:
-                    chooseDifficulty();
+//                    chooseDifficulty();
+                    View viewByID = findViewByID(R.id.btn_choose_img);
+//                    viewByID.setEnabled(!viewByID.isEnabled());
+                    viewByID.setSelected(!viewByID.isSelected());
                     break;
                 case R.id.btn_show_origin_img:
                     showOriginImg();
