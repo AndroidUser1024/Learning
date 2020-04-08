@@ -146,7 +146,7 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
                 mHandler.removeCallbacks(mUpdateProgressRunnable);
                 mHandler.post(mUpdateProgressRunnable);
 
-                showControl();
+//                showControl();
             }
         }
 
@@ -252,7 +252,7 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
     private Runnable mHideControlRunnable = new Runnable() {
         @Override
         public void run() {
-            hideControl();
+//            hideControl();
         }
     };
     private boolean mContinuePlay = false;
@@ -361,23 +361,23 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
 //        mExoPlayer.setPlayWhenReady(true);
 
         String userAgent = Util.getUserAgent(getContext(), "QinshouBox");
-        // 播放单个视频
-        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(), userAgent);
-        // 设置播放源
-        MediaSource mediaSource = new ProgressiveMediaSource.Factory(dataSourceFactory)
-                .createMediaSource(Uri.parse(path));
-        mExoPlayer.prepare(mediaSource);
+//        // 播放单个视频
+//        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(), userAgent);
+//        // 设置播放源
+//        MediaSource mediaSource = new ProgressiveMediaSource.Factory(dataSourceFactory)
+//                .createMediaSource(Uri.parse(path));
+//        mExoPlayer.prepare(mediaSource);
 //        MediaSource mediaSource2 = new ProgressiveMediaSource.Factory(dataSourceFactory)
 //                .createMediaSource(Uri.parse(path2));
         // Prepare the player with the source.
         // ConcatenatingMediaSource 可以设置多个播放源
 //        ConcatenatingMediaSource concatenatingMediaSource = new ConcatenatingMediaSource(mediaSource, mediaSource2);
 
-//        // 播放 HLS 流
-//        DataSource.Factory dataSourceFactory = new DefaultHttpDataSourceFactory(userAgent);
-//        Uri uri = Uri.parse("http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8");
-//        MediaSource mediaSource = new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(uri);
-//        mExoPlayer.prepare(mediaSource);
+        // 播放 HLS 流
+        DataSource.Factory dataSourceFactory = new DefaultHttpDataSourceFactory(userAgent);
+        Uri uri = Uri.parse("http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8");
+        MediaSource mediaSource = new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(uri);
+        mExoPlayer.prepare(mediaSource);
 
         mPlayerView.setPlayer(mExoPlayer);
     }
@@ -418,7 +418,7 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
                     playbackParameters = new PlaybackParameters(1.0f);
                 }
                 mExoPlayer.setPlaybackParameters(playbackParameters);
-                showControl();
+//                showControl();
             }
         });
         mIvFullscreen.setOnClickListener(new View.OnClickListener() {
@@ -429,7 +429,7 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
                 } else {
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                 }
-                showControl();
+//                showControl();
             }
         });
         mPlayerView.setOnTouchListener(new View.OnTouchListener() {
@@ -466,7 +466,7 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
                     case MotionEvent.ACTION_UP:
                         // 从上一次按下到抬起,小于 CLICK_TIME,则认为是单击事件
                         if (System.currentTimeMillis() - mActionDownTimestamp < CLICK_TIME) {
-                            showControl();
+//                            showControl();
                         }
                         mAdjustBrightness = false;
                         mAdjustVolume = false;
@@ -581,7 +581,7 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     if (mExoPlayer != null && mExoPlayer.isPlaying()) {
-                        ShowLogUtil.logi("一秒后自动隐藏");
+                        // 一秒后自动隐藏
                         mHandler.postDelayed(mHideControlRunnable, HIDE_CONTROL_DELAY);
                     }
                 }
@@ -597,29 +597,25 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
                 }
             });
         }
-        if (mShowControlAnimator.isRunning()) {
+        if (mShowControlAnimator.isRunning() || mLlControl.getY() == mRelativeLayout.getBottom() - mLlControl.getMeasuredHeight()) {
             return;
         }
-//        // 已经显示了,再让显示,直接 return
-//        if (mLlControl.getY() == (mRelativeLayout.getBottom() - mLlControl.getMeasuredHeight())) {
-//            return;
-//        }
         mShowControlAnimator.start();
     }
 
 
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2020/2/25 12:32
-     * Description:隐藏控制器控件
-     */
-    private void hideControl() {
-        ShowLogUtil.logi("隐藏控制器");
-        if (mHideControlAnimator == null) {
-            mHideControlAnimator = ObjectAnimator.ofFloat(mLlControl, "y", mRelativeLayout.getBottom() - mLlControl.getMeasuredHeight(), mRelativeLayout.getBottom());
-            mHideControlAnimator.setDuration(ANIMATOR_DURATION);
-        }
-        mHideControlAnimator.start();
-    }
+//    /**
+//     * Author: QinHao
+//     * Email:cqflqinhao@126.com
+//     * Date:2020/2/25 12:32
+//     * Description:隐藏控制器控件
+//     */
+//    private void hideControl() {
+//        ShowLogUtil.logi("隐藏控制器");
+//        if (mHideControlAnimator == null) {
+//            mHideControlAnimator = ObjectAnimator.ofFloat(mLlControl, "y", mRelativeLayout.getBottom() - mLlControl.getMeasuredHeight(), mRelativeLayout.getBottom());
+//            mHideControlAnimator.setDuration(ANIMATOR_DURATION);
+//        }
+//        mHideControlAnimator.start();
+//    }
 }
