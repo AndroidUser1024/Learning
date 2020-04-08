@@ -30,10 +30,15 @@ import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
+import com.google.android.exoplayer2.source.dash.DashMediaSource;
+import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
+import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.util.StatusBarUtil;
@@ -354,9 +359,10 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
         mExoPlayer.addListener(mEventListener);
         mExoPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
 //        mExoPlayer.setPlayWhenReady(true);
-        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(),
-                Util.getUserAgent(getContext(), "QinshouBox"));
-        // This is the MediaSource representing the media to be played.
+
+        String userAgent = Util.getUserAgent(getContext(), "QinshouBox");
+        // 播放单个视频
+        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(), userAgent);
         // 设置播放源
         MediaSource mediaSource = new ProgressiveMediaSource.Factory(dataSourceFactory)
                 .createMediaSource(Uri.parse(path));
@@ -366,7 +372,13 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
         // Prepare the player with the source.
         // ConcatenatingMediaSource 可以设置多个播放源
 //        ConcatenatingMediaSource concatenatingMediaSource = new ConcatenatingMediaSource(mediaSource, mediaSource2);
-//        mExoPlayer.prepare(concatenatingMediaSource);
+
+//        // 播放 HLS 流
+//        DataSource.Factory dataSourceFactory = new DefaultHttpDataSourceFactory(userAgent);
+//        Uri uri = Uri.parse("http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8");
+//        MediaSource mediaSource = new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(uri);
+//        mExoPlayer.prepare(mediaSource);
+
         mPlayerView.setPlayer(mExoPlayer);
     }
 

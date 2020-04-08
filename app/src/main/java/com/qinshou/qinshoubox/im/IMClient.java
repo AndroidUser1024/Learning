@@ -72,8 +72,8 @@ public enum IMClient {
 
     private static final String TAG = "IMClient";
     private final int TIME_OUT = 10 * 1000;
-//    private static final String URL = "ws://www.mrqinshou.com:10086/websocket";
-        private static final String URL = "ws://172.16.60.231:10086/websocket";
+    private static final String URL = "ws://www.mrqinshou.com:10086/websocket";
+//        private static final String URL = "ws://172.16.60.231:10086/websocket";
 //            private static final String URL = "ws://192.168.1.109:10086/websocket";
 //    private static final String URL = "ws://192.168.31.199:10086/websocket";
     private Context mContext;
