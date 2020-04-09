@@ -2,7 +2,6 @@ package com.qinshou.qinshoubox.me.ui.fragment;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -30,13 +29,11 @@ import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.qinshou.commonmodule.util.ShowLogUtil;
@@ -313,6 +310,7 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
                 showControl();
+                mRelativeLayout.removeOnLayoutChangeListener(this);
             }
         });
     }
@@ -358,11 +356,11 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
 
         String userAgent = Util.getUserAgent(getContext(), "QinshouBox");
         // 播放单个视频
-        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(), userAgent);
-        // 设置播放源
-        MediaSource mediaSource = new ProgressiveMediaSource.Factory(dataSourceFactory)
-                .createMediaSource(Uri.parse(path));
-        mExoPlayer.prepare(mediaSource);
+//        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(), userAgent);
+//        // 设置播放源
+//        MediaSource mediaSource = new ProgressiveMediaSource.Factory(dataSourceFactory)
+//                .createMediaSource(Uri.parse(path));
+//        mExoPlayer.prepare(mediaSource);
 
 //        MediaSource mediaSource2 = new ProgressiveMediaSource.Factory(dataSourceFactory)
 //                .createMediaSource(Uri.parse(path2));
@@ -371,10 +369,10 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
 //        ConcatenatingMediaSource concatenatingMediaSource = new ConcatenatingMediaSource(mediaSource, mediaSource2);
 
         // 播放 HLS 流
-//        DataSource.Factory dataSourceFactory = new DefaultHttpDataSourceFactory(userAgent);
-//        Uri uri = Uri.parse("http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8");
-//        MediaSource mediaSource = new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(uri);
-//        mExoPlayer.prepare(mediaSource);
+        DataSource.Factory dataSourceFactory = new DefaultHttpDataSourceFactory(userAgent);
+        Uri uri = Uri.parse("http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8");
+        MediaSource mediaSource = new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(uri);
+        mExoPlayer.prepare(mediaSource);
 
         mPlayerView.setPlayer(mExoPlayer);
     }
@@ -429,53 +427,6 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
 //                showControl();
             }
         });
-
-
-//        new View.OnTouchListener() {
-//            private boolean mAdjustBrightness;
-//            private boolean mAdjustVolume;
-//            private long mActionDownTimestamp;
-//
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                float screenWidth = getResources().getDisplayMetrics().widthPixels;
-//                float x = event.getX();
-//                float y = event.getY();
-//                switch (event.getAction()) {
-//                    case MotionEvent.ACTION_DOWN:
-//                        mActionDownTimestamp = System.currentTimeMillis();
-//                        if (x < screenWidth / 2) {
-//                            mAdjustBrightness = true;
-//                        } else {
-//                            mAdjustVolume = true;
-//                        }
-//                        break;
-//                    case MotionEvent.ACTION_MOVE:
-//                        // 小于单击有效时间,暂不调整亮度和音量
-//                        if (System.currentTimeMillis() - mActionDownTimestamp < CLICK_TIME) {
-//                            break;
-//                        }
-//                        if (mAdjustBrightness) {
-//                            adjustBrightness(y);
-//                        } else if (mAdjustVolume) {
-//                            adjustVolume(y);
-//                        }
-//                        break;
-//                    case MotionEvent.ACTION_CANCEL:
-//                    case MotionEvent.ACTION_UP:
-//                        // 从上一次按下到抬起,小于 CLICK_TIME,则认为是单击事件
-//                        if (System.currentTimeMillis() - mActionDownTimestamp < CLICK_TIME) {
-////                            showControl();
-//                            mExoPlayer.setPlayWhenReady(false);
-//                        }
-//                        mAdjustBrightness = false;
-//                        mAdjustVolume = false;
-//                        mLlBrightness.setVisibility(View.GONE);
-//                        break;
-//                }
-//                return true;
-//            }
-//        }
         // 手势监听器
         GestureDetector mGestureDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener() {
 
@@ -608,6 +559,9 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
      */
     private void showControl() {
         mHandler.removeCallbacks(mHideControlRunnable);
+        if (mLlControl.getY() == mRelativeLayout.getBottom() - mLlControl.getMeasuredHeight()) {
+            return;
+        }
         ObjectAnimator showControlAnimator = ObjectAnimator.ofFloat(mLlControl, "y", mRelativeLayout.getBottom(), mRelativeLayout.getBottom() - mLlControl.getMeasuredHeight());
         showControlAnimator.setDuration(ANIMATOR_DURATION);
         showControlAnimator.addListener(new Animator.AnimatorListener() {
@@ -634,9 +588,6 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
 
             }
         });
-        if (mLlControl.getY() == mRelativeLayout.getBottom() - mLlControl.getMeasuredHeight()) {
-            return;
-        }
         showControlAnimator.start();
     }
 
