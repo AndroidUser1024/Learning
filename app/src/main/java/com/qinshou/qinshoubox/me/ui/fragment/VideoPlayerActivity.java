@@ -49,6 +49,7 @@ import com.qinshou.qinshoubox.me.presenter.VideoPlayerPresenter;
 import com.qinshou.qinshoubox.me.ui.dialog.PlayListDialog;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -229,13 +230,8 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
 //                showControl();
                     break;
                 case R.id.tv_play_list:
-                    ArrayList<MediaSourceBean> mediaSourceBeanList = new ArrayList<>();
-                    for (int i = 0; i < 20; i++) {
-                        MediaSourceBean mediaSourceBean = new MediaSourceBean();
-                        mediaSourceBean.setTitle("CCTV" + i);
-                        mediaSourceBeanList.add(mediaSourceBean);
-                    }
-                    PlayListDialog playListDialog = PlayListDialog.newInstance(mediaSourceBeanList);
+
+                    PlayListDialog playListDialog = PlayListDialog.newInstance(mMediaSourceBeanList);
                     playListDialog.show(getSupportFragmentManager(), "PlayListDialog");
                     break;
             }
@@ -317,6 +313,7 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
         }
     };
     private boolean mContinuePlay = false;
+    private ArrayList<MediaSourceBean> mMediaSourceBeanList = new ArrayList<>();
 
     @Override
     protected void onRestart() {
@@ -437,12 +434,15 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
 //        ConcatenatingMediaSource concatenatingMediaSource = new ConcatenatingMediaSource(mediaSource, mediaSource2);
 
         // 播放 HLS 流
-        DataSource.Factory dataSourceFactory = new DefaultHttpDataSourceFactory(userAgent);
-        Uri uri = Uri.parse("http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8");
-        MediaSource mediaSource = new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(uri);
-        mExoPlayer.prepare(mediaSource);
+//        DataSource.Factory dataSourceFactory = new DefaultHttpDataSourceFactory(userAgent);
+//        Uri uri = Uri.parse("http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8");
+//        MediaSource mediaSource = new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(uri);
+//        mExoPlayer.prepare(mediaSource);
+//        mExoPlayer.setPlayWhenReady(true);
 
         mPlayerView.setPlayer(mExoPlayer);
+
+        getPresenter().getHlsPlayList();
     }
 
     @Override
@@ -457,6 +457,12 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
             @Override
             public boolean onDown(MotionEvent e) {
                 // return true 才会响应后续事件，如 onSingleTapUp、onDoubleTap 等
+                return true;
+            }
+
+            @Override
+            public boolean onSingleTapConfirmed(MotionEvent e) {
+                showControl();
                 return true;
             }
 
@@ -495,6 +501,20 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
 
     @Override
     public void handleEvent(EventBean<Object> eventBean) {
+
+    }
+
+    @Override
+    public void getHlsPlayListSuccess(List<MediaSourceBean> mediaSourceBeanList) {
+        mMediaSourceBeanList.addAll(mediaSourceBeanList);
+        if (mMediaSourceBeanList.size() == 0) {
+            return;
+        }
+        playHls(mMediaSourceBeanList.get(0).getUrl());
+    }
+
+    @Override
+    public void getHlsPlayListFailure(Exception e) {
 
     }
 
@@ -627,4 +647,15 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
         hideControlAnimator.setDuration(ANIMATOR_DURATION);
         hideControlAnimator.start();
     }
+
+    public void playHls(String url) {
+        String userAgent = Util.getUserAgent(getContext(), "QinshouBox");
+        // 播放 HLS 流
+        DataSource.Factory dataSourceFactory = new DefaultHttpDataSourceFactory(userAgent);
+        Uri uri = Uri.parse(url);
+        MediaSource mediaSource = new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(uri);
+        mExoPlayer.prepare(mediaSource);
+        mExoPlayer.setPlayWhenReady(true);
+    }
+
 }

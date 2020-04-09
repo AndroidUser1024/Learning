@@ -11,14 +11,21 @@ import android.os.Parcelable;
  */
 public class MediaSourceBean implements Parcelable {
     private String title;
+    private String url;
 
     public MediaSourceBean() {
+    }
+
+    public MediaSourceBean(String title, String url) {
+        this.title = title;
+        this.url = url;
     }
 
     @Override
     public String toString() {
         return "MediaSourceBean{" +
                 "title='" + title + '\'' +
+                ", url='" + url + '\'' +
                 '}';
     }
 
@@ -30,8 +37,17 @@ public class MediaSourceBean implements Parcelable {
         this.title = title;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
     protected MediaSourceBean(Parcel in) {
         title = in.readString();
+        url = in.readString();
     }
 
     public static final Creator<MediaSourceBean> CREATOR = new Creator<MediaSourceBean>() {
@@ -54,5 +70,6 @@ public class MediaSourceBean implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(title);
+        dest.writeString(url);
     }
 }

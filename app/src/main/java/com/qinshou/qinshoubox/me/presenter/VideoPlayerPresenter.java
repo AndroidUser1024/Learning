@@ -1,9 +1,13 @@
 package com.qinshou.qinshoubox.me.presenter;
 
 import com.qinshou.commonmodule.base.AbsPresenter;
+import com.qinshou.okhttphelper.callback.Callback;
+import com.qinshou.qinshoubox.me.bean.MediaSourceBean;
 import com.qinshou.qinshoubox.me.contract.IVideoPlayerContract;
 import com.qinshou.qinshoubox.me.model.VideoPlayerModel;
 import com.qinshou.qinshoubox.me.ui.fragment.VideoPlayerActivity;
+
+import java.util.List;
 
 /**
  * Author: QinHao
@@ -15,5 +19,26 @@ public class VideoPlayerPresenter extends AbsPresenter<IVideoPlayerContract.IVie
     @Override
     public IVideoPlayerContract.IModel initModel() {
         return new VideoPlayerModel();
+    }
+
+    @Override
+    public void getHlsPlayList() {
+        getModel().getHlsPlayList(new Callback<List<MediaSourceBean>>() {
+            @Override
+            public void onSuccess(List<MediaSourceBean> data) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().getHlsPlayListSuccess(data);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().getHlsPlayListFailure(e);
+            }
+        });
     }
 }

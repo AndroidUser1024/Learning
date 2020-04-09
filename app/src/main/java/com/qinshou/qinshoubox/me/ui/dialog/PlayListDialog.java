@@ -1,6 +1,5 @@
 package com.qinshou.qinshoubox.me.ui.dialog;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -11,9 +10,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.qinshou.commonmodule.base.AbsDialogFragment;
+import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
+import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemClickListener;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.bean.MediaSourceBean;
 import com.qinshou.qinshoubox.me.ui.adapter.RcvPlayListAdapter;
+import com.qinshou.qinshoubox.me.ui.fragment.VideoPlayerActivity;
 
 import java.util.ArrayList;
 
@@ -46,7 +48,16 @@ public class PlayListDialog extends AbsDialogFragment {
 
     @Override
     public void setListener() {
-
+        mRcvPlayListAdapter.setOnItemClickListener(new IOnItemClickListener<MediaSourceBean>() {
+            @Override
+            public void onItemClick(BaseViewHolder holder, MediaSourceBean itemData, int position) {
+                dismiss();
+                if (!(getActivity() instanceof VideoPlayerActivity)) {
+                    return;
+                }
+                ((VideoPlayerActivity) getActivity()).playHls(itemData.getUrl());
+            }
+        });
     }
 
     @Override
