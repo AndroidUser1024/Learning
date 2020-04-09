@@ -97,72 +97,72 @@ public class TestFragment extends AbsMVPFragment<TestPresenter> implements ITest
 //        mWaveSideBar = findViewByID(R.id.wave_side_bar);
 //        String url = "https://gets.ddooo.com/dl.asp?sid=114131&rm=0&downurl=http://gd.ddooo.com:8081/androidkfjj_114131.rar";
         String url = "http://vfx.mtime.cn/Video/2019/03/12/mp4/190312143927981075.mp4";
-        ProgressBar progressBar = findViewByID(R.id.progress_bar);
-        Button btnStart = findViewByID(R.id.btn_start);
-        Button btnPause = findViewByID(R.id.btn_pause);
-        btnStart.setOnClickListener(new View.OnClickListener() {
-
-
-            @Override
-            public void onClick(View v) {
-                String fileName = url.substring(url.lastIndexOf("/"));
-                ShowLogUtil.logi("fileName--->" + fileName);
-                File file = new File(getActivity().getCacheDir() + File.separator + fileName);
-                ShowLogUtil.logi("file--->" + file.getAbsolutePath());
-                // 创建新文件
-                if (!file.getParentFile().exists()) {
-                    file.getParentFile().mkdirs();
-                }
-                if (!file.exists()) {
-                    try {
-                        file.createNewFile();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                mCall = OkHttpHelperForQSBoxCommonApi.SINGLETON.download(url, file.length(),file, new AbsDownloadCallback() {
-                    @Override
-                    public void onStart(long length) {
-                        ShowLogUtil.logi("onStart: " + "length--->" + length);
-                    }
-
-                    @Override
-                    public void onProgress(int progress) {
-                        ShowLogUtil.logi("onProgress: " + "progress--->" + progress);
-                        progressBar.setProgress(progress);
-                    }
-
-                    @Override
-                    public void onSuccess(File file) {
-                        ShowLogUtil.logi("onSuccess: " + "file--->" + file.getAbsolutePath());
-                    }
-
-                    @Override
-                    public void onFailure(Exception e) {
-                        ShowLogUtil.logi("onFailure: " + "e--->" + e.getMessage());
-                    }
-                });
-                mCall.enqueue(new Callback<File>() {
-                    @Override
-                    public void onSuccess(File data) {
-                        ShowLogUtil.logi("onSuccess: " + "data--->" + data.getAbsolutePath());
-                    }
-
-                    @Override
-                    public void onFailure(Exception e) {
-                        ShowLogUtil.logi("onFailure: " + "e--->" + e.getMessage());
-                    }
-                });
-            }
-        });
-        btnPause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mCall != null) {
-                    mCall.cancel();
-                }
-            }
-        });
+//        ProgressBar progressBar = findViewByID(R.id.progress_bar);
+//        Button btnStart = findViewByID(R.id.btn_start);
+//        Button btnPause = findViewByID(R.id.btn_pause);
+//        btnStart.setOnClickListener(new View.OnClickListener() {
+//
+//
+//            @Override
+//            public void onClick(View v) {
+//                String fileName = url.substring(url.lastIndexOf("/"));
+//                ShowLogUtil.logi("fileName--->" + fileName);
+//                File file = new File(getActivity().getCacheDir() + File.separator + fileName);
+//                ShowLogUtil.logi("file--->" + file.getAbsolutePath());
+//                // 创建新文件
+//                if (!file.getParentFile().exists()) {
+//                    file.getParentFile().mkdirs();
+//                }
+//                if (!file.exists()) {
+//                    try {
+//                        file.createNewFile();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//                mCall = OkHttpHelperForQSBoxCommonApi.SINGLETON.download(url, file.length(),file, new AbsDownloadCallback() {
+//                    @Override
+//                    public void onStart(long length) {
+//                        ShowLogUtil.logi("onStart: " + "length--->" + length);
+//                    }
+//
+//                    @Override
+//                    public void onProgress(int progress) {
+//                        ShowLogUtil.logi("onProgress: " + "progress--->" + progress);
+//                        progressBar.setProgress(progress);
+//                    }
+//
+//                    @Override
+//                    public void onSuccess(File file) {
+//                        ShowLogUtil.logi("onSuccess: " + "file--->" + file.getAbsolutePath());
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Exception e) {
+//                        ShowLogUtil.logi("onFailure: " + "e--->" + e.getMessage());
+//                    }
+//                });
+//                mCall.enqueue(new Callback<File>() {
+//                    @Override
+//                    public void onSuccess(File data) {
+//                        ShowLogUtil.logi("onSuccess: " + "data--->" + data.getAbsolutePath());
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Exception e) {
+//                        ShowLogUtil.logi("onFailure: " + "e--->" + e.getMessage());
+//                    }
+//                });
+//            }
+//        });
+//        btnPause.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (mCall != null) {
+//                    mCall.cancel();
+//                }
+//            }
+//        });
     }
 
     @Override

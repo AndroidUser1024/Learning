@@ -60,7 +60,7 @@ public abstract class RcvBaseAdapter<T> extends RecyclerView.Adapter<BaseViewHol
             holder.getItemView().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int position = holder.getLayoutPosition();
+//                    int position = holder.getLayoutPosition();
                     mOnItemClickListener.onItemClick(holder, dataList.get(position), position);
                 }
             });
@@ -69,7 +69,7 @@ public abstract class RcvBaseAdapter<T> extends RecyclerView.Adapter<BaseViewHol
             holder.getItemView().setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    int position = holder.getLayoutPosition();
+//                    int position = holder.getLayoutPosition();
                     mOnItemLongClickListener.onItemLongClick(holder, dataList.get(position), position);
                     return true;
                 }
