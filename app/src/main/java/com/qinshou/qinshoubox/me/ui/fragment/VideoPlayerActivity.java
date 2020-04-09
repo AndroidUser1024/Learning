@@ -11,6 +11,7 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,11 +30,13 @@ import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.qinshou.commonmodule.util.ShowLogUtil;
@@ -354,12 +357,13 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
 //        mExoPlayer.setPlayWhenReady(true);
 
         String userAgent = Util.getUserAgent(getContext(), "QinshouBox");
-//        // 播放单个视频
-//        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(), userAgent);
-//        // 设置播放源
-//        MediaSource mediaSource = new ProgressiveMediaSource.Factory(dataSourceFactory)
-//                .createMediaSource(Uri.parse(path));
-//        mExoPlayer.prepare(mediaSource);
+        // 播放单个视频
+        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(), userAgent);
+        // 设置播放源
+        MediaSource mediaSource = new ProgressiveMediaSource.Factory(dataSourceFactory)
+                .createMediaSource(Uri.parse(path));
+        mExoPlayer.prepare(mediaSource);
+
 //        MediaSource mediaSource2 = new ProgressiveMediaSource.Factory(dataSourceFactory)
 //                .createMediaSource(Uri.parse(path2));
         // Prepare the player with the source.
@@ -367,10 +371,10 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
 //        ConcatenatingMediaSource concatenatingMediaSource = new ConcatenatingMediaSource(mediaSource, mediaSource2);
 
         // 播放 HLS 流
-        DataSource.Factory dataSourceFactory = new DefaultHttpDataSourceFactory(userAgent);
-        Uri uri = Uri.parse("http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8");
-        MediaSource mediaSource = new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(uri);
-        mExoPlayer.prepare(mediaSource);
+//        DataSource.Factory dataSourceFactory = new DefaultHttpDataSourceFactory(userAgent);
+//        Uri uri = Uri.parse("http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8");
+//        MediaSource mediaSource = new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(uri);
+//        mExoPlayer.prepare(mediaSource);
 
         mPlayerView.setPlayer(mExoPlayer);
     }
@@ -425,49 +429,91 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
 //                showControl();
             }
         });
-        mPlayerView.setOnTouchListener(new View.OnTouchListener() {
-            private boolean mAdjustBrightness;
-            private boolean mAdjustVolume;
-            private long mActionDownTimestamp;
+
+
+//        new View.OnTouchListener() {
+//            private boolean mAdjustBrightness;
+//            private boolean mAdjustVolume;
+//            private long mActionDownTimestamp;
+//
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                float screenWidth = getResources().getDisplayMetrics().widthPixels;
+//                float x = event.getX();
+//                float y = event.getY();
+//                switch (event.getAction()) {
+//                    case MotionEvent.ACTION_DOWN:
+//                        mActionDownTimestamp = System.currentTimeMillis();
+//                        if (x < screenWidth / 2) {
+//                            mAdjustBrightness = true;
+//                        } else {
+//                            mAdjustVolume = true;
+//                        }
+//                        break;
+//                    case MotionEvent.ACTION_MOVE:
+//                        // 小于单击有效时间,暂不调整亮度和音量
+//                        if (System.currentTimeMillis() - mActionDownTimestamp < CLICK_TIME) {
+//                            break;
+//                        }
+//                        if (mAdjustBrightness) {
+//                            adjustBrightness(y);
+//                        } else if (mAdjustVolume) {
+//                            adjustVolume(y);
+//                        }
+//                        break;
+//                    case MotionEvent.ACTION_CANCEL:
+//                    case MotionEvent.ACTION_UP:
+//                        // 从上一次按下到抬起,小于 CLICK_TIME,则认为是单击事件
+//                        if (System.currentTimeMillis() - mActionDownTimestamp < CLICK_TIME) {
+////                            showControl();
+//                            mExoPlayer.setPlayWhenReady(false);
+//                        }
+//                        mAdjustBrightness = false;
+//                        mAdjustVolume = false;
+//                        mLlBrightness.setVisibility(View.GONE);
+//                        break;
+//                }
+//                return true;
+//            }
+//        }
+        // 手势监听器
+        GestureDetector mGestureDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener() {
 
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                float screenWidth = getResources().getDisplayMetrics().widthPixels;
-                float x = event.getX();
-                float y = event.getY();
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        mActionDownTimestamp = System.currentTimeMillis();
-                        if (x < screenWidth / 2) {
-                            mAdjustBrightness = true;
-                        } else {
-                            mAdjustVolume = true;
-                        }
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        // 小于单击有效时间,暂不调整亮度和音量
-                        if (System.currentTimeMillis() - mActionDownTimestamp < CLICK_TIME) {
-                            break;
-                        }
-                        if (mAdjustBrightness) {
-                            adjustBrightness(y);
-                        } else if (mAdjustVolume) {
-                            adjustVolume(y);
-                        }
-                        break;
-                    case MotionEvent.ACTION_CANCEL:
-                    case MotionEvent.ACTION_UP:
-                        // 从上一次按下到抬起,小于 CLICK_TIME,则认为是单击事件
-                        if (System.currentTimeMillis() - mActionDownTimestamp < CLICK_TIME) {
-//                            showControl();
-                            mExoPlayer.setPlayWhenReady(false);
-                        }
-                        mAdjustBrightness = false;
-                        mAdjustVolume = false;
-                        mLlBrightness.setVisibility(View.GONE);
-                        break;
+            public boolean onDown(MotionEvent e) {
+                // return true 才会响应后续事件，如 onSingleTapUp、onDoubleTap 等
+                return true;
+            }
+
+            @Override
+            public boolean onDoubleTap(MotionEvent e) {
+                if (mExoPlayer != null && mExoPlayer.isPlaying()) {
+                    mExoPlayer.setPlayWhenReady(false);
                 }
                 return true;
+            }
+
+            @Override
+            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+                if (e1.getX() < mPlayerView.getWidth() / 2f) {
+                    adjustBrightness(e2.getY());
+                } else {
+                    adjustVolume(e2.getY());
+                }
+                return false;
+            }
+
+        });
+        mPlayerView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // 抬起事件在 GestureDetector 中监听不到,还得在 onTouchListener 中监听
+                boolean onTouchEvent = mGestureDetector.onTouchEvent(event);
+                if (!onTouchEvent && event.getAction() == MotionEvent.ACTION_UP) {
+                    mLlBrightness.setVisibility(View.GONE);
+                    return true;
+                }
+                return onTouchEvent;
             }
         });
     }
@@ -561,15 +607,9 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
      * Description:显示控制器控件
      */
     private void showControl() {
-        ShowLogUtil.logi("mRelativeLayout.getBottom()--->" + mRelativeLayout.getBottom());
+        mHandler.removeCallbacks(mHideControlRunnable);
         ObjectAnimator showControlAnimator = ObjectAnimator.ofFloat(mLlControl, "y", mRelativeLayout.getBottom(), mRelativeLayout.getBottom() - mLlControl.getMeasuredHeight());
         showControlAnimator.setDuration(ANIMATOR_DURATION);
-        showControlAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                ShowLogUtil.logi("value--->" + animation.getAnimatedValue());
-            }
-        });
         showControlAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
