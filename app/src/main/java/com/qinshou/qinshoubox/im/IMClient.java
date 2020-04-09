@@ -72,9 +72,9 @@ public enum IMClient {
 
     private static final String TAG = "IMClient";
     private final int TIME_OUT = 10 * 1000;
-    private static final String URL = "ws://www.mrqinshou.com:10086/websocket";
-//        private static final String URL = "ws://172.16.60.231:10086/websocket";
-//            private static final String URL = "ws://192.168.1.109:10086/websocket";
+    //    private static final String URL = "ws://www.mrqinshou.com:10086/websocket";
+    private static final String URL = "ws://10.11.11.179:10086/websocket";
+    //            private static final String URL = "ws://192.168.1.109:10086/websocket";
 //    private static final String URL = "ws://192.168.31.199:10086/websocket";
     private Context mContext;
     private WebSocket mWebSocket;
@@ -326,7 +326,7 @@ public enum IMClient {
             }
         } else if (groupChatStatusBean.getStatus() == GroupChatStatus.OTHER_ADD.getValue()) {
             for (UserDetailBean userDetailBean : groupChatStatusBean.getToUserList()) {
-                // 删除群成员缓存
+                // 添加群成员缓存
                 mGroupChatMemberManager.getCache().put(groupChatBean.getId() + "_" + userDetailBean.getId()
                         , userDetailBean);
             }
@@ -369,6 +369,15 @@ public enum IMClient {
 
             for (IOnGroupChatStatusListener onGroupChatStatusListener : mOnGroupChatStatusListenerList) {
                 onGroupChatStatusListener.nicknameChanged(groupChatDetailBean, groupChatStatusBean.getFromUser(), groupChatStatusBean.getToUserList());
+            }
+        } else if (groupChatStatusBean.getStatus() == GroupChatStatus.NICKNAME_IN_GROUP_CHAT_CHANGED.getValue()) {
+            // 更新缓存
+            mGroupChatManager.getCache().put(groupChatBean.getId(), groupChatBean);
+            // 更新群成员缓存
+            mGroupChatMemberManager.getCache().put(groupChatBean.getId() + "_" + groupChatStatusBean.getFromUser().getId()
+                    , groupChatStatusBean.getFromUser());
+            for (IOnGroupChatStatusListener onGroupChatStatusListener : mOnGroupChatStatusListenerList) {
+                onGroupChatStatusListener.nicknameInGroupChatChanged(groupChatDetailBean, groupChatStatusBean.getFromUser(), groupChatStatusBean.getToUserList());
             }
         }
     }

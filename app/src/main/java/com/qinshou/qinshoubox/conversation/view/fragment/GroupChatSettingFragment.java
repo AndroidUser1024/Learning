@@ -127,7 +127,12 @@ public class GroupChatSettingFragment extends QSFragment<GroupChatSettingPresent
 
         @Override
         public void nicknameChanged(GroupChatDetailBean groupChat, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
+            getPresenter().getGroupChatDetail(groupChat.getId());
+        }
 
+        @Override
+        public void nicknameInGroupChatChanged(GroupChatDetailBean groupChat, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
+            getPresenter().getGroupChatDetail(groupChat.getId());
         }
     };
 

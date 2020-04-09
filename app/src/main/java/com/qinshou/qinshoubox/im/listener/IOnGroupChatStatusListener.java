@@ -22,4 +22,6 @@ public interface IOnGroupChatStatusListener {
     void otherDelete(GroupChatDetailBean groupChat, UserDetailBean fromUser, List<UserDetailBean> toUserList);
 
     void nicknameChanged(GroupChatDetailBean groupChat, UserDetailBean fromUser, List<UserDetailBean> toUserList);
+
+    void nicknameInGroupChatChanged(GroupChatDetailBean groupChat, UserDetailBean fromUser, List<UserDetailBean> toUserList);
 }

@@ -147,6 +147,11 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
             ShowLogUtil.logi("nicknameChanged" + " : " + "groupChat--->" + groupChat + ",fromUser--->" + fromUser + ",toUserList--->" + toUserList);
             getPresenter().getMyGroupChatList();
         }
+
+        @Override
+        public void nicknameInGroupChatChanged(GroupChatDetailBean groupChat, UserDetailBean fromUser, List<UserDetailBean> toUserList) {
+            getPresenter().getMyGroupChatList();
+        }
     };
 
     @Override

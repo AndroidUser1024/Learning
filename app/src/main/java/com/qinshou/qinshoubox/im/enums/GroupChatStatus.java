@@ -25,7 +25,11 @@ public enum GroupChatStatus {
     /**
      * 群昵称被修改
      */
-    NICKNAME_CHANGED(40005);
+    NICKNAME_CHANGED(40005),
+    /**
+     * 有人修改了他在本群中的群昵称
+     */
+    NICKNAME_IN_GROUP_CHAT_CHANGED(40006);
     private int value;
 
     GroupChatStatus(int value) {
