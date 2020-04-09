@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/px120"
+    android:orientation="horizontal"
+    android:padding="@dimen/px20"
+    tools:context="com.qinshou.qinshoubox.me.ui.adapter.RcvPlayListAdapter">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textColor="#FFFFFFFF"
+        android:textSize="@dimen/px30"
+        tools:text="CCTV1" />
+</LinearLayout>

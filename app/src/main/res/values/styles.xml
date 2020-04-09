@@ -43,4 +43,12 @@
         <item name="android:textColor">#FF333333</item>
         <item name="android:textSize">@dimen/px30</item>
     </style>
+
+    <!-- 播放列表对话框的动画 -->
+    <style name="PlayListDialogAnimation" parent="android:Animation">
+        <!-- 进入时的动画 -->
+        <item name="android:windowEnterAnimation">@anim/play_list_dialog_enter</item>
+        <!-- 退出时的动画 -->
+        <item name="android:windowExitAnimation">@anim/play_list_dialog_exit</item>
+    </style>
 </resources>

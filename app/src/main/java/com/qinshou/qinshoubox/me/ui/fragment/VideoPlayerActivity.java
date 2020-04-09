@@ -36,14 +36,19 @@ import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.qinshou.commonmodule.util.PreventRepeatOnClickListener;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.util.StatusBarUtil;
 import com.qinshou.commonmodule.util.SystemUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
+import com.qinshou.qinshoubox.me.bean.MediaSourceBean;
 import com.qinshou.qinshoubox.me.contract.IVideoPlayerContract;
 import com.qinshou.qinshoubox.me.presenter.VideoPlayerPresenter;
+import com.qinshou.qinshoubox.me.ui.dialog.PlayListDialog;
+
+import java.util.ArrayList;
 
 
 /**
@@ -93,6 +98,10 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
      * 全屏按钮
      */
     private ImageView mIvFullscreen;
+    /**
+     * 播放列表
+     */
+    private TextView mTvPlayList;
     private LinearLayout mLlBrightness;
     private ImageView mIvBrightness;
     private LinearLayout mLlBrightnessValue;
@@ -174,6 +183,62 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
         @Override
         public void onSeekProcessed() {
 
+        }
+    };
+    private View.OnClickListener mOnClickListener = new PreventRepeatOnClickListener() {
+        @Override
+        public void onNotRepeatClick(View v) {
+            switch (v.getId()) {
+                case R.id.iv_play:
+                    if (mExoPlayer == null) {
+                        return;
+                    }
+                    if (mExoPlayer.isPlaying()) {
+                        mExoPlayer.setPlayWhenReady(false);
+                        mIvPlay.setImageResource(R.drawable.video_player_iv_play_src);
+                    } else {
+                        mExoPlayer.setPlayWhenReady(true);
+                        mIvPlay.setImageResource(R.drawable.video_player_iv_play_src_2);
+                    }
+                    break;
+                case R.id.tv_speed:
+                    if (mExoPlayer == null) {
+                        return;
+                    }
+                    CharSequence text = mTvSpeed.getText();
+                    PlaybackParameters playbackParameters = null;
+                    if (TextUtils.equals(text, getString(R.string.video_player_tv_speed_text))) {
+                        mTvSpeed.setText(getString(R.string.video_player_tv_speed_text_2));
+                        playbackParameters = new PlaybackParameters(1.5f);
+                    } else if (TextUtils.equals(text, getString(R.string.video_player_tv_speed_text_2))) {
+                        mTvSpeed.setText(getString(R.string.video_player_tv_speed_text_3));
+                        playbackParameters = new PlaybackParameters(2.0f);
+                    } else if (TextUtils.equals(text, getString(R.string.video_player_tv_speed_text_3))) {
+                        mTvSpeed.setText(getString(R.string.video_player_tv_speed_text));
+                        playbackParameters = new PlaybackParameters(1.0f);
+                    }
+                    mExoPlayer.setPlaybackParameters(playbackParameters);
+//                showControl();
+                    break;
+                case R.id.iv_fullscreen:
+                    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                    } else {
+                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                    }
+//                showControl();
+                    break;
+                case R.id.tv_play_list:
+                    ArrayList<MediaSourceBean> mediaSourceBeanList = new ArrayList<>();
+                    for (int i = 0; i < 20; i++) {
+                        MediaSourceBean mediaSourceBean = new MediaSourceBean();
+                        mediaSourceBean.setTitle("CCTV" + i);
+                        mediaSourceBeanList.add(mediaSourceBean);
+                    }
+                    PlayListDialog playListDialog = PlayListDialog.newInstance(mediaSourceBeanList);
+                    playListDialog.show(getSupportFragmentManager(), "PlayListDialog");
+                    break;
+            }
         }
     };
     /**
@@ -289,6 +354,7 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
         super.onConfigurationChanged(newConfig);
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             mIvFullscreen.setImageResource(R.drawable.video_player_iv_fullscreen_src_2);
+            mTvPlayList.setVisibility(View.VISIBLE);
             ViewGroup.LayoutParams layoutParams = mRelativeLayout.getLayoutParams();
             layoutParams.width = SystemUtil.getScreenWidth(getContext());
             layoutParams.height = SystemUtil.getScreenHeight(getContext());
@@ -299,6 +365,7 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
             StatusBarUtil.setStatusBarColor(getActivity().getWindow(), Color.TRANSPARENT, true);
         } else {
             mIvFullscreen.setImageResource(R.drawable.video_player_iv_fullscreen_src);
+            mTvPlayList.setVisibility(View.GONE);
             ViewGroup.LayoutParams layoutParams = mRelativeLayout.getLayoutParams();
             layoutParams.width = SystemUtil.getScreenWidth(getContext());
             layoutParams.height = getResources().getDimensionPixelOffset(R.dimen.px500);
@@ -334,6 +401,7 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
         mTvTotalTime = findViewByID(R.id.tv_total_time);
         mTvSpeed = findViewByID(R.id.tv_speed);
         mIvFullscreen = findViewByID(R.id.iv_fullscreen);
+        mTvPlayList = findViewByID(R.id.tv_play_list);
         mLlBrightness = findViewByID(R.id.ll_brightness);
         mIvBrightness = findViewByID(R.id.iv_brightness);
         mLlBrightnessValue = findViewByID(R.id.ll_brightness_value);
@@ -379,54 +447,10 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
 
     @Override
     public void setListener() {
-        mIvPlay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mExoPlayer == null) {
-                    return;
-                }
-                if (mExoPlayer.isPlaying()) {
-                    mExoPlayer.setPlayWhenReady(false);
-                    mIvPlay.setImageResource(R.drawable.video_player_iv_play_src);
-                } else {
-                    mExoPlayer.setPlayWhenReady(true);
-                    mIvPlay.setImageResource(R.drawable.video_player_iv_play_src_2);
-                }
-            }
-        });
-        mTvSpeed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mExoPlayer == null) {
-                    return;
-                }
-                CharSequence text = mTvSpeed.getText();
-                PlaybackParameters playbackParameters = null;
-                if (TextUtils.equals(text, getString(R.string.video_player_tv_speed_text))) {
-                    mTvSpeed.setText(getString(R.string.video_player_tv_speed_text_2));
-                    playbackParameters = new PlaybackParameters(1.5f);
-                } else if (TextUtils.equals(text, getString(R.string.video_player_tv_speed_text_2))) {
-                    mTvSpeed.setText(getString(R.string.video_player_tv_speed_text_3));
-                    playbackParameters = new PlaybackParameters(2.0f);
-                } else if (TextUtils.equals(text, getString(R.string.video_player_tv_speed_text_3))) {
-                    mTvSpeed.setText(getString(R.string.video_player_tv_speed_text));
-                    playbackParameters = new PlaybackParameters(1.0f);
-                }
-                mExoPlayer.setPlaybackParameters(playbackParameters);
-//                showControl();
-            }
-        });
-        mIvFullscreen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                } else {
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                }
-//                showControl();
-            }
-        });
+        mIvPlay.setOnClickListener(mOnClickListener);
+        mTvSpeed.setOnClickListener(mOnClickListener);
+        mIvFullscreen.setOnClickListener(mOnClickListener);
+        mTvPlayList.setOnClickListener(mOnClickListener);
         // 手势监听器
         GestureDetector mGestureDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener() {
 

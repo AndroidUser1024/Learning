@@ -4,12 +4,16 @@ import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 
 import androidx.fragment.app.DialogFragment;
+
+import com.qinshou.commonmodule.util.StatusBarUtil;
 
 /**
  * Description:DialogFragment 的基类
@@ -54,6 +58,15 @@ public abstract class AbsDialogFragment extends DialogFragment {
         Window window = dialog.getWindow();
         if (window != null) {
             window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            if (isImmersive()) {
+                //使内容延伸到状态栏下
+                StatusBarUtil.setStatusBarTranslucent(window, true);
+                //使状态栏透明
+                StatusBarUtil.setStatusBarColor(window, Color.TRANSPARENT, true);
+            } else {
+                StatusBarUtil.setStatusBarTranslucent(window, false);
+                StatusBarUtil.setStatusBarColor(window, initStatusBarColor(), false);
+            }
         }
         dialog = customDialog(dialog);
         initView();
@@ -75,5 +88,25 @@ public abstract class AbsDialogFragment extends DialogFragment {
             return (T) rootView.findViewById(viewId);
         }
         return null;
+    }
+
+    /**
+     * Author: QinHao
+     * Email:qinhao@jeejio.com
+     * Date:2019/10/26 17:26
+     * Description:是否沉浸式,使内容延伸到状态栏下并使状态栏透明
+     */
+    public boolean isImmersive() {
+        return false;
+    }
+
+    /**
+     * Author: QinHao
+     * Email:qinhao@jeejio.com
+     * Date:2019/10/26 17:31
+     * Description:设置状态栏颜色,需在 initLayoutId() 方法前调用,通常在 isImmersive() 方法中设置
+     */
+    public int initStatusBarColor() {
+        return 0xFF000000;
     }
 }
