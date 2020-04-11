@@ -45,6 +45,9 @@ public abstract class BaseItemView<T> {
      * @return 是否属于子布局
      */
     public boolean isForViewType(T item, int position) {
+        if (item == null) {
+            return false;
+        }
         Type type = getClass().getGenericSuperclass();
         ParameterizedType parameterizedType = (ParameterizedType) type;
         Class clazz = (Class) parameterizedType.getActualTypeArguments()[0];
