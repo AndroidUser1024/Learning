@@ -57,8 +57,8 @@ public abstract class InfiniteCycleViewPagerAdapter2<T> extends RcvSingleBaseAda
     }
 
     @Override
-    public void setDataList(List<T> dataList, boolean showEmptyView) {
-        super.setDataList(dataList, showEmptyView);
+    public void setDataList(List<T> dataList) {
+        super.setDataList(dataList);
         if (dataList == null || dataList.size() == 0) {
             return;
         }

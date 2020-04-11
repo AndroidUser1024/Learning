@@ -66,11 +66,7 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
     /**
      * 延时隐藏控制器组件的时长
      */
-    private final int HIDE_CONTROL_DELAY = 1000;
-    /**
-     * 单击有效期
-     */
-    private final int CLICK_TIME = 500;
+    private final int HIDE_CONTROL_DELAY = 2000;
     private RelativeLayout mRelativeLayout;
     private PlayerView mPlayerView;
     private ExoPlayer mExoPlayer;
@@ -124,10 +120,6 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
         @Override
         public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
             ShowLogUtil.logi("onPlayerStateChanged: " + "playWhenReady--->" + playWhenReady + ",playbackState--->" + playbackState);
-            if (playbackState == Player.STATE_READY) {
-                mHandler.removeCallbacks(mUpdateProgressRunnable);
-                mHandler.post(mUpdateProgressRunnable);
-            }
         }
 
         @Override
@@ -143,13 +135,11 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
                 mHandler.removeCallbacks(mUpdateProgressRunnable);
                 mHandler.post(mUpdateProgressRunnable);
 
-                //  开始播放后 1s 后隐藏控制器
-                mHandler.removeCallbacks(mHideControlRunnable);
-                mHandler.postDelayed(mHideControlRunnable, HIDE_CONTROL_DELAY);
+                //  开始播放后隐藏控制器
+                hideControlDelay();
             } else {
                 mIvPlay.setImageResource(R.drawable.video_player_iv_play_src);
                 mHandler.removeCallbacks(mUpdateProgressRunnable);
-                mHandler.post(mUpdateProgressRunnable);
 
                 // 暂停立即显示控制器
                 showControl();
@@ -299,19 +289,11 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
             if (mExoPlayer.isPlaying()) {
                 float speed = mExoPlayer.getPlaybackParameters().speed;
                 long delayMillis = (long) (1000 / speed);
-                mHandler.postDelayed(mUpdateProgressRunnable, delayMillis);
+                mHandler.postDelayed(this, delayMillis);
             }
         }
     };
-    /**
-     * 隐藏控制器组件的任务
-     */
-    private Runnable mHideControlRunnable = new Runnable() {
-        @Override
-        public void run() {
-            hideControl();
-        }
-    };
+
     private boolean mContinuePlay = false;
     private ArrayList<MediaSourceBean> mMediaSourceBeanList = new ArrayList<>();
 
@@ -370,11 +352,11 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
             StatusBarUtil.setStatusBarTranslucent(getActivity().getWindow(), false);
             StatusBarUtil.setStatusBarColor(getActivity().getWindow(), initStatusBarColor(), false);
         }
-        mRelativeLayout.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+        mRelativeLayout.post(new Runnable() {
             @Override
-            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+            public void run() {
                 showControl();
-                mRelativeLayout.removeOnLayoutChangeListener(this);
+                hideControlDelay();
             }
         });
     }
@@ -463,6 +445,7 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
             @Override
             public boolean onSingleTapConfirmed(MotionEvent e) {
                 showControl();
+                hideControlDelay();
                 return true;
             }
 
@@ -602,7 +585,6 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
      * Description:显示控制器控件
      */
     private void showControl() {
-        mHandler.removeCallbacks(mHideControlRunnable);
         if (mLlControl.getY() == mRelativeLayout.getBottom() - mLlControl.getMeasuredHeight()) {
             return;
         }
@@ -616,10 +598,6 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if (mExoPlayer != null && mExoPlayer.isPlaying()) {
-                    // 一秒后自动隐藏
-                    mHandler.postDelayed(mHideControlRunnable, HIDE_CONTROL_DELAY);
-                }
             }
 
             @Override
@@ -635,17 +613,27 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
         showControlAnimator.start();
     }
 
+    /**
+     * 隐藏控制器组件的任务
+     */
+    private Runnable mHideControlRunnable = new Runnable() {
+        @Override
+        public void run() {
+            ObjectAnimator hideControlAnimator = ObjectAnimator.ofFloat(mLlControl, "y", mRelativeLayout.getBottom() - mLlControl.getMeasuredHeight(), mRelativeLayout.getBottom());
+            hideControlAnimator.setDuration(ANIMATOR_DURATION);
+            hideControlAnimator.start();
+        }
+    };
 
     /**
      * Author: QinHao
      * Email:cqflqinhao@126.com
      * Date:2020/2/25 12:32
-     * Description:隐藏控制器控件
+     * Description:{@link VideoPlayerActivity#HIDE_CONTROL_DELAY} 后隐藏控制器控件
      */
-    private void hideControl() {
-        ObjectAnimator hideControlAnimator = ObjectAnimator.ofFloat(mLlControl, "y", mRelativeLayout.getBottom() - mLlControl.getMeasuredHeight(), mRelativeLayout.getBottom());
-        hideControlAnimator.setDuration(ANIMATOR_DURATION);
-        hideControlAnimator.start();
+    private void hideControlDelay() {
+        mHandler.removeCallbacks(mHideControlRunnable);
+        mHandler.postDelayed(mHideControlRunnable, HIDE_CONTROL_DELAY);
     }
 
     public void playHls(String url) {
@@ -657,5 +645,4 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
         mExoPlayer.prepare(mediaSource);
         mExoPlayer.setPlayWhenReady(true);
     }
-
 }
