@@ -1,29 +1,21 @@
 package com.qinshou.okhttphelper.call;
 
-import com.google.gson.Gson;
 import com.qinshou.okhttphelper.callback.Callback;
-import com.qinshou.okhttphelper.callback.FailureRunnable;
-import com.qinshou.okhttphelper.callback.SuccessRunnable;
 import com.qinshou.okhttphelper.util.CallbackUtil;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.lang.reflect.Type;
 
-import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 /**
- * Author: QinHao
- * Email:qinhao@jeejio.com
+ * Author: MrQinshou
+ * Email:cqflqinhao@126.com
  * Date: 2020/1/3 9:35
  * Description:下载请求实现类
  */

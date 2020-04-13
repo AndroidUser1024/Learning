@@ -18,8 +18,8 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 /**
- * Author: QinHao
- * Email:qinhao@jeejio.com
+ * Author: MrQinshou
+ * Email:cqflqinhao@126.com
  * Date: 2019/7/4 9:22
  * Description:请求实现类
  */

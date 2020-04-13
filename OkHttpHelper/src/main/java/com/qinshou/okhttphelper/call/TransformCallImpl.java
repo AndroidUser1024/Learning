@@ -2,24 +2,18 @@ package com.qinshou.okhttphelper.call;
 
 import com.google.gson.Gson;
 import com.qinshou.okhttphelper.callback.Callback;
-import com.qinshou.okhttphelper.callback.FailureRunnable;
-import com.qinshou.okhttphelper.callback.SuccessRunnable;
 import com.qinshou.okhttphelper.util.CallbackUtil;
 
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
 import okhttp3.Call;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 /**
- * Author: QinHao
- * Email:qinhao@jeejio.com
+ * Author: MrQinshou
+ * Email:cqflqinhao@126.com
  * Date: 2019/7/4 17:07
  * Description:转换回调接口传值泛型后的请求调用者
  */

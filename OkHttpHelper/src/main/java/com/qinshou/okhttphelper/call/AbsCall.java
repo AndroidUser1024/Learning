@@ -8,8 +8,8 @@ import okhttp3.Call;
 import okhttp3.Response;
 
 /**
- * Author: QinHao
- * Email:qinhao@jeejio.com
+ * Author: MrQinshou
+ * Email:cqflqinhao@126.com
  * Date: 2020/3/3 17:37
  * Description:请求的抽象类
  */
