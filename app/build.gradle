@@ -78,8 +78,8 @@ dependencies {
     implementation project(':qrcodemodule')
 //    implementation project(':sharemodule')
     implementation project(':immodule')
-    implementation project(':OkHttpHelper')
-    annotationProcessor project(':OkHttpHelperProcessor')
+//    implementation project(':OkHttpHelper')
+//    annotationProcessor project(':OkHttpHelperProcessor')
 
     // ORMLite 数据库
     api 'com.j256.ormlite:ormlite-android:5.1'
@@ -95,5 +95,4 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer-dash:2.11.3'
     implementation 'com.google.android.exoplayer:exoplayer-hls:2.11.3'
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.11.3'
-    implementation 'com.squareup.retrofit2:retrofit:2.8.1'
 }

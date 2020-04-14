@@ -1,7 +1,6 @@
 package com.qinshou.qinshoubox.listener;
 
 
-import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 /**

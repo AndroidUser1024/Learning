@@ -1,7 +1,7 @@
 package com.jeejio.networkmodule.response;
 
 
-import com.jeejio.networkmodule.callback.AbsDownloadCallback;
+import com.jeejio.networkmodule.callback.IDownloadCallback;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,14 +16,14 @@ import okio.Source;
 
 public class DownloadResponseBody extends ResponseBody {
     private ResponseBody responseBody;
-    private AbsDownloadCallback mDownloadCallback;
+    private IDownloadCallback mDownloadCallback;
     // BufferedSource 是 okio 库中的输入流，这里就当作 inputStream 来使用。
     private BufferedSource bufferedSource;
     private File mFile;
     private long totalBytesRead = 0L;
     private long totalBytes = 0L;
 
-    public DownloadResponseBody(ResponseBody responseBody, AbsDownloadCallback downloadCallback, File file, long start) {
+    public DownloadResponseBody(ResponseBody responseBody, IDownloadCallback downloadCallback, File file, long start) {
         this.responseBody = responseBody;
         this.mDownloadCallback = downloadCallback;
         mDownloadCallback.onStart(responseBody.contentLength());

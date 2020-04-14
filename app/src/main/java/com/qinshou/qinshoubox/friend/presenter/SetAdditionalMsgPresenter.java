@@ -2,7 +2,6 @@ package com.qinshou.qinshoubox.friend.presenter;
 
 
 import com.qinshou.commonmodule.base.AbsPresenter;
-import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.friend.contract.ISetAdditionalMsgContract;
 import com.qinshou.qinshoubox.friend.model.SetAdditionalMsgModel;
 import com.qinshou.qinshoubox.friend.view.fragment.SetAdditionalMsgFragment;

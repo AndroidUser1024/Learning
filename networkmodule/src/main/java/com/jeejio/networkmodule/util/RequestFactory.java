@@ -1,5 +1,7 @@
 package com.jeejio.networkmodule.util;
 
+import android.util.Log;
+
 import com.google.gson.GsonBuilder;
 import com.google.gson.LongSerializationPolicy;
 
@@ -99,10 +101,10 @@ public class RequestFactory {
      * Description:创建一个 post 请求,参数以 json 字符串形式传递
      *
      * @param url          请求地址
-     * @param parameterMap 请求参数
+     * @param paramMap 请求参数
      * @return 用于发起请求的对象
      */
-    public static Request newPostJsonRequest(String url, Map<String, String> headerMap, Map<String, Object> parameterMap) {
+    public static Request newPostJsonRequest(String url, Map<String, String> headerMap, Map<String, Object> paramMap) {
         // 添加请求头
         Request.Builder requestBuilder = new Request.Builder();
         for (String key : headerMap.keySet()) {
@@ -117,7 +119,7 @@ public class RequestFactory {
                 .post(RequestBody.create(MediaType.parse("application/json;charset=utf-8"), new GsonBuilder()
                         .setLongSerializationPolicy(LongSerializationPolicy.STRING) //转换 Long 类型参数时先转为 String,否则数字太长会自动转为科学计数法
                         .create()
-                        .toJson(parameterMap)))
+                        .toJson(paramMap)))
                 .addHeader("Accept-Language", "zh_CN")
                 .build();
     }
@@ -129,15 +131,15 @@ public class RequestFactory {
      * Description:创建一个发送文件的 post 请求
      *
      * @param url          请求地址
-     * @param parameterMap 请求参数
+     * @param paramMap 请求参数
      * @return 用于发起请求的对象
      */
-    public static Request newPostFileRequest(String url, Map<String, String> headerMap, Map<String, Object> parameterMap) {
+    public static Request newPostFileRequest(String url, Map<String, String> headerMap, Map<String, Object> paramMap) {
         MultipartBody.Builder multipartBodyBuilder = new MultipartBody.Builder();
         // 设置类型
         multipartBodyBuilder.setType(MultipartBody.FORM);
-        for (String key : parameterMap.keySet()) {
-            Object value = parameterMap.get(key);
+        for (String key : paramMap.keySet()) {
+            Object value = paramMap.get(key);
             if (value == null) {
                 continue;
             }
@@ -148,6 +150,7 @@ public class RequestFactory {
                 multipartBodyBuilder.addFormDataPart(key, value.toString());
             }
         }
+        Log.i("daolema", "paramMap--->" + paramMap);
         // 添加请求头
         Request.Builder requestBuilder = new Request.Builder();
         for (String key : headerMap.keySet()) {

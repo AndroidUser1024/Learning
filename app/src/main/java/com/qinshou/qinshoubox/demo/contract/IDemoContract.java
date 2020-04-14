@@ -1,9 +1,9 @@
 package com.qinshou.qinshoubox.demo.contract;
 
 
+import com.jeejio.networkmodule.callback.Callback;
 import com.qinshou.commonmodule.base.IBaseModel;
 import com.qinshou.commonmodule.base.IBaseView;
-import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.demo.view.activity.DemoActivity;
 
 /**

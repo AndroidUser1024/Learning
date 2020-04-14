@@ -1,7 +1,6 @@
 package com.qinshou.qinshoubox.conversation.presenter;
 
 import com.qinshou.commonmodule.base.AbsPresenter;
-import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.contract.IChatSettingContract;
 import com.qinshou.qinshoubox.conversation.model.ChatSettingModel;
 import com.qinshou.qinshoubox.conversation.view.fragment.ChatSettingFragment;

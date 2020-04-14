@@ -2,7 +2,7 @@ package com.jeejio.networkmodule.callback;
 
 import java.io.File;
 
-public interface AbsDownloadCallback {
+public interface IDownloadCallback {
     void onStart(long length);
 
     void onProgress(int progress);

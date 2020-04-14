@@ -1,7 +1,7 @@
 package com.jeejio.networkmodule.interceptor;
 
 
-import com.jeejio.networkmodule.callback.AbsDownloadCallback;
+import com.jeejio.networkmodule.callback.IDownloadCallback;
 import com.jeejio.networkmodule.response.DownloadResponseBody;
 
 import java.io.File;
@@ -14,7 +14,7 @@ import okhttp3.ResponseBody;
 /**
  * Description:使用实例
  * Date:2018/11/28
- * public void downloadFile(String url, AbsDownloadCallback downloadListener, Observer<InputStream> observer) {
+ * public void downloadFile(String url, IDownloadCallback downloadListener, Observer<InputStream> observer) {
  * Observable<InputStream> observable = new CustomRetrofitBuilder()
  * .addInterceptor(new DownloadInterceptor(downloadListener))
  * .build(baseUrl)
@@ -53,15 +53,15 @@ import okhttp3.ResponseBody;
  * @GET Observable<ResponseBody> downloadFile(@Url String fileUrl);
  */
 public class DownloadInterceptor implements Interceptor {
-    private AbsDownloadCallback mDownloadCallback;
+    private IDownloadCallback mDownloadCallback;
     private File mFile;
     private long mStart;
 
-    public DownloadInterceptor(AbsDownloadCallback downloadCallback, File file) {
+    public DownloadInterceptor(IDownloadCallback downloadCallback, File file) {
         this(downloadCallback, file, 0);
     }
 
-    public DownloadInterceptor(AbsDownloadCallback downloadCallback, File file, long start) {
+    public DownloadInterceptor(IDownloadCallback downloadCallback, File file, long start) {
         mDownloadCallback = downloadCallback;
         mFile = file;
         mStart = start;

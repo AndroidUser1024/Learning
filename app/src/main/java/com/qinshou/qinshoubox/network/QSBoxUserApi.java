@@ -2,6 +2,7 @@ package com.qinshou.qinshoubox.network;
 
 import com.jeejio.networkmodule.annotation.Api;
 import com.jeejio.networkmodule.annotation.Json;
+import com.jeejio.networkmodule.annotation.Multipart;
 import com.jeejio.networkmodule.annotation.Param;
 import com.jeejio.networkmodule.annotation.Post;
 import com.jeejio.networkmodule.call.AbsCall;
@@ -10,6 +11,8 @@ import com.qinshou.qinshoubox.constant.IUrlConstant;
 import com.qinshou.qinshoubox.homepage.bean.QinshouResultBean;
 import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.login.bean.UserBean;
+
+import java.io.File;
 
 /**
  * Author: QinHao
@@ -38,10 +41,10 @@ public interface QSBoxUserApi {
     AbsCall<QinshouResultBean<UserBean>> setInfo(@Param("id") String userId
             , @Param("nickname") String nickname);
 
-//    @Multipart
-//    @Post("/setHeadImg")
-//    AbsCall<QinshouResultBean<UserBean>> setHeadImg(@Field(name = "id") String userId
-//            , @Field(name = "headImg") File headImg);
+    @Multipart
+    @Post("/setHeadImg")
+    AbsCall<QinshouResultBean<UserBean>> setHeadImg(@Param("id") String userId
+            , @Param("headImg") File headImg);
 
     @Json
     @Post("/getUserDetail")

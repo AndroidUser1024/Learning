@@ -1,12 +1,12 @@
 package com.qinshou.qinshoubox.conversation.model;
 
 
-import com.qinshou.okhttphelper.callback.Callback;
+import com.jeejio.networkmodule.callback.Callback;
 import com.qinshou.qinshoubox.im.IMClient;
-import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.conversation.contract.IConversationContract;
 import com.qinshou.qinshoubox.conversation.view.fragment.ConversationFragment;
 import com.qinshou.qinshoubox.im.bean.ConversationDetailBean;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class ConversationModel implements IConversationContract.IModel {
     @Override
-    public void getConversationList(Callback<List<ConversationDetailBean>> callback) {
-        callback.onSuccess(IMClient.SINGLETON.getConversationManager().getListOrderByTopDescAndLastMsgTimeDesc());
+    public void getConversationList(QSCallback<List<ConversationDetailBean>> qsCallback) {
+        qsCallback.onSuccess(IMClient.SINGLETON.getConversationManager().getListOrderByTopDescAndLastMsgTimeDesc());
     }
 }

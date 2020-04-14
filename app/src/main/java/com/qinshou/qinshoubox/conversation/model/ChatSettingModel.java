@@ -1,7 +1,6 @@
 package com.qinshou.qinshoubox.conversation.model;
 
 
-import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.contract.IChatSettingContract;
 import com.qinshou.qinshoubox.conversation.view.fragment.ChatSettingFragment;
 import com.qinshou.qinshoubox.im.bean.UserDetailBean;

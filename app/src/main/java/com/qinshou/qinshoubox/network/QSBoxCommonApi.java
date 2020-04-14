@@ -1,18 +1,19 @@
 package com.qinshou.qinshoubox.network;
 
-import com.qinshou.okhttphelper.annotation.Api;
-import com.qinshou.okhttphelper.annotation.Download;
-import com.qinshou.okhttphelper.annotation.DownloadCallback;
-import com.qinshou.okhttphelper.annotation.Field;
-import com.qinshou.okhttphelper.annotation.FileTarget;
-import com.qinshou.okhttphelper.annotation.Get;
-import com.qinshou.okhttphelper.annotation.Multipart;
-import com.qinshou.okhttphelper.annotation.Post;
-import com.qinshou.okhttphelper.annotation.Range;
-import com.qinshou.okhttphelper.annotation.Url;
-import com.qinshou.okhttphelper.call.AbsCall;
-import com.qinshou.okhttphelper.callback.AbsDownloadCallback;
-import com.qinshou.okhttphelper.enums.LogLevel;
+import com.jeejio.networkmodule.annotation.Api;
+import com.jeejio.networkmodule.annotation.Download;
+import com.jeejio.networkmodule.annotation.DownloadCallback;
+import com.jeejio.networkmodule.annotation.FileTarget;
+import com.jeejio.networkmodule.annotation.Get;
+import com.jeejio.networkmodule.annotation.Header;
+import com.jeejio.networkmodule.annotation.Multipart;
+import com.jeejio.networkmodule.annotation.Param;
+import com.jeejio.networkmodule.annotation.Post;
+import com.jeejio.networkmodule.annotation.Range;
+import com.jeejio.networkmodule.annotation.Url;
+import com.jeejio.networkmodule.call.AbsCall;
+import com.jeejio.networkmodule.callback.IDownloadCallback;
+import com.jeejio.networkmodule.enums.LogLevel;
 import com.qinshou.qinshoubox.constant.IUrlConstant;
 import com.qinshou.qinshoubox.conversation.bean.UploadImgResultBean;
 import com.qinshou.qinshoubox.conversation.bean.UploadVoiceResultBean;
@@ -30,14 +31,14 @@ import java.io.File;
 public interface QSBoxCommonApi {
     @Multipart
     @Post(value = "/uploadVoice")
-    AbsCall<QinshouResultBean<UploadVoiceResultBean>> uploadVoice(@Field(name = "userId") String userId
-            , @Field(name = "time") long time
-            , @Field(name = "voice") File voice);
+    AbsCall<QinshouResultBean<UploadVoiceResultBean>> uploadVoice(@Param("userId") String userId
+            , @Param("time") long time
+            , @Param("voice") File voice);
 
     @Multipart
     @Post(value = "/uploadImg")
-    AbsCall<QinshouResultBean<UploadImgResultBean>> uploadImg(@Field(name = "userId") String userId
-            , @Field(name = "img") File img);
+    AbsCall<QinshouResultBean<UploadImgResultBean>> uploadImg(@Param("userId") String userId
+            , @Param("img") File img);
 
     @Download
     @Get()
@@ -45,9 +46,13 @@ public interface QSBoxCommonApi {
 
     @Download
     @Get()
-    AbsCall download(@Url String url, @FileTarget File file, @DownloadCallback AbsDownloadCallback downloadCallback);
+    AbsCall download(@Url String url, @FileTarget File file, @DownloadCallback IDownloadCallback downloadCallback);
 
+    /**
+     * 断点续传
+     * RANGE:bytes=start-
+     */
     @Download
     @Get()
-    AbsCall download(@Url String url, @Range long start, @FileTarget File file, @DownloadCallback AbsDownloadCallback downloadCallback);
+    AbsCall download(@Url String url, @Range long start, @FileTarget File file, @DownloadCallback IDownloadCallback downloadCallback);
 }

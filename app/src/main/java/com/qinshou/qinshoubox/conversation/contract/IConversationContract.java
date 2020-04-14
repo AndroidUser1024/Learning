@@ -3,9 +3,9 @@ package com.qinshou.qinshoubox.conversation.contract;
 
 import com.qinshou.commonmodule.base.IBaseModel;
 import com.qinshou.commonmodule.base.IBaseView;
-import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.view.fragment.ConversationFragment;
 import com.qinshou.qinshoubox.im.bean.ConversationDetailBean;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import java.util.List;
  */
 public interface IConversationContract {
     interface IModel extends IBaseModel {
-        void getConversationList(Callback<List<ConversationDetailBean>> callback);
+        void getConversationList(QSCallback<List<ConversationDetailBean>> qsCallback);
     }
 
     interface IView extends IBaseView {

@@ -47,15 +47,13 @@ public class CallImpl<T> extends AbsCall<T> {
                     mHandler.post(new FailureRunnable<>(callback, new Exception(("return type is null"))));
                     return;
                 }
-                String json;
                 try {
-                    json = response.body().string();
+                    String json = response.body().string();
+                    T t = new Gson().fromJson(json, mType);
+                    mHandler.post(new SuccessRunnable<>(callback, t));
                 } catch (IOException e) {
                     mHandler.post(new FailureRunnable<>(callback, e));
-                    return;
                 }
-                T t = new Gson().fromJson(json, mType);
-                mHandler.post(new SuccessRunnable<>(callback, t));
             }
         });
     }

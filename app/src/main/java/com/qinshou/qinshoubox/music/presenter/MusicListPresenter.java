@@ -2,8 +2,8 @@ package com.qinshou.qinshoubox.music.presenter;
 
 import android.content.Context;
 
+import com.jeejio.networkmodule.callback.Callback;
 import com.qinshou.commonmodule.base.AbsPresenter;
-import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.music.bean.MusicBean;
 import com.qinshou.qinshoubox.music.contract.IMusicListContract;
 import com.qinshou.qinshoubox.music.model.MusicListModel;

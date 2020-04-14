@@ -1,9 +1,12 @@
 package com.qinshou.qinshoubox.me.model;
 
-import com.qinshou.okhttphelper.callback.Callback;
+import com.jeejio.networkmodule.OkHttpHelper;
+import com.jeejio.networkmodule.callback.Callback;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.me.contract.IPersonalHeadImgContract;
 import com.qinshou.qinshoubox.me.ui.fragment.PersonalHeadImgFragment;
+import com.qinshou.qinshoubox.network.QSBoxUserApi;
+import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 
 import java.io.File;
 
@@ -16,8 +19,8 @@ import java.io.File;
 public class PersonalHeadImgModel implements IPersonalHeadImgContract.IModel {
     @Override
     public void setHeadImg(String userId, File file, Callback<UserBean> callback) {
-//        OkHttpHelperForQSBoxUserApi.SINGLETON.setHeadImg(userId, file)
-//                .transform(new QSApiTransformer<UserBean>())
-//                .enqueue(callback);
+        OkHttpHelper.SINGLETON.getCaller(QSBoxUserApi.class).setHeadImg(userId, file)
+                .transform(new QSApiTransformer<UserBean>())
+                .enqueue(callback);
     }
 }

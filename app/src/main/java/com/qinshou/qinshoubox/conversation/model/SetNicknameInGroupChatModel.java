@@ -1,6 +1,5 @@
 package com.qinshou.qinshoubox.conversation.model;
 
-import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.contract.ISetNicknameInGroupChatContract;
 import com.qinshou.qinshoubox.conversation.view.fragment.SetNicknameInGroupChatFragment;
 import com.qinshou.qinshoubox.im.IMClient;

@@ -7,12 +7,12 @@ import android.widget.ImageView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.jeejio.networkmodule.callback.Callback;
+import com.jeejio.networkmodule.callback.IDownloadCallback;
 import com.qinshou.commonmodule.rcvbaseadapter.RcvMultipleBaseAdapter;
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.commonmodule.util.MediaPlayerHelper;
 import com.qinshou.commonmodule.util.ShowLogUtil;
-import com.qinshou.okhttphelper.callback.AbsDownloadCallback;
-import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.conversation.bean.VoiceBean;
 import com.qinshou.qinshoubox.im.IMClient;
@@ -120,38 +120,38 @@ public class RcvMessageAdapter extends RcvMultipleBaseAdapter<MessageBean> {
             MediaPlayerHelper.SINGLETON.playMusic(file.getAbsolutePath(), onMediaPlayerListener);
             return;
         }
-//        IMClient.SINGLETON.download(voiceBean.getUrl(), file, new AbsDownloadCallback() {
-//            @Override
-//            public void onStart(long length) {
-//                ShowLogUtil.logi("onStart: length--->" + length);
-//            }
-//
-//            @Override
-//            public void onProgress(int progress) {
-//                ShowLogUtil.logi("onProgress: progress--->" + progress);
-//            }
-//
-//            @Override
-//            public void onSuccess(File file) {
-//                ShowLogUtil.logi("onSuccess");
-//
-//            }
-//
-//            @Override
-//            public void onFailure(Exception e) {
-//                ShowLogUtil.logi("onFailure: e--->" + e.getMessage());
-//            }
-//        }, new Callback<File>() {
-//            @Override
-//            public void onSuccess(File data) {
-//                MediaPlayerHelper.SINGLETON.playMusic(data.getAbsolutePath(), onMediaPlayerListener);
-//            }
-//
-//            @Override
-//            public void onFailure(Exception e) {
-//
-//            }
-//        });
+        IMClient.SINGLETON.download(voiceBean.getUrl(), file, new IDownloadCallback() {
+            @Override
+            public void onStart(long length) {
+                ShowLogUtil.logi("onStart: length--->" + length);
+            }
+
+            @Override
+            public void onProgress(int progress) {
+                ShowLogUtil.logi("onProgress: progress--->" + progress);
+            }
+
+            @Override
+            public void onSuccess(File file) {
+                ShowLogUtil.logi("onSuccess");
+
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                ShowLogUtil.logi("onFailure: e--->" + e.getMessage());
+            }
+        }, new Callback<File>() {
+            @Override
+            public void onSuccess(File data) {
+                MediaPlayerHelper.SINGLETON.playMusic(data.getAbsolutePath(), onMediaPlayerListener);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        });
     }
 
     /**

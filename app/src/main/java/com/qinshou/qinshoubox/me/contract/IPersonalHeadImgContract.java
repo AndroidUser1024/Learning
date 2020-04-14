@@ -1,9 +1,9 @@
 package com.qinshou.qinshoubox.me.contract;
 
 
+import com.jeejio.networkmodule.callback.Callback;
 import com.qinshou.commonmodule.base.IBaseModel;
 import com.qinshou.commonmodule.base.IBaseView;
-import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.me.ui.fragment.PersonalHeadImgFragment;
 

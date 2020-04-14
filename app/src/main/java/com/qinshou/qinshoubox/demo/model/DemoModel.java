@@ -1,7 +1,7 @@
 package com.qinshou.qinshoubox.demo.model;
 
 
-import com.qinshou.okhttphelper.callback.Callback;
+import com.jeejio.networkmodule.callback.Callback;
 import com.qinshou.qinshoubox.demo.contract.IDemoContract;
 import com.qinshou.qinshoubox.demo.view.activity.DemoActivity;
 

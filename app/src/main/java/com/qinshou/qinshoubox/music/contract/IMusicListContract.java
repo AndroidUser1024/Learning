@@ -2,10 +2,10 @@ package com.qinshou.qinshoubox.music.contract;
 
 import android.content.Context;
 
+import com.jeejio.networkmodule.callback.Callback;
 import com.qinshou.commonmodule.base.IBaseContract;
 import com.qinshou.commonmodule.base.IBaseModel;
 import com.qinshou.commonmodule.base.IBaseView;
-import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.music.bean.MusicBean;
 import com.qinshou.qinshoubox.music.view.fragment.MusicListFragment;
 

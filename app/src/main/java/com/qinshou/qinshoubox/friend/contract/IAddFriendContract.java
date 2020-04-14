@@ -3,7 +3,6 @@ package com.qinshou.qinshoubox.friend.contract;
 
 import com.qinshou.commonmodule.base.IBaseModel;
 import com.qinshou.commonmodule.base.IBaseView;
-import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.friend.view.fragment.AddFriendFragment;
 import com.qinshou.qinshoubox.im.listener.QSCallback;

@@ -1,8 +1,8 @@
 package com.qinshou.qinshoubox.demo.presenter;
 
 
+import com.jeejio.networkmodule.callback.Callback;
 import com.qinshou.commonmodule.base.AbsPresenter;
-import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.demo.contract.IDemoContract;
 import com.qinshou.qinshoubox.demo.model.DemoModel;
 import com.qinshou.qinshoubox.demo.view.activity.DemoActivity;

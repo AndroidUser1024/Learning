@@ -1,10 +1,8 @@
 package com.qinshou.qinshoubox.conversation.presenter;
 
 import com.qinshou.commonmodule.base.AbsPresenter;
-import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.contract.ISetNicknameInGroupChatContract;
 import com.qinshou.qinshoubox.conversation.model.SetNicknameInGroupChatModel;
-import com.qinshou.qinshoubox.conversation.view.fragment.SetGroupChatNicknameFragment;
 import com.qinshou.qinshoubox.conversation.view.fragment.SetNicknameInGroupChatFragment;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
 

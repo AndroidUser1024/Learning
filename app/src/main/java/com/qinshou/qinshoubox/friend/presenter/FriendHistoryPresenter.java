@@ -2,12 +2,10 @@ package com.qinshou.qinshoubox.friend.presenter;
 
 
 import com.qinshou.commonmodule.base.AbsPresenter;
-import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.friend.bean.FriendHistoryBean;
 import com.qinshou.qinshoubox.friend.contract.IFriendHistoryContract;
 import com.qinshou.qinshoubox.friend.model.FriendHistoryModel;
 import com.qinshou.qinshoubox.friend.view.fragment.FriendHistoryFragment;
-import com.qinshou.qinshoubox.homepage.bean.PageResultBean;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 import java.util.List;

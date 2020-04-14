@@ -2,13 +2,11 @@ package com.qinshou.qinshoubox.conversation.presenter;
 
 
 import com.qinshou.commonmodule.base.AbsPresenter;
-import com.qinshou.okhttphelper.callback.Callback;
-import com.qinshou.qinshoubox.im.bean.ConversationBean;
-import com.qinshou.qinshoubox.im.bean.ConversationDetailBean;
-import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.conversation.contract.IConversationContract;
 import com.qinshou.qinshoubox.conversation.model.ConversationModel;
 import com.qinshou.qinshoubox.conversation.view.fragment.ConversationFragment;
+import com.qinshou.qinshoubox.im.bean.ConversationDetailBean;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 import java.util.List;
 
@@ -26,7 +24,7 @@ public class ConversationPresenter extends AbsPresenter<IConversationContract.IV
 
     @Override
     public void getConversationList() {
-        getModel().getConversationList(new Callback<List<ConversationDetailBean>>() {
+        getModel().getConversationList(new QSCallback<List<ConversationDetailBean>>() {
             @Override
             public void onSuccess(List<ConversationDetailBean> data) {
                 if (!isViewAttached()) {

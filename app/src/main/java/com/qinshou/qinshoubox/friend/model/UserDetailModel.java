@@ -1,11 +1,10 @@
 package com.qinshou.qinshoubox.friend.model;
 
 
-import com.qinshou.okhttphelper.callback.Callback;
-import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.friend.contract.IUserDetailContract;
 import com.qinshou.qinshoubox.friend.view.fragment.UserDetailFragment;
 import com.qinshou.qinshoubox.im.IMClient;
+import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 /**

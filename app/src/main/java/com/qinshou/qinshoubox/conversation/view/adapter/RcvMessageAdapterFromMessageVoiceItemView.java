@@ -1,30 +1,16 @@
 package com.qinshou.qinshoubox.conversation.view.adapter;
 
 import android.content.Context;
-import android.graphics.drawable.AnimationDrawable;
-
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.google.gson.Gson;
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
-import com.qinshou.commonmodule.util.MediaPlayerHelper;
-import com.qinshou.commonmodule.util.ShowLogUtil;
-import com.qinshou.okhttphelper.callback.AbsDownloadCallback;
-import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.conversation.bean.VoiceBean;
-import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.enums.MessageContentType;
-import com.qinshou.qinshoubox.im.listener.QSCallback;
-import com.qinshou.qinshoubox.util.QSUtil;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
-
-import java.io.File;
 
 /**
  * Author: QinHao
