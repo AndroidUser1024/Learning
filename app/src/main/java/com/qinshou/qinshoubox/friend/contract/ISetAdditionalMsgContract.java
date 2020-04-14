@@ -5,6 +5,7 @@ import com.qinshou.commonmodule.base.IBaseModel;
 import com.qinshou.commonmodule.base.IBaseView;
 import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.friend.view.fragment.SetAdditionalMsgFragment;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 /**
  * Author: QinHao
@@ -25,7 +26,7 @@ public interface ISetAdditionalMsgContract {
          * @param additionalMsg 附加验证信息
          * @param source        添加来源
          */
-        void addFriend(String toUserId, String remark, String additionalMsg, int source, Callback<Object> callback);
+        void addFriend(String toUserId, String remark, String additionalMsg, int source, QSCallback<Object> qsCallback);
     }
 
     interface IView extends IBaseView {

@@ -22,7 +22,7 @@ public class GroupChatDeleteMemberModel implements IGroupChatDeleteMemberContrac
     }
 
     @Override
-    public void deleteMember(String groupChatId, List<String> deleteMemberIdList, Callback<Object> callback) {
-        IMClient.SINGLETON.getGroupChatManager().deleteMember(groupChatId, deleteMemberIdList, callback);
+    public void deleteMember(String groupChatId, List<String> deleteMemberIdList, QSCallback<Object> qsCallback) {
+        IMClient.SINGLETON.getGroupChatManager().deleteMember(groupChatId, deleteMemberIdList, qsCallback);
     }
 }

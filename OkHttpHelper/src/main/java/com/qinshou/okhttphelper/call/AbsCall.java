@@ -2,10 +2,8 @@ package com.qinshou.okhttphelper.call;
 
 import com.qinshou.okhttphelper.callback.Callback;
 
-import java.io.IOException;
 
 import okhttp3.Call;
-import okhttp3.Response;
 
 /**
  * Author: MrQinshou

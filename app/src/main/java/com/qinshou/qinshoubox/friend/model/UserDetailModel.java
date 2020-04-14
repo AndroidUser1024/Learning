@@ -7,9 +7,6 @@ import com.qinshou.qinshoubox.friend.contract.IUserDetailContract;
 import com.qinshou.qinshoubox.friend.view.fragment.UserDetailFragment;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
-import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxUserApi;
-import com.qinshou.qinshoubox.transformer.QSApiTransformer;
-import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 /**
  * Author: QinHao

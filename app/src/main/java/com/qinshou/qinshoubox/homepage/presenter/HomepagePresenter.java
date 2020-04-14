@@ -1,15 +1,13 @@
 package com.qinshou.qinshoubox.homepage.presenter;
 
+import com.jeejio.networkmodule.callback.Callback;
 import com.qinshou.commonmodule.base.AbsPresenter;
-import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.homepage.bean.NewsBean;
 import com.qinshou.qinshoubox.homepage.bean.PageResultBean;
 import com.qinshou.qinshoubox.homepage.bean.WallpaperBean;
 import com.qinshou.qinshoubox.homepage.contract.IHomepageContract;
 import com.qinshou.qinshoubox.homepage.model.HomepageModel;
 import com.qinshou.qinshoubox.homepage.ui.fragment.HomepageFragment;
-
-import java.util.List;
 
 /**
  * Author: QinHao

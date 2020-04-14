@@ -36,7 +36,7 @@ public interface IGroupChatDeleteMemberContract {
          * @param groupChatId        群 id
          * @param deleteMemberIdList 待删除的群成员的 id 列表
          */
-        void deleteMember(String groupChatId, List<String> deleteMemberIdList, Callback<Object> callback);
+        void deleteMember(String groupChatId, List<String> deleteMemberIdList, QSCallback<Object> qsCallback);
     }
 
     interface IView extends IBaseView {

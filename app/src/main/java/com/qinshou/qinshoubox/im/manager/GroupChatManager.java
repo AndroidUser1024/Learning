@@ -2,8 +2,9 @@ package com.qinshou.qinshoubox.im.manager;
 
 import android.text.TextUtils;
 
+import com.jeejio.networkmodule.OkHttpHelper;
+import com.jeejio.networkmodule.callback.Callback;
 import com.qinshou.commonmodule.util.ShowLogUtil;
-import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.im.bean.GroupChatDetailBean;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
@@ -18,7 +19,7 @@ import com.qinshou.qinshoubox.im.enums.MessageType;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.listener.FailureRunnable;
 import com.qinshou.qinshoubox.listener.SuccessRunnable;
-import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxGroupChatApi;
+import com.qinshou.qinshoubox.network.QSBoxGroupChatApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 
 import java.util.ArrayList;
@@ -83,7 +84,7 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
             public void run() {
                 try {
                     String userId = IMClient.SINGLETON.getUserDetailBean().getId();
-                    List<GroupChatBean> groupChatBeanList = OkHttpHelperForQSBoxGroupChatApi.SINGLETON.getMyGroupChatList(userId)
+                    List<GroupChatBean> groupChatBeanList = OkHttpHelper.SINGLETON.getCaller(QSBoxGroupChatApi.class).getMyGroupChatList(userId)
                             .transform(new QSApiTransformer<List<GroupChatBean>>())
                             .execute();
                     for (GroupChatBean groupChatBean : groupChatBeanList) {
@@ -110,7 +111,7 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
      */
     public void create(List<String> toUserIdList, String nickname, String headImg, QSCallback<GroupChatBean> qsCallback) {
         String userId = IMClient.SINGLETON.getUserDetailBean().getId();
-        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.create(userId, toUserIdList, nickname, headImg)
+        OkHttpHelper.SINGLETON.getCaller(QSBoxGroupChatApi.class).create(userId, toUserIdList, nickname, headImg)
                 .transform(new QSApiTransformer<GroupChatBean>())
                 .enqueue(new Callback<GroupChatBean>() {
                     @Override
@@ -158,7 +159,7 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
      */
     public void getDetail(String groupChatId, final QSCallback<GroupChatDetailBean> qsCallback) {
         String userId = IMClient.SINGLETON.getUserDetailBean().getId();
-        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.getDetail(groupChatId, userId)
+        OkHttpHelper.SINGLETON.getCaller(QSBoxGroupChatApi.class).getDetail(groupChatId, userId)
                 .transform(new QSApiTransformer<GroupChatDetailBean>())
                 .enqueue(new Callback<GroupChatDetailBean>() {
                     @Override
@@ -206,7 +207,7 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
      */
     public void getMemberList(final String groupChatId, final QSCallback<List<UserDetailBean>> qsCallback) {
         String userId = IMClient.SINGLETON.getUserDetailBean().getId();
-        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.getMemberList(groupChatId, userId)
+        OkHttpHelper.SINGLETON.getCaller(QSBoxGroupChatApi.class).getMemberList(groupChatId, userId)
                 .transform(new QSApiTransformer<List<UserDetailBean>>())
                 .enqueue(new Callback<List<UserDetailBean>>() {
                     @Override
@@ -242,7 +243,7 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
      */
     public void addMember(String groupChatId, List<String> toUserIdList, final QSCallback<Object> qsCallback) {
         String userId = IMClient.SINGLETON.getUserDetailBean().getId();
-        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.addMember(groupChatId, userId, toUserIdList)
+        OkHttpHelper.SINGLETON.getCaller(QSBoxGroupChatApi.class).addMember(groupChatId, userId, toUserIdList)
                 .transform(new QSApiTransformer<Object>())
                 .enqueue(new Callback<Object>() {
                     @Override
@@ -265,11 +266,21 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
      *
      * @param groupChatId 待删除的群成员的 Id 集合
      */
-    public void deleteMember(String groupChatId, List<String> toUserIdList, final Callback<Object> callback) {
+    public void deleteMember(String groupChatId, List<String> toUserIdList, final QSCallback<Object> qsCallback) {
         String userId = IMClient.SINGLETON.getUserDetailBean().getId();
-        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.deleteMember(groupChatId, userId, toUserIdList)
+        OkHttpHelper.SINGLETON.getCaller(QSBoxGroupChatApi.class).deleteMember(groupChatId, userId, toUserIdList)
                 .transform(new QSApiTransformer<Object>())
-                .enqueue(callback);
+                .enqueue(new Callback<Object>() {
+                    @Override
+                    public void onSuccess(Object data) {
+                        qsCallback.onSuccess(data);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        qsCallback.onFailure(e);
+                    }
+                });
     }
 
     /**
@@ -283,7 +294,7 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
      */
     public void setNickname(final String groupChatId, final String nickname, final QSCallback<Object> qsCallback) {
         String userId = IMClient.SINGLETON.getUserDetailBean().getId();
-        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.setNickname(groupChatId, userId, nickname)
+        OkHttpHelper.SINGLETON.getCaller(QSBoxGroupChatApi.class).setNickname(groupChatId, userId, nickname)
                 .transform(new QSApiTransformer<Object>())
                 .enqueue(new Callback<Object>() {
                     @Override
@@ -319,7 +330,7 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
      */
     public void setNicknameInGroupChat(final String groupChatId, final String nicknameInGroupChat, final QSCallback<Object> qsCallback) {
         String userId = IMClient.SINGLETON.getUserDetailBean().getId();
-        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.setInfo(groupChatId, userId, nicknameInGroupChat, null, null, null)
+        OkHttpHelper.SINGLETON.getCaller(QSBoxGroupChatApi.class).setInfo(groupChatId, userId, nicknameInGroupChat, null, null, null)
                 .transform(new QSApiTransformer<Object>())
                 .enqueue(new Callback<Object>() {
                     @Override
@@ -355,7 +366,7 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
      */
     public void setTop(final String groupChatId, final int top, final QSCallback<Object> qsCallback) {
         String userId = IMClient.SINGLETON.getUserDetailBean().getId();
-        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.setInfo(groupChatId, userId, null, top, null, null)
+        OkHttpHelper.SINGLETON.getCaller(QSBoxGroupChatApi.class).setInfo(groupChatId, userId, null, top, null, null)
                 .transform(new QSApiTransformer<Object>())
                 .enqueue(new Callback<Object>() {
                     @Override
@@ -391,7 +402,7 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
      */
     public void setDoNotDisturb(final String groupChatId, final int doNotDisturb, final QSCallback<Object> qsCallback) {
         String userId = IMClient.SINGLETON.getUserDetailBean().getId();
-        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.setInfo(groupChatId, userId, null, null, doNotDisturb, null)
+        OkHttpHelper.SINGLETON.getCaller(QSBoxGroupChatApi.class).setInfo(groupChatId, userId, null, null, doNotDisturb, null)
                 .transform(new QSApiTransformer<Object>())
                 .enqueue(new Callback<Object>() {
                     @Override
@@ -427,7 +438,7 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
      */
     public void setShowGroupChatMemberNickname(final String groupChatId, final int showGroupChatMemberNickname, final QSCallback<Object> qsCallback) {
         String userId = IMClient.SINGLETON.getUserDetailBean().getId();
-        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.setInfo(groupChatId, userId, null, null, null, showGroupChatMemberNickname)
+        OkHttpHelper.SINGLETON.getCaller(QSBoxGroupChatApi.class).setInfo(groupChatId, userId, null, null, null, showGroupChatMemberNickname)
                 .transform(new QSApiTransformer<Object>())
                 .enqueue(new Callback<Object>() {
                     @Override
@@ -462,7 +473,7 @@ public class GroupChatManager extends AbsManager<String, GroupChatBean> {
      */
     public void exit(String groupChatId, QSCallback<Object> qsCallback) {
         String userId = IMClient.SINGLETON.getUserDetailBean().getId();
-        OkHttpHelperForQSBoxGroupChatApi.SINGLETON.exit(groupChatId, userId)
+        OkHttpHelper.SINGLETON.getCaller(QSBoxGroupChatApi.class).exit(groupChatId, userId)
                 .transform(new QSApiTransformer<Object>())
                 .enqueue(new Callback<Object>() {
                     @Override

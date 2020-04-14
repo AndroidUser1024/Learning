@@ -1,10 +1,11 @@
 package com.qinshou.qinshoubox.login.model;
 
-import com.qinshou.okhttphelper.callback.Callback;
+import com.jeejio.networkmodule.OkHttpHelper;
+import com.jeejio.networkmodule.callback.Callback;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.login.contract.ILoginOrRegisterContract;
 import com.qinshou.qinshoubox.login.view.fragment.LoginOrRegisterFragment;
-import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxUserApi;
+import com.qinshou.qinshoubox.network.QSBoxUserApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 
 /**
@@ -15,14 +16,14 @@ import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 public class LoginOrRegisterModel implements ILoginOrRegisterContract.IModel {
     @Override
     public void register(String username, String password, Callback<UserBean> callback) {
-        OkHttpHelperForQSBoxUserApi.SINGLETON.register(username, password)
+        OkHttpHelper.SINGLETON.getCaller(QSBoxUserApi.class).register(username, password)
                 .transform(new QSApiTransformer<UserBean>())
                 .enqueue(callback);
     }
 
     @Override
     public void login(String username, String password, Callback<UserBean> callback) {
-        OkHttpHelperForQSBoxUserApi.SINGLETON.login(username, password)
+        OkHttpHelper.SINGLETON.getCaller(QSBoxUserApi.class).login(username, password)
                 .transform(new QSApiTransformer<UserBean>())
                 .enqueue(callback);
     }

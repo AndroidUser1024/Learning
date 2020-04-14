@@ -73,6 +73,7 @@ dependencies {
     implementation project(':commonmodule')
     implementation project(':dbmodule')
     implementation project(':imagemodule')
+    implementation project(':networkmodule')
     implementation project(':pushmodule')
     implementation project(':qrcodemodule')
 //    implementation project(':sharemodule')
@@ -94,4 +95,5 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer-dash:2.11.3'
     implementation 'com.google.android.exoplayer:exoplayer-hls:2.11.3'
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.11.3'
+    implementation 'com.squareup.retrofit2:retrofit:2.8.1'
 }

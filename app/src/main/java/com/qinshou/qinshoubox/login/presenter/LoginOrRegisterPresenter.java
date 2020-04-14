@@ -1,7 +1,7 @@
 package com.qinshou.qinshoubox.login.presenter;
 
+import com.jeejio.networkmodule.callback.Callback;
 import com.qinshou.commonmodule.base.AbsPresenter;
-import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.login.contract.ILoginOrRegisterContract;
 import com.qinshou.qinshoubox.login.model.LoginOrRegisterModel;

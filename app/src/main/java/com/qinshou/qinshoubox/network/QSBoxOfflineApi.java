@@ -1,10 +1,10 @@
 package com.qinshou.qinshoubox.network;
 
-import com.qinshou.okhttphelper.annotation.Api;
-import com.qinshou.okhttphelper.annotation.Field;
-import com.qinshou.okhttphelper.annotation.Json;
-import com.qinshou.okhttphelper.annotation.Post;
-import com.qinshou.okhttphelper.call.AbsCall;
+import com.jeejio.networkmodule.annotation.Api;
+import com.jeejio.networkmodule.annotation.Json;
+import com.jeejio.networkmodule.annotation.Param;
+import com.jeejio.networkmodule.annotation.Post;
+import com.jeejio.networkmodule.call.AbsCall;
 import com.qinshou.qinshoubox.constant.IUrlConstant;
 import com.qinshou.qinshoubox.homepage.bean.QinshouResultBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
@@ -22,9 +22,9 @@ public interface QSBoxOfflineApi {
 
     @Json
     @Post("/getOfflineMessageList")
-    AbsCall<QinshouResultBean<List<MessageBean>>> getOfflineMessageList(@Field(name = "userId") String userId);
+    AbsCall<QinshouResultBean<List<MessageBean>>> getOfflineMessageList(@Param("userId") String userId);
 
     @Json
     @Post("/deleteOfflineMessageList")
-    AbsCall<QinshouResultBean<Object>> deleteOfflineMessageList(@Field(name = "userId") String userId);
+    AbsCall<QinshouResultBean<Object>> deleteOfflineMessageList(@Param("userId") String userId);
 }

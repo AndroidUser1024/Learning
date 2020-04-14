@@ -6,6 +6,7 @@ import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.friend.contract.ISetAdditionalMsgContract;
 import com.qinshou.qinshoubox.friend.model.SetAdditionalMsgModel;
 import com.qinshou.qinshoubox.friend.view.fragment.SetAdditionalMsgFragment;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 /**
  * Author: QinHao
@@ -21,7 +22,7 @@ public class SetAdditionalMsgPresenter extends AbsPresenter<ISetAdditionalMsgCon
 
     @Override
     public void addFriend(String toUserId, String remark, String additionalMsg, int source) {
-        getModel().addFriend(toUserId, remark, additionalMsg, source, new Callback<Object>() {
+        getModel().addFriend(toUserId, remark, additionalMsg, source, new QSCallback<Object>() {
             @Override
             public void onSuccess(Object data) {
                 if (!isViewAttached()) {

@@ -1,9 +1,9 @@
 package com.qinshou.qinshoubox.network;
 
-import com.qinshou.okhttphelper.annotation.Api;
-import com.qinshou.okhttphelper.annotation.Get;
-import com.qinshou.okhttphelper.annotation.Query;
-import com.qinshou.okhttphelper.call.AbsCall;
+import com.jeejio.networkmodule.annotation.Api;
+import com.jeejio.networkmodule.annotation.Get;
+import com.jeejio.networkmodule.annotation.Param;
+import com.jeejio.networkmodule.call.AbsCall;
 import com.qinshou.qinshoubox.constant.IUrlConstant;
 import com.qinshou.qinshoubox.homepage.bean.NewsBean;
 import com.qinshou.qinshoubox.homepage.bean.PageResultBean;
@@ -18,5 +18,5 @@ import com.qinshou.qinshoubox.homepage.bean.QinshouResultBean;
 @Api(IUrlConstant.DEFAULT_HOST + "/news")
 public interface QSBoxNewsApi {
     @Get("/getList")
-    AbsCall<QinshouResultBean<PageResultBean<NewsBean>>> getList(@Query(name = "page") int page, @Query(name = "pageSize") int pageSize);
+    AbsCall<QinshouResultBean<PageResultBean<NewsBean>>> getList(@Param("page") int page, @Param("pageSize") int pageSize);
 }

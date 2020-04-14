@@ -1,9 +1,9 @@
 package com.qinshou.qinshoubox.homepage.contract;
 
+import com.jeejio.networkmodule.callback.Callback;
 import com.qinshou.commonmodule.base.IBaseContract;
 import com.qinshou.commonmodule.base.IBaseModel;
 import com.qinshou.commonmodule.base.IBaseView;
-import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.homepage.bean.NewsBean;
 import com.qinshou.qinshoubox.homepage.bean.PageResultBean;
 import com.qinshou.qinshoubox.homepage.bean.WallpaperBean;

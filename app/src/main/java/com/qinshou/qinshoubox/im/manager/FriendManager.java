@@ -1,7 +1,8 @@
 package com.qinshou.qinshoubox.im.manager;
 
+import com.jeejio.networkmodule.OkHttpHelper;
+import com.jeejio.networkmodule.callback.Callback;
 import com.qinshou.commonmodule.util.ShowLogUtil;
-import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.friend.bean.FriendHistoryBean;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.ConversationDetailBean;
@@ -17,7 +18,7 @@ import com.qinshou.qinshoubox.im.enums.MessageType;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.listener.FailureRunnable;
 import com.qinshou.qinshoubox.listener.SuccessRunnable;
-import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxFriendApi;
+import com.qinshou.qinshoubox.network.QSBoxFriendApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
             public void run() {
                 try {
                     String userId = IMClient.SINGLETON.getUserDetailBean().getId();
-                    List<UserDetailBean> userDetailBeanList = OkHttpHelperForQSBoxFriendApi.SINGLETON.getList(userId)
+                    List<UserDetailBean> userDetailBeanList = OkHttpHelper.SINGLETON.getCaller(QSBoxFriendApi.class).getList(userId)
                             .transform(new QSApiTransformer<List<UserDetailBean>>())
                             .execute();
                     for (UserDetailBean userDetailBean : userDetailBeanList) {
@@ -111,11 +112,21 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
      * @param additionalMsg 附加验证信息
      * @param source        添加来源
      */
-    public void addFriend(String toUserId, String remark, String additionalMsg, int source, Callback<Object> callback) {
+    public void addFriend(String toUserId, String remark, String additionalMsg, int source, QSCallback<Object> qsCallback) {
         String userId = IMClient.SINGLETON.getUserDetailBean().getId();
-        OkHttpHelperForQSBoxFriendApi.SINGLETON.add(userId, toUserId, remark, additionalMsg, source)
+        OkHttpHelper.SINGLETON.getCaller(QSBoxFriendApi.class).add(userId, toUserId, remark, additionalMsg, source)
                 .transform(new QSApiTransformer<Object>())
-                .enqueue(callback);
+                .enqueue(new Callback<Object>() {
+                    @Override
+                    public void onSuccess(Object data) {
+                        qsCallback.onSuccess(data);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        qsCallback.onFailure(e);
+                    }
+                });
     }
 
     /**
@@ -129,7 +140,7 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
      */
     public void agreeAddFriend(final String toUserId, String remark, final QSCallback<Object> qsCallback) {
         String userId = IMClient.SINGLETON.getUserDetailBean().getId();
-        OkHttpHelperForQSBoxFriendApi.SINGLETON.agreeAdd(userId, toUserId, remark)
+        OkHttpHelper.SINGLETON.getCaller(QSBoxFriendApi.class).agreeAdd(userId, toUserId, remark)
                 .transform(new QSApiTransformer<Object>())
                 .enqueue(new Callback<Object>() {
                     @Override
@@ -174,7 +185,7 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
      */
     public void deleteFriend(final String toUserId, final QSCallback<Object> qsCallback) {
         String userId = IMClient.SINGLETON.getUserDetailBean().getId();
-        OkHttpHelperForQSBoxFriendApi.SINGLETON.delete(userId, toUserId)
+        OkHttpHelper.SINGLETON.getCaller(QSBoxFriendApi.class).delete(userId, toUserId)
                 .transform(new QSApiTransformer<Object>())
                 .enqueue(new Callback<Object>() {
                     @Override
@@ -209,7 +220,7 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
      */
     public void setRemark(final String toUserId, final String remark, final QSCallback<Object> qsCallback) {
         String userId = IMClient.SINGLETON.getUserDetailBean().getId();
-        OkHttpHelperForQSBoxFriendApi.SINGLETON.setInfo(userId, toUserId, remark, null, null, null)
+        OkHttpHelper.SINGLETON.getCaller(QSBoxFriendApi.class).setInfo(userId, toUserId, remark, null, null, null)
                 .transform(new QSApiTransformer<Object>())
                 .enqueue(new Callback<Object>() {
                     @Override
@@ -245,7 +256,7 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
      */
     public void setTop(final String toUserId, final int top, final QSCallback<Object> qsCallback) {
         String userId = IMClient.SINGLETON.getUserDetailBean().getId();
-        OkHttpHelperForQSBoxFriendApi.SINGLETON.setInfo(userId, toUserId, null, top, null, null)
+        OkHttpHelper.SINGLETON.getCaller(QSBoxFriendApi.class).setInfo(userId, toUserId, null, top, null, null)
                 .transform(new QSApiTransformer<Object>())
                 .enqueue(new Callback<Object>() {
                     @Override
@@ -282,7 +293,7 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
      */
     public void setDoNotDisturb(final String toUserId, final int doNotDisturb, final QSCallback<Object> qsCallback) {
         String userId = IMClient.SINGLETON.getUserDetailBean().getId();
-        OkHttpHelperForQSBoxFriendApi.SINGLETON.setInfo(userId, toUserId, null, null, doNotDisturb, null)
+        OkHttpHelper.SINGLETON.getCaller(QSBoxFriendApi.class).setInfo(userId, toUserId, null, null, doNotDisturb, null)
                 .transform(new QSApiTransformer<Object>())
                 .enqueue(new Callback<Object>() {
                     @Override
@@ -318,7 +329,7 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
      */
     public void setBlackList(final String toUserId, final int blackList, final QSCallback<Object> qsCallback) {
         String userId = IMClient.SINGLETON.getUserDetailBean().getId();
-        OkHttpHelperForQSBoxFriendApi.SINGLETON.setInfo(userId, toUserId, null, null, null, blackList)
+        OkHttpHelper.SINGLETON.getCaller(QSBoxFriendApi.class).setInfo(userId, toUserId, null, null, null, blackList)
                 .transform(new QSApiTransformer<Object>())
                 .enqueue(new Callback<Object>() {
                     @Override
@@ -352,11 +363,21 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
      * @param page     分页加载当前页码
      * @param pageSize 分页加载每一页的条数
      */
-    public void getHistory(int page, int pageSize, Callback<List<FriendHistoryBean>> callback) {
+    public void getHistory(int page, int pageSize, QSCallback<List<FriendHistoryBean>> qsCallback) {
         String userId = IMClient.SINGLETON.getUserDetailBean().getId();
-        OkHttpHelperForQSBoxFriendApi.SINGLETON.getHistory(userId, page, pageSize)
+        OkHttpHelper.SINGLETON.getCaller(QSBoxFriendApi.class).getHistory(userId, page, pageSize)
                 .transform(new QSApiTransformer<List<FriendHistoryBean>>())
-                .enqueue(callback);
+                .enqueue(new Callback<List<FriendHistoryBean>>() {
+                    @Override
+                    public void onSuccess(List<FriendHistoryBean> data) {
+                        qsCallback.onSuccess(data);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        qsCallback.onFailure(e);
+                    }
+                });
     }
 
     /**
@@ -369,7 +390,7 @@ public class FriendManager extends AbsManager<String, UserDetailBean> {
      */
     public void getInfo(String toUserId, QSCallback<UserDetailBean> qsCallback) {
         String userId = IMClient.SINGLETON.getUserDetailBean().getId();
-        OkHttpHelperForQSBoxFriendApi.SINGLETON.getInfo(userId, toUserId)
+        OkHttpHelper.SINGLETON.getCaller(QSBoxFriendApi.class).getInfo(userId, toUserId)
                 .transform(new QSApiTransformer<UserDetailBean>())
                 .enqueue(new Callback<UserDetailBean>() {
                     @Override

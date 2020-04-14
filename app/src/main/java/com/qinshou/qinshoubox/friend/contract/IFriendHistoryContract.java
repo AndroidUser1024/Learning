@@ -6,6 +6,7 @@ import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.friend.bean.FriendHistoryBean;
 import com.qinshou.qinshoubox.friend.view.fragment.FriendHistoryFragment;
 import com.qinshou.qinshoubox.homepage.bean.PageResultBean;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 import java.util.List;
 
@@ -24,9 +25,8 @@ public interface IFriendHistoryContract {
          * Date:2019/9/5 14:15
          * Description:获取好友申请历史
          *
-         * @param callback 回调接口
          */
-        void getFriendHistory(int page, int pageSize, Callback<List<FriendHistoryBean>> callback);
+        void getFriendHistory(int page, int pageSize, QSCallback<List<FriendHistoryBean>> qsCallback);
     }
 
     interface IView extends IBaseView {

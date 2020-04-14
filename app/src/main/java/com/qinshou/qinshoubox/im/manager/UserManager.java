@@ -3,13 +3,13 @@ package com.qinshou.qinshoubox.im.manager;
 
 import com.jeejio.dbmodule.DatabaseManager;
 import com.jeejio.dbmodule.dao.IBaseDao;
-import com.qinshou.commonmodule.util.ShowLogUtil;
-import com.qinshou.okhttphelper.callback.Callback;
+import com.jeejio.networkmodule.OkHttpHelper;
+import com.jeejio.networkmodule.callback.Callback;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.UserBean;
 import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
-import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxUserApi;
+import com.qinshou.qinshoubox.network.QSBoxUserApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 
 /**
@@ -27,7 +27,7 @@ public class UserManager {
 
     public void getUser(String keyword, final QSCallback<UserDetailBean> qsCallback) {
         String userId = IMClient.SINGLETON.getUserDetailBean().getId();
-        OkHttpHelperForQSBoxUserApi.SINGLETON.getUserDetail(keyword, userId)
+        OkHttpHelper.SINGLETON.getCaller(QSBoxUserApi.class).getUserDetail(keyword, userId)
                 .transform(new QSApiTransformer<>())
                 .enqueue(new Callback<UserDetailBean>() {
                     @Override
@@ -51,7 +51,7 @@ public class UserManager {
 
     public void getUser(String keyword, String groupChatId, final QSCallback<UserDetailBean> qsCallback) {
         String userId = IMClient.SINGLETON.getUserDetailBean().getId();
-        OkHttpHelperForQSBoxUserApi.SINGLETON.getUserDetail(keyword, userId, groupChatId)
+        OkHttpHelper.SINGLETON.getCaller(QSBoxUserApi.class).getUserDetail(keyword, userId, groupChatId)
                 .transform(new QSApiTransformer<>())
                 .enqueue(new Callback<UserDetailBean>() {
                     @Override

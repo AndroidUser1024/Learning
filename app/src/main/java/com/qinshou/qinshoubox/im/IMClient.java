@@ -7,9 +7,10 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.jeejio.dbmodule.DatabaseManager;
+import com.jeejio.networkmodule.OkHttpHelper;
+import com.jeejio.networkmodule.callback.AbsDownloadCallback;
+import com.jeejio.networkmodule.callback.Callback;
 import com.qinshou.commonmodule.util.ShowLogUtil;
-import com.qinshou.okhttphelper.callback.AbsDownloadCallback;
-import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.conversation.bean.ImgBean;
 import com.qinshou.qinshoubox.conversation.bean.UploadImgResultBean;
 import com.qinshou.qinshoubox.conversation.bean.UploadVoiceResultBean;
@@ -45,8 +46,7 @@ import com.qinshou.qinshoubox.im.manager.MessageManager;
 import com.qinshou.qinshoubox.im.manager.PingManager;
 import com.qinshou.qinshoubox.im.manager.ReconnectManager;
 import com.qinshou.qinshoubox.im.manager.UserManager;
-import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxCommonApi;
-import com.qinshou.qinshoubox.network.OkHttpHelperForQSBoxOfflineApi;
+import com.qinshou.qinshoubox.network.QSBoxOfflineApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
 
 import java.io.File;
@@ -72,8 +72,8 @@ public enum IMClient {
 
     private static final String TAG = "IMClient";
     private final int TIME_OUT = 10 * 1000;
-        private static final String URL = "ws://www.mrqinshou.com:10086/websocket";
-//    private static final String URL = "ws://10.11.11.179:10086/websocket";
+    private static final String URL = "ws://www.mrqinshou.com:10086/websocket";
+    //    private static final String URL = "ws://10.11.11.179:10086/websocket";
     //            private static final String URL = "ws://192.168.1.109:10086/websocket";
 //    private static final String URL = "ws://192.168.31.199:10086/websocket";
     private Context mContext;
@@ -120,7 +120,7 @@ public enum IMClient {
         mPingManager.start();
         mReconnectManager = new ReconnectManager();
         // 拉取离线消息
-        OkHttpHelperForQSBoxOfflineApi.SINGLETON.getOfflineMessageList(mUserDetailBean.getId())
+        OkHttpHelper.SINGLETON.getCaller(QSBoxOfflineApi.class).getOfflineMessageList(mUserDetailBean.getId())
                 .transform(new QSApiTransformer<List<MessageBean>>())
                 .enqueue(new Callback<List<MessageBean>>() {
                     @Override
@@ -129,7 +129,7 @@ public enum IMClient {
                             handleMessage(messageBean);
                         }
                         // 通知后台删除离线消息
-                        OkHttpHelperForQSBoxOfflineApi.SINGLETON.deleteOfflineMessageList(mUserDetailBean.getId())
+                        OkHttpHelper.SINGLETON.getCaller(QSBoxOfflineApi.class).deleteOfflineMessageList(mUserDetailBean.getId())
                                 .enqueue(null);
                     }
 
@@ -524,15 +524,15 @@ public enum IMClient {
     }
 
     private void uploadVoice(File voice, long time, final Callback<UploadVoiceResultBean> callback) {
-        OkHttpHelperForQSBoxCommonApi.SINGLETON.uploadVoice(mUserDetailBean.getId(), time, voice)
-                .transform(new QSApiTransformer<UploadVoiceResultBean>())
-                .enqueue(callback);
+//        OkHttpHelperForQSBoxCommonApi.SINGLETON.uploadVoice(mUserDetailBean.getId(), time, voice)
+//                .transform(new QSApiTransformer<UploadVoiceResultBean>())
+//                .enqueue(callback);
     }
 
     private void uploadImg(File img, final Callback<UploadImgResultBean> callback) {
-        OkHttpHelperForQSBoxCommonApi.SINGLETON.uploadImg(mUserDetailBean.getId(), img)
-                .transform(new QSApiTransformer<UploadImgResultBean>())
-                .enqueue(callback);
+//        OkHttpHelperForQSBoxCommonApi.SINGLETON.uploadImg(mUserDetailBean.getId(), img)
+//                .transform(new QSApiTransformer<UploadImgResultBean>())
+//                .enqueue(callback);
     }
 
     /**
@@ -750,7 +750,7 @@ public enum IMClient {
      * @param callback         下载结果回调
      */
     public void download(String url, final File file, AbsDownloadCallback downloadCallback, final Callback<File> callback) {
-        OkHttpHelperForQSBoxCommonApi.SINGLETON.download(url, file, downloadCallback).enqueue(callback);
+//        OkHttpHelperForQSBoxCommonApi.SINGLETON.download(url, file, downloadCallback).enqueue(callback);
     }
 
     public UserDetailBean getUserDetailBean() {

@@ -1,11 +1,10 @@
 package com.qinshou.qinshoubox.friend.model;
 
-import com.qinshou.okhttphelper.callback.Callback;
 import com.qinshou.qinshoubox.friend.bean.FriendHistoryBean;
 import com.qinshou.qinshoubox.friend.contract.IFriendHistoryContract;
 import com.qinshou.qinshoubox.friend.view.fragment.FriendHistoryFragment;
-import com.qinshou.qinshoubox.homepage.bean.PageResultBean;
 import com.qinshou.qinshoubox.im.IMClient;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 import java.util.List;
 
@@ -17,7 +16,7 @@ import java.util.List;
  */
 public class FriendHistoryModel implements IFriendHistoryContract.IModel {
     @Override
-    public void getFriendHistory(int page, int pageSize, Callback<List<FriendHistoryBean>> callback) {
-        IMClient.SINGLETON.getFriendManager().getHistory(page, pageSize, callback);
+    public void getFriendHistory(int page, int pageSize, QSCallback<List<FriendHistoryBean>> qsCallback) {
+        IMClient.SINGLETON.getFriendManager().getHistory(page, pageSize, qsCallback);
     }
 }

@@ -8,6 +8,7 @@ import com.qinshou.qinshoubox.friend.contract.IFriendHistoryContract;
 import com.qinshou.qinshoubox.friend.model.FriendHistoryModel;
 import com.qinshou.qinshoubox.friend.view.fragment.FriendHistoryFragment;
 import com.qinshou.qinshoubox.homepage.bean.PageResultBean;
+import com.qinshou.qinshoubox.im.listener.QSCallback;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class FriendHistoryPresenter extends AbsPresenter<IFriendHistoryContract.
 
     @Override
     public void getFriendHistory(int page, int pageSize) {
-        getModel().getFriendHistory(page, pageSize, new Callback<List<FriendHistoryBean>>() {
+        getModel().getFriendHistory(page, pageSize, new QSCallback<List<FriendHistoryBean>>() {
             @Override
             public void onSuccess(List<FriendHistoryBean> data) {
                 if (!isViewAttached()) {
