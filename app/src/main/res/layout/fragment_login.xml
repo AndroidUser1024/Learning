@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/login_cl_root_bg"
-    tools:context="com.qinshou.qinshoubox.me.ui.fragment.LoginOrRegisterFragment">
+    tools:context="com.qinshou.qinshoubox.login.view.fragment.LoginOrRegisterFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guide_line_horizontal"

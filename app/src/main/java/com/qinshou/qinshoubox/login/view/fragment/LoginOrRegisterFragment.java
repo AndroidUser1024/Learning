@@ -14,9 +14,12 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.util.SoftKeyboardUtil;
+import com.qinshou.commonmodule.util.StatusBarUtil;
 import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
@@ -35,6 +38,10 @@ import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
  * Date: 2019/5/5 17:16
  */
 public class LoginOrRegisterFragment extends QSFragment<LoginOrRegisterPresenter> implements ILoginOrRegisterContract.IView {
+    /**
+     * 根布局
+     */
+    private ConstraintLayout mClRoot;
     /**
      * 登录文本框
      */
@@ -61,12 +68,24 @@ public class LoginOrRegisterFragment extends QSFragment<LoginOrRegisterPresenter
     private LinearLayout mLlInput;
 
     @Override
+    public boolean isImmersive() {
+        return true;
+    }
+
+    @Override
     public int getLayoutId() {
         return R.layout.fragment_login;
     }
 
     @Override
     public void initView() {
+        mClRoot = findViewByID(R.id.cl_root);
+        mClRoot.post(new Runnable() {
+            @Override
+            public void run() {
+                StatusBarUtil.appendStatusBarPadding(mClRoot, mClRoot.getHeight());
+            }
+        });
         mTvLogin = findViewByID(R.id.tv_click_2_login);
         mTvRegister = findViewByID(R.id.tv_register);
         mLlInput = findViewByID(R.id.ll_input);
@@ -79,7 +98,7 @@ public class LoginOrRegisterFragment extends QSFragment<LoginOrRegisterPresenter
     @Override
     public void setListener() {
         // 点击外部区域关闭软键盘
-        findViewByID(R.id.cl_root).setOnClickListener(new View.OnClickListener() {
+        mClRoot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SoftKeyboardUtil.hideSoftKeyboard(getActivity());

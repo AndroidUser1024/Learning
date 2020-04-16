@@ -174,6 +174,9 @@ public class ViewPagerPoints extends LinearLayout {
 
             @Override
             public void onPageSelected(int position) {
+                if (count == 0) {
+                    return;
+                }
                 setCurrentItem(position % count);
             }
 
@@ -198,6 +201,9 @@ public class ViewPagerPoints extends LinearLayout {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
+                if (count == 0) {
+                    return;
+                }
                 setCurrentItem(position % count);
             }
 
