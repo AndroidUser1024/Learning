@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FF000000"
+    tools:context="com.qinshou.qinshoubox.me.ui.fragment.MagicTowerFragment">
+
+    <TableLayout
+        android:id="@+id/tl_map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </TableLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_layout_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="存储进度"
+            android:textColor="#FFFFFFFF"
+            android:textSize="@dimen/px24" />
+
+        <Button
+            android:id="@+id/btn_read"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="读取进度"
+            android:textColor="#FFFFFFFF"
+            android:textSize="@dimen/px24" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_layout_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linear_layout_1">
+
+        <TextView
+            android:id="@+id/tv_level_prompt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="等级:"
+            android:textColor="#FFFFFFFF"
+            android:textSize="@dimen/px36" />
+
+        <TextView
+            android:id="@+id/tv_level"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#FFFFFFFF"
+            android:textSize="@dimen/px36"
+            tools:text="1" />
+
+        <TextView
+            android:id="@+id/tv_experience_prompt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="经验:"
+            android:textColor="#FFFFFFFF"
+            android:textSize="@dimen/px36" />
+
+        <TextView
+            android:id="@+id/tv_experience"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#FFFFFFFF"
+            android:textSize="@dimen/px36"
+            tools:text="1" />
+
+        <TextView
+            android:id="@+id/tv_money_prompt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="金币:"
+            android:textColor="#FFFFFFFF"
+            android:textSize="@dimen/px36" />
+
+        <TextView
+            android:id="@+id/tv_money"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#FFFFFFFF"
+            android:textSize="@dimen/px36"
+            tools:text="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_layout_3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linear_layout_2">
+
+        <TextView
+            android:id="@+id/tv_life_value_prompt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="生命:"
+            android:textColor="#FFFFFFFF"
+            android:textSize="@dimen/px36" />
+
+        <TextView
+            android:id="@+id/tv_life_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#FFFFFFFF"
+            android:textSize="@dimen/px36"
+            tools:text="1" />
+
+        <TextView
+            android:id="@+id/tv_attack_value_prompt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="攻击:"
+            android:textColor="#FFFFFFFF"
+            android:textSize="@dimen/px36" />
+
+        <TextView
+            android:id="@+id/tv_attack_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#FFFFFFFF"
+            android:textSize="@dimen/px36"
+            tools:text="1" />
+
+        <TextView
+            android:id="@+id/tv_defense_value_prompt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="防御:"
+            android:textColor="#FFFFFFFF"
+            android:textSize="@dimen/px36" />
+
+        <TextView
+            android:id="@+id/tv_defense_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#FFFFFFFF"
+            android:textSize="@dimen/px36"
+            tools:text="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_layout_4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_sheng_guang_hui"
+            android:layout_width="@dimen/px100"
+            android:layout_height="@dimen/px100"
+            android:src="@drawable/magic_tower_prop_sheng_guang_hui"
+            android:visibility="invisible"
+            tools:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/iv_feng_zhi_luo_pan"
+            android:layout_width="@dimen/px100"
+            android:layout_height="@dimen/px100"
+            android:src="@drawable/magic_tower_prop_feng_zhi_luo_pan"
+            android:visibility="invisible"
+            tools:visibility="visible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_layout_5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@id/linear_layout_4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_yellow_key"
+            android:layout_width="@dimen/px60"
+            android:layout_height="@dimen/px60"
+            android:src="@drawable/magic_tower_prop_key_yellow" />
+
+        <TextView
+            android:id="@+id/tv_yellow_key_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/px10"
+            android:layout_marginLeft="@dimen/px10"
+            android:textColor="#FFFFFFFF"
+            android:textSize="@dimen/px36"
+            tools:text="1" />
+
+        <ImageView
+            android:id="@+id/iv_blue_key"
+            android:layout_width="@dimen/px60"
+            android:layout_height="@dimen/px60"
+            android:layout_marginStart="@dimen/px50"
+            android:layout_marginLeft="@dimen/px50"
+            android:src="@drawable/magic_tower_prop_key_blue" />
+
+        <TextView
+            android:id="@+id/tv_blue_key_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/px10"
+            android:layout_marginLeft="@dimen/px10"
+            android:textColor="#FFFFFFFF"
+            android:textSize="@dimen/px36"
+            tools:text="1" />
+
+        <ImageView
+            android:id="@+id/iv_red_key"
+            android:layout_width="@dimen/px60"
+            android:layout_height="@dimen/px60"
+            android:layout_marginStart="@dimen/px50"
+            android:layout_marginLeft="@dimen/px50"
+            android:src="@drawable/magic_tower_prop_key_red" />
+
+        <TextView
+            android:id="@+id/tv_red_key_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/px10"
+            android:layout_marginLeft="@dimen/px10"
+            android:textColor="#FFFFFFFF"
+            android:textSize="@dimen/px36"
+            tools:text="1" />
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <ImageButton
+            android:id="@+id/ib_move_right"
+            android:layout_width="@dimen/px100"
+            android:layout_height="@dimen/px100"
+            android:background="@null"
+            android:padding="@dimen/px5"
+            android:scaleType="fitCenter"
+            android:src="@drawable/magic_tower_move_right"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+        <ImageButton
+            android:id="@+id/ib_move_down"
+            android:layout_width="@dimen/px100"
+            android:layout_height="@dimen/px100"
+            android:layout_alignParentBottom="true"
+            android:background="@null"
+            android:padding="@dimen/px5"
+            android:scaleType="fitCenter"
+            android:src="@drawable/magic_tower_move_down"
+            app:layout_constraintBottom_toBottomOf="@id/ib_move_right"
+            app:layout_constraintRight_toLeftOf="@id/ib_move_right"
+            app:layout_constraintTop_toTopOf="@id/ib_move_right" />
+
+        <ImageButton
+            android:id="@+id/ib_move_left"
+            android:layout_width="@dimen/px100"
+            android:layout_height="@dimen/px100"
+            android:background="@null"
+            android:padding="@dimen/px5"
+            android:scaleType="fitCenter"
+            android:src="@drawable/magic_tower_move_left"
+            app:layout_constraintBottom_toBottomOf="@id/ib_move_down"
+            app:layout_constraintRight_toLeftOf="@id/ib_move_down"
+            app:layout_constraintTop_toTopOf="@id/ib_move_down" />
+
+        <ImageButton
+            android:id="@+id/ib_move_up"
+            android:layout_width="@dimen/px100"
+            android:layout_height="@dimen/px100"
+            android:background="@null"
+            android:padding="@dimen/px5"
+            android:scaleType="fitCenter"
+            android:src="@drawable/magic_tower_move_up"
+            app:layout_constraintBottom_toTopOf="@id/ib_move_down"
+            app:layout_constraintEnd_toEndOf="@id/ib_move_down"
+            app:layout_constraintLeft_toLeftOf="@id/ib_move_down"
+            app:layout_constraintRight_toRightOf="@id/ib_move_down"
+            app:layout_constraintStart_toStartOf="@id/ib_move_down" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -72,7 +72,7 @@ public class MeFragment extends QSFragment<MePresenter> implements IMeContract.I
                     startActivity(new Intent(getContext(), TurningRobotActivity.class));
                     break;
                 case R.id.btn_magic_tower:
-//                    startActivity(new Intent(getContext(), MagicTowerActivity.class));
+                    startActivity(ContainerActivity.getJumpIntent(getContext(), MagicTowerFragment.class));
                     break;
                 case R.id.btn_contact_list:
                     startActivity(new Intent(getContext(), ContactListActivity.class));
