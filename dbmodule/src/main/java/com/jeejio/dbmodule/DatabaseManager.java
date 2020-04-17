@@ -5,26 +5,18 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.text.TextUtils;
 import android.util.Log;
-import android.util.Patterns;
 
 
 import com.jeejio.dbmodule.annotation.Column;
-import com.jeejio.dbmodule.annotation.Delete;
 import com.jeejio.dbmodule.annotation.Id;
-import com.jeejio.dbmodule.annotation.Insert;
-import com.jeejio.dbmodule.annotation.ObjParam;
-import com.jeejio.dbmodule.annotation.Param;
 import com.jeejio.dbmodule.annotation.Table;
 import com.jeejio.dbmodule.bean.ColumnInfoBean;
 import com.jeejio.dbmodule.bean.IdColumnInfoBean;
 import com.jeejio.dbmodule.dao.IBaseDao;
 import com.jeejio.dbmodule.dao.impl.DefaultDaoImpl;
-import com.jeejio.dbmodule.util.SqlUtil;
+import com.jeejio.dbmodule.util.SqlUtil2;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -32,13 +24,9 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Description:数据库管理者类
@@ -92,6 +80,13 @@ public class DatabaseManager {
         mSqLiteDatabase = sqLiteOpenHelper.getWritableDatabase();
         for (Class<?> clazz : classArray) {
             mDaoMap.put(clazz, new DefaultDaoImpl<>(mSqLiteDatabase, clazz));
+            HashMap<String, String> map = new HashMap<>();
+            map.put("${insert}", SqlUtil2.getInsertSql(clazz));
+            map.put("${deleteById}", SqlUtil2.getDeleteByIdSql(clazz));
+            map.put("${updateById}", SqlUtil2.getUpdateByIdSql(clazz));
+            map.put("${selectById}", SqlUtil2.getSelectByIdSql(clazz));
+            map.put("${selectList}", SqlUtil2.getSelectListSql(clazz));
+            mSqlMap.put(clazz, map);
         }
     }
 
@@ -459,4 +454,6 @@ public class DatabaseManager {
             }
         });
     }
+
+    private Map<Class, Map<String, String>> mSqlMap = new HashMap<>();
 }

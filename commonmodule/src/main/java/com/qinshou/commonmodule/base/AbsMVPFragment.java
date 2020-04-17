@@ -78,7 +78,7 @@ public abstract class AbsMVPFragment<P extends AbsPresenter> extends Fragment im
         if (mPresenter != null) {
             mPresenter.attachView(this);
         }
-        return mRootView = LayoutInflater.from(getContext()).inflate(getLayoutId(), null, false);
+        return mRootView = LayoutInflater.from(getContext()).inflate(getLayoutId(), container, false);
     }
 
     @Override
