@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.jeejio.dbmodule.DatabaseManager;
 import com.jeejio.dbmodule.condition.Where;
+import com.qinshou.commonmodule.base.AbsDialogFragment;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.R;
@@ -392,20 +393,20 @@ public enum MapManager {
 
             TalkDialogFragment talkDialogFragment = TalkDialogFragment.newInstance(talker1, talker2);
             talkDialogFragment.show(fragmentManager, "TalkDialogFragment");
-//            talkDialogFragment.setOnDismissListener(new OnDismissListener() {
-//                @Override
-//                public void onDismiss(DialogInterface dialog) {
-//                    setToCase2Road(toCase);
-//
-//                    CaseBean caseBean = new CaseBean(toCase.getFloor(), toCase.getRow(), toCase.getColumn() - 1, Npc.FAIRY_2, R.drawable.magic_tower_npc_fairy);
-//                    setCase(caseBean.getRow(), caseBean.getColumn(), caseBean);
-//                    updateUI(caseBean);
-//
-//                    WarriorBean.getInstance().obtainYellowKey();
-//                    WarriorBean.getInstance().obtainBlueKey();
-//                    WarriorBean.getInstance().obtainRedKey();
-//                }
-//            });
+            talkDialogFragment.setOnDismissListener(new AbsDialogFragment.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    setToCase2Road(toCase);
+
+                    CaseBean caseBean = new CaseBean(toCase.getFloor(), toCase.getRow(), toCase.getColumn() - 1, Npc.FAIRY_2, R.drawable.magic_tower_npc_fairy);
+                    setCase(caseBean.getRow(), caseBean.getColumn(), caseBean);
+                    updateUI(caseBean);
+
+                    WarriorBean.getInstance().obtainYellowKey();
+                    WarriorBean.getInstance().obtainBlueKey();
+                    WarriorBean.getInstance().obtainRedKey();
+                }
+            });
         }
         if (toCase.getType() == Npc.FAIRY_2) {
             String[] content1 = new String[]{"……"
@@ -796,13 +797,13 @@ public enum MapManager {
         BattleDialogFragment battleDialogFragment = BattleDialogFragment.newInstance(monsterBean);
         // 失去的总生命值
         int finalWarriorTotalLossLifeValue = warriorTotalLossLifeValue;
-//        battleDialogFragment.setOnDismissListener(new OnDismissListener() {
-//            @Override
-//            public void onDismiss(DialogInterface dialog) {
-//                setToCase2Road(toCase);
-//                WarriorBean.getInstance().beatMonster(finalWarriorTotalLossLifeValue, monsterBean.getExperience(), monsterBean.getMoney());
-//            }
-//        });
+        battleDialogFragment.setOnDismissListener(new AbsDialogFragment.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                setToCase2Road(toCase);
+                WarriorBean.getInstance().beatMonster(finalWarriorTotalLossLifeValue, monsterBean.getExperience(), monsterBean.getMoney());
+            }
+        });
         battleDialogFragment.show(fragmentManager, "BattleDialogFragment");
         return false;
     }

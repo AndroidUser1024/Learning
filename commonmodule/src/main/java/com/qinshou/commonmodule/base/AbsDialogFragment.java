@@ -1,6 +1,7 @@
 package com.qinshou.commonmodule.base;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import com.qinshou.commonmodule.util.StatusBarUtil;
  */
 public abstract class AbsDialogFragment extends DialogFragment {
     private View rootView;
+    private OnDismissListener mOnDismissListener;
 
     /**
      * Description:初始化布局资源 ID
@@ -75,6 +77,15 @@ public abstract class AbsDialogFragment extends DialogFragment {
         return dialog;
     }
 
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        if (mOnDismissListener == null) {
+            return;
+        }
+        mOnDismissListener.onDismiss(dialog);
+    }
+
     /**
      * Description:如果对对话框样式有个性需求，可覆写该方法
      * Date:2019/2/19
@@ -108,5 +119,13 @@ public abstract class AbsDialogFragment extends DialogFragment {
      */
     public int initStatusBarColor() {
         return 0xFF000000;
+    }
+
+    public void setOnDismissListener(OnDismissListener onDismissListener) {
+        mOnDismissListener = onDismissListener;
+    }
+
+    public interface OnDismissListener {
+        void onDismiss(DialogInterface dialog);
     }
 }

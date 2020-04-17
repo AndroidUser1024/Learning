@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="@dimen/px600"
+        android:layout_height="@dimen/px600"
+        android:background="#FF000000"
+        android:orientation="vertical"
+        android:padding="@dimen/px30">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_talker_1"
+                android:layout_width="@dimen/px80"
+                android:layout_height="@dimen/px80"
+                tools:src="@drawable/magic_tower_npc_fairy" />
+
+            <ImageView
+                android:id="@+id/iv_talker_2"
+                android:layout_width="@dimen/px80"
+                android:layout_height="@dimen/px80"
+                tools:src="@drawable/magic_tower_warrior_down" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/px30"
+            android:layout_marginBottom="@dimen/px30"
+            android:layout_weight="1"
+            android:textColor="#FFFFFFFF"
+            android:textSize="@dimen/px36" />
+
+        <Button
+            android:id="@+id/btn_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|right"
+            android:background="@null"
+            android:text="﹀"
+            android:textColor="#FFFFFFFF"
+            android:textSize="@dimen/px60" />
+    </LinearLayout>
+</FrameLayout>

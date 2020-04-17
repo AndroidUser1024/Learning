@@ -27,7 +27,7 @@ public class PeiQiActivity extends QSActivity<AbsPresenter> {
 
     @Override
     public void setListener() {
-        findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.btn_next).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((PeiQiView) findViewById(R.id.pei_qi_view)).drawPeiQi();

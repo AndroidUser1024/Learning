@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import com.jeejio.dbmodule.DatabaseManager;
 import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.commonmodule.util.ShowLogUtil;
@@ -15,6 +16,7 @@ import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.IMClient;
+import com.qinshou.qinshoubox.im.db.IUserDao;
 import com.qinshou.qinshoubox.login.bean.PoemBean;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.login.contract.ISplashContract;
@@ -70,6 +72,11 @@ public class SplashActivity extends QSActivity<SplashPresenter> implements ISpla
     @Override
     public void initData() {
         getPresenter().getRandomPoem();
+        DatabaseManager.getInstance().getDao(IUserDao.class).insert("1"
+                , "2"
+                , "3"
+                , "4"
+                , "5");
     }
 
     @Override

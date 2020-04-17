@@ -6,10 +6,12 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.util.Patterns;
 
 
 import com.jeejio.dbmodule.annotation.Column;
 import com.jeejio.dbmodule.annotation.Id;
+import com.jeejio.dbmodule.annotation.Insert;
 import com.jeejio.dbmodule.annotation.Table;
 import com.jeejio.dbmodule.bean.ColumnInfoBean;
 import com.jeejio.dbmodule.bean.IdColumnInfoBean;
@@ -17,12 +19,18 @@ import com.jeejio.dbmodule.dao.IBaseDao;
 import com.jeejio.dbmodule.dao.impl.DefaultDaoImpl;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Description:数据库管理者类
@@ -367,5 +375,55 @@ public class DatabaseManager {
             }
         }
         return list;
+    }
+
+    public <T> T getDao(Class<T> clazz) {
+        return (T) Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, new InvocationHandler() {
+            @Override
+            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                Insert insert = method.getAnnotation(Insert.class);
+                if (insert != null) {
+                    String sql = insert.value();
+                    sql.matches("#");
+                    Pattern pattern = Pattern.compile("#\\{([a-z]|[A-Z]|[0-9])+\\}");
+                    Matcher matcher = pattern.matcher(sql);
+                    Log.i("daolema", "sql--->" + sql);
+                    int index = 0;
+                    List<String> placeholderList = new ArrayList<>();
+                    while (matcher.find()) {
+//                        Log.i("daolema", "start--->" + matcher.start());
+//                        Log.i("daolema", "end--->" + matcher.end());
+//                        Log.i("daolema", "sql--->" + sql.substring(matcher.start(), matcher.end()));
+                        Object arg = args[index++];
+                        String substring = sql.substring(matcher.start(), matcher.end());
+                        if (arg instanceof String) {
+                            sql = sql.replace(substring, "\'" + arg.toString() + "\'");
+                        } else if (arg instanceof Integer
+                                || arg instanceof Float
+                                || arg instanceof Double
+                                || arg instanceof Long) {
+                            sql = sql.replace(substring, arg.toString());
+                        } else {
+                            String fieldName = substring.replace("#{", "").replace("}", "");
+                            Field field = arg.getClass().getDeclaredField(fieldName);
+                            Object o = field.get(arg);
+
+                        }
+                        Log.i("daolema", "sql--->" + sql);
+                        matcher = pattern.matcher(sql);
+                    }
+//                    for (int i = 0; i < placeholderList.size(); i++) {
+//                        Object arg = args[i];
+//                        if (arg instanceof String) {
+//                            sql = sql.replace(sql.substring(matcher.start(), matcher.end()), "\'" + arg.toString() + "\'");
+//                        } else {
+//                            sql = sql.replace(sql.substring(matcher.start(), matcher.end()), arg.toString());
+//                        }
+//                    }
+                    Log.i("daolema", "sql--->" + sql);
+                }
+                return null;
+            }
+        });
     }
 }

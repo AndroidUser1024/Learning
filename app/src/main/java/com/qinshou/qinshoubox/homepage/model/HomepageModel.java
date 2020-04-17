@@ -27,7 +27,7 @@ public class HomepageModel implements IHomepageContract.IModel {
 
     @Override
     public void getNewsList(int page, int pageSize, Callback<PageResultBean<NewsBean>> callback) {
-        OkHttpHelper.SINGLETON.getCaller(QSBoxNewsApi.class).getList(1, 5)
+        OkHttpHelper.SINGLETON.getCaller(QSBoxNewsApi.class).getList(page, pageSize)
                 .transform(new QSApiTransformer<PageResultBean<NewsBean>>())
                 .enqueue(callback);
     }
