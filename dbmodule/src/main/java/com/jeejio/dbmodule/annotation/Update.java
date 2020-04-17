@@ -9,10 +9,10 @@ import java.lang.annotation.Target;
  * Author: QinHao
  * Email:qinhao@jeejio.com
  * Date: 2020/4/17 9:06
- * Description:插入语句
+ * Description:修改语句
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface Insert {
+public @interface Update {
     String value();
 }

@@ -16,6 +16,9 @@ import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.IMClient;
+import com.qinshou.qinshoubox.im.bean.GroupChatBean;
+import com.qinshou.qinshoubox.im.db.IFriendDao;
+import com.qinshou.qinshoubox.im.db.IGroupChatDao;
 import com.qinshou.qinshoubox.im.db.IUserDao;
 import com.qinshou.qinshoubox.login.bean.PoemBean;
 import com.qinshou.qinshoubox.login.bean.UserBean;
@@ -72,11 +75,6 @@ public class SplashActivity extends QSActivity<SplashPresenter> implements ISpla
     @Override
     public void initData() {
         getPresenter().getRandomPoem();
-        DatabaseManager.getInstance().getDao(IUserDao.class).insert("1"
-                , "2"
-                , "3"
-                , "4"
-                , "5");
     }
 
     @Override

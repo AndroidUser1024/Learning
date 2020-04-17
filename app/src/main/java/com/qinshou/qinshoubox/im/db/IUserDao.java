@@ -1,7 +1,8 @@
-
 package com.qinshou.qinshoubox.im.db;
 
 import com.jeejio.dbmodule.annotation.Insert;
+import com.jeejio.dbmodule.annotation.ObjParam;
+import com.jeejio.dbmodule.annotation.Param;
 import com.qinshou.qinshoubox.im.bean.UserBean;
 
 /**
@@ -24,5 +25,24 @@ public interface IUserDao {
             ",#{headImg}" +
             ",#{headImgSmall}" +
             ")")
-    UserBean insert(String id,String username,String nickname,String headImg,String headImgSmall);
+    UserBean insert(@Param("id") String id
+            , @Param("username") String username
+            , @Param("nickname") String nickname
+            , @Param("headImg") String headImg
+            , @Param("headImgSmall") String headImgSmall);
+
+    @Insert("INSERT INTO USER(" +
+            "id" +
+            ",username" +
+            ",nickname" +
+            ",headImg" +
+            ",headImgSmall" +
+            ") VALUES (" +
+            "#{id}" +
+            ",#{username}" +
+            ",#{nickname}" +
+            ",#{headImg}" +
+            ",#{headImgSmall}" +
+            ")")
+    UserBean insert(@ObjParam() UserBean userBean);
 }

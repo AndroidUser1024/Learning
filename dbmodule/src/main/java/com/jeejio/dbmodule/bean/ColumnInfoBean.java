@@ -22,6 +22,16 @@ public class ColumnInfoBean {
         this.type = type;
     }
 
+    @Override
+    public String  toString() {
+        return "ColumnInfoBean{" +
+                "tableName='" + tableName + '\'' +
+                ", columnName='" + columnName + '\'' +
+                ", fieldName='" + fieldName + '\'' +
+                ", type=" + type +
+                '}';
+    }
+
     public String getTableName() {
         return tableName;
     }

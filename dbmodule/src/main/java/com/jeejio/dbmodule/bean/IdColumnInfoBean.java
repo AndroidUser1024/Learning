@@ -19,6 +19,14 @@ public class IdColumnInfoBean extends ColumnInfoBean {
         this.useGeneratedKeys = useGeneratedKeys;
     }
 
+    @Override
+    public String toString() {
+        return "IdColumnInfoBean{" +
+                "autoIncrement=" + autoIncrement +
+                ", useGeneratedKeys=" + useGeneratedKeys +
+                '}';
+    }
+
     public boolean isAutoIncrement() {
         return autoIncrement;
     }

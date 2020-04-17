@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jeejio.dbmodule.DatabaseManager;
 import com.qinshou.commonmodule.util.FragmentUtil;
 import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.base.QSFragment;
@@ -18,6 +19,8 @@ import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.homepage.ui.fragment.HomepageFragment;
 import com.qinshou.qinshoubox.im.IMClient;
+import com.qinshou.qinshoubox.im.bean.GroupChatBean;
+import com.qinshou.qinshoubox.im.db.IGroupChatDao;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.me.ui.fragment.MeFragment;
 import com.qinshou.qinshoubox.music.view.fragment.MusicListFragment;
