@@ -2,6 +2,8 @@ package com.jeejio.dbmodule.tmp;
 
 import com.jeejio.dbmodule.annotation.Delete;
 import com.jeejio.dbmodule.annotation.Insert;
+import com.jeejio.dbmodule.annotation.ObjParam;
+import com.jeejio.dbmodule.annotation.Param;
 import com.jeejio.dbmodule.annotation.Select;
 import com.jeejio.dbmodule.annotation.Update;
 
@@ -15,20 +17,20 @@ import java.util.List;
  */
 public interface IBaseDao<T, ID> {
     @Insert("${insert}")
-    T insert(T t);
+    T insert(@ObjParam() T t);
 
     @Delete("${deleteById}")
-    int deleteById(ID id);
+    int deleteById(@Param("id") ID id);
 
     @Update("${updateById}")
-    T updateById(T t);
+    T updateById(@ObjParam() T t);
 
     @Select("${selectById}")
-    T selectById(ID id);
+    T selectById(@Param("id") ID id);
 
     @Select("${selectList}")
     List<T> selectList();
 
     @Select("${existsById}")
-    boolean existsById(ID id);
+    boolean existsById(@Param("id") ID id);
 }

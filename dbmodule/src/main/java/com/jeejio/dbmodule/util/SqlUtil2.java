@@ -125,9 +125,7 @@ public class SqlUtil2 {
         sql.append("DELETE FROM ").append(idColumnInfo.getTableName())
                 .append(" WHERE ")
                 .append(idColumnInfo.getColumnName())
-                .append("=#{")
-                .append(idColumnInfo.getFieldName())
-                .append("}");
+                .append("=#{id}");
         printSql(sql.toString());
         return sql.toString();
     }
@@ -148,9 +146,7 @@ public class SqlUtil2 {
 
         for (ColumnInfoBean columnInfoBean : DatabaseManager.getInstance().getColumnByClass(clazz)) {
             sql.append(columnInfoBean.getColumnName())
-                    .append("=#{")
-                    .append(columnInfoBean.getFieldName())
-                    .append("},");
+                    .append("=#{id}");
         }
         // 去掉最后一个 ","
         int start = sql.lastIndexOf(",");
@@ -183,9 +179,7 @@ public class SqlUtil2 {
                 .append(idColumnInfo.getTableName())
                 .append(" WHERE ")
                 .append(idColumnInfo.getColumnName())
-                .append("=#{")
-                .append(idColumnInfo.getFieldName())
-                .append("}");
+                .append("=#{id}");
         printSql(sql.toString());
         return sql.toString();
     }
