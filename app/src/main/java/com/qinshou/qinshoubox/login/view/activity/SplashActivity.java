@@ -1,11 +1,11 @@
 package com.qinshou.qinshoubox.login.view.activity;
 
 import android.content.Intent;
-import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.jeejio.dbmodule.DatabaseManager;
+import com.qinshou.dbmodule.DatabaseManager;
 import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.commonmodule.util.ShowLogUtil;
@@ -16,16 +16,18 @@ import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.IMClient;
-import com.qinshou.qinshoubox.im.bean.GroupChatBean;
-import com.qinshou.qinshoubox.im.db.IFriendDao;
-import com.qinshou.qinshoubox.im.db.IGroupChatDao;
-import com.qinshou.qinshoubox.im.db.IUserDao;
+import com.qinshou.qinshoubox.im.bean.ConversationBean;
+import com.qinshou.qinshoubox.im.bean.MessageBean;
+import com.qinshou.qinshoubox.im.db.IConversationDao;
+import com.qinshou.qinshoubox.im.db.IMessageDao;
+import com.qinshou.qinshoubox.im.enums.MessageContentType;
+import com.qinshou.qinshoubox.im.enums.MessageStatus;
+import com.qinshou.qinshoubox.im.enums.MessageType;
 import com.qinshou.qinshoubox.login.bean.PoemBean;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.login.contract.ISplashContract;
 import com.qinshou.qinshoubox.login.presenter.SplashPresenter;
 import com.qinshou.qinshoubox.login.view.fragment.LoginOrRegisterFragment;
-import com.qinshou.qinshoubox.util.EncryptUtil;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 /**
@@ -75,6 +77,33 @@ public class SplashActivity extends QSActivity<SplashPresenter> implements ISpla
     @Override
     public void initData() {
         getPresenter().getRandomPoem();
+
+        DatabaseManager.getInstance().init(getContext(), "test", 1, ConversationBean.class
+                , MessageBean.class);
+        IConversationDao conversationDao = DatabaseManager.getInstance().getDao(IConversationDao.class);
+        IMessageDao messageDao = DatabaseManager.getInstance().getDao(IMessageDao.class);
+        for (int i = 1; i <= 100; i++) {
+            ConversationBean conversationBean = new ConversationBean(i
+                    , MessageType.CHAT.getValue()
+                    , "" + i * 10000
+                    , System.currentTimeMillis()
+                    , i);
+            Log.i("daolema2", "conversationBean1--->" + conversationBean);
+            conversationDao.insert(conversationBean);
+            Log.i("daolema2", "conversationBean2--->" + conversationBean);
+        }
+//        for (int i = 1; i <= 100; i++) {
+//            messageDao.insert(new MessageBean("" + i * 10000
+//                    , "" + i * 10000
+//                    , "" + i * 20000
+//                    , MessageType.CHAT.getValue()
+//                    , MessageContentType.TEXT.getValue()
+//                    , "我是测试消息" + i
+//                    , System.currentTimeMillis()
+//                    , System.currentTimeMillis()
+//                    , MessageStatus.SENDED.getValue()
+//                    , ""));
+//        }
     }
 
     @Override
@@ -89,19 +118,19 @@ public class SplashActivity extends QSActivity<SplashPresenter> implements ISpla
     }
 
     private void jumpToMainActivity() {
-        if (isFinishing()) {
-            return;
-        }
-        String username = SharedPreferencesHelper.SINGLETON.getString(IConstant.SP_KEY_LAST_LOGIN_USERNAME);
-        String password = SharedPreferencesHelper.SINGLETON.getString(IConstant.SP_KEY_LAST_LOGIN_PASSWORD);
-        if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
-            // 对存储的密码进行解密,并自动登录
-            getPresenter().login(username, EncryptUtil.decrypt(password));
-        } else {
-            startActivity(ContainerActivity.getJumpIntent(getContext(), LoginOrRegisterFragment.class));
-//        startActivity(new Intent(getContext(), MainActivity.class));
-            finish();
-        }
+//        if (isFinishing()) {
+//            return;
+//        }
+//        String username = SharedPreferencesHelper.SINGLETON.getString(IConstant.SP_KEY_LAST_LOGIN_USERNAME);
+//        String password = SharedPreferencesHelper.SINGLETON.getString(IConstant.SP_KEY_LAST_LOGIN_PASSWORD);
+//        if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
+//            // 对存储的密码进行解密,并自动登录
+//            getPresenter().login(username, EncryptUtil.decrypt(password));
+//        } else {
+//            startActivity(ContainerActivity.getJumpIntent(getContext(), LoginOrRegisterFragment.class));
+////        startActivity(new Intent(getContext(), MainActivity.class));
+//            finish();
+//        }
     }
 
     @Override

@@ -5,7 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
 
-import com.jeejio.networkmodule.callback.Callback;
+import com.qinshou.networkmodule.callback.Callback;
 import com.qinshou.qinshoubox.music.bean.MusicBean;
 import com.qinshou.qinshoubox.music.contract.IMusicListContract;
 import com.qinshou.qinshoubox.music.view.fragment.MusicListFragment;

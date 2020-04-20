@@ -4,17 +4,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
 import androidx.fragment.app.FragmentManager;
 
-import com.jeejio.dbmodule.DatabaseManager;
-import com.jeejio.dbmodule.condition.Where;
 import com.qinshou.commonmodule.base.AbsDialogFragment;
-import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.bean.CaseBean;
@@ -57,7 +53,6 @@ import com.qinshou.qinshoubox.me.ui.dialog.MysteriousOldManFloor5DialogFragment;
 import com.qinshou.qinshoubox.me.ui.dialog.StoreBigDialogFragment;
 import com.qinshou.qinshoubox.me.ui.dialog.StoreSmallDialogFragment;
 import com.qinshou.qinshoubox.me.ui.dialog.TalkDialogFragment;
-import com.qinshou.qrcodemodule.constant.Constant;
 
 import java.util.ArrayList;
 import java.util.List;

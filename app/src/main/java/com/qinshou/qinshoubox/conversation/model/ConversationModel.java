@@ -1,7 +1,6 @@
 package com.qinshou.qinshoubox.conversation.model;
 
 
-import com.jeejio.networkmodule.callback.Callback;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.conversation.contract.IConversationContract;
 import com.qinshou.qinshoubox.conversation.view.fragment.ConversationFragment;

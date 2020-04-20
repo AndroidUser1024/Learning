@@ -1,13 +1,8 @@
 package com.qinshou.qinshoubox;
 
-import com.jeejio.dbmodule.DatabaseManager;
 import com.qinshou.commonmodule.base.BaseApplication;
-import com.qinshou.commonmodule.crash.CrashHandler;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
-import com.qinshou.qinshoubox.constant.IConstant;
-import com.qinshou.qinshoubox.homepage.bean.NewsBean;
 import com.qinshou.qinshoubox.im.IMClient;
-import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 
 /**
  * Description:

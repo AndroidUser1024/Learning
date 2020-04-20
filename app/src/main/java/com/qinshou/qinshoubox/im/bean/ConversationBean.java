@@ -1,9 +1,9 @@
 package com.qinshou.qinshoubox.im.bean;
 
 
-import com.jeejio.dbmodule.annotation.Column;
-import com.jeejio.dbmodule.annotation.Id;
-import com.jeejio.dbmodule.annotation.Table;
+import com.qinshou.dbmodule.annotation.Column;
+import com.qinshou.dbmodule.annotation.Id;
+import com.qinshou.dbmodule.annotation.Table;
 
 /**
  * Author: QinHao
@@ -46,6 +46,14 @@ public class ConversationBean {
     private int lastMsgPid;
 
     public ConversationBean() {
+    }
+
+    public ConversationBean(int unreadCount, int type, String toUserId, long lastMsgTimestamp, int lastMsgPid) {
+        this.unreadCount = unreadCount;
+        this.type = type;
+        this.toUserId = toUserId;
+        this.lastMsgTimestamp = lastMsgTimestamp;
+        this.lastMsgPid = lastMsgPid;
     }
 
     @Override

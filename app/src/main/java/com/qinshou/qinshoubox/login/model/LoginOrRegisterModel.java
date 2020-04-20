@@ -1,7 +1,7 @@
 package com.qinshou.qinshoubox.login.model;
 
-import com.jeejio.networkmodule.OkHttpHelper;
-import com.jeejio.networkmodule.callback.Callback;
+import com.qinshou.networkmodule.OkHttpHelper;
+import com.qinshou.networkmodule.callback.Callback;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.login.contract.ILoginOrRegisterContract;
 import com.qinshou.qinshoubox.login.view.fragment.LoginOrRegisterFragment;

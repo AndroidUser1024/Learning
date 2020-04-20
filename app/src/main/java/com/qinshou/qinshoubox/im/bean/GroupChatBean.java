@@ -1,9 +1,9 @@
 package com.qinshou.qinshoubox.im.bean;
 
 
-import com.jeejio.dbmodule.annotation.Column;
-import com.jeejio.dbmodule.annotation.Id;
-import com.jeejio.dbmodule.annotation.Table;
+import com.qinshou.dbmodule.annotation.Column;
+import com.qinshou.dbmodule.annotation.Id;
+import com.qinshou.dbmodule.annotation.Table;
 
 /**
  * Author: QinHao

@@ -1,10 +1,10 @@
 package com.qinshou.qinshoubox.network;
 
-import com.jeejio.networkmodule.annotation.Api;
-import com.jeejio.networkmodule.annotation.Json;
-import com.jeejio.networkmodule.annotation.Param;
-import com.jeejio.networkmodule.annotation.Post;
-import com.jeejio.networkmodule.call.AbsCall;
+import com.qinshou.networkmodule.annotation.Api;
+import com.qinshou.networkmodule.annotation.Json;
+import com.qinshou.networkmodule.annotation.Param;
+import com.qinshou.networkmodule.annotation.Post;
+import com.qinshou.networkmodule.call.AbsCall;
 import com.qinshou.qinshoubox.constant.IUrlConstant;
 import com.qinshou.qinshoubox.homepage.bean.QinshouResultBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;

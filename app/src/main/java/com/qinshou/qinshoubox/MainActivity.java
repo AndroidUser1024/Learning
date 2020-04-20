@@ -10,26 +10,15 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.jeejio.dbmodule.DatabaseManager;
 import com.qinshou.commonmodule.util.FragmentUtil;
-import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.conversation.view.fragment.ConversationFragment;
 import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.homepage.ui.fragment.HomepageFragment;
-import com.qinshou.qinshoubox.im.IMClient;
-import com.qinshou.qinshoubox.im.bean.ConversationDetailBean;
-import com.qinshou.qinshoubox.im.bean.GroupChatBean;
-import com.qinshou.qinshoubox.im.db.IConversationDao;
-import com.qinshou.qinshoubox.im.db.IGroupChatDao;
-import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.me.ui.fragment.MeFragment;
 import com.qinshou.qinshoubox.music.view.fragment.MusicListFragment;
-import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
-
-import java.util.List;
 
 /**
  * Description:主 Activity
@@ -113,29 +102,6 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
 
     @Override
     public void initData() {
-//        IGroupChatDao groupChatDao = DatabaseManager.getInstance().getDao(IGroupChatDao.class);
-//        groupChatDao.insert(new GroupChatBean("1"
-//                , "2"
-//                , "3"
-//                , "4"
-//                , "5"
-//                , "6"
-//                , "7"
-//                , 0
-//                , 0
-//                , 0
-//                , 2));
-//        groupChatDao.deleteById("1");
-//        groupChatDao.deleteById("1");
-        int totalUnreadCount = DatabaseManager.getInstance().getDao(IConversationDao.class)
-                .getTotalUnreadCount();
-        ShowLogUtil.logi("totalUnreadCount--->" + totalUnreadCount);
-        List<ConversationDetailBean> conversationDetailBeanList = DatabaseManager.getInstance().getDao(IConversationDao.class)
-                .getListOrderByTopDescAndLastMsgTimeDesc();
-        ShowLogUtil.logi("conversationDetailBeanList--->" + conversationDetailBeanList);
-        ConversationDetailBean conversationDetailBean = DatabaseManager.getInstance().getDao(IConversationDao.class)
-                .selectById(1);
-        ShowLogUtil.logi("conversationDetailBean--->" + conversationDetailBean);
 //        PushHelper.setOnGetPushListener(new OnGetPushListener() {
 //            @Override
 //            public void getPush(String content) {

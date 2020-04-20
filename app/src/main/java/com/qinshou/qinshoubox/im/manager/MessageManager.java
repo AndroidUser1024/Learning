@@ -1,9 +1,7 @@
 package com.qinshou.qinshoubox.im.manager;
 
-import com.jeejio.dbmodule.DatabaseManager;
-import com.jeejio.dbmodule.dao.IBaseDao;
-import com.qinshou.qinshoubox.im.bean.ConversationBean;
-import com.qinshou.qinshoubox.im.bean.ConversationMessageRelBean;
+import com.qinshou.dbmodule.DatabaseManager;
+import com.qinshou.dbmodule.dao.IBaseDao;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 
 import java.util.ArrayList;

@@ -1,8 +1,8 @@
 package com.qinshou.qinshoubox.me.model;
 
 
-import com.jeejio.networkmodule.OkHttpHelper;
-import com.jeejio.networkmodule.callback.Callback;
+import com.qinshou.networkmodule.OkHttpHelper;
+import com.qinshou.networkmodule.callback.Callback;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.me.contract.IDataSettingContract;
 import com.qinshou.qinshoubox.me.ui.fragment.DataSettingFragment;

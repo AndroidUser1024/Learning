@@ -1,9 +1,6 @@
 package com.qinshou.qinshoubox.im.db;
 
-import com.jeejio.dbmodule.annotation.Insert;
-import com.jeejio.dbmodule.annotation.ObjParam;
-import com.jeejio.dbmodule.annotation.Param;
-import com.jeejio.dbmodule.tmp.IBaseDao;
+import com.qinshou.dbmodule.tmp.IBaseDao;
 import com.qinshou.qinshoubox.im.bean.UserBean;
 
 /**

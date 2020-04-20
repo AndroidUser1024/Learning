@@ -1,7 +1,7 @@
 package com.qinshou.qinshoubox.im.manager;
 
-import com.jeejio.networkmodule.OkHttpHelper;
-import com.jeejio.networkmodule.callback.Callback;
+import com.qinshou.networkmodule.OkHttpHelper;
+import com.qinshou.networkmodule.callback.Callback;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.friend.bean.FriendHistoryBean;
 import com.qinshou.qinshoubox.im.IMClient;

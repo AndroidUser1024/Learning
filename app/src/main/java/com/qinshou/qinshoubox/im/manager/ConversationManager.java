@@ -1,19 +1,15 @@
 package com.qinshou.qinshoubox.im.manager;
 
 
-import android.text.TextUtils;
-
-import com.jeejio.dbmodule.DatabaseManager;
-import com.jeejio.dbmodule.dao.IBaseDao;
-import com.jeejio.dbmodule.condition.Where;
-import com.qinshou.commonmodule.util.ShowLogUtil;
+import com.qinshou.dbmodule.DatabaseManager;
+import com.qinshou.dbmodule.dao.IBaseDao;
+import com.qinshou.dbmodule.condition.Where;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.bean.ConversationDetailBean;
 import com.qinshou.qinshoubox.im.bean.ConversationMessageRelBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.enums.MessageType;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 

@@ -6,10 +6,10 @@ import android.os.Looper;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.jeejio.dbmodule.DatabaseManager;
-import com.jeejio.networkmodule.OkHttpHelper;
-import com.jeejio.networkmodule.callback.IDownloadCallback;
-import com.jeejio.networkmodule.callback.Callback;
+import com.qinshou.dbmodule.DatabaseManager;
+import com.qinshou.networkmodule.OkHttpHelper;
+import com.qinshou.networkmodule.callback.IDownloadCallback;
+import com.qinshou.networkmodule.callback.Callback;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.conversation.bean.ImgBean;
 import com.qinshou.qinshoubox.conversation.bean.UploadImgResultBean;

@@ -1,7 +1,7 @@
 package com.qinshou.qinshoubox.homepage.model;
 
-import com.jeejio.networkmodule.OkHttpHelper;
-import com.jeejio.networkmodule.callback.Callback;
+import com.qinshou.networkmodule.OkHttpHelper;
+import com.qinshou.networkmodule.callback.Callback;
 import com.qinshou.qinshoubox.homepage.bean.NewsBean;
 import com.qinshou.qinshoubox.homepage.bean.PageResultBean;
 import com.qinshou.qinshoubox.homepage.bean.WallpaperBean;

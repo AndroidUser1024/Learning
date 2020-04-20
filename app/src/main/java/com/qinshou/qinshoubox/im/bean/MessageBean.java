@@ -2,17 +2,15 @@ package com.qinshou.qinshoubox.im.bean;
 
 
 import com.google.gson.Gson;
-import com.jeejio.dbmodule.annotation.Column;
-import com.jeejio.dbmodule.annotation.Id;
-import com.jeejio.dbmodule.annotation.Table;
+import com.qinshou.dbmodule.annotation.Column;
+import com.qinshou.dbmodule.annotation.Id;
+import com.qinshou.dbmodule.annotation.Table;
 import com.qinshou.qinshoubox.conversation.bean.ImgBean;
 import com.qinshou.qinshoubox.conversation.bean.VoiceBean;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.enums.MessageContentType;
 import com.qinshou.qinshoubox.im.enums.MessageStatus;
 import com.qinshou.qinshoubox.im.enums.MessageType;
-
-import java.util.Map;
 
 /**
  * Author: QinHao
@@ -25,7 +23,7 @@ public class MessageBean {
     /**
      * 自增长 id
      */
-    @Id(autoIncrement = true,useGeneratedKeys = true)
+    @Id(autoIncrement = true, useGeneratedKeys = true)
     @Column(type = Column.Type.INTEGER)
     private int pid;
     /**
@@ -75,10 +73,24 @@ public class MessageBean {
     private int status;
     /**
      * 扩展字段
-     */@Column
+     */
+    @Column
     private String extend;
 
     public MessageBean() {
+    }
+
+    public MessageBean(String id, String fromUserId, String toUserId, int type, int contentType, String content, long sendTimestamp, long receiveTimestamp, int status, String extend) {
+        this.id = id;
+        this.fromUserId = fromUserId;
+        this.toUserId = toUserId;
+        this.type = type;
+        this.contentType = contentType;
+        this.content = content;
+        this.sendTimestamp = sendTimestamp;
+        this.receiveTimestamp = receiveTimestamp;
+        this.status = status;
+        this.extend = extend;
     }
 
     @Override

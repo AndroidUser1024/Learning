@@ -1,8 +1,8 @@
 package com.qinshou.qinshoubox.im.cache;
 
-import com.jeejio.dbmodule.DatabaseManager;
-import com.jeejio.dbmodule.dao.IBaseDao;
-import com.jeejio.dbmodule.condition.Where;
+import com.qinshou.dbmodule.DatabaseManager;
+import com.qinshou.dbmodule.dao.IBaseDao;
+import com.qinshou.dbmodule.condition.Where;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatMemberBean;
 import com.qinshou.qinshoubox.im.bean.UserBean;

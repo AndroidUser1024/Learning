@@ -1,6 +1,6 @@
 package com.qinshou.qinshoubox.homepage.contract;
 
-import com.jeejio.networkmodule.callback.Callback;
+import com.qinshou.networkmodule.callback.Callback;
 import com.qinshou.commonmodule.base.IBaseContract;
 import com.qinshou.commonmodule.base.IBaseModel;
 import com.qinshou.commonmodule.base.IBaseView;

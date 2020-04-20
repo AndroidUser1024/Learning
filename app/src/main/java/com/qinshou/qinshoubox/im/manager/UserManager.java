@@ -1,10 +1,10 @@
 package com.qinshou.qinshoubox.im.manager;
 
 
-import com.jeejio.dbmodule.DatabaseManager;
-import com.jeejio.dbmodule.dao.IBaseDao;
-import com.jeejio.networkmodule.OkHttpHelper;
-import com.jeejio.networkmodule.callback.Callback;
+import com.qinshou.dbmodule.DatabaseManager;
+import com.qinshou.dbmodule.dao.IBaseDao;
+import com.qinshou.networkmodule.OkHttpHelper;
+import com.qinshou.networkmodule.callback.Callback;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.UserBean;
 import com.qinshou.qinshoubox.im.bean.UserDetailBean;

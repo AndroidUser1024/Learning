@@ -7,8 +7,8 @@ import android.widget.ImageView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
-import com.jeejio.networkmodule.callback.Callback;
-import com.jeejio.networkmodule.callback.IDownloadCallback;
+import com.qinshou.networkmodule.callback.Callback;
+import com.qinshou.networkmodule.callback.IDownloadCallback;
 import com.qinshou.commonmodule.rcvbaseadapter.RcvMultipleBaseAdapter;
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.commonmodule.util.MediaPlayerHelper;

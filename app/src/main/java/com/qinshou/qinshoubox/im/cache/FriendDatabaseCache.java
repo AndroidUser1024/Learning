@@ -1,7 +1,7 @@
 package com.qinshou.qinshoubox.im.cache;
 
-import com.jeejio.dbmodule.DatabaseManager;
-import com.jeejio.dbmodule.dao.IBaseDao;
+import com.qinshou.dbmodule.DatabaseManager;
+import com.qinshou.dbmodule.dao.IBaseDao;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.UserBean;
 import com.qinshou.qinshoubox.im.bean.UserDetailBean;

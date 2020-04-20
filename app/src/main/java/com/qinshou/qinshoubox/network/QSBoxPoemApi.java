@@ -1,8 +1,8 @@
 package com.qinshou.qinshoubox.network;
 
-import com.jeejio.networkmodule.annotation.Api;
-import com.jeejio.networkmodule.annotation.Get;
-import com.jeejio.networkmodule.call.AbsCall;
+import com.qinshou.networkmodule.annotation.Api;
+import com.qinshou.networkmodule.annotation.Get;
+import com.qinshou.networkmodule.call.AbsCall;
 import com.qinshou.qinshoubox.constant.IUrlConstant;
 import com.qinshou.qinshoubox.homepage.bean.QinshouResultBean;
 import com.qinshou.qinshoubox.login.bean.PoemBean;

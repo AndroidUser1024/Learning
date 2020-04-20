@@ -1,6 +1,6 @@
 package com.qinshou.qinshoubox.transformer;
 
-import com.jeejio.networkmodule.call.ResponseTransformer;
+import com.qinshou.networkmodule.call.ResponseTransformer;
 import com.qinshou.qinshoubox.homepage.bean.QinshouResultBean;
 
 /**

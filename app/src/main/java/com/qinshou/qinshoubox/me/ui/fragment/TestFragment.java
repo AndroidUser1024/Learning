@@ -4,10 +4,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
-import com.jeejio.networkmodule.OkHttpHelper;
-import com.jeejio.networkmodule.call.AbsCall;
-import com.jeejio.networkmodule.callback.Callback;
-import com.jeejio.networkmodule.callback.IDownloadCallback;
+import com.qinshou.networkmodule.OkHttpHelper;
+import com.qinshou.networkmodule.call.AbsCall;
+import com.qinshou.networkmodule.callback.Callback;
+import com.qinshou.networkmodule.callback.IDownloadCallback;
 import com.qinshou.commonmodule.base.AbsMVPFragment;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.R;

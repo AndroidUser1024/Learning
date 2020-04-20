@@ -1,11 +1,10 @@
 package com.qinshou.qinshoubox.im.db;
 
-import com.jeejio.dbmodule.annotation.Param;
-import com.jeejio.dbmodule.annotation.Select;
-import com.jeejio.dbmodule.tmp.IBaseDao;
+import com.qinshou.dbmodule.annotation.Param;
+import com.qinshou.dbmodule.annotation.Select;
+import com.qinshou.dbmodule.tmp.IBaseDao;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.bean.ConversationDetailBean;
-import com.qinshou.qinshoubox.im.enums.MessageType;
 
 import java.util.List;
 

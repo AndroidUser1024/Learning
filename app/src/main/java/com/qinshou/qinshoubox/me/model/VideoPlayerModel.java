@@ -1,6 +1,6 @@
 package com.qinshou.qinshoubox.me.model;
 
-import com.jeejio.networkmodule.callback.Callback;
+import com.qinshou.networkmodule.callback.Callback;
 import com.qinshou.qinshoubox.me.bean.MediaSourceBean;
 import com.qinshou.qinshoubox.me.contract.IVideoPlayerContract;
 import com.qinshou.qinshoubox.me.ui.fragment.VideoPlayerActivity;
