@@ -1,8 +1,6 @@
 package com.qinshou.qinshoubox.im.cache;
 
 import com.qinshou.dbmodule.DatabaseManager;
-import com.qinshou.dbmodule.dao.IBaseDao;
-import com.qinshou.dbmodule.condition.Where;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatMemberBean;
 import com.qinshou.qinshoubox.im.bean.UserBean;
@@ -12,8 +10,6 @@ import com.qinshou.qinshoubox.im.db.IGroupChatMemberDao;
 import com.qinshou.qinshoubox.im.db.IUserDao;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Author: QinHao

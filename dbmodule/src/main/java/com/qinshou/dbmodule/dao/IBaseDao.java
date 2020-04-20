@@ -1,6 +1,11 @@
 package com.qinshou.dbmodule.dao;
 
-import com.qinshou.dbmodule.condition.QueryCondition;
+import com.qinshou.dbmodule.annotation.Delete;
+import com.qinshou.dbmodule.annotation.Insert;
+import com.qinshou.dbmodule.annotation.ObjParam;
+import com.qinshou.dbmodule.annotation.Param;
+import com.qinshou.dbmodule.annotation.Select;
+import com.qinshou.dbmodule.annotation.Update;
 
 import java.util.List;
 
@@ -10,28 +15,22 @@ import java.util.List;
  * Date: 2020/3/18 18:40
  * Description:该接口定义了一些操作持久化类的基本方法
  */
-public interface IBaseDao<T> {
-    T save(T t);
+public interface IBaseDao<T, ID> {
+    @Insert("${insert}")
+    T insert(@ObjParam() T t);
 
-    T insert(T t);
+    @Delete("${deleteById}")
+    int deleteById(@Param("id") ID id);
 
-    int deleteById(Object id);
+    @Update("${updateById}")
+    T updateById(@ObjParam() T t);
 
-    int delete(T t);
+    @Select("${selectById}")
+    T selectById(@Param("id") ID id);
 
-    int delete(QueryCondition... queryConditionArray);
-
-    T update(T t);
-
-    T update(T t, QueryCondition... queryConditionArray);
-
-    T select(QueryCondition... queryConditionArray);
-
-    T selectById(Object id);
-
+    @Select("${selectList}")
     List<T> selectList();
 
-    List<T> selectList(QueryCondition... queryConditionArray);
-
-    boolean existsById(Object id);
+    @Select("${existsById}")
+    int existsById(@Param("id") ID id);
 }

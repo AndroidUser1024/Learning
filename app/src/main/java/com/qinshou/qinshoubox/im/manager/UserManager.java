@@ -2,7 +2,6 @@ package com.qinshou.qinshoubox.im.manager;
 
 
 import com.qinshou.dbmodule.DatabaseManager;
-import com.qinshou.dbmodule.dao.IBaseDao;
 import com.qinshou.networkmodule.OkHttpHelper;
 import com.qinshou.networkmodule.callback.Callback;
 import com.qinshou.qinshoubox.im.IMClient;

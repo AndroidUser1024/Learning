@@ -2,7 +2,7 @@ package com.qinshou.qinshoubox.im.db;
 
 import com.qinshou.dbmodule.annotation.Param;
 import com.qinshou.dbmodule.annotation.Select;
-import com.qinshou.dbmodule.tmp.IBaseDao;
+import com.qinshou.dbmodule.dao.IBaseDao;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
 import com.qinshou.qinshoubox.im.bean.ConversationDetailBean;
 
@@ -15,6 +15,61 @@ import java.util.List;
  * Description:conversation 表的 Dao
  */
 public interface IConversationDao extends IBaseDao<ConversationBean, Integer> {
+    @Select("SELECT" +
+            " c.id" +
+            ",c.unreadCount" +
+            ",c.type" +
+            ",c.toUserId" +
+            ",c.lastMsgTimestamp" +
+            ",c.lastMsgPid" +
+            ",m.content AS lastMsgContent" +
+            ",m.contentType AS lastMsgContentType" +
+            ",m.status AS lastMsgStatus" +
+            ",u.nickname AS uNickname" +
+            ",u.headImgSmall AS uHeadImgSmall" +
+            ",f.remark AS fRemark" +
+            ",f.top AS fTop" +
+            ",f.doNotDisturb AS fDoNotDisturb" +
+            ",gc.nickname AS gcNickname" +
+            ",gc.headImgSmall AS gcHeadImgSmall" +
+            ",gc.nicknameDefault AS gcNicknameDefault" +
+            ",gc.top AS gcTop" +
+            ",gc.doNotDisturb AS gcDoNotDisturb" +
+            " FROM conversation AS c" +
+            " LEFT OUTER JOIN message AS m ON m.pid=c.lastMsgPid" +
+            " LEFT OUTER JOIN user AS u ON u.id=c.toUserId AND c.type=2001" +
+            " LEFT OUTER JOIN friend AS f ON f.id=c.toUserId AND c.type=2001+" +
+            " LEFT OUTER JOIN group_chat AS gc ON gc.id=c.toUserId AND c.type=3001")
+    List<ConversationDetailBean> getList();
+
+    @Select("SELECT" +
+            " c.id" +
+            ",c.unreadCount" +
+            ",c.type" +
+            ",c.toUserId" +
+            ",c.lastMsgTimestamp" +
+            ",c.lastMsgPid" +
+            ",m.content AS lastMsgContent" +
+            ",m.contentType AS lastMsgContentType" +
+            ",m.status AS lastMsgStatus" +
+            ",u.nickname AS uNickname" +
+            ",u.headImgSmall AS uHeadImgSmall" +
+            ",f.remark AS fRemark" +
+            ",f.top AS fTop" +
+            ",f.doNotDisturb AS fDoNotDisturb" +
+            ",gc.nickname AS gcNickname" +
+            ",gc.headImgSmall AS gcHeadImgSmall" +
+            ",gc.nicknameDefault AS gcNicknameDefault" +
+            ",gc.top AS gcTop" +
+            ",gc.doNotDisturb AS gcDoNotDisturb" +
+            " FROM conversation AS c" +
+            " LEFT OUTER JOIN message AS m ON m.pid=c.lastMsgPid" +
+            " LEFT OUTER JOIN user AS u ON u.id=c.toUserId AND c.type=2001" +
+            " LEFT OUTER JOIN friend AS f ON f.id=c.toUserId AND c.type=2001" +
+            " LEFT OUTER JOIN group_chat AS gc ON gc.id=c.toUserId AND c.type=3001" +
+            " ORDER BY c.lastMsgTimestamp DESC")
+    List<ConversationDetailBean> getListOrderByLastMsgTimeDesc();
+
     @Select("SELECT" +
             " c.id" +
             ",c.unreadCount" +
@@ -72,7 +127,48 @@ public interface IConversationDao extends IBaseDao<ConversationBean, Integer> {
             " LEFT OUTER JOIN group_chat AS gc ON gc.id=c.toUserId AND c.type=3001" +
             " WHERE" +
             " c.id=#{id}")
-    ConversationDetailBean selectById(@Param("id") int id);
+    ConversationDetailBean selectDetailById(@Param("id") int id);
+
+    @Select("SELECT" +
+            " c.id" +
+            ",c.unreadCount" +
+            ",c.type" +
+            ",c.toUserId" +
+            ",c.lastMsgTimestamp" +
+            ",c.lastMsgPid" +
+            ",m.content AS lastMsgContent" +
+            ",m.contentType AS lastMsgContentType" +
+            ",m.status AS lastMsgStatus" +
+            ",u.nickname AS uNickname" +
+            ",u.headImgSmall AS uHeadImgSmall" +
+            ",f.remark AS fRemark" +
+            ",f.top AS fTop" +
+            ",f.doNotDisturb AS fDoNotDisturb" +
+            ",gc.nickname AS gcNickname" +
+            ",gc.headImgSmall AS gcHeadImgSmall" +
+            ",gc.nicknameDefault AS gcNicknameDefault" +
+            ",gc.top AS gcTop" +
+            ",gc.doNotDisturb AS gcDoNotDisturb" +
+            " FROM conversation AS c" +
+            " LEFT OUTER JOIN message AS m ON m.pid=c.lastMsgPid" +
+            " LEFT OUTER JOIN user AS u ON u.id=c.toUserId AND c.type=2001" +
+            " LEFT OUTER JOIN friend AS f ON f.id=c.toUserId AND c.type=2001" +
+            " LEFT OUTER JOIN group_chat AS gc ON gc.id=c.toUserId AND c.type=3001" +
+            " WHERE" +
+            " c.type=#{type}" +
+            " AND" +
+            " c.toUserId=#{toUserId}")
+    ConversationDetailBean selectDetailByTypeAndToUserId(@Param("type") int type
+            , @Param("toUserId") String toUserId);
+
+    @Select("SELECT * FROM" +
+            " conversation" +
+            " WHERE" +
+            " type=#{type}" +
+            " AND" +
+            " toUserId=#{toUserId}")
+    ConversationBean selectByTypeAndToUserId(@Param("type") int type
+            , @Param("toUserId") String toUserId);
 
     @Select("SELECT" +
             " SUM(ABS(unreadCount)) AS totalUnreadCount" +

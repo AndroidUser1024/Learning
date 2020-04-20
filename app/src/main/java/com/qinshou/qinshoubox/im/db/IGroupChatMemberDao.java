@@ -3,9 +3,8 @@ package com.qinshou.qinshoubox.im.db;
 import com.qinshou.dbmodule.annotation.Delete;
 import com.qinshou.dbmodule.annotation.Param;
 import com.qinshou.dbmodule.annotation.Select;
-import com.qinshou.dbmodule.tmp.IBaseDao;
+import com.qinshou.dbmodule.dao.IBaseDao;
 import com.qinshou.qinshoubox.im.bean.GroupChatMemberBean;
-import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 
 /**
  * Author: QinHao

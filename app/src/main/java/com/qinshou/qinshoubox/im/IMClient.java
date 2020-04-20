@@ -73,9 +73,9 @@ public enum IMClient {
 
     private static final String TAG = "IMClient";
     private final int TIME_OUT = 10 * 1000;
-        private static final String URL = "ws://www.mrqinshou.com:10086/websocket";
+//        private static final String URL = "ws://www.mrqinshou.com:10086/websocket";
 //    private static final String URL = "ws://10.11.11.179:10086/websocket";
-    //            private static final String URL = "ws://192.168.1.109:10086/websocket";
+                private static final String URL = "ws://192.168.1.109:10086/websocket";
 //    private static final String URL = "ws://192.168.31.199:10086/websocket";
     private Context mContext;
     private WebSocket mWebSocket;
@@ -208,6 +208,9 @@ public enum IMClient {
 //                    }
                     ServerReceiptBean serverReceiptBean = new Gson().fromJson(messageBean.getExtend(), ServerReceiptBean.class);
                     MessageBean select = mMessageManager.selectByPid(serverReceiptBean.getPid());
+                    if (select == null) {
+                        return;
+                    }
                     if (serverReceiptBean.getStatus() == MessageStatus.FAILURE.getValue()) {
                         if (select != null) {
                             select.setId(serverReceiptBean.getId());

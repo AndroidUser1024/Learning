@@ -1,11 +1,10 @@
 package com.qinshou.qinshoubox.login.view.activity;
 
 import android.content.Intent;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
-import com.qinshou.dbmodule.DatabaseManager;
 import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.commonmodule.util.ShowLogUtil;
@@ -16,20 +15,12 @@ import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.IMClient;
-import com.qinshou.qinshoubox.im.bean.ConversationBean;
-import com.qinshou.qinshoubox.im.bean.GroupChatMemberBean;
-import com.qinshou.qinshoubox.im.bean.MessageBean;
-import com.qinshou.qinshoubox.im.db.IConversationDao;
-import com.qinshou.qinshoubox.im.db.IGroupChatMemberDao;
-import com.qinshou.qinshoubox.im.db.IMessageDao;
-import com.qinshou.qinshoubox.im.enums.MessageContentType;
-import com.qinshou.qinshoubox.im.enums.MessageStatus;
-import com.qinshou.qinshoubox.im.enums.MessageType;
 import com.qinshou.qinshoubox.login.bean.PoemBean;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.login.contract.ISplashContract;
 import com.qinshou.qinshoubox.login.presenter.SplashPresenter;
 import com.qinshou.qinshoubox.login.view.fragment.LoginOrRegisterFragment;
+import com.qinshou.qinshoubox.util.EncryptUtil;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 /**
@@ -79,13 +70,6 @@ public class SplashActivity extends QSActivity<SplashPresenter> implements ISpla
     @Override
     public void initData() {
         getPresenter().getRandomPoem();
-
-        DatabaseManager.getInstance().init(getContext(), "test", 1, ConversationBean.class
-                , MessageBean.class
-                , GroupChatMemberBean.class);
-        int id = DatabaseManager.getInstance().getDao(IGroupChatMemberDao.class)
-                .selectIdByGroupChatIdAndUserId("1", "2");
-        ShowLogUtil.logi("id--->" + id);
     }
 
     @Override
@@ -100,19 +84,19 @@ public class SplashActivity extends QSActivity<SplashPresenter> implements ISpla
     }
 
     private void jumpToMainActivity() {
-//        if (isFinishing()) {
-//            return;
-//        }
-//        String username = SharedPreferencesHelper.SINGLETON.getString(IConstant.SP_KEY_LAST_LOGIN_USERNAME);
-//        String password = SharedPreferencesHelper.SINGLETON.getString(IConstant.SP_KEY_LAST_LOGIN_PASSWORD);
-//        if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
-//            // 对存储的密码进行解密,并自动登录
-//            getPresenter().login(username, EncryptUtil.decrypt(password));
-//        } else {
-//            startActivity(ContainerActivity.getJumpIntent(getContext(), LoginOrRegisterFragment.class));
-////        startActivity(new Intent(getContext(), MainActivity.class));
-//            finish();
-//        }
+        if (isFinishing()) {
+            return;
+        }
+        String username = SharedPreferencesHelper.SINGLETON.getString(IConstant.SP_KEY_LAST_LOGIN_USERNAME);
+        String password = SharedPreferencesHelper.SINGLETON.getString(IConstant.SP_KEY_LAST_LOGIN_PASSWORD);
+        if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
+            // 对存储的密码进行解密,并自动登录
+            getPresenter().login(username, EncryptUtil.decrypt(password));
+        } else {
+            startActivity(ContainerActivity.getJumpIntent(getContext(), LoginOrRegisterFragment.class));
+//        startActivity(new Intent(getContext(), MainActivity.class));
+            finish();
+        }
     }
 
     @Override

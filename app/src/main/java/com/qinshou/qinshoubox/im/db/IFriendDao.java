@@ -1,6 +1,6 @@
 package com.qinshou.qinshoubox.im.db;
 
-import com.qinshou.dbmodule.tmp.IBaseDao;
+import com.qinshou.dbmodule.dao.IBaseDao;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 
 /**

@@ -3,12 +3,9 @@ package com.qinshou.dbmodule.util;
 import android.util.Log;
 
 import com.qinshou.dbmodule.DatabaseManager;
-import com.qinshou.dbmodule.annotation.Column;
 import com.qinshou.dbmodule.bean.ColumnInfoBean;
-import com.qinshou.dbmodule.bean.IdColumnInfoBean;
-import com.qinshou.dbmodule.condition.QueryCondition;
+import com.qinshou.dbmodule.bean.TableInfoBean;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,17 +34,22 @@ public class SqlUtil {
      */
     public static String getCreateTableSql(Class<?> clazz) throws IllegalStateException {
         StringBuilder sql = new StringBuilder();
-        IdColumnInfoBean idColumnInfo = DatabaseManager.getInstance().getIdByClass(clazz);
-        sql.append("CREATE TABLE IF NOT EXISTS ").append(idColumnInfo.getTableName()).append("(");
+        TableInfoBean tableInfoBean = DatabaseManager.getInstance().getTableInfoByClass(clazz);
+        sql.append("CREATE TABLE IF NOT EXISTS ").append(tableInfoBean.getTableName()).append("(");
         // 主键
-        if (idColumnInfo.isAutoIncrement()) {
-            sql.append(idColumnInfo.getColumnName()).append(" INTEGER PRIMARY KEY AUTOINCREMENT,");
+        if (tableInfoBean.getIdColumnInfoBean().isAutoIncrement()) {
+            sql.append(tableInfoBean.getIdColumnInfoBean().getColumnName()).append(" INTEGER PRIMARY KEY AUTOINCREMENT,");
         } else {
-            sql.append(idColumnInfo.getColumnName()).append(" ").append(idColumnInfo.getType()).append(" PRIMARY KEY,");
+            sql.append(tableInfoBean.getIdColumnInfoBean().getColumnName())
+                    .append(" ")
+                    .append(tableInfoBean.getIdColumnInfoBean().getType()).append(" PRIMARY KEY,");
         }
         // 其余列
-        for (ColumnInfoBean columnInfoBean : DatabaseManager.getInstance().getColumnByClass(clazz)) {
-            sql.append(columnInfoBean.getColumnName()).append(" ").append(columnInfoBean.getType()).append(",");
+        for (ColumnInfoBean columnInfoBean : tableInfoBean.getColumnInfoBeanList()) {
+            sql.append(columnInfoBean.getColumnName())
+                    .append(" ")
+                    .append(columnInfoBean.getType())
+                    .append(",");
         }
         // 去掉最后一个 ","
         int start = sql.lastIndexOf(",");
@@ -55,7 +57,6 @@ public class SqlUtil {
             sql.delete(start, start + ",".length());
         }
         sql.append(")");
-        printSql(sql.toString());
         return sql.toString();
     }
 
@@ -65,45 +66,24 @@ public class SqlUtil {
      * Date:2020/3/18 19:44
      * Description:获取插入语句
      *
-     * @param obj 需要存储的对象
      * @return 自动生成的 sql
      */
-    public static String getInsertSql(Object obj) throws NoSuchFieldException, IllegalAccessException {
+    public static String getInsertSql(Class<?> clazz) {
         StringBuilder sql = new StringBuilder();
-        Class<?> clazz = obj.getClass();
         List<String> columnNameList = new ArrayList<>();
         List<Object> columnValueList = new ArrayList<>();
-        // 主键
-        IdColumnInfoBean idColumnInfo = DatabaseManager.getInstance().getIdByClass(clazz);
-        sql.append("INSERT INTO ").append(idColumnInfo.getTableName()).append(" (");
+        TableInfoBean tableInfoBean = DatabaseManager.getInstance().getTableInfoByClass(clazz);
+        sql.append("INSERT INTO ").append(tableInfoBean.getTableName()).append(" (");
 
-        // 不是自增长主键才添加
-        if (!idColumnInfo.isAutoIncrement()) {
-            columnNameList.add(idColumnInfo.getColumnName());
-            Field field = clazz.getDeclaredField(idColumnInfo.getFieldName());
-            if (!field.isAccessible()) {
-                field.setAccessible(true);
-            }
-            Object value = field.get(obj);
-            if (idColumnInfo.getType() == Column.Type.TEXT && value != null) {
-                columnValueList.add("\'" + value + "\'");
-            } else {
-                columnValueList.add(value);
-            }
+        // 主键不是自增长主键才添加
+        if (!tableInfoBean.getIdColumnInfoBean().isAutoIncrement()) {
+            columnNameList.add(tableInfoBean.getIdColumnInfoBean().getColumnName());
+            columnValueList.add("#{" + tableInfoBean.getIdColumnInfoBean().getColumnName() + "}");
         }
         // 其他列
-        for (ColumnInfoBean columnInfoBean : DatabaseManager.getInstance().getColumnByClass(clazz)) {
+        for (ColumnInfoBean columnInfoBean : tableInfoBean.getColumnInfoBeanList()) {
             columnNameList.add(columnInfoBean.getColumnName());
-            Field field = clazz.getDeclaredField(columnInfoBean.getFieldName());
-            if (!field.isAccessible()) {
-                field.setAccessible(true);
-            }
-            Object value = field.get(obj);
-            if (columnInfoBean.getType() == Column.Type.TEXT && value != null) {
-                columnValueList.add("\'" + value + "\'");
-            } else {
-                columnValueList.add(value);
-            }
+            columnValueList.add("#{" + columnInfoBean.getColumnName() + "}");
         }
         // 拼接列名
         for (String columnName : columnNameList) {
@@ -125,7 +105,6 @@ public class SqlUtil {
             sql.delete(start, start + ",".length());
         }
         sql.append(")");
-        printSql(sql.toString());
         return sql.toString();
     }
 
@@ -138,15 +117,13 @@ public class SqlUtil {
      * @param clazz 需要删除的对象的 class
      * @return 自动生成的 sql
      */
-    public static String getDeleteSql(Class<?> clazz, QueryCondition... queryConditionArray) {
+    public static String getDeleteByIdSql(Class<?> clazz) {
         StringBuilder sql = new StringBuilder();
-        // 主键
-        IdColumnInfoBean idColumnInfo = DatabaseManager.getInstance().getIdByClass(clazz);
-        sql.append("DELETE FROM ").append(idColumnInfo.getTableName());
-        for (QueryCondition queryCondition : queryConditionArray) {
-            sql.append(queryCondition.getSql());
-        }
-        printSql(sql.toString());
+        TableInfoBean tableInfoBean = DatabaseManager.getInstance().getTableInfoByClass(clazz);
+        sql.append("DELETE FROM ").append(tableInfoBean.getTableName())
+                .append(" WHERE ")
+                .append(tableInfoBean.getIdColumnInfoBean().getColumnName())
+                .append("=#{id}");
         return sql.toString();
     }
 
@@ -156,37 +133,29 @@ public class SqlUtil {
      * Date:2020/3/18 19:44
      * Description:获取更新语句
      *
-     * @param obj 需要更新的对象
      * @return 自动生成的 sql
      */
-    public static String getUpdateSql(Object obj, QueryCondition... queryConditionArray) throws NoSuchFieldException, IllegalAccessException {
+    public static String getUpdateByIdSql(Class<?> clazz) {
         StringBuilder sql = new StringBuilder();
-        Class<?> clazz = obj.getClass();
-        // 主键
-        IdColumnInfoBean idColumnInfo = DatabaseManager.getInstance().getIdByClass(clazz);
-        sql.append("UPDATE ").append(idColumnInfo.getTableName()).append(" SET ");
+        TableInfoBean tableInfoBean = DatabaseManager.getInstance().getTableInfoByClass(clazz);
+        sql.append("UPDATE ").append(tableInfoBean.getTableName()).append(" SET ");
 
-        for (ColumnInfoBean columnInfoBean : DatabaseManager.getInstance().getColumnByClass(clazz)) {
-            Field field = clazz.getDeclaredField(columnInfoBean.getFieldName());
-            if (!field.isAccessible()) {
-                field.setAccessible(true);
-            }
-            Object value = field.get(obj);
-            if (columnInfoBean.getType() == Column.Type.TEXT && value != null) {
-                sql.append(columnInfoBean.getColumnName()).append("=\'").append(value).append("\'").append(",");
-            } else {
-                sql.append(columnInfoBean.getColumnName()).append("=").append(value).append(",");
-            }
+        for (ColumnInfoBean columnInfoBean : tableInfoBean.getColumnInfoBeanList()) {
+            sql.append(columnInfoBean.getColumnName())
+                    .append("=#{")
+                    .append(columnInfoBean.getFieldName())
+                    .append("},");
         }
         // 去掉最后一个 ","
         int start = sql.lastIndexOf(",");
         if (start != -1) {
             sql.delete(start, start + ",".length());
         }
-        for (QueryCondition queryCondition : queryConditionArray) {
-            sql.append(queryCondition.getSql());
-        }
-        printSql(sql.toString());
+        sql.append(" WHERE ")
+                .append(tableInfoBean.getIdColumnInfoBean().getColumnName())
+                .append("=#{")
+                .append(tableInfoBean.getIdColumnInfoBean().getFieldName())
+                .append("}");
         return sql.toString();
     }
 
@@ -199,15 +168,52 @@ public class SqlUtil {
      * @param clazz 需要查询的对象的 class
      * @return 自动生成的 sql
      */
-    public static String getQuerySql(Class<?> clazz, QueryCondition... queryConditionArray) {
+    public static String getSelectByIdSql(Class<?> clazz) {
         StringBuilder sql = new StringBuilder();
-        // 主键
-        IdColumnInfoBean idColumnInfo = DatabaseManager.getInstance().getIdByClass(clazz);
-        sql.append("SELECT * FROM ").append(idColumnInfo.getTableName());
-        for (QueryCondition queryCondition : queryConditionArray) {
-            sql.append(queryCondition.getSql());
-        }
-        printSql(sql.toString());
+        TableInfoBean tableInfoBean = DatabaseManager.getInstance().getTableInfoByClass(clazz);
+        sql.append("SELECT * FROM ")
+                .append(tableInfoBean.getTableName())
+                .append(" WHERE ")
+                .append(tableInfoBean.getIdColumnInfoBean().getColumnName())
+                .append("=#{id}");
+        return sql.toString();
+    }
+
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2020/3/18 19:44
+     * Description:获取查询语句
+     *
+     * @param clazz 需要查询的对象的 class
+     * @return 自动生成的 sql
+     */
+    public static String getSelectListSql(Class<?> clazz) {
+        StringBuilder sql = new StringBuilder();
+        TableInfoBean tableInfoBean = DatabaseManager.getInstance().getTableInfoByClass(clazz);
+        sql.append("SELECT * FROM ")
+                .append(tableInfoBean.getTableName());
+        return sql.toString();
+    }
+
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2020/4/20 18:31
+     * Description:获取根据 id 判断是否存在的 sql
+     */
+    public static String getExistsByIdSql(Class<?> clazz) {
+        StringBuilder sql = new StringBuilder();
+        TableInfoBean tableInfoBean = DatabaseManager.getInstance().getTableInfoByClass(clazz);
+        sql.append("SELECT")
+                .append(" COUNT(")
+                .append(tableInfoBean.getIdColumnInfoBean().getColumnName())
+                .append(") AS count")
+                .append(" FROM ")
+                .append(tableInfoBean.getTableName())
+                .append(" WHERE ")
+                .append(tableInfoBean.getIdColumnInfoBean().getColumnName())
+                .append("=#{id}");
         return sql.toString();
     }
 }

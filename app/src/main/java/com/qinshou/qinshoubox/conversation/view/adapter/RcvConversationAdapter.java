@@ -42,7 +42,6 @@ public class RcvConversationAdapter extends RcvSingleBaseAdapter<ConversationDet
 
     @Override
     public void bindViewHolder(final BaseViewHolder baseViewHolder, final ConversationDetailBean conversationDetailBean, final int position) {
-        ShowLogUtil.logi("conversationDetailBean--->" + conversationDetailBean);
         if (TextUtils.isEmpty(conversationDetailBean.getHeadImgSmall())) {
             ImageLoadUtil.SINGLETON.loadImage(getContext(), R.drawable.create_group_iv_head_img_src, baseViewHolder.getImageView(R.id.iv_head_img));
         } else {

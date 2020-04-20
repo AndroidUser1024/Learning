@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteStatement;
 import android.text.TextUtils;
 import android.util.Log;
 
-
 import com.qinshou.dbmodule.annotation.Column;
 import com.qinshou.dbmodule.annotation.Delete;
 import com.qinshou.dbmodule.annotation.Id;
@@ -21,10 +20,8 @@ import com.qinshou.dbmodule.annotation.Table;
 import com.qinshou.dbmodule.annotation.Update;
 import com.qinshou.dbmodule.bean.ColumnInfoBean;
 import com.qinshou.dbmodule.bean.IdColumnInfoBean;
-import com.qinshou.dbmodule.dao.IBaseDao;
-import com.qinshou.dbmodule.dao.impl.DefaultDaoImpl;
-import com.qinshou.dbmodule.tmp.TableInfoBean;
-import com.qinshou.dbmodule.tmp.SqlUtil;
+import com.qinshou.dbmodule.util.SqlUtil;
+import com.qinshou.dbmodule.bean.TableInfoBean;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -51,15 +48,9 @@ public class DatabaseManager {
 
     private SQLiteDatabase mSqLiteDatabase;
     /**
-     * Map.Entry<String, String> 中 Key 为数据库的列名,Value 为实体类的属性名
+     * Map<Class, String> 中 Key 为表映射类 class,Value 为表信息
      */
-    private Map<Class, IdColumnInfoBean> mIdMap = new HashMap<>();
-    /**
-     * Map<String, String> 中 Key 为数据库的列名,Value 为实体类的属性名
-     */
-    private Map<Class, List<com.qinshou.dbmodule.bean.ColumnInfoBean>> mColumnMap = new HashMap<>();
     private Map<Class, TableInfoBean> mTableInfoBeanMap = new HashMap<>();
-    private Map<Class, IBaseDao<?>> mDaoMap = new HashMap<>();
 
     private DatabaseManager() {
     }
@@ -92,7 +83,6 @@ public class DatabaseManager {
         //获取数据库可读可写的操作对象
         mSqLiteDatabase = sqLiteOpenHelper.getWritableDatabase();
         for (Class<?> clazz : classArray) {
-            mDaoMap.put(clazz, new DefaultDaoImpl<>(mSqLiteDatabase, clazz));
             HashMap<String, String> map = new HashMap<>();
             map.put("${insert}", SqlUtil.getInsertSql(clazz));
             map.put("${deleteById}", SqlUtil.getDeleteByIdSql(clazz));
@@ -156,7 +146,7 @@ public class DatabaseManager {
     private void parseObj(Class<?> clazz) {
         TableInfoBean tableInfoBean = new TableInfoBean();
         tableInfoBean.setTableName(getTableName(clazz, clazz.getAnnotation(Table.class)));
-        List<com.qinshou.dbmodule.tmp.ColumnInfoBean> columnInfoBeanList = new ArrayList<>();
+        List<ColumnInfoBean> columnInfoBeanList = new ArrayList<>();
         for (Field field : clazz.getDeclaredFields()) {
             Column column = field.getAnnotation(Column.class);
             if (column == null) {
@@ -165,46 +155,15 @@ public class DatabaseManager {
             Id id = field.getAnnotation(Id.class);
             if (id == null) {
                 // 非主键
-                columnInfoBeanList.add(new com.qinshou.dbmodule.tmp.ColumnInfoBean(getColumnName(field, column), field.getName(), field.getType()));
+                columnInfoBeanList.add(new ColumnInfoBean(getColumnName(field, column), field.getName(), field.getType()));
             } else {
                 // 主键
-                tableInfoBean.setIdColumnInfoBean(new com.qinshou.dbmodule.tmp.IdColumnInfoBean(getColumnName(field, column), field.getName(), field.getType(), id.autoIncrement(), id.useGeneratedKeys()));
+                tableInfoBean.setIdColumnInfoBean(new IdColumnInfoBean(getColumnName(field, column), field.getName(), field.getType(), id.autoIncrement(), id.useGeneratedKeys()));
             }
         }
         tableInfoBean.setColumnInfoBeanList(columnInfoBeanList);
         mTableInfoBeanMap.put(clazz, tableInfoBean);
 
-        Field[] fields = clazz.getDeclaredFields();
-        List<com.qinshou.dbmodule.bean.ColumnInfoBean> columnInfoBeanBeanList = new ArrayList<>();
-        for (Field field : fields) {
-            Column column = field.getAnnotation(Column.class);
-            if (column == null) {
-                continue;
-            }
-            Id id = field.getAnnotation(Id.class);
-            String tableName = getTableName(clazz, clazz.getAnnotation(Table.class));
-            String columnName = getColumnName(field, column);
-            if (id == null) {
-                // 非主键
-                columnInfoBeanBeanList.add(new ColumnInfoBean(tableName, columnName, field.getName(), column.type()));
-            } else {
-                // 主键
-                mIdMap.put(clazz, new IdColumnInfoBean(tableName, columnName, field.getName(), column.type(), id.autoIncrement(), id.useGeneratedKeys()));
-            }
-        }
-        mColumnMap.put(clazz, columnInfoBeanBeanList);
-    }
-
-    public IdColumnInfoBean getIdByClass(Class<?> clazz) {
-        return mIdMap.get(clazz);
-    }
-
-    public List<com.qinshou.dbmodule.bean.ColumnInfoBean> getColumnByClass(Class<?> clazz) {
-        return mColumnMap.get(clazz);
-    }
-
-    public <T> IBaseDao<T> getDaoByClass(Class<T> clazz) {
-        return (IBaseDao<T>) mDaoMap.get(clazz);
     }
 
     /**
@@ -422,6 +381,8 @@ public class DatabaseManager {
         return (T) Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, new InvocationHandler() {
             @Override
             public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                Method m = clazz.getMethod(method.getName(), method.getParameterTypes());
+                Log.i("daolema", "m--->" + m.getGenericReturnType());
                 // 获取注解上的 sql 语句
                 // 获取该接口真实泛型,第一个真实泛型是表的映射类
                 Type[] genericInterfaces = clazz.getGenericInterfaces();
@@ -441,6 +402,9 @@ public class DatabaseManager {
                 Map<String, Object> paramMap = getParamMap(method, args);
                 // 将参数集合替换预定义 sql 中对应的占位符
                 sql = formatSql(sql, paramMap);
+                if (BuildConfig.DEBUG) {
+                    Log.i(TAG, sql);
+                }
                 Type returnType = method.getGenericReturnType();
                 Cursor cursor = null;
                 try {
@@ -448,7 +412,7 @@ public class DatabaseManager {
                         TableInfoBean tableInfoBean = mTableInfoBeanMap.get(actualTypeArguments[0]);
                         SQLiteStatement sqLiteStatement = mSqLiteDatabase.compileStatement(sql);
                         long lastRowInserted = sqLiteStatement.executeInsert();
-                        com.qinshou.dbmodule.tmp.IdColumnInfoBean idColumnInfoBean = tableInfoBean.getIdColumnInfoBean();
+                        IdColumnInfoBean idColumnInfoBean = tableInfoBean.getIdColumnInfoBean();
                         if (isObjParam(method)
                                 && idColumnInfoBean.isAutoIncrement()
                                 && idColumnInfoBean.isUseGeneratedKeys()) {
@@ -645,24 +609,25 @@ public class DatabaseManager {
      * Description:将原生 sql 查询的结果封装成对象
      */
     private Object getObj(String className, Cursor cursor) {
+        Log.i("daolema", "className--->" + className);
         Object obj;
         Class<?> cls;
         try {
             cls = Class.forName(className);
             obj = cls.newInstance();
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
         String[] columnNameArray = cursor.getColumnNames();
         for (String columnName : columnNameArray) {
+            Log.i("daolema", "columnNameArray--->" + columnName);
             Field field = null;
             // 找不到列名对应的变量,直接跳过
             try {
                 field = cls.getDeclaredField(columnName);
             } catch (NoSuchFieldException e) {
-                continue;
-            }
-            if (field == null) {
+                e.printStackTrace();
                 continue;
             }
             int columnIndex = cursor.getColumnIndex(columnName);
@@ -675,6 +640,7 @@ public class DatabaseManager {
             }
             // 根据类型,设置属性的值
             Class<?> fieldType = field.getType();
+            Log.i("daolema", "columnNameArray--->" + columnName);
             try {
                 if (fieldType == int.class || fieldType == Integer.class) {
                     field.set(obj, cursor.getInt(columnIndex));

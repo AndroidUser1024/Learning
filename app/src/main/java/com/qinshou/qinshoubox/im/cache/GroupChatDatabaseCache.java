@@ -1,7 +1,6 @@
 package com.qinshou.qinshoubox.im.cache;
 
 import com.qinshou.dbmodule.DatabaseManager;
-import com.qinshou.dbmodule.dao.IBaseDao;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 import com.qinshou.qinshoubox.im.db.IGroupChatDao;
 

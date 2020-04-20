@@ -1,4 +1,4 @@
-package com.qinshou.dbmodule.tmp;
+package com.qinshou.dbmodule.bean;
 
 import java.util.List;
 
