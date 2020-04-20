@@ -5,6 +5,8 @@ import com.qinshou.dbmodule.dao.IBaseDao;
 import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.UserBean;
 import com.qinshou.qinshoubox.im.bean.UserDetailBean;
+import com.qinshou.qinshoubox.im.db.IFriendDao;
+import com.qinshou.qinshoubox.im.db.IUserDao;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,18 +20,18 @@ import java.util.List;
  */
 public class FriendDatabaseCache extends AbsDatabaseCache<String, UserDetailBean> {
 
-    private IBaseDao<UserBean> mUserDao;
-    private IBaseDao<FriendBean> mFriendDao;
+    private IUserDao mUserDao;
+    private IFriendDao mFriendDao;
 
     public FriendDatabaseCache() {
-        mUserDao = DatabaseManager.getInstance().getDaoByClass(UserBean.class);
-        mFriendDao = DatabaseManager.getInstance().getDaoByClass(FriendBean.class);
+        mUserDao = DatabaseManager.getInstance().getDao(IUserDao.class);
+        mFriendDao = DatabaseManager.getInstance().getDao(IFriendDao.class);
     }
 
     @Override
     public void put(String key, UserDetailBean value) {
         // 用户数据不存在才存,但是这里不更新用户数据库
-        if (!mUserDao.existsById(value.getId())) {
+        if (mUserDao.existsById(value.getId()) == 0) {
             UserBean userBean = new UserBean(value.getId()
                     , value.getUsername()
                     , value.getNickname()
@@ -43,7 +45,11 @@ public class FriendDatabaseCache extends AbsDatabaseCache<String, UserDetailBean
                 , value.getTop()
                 , value.getDoNotDisturb()
                 , value.getBlackList());
-        mFriendDao.save(friendBean);
+        if (mFriendDao.existsById(friendBean.getId()) == 0) {
+            mFriendDao.insert(friendBean);
+        } else {
+            mFriendDao.updateById(friendBean);
+        }
     }
 
     @Override

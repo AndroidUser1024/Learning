@@ -99,6 +99,7 @@ public class DatabaseManager {
             map.put("${updateById}", SqlUtil.getUpdateByIdSql(clazz));
             map.put("${selectById}", SqlUtil.getSelectByIdSql(clazz));
             map.put("${selectList}", SqlUtil.getSelectListSql(clazz));
+            map.put("${existsById}", SqlUtil.getExistsByIdSql(clazz));
             mSqlMap.put(clazz, map);
         }
     }

@@ -3,6 +3,7 @@ package com.qinshou.qinshoubox.im.manager;
 import com.qinshou.dbmodule.DatabaseManager;
 import com.qinshou.dbmodule.dao.IBaseDao;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
+import com.qinshou.qinshoubox.im.db.IMessageDao;
 
 import java.util.ArrayList;
 import java.util.List;

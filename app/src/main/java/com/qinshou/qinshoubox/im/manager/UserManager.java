@@ -8,6 +8,7 @@ import com.qinshou.networkmodule.callback.Callback;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.UserBean;
 import com.qinshou.qinshoubox.im.bean.UserDetailBean;
+import com.qinshou.qinshoubox.im.db.IUserDao;
 import com.qinshou.qinshoubox.im.listener.QSCallback;
 import com.qinshou.qinshoubox.network.QSBoxUserApi;
 import com.qinshou.qinshoubox.transformer.QSApiTransformer;
@@ -19,10 +20,10 @@ import com.qinshou.qinshoubox.transformer.QSApiTransformer;
  * Description:用户管理者
  */
 public class UserManager {
-    private IBaseDao<UserBean> mUserDao;
+    private IUserDao mUserDao;
 
     public UserManager() {
-        mUserDao = DatabaseManager.getInstance().getDaoByClass(UserBean.class);
+        mUserDao = DatabaseManager.getInstance().getDao(IUserDao.class);
     }
 
     public void getUser(String keyword, final QSCallback<UserDetailBean> qsCallback) {
@@ -37,8 +38,11 @@ public class UserManager {
                                 , data.getNickname()
                                 , data.getHeadImgSmall()
                                 , data.getHeadImg());
-                        mUserDao.save(userBean);
-
+                        if (mUserDao.existsById(userBean.getId()) == 0) {
+                            mUserDao.insert(userBean);
+                        } else {
+                            mUserDao.updateById(userBean);
+                        }
                         qsCallback.onSuccess(data);
                     }
 
@@ -61,8 +65,11 @@ public class UserManager {
                                 , data.getNickname()
                                 , data.getHeadImgSmall()
                                 , data.getHeadImg());
-                        mUserDao.save(userBean);
-
+                        if (mUserDao.existsById(userBean.getId()) == 0) {
+                            mUserDao.insert(userBean);
+                        } else {
+                            mUserDao.updateById(userBean);
+                        }
                         qsCallback.onSuccess(data);
                     }
 

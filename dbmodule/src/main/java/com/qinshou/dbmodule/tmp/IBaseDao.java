@@ -32,5 +32,5 @@ public interface IBaseDao<T, ID> {
     List<T> selectList();
 
     @Select("${existsById}")
-    boolean existsById(@Param("id") ID id);
+    int existsById(@Param("id") ID id);
 }

@@ -7,6 +7,9 @@ import com.qinshou.qinshoubox.im.bean.FriendBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatMemberBean;
 import com.qinshou.qinshoubox.im.bean.UserBean;
 import com.qinshou.qinshoubox.im.bean.UserDetailBean;
+import com.qinshou.qinshoubox.im.db.IFriendDao;
+import com.qinshou.qinshoubox.im.db.IGroupChatMemberDao;
+import com.qinshou.qinshoubox.im.db.IUserDao;
 
 import java.util.Collection;
 import java.util.List;
@@ -20,14 +23,14 @@ import java.util.Map;
  */
 public class GroupChatMemberDatabaseCache extends AbsDatabaseCache<String, UserDetailBean> {
 
-    private IBaseDao<UserBean> mUserDao;
-    private IBaseDao<FriendBean> mFriendDao;
-    private IBaseDao<GroupChatMemberBean> mGroupChatMemberDao;
+    private IUserDao mUserDao;
+    private IFriendDao mFriendDao;
+    private IGroupChatMemberDao mGroupChatMemberDao;
 
     public GroupChatMemberDatabaseCache() {
-        mUserDao = DatabaseManager.getInstance().getDaoByClass(UserBean.class);
-        mFriendDao = DatabaseManager.getInstance().getDaoByClass(FriendBean.class);
-        mGroupChatMemberDao = DatabaseManager.getInstance().getDaoByClass(GroupChatMemberBean.class);
+        mUserDao = DatabaseManager.getInstance().getDao(IUserDao.class);
+        mFriendDao = DatabaseManager.getInstance().getDao(IFriendDao.class);
+        mGroupChatMemberDao = DatabaseManager.getInstance().getDao(IGroupChatMemberDao.class);
     }
 
     @Override
@@ -39,7 +42,7 @@ public class GroupChatMemberDatabaseCache extends AbsDatabaseCache<String, UserD
         String groupChatId = split[0];
         String userId = split[1];
         // 用户数据不存在才存,但是这里不更新用户数据库
-        if (!mUserDao.existsById(value.getId())) {
+        if (mUserDao.existsById(value.getId()) == 0) {
             UserBean userBean = new UserBean(value.getId()
                     , value.getUsername()
                     , value.getNickname()
@@ -52,19 +55,12 @@ public class GroupChatMemberDatabaseCache extends AbsDatabaseCache<String, UserD
         groupChatMemberBean.setUserId(userId);
         groupChatMemberBean.setNicknameInGroupChat(value.getNicknameInGroupChat());
 
-        List<Map<String, Object>> list = DatabaseManager.getInstance().rawQuery("SELECT" +
-                " COUNT(id) AS count" +
-                " FROM group_chat_member" +
-                " WHERE" +
-                " groupChatId=\'" + groupChatId + "\'" +
-                " AND userId=\'" + userId + "\'");
-        if (list.size() > 0) {
-            Object count = list.get(0).get("count");
-            if (count instanceof Integer && (int) count > 0) {
-                mGroupChatMemberDao.update(groupChatMemberBean);
-            } else {
-                mGroupChatMemberDao.insert(groupChatMemberBean);
-            }
+        GroupChatMemberBean select = mGroupChatMemberDao.selectByGroupChatIdAndUserId(groupChatId, userId);
+        if (select == null) {
+            mGroupChatMemberDao.insert(groupChatMemberBean);
+        } else {
+            groupChatMemberBean.setId(select.getId());
+            mGroupChatMemberDao.updateById(groupChatMemberBean);
         }
     }
 
@@ -93,11 +89,7 @@ public class GroupChatMemberDatabaseCache extends AbsDatabaseCache<String, UserD
             userDetailBean.setRemark(friendBean.getRemark());
         }
 
-        GroupChatMemberBean groupChatMemberBean = mGroupChatMemberDao.select(new Where.Builder()
-                .equal("groupChatId", groupChatId)
-                .and()
-                .equal("userId", userId)
-                .build());
+        GroupChatMemberBean groupChatMemberBean = mGroupChatMemberDao.selectByGroupChatIdAndUserId(groupChatId, userId);
         if (groupChatMemberBean != null) {
             userDetailBean.setNicknameInGroupChat(groupChatMemberBean.getNicknameInGroupChat());
         }
@@ -112,11 +104,7 @@ public class GroupChatMemberDatabaseCache extends AbsDatabaseCache<String, UserD
         }
         String groupChatId = split[0];
         String userId = split[1];
-        mGroupChatMemberDao.delete(new Where.Builder()
-                .equal("groupChatId", groupChatId)
-                .and()
-                .equal("userId", userId)
-                .build());
+        mGroupChatMemberDao.deleteByGroupChatIdAndUserId(groupChatId, userId);
         return null;
     }
 

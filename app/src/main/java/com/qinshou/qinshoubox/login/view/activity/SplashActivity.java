@@ -17,8 +17,10 @@ import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.ConversationBean;
+import com.qinshou.qinshoubox.im.bean.GroupChatMemberBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.db.IConversationDao;
+import com.qinshou.qinshoubox.im.db.IGroupChatMemberDao;
 import com.qinshou.qinshoubox.im.db.IMessageDao;
 import com.qinshou.qinshoubox.im.enums.MessageContentType;
 import com.qinshou.qinshoubox.im.enums.MessageStatus;
@@ -79,31 +81,11 @@ public class SplashActivity extends QSActivity<SplashPresenter> implements ISpla
         getPresenter().getRandomPoem();
 
         DatabaseManager.getInstance().init(getContext(), "test", 1, ConversationBean.class
-                , MessageBean.class);
-        IConversationDao conversationDao = DatabaseManager.getInstance().getDao(IConversationDao.class);
-        IMessageDao messageDao = DatabaseManager.getInstance().getDao(IMessageDao.class);
-        for (int i = 1; i <= 100; i++) {
-            ConversationBean conversationBean = new ConversationBean(i
-                    , MessageType.CHAT.getValue()
-                    , "" + i * 10000
-                    , System.currentTimeMillis()
-                    , i);
-            Log.i("daolema2", "conversationBean1--->" + conversationBean);
-            conversationDao.insert(conversationBean);
-            Log.i("daolema2", "conversationBean2--->" + conversationBean);
-        }
-//        for (int i = 1; i <= 100; i++) {
-//            messageDao.insert(new MessageBean("" + i * 10000
-//                    , "" + i * 10000
-//                    , "" + i * 20000
-//                    , MessageType.CHAT.getValue()
-//                    , MessageContentType.TEXT.getValue()
-//                    , "我是测试消息" + i
-//                    , System.currentTimeMillis()
-//                    , System.currentTimeMillis()
-//                    , MessageStatus.SENDED.getValue()
-//                    , ""));
-//        }
+                , MessageBean.class
+                , GroupChatMemberBean.class);
+        int id = DatabaseManager.getInstance().getDao(IGroupChatMemberDao.class)
+                .selectIdByGroupChatIdAndUserId("1", "2");
+        ShowLogUtil.logi("id--->" + id);
     }
 
     @Override

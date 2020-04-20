@@ -197,4 +197,26 @@ public class SqlUtil {
         printSql(sql.toString());
         return sql.toString();
     }
+
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2020/4/20 18:31
+     * Description:获取根据 id 判断是否存在的 sql
+     */
+    public static String getExistsByIdSql(Class<?> clazz) {
+        StringBuilder sql = new StringBuilder();
+        TableInfoBean tableInfoBean = DatabaseManager.getInstance().getTableInfoByClass(clazz);
+        sql.append("SELECT")
+                .append(" COUNT(")
+                .append(tableInfoBean.getIdColumnInfoBean().getColumnName())
+                .append(") AS count")
+                .append(" FROM ")
+                .append(tableInfoBean.getTableName())
+                .append(" WHERE ")
+                .append(tableInfoBean.getIdColumnInfoBean().getColumnName())
+                .append("=#{id}");
+        printSql(sql.toString());
+        return sql.toString();
+    }
 }
