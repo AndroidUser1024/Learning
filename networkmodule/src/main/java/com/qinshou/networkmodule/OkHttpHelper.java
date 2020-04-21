@@ -31,6 +31,7 @@ import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -48,12 +49,19 @@ public enum OkHttpHelper {
     OkHttpHelper() {
         // 创建默认的 OkHttpClient
         mOkHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(15, TimeUnit.SECONDS)
+                .readTimeout(15, TimeUnit.SECONDS)
+                .writeTimeout(15, TimeUnit.SECONDS)
                 .addInterceptor(new LogInterceptor(LogInterceptor.Level.BASIC, new LogInterceptor.Logger() {
                     @Override
                     public void log(String message) {
                         Log.i("daolema", "message--->" + message);
                     }
                 })).build();
+    }
+
+    public void recreateOkHttpClient(OkHttpClient okHttpClient) {
+        mOkHttpClient = okHttpClient;
     }
 
     public <T> T getCaller(final Class<T> clazz) {

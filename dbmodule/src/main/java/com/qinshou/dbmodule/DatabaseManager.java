@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Semaphore;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -170,6 +171,8 @@ public class DatabaseManager {
         return mTableInfoBeanMap.get(clazz);
     }
 
+    private Semaphore mSemaphore = new Semaphore(1);
+
     public <T> T getDao(final Class<T> clazz) {
         return (T) Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, new InvocationHandler() {
             @Override
@@ -213,9 +216,8 @@ public class DatabaseManager {
                                 idField.setAccessible(true);
                             }
                             idField.set(arg, idColumnInfoBean.convertIdValue(lastRowInserted));
-                        } else {
-                            return 1;
                         }
+                        return 1;
                     } else if (method.getAnnotation(Delete.class) != null) {
                         return mSqLiteDatabase.compileStatement(sql).executeUpdateDelete();
                     } else if (method.getAnnotation(Update.class) != null) {

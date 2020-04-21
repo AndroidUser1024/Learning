@@ -65,6 +65,10 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    testImplementation 'org.robolectric:robolectric:3.3.2'
+    testImplementation 'org.robolectric:shadows-support-v4:3.3.2'
+    testImplementation 'org.robolectric:shadows-multidex:4.3.1'
     implementation 'androidx.appcompat:appcompat:1.0.0'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
@@ -80,10 +84,6 @@ dependencies {
     implementation project(':immodule')
 //    implementation project(':OkHttpHelper')
 //    annotationProcessor project(':OkHttpHelperProcessor')
-
-    // ORMLite 数据库
-    api 'com.j256.ormlite:ormlite-android:5.1'
-    api 'com.j256.ormlite:ormlite-core:5.1'
 
     //仿 iOS 的 PickerView 控件，有时间选择器和选项选择器
     implementation 'com.contrarywind:Android-PickerView:4.1.6'

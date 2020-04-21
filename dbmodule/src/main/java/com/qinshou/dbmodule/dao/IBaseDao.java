@@ -17,7 +17,7 @@ import java.util.List;
  */
 public interface IBaseDao<T, ID> {
     @Insert("${insert}")
-    T insert(@ObjParam() T t);
+    int insert(@ObjParam() T t);
 
     @Delete("${deleteById}")
     int deleteById(@Param("id") ID id);
