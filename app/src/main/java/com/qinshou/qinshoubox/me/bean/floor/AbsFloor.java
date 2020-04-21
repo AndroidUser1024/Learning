@@ -12,7 +12,7 @@ import com.qinshou.qinshoubox.me.bean.WarriorBean;
 import com.qinshou.qinshoubox.me.enums.Building;
 import com.qinshou.qinshoubox.me.enums.Npc;
 import com.qinshou.qinshoubox.me.enums.Warrior;
-import com.qinshou.qinshoubox.util.MapManager;
+import com.qinshou.qinshoubox.util.MagicGameManager;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ import java.util.List;
  * Created on 2018/4/11
  */
 
-public abstract class AFloor {
+public abstract class AbsFloor {
     private List<List<CaseBean>> mData;
 
     public abstract int getFloor();
@@ -35,12 +35,12 @@ public abstract class AFloor {
 
     @Override
     public String toString() {
-        return "AFloor{" +
+        return "AbsFloor{" +
                 "mData=" + mData +
                 '}';
     }
 
-    public AFloor() {
+    public AbsFloor() {
         mData = setData();
     }
 
@@ -68,14 +68,14 @@ public abstract class AFloor {
                     imageView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            MapManager.SINGLETON.goUpstairs();
+                            MagicGameManager.SINGLETON.goUpstairs();
                         }
                     });
                 } else if (caseBean.getType() == Npc.GO_DOWNSTAIRS) {
                     imageView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            MapManager.SINGLETON.goDownstairs();
+                            MagicGameManager.SINGLETON.goDownstairs();
                         }
                     });
                 }
@@ -87,8 +87,8 @@ public abstract class AFloor {
         return mData.get(row).get(column);
     }
 
-    public void setCase(int row, int column, CaseBean caseBean) {
-        mData.get(row).set(column, caseBean);
+    public void setCase(CaseBean caseBean) {
+        mData.get(caseBean.getRow()).set(caseBean.getColumn(), caseBean);
     }
 
     /**
@@ -98,9 +98,9 @@ public abstract class AFloor {
      * Description:清除勇士当前位置,在上下楼时调用
      */
     public void clearWarriorPosition() {
-        setCase(WarriorBean.getInstance().getPosition().getRow()
-                , WarriorBean.getInstance().getPosition().getColumn()
-                , new CaseBean(getFloor(), WarriorBean.getInstance().getPosition().getRow(), WarriorBean.getInstance().getPosition().getColumn(), Building.ROAD, R.drawable.magic_tower_building_road));
+//        setCase(WarriorBean.getInstance().getPosition().getRow()
+//                , WarriorBean.getInstance().getPosition().getColumn()
+//                , new CaseBean(getFloor(), WarriorBean.getInstance().getPosition().getRow(), WarriorBean.getInstance().getPosition().getColumn(), Building.ROAD, R.drawable.magic_tower_building_road));
     }
 
     /**
@@ -109,8 +109,8 @@ public abstract class AFloor {
      */
     public void resetWarriorPosition(int row, int column) {
         CaseBean caseBean = new CaseBean(getFloor(), row, column, Warrior.UP, R.drawable.magic_tower_warrior_up);
-        setCase(row, column, caseBean);
-        MapManager.SINGLETON.updateUI(caseBean);
+//        setCase(row, column, caseBean);
+        MagicGameManager.SINGLETON.updateUI(caseBean);
         WarriorBean.getInstance().setPosition(new WarriorBean.Position(row, column));
     }
 }

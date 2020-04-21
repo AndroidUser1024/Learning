@@ -17,7 +17,7 @@ import java.util.List;
  * Created on 2017/4/27
  */
 
-public class Floor17 extends AFloor {
+public class Floor17 extends AbsFloor {
 
     @Override
     public int getFloor() {

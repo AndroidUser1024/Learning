@@ -2,6 +2,7 @@ package com.qinshou.qinshoubox.me.bean;
 
 
 import androidx.annotation.DrawableRes;
+import androidx.fragment.app.FragmentManager;
 
 import com.qinshou.qinshoubox.me.enums.Type;
 
@@ -20,10 +21,6 @@ public class CaseBean {
      * 格子类型
      */
     private Type type;
-    /**
-     * 格子类型对应的字符串
-     */
-    private String typeValue;
 
     public CaseBean() {
     }
@@ -34,7 +31,6 @@ public class CaseBean {
         this.column = column;
         this.type = type;
         this.resourceId = resourceId;
-        this.typeValue = type.toString();
     }
 
     @Override
@@ -45,7 +41,6 @@ public class CaseBean {
                 ", 列=" + column +
                 ", 图片资源 Id=" + resourceId +
                 ", 类型=" + type +
-                ", 类型对应字符串='" + typeValue + '\'' +
                 '}';
     }
 
@@ -87,11 +82,9 @@ public class CaseBean {
 
     public void setType(Type type) {
         this.type = type;
-        // 同步更新类型对应的字符串
-        this.typeValue = type.toString();
     }
 
-    public String getTypeValue() {
-        return typeValue;
+    public boolean handleEvent(FragmentManager fragmentManager) {
+        return true;
     }
 }

@@ -3,6 +3,7 @@ package com.qinshou.qinshoubox.me.bean.floor;
 
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.bean.CaseBean;
+import com.qinshou.qinshoubox.me.bean.npc.FairyBean;
 import com.qinshou.qinshoubox.me.enums.Building;
 import com.qinshou.qinshoubox.me.enums.Npc;
 
@@ -15,7 +16,7 @@ import java.util.List;
  * Created on 2017/6/15
  */
 
-public class Floor0 extends AFloor {
+public class Floor0 extends AbsFloor {
 
     @Override
     public int getFloor() {
@@ -143,7 +144,7 @@ public class Floor0 extends AFloor {
         row8.add(new CaseBean(0, 8, 2, Building.FIRE_SEA, R.drawable.magic_tower_building_fire_sea));
         row8.add(new CaseBean(0, 8, 3, Building.WALL, R.drawable.magic_tower_building_wall));
         row8.add(new CaseBean(0, 8, 4, Building.ROAD, R.drawable.magic_tower_building_road));
-        row8.add(new CaseBean(0, 8, 5, Npc.FAIRY_1, R.drawable.magic_tower_npc_fairy));
+        row8.add(new FairyBean());
         row8.add(new CaseBean(0, 8, 6, Building.ROAD, R.drawable.magic_tower_building_road));
         row8.add(new CaseBean(0, 8, 7, Building.WALL, R.drawable.magic_tower_building_wall));
         row8.add(new CaseBean(0, 8, 8, Building.FIRE_SEA, R.drawable.magic_tower_building_fire_sea));

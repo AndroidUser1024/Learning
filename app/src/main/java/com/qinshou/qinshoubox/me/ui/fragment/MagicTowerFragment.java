@@ -21,7 +21,7 @@ import com.qinshou.qinshoubox.me.contract.IMagicTowerContract;
 import com.qinshou.qinshoubox.me.enums.Monster;
 import com.qinshou.qinshoubox.me.presenter.MagicTowerPresenter;
 import com.qinshou.qinshoubox.me.ui.dialog.MonsterInfoDialogFragment;
-import com.qinshou.qinshoubox.util.MapManager;
+import com.qinshou.qinshoubox.util.MagicGameManager;
 import com.qinshou.qinshoubox.util.MonsterFactory;
 
 import java.util.ArrayList;
@@ -68,10 +68,10 @@ public class MagicTowerFragment extends AbsMVPFragment<MagicTowerPresenter> impl
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.btn_save:
-                    MapManager.SINGLETON.save(getContext());
+                    MagicGameManager.SINGLETON.save();
                     break;
                 case R.id.btn_read:
-                    MapManager.SINGLETON.read(getContext());
+                    MagicGameManager.SINGLETON.read();
                     break;
                 case R.id.iv_sheng_guang_hui:
                     ShowLogUtil.logi("圣光徽");
@@ -80,16 +80,16 @@ public class MagicTowerFragment extends AbsMVPFragment<MagicTowerPresenter> impl
                 case R.id.iv_feng_zhi_luo_pan:
                     break;
                 case R.id.ib_move_up:
-                    MapManager.SINGLETON.warriorMoveUp(getChildFragmentManager());
+                    MagicGameManager.SINGLETON.warriorMoveUp();
                     break;
                 case R.id.ib_move_down:
-                    MapManager.SINGLETON.warriorMoveDown(getChildFragmentManager());
+                    MagicGameManager.SINGLETON.warriorMoveDown();
                     break;
                 case R.id.ib_move_left:
-                    MapManager.SINGLETON.warriorMoveLeft(getChildFragmentManager());
+                    MagicGameManager.SINGLETON.warriorMoveLeft();
                     break;
                 case R.id.ib_move_right:
-                    MapManager.SINGLETON.warriorMoveRight(getChildFragmentManager());
+                    MagicGameManager.SINGLETON.warriorMoveRight();
                     break;
             }
         }
@@ -196,7 +196,7 @@ public class MagicTowerFragment extends AbsMVPFragment<MagicTowerPresenter> impl
     @Override
     public void initData() {
         WarriorBean.getInstance().addObserver(this);
-        MapManager.SINGLETON.initMap(mTlMap);
+        MagicGameManager.SINGLETON.startGame(getChildFragmentManager(),mTlMap);
         updateWarriorInfo(WarriorBean.getInstance());
     }
 
@@ -235,7 +235,7 @@ public class MagicTowerFragment extends AbsMVPFragment<MagicTowerPresenter> impl
      * Description:显示怪物信息
      */
     private void showMonsterInfo() {
-        List<List<CaseBean>> currentFloor = MapManager.SINGLETON.getCurrentFloor();
+        List<List<CaseBean>> currentFloor = MagicGameManager.SINGLETON.getCurrentFloor();
         Set<MonsterBean> monsterBeanSet = new HashSet<>();
         for (List<CaseBean> caseBeanList : currentFloor) {
             for (CaseBean caseBean : caseBeanList) {

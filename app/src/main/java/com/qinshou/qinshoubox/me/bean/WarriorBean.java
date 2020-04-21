@@ -19,7 +19,6 @@ import java.util.Observable;
 public class WarriorBean extends Observable {
     private String name;
     private Type type;
-    @DrawableRes
     private int resourceId;
     private int level;
     private int lifeValue;
@@ -36,24 +35,27 @@ public class WarriorBean extends Observable {
     private boolean hasLuckyCross;
     private Position position;
 
+    public WarriorBean() {
+    }
 
-    private WarriorBean() {
-        name = "勇士";
-        type = Warrior.UP;
-        resourceId = R.drawable.magic_tower_warrior_up;
-        level = 1;
-        lifeValue = 1000;
-        attackValue = 10;
-        defenseValue = 10;
-        money = 0;
-        experience = 0;
-        yellowKeyCount = 0;
-        blueKeyCount = 0;
-        redKeyCount = 0;
-        hasShengGuangHui = false;
-        hasFengZhiLuoPan = false;
-        hasXingGuangShenLang = false;
-        position = new Position(9, 5);
+    public WarriorBean(String name, Type type, int resourceId, int level, int lifeValue, int attackValue, int defenseValue, int money, int experience, int yellowKeyCount, int blueKeyCount, int redKeyCount, boolean hasShengGuangHui, boolean hasFengZhiLuoPan, boolean hasXingGuangShenLang, boolean hasLuckyCross, Position position) {
+        this.name = name;
+        this.type = type;
+        this.resourceId = resourceId;
+        this.level = level;
+        this.lifeValue = lifeValue;
+        this.attackValue = attackValue;
+        this.defenseValue = defenseValue;
+        this.money = money;
+        this.experience = experience;
+        this.yellowKeyCount = yellowKeyCount;
+        this.blueKeyCount = blueKeyCount;
+        this.redKeyCount = redKeyCount;
+        this.hasShengGuangHui = hasShengGuangHui;
+        this.hasFengZhiLuoPan = hasFengZhiLuoPan;
+        this.hasXingGuangShenLang = hasXingGuangShenLang;
+        this.hasLuckyCross = hasLuckyCross;
+        this.position = position;
     }
 
     public static class Position {
