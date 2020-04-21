@@ -17,17 +17,17 @@ public class ConversationMessageRelBean {
      * 自增长 id
      */
     @Id(autoIncrement = true,useGeneratedKeys = true)
-    @Column(type = Column.Type.INTEGER)
+    @Column
     private int id;
     /**
      * 会话 id
      */
-    @Column(type = Column.Type.INTEGER)
+    @Column
     private int conversationId;
     /**
      * 消息自增长 id
      */
-    @Column(type = Column.Type.INTEGER)
+    @Column
     private int messagePid;
 
     public ConversationMessageRelBean() {

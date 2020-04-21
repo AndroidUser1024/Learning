@@ -17,17 +17,17 @@ public class ConversationBean {
      * 自增长 Id
      */
     @Id(autoIncrement = true, useGeneratedKeys = true)
-    @Column(type = Column.Type.INTEGER)
+    @Column
     private int id;
     /**
      * 未读数
      */
-    @Column(type = Column.Type.INTEGER)
+    @Column
     private int unreadCount;
     /**
      * 会话类型
      */
-    @Column(type = Column.Type.INTEGER)
+    @Column
     private int type;
     /**
      * 私聊就是对方的用户 id,群聊就是群的 id
@@ -37,12 +37,12 @@ public class ConversationBean {
     /**
      * 最后一条消息的时间
      */
-    @Column(type = Column.Type.LONG)
+    @Column
     private long lastMsgTimestamp;
     /**
      * 最后一条消息的 pid
      */
-    @Column(type = Column.Type.INTEGER)
+    @Column
     private int lastMsgPid;
 
     public ConversationBean() {

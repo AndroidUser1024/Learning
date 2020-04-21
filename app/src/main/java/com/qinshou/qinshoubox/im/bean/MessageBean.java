@@ -24,7 +24,7 @@ public class MessageBean {
      * 自增长 id
      */
     @Id(autoIncrement = true, useGeneratedKeys = true)
-    @Column(type = Column.Type.INTEGER)
+    @Column
     private int pid;
     /**
      * Id
@@ -44,12 +44,12 @@ public class MessageBean {
     /**
      * 消息类型
      */
-    @Column(type = Column.Type.INTEGER)
+    @Column
     private int type;
     /**
      * 消息内容类型
      */
-    @Column(type = Column.Type.INTEGER)
+    @Column
     private int contentType;
     /**
      * 消息内容
@@ -59,17 +59,17 @@ public class MessageBean {
     /**
      * 发送时间戳
      */
-    @Column(type = Column.Type.LONG)
+    @Column
     private long sendTimestamp;
     /**
      * 发送时间戳
      */
-    @Column(type = Column.Type.LONG)
+    @Column
     private long receiveTimestamp;
     /**
      * 消息状态
      */
-    @Column(type = Column.Type.INTEGER)
+    @Column
     private int status;
     /**
      * 扩展字段

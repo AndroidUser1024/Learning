@@ -22,7 +22,7 @@ public class FriendBean {
     /**
      * 好友状态
      */
-    @Column(type = Column.Type.INTEGER)
+    @Column
     private int status;
     /**
      * 备注
@@ -32,17 +32,17 @@ public class FriendBean {
     /**
      * 是否置顶,0 是非置顶,1 是置顶
      */
-    @Column(type = Column.Type.INTEGER)
+    @Column
     private int top;
     /**
      * 是否免打扰,0 是非免打扰,1 是免打扰
      */
-    @Column(type = Column.Type.INTEGER)
+    @Column
     private int doNotDisturb;
     /**
      * 是否加入了黑名单,0 是没有加入,1 是加入了
      */
-    @Column(type = Column.Type.INTEGER)
+    @Column
     private int blackList;
 
     public FriendBean() {

@@ -16,7 +16,7 @@ public class GroupChatMemberBean {
      * 自增长 id
      */
     @Id(autoIncrement = true)
-    @Column(type = Column.Type.INTEGER)
+    @Column
     private int id;
     /**
      * 群 id

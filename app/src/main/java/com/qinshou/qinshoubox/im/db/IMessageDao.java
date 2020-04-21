@@ -30,9 +30,9 @@ public interface IMessageDao extends IBaseDao<MessageBean, Integer> {
             " INNER JOIN conversation_message_rel AS cmr ON cmr.conversationId=c.id" +
             " INNER JOIN message AS m ON m.pid=cmr.messagePid" +
             " WHERE" +
-            " c.type=#{type}" +
+            " m.type=#{type}" +
             " AND" +
-            " c.toUserId=#{toUserId}" +
+            " m.toUserId=#{toUserId}" +
             " ORDER BY" +
             " m.pid DESC" +
             " LIMIT #{start},#{size}")

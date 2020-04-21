@@ -52,22 +52,22 @@ public class GroupChatBean {
     /**
      * 群聊会话是否置顶,1 为置顶,0 为不置顶
      */
-    @Column(type = Column.Type.INTEGER)
+    @Column
     private int top;
     /**
      * 群聊会话是否免打扰,1 为免打扰,0 为非免打扰
      */
-    @Column(type = Column.Type.INTEGER)
+    @Column
     private int doNotDisturb;
     /**
      * 群聊会话是否显示成员昵称,1 为显示,0 为不显示
      */
-    @Column(type = Column.Type.INTEGER)
+    @Column
     private int showGroupChatMemberNickname;
     /**
      * 群成员个数
      */
-    @Column(type = Column.Type.INTEGER)
+    @Column
     private int memberCount;
 
     public GroupChatBean() {

@@ -18,9 +18,5 @@ public @interface Column {
         NULL, INTEGER, LONG, REAL, TEXT, BLOB
     }
 
-    Type type() default Type.TEXT;
-
     String name() default "";
-
-    boolean primaryKey() default false;
 }

@@ -166,213 +166,6 @@ public class DatabaseManager {
 
     }
 
-    /**
-     * Author: QinHao
-     * Email:qinhao@jeejio.com
-     * Date:2020/3/20 9:10
-     * Description:执行自定义 sql
-     */
-    public int executeSql(String sql) {
-        Log.i(TAG, "sql--->" + sql);
-        try {
-            mSqLiteDatabase.execSQL(sql);
-        } catch (SQLException e) {
-            return 0;
-        }
-        return 1;
-    }
-
-    /**
-     * Author: QinHao
-     * Email:qinhao@jeejio.com
-     * Date:2020/3/20 9:10
-     * Description:执行自定义 sql 查询
-     * 返回值是一个集合,集合中的元素是一个 Map
-     * key 是 String 型.默认为列名,如果 sql 中有指定别名则为指定的别名
-     * value 是 Object 型,是查询到的值,如果没有值则为 null,拿到后需要强转为自己需要的类型,注意强转前需要进行非空判断
-     */
-    public List<Map<String, Object>> rawQuery(String sql) {
-        Log.i(TAG, "sql--->" + sql);
-        List<Map<String, Object>> list = new ArrayList<>();
-        Cursor cursor = null;
-        try {
-            cursor = mSqLiteDatabase.rawQuery(sql, new String[]{});
-            while (cursor.moveToNext()) {
-                Map<String, Object> map = new HashMap<>();
-                String[] columnNameArray = cursor.getColumnNames();
-                for (String columnName : columnNameArray) {
-                    int columnIndex = cursor.getColumnIndex(columnName);
-                    switch (cursor.getType(columnIndex)) {
-                        case Cursor.FIELD_TYPE_NULL:
-                            map.put(columnName, null);
-                            break;
-                        case Cursor.FIELD_TYPE_INTEGER:
-                            map.put(columnName, cursor.getInt(columnIndex));
-                            map.put(columnName + "_Int", cursor.getInt(columnIndex));
-                            map.put(columnName + "_Long", cursor.getLong(columnIndex));
-                            break;
-                        case Cursor.FIELD_TYPE_FLOAT:
-                            map.put(columnName, cursor.getFloat(columnIndex));
-                            break;
-                        case Cursor.FIELD_TYPE_STRING:
-                            map.put(columnName, cursor.getString(columnIndex));
-                            break;
-                        case Cursor.FIELD_TYPE_BLOB:
-                            map.put(columnName, cursor.getBlob(columnIndex));
-                            break;
-                    }
-                }
-                list.add(map);
-            }
-        } catch (SQLException ignored) {
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-        return list;
-    }
-
-    /**
-     * Author: QinHao
-     * Email:qinhao@jeejio.com
-     * Date:2020/3/20 9:10
-     * Description:执行自定义 sql 查询
-     *
-     * @param sql   自定义 sql
-     * @param clazz 装载查询出来的数据的映射类,需要提供无参构造方法,属性名需要与查询出来的数据列名对应
-     */
-    public <T> T rawQuery(String sql, Class<T> clazz) {
-        Log.i(TAG, "sql--->" + sql);
-        T t = null;
-        Cursor cursor = null;
-        try {
-            cursor = mSqLiteDatabase.rawQuery(sql, new String[]{});
-            if (cursor.moveToNext()) {
-                try {
-                    t = clazz.newInstance();
-                } catch (Exception e) {
-                    return t;
-                }
-                String[] columnNameArray = cursor.getColumnNames();
-                for (String columnName : columnNameArray) {
-                    Field field = null;
-                    // 找不到列名对应的变量,直接跳过
-                    try {
-                        field = clazz.getDeclaredField(columnName);
-                    } catch (NoSuchFieldException e) {
-                        continue;
-                    }
-                    if (field == null) {
-                        continue;
-                    }
-                    int columnIndex = cursor.getColumnIndex(columnName);
-                    // 列对应的值为空,直接跳过
-                    if (cursor.getType(columnIndex) == Cursor.FIELD_TYPE_NULL) {
-                        continue;
-                    }
-                    if (!field.isAccessible()) {
-                        field.setAccessible(true);
-                    }
-                    // 根据类型,设置属性的值
-                    Class<?> fieldType = field.getType();
-                    try {
-                        if (fieldType == int.class || fieldType == Integer.class) {
-                            field.set(t, cursor.getInt(columnIndex));
-                        } else if (fieldType == short.class || fieldType == Short.class) {
-                            field.set(t, cursor.getShort(columnIndex));
-                        } else if (fieldType == long.class || fieldType == Long.class) {
-                            field.set(t, cursor.getLong(columnIndex));
-                        } else if (fieldType == float.class || fieldType == Float.class) {
-                            field.set(t, cursor.getFloat(columnIndex));
-                        } else if (fieldType == double.class || fieldType == Double.class) {
-                            field.set(t, cursor.getDouble(columnIndex));
-                        } else if (fieldType == String.class) {
-                            field.set(t, cursor.getString(columnIndex));
-                        }
-                    } catch (IllegalAccessException ignored) {
-                    }
-                }
-            }
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-        return t;
-    }
-
-    /**
-     * Author: QinHao
-     * Email:qinhao@jeejio.com
-     * Date:2020/3/20 9:10
-     * Description:执行自定义 sql 查询
-     *
-     * @param sql   自定义 sql
-     * @param clazz 装载查询出来的数据的映射类,需要提供无参构造方法,属性名需要与查询出来的数据列名对应
-     */
-    public <T> List<T> rawQueryList(String sql, Class<T> clazz) {
-        Log.i(TAG, "sql--->" + sql);
-        List<T> list = new ArrayList<>();
-        Cursor cursor = null;
-        try {
-            cursor = mSqLiteDatabase.rawQuery(sql, new String[]{});
-            while (cursor.moveToNext()) {
-                T t = null;
-                try {
-                    t = clazz.newInstance();
-                } catch (Exception e) {
-                    return list;
-                }
-                String[] columnNameArray = cursor.getColumnNames();
-                for (String columnName : columnNameArray) {
-                    Field field = null;
-                    // 找不到列名对应的变量,直接跳过
-                    try {
-                        field = clazz.getDeclaredField(columnName);
-                    } catch (NoSuchFieldException e) {
-                        continue;
-                    }
-                    if (field == null) {
-                        continue;
-                    }
-                    // 列对应的值为空,直接跳过
-                    int columnIndex = cursor.getColumnIndex(columnName);
-                    if (cursor.getType(columnIndex) == Cursor.FIELD_TYPE_NULL) {
-                        continue;
-                    }
-                    if (!field.isAccessible()) {
-                        field.setAccessible(true);
-                    }
-                    // 根据类型,设置属性的值
-                    Class<?> fieldType = field.getType();
-                    try {
-                        if (fieldType == int.class || fieldType == Integer.class) {
-                            field.set(t, cursor.getInt(columnIndex));
-                        } else if (fieldType == short.class || fieldType == Short.class) {
-                            field.set(t, cursor.getShort(columnIndex));
-                        } else if (fieldType == long.class || fieldType == Long.class) {
-                            field.set(t, cursor.getLong(columnIndex));
-                        } else if (fieldType == float.class || fieldType == Float.class) {
-                            field.set(t, cursor.getFloat(columnIndex));
-                        } else if (fieldType == double.class || fieldType == Double.class) {
-                            field.set(t, cursor.getDouble(columnIndex));
-                        } else if (fieldType == String.class) {
-                            field.set(t, cursor.getString(columnIndex));
-                        }
-                    } catch (IllegalAccessException ignored) {
-                    }
-                }
-                list.add(t);
-            }
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-        return list;
-    }
-
     public TableInfoBean getTableInfoByClass(Class<?> clazz) {
         return mTableInfoBeanMap.get(clazz);
     }
@@ -381,9 +174,6 @@ public class DatabaseManager {
         return (T) Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, new InvocationHandler() {
             @Override
             public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-                Method m = clazz.getMethod(method.getName(), method.getParameterTypes());
-                Log.i("daolema", "m--->" + m.getGenericReturnType());
-                // 获取注解上的 sql 语句
                 // 获取该接口真实泛型,第一个真实泛型是表的映射类
                 Type[] genericInterfaces = clazz.getGenericInterfaces();
                 if (genericInterfaces.length == 0) {
@@ -397,6 +187,7 @@ public class DatabaseManager {
                 if (actualTypeArguments.length == 0) {
                     throw new Exception();
                 }
+                // 获取注解上的 sql 语句
                 String sql = getSql(actualTypeArguments[0], method);
                 // 获取参数集合
                 Map<String, Object> paramMap = getParamMap(method, args);
@@ -405,7 +196,6 @@ public class DatabaseManager {
                 if (BuildConfig.DEBUG) {
                     Log.i(TAG, sql);
                 }
-                Type returnType = method.getGenericReturnType();
                 Cursor cursor = null;
                 try {
                     if (method.getAnnotation(Insert.class) != null) {
@@ -416,6 +206,7 @@ public class DatabaseManager {
                         if (isObjParam(method)
                                 && idColumnInfoBean.isAutoIncrement()
                                 && idColumnInfoBean.isUseGeneratedKeys()) {
+                            // 返回自增长 id
                             Object arg = args[0];
                             Field idField = arg.getClass().getDeclaredField(idColumnInfoBean.getFieldName());
                             if (!idField.isAccessible()) {
@@ -431,6 +222,7 @@ public class DatabaseManager {
                         return mSqLiteDatabase.compileStatement(sql).executeUpdateDelete();
                     } else if (method.getAnnotation(Select.class) != null) {
                         cursor = mSqLiteDatabase.rawQuery(sql, new String[]{});
+                        Type returnType = method.getGenericReturnType();
                         if (returnType == int.class || returnType == Integer.class) {
                             // 返回 int
                             if (cursor.moveToNext()) {
@@ -458,15 +250,21 @@ public class DatabaseManager {
                         } else {
                             // 除了 int,long,float,double,其他类型暂时都统一作为对象处理
                             if (returnType instanceof ParameterizedType) {
-                                // 如果 returnType 为 ParameterizedType 则是使用了泛型,认为是集合
+                                // 如果 returnType 为 ParameterizedType 则是使用了泛型,认为是集合,接口现在要不要只支持 list 呢
                                 ((ParameterizedType) returnType).getActualTypeArguments();
-                                List<Object> list = new ArrayList();
                                 if (((ParameterizedType) returnType).getActualTypeArguments().length == 0) {
-                                    return list;
+                                    return new ArrayList<>();
                                 }
-                                Type actualTypeArgument = ((ParameterizedType) returnType).getActualTypeArguments()[0];
+                                String className;
+                                if (mSqlMap.get(actualTypeArguments[0]).containsKey(method.getAnnotation(Select.class).value())) {
+                                    // 内置的 sql,类型为该接口泛型的一个真实类型
+                                    className = actualTypeArguments[0].toString().replace("class ", "");
+                                } else {
+                                    className = ((ParameterizedType) returnType).getActualTypeArguments()[0].toString().replace("class ", "");
+                                }
+                                List<Object> list = new ArrayList();
                                 while (cursor.moveToNext()) {
-                                    Object obj = getObj(actualTypeArgument.toString().replace("class ", ""), cursor);
+                                    Object obj = getObj(className, cursor);
                                     if (obj != null) {
                                         list.add(obj);
                                     }
@@ -474,8 +272,15 @@ public class DatabaseManager {
                                 return list;
                             } else {
                                 // 单个对象
+                                String className = "";
+                                if (mSqlMap.get(actualTypeArguments[0]).containsKey(method.getAnnotation(Select.class).value())) {
+                                    // 内置的 sql,类型为该接口泛型的一个真实类型
+                                    className = actualTypeArguments[0].toString().replace("class ", "");
+                                } else {
+                                    className = returnType.toString().replace("class ", "");
+                                }
                                 if (cursor.moveToNext()) {
-                                    return getObj(returnType.toString().replace("class ", ""), cursor);
+                                    return getObj(className, cursor);
                                 }
                                 return null;
                             }
@@ -609,7 +414,6 @@ public class DatabaseManager {
      * Description:将原生 sql 查询的结果封装成对象
      */
     private Object getObj(String className, Cursor cursor) {
-        Log.i("daolema", "className--->" + className);
         Object obj;
         Class<?> cls;
         try {
@@ -621,7 +425,6 @@ public class DatabaseManager {
         }
         String[] columnNameArray = cursor.getColumnNames();
         for (String columnName : columnNameArray) {
-            Log.i("daolema", "columnNameArray--->" + columnName);
             Field field = null;
             // 找不到列名对应的变量,直接跳过
             try {
@@ -640,7 +443,6 @@ public class DatabaseManager {
             }
             // 根据类型,设置属性的值
             Class<?> fieldType = field.getType();
-            Log.i("daolema", "columnNameArray--->" + columnName);
             try {
                 if (fieldType == int.class || fieldType == Integer.class) {
                     field.set(obj, cursor.getInt(columnIndex));
