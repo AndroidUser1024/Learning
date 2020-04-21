@@ -4,15 +4,22 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
 import androidx.fragment.app.FragmentManager;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.qinshou.commonmodule.base.AbsDialogFragment;
+import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.commonmodule.util.ShowLogUtil;
+import com.qinshou.dbmodule.DatabaseManager;
+import com.qinshou.dbmodule.condition.Where;
 import com.qinshou.qinshoubox.R;
+import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.me.bean.CaseBean;
 import com.qinshou.qinshoubox.me.bean.MonsterBean;
 import com.qinshou.qinshoubox.me.bean.TalkerBean;
@@ -53,6 +60,7 @@ import com.qinshou.qinshoubox.me.ui.dialog.MysteriousOldManFloor5DialogFragment;
 import com.qinshou.qinshoubox.me.ui.dialog.StoreBigDialogFragment;
 import com.qinshou.qinshoubox.me.ui.dialog.StoreSmallDialogFragment;
 import com.qinshou.qinshoubox.me.ui.dialog.TalkDialogFragment;
+import com.qinshou.qrcodemodule.constant.Constant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -810,64 +818,17 @@ public enum MapManager {
      * Description:保存地图所有楼层当前状态
      */
     public void save(Context context) {
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                // 遍历所有层
-//                for (int i = 0; i < floorList.size(); i++) {
-//                    List<List<CaseBean>> floor = floorList.get(i).getData();
-//                    // 遍历所有行
-//                    for (int j = 0; j < floor.size(); j++) {
-//                        List<CaseBean> row = floor.get(j);
-//                        // 遍历每一行
-//                        for (int k = 0; k < row.size(); k++) {
-//                            CaseBean caseBean = DatabaseManager.SINGLETON.select(CaseBean.class, new Where.Builder()
-//                                    .equal("floor", i)
-//                                    .operator(Where.Operator.AND)
-//                                    .equal("row", j)
-//                                    .operator(Where.Operator.AND)
-//                                    .equal("column", k)
-//                                    .build());
-//                            if (caseBean == null) {
-//                                // 插入
-//                                DatabaseManager.SINGLETON.insert(row.get(k));
-//                            } else {
-//                                // 更新
-//                                DatabaseManager.SINGLETON.update(row.get(k), new Where.Builder()
-//                                        .equal("floor", i)
-//                                        .operator(Where.Operator.AND)
-//                                        .equal("row", j)
-//                                        .operator(Where.Operator.AND)
-//                                        .equal("column", k)
-//                                        .build());
-//                            }
-//                        }
-//                    }
-//                }
-//                // 保存当前楼层
-//                SharedPreferencesHelper.SINGLETON.putInt(Constant.SP_KEY_FLOOR, mFloor);
-//                // 保存勇士属性
-//                WarriorBean warriorBean = WarriorBean.getInstance();
-//                SharedPreferencesHelper.SINGLETON.putString(Constant.SP_KEY_WARRIOR_NAME, warriorBean.getName());
-//                SharedPreferencesHelper.SINGLETON.putString(Constant.SP_KEY_WARRIOR_TYPE, warriorBean.getType().toString());
-//                SharedPreferencesHelper.SINGLETON.putInt(Constant.SP_KEY_WARRIOR_RESOURCE_ID, warriorBean.getResourceId());
-//                SharedPreferencesHelper.SINGLETON.putInt(Constant.SP_KEY_WARRIOR_LEVEL, warriorBean.getLevel());
-//                SharedPreferencesHelper.SINGLETON.putInt(Constant.SP_KEY_WARRIOR_LIFE_VALUE, warriorBean.getLifeValue());
-//                SharedPreferencesHelper.SINGLETON.putInt(Constant.SP_KEY_WARRIOR_ATTACK_VALUE, warriorBean.getAttackValue());
-//                SharedPreferencesHelper.SINGLETON.putInt(Constant.SP_KEY_WARRIOR_DEFENSE_VALUE, warriorBean.getDefenseValue());
-//                SharedPreferencesHelper.SINGLETON.putInt(Constant.SP_KEY_WARRIOR_MONEY, warriorBean.getMoney());
-//                SharedPreferencesHelper.SINGLETON.putInt(Constant.SP_KEY_WARRIOR_EXPERIENCE, warriorBean.getExperience());
-//                SharedPreferencesHelper.SINGLETON.putInt(Constant.SP_KEY_WARRIOR_YELLOW_KEY_COUNT, warriorBean.getYellowKeyCount());
-//                SharedPreferencesHelper.SINGLETON.putInt(Constant.SP_KEY_WARRIOR_BLUE_KEY_COUNT, warriorBean.getBlueKeyCount());
-//                SharedPreferencesHelper.SINGLETON.putInt(Constant.SP_KEY_WARRIOR_RED_KEY_COUNT, warriorBean.getRedKeyCount());
-//                SharedPreferencesHelper.SINGLETON.putBoolean(Constant.SP_KEY_WARRIOR_HAS_SHENG_GUANG_HUI, warriorBean.isHasShengGuangHui());
-//                SharedPreferencesHelper.SINGLETON.putBoolean(Constant.SP_KEY_WARRIOR_HAS_FENG_ZHI_LUO_PAN, warriorBean.isHasFengZhiLuoPan());
-//                SharedPreferencesHelper.SINGLETON.putBoolean(Constant.SP_KEY_WARRIOR_HAS_XING_GUANG_SHEN_LANG, warriorBean.isHasXingGuangShenLang());
-//                SharedPreferencesHelper.SINGLETON.putBoolean(Constant.SP_KEY_WARRIOR_HAS_LUCKY_CROSS, warriorBean.isHasLuckyCross());
-//                SharedPreferencesHelper.SINGLETON.putInt(Constant.SP_KEY_WARRIOR_POSITION_ROW, warriorBean.getPosition().getRow());
-//                SharedPreferencesHelper.SINGLETON.putInt(Constant.SP_KEY_WARRIOR_POSITION_COLUMN, warriorBean.getPosition().getColumn());
-//            }
-//        }).start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String json = new Gson().toJson(floorList);
+                SharedPreferencesHelper.SINGLETON.putString(IConstant.MAP_JSON, json);
+                // 保存当前楼层
+                SharedPreferencesHelper.SINGLETON.putInt(IConstant.FLOOR, mFloor);
+                // 保存勇士属性
+                SharedPreferencesHelper.SINGLETON.putString(IConstant.WARRIOR_BEAN_JSON, new Gson().toJson(WarriorBean.getInstance()));
+            }
+        }).start();
     }
 
     /**
@@ -877,248 +838,232 @@ public enum MapManager {
      * Description:读取之前存储的地图状态
      */
     public void read(Context context) {
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                // 读取保存的数据
-//                List<CaseBean> caseBeanList = DatabaseManager.SINGLETON.selectList(CaseBean.class);
-//                if (caseBeanList.size() == 0) {
-//                    return;
-//                }
-//                // 设置地图状态
-//                for (CaseBean caseBean : caseBeanList) {
-//                    setCaseBeanType(caseBean);
-//                    floorList.get(caseBean.getFloor()).setCase(caseBean.getRow(), caseBean.getColumn(), caseBean);
-//                }
-//                // 设置当前楼层
-//                mFloor = SharedPreferencesHelper.SINGLETON.getInt(Constant.SP_KEY_FLOOR);
-//                // 读取勇士属性
-//                WarriorBean warriorBean = WarriorBean.getInstance();
-//                warriorBean.setName(SharedPreferencesHelper.SINGLETON.getString(Constant.SP_KEY_WARRIOR_NAME));
-//                String type = SharedPreferencesHelper.SINGLETON.getString(Constant.SP_KEY_WARRIOR_TYPE);
-//                if (TextUtils.equals(type, Warrior.LEFT.toString())) {
-//                    warriorBean.setType(Warrior.LEFT);
-//                } else if (TextUtils.equals(type, Warrior.UP.toString())) {
-//                    warriorBean.setType(Warrior.UP);
-//                } else if (TextUtils.equals(type, Warrior.RIGHT.toString())) {
-//                    warriorBean.setType(Warrior.RIGHT);
-//                } else if (TextUtils.equals(type, Warrior.DOWN.toString())) {
-//                    warriorBean.setType(Warrior.DOWN);
-//                }
-//                warriorBean.setResourceId(SharedPreferencesHelper.SINGLETON.getInt(Constant.SP_KEY_WARRIOR_LEVEL));
-//                warriorBean.setLifeValue(SharedPreferencesHelper.SINGLETON.getInt(Constant.SP_KEY_WARRIOR_LIFE_VALUE));
-//                warriorBean.setAttackValue(SharedPreferencesHelper.SINGLETON.getInt(Constant.SP_KEY_WARRIOR_ATTACK_VALUE));
-//                warriorBean.setDefenseValue(SharedPreferencesHelper.SINGLETON.getInt(Constant.SP_KEY_WARRIOR_DEFENSE_VALUE));
-//                warriorBean.setMoney(SharedPreferencesHelper.SINGLETON.getInt(Constant.SP_KEY_WARRIOR_MONEY));
-//                warriorBean.setExperience(SharedPreferencesHelper.SINGLETON.getInt(Constant.SP_KEY_WARRIOR_EXPERIENCE));
-//                warriorBean.setYellowKeyCount(SharedPreferencesHelper.SINGLETON.getInt(Constant.SP_KEY_WARRIOR_YELLOW_KEY_COUNT));
-//                warriorBean.setBlueKeyCount(SharedPreferencesHelper.SINGLETON.getInt(Constant.SP_KEY_WARRIOR_BLUE_KEY_COUNT));
-//                warriorBean.setResourceId(SharedPreferencesHelper.SINGLETON.getInt(Constant.SP_KEY_WARRIOR_RED_KEY_COUNT));
-//                warriorBean.setHasShengGuangHui(SharedPreferencesHelper.SINGLETON.getBoolean(Constant.SP_KEY_WARRIOR_HAS_SHENG_GUANG_HUI));
-//                warriorBean.setHasFengZhiLuoPan(SharedPreferencesHelper.SINGLETON.getBoolean(Constant.SP_KEY_WARRIOR_HAS_FENG_ZHI_LUO_PAN));
-//                warriorBean.setHasXingGuangShenLang(SharedPreferencesHelper.SINGLETON.getBoolean(Constant.SP_KEY_WARRIOR_HAS_XING_GUANG_SHEN_LANG));
-//                warriorBean.setHasLuckyCross(SharedPreferencesHelper.SINGLETON.getBoolean(Constant.SP_KEY_WARRIOR_HAS_LUCKY_CROSS));
-//                warriorBean.getPosition().setRow(SharedPreferencesHelper.SINGLETON.getInt(Constant.SP_KEY_WARRIOR_POSITION_ROW));
-//                warriorBean.getPosition().setColumn(SharedPreferencesHelper.SINGLETON.getInt(Constant.SP_KEY_WARRIOR_POSITION_COLUMN));
-//                mHandler.post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        updateUI();
-//                        warriorBean.update();
-//                    }
-//                });
-//            }
-//
-//            private void setCaseBeanType(CaseBean caseBean) {
-//                if (TextUtils.equals(caseBean.getTypeValue(), Building.ROAD.toString())) {
-//                    caseBean.setType(Building.ROAD);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Building.WALL.toString())) {
-//                    caseBean.setType(Building.WALL);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Building.STARRY_SKY.toString())) {
-//                    caseBean.setType(Building.STARRY_SKY);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Building.FIRE_SEA.toString())) {
-//                    caseBean.setType(Building.FIRE_SEA);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.LV_TOU_GUAI.toString())) {
-//                    caseBean.setType(Monster.LV_TOU_GUAI);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.HONG_TOU_GUAI.toString())) {
-//                    caseBean.setType(Monster.HONG_TOU_GUAI);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.KU_LOU_REN.toString())) {
-//                    caseBean.setType(Monster.KU_LOU_REN);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.KU_LOU_SHI_BING.toString())) {
-//                    caseBean.setType(Monster.KU_LOU_SHI_BING);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.CHU_JI_FA_SHI.toString())) {
-//                    caseBean.setType(Monster.CHU_JI_FA_SHI);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.XIAO_BIAN_FU.toString())) {
-//                    caseBean.setType(Monster.XIAO_BIAN_FU);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.QING_TOU_GUAI.toString())) {
-//                    caseBean.setType(Monster.QING_TOU_GUAI);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.SHOU_MIAN_REN.toString())) {
-//                    caseBean.setType(Monster.SHOU_MIAN_REN);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.JIN_WEI_SHI.toString())) {
-//                    caseBean.setType(Monster.JIN_WEI_SHI);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.JIN_DUI_ZHANG.toString())) {
-//                    caseBean.setType(Monster.JIN_DUI_ZHANG);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.DA_BIAN_FU.toString())) {
-//                    caseBean.setType(Monster.DA_BIAN_FU);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.HONG_BIAN_FU.toString())) {
-//                    caseBean.setType(Monster.HONG_BIAN_FU);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.CHU_JI_WEI_BING.toString())) {
-//                    caseBean.setType(Monster.CHU_JI_WEI_BING);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.KU_LOU_DUI_ZHANG.toString())) {
-//                    caseBean.setType(Monster.KU_LOU_DUI_ZHANG);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.GUAI_WANG.toString())) {
-//                    caseBean.setType(Monster.GUAI_WANG);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.SHI_TOU_GUAI_REN.toString())) {
-//                    caseBean.setType(Monster.SHI_TOU_GUAI_REN);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.HONG_YI_FA_SHI.toString())) {
-//                    caseBean.setType(Monster.HONG_YI_FA_SHI);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.GAO_JI_FA_SHI.toString())) {
-//                    caseBean.setType(Monster.GAO_JI_FA_SHI);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.BAI_YI_WU_SHI.toString())) {
-//                    caseBean.setType(Monster.BAI_YI_WU_SHI);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.MA_YI_FA_SHI.toString())) {
-//                    caseBean.setType(Monster.MA_YI_FA_SHI);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.SHOU_MIAN_WU_SHI.toString())) {
-//                    caseBean.setType(Monster.SHOU_MIAN_WU_SHI);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.MING_WEI_BING.toString())) {
-//                    caseBean.setType(Monster.MING_WEI_BING);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.GAO_JI_WEI_BING.toString())) {
-//                    caseBean.setType(Monster.GAO_JI_WEI_BING);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.SHUANG_SHOU_JIAN_SHI.toString())) {
-//                    caseBean.setType(Monster.SHUANG_SHOU_JIAN_SHI);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.LING_WU_SHI_1.toString())) {
-//                    caseBean.setType(Monster.LING_WU_SHI_1);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.LING_WU_SHI_2.toString())) {
-//                    caseBean.setType(Monster.LING_WU_SHI_2);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.MING_ZHAN_SHI.toString())) {
-//                    caseBean.setType(Monster.MING_ZHAN_SHI);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.LING_FA_SHI_1.toString())) {
-//                    caseBean.setType(Monster.LING_FA_SHI_1);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.LING_FA_SHI_2.toString())) {
-//                    caseBean.setType(Monster.LING_FA_SHI_2);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.MING_DUI_ZHANG_1.toString())) {
-//                    caseBean.setType(Monster.MING_DUI_ZHANG_1);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.MING_DUI_ZHANG_2.toString())) {
-//                    caseBean.setType(Monster.MING_DUI_ZHANG_2);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.HONG_YI_MO_WANG_1.toString())) {
-//                    caseBean.setType(Monster.HONG_YI_MO_WANG_1);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.HONG_YI_MO_WANG_2.toString())) {
-//                    caseBean.setType(Monster.HONG_YI_MO_WANG_2);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.YING_ZI_ZHAN_SHI.toString())) {
-//                    caseBean.setType(Monster.YING_ZI_ZHAN_SHI);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.MING_LING_MO_WANG_1.toString())) {
-//                    caseBean.setType(Monster.MING_LING_MO_WANG_1);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.MING_LING_MO_WANG_2.toString())) {
-//                    caseBean.setType(Monster.MING_LING_MO_WANG_2);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.FAIRY_1.toString())) {
-//                    caseBean.setType(Npc.FAIRY_1);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.FAIRY_2.toString())) {
-//                    caseBean.setType(Npc.FAIRY_2);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.GO_UPSTAIRS.toString())) {
-//                    caseBean.setType(Npc.GO_UPSTAIRS);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.GO_DOWNSTAIRS.toString())) {
-//                    caseBean.setType(Npc.GO_DOWNSTAIRS);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.GATE_YELLOW.toString())) {
-//                    caseBean.setType(Npc.GATE_YELLOW);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.GATE_BLUE.toString())) {
-//                    caseBean.setType(Npc.GATE_BLUE);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.GATE_RED.toString())) {
-//                    caseBean.setType(Npc.GATE_RED);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.GATE_GREEN.toString())) {
-//                    caseBean.setType(Npc.GATE_GREEN);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.GATE_IRON_OPEN.toString())) {
-//                    caseBean.setType(Npc.GATE_IRON_OPEN);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.GATE_IRON_CLOSE.toString())) {
-//                    caseBean.setType(Npc.GATE_IRON_CLOSE);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.SHEN_MI_LAO_REN_FLOOR_2.toString())) {
-//                    caseBean.setType(Npc.SHEN_MI_LAO_REN_FLOOR_2);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.SHANG_REN_FLOOR_2.toString())) {
-//                    caseBean.setType(Npc.SHANG_REN_FLOOR_2);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.SHANG_DIAN_LAO_BAN_SMALL_1.toString())) {
-//                    caseBean.setType(Npc.SHANG_DIAN_LAO_BAN_SMALL_1);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.SHANG_DIAN_LAO_BAN_SMALL_2.toString())) {
-//                    caseBean.setType(Npc.SHANG_DIAN_LAO_BAN_SMALL_2);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.SHANG_DIAN_LAO_BAN_SMALL_3.toString())) {
-//                    caseBean.setType(Npc.SHANG_DIAN_LAO_BAN_SMALL_3);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.THIEF_1.toString())) {
-//                    caseBean.setType(Npc.THIEF_1);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.THIEF_2.toString())) {
-//                    caseBean.setType(Npc.THIEF_2);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.SHEN_MI_LAO_REN_FLOOR_5.toString())) {
-//                    caseBean.setType(Npc.SHEN_MI_LAO_REN_FLOOR_5);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.SHANG_REN_FLOOR_5.toString())) {
-//                    caseBean.setType(Npc.SHANG_REN_FLOOR_5);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.SHANG_DIAN_LAO_BAN_BIG_1.toString())) {
-//                    caseBean.setType(Npc.SHANG_DIAN_LAO_BAN_BIG_1);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.SHANG_DIAN_LAO_BAN_BIG_2.toString())) {
-//                    caseBean.setType(Npc.SHANG_DIAN_LAO_BAN_BIG_2);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.SHANG_DIAN_LAO_BAN_BIG_3.toString())) {
-//                    caseBean.setType(Npc.SHANG_DIAN_LAO_BAN_BIG_3);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.SHANG_REN_FLOOR_12.toString())) {
-//                    caseBean.setType(Npc.SHANG_REN_FLOOR_12);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.SHEN_MI_LAO_REN_FLOOR_13.toString())) {
-//                    caseBean.setType(Npc.SHEN_MI_LAO_REN_FLOOR_13);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.SHANG_REN_FLOOR_15.toString())) {
-//                    caseBean.setType(Npc.SHANG_REN_FLOOR_15);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.SHEN_MI_LAO_REN_FLOOR_15.toString())) {
-//                    caseBean.setType(Npc.SHEN_MI_LAO_REN_FLOOR_15);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.PRINCESS.toString())) {
-//                    caseBean.setType(Npc.PRINCESS);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.KEY_YELLOW.toString())) {
-//                    caseBean.setType(Prop.KEY_YELLOW);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.KEY_BLUE.toString())) {
-//                    caseBean.setType(Prop.KEY_BLUE);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.KEY_RED.toString())) {
-//                    caseBean.setType(Prop.KEY_RED);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.XIE_PING_SMALL.toString())) {
-//                    caseBean.setType(Prop.XIE_PING_SMALL);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.XIE_PING_BIG.toString())) {
-//                    caseBean.setType(Prop.XIE_PING_BIG);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.BAO_SHI_RED.toString())) {
-//                    caseBean.setType(Prop.BAO_SHI_RED);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.BAO_SHI_BLUE.toString())) {
-//                    caseBean.setType(Prop.BAO_SHI_BLUE);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.SHENG_GUANG_HUI.toString())) {
-//                    caseBean.setType(Prop.SHENG_GUANG_HUI);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.TIE_JIAN.toString())) {
-//                    caseBean.setType(Prop.TIE_JIAN);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.TIE_DUN.toString())) {
-//                    caseBean.setType(Prop.TIE_DUN);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.YAO_SHI_HE.toString())) {
-//                    caseBean.setType(Prop.YAO_SHI_HE);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.XIAO_FEI_YU.toString())) {
-//                    caseBean.setType(Prop.XIAO_FEI_YU);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.JIN_KUAI.toString())) {
-//                    caseBean.setType(Prop.JIN_KUAI);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.XING_YUN_SHI_ZI_JIA.toString())) {
-//                    caseBean.setType(Prop.XING_YUN_SHI_ZI_JIA);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.FENG_ZHI_LUO_PAN.toString())) {
-//                    caseBean.setType(Prop.FENG_ZHI_LUO_PAN);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.QING_FENG_JIAN.toString())) {
-//                    caseBean.setType(Prop.QING_FENG_JIAN);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.HUANG_JIN_DUN.toString())) {
-//                    caseBean.setType(Prop.HUANG_JIN_DUN);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.XING_GUANG_SHEN_LANG.toString())) {
-//                    caseBean.setType(Prop.XING_GUANG_SHEN_LANG);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.DA_FEI_YU.toString())) {
-//                    caseBean.setType(Prop.DA_FEI_YU);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.SHENG_SHUI.toString())) {
-//                    caseBean.setType(Prop.SHENG_SHUI);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.XING_GUANG_SHEN_JIAN.toString())) {
-//                    caseBean.setType(Prop.XING_GUANG_SHEN_JIAN);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.GUANG_MANG_SHEN_DUN.toString())) {
-//                    caseBean.setType(Prop.GUANG_MANG_SHEN_DUN);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Warrior.LEFT.toString())) {
-//                    caseBean.setType(Warrior.LEFT);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Warrior.UP.toString())) {
-//                    caseBean.setType(Warrior.UP);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Warrior.RIGHT.toString())) {
-//                    caseBean.setType(Warrior.RIGHT);
-//                } else if (TextUtils.equals(caseBean.getTypeValue(), Warrior.DOWN.toString())) {
-//                    caseBean.setType(Warrior.DOWN);
-//                }
-//            }
-//        }).start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                floorList = new Gson().fromJson(SharedPreferencesHelper.SINGLETON.getString(IConstant.MAP_JSON), new TypeToken<List<List<AFloor>>>() {
+                }.getType());
+                // 读取保存的数据
+                mFloor = SharedPreferencesHelper.SINGLETON.getInt(IConstant.FLOOR);
+                // 读取勇士属性
+
+                WarriorBean warriorBean = new Gson().fromJson(SharedPreferencesHelper.SINGLETON.getString(IConstant.WARRIOR_BEAN_JSON), WarriorBean.class);
+                WarriorBean.getInstance().setName(warriorBean.getName());
+                WarriorBean.getInstance().setType(warriorBean.getType());
+                WarriorBean.getInstance().setResourceId(warriorBean.getResourceId());
+                WarriorBean.getInstance().setLifeValue(warriorBean.getLifeValue());
+                WarriorBean.getInstance().setAttackValue(warriorBean.getAttackValue());
+                WarriorBean.getInstance().setDefenseValue(warriorBean.getDefenseValue());
+                WarriorBean.getInstance().setMoney(warriorBean.getMoney());
+                WarriorBean.getInstance().setExperience(warriorBean.getExperience());
+                WarriorBean.getInstance().setYellowKeyCount(warriorBean.getYellowKeyCount());
+                WarriorBean.getInstance().setBlueKeyCount(warriorBean.getBlueKeyCount());
+                WarriorBean.getInstance().setResourceId(warriorBean.getRedKeyCount());
+                WarriorBean.getInstance().setHasShengGuangHui(warriorBean.isHasShengGuangHui());
+                WarriorBean.getInstance().setHasFengZhiLuoPan(warriorBean.isHasFengZhiLuoPan());
+                WarriorBean.getInstance().setHasXingGuangShenLang(warriorBean.isHasXingGuangShenLang());
+                WarriorBean.getInstance().setHasLuckyCross(warriorBean.isHasLuckyCross());
+                WarriorBean.getInstance().getPosition().setRow(warriorBean.getPosition().getRow());
+                WarriorBean.getInstance().getPosition().setColumn(warriorBean.getPosition().getColumn());
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateUI();
+                        WarriorBean.getInstance().update();
+                    }
+                });
+            }
+
+            private void setCaseBeanType(CaseBean caseBean) {
+                if (TextUtils.equals(caseBean.getTypeValue(), Building.ROAD.toString())) {
+                    caseBean.setType(Building.ROAD);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Building.WALL.toString())) {
+                    caseBean.setType(Building.WALL);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Building.STARRY_SKY.toString())) {
+                    caseBean.setType(Building.STARRY_SKY);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Building.FIRE_SEA.toString())) {
+                    caseBean.setType(Building.FIRE_SEA);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.LV_TOU_GUAI.toString())) {
+                    caseBean.setType(Monster.LV_TOU_GUAI);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.HONG_TOU_GUAI.toString())) {
+                    caseBean.setType(Monster.HONG_TOU_GUAI);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.KU_LOU_REN.toString())) {
+                    caseBean.setType(Monster.KU_LOU_REN);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.KU_LOU_SHI_BING.toString())) {
+                    caseBean.setType(Monster.KU_LOU_SHI_BING);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.CHU_JI_FA_SHI.toString())) {
+                    caseBean.setType(Monster.CHU_JI_FA_SHI);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.XIAO_BIAN_FU.toString())) {
+                    caseBean.setType(Monster.XIAO_BIAN_FU);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.QING_TOU_GUAI.toString())) {
+                    caseBean.setType(Monster.QING_TOU_GUAI);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.SHOU_MIAN_REN.toString())) {
+                    caseBean.setType(Monster.SHOU_MIAN_REN);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.JIN_WEI_SHI.toString())) {
+                    caseBean.setType(Monster.JIN_WEI_SHI);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.JIN_DUI_ZHANG.toString())) {
+                    caseBean.setType(Monster.JIN_DUI_ZHANG);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.DA_BIAN_FU.toString())) {
+                    caseBean.setType(Monster.DA_BIAN_FU);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.HONG_BIAN_FU.toString())) {
+                    caseBean.setType(Monster.HONG_BIAN_FU);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.CHU_JI_WEI_BING.toString())) {
+                    caseBean.setType(Monster.CHU_JI_WEI_BING);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.KU_LOU_DUI_ZHANG.toString())) {
+                    caseBean.setType(Monster.KU_LOU_DUI_ZHANG);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.GUAI_WANG.toString())) {
+                    caseBean.setType(Monster.GUAI_WANG);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.SHI_TOU_GUAI_REN.toString())) {
+                    caseBean.setType(Monster.SHI_TOU_GUAI_REN);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.HONG_YI_FA_SHI.toString())) {
+                    caseBean.setType(Monster.HONG_YI_FA_SHI);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.GAO_JI_FA_SHI.toString())) {
+                    caseBean.setType(Monster.GAO_JI_FA_SHI);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.BAI_YI_WU_SHI.toString())) {
+                    caseBean.setType(Monster.BAI_YI_WU_SHI);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.MA_YI_FA_SHI.toString())) {
+                    caseBean.setType(Monster.MA_YI_FA_SHI);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.SHOU_MIAN_WU_SHI.toString())) {
+                    caseBean.setType(Monster.SHOU_MIAN_WU_SHI);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.MING_WEI_BING.toString())) {
+                    caseBean.setType(Monster.MING_WEI_BING);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.GAO_JI_WEI_BING.toString())) {
+                    caseBean.setType(Monster.GAO_JI_WEI_BING);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.SHUANG_SHOU_JIAN_SHI.toString())) {
+                    caseBean.setType(Monster.SHUANG_SHOU_JIAN_SHI);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.LING_WU_SHI_1.toString())) {
+                    caseBean.setType(Monster.LING_WU_SHI_1);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.LING_WU_SHI_2.toString())) {
+                    caseBean.setType(Monster.LING_WU_SHI_2);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.MING_ZHAN_SHI.toString())) {
+                    caseBean.setType(Monster.MING_ZHAN_SHI);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.LING_FA_SHI_1.toString())) {
+                    caseBean.setType(Monster.LING_FA_SHI_1);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.LING_FA_SHI_2.toString())) {
+                    caseBean.setType(Monster.LING_FA_SHI_2);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.MING_DUI_ZHANG_1.toString())) {
+                    caseBean.setType(Monster.MING_DUI_ZHANG_1);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.MING_DUI_ZHANG_2.toString())) {
+                    caseBean.setType(Monster.MING_DUI_ZHANG_2);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.HONG_YI_MO_WANG_1.toString())) {
+                    caseBean.setType(Monster.HONG_YI_MO_WANG_1);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.HONG_YI_MO_WANG_2.toString())) {
+                    caseBean.setType(Monster.HONG_YI_MO_WANG_2);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.YING_ZI_ZHAN_SHI.toString())) {
+                    caseBean.setType(Monster.YING_ZI_ZHAN_SHI);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.MING_LING_MO_WANG_1.toString())) {
+                    caseBean.setType(Monster.MING_LING_MO_WANG_1);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Monster.MING_LING_MO_WANG_2.toString())) {
+                    caseBean.setType(Monster.MING_LING_MO_WANG_2);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.FAIRY_1.toString())) {
+                    caseBean.setType(Npc.FAIRY_1);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.FAIRY_2.toString())) {
+                    caseBean.setType(Npc.FAIRY_2);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.GO_UPSTAIRS.toString())) {
+                    caseBean.setType(Npc.GO_UPSTAIRS);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.GO_DOWNSTAIRS.toString())) {
+                    caseBean.setType(Npc.GO_DOWNSTAIRS);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.GATE_YELLOW.toString())) {
+                    caseBean.setType(Npc.GATE_YELLOW);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.GATE_BLUE.toString())) {
+                    caseBean.setType(Npc.GATE_BLUE);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.GATE_RED.toString())) {
+                    caseBean.setType(Npc.GATE_RED);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.GATE_GREEN.toString())) {
+                    caseBean.setType(Npc.GATE_GREEN);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.GATE_IRON_OPEN.toString())) {
+                    caseBean.setType(Npc.GATE_IRON_OPEN);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.GATE_IRON_CLOSE.toString())) {
+                    caseBean.setType(Npc.GATE_IRON_CLOSE);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.SHEN_MI_LAO_REN_FLOOR_2.toString())) {
+                    caseBean.setType(Npc.SHEN_MI_LAO_REN_FLOOR_2);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.SHANG_REN_FLOOR_2.toString())) {
+                    caseBean.setType(Npc.SHANG_REN_FLOOR_2);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.SHANG_DIAN_LAO_BAN_SMALL_1.toString())) {
+                    caseBean.setType(Npc.SHANG_DIAN_LAO_BAN_SMALL_1);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.SHANG_DIAN_LAO_BAN_SMALL_2.toString())) {
+                    caseBean.setType(Npc.SHANG_DIAN_LAO_BAN_SMALL_2);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.SHANG_DIAN_LAO_BAN_SMALL_3.toString())) {
+                    caseBean.setType(Npc.SHANG_DIAN_LAO_BAN_SMALL_3);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.THIEF_1.toString())) {
+                    caseBean.setType(Npc.THIEF_1);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.THIEF_2.toString())) {
+                    caseBean.setType(Npc.THIEF_2);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.SHEN_MI_LAO_REN_FLOOR_5.toString())) {
+                    caseBean.setType(Npc.SHEN_MI_LAO_REN_FLOOR_5);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.SHANG_REN_FLOOR_5.toString())) {
+                    caseBean.setType(Npc.SHANG_REN_FLOOR_5);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.SHANG_DIAN_LAO_BAN_BIG_1.toString())) {
+                    caseBean.setType(Npc.SHANG_DIAN_LAO_BAN_BIG_1);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.SHANG_DIAN_LAO_BAN_BIG_2.toString())) {
+                    caseBean.setType(Npc.SHANG_DIAN_LAO_BAN_BIG_2);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.SHANG_DIAN_LAO_BAN_BIG_3.toString())) {
+                    caseBean.setType(Npc.SHANG_DIAN_LAO_BAN_BIG_3);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.SHANG_REN_FLOOR_12.toString())) {
+                    caseBean.setType(Npc.SHANG_REN_FLOOR_12);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.SHEN_MI_LAO_REN_FLOOR_13.toString())) {
+                    caseBean.setType(Npc.SHEN_MI_LAO_REN_FLOOR_13);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.SHANG_REN_FLOOR_15.toString())) {
+                    caseBean.setType(Npc.SHANG_REN_FLOOR_15);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.SHEN_MI_LAO_REN_FLOOR_15.toString())) {
+                    caseBean.setType(Npc.SHEN_MI_LAO_REN_FLOOR_15);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Npc.PRINCESS.toString())) {
+                    caseBean.setType(Npc.PRINCESS);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.KEY_YELLOW.toString())) {
+                    caseBean.setType(Prop.KEY_YELLOW);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.KEY_BLUE.toString())) {
+                    caseBean.setType(Prop.KEY_BLUE);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.KEY_RED.toString())) {
+                    caseBean.setType(Prop.KEY_RED);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.XIE_PING_SMALL.toString())) {
+                    caseBean.setType(Prop.XIE_PING_SMALL);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.XIE_PING_BIG.toString())) {
+                    caseBean.setType(Prop.XIE_PING_BIG);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.BAO_SHI_RED.toString())) {
+                    caseBean.setType(Prop.BAO_SHI_RED);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.BAO_SHI_BLUE.toString())) {
+                    caseBean.setType(Prop.BAO_SHI_BLUE);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.SHENG_GUANG_HUI.toString())) {
+                    caseBean.setType(Prop.SHENG_GUANG_HUI);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.TIE_JIAN.toString())) {
+                    caseBean.setType(Prop.TIE_JIAN);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.TIE_DUN.toString())) {
+                    caseBean.setType(Prop.TIE_DUN);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.YAO_SHI_HE.toString())) {
+                    caseBean.setType(Prop.YAO_SHI_HE);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.XIAO_FEI_YU.toString())) {
+                    caseBean.setType(Prop.XIAO_FEI_YU);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.JIN_KUAI.toString())) {
+                    caseBean.setType(Prop.JIN_KUAI);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.XING_YUN_SHI_ZI_JIA.toString())) {
+                    caseBean.setType(Prop.XING_YUN_SHI_ZI_JIA);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.FENG_ZHI_LUO_PAN.toString())) {
+                    caseBean.setType(Prop.FENG_ZHI_LUO_PAN);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.QING_FENG_JIAN.toString())) {
+                    caseBean.setType(Prop.QING_FENG_JIAN);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.HUANG_JIN_DUN.toString())) {
+                    caseBean.setType(Prop.HUANG_JIN_DUN);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.XING_GUANG_SHEN_LANG.toString())) {
+                    caseBean.setType(Prop.XING_GUANG_SHEN_LANG);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.DA_FEI_YU.toString())) {
+                    caseBean.setType(Prop.DA_FEI_YU);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.SHENG_SHUI.toString())) {
+                    caseBean.setType(Prop.SHENG_SHUI);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.XING_GUANG_SHEN_JIAN.toString())) {
+                    caseBean.setType(Prop.XING_GUANG_SHEN_JIAN);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Prop.GUANG_MANG_SHEN_DUN.toString())) {
+                    caseBean.setType(Prop.GUANG_MANG_SHEN_DUN);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Warrior.LEFT.toString())) {
+                    caseBean.setType(Warrior.LEFT);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Warrior.UP.toString())) {
+                    caseBean.setType(Warrior.UP);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Warrior.RIGHT.toString())) {
+                    caseBean.setType(Warrior.RIGHT);
+                } else if (TextUtils.equals(caseBean.getTypeValue(), Warrior.DOWN.toString())) {
+                    caseBean.setType(Warrior.DOWN);
+                }
+            }
+        }).start();
     }
 
     /**

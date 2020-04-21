@@ -9,7 +9,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.qinshou.dbmodule.bean.BookBean;
 import com.qinshou.dbmodule.dao.IBookDao;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

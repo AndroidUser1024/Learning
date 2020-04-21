@@ -38,8 +38,17 @@ public interface IConstant {
     int DATABASE_VERSION = 1;
     //天气界面
     String LAST_CHOOSE_CITY = "lastChooseCity";
-    //魔塔界面
+    /**
+     * 魔塔界面,地图信息 Json
+     */
+    String MAP_JSON = "mapJson";
+    /**
+     * 魔塔界面,勇士信息 Json
+     */
     String WARRIOR_BEAN_JSON = "warriorBeanJson";
+    /**
+     * 魔塔界面,当前楼层
+     */
     String FLOOR = "floor";
     //友盟推送
     String UMENG_KEY = "5be28f97f1f5563b0f000070";
