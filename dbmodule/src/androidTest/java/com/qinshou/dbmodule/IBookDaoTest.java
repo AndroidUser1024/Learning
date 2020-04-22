@@ -9,6 +9,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.qinshou.dbmodule.bean.BookBean;
 import com.qinshou.dbmodule.dao.IBookDao;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,7 +41,7 @@ public class IBookDaoTest {
 
     @Test
     public void testInsert() {
-        BookBean bookBean = new BookBean("Android 开发艺术探索", "任玉刚", 45.8f);
+        BookBean bookBean = new BookBean("红岩", null, 45.8f);
         Log.i(TAG, "bookBean--->" + bookBean);
         int insert = mBookDao.insert(bookBean);
         Log.i(TAG, "insert--->" + insert);
@@ -60,6 +61,12 @@ public class IBookDaoTest {
     }
 
     @Test
+    public void testDelete2() {
+        int delete = mBookDao.delete(new BookBean("Android 群英传", "徐宜生", 39.8f));
+        Log.i(TAG, "delete--->" + delete);
+    }
+
+    @Test
     public void testUpdate() {
         BookBean bookBean = mBookDao.selectById(2);
         if (bookBean != null) {
@@ -73,13 +80,14 @@ public class IBookDaoTest {
         BookBean bookBean = mBookDao.selectById(2);
         Log.i(TAG, "bookBean--->" + bookBean);
     }
+
     @Test
     public void testSelectByAuthor() {
         BookBean bookBean = mBookDao.selectByAuthor("任玉刚");
         Log.i(TAG, "bookBean--->" + bookBean);
     }
 
-//    @After
+    @After
     public void testSelectList() {
         List<BookBean> bookBeanList = mBookDao.selectList();
         Log.i(TAG, "bookBeanList--->" + bookBeanList);

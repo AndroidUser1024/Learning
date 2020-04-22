@@ -162,6 +162,9 @@ public class DatabaseManager {
                 tableInfoBean.setIdColumnInfoBean(new IdColumnInfoBean(getColumnName(field, column), field.getName(), field.getType(), id.autoIncrement(), id.useGeneratedKeys()));
             }
         }
+        if (tableInfoBean.getIdColumnInfoBean() == null) {
+            throw new RuntimeException("class:" + clazz.getName() + " must assign primary key");
+        }
         tableInfoBean.setColumnInfoBeanList(columnInfoBeanList);
         mTableInfoBeanMap.put(clazz, tableInfoBean);
 

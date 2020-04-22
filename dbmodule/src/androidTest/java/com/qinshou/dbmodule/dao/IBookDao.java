@@ -1,6 +1,8 @@
 package com.qinshou.dbmodule.dao;
 
+import com.qinshou.dbmodule.annotation.Delete;
 import com.qinshou.dbmodule.annotation.Insert;
+import com.qinshou.dbmodule.annotation.ObjParam;
 import com.qinshou.dbmodule.annotation.Param;
 import com.qinshou.dbmodule.annotation.Select;
 import com.qinshou.dbmodule.bean.BookBean;
@@ -24,6 +26,15 @@ public interface IBookDao extends IBaseDao<BookBean, Integer> {
             ",#{price}" +
             ")")
     int insert(@Param("name") String name, @Param("author") String author, @Param("price") float price);
+
+    @Delete("DELETE FROM book" +
+            " WHERE" +
+            " name=#{name}" +
+            " AND" +
+            " author=#{author}" +
+            " AND" +
+            " price=#{price}")
+    int delete(@ObjParam BookBean bookBean);
 
     @Select("SELECT" +
             " name" +
