@@ -84,7 +84,6 @@ public class CaseBean {
         this.type = type;
     }
 
-    public boolean handleEvent(FragmentManager fragmentManager) {
-        return true;
+    public void handleEvent(FragmentManager fragmentManager,IHandleEventCallback handleEventCallback) {
     }
 }

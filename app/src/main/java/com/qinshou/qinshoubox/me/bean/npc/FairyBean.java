@@ -5,9 +5,16 @@ import android.content.DialogInterface;
 import com.qinshou.commonmodule.base.AbsDialogFragment;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.R;
+import com.qinshou.qinshoubox.me.bean.CaseBean;
+import com.qinshou.qinshoubox.me.bean.IHandleEventCallback;
 import com.qinshou.qinshoubox.me.bean.TalkerBean;
+import com.qinshou.qinshoubox.me.bean.WarriorBean;
+import com.qinshou.qinshoubox.me.bean.building.RoadBean;
+import com.qinshou.qinshoubox.me.enums.Building;
 import com.qinshou.qinshoubox.me.enums.Npc;
+import com.qinshou.qinshoubox.me.enums.Type;
 import com.qinshou.qinshoubox.me.ui.dialog.TalkDialogFragment;
+import com.qinshou.qinshoubox.util.MagicGameManager;
 
 import androidx.fragment.app.FragmentManager;
 
@@ -23,7 +30,7 @@ public class FairyBean extends NpcBean {
     }
 
     @Override
-    public boolean handleEvent(FragmentManager fragmentManager) {
+    public void handleEvent(FragmentManager fragmentManager, IHandleEventCallback handleEventCallback) {
         ShowLogUtil.logi("我要处理事件");
         String[] content1 = new String[]{"……"
                 , "……你是谁？我在哪里？"
@@ -54,6 +61,18 @@ public class FairyBean extends NpcBean {
         talkDialogFragment.setOnDismissListener(new AbsDialogFragment.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
+                handleEventCallback.onSuccess(false);
+                MagicGameManager.SINGLETON.getWarriorBean().obtainYellowKey();
+                MagicGameManager.SINGLETON.getWarriorBean().obtainBlueKey();
+                MagicGameManager.SINGLETON.getWarriorBean().obtainRedKey();
+
+                CaseBean caseBean = new CaseBean(0, 8, 4, Npc.FAIRY_2, R.drawable.magic_tower_npc_fairy);
+                MagicGameManager.SINGLETON.setCase(0, 8, 4, caseBean);
+                MagicGameManager.SINGLETON.updateUI(8, 4, caseBean);
+
+                CaseBean roadBean = new RoadBean(0, 8, 5);
+                MagicGameManager.SINGLETON.setCase(0, 8, 5, roadBean);
+                MagicGameManager.SINGLETON.updateUI(8, 5, roadBean);
 //                setToCase2Road(toCase);
 //
 //                CaseBean caseBean = new CaseBean(toCase.getFloor(), toCase.getRow(), toCase.getColumn() - 1, Npc.FAIRY_2, R.drawable.magic_tower_npc_fairy);
@@ -65,6 +84,5 @@ public class FairyBean extends NpcBean {
 //                WarriorBean.getInstance().obtainRedKey();
             }
         });
-        return false;
     }
 }

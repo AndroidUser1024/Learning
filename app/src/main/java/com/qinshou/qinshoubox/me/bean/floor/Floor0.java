@@ -3,6 +3,7 @@ package com.qinshou.qinshoubox.me.bean.floor;
 
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.bean.CaseBean;
+import com.qinshou.qinshoubox.me.bean.building.RoadBean;
 import com.qinshou.qinshoubox.me.bean.npc.FairyBean;
 import com.qinshou.qinshoubox.me.enums.Building;
 import com.qinshou.qinshoubox.me.enums.Npc;
@@ -143,9 +144,9 @@ public class Floor0 extends AbsFloor {
         row8.add(new CaseBean(0, 8, 1, Building.WALL, R.drawable.magic_tower_building_wall));
         row8.add(new CaseBean(0, 8, 2, Building.FIRE_SEA, R.drawable.magic_tower_building_fire_sea));
         row8.add(new CaseBean(0, 8, 3, Building.WALL, R.drawable.magic_tower_building_wall));
-        row8.add(new CaseBean(0, 8, 4, Building.ROAD, R.drawable.magic_tower_building_road));
+        row8.add(new RoadBean(0, 8, 4));
         row8.add(new FairyBean());
-        row8.add(new CaseBean(0, 8, 6, Building.ROAD, R.drawable.magic_tower_building_road));
+        row8.add(new RoadBean(0, 8, 6));
         row8.add(new CaseBean(0, 8, 7, Building.WALL, R.drawable.magic_tower_building_wall));
         row8.add(new CaseBean(0, 8, 8, Building.FIRE_SEA, R.drawable.magic_tower_building_fire_sea));
         row8.add(new CaseBean(0, 8, 9, Building.WALL, R.drawable.magic_tower_building_wall));
@@ -158,7 +159,7 @@ public class Floor0 extends AbsFloor {
         row9.add(new CaseBean(0, 9, 2, Building.FIRE_SEA, R.drawable.magic_tower_building_fire_sea));
         row9.add(new CaseBean(0, 9, 3, Building.FIRE_SEA, R.drawable.magic_tower_building_fire_sea));
         row9.add(new CaseBean(0, 9, 4, Building.FIRE_SEA, R.drawable.magic_tower_building_fire_sea));
-        row9.add(new CaseBean(0, 9, 5, Building.ROAD, R.drawable.magic_tower_building_road));
+        row9.add(new RoadBean(0, 9, 5));
         row9.add(new CaseBean(0, 9, 6, Building.FIRE_SEA, R.drawable.magic_tower_building_fire_sea));
         row9.add(new CaseBean(0, 9, 7, Building.FIRE_SEA, R.drawable.magic_tower_building_fire_sea));
         row9.add(new CaseBean(0, 9, 8, Building.FIRE_SEA, R.drawable.magic_tower_building_fire_sea));
@@ -172,7 +173,7 @@ public class Floor0 extends AbsFloor {
         row10.add(new CaseBean(0, 10, 2, Building.FIRE_SEA, R.drawable.magic_tower_building_fire_sea));
         row10.add(new CaseBean(0, 10, 3, Building.FIRE_SEA, R.drawable.magic_tower_building_fire_sea));
         row10.add(new CaseBean(0, 10, 4, Building.FIRE_SEA, R.drawable.magic_tower_building_fire_sea));
-        row10.add(new CaseBean(0, 10, 5, Building.ROAD, R.drawable.magic_tower_building_road));
+        row10.add(new RoadBean(0, 10, 5));
         row10.add(new CaseBean(0, 10, 6, Building.FIRE_SEA, R.drawable.magic_tower_building_fire_sea));
         row10.add(new CaseBean(0, 10, 7, Building.FIRE_SEA, R.drawable.magic_tower_building_fire_sea));
         row10.add(new CaseBean(0, 10, 8, Building.FIRE_SEA, R.drawable.magic_tower_building_fire_sea));

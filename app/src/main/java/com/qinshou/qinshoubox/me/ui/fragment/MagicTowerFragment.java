@@ -98,7 +98,7 @@ public class MagicTowerFragment extends AbsMVPFragment<MagicTowerPresenter> impl
     @Override
     public void onDestroy() {
         super.onDestroy();
-        WarriorBean.getInstance().deleteObserver(this);
+        MagicGameManager.SINGLETON.getWarriorBean().deleteObserver(this);
     }
 
     @Override
@@ -195,14 +195,14 @@ public class MagicTowerFragment extends AbsMVPFragment<MagicTowerPresenter> impl
 
     @Override
     public void initData() {
-        WarriorBean.getInstance().addObserver(this);
+        MagicGameManager.SINGLETON.getWarriorBean().addObserver(this);
         MagicGameManager.SINGLETON.startGame(getChildFragmentManager(),mTlMap);
-        updateWarriorInfo(WarriorBean.getInstance());
+        updateWarriorInfo(MagicGameManager.SINGLETON.getWarriorBean());
     }
 
     @Override
     public void update(Observable o, Object arg) {
-        updateWarriorInfo(WarriorBean.getInstance());
+        updateWarriorInfo(MagicGameManager.SINGLETON.getWarriorBean());
     }
 
 

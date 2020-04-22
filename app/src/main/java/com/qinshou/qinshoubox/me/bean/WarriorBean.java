@@ -1,11 +1,7 @@
 package com.qinshou.qinshoubox.me.bean;
 
 
-import androidx.annotation.DrawableRes;
-
-import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.enums.Type;
-import com.qinshou.qinshoubox.me.enums.Warrior;
 
 import java.util.Observable;
 
@@ -114,14 +110,6 @@ public class WarriorBean extends Observable {
                 ", 是否拥有星光神榔:" + hasXingGuangShenLang +
                 ", 是否拥有幸运十字架:" + hasLuckyCross +
                 '}';
-    }
-
-    public static WarriorBean getInstance() {
-        return SingleHolder.singleton;
-    }
-
-    private static class SingleHolder {
-        private static final WarriorBean singleton = new WarriorBean();
     }
 
     public String getName() {

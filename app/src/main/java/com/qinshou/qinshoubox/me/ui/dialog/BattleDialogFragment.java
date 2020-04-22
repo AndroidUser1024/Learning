@@ -87,24 +87,24 @@ public class BattleDialogFragment extends AbsDialogFragment {
             return;
         }
         final MonsterBean monster = bundle.getParcelable(MONSTER);
-        WarriorBean warriorBean = WarriorBean.getInstance();
-        if (monster == null) {
-            return;
-        }
+//        WarriorBean warriorBean = WarriorBean.getInstance();
+//        if (monster == null) {
+//            return;
+//        }
 
-        // 设置怪物信息
-        mIvMonster.setImageResource(monster.getResourceId());
-        mTvMonsterName.setText(monster.getName());
-        mTvMonsterLifeValue.setText("生命:" + monster.getLifeValue());
-        mTvMonsterAttackValue.setText("攻击:" + monster.getAttackValue());
-        mTvMonsterDefenseValue.setText("防御:" + monster.getDefenseValue());
-
-        // 设置勇士信息
-        mTvWarriorLifeValue.setText("生命:" + warriorBean.getLifeValue());
-        mTvWarriorAttackValue.setText("攻击:" + warriorBean.getAttackValue());
-        mTvWarriorDefenseValue.setText("防御:" + warriorBean.getDefenseValue());
-
-        new BattleThread(monster, warriorBean).start();
+//        // 设置怪物信息
+//        mIvMonster.setImageResource(monster.getResourceId());
+//        mTvMonsterName.setText(monster.getName());
+//        mTvMonsterLifeValue.setText("生命:" + monster.getLifeValue());
+//        mTvMonsterAttackValue.setText("攻击:" + monster.getAttackValue());
+//        mTvMonsterDefenseValue.setText("防御:" + monster.getDefenseValue());
+//
+//        // 设置勇士信息
+//        mTvWarriorLifeValue.setText("生命:" + warriorBean.getLifeValue());
+//        mTvWarriorAttackValue.setText("攻击:" + warriorBean.getAttackValue());
+//        mTvWarriorDefenseValue.setText("防御:" + warriorBean.getDefenseValue());
+//
+//        new BattleThread(monster, warriorBean).start();
     }
 
     @Override

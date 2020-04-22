@@ -13,6 +13,7 @@ import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.me.bean.CaseBean;
+import com.qinshou.qinshoubox.me.bean.IHandleEventCallback;
 import com.qinshou.qinshoubox.me.bean.MonsterBean;
 import com.qinshou.qinshoubox.me.bean.WarriorBean;
 import com.qinshou.qinshoubox.me.bean.floor.AbsFloor;
@@ -476,51 +477,51 @@ public enum MagicGameManager {
      * @param toCase 勇士将要去的位置
      */
     private boolean handlePropToCase(CaseBean toCase) {
-        if (toCase.getType() == Prop.KEY_YELLOW) {
-            WarriorBean.getInstance().obtainYellowKey();
-        } else if (toCase.getType() == Prop.KEY_BLUE) {
-            WarriorBean.getInstance().obtainBlueKey();
-        } else if (toCase.getType() == Prop.KEY_RED) {
-            WarriorBean.getInstance().obtainRedKey();
-        } else if (toCase.getType() == Prop.XIE_PING_SMALL) {
-            WarriorBean.getInstance().obtainSmallBloodBottle();
-        } else if (toCase.getType() == Prop.XIE_PING_BIG) {
-            WarriorBean.getInstance().obtainBigBloodBottle();
-        } else if (toCase.getType() == Prop.BAO_SHI_RED) {
-            WarriorBean.getInstance().obtainRedGem();
-        } else if (toCase.getType() == Prop.BAO_SHI_BLUE) {
-            WarriorBean.getInstance().obtainBlueGem();
-        } else if (toCase.getType() == Prop.SHENG_GUANG_HUI) {
-            WarriorBean.getInstance().obtainShengGuangHui();
-        } else if (toCase.getType() == Prop.TIE_JIAN) {
-            WarriorBean.getInstance().obtainIronSword();
-        } else if (toCase.getType() == Prop.TIE_DUN) {
-            WarriorBean.getInstance().obtainIronShield();
-        } else if (toCase.getType() == Prop.YAO_SHI_HE) {
-            WarriorBean.getInstance().obtainKeyBox();
-        } else if (toCase.getType() == Prop.XIAO_FEI_YU) {
-            WarriorBean.getInstance().obtainSmallFlightFeather();
-        } else if (toCase.getType() == Prop.JIN_KUAI) {
-            WarriorBean.getInstance().obtainGoldBullion();
-        } else if (toCase.getType() == Prop.XING_YUN_SHI_ZI_JIA) {
-            WarriorBean.getInstance().obtainLuckyCross();
-        } else if (toCase.getType() == Prop.FENG_ZHI_LUO_PAN) {
-            WarriorBean.getInstance().obtainWindCompass();
-        } else if (toCase.getType() == Prop.QING_FENG_JIAN) {
-            WarriorBean.getInstance().obtainQingFengSword();
-        } else if (toCase.getType() == Prop.HUANG_JIN_DUN) {
-            WarriorBean.getInstance().obtainGoldShield();
-        } else if (toCase.getType() == Prop.XING_GUANG_SHEN_LANG) {
-            WarriorBean.getInstance().obtainStarlightGodHammer();
-        } else if (toCase.getType() == Prop.DA_FEI_YU) {
-            WarriorBean.getInstance().obtainBigFlightFeather();
-        } else if (toCase.getType() == Prop.SHENG_SHUI) {
-            WarriorBean.getInstance().obtainHolyWater();
-        } else if (toCase.getType() == Prop.XING_GUANG_SHEN_JIAN) {
-            WarriorBean.getInstance().obtainStarLightGodSword();
-        } else if (toCase.getType() == Prop.GUANG_MANG_SHEN_DUN) {
-            WarriorBean.getInstance().obtainLightGodShield();
-        }
+//        if (toCase.getType() == Prop.KEY_YELLOW) {
+//            WarriorBean.getInstance().obtainYellowKey();
+//        } else if (toCase.getType() == Prop.KEY_BLUE) {
+//            WarriorBean.getInstance().obtainBlueKey();
+//        } else if (toCase.getType() == Prop.KEY_RED) {
+//            WarriorBean.getInstance().obtainRedKey();
+//        } else if (toCase.getType() == Prop.XIE_PING_SMALL) {
+//            WarriorBean.getInstance().obtainSmallBloodBottle();
+//        } else if (toCase.getType() == Prop.XIE_PING_BIG) {
+//            WarriorBean.getInstance().obtainBigBloodBottle();
+//        } else if (toCase.getType() == Prop.BAO_SHI_RED) {
+//            WarriorBean.getInstance().obtainRedGem();
+//        } else if (toCase.getType() == Prop.BAO_SHI_BLUE) {
+//            WarriorBean.getInstance().obtainBlueGem();
+//        } else if (toCase.getType() == Prop.SHENG_GUANG_HUI) {
+//            WarriorBean.getInstance().obtainShengGuangHui();
+//        } else if (toCase.getType() == Prop.TIE_JIAN) {
+//            WarriorBean.getInstance().obtainIronSword();
+//        } else if (toCase.getType() == Prop.TIE_DUN) {
+//            WarriorBean.getInstance().obtainIronShield();
+//        } else if (toCase.getType() == Prop.YAO_SHI_HE) {
+//            WarriorBean.getInstance().obtainKeyBox();
+//        } else if (toCase.getType() == Prop.XIAO_FEI_YU) {
+//            WarriorBean.getInstance().obtainSmallFlightFeather();
+//        } else if (toCase.getType() == Prop.JIN_KUAI) {
+//            WarriorBean.getInstance().obtainGoldBullion();
+//        } else if (toCase.getType() == Prop.XING_YUN_SHI_ZI_JIA) {
+//            WarriorBean.getInstance().obtainLuckyCross();
+//        } else if (toCase.getType() == Prop.FENG_ZHI_LUO_PAN) {
+//            WarriorBean.getInstance().obtainWindCompass();
+//        } else if (toCase.getType() == Prop.QING_FENG_JIAN) {
+//            WarriorBean.getInstance().obtainQingFengSword();
+//        } else if (toCase.getType() == Prop.HUANG_JIN_DUN) {
+//            WarriorBean.getInstance().obtainGoldShield();
+//        } else if (toCase.getType() == Prop.XING_GUANG_SHEN_LANG) {
+//            WarriorBean.getInstance().obtainStarlightGodHammer();
+//        } else if (toCase.getType() == Prop.DA_FEI_YU) {
+//            WarriorBean.getInstance().obtainBigFlightFeather();
+//        } else if (toCase.getType() == Prop.SHENG_SHUI) {
+//            WarriorBean.getInstance().obtainHolyWater();
+//        } else if (toCase.getType() == Prop.XING_GUANG_SHEN_JIAN) {
+//            WarriorBean.getInstance().obtainStarLightGodSword();
+//        } else if (toCase.getType() == Prop.GUANG_MANG_SHEN_DUN) {
+//            WarriorBean.getInstance().obtainLightGodShield();
+//        }
 //        setToCase2Road(toCase);
         return false;
     }
@@ -534,40 +535,44 @@ public enum MagicGameManager {
      * @param toCase 勇士将要去的位置
      */
     private boolean handleMonsterToCase(CaseBean toCase) {
-        WarriorBean warriorBean = WarriorBean.getInstance();
-        MonsterBean monsterBean = MonsterFactory.getMonster((Monster) toCase.getType());
-        int monsterEachBoutLossLifeValue = warriorBean.getAttackValue() - monsterBean.getDefenseValue();
-        if (monsterEachBoutLossLifeValue <= 0) {
-            ShowLogUtil.logi("打不过啊,兄dei,人家一点血不掉");
-            return false;
-        }
-        // 每一回合失去的生命值
-        int warriorEachBoutLossLifeValue = monsterBean.getAttackValue() - warriorBean.getDefenseValue() > 0
-                ? monsterBean.getAttackValue() - warriorBean.getDefenseValue()
-                : 0;
-        // 向上取整
-        int bout = (int) Math.ceil((double) monsterBean.getLifeValue() / (double) monsterEachBoutLossLifeValue);
-        // 失去的总生命值
-        int warriorTotalLossLifeValue = warriorEachBoutLossLifeValue * bout;
-//        if (toCase.getType() == Monster.BAI_YI_WU_SHI) {
-//            warriorTotalLossLifeValue += warriorBean.getLifeValue() / 4;
+//        WarriorBean warriorBean = WarriorBean.getInstance();
+//        MonsterBean monsterBean = MonsterFactory.getMonster((Monster) toCase.getType());
+//        int monsterEachBoutLossLifeValue = warriorBean.getAttackValue() - monsterBean.getDefenseValue();
+//        if (monsterEachBoutLossLifeValue <= 0) {
+//            ShowLogUtil.logi("打不过啊,兄dei,人家一点血不掉");
+//            return false;
 //        }
-        if (warriorBean.getLifeValue() <= warriorTotalLossLifeValue) {
-            ShowLogUtil.logi("打是打得动,但是打着打着你就死了啊,兄dei");
-            return false;
-        }
-        BattleDialogFragment battleDialogFragment = BattleDialogFragment.newInstance(monsterBean);
-        // 失去的总生命值
-        int finalWarriorTotalLossLifeValue = warriorTotalLossLifeValue;
-        battleDialogFragment.setOnDismissListener(new AbsDialogFragment.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-//                setToCase2Road(toCase);
-                WarriorBean.getInstance().beatMonster(finalWarriorTotalLossLifeValue, monsterBean.getExperience(), monsterBean.getMoney());
-            }
-        });
-        battleDialogFragment.show(mFragmentManager, "BattleDialogFragment");
+//        // 每一回合失去的生命值
+//        int warriorEachBoutLossLifeValue = monsterBean.getAttackValue() - warriorBean.getDefenseValue() > 0
+//                ? monsterBean.getAttackValue() - warriorBean.getDefenseValue()
+//                : 0;
+//        // 向上取整
+//        int bout = (int) Math.ceil((double) monsterBean.getLifeValue() / (double) monsterEachBoutLossLifeValue);
+//        // 失去的总生命值
+//        int warriorTotalLossLifeValue = warriorEachBoutLossLifeValue * bout;
+////        if (toCase.getType() == Monster.BAI_YI_WU_SHI) {
+////            warriorTotalLossLifeValue += warriorBean.getLifeValue() / 4;
+////        }
+//        if (warriorBean.getLifeValue() <= warriorTotalLossLifeValue) {
+//            ShowLogUtil.logi("打是打得动,但是打着打着你就死了啊,兄dei");
+//            return false;
+//        }
+//        BattleDialogFragment battleDialogFragment = BattleDialogFragment.newInstance(monsterBean);
+//        // 失去的总生命值
+//        int finalWarriorTotalLossLifeValue = warriorTotalLossLifeValue;
+//        battleDialogFragment.setOnDismissListener(new AbsDialogFragment.OnDismissListener() {
+//            @Override
+//            public void onDismiss(DialogInterface dialog) {
+////                setToCase2Road(toCase);
+//                WarriorBean.getInstance().beatMonster(finalWarriorTotalLossLifeValue, monsterBean.getExperience(), monsterBean.getMoney());
+//            }
+//        });
+//        battleDialogFragment.show(mFragmentManager, "BattleDialogFragment");
         return false;
+    }
+
+    private void setCase(int row, int column, CaseBean toCase) {
+        this.setCase(mFloor, row, column, toCase);
     }
 
     /**
@@ -578,8 +583,11 @@ public enum MagicGameManager {
      *
      * @param caseBean 格子对象
      */
-    public void setCase(CaseBean caseBean) {
-        mFloorList.get(mFloor).setCase(caseBean);
+    public void setCase(int floor, int row, int column, CaseBean caseBean) {
+        mFloorList.get(floor).setCase(row, column, caseBean);
+        if (floor == mFloor) {
+            updateUI(row, column, caseBean);
+        }
     }
 
     public WarriorBean getWarriorBean() {
@@ -610,30 +618,35 @@ public enum MagicGameManager {
         }
         // 勇士需要移动到的位置
         CaseBean caseBean = mFloorList.get(mFloor).getCase(mWarriorBean.getPosition().getRow(), originColumn - 1);
-        if (!caseBean.handleEvent(mFragmentManager)) {
-            return;
-        }
-        if (!handleToCase(getCase(mWarriorBean.getPosition().getRow(), originColumn - 1))) {
-            return;
-        }
-        // 可以移动过去,则修改勇士属性
-        mWarriorBean.setType(Warrior.LEFT);
-        mWarriorBean.setResourceId(R.drawable.magic_tower_warrior_left);
-        mWarriorBean.getPosition().setColumn(originColumn - 1);
+        caseBean.handleEvent(mFragmentManager, new IHandleEventCallback() {
+            @Override
+            public void onSuccess(boolean canMove) {
+                if (!canMove) {
+                    return;
+                }
+                // 可以移动过去,则修改勇士属性
+                mWarriorBean.setType(Warrior.LEFT);
+                mWarriorBean.setResourceId(R.drawable.magic_tower_warrior_left);
+                mWarriorBean.getPosition().setColumn(originColumn - 1);
 
-        // 更新勇士现在的位置的 UI
-        CaseBean toCase = getCase(mWarriorBean.getPosition().getRow(), mWarriorBean.getPosition().getColumn());
-        toCase.setType(Warrior.LEFT);
-        toCase.setResourceId(R.drawable.magic_tower_warrior_left);
-        setCase(toCase);
-        updateUI(toCase);
+                // 更新勇士现在的位置的 UI
+                CaseBean toCase = getCase(mWarriorBean.getPosition().getRow(), mWarriorBean.getPosition().getColumn());
+                toCase.setType(Warrior.LEFT);
+                toCase.setResourceId(R.drawable.magic_tower_warrior_left);
+                setCase(mWarriorBean.getPosition().getRow(), mWarriorBean.getPosition().getColumn(), toCase);
 
-        // 勇士原来的位置变成 Building.ROAD
-        CaseBean fromCase = getCase(mWarriorBean.getPosition().getRow(), originColumn);
-        fromCase.setType(Building.ROAD);
-        fromCase.setResourceId(R.drawable.magic_tower_building_road);
-        setCase(fromCase);
-        updateUI(fromCase);
+                // 勇士原来的位置变成 Building.ROAD
+                CaseBean fromCase = getCase(mWarriorBean.getPosition().getRow(), originColumn);
+                fromCase.setType(Building.ROAD);
+                fromCase.setResourceId(R.drawable.magic_tower_building_road);
+                setCase(mWarriorBean.getPosition().getRow(), originColumn, fromCase);
+            }
+
+            @Override
+            public void onFailure() {
+
+            }
+        });
     }
 
     /**
@@ -650,31 +663,35 @@ public enum MagicGameManager {
         }
         // 勇士需要移动到的位置
         CaseBean caseBean = mFloorList.get(mFloor).getCase(originRow - 1, mWarriorBean.getPosition().getColumn());
-        if (!caseBean.handleEvent(mFragmentManager)) {
-            return;
-        }
-        // 勇士需要移动到的位置
-        if (!handleToCase(getCase(originRow - 1, mWarriorBean.getPosition().getColumn()))) {
-            return;
-        }
-        // 可以移动过去,则修改勇士属性
-        mWarriorBean.setType(Warrior.UP);
-        mWarriorBean.setResourceId(R.drawable.magic_tower_warrior_up);
-        mWarriorBean.getPosition().setRow(originRow - 1);
+        caseBean.handleEvent(mFragmentManager, new IHandleEventCallback() {
+            @Override
+            public void onSuccess(boolean canMove) {
+                if (!canMove) {
+                    return;
+                }
+                // 可以移动过去,则修改勇士属性
+                mWarriorBean.setType(Warrior.UP);
+                mWarriorBean.setResourceId(R.drawable.magic_tower_warrior_up);
+                mWarriorBean.getPosition().setRow(originRow - 1);
 
-        // 更新勇士现在的位置的 UI
-        CaseBean toCase = getCase(mWarriorBean.getPosition().getRow(), mWarriorBean.getPosition().getColumn());
-        toCase.setType(Warrior.UP);
-        toCase.setResourceId(R.drawable.magic_tower_warrior_up);
-        setCase(toCase);
-        updateUI(toCase);
+                // 更新勇士现在的位置的 UI
+                CaseBean toCase = getCase(mWarriorBean.getPosition().getRow(), mWarriorBean.getPosition().getColumn());
+                toCase.setType(Warrior.UP);
+                toCase.setResourceId(R.drawable.magic_tower_warrior_up);
+                setCase(mWarriorBean.getPosition().getRow(), mWarriorBean.getPosition().getColumn(), toCase);
 
-        // 勇士原来的位置变成 Building.ROAD
-        CaseBean fromCase = getCase(originRow, mWarriorBean.getPosition().getColumn());
-        fromCase.setType(Building.ROAD);
-        fromCase.setResourceId(R.drawable.magic_tower_building_road);
-        setCase(fromCase);
-        updateUI(fromCase);
+                // 勇士原来的位置变成 Building.ROAD
+                CaseBean fromCase = getCase(originRow, mWarriorBean.getPosition().getColumn());
+                fromCase.setType(Building.ROAD);
+                fromCase.setResourceId(R.drawable.magic_tower_building_road);
+                setCase(originRow, mWarriorBean.getPosition().getColumn(), toCase);
+            }
+
+            @Override
+            public void onFailure() {
+
+            }
+        });
     }
 
     /**
@@ -691,27 +708,36 @@ public enum MagicGameManager {
             return;
         }
         // 勇士需要移动到的位置
-        if (!handleToCase(getCase(mWarriorBean.getPosition().getRow(), originColumn + 1))) {
-            return;
-        }
-        // 可以移动过去,则修改勇士属性
-        mWarriorBean.setType(Warrior.LEFT);
-        mWarriorBean.setResourceId(R.drawable.magic_tower_warrior_left);
-        mWarriorBean.getPosition().setColumn(originColumn + 1);
+        CaseBean caseBean = mFloorList.get(mFloor).getCase(mWarriorBean.getPosition().getRow(), originColumn + 1);
+        caseBean.handleEvent(mFragmentManager, new IHandleEventCallback() {
+            @Override
+            public void onSuccess(boolean canMove) {
+                if (!canMove) {
+                    return;
+                }
+                // 可以移动过去,则修改勇士属性
+                mWarriorBean.setType(Warrior.RIGHT);
+                mWarriorBean.setResourceId(R.drawable.magic_tower_warrior_right);
+                mWarriorBean.getPosition().setColumn(originColumn + 1);
 
-        // 更新勇士现在的位置的 UI
-        CaseBean toCase = getCase(mWarriorBean.getPosition().getRow(), mWarriorBean.getPosition().getColumn());
-        toCase.setType(Warrior.LEFT);
-        toCase.setResourceId(R.drawable.magic_tower_warrior_left);
-        setCase(toCase);
-        updateUI(toCase);
+                // 更新勇士现在的位置的 UI
+                CaseBean toCase = getCase(mWarriorBean.getPosition().getRow(), mWarriorBean.getPosition().getColumn());
+                toCase.setType(Warrior.RIGHT);
+                toCase.setResourceId(R.drawable.magic_tower_warrior_right);
+                setCase(mWarriorBean.getPosition().getRow(), mWarriorBean.getPosition().getColumn(), toCase);
 
-        // 勇士原来的位置变成 Building.ROAD
-        CaseBean fromCase = getCase(mWarriorBean.getPosition().getRow(), originColumn);
-        fromCase.setType(Building.ROAD);
-        fromCase.setResourceId(R.drawable.magic_tower_building_road);
-        setCase(fromCase);
-        updateUI(fromCase);
+                // 勇士原来的位置变成 Building.ROAD
+                CaseBean fromCase = getCase(mWarriorBean.getPosition().getRow(), originColumn);
+                fromCase.setType(Building.ROAD);
+                fromCase.setResourceId(R.drawable.magic_tower_building_road);
+                setCase(mWarriorBean.getPosition().getRow(), originColumn, toCase);
+            }
+
+            @Override
+            public void onFailure() {
+
+            }
+        });
     }
 
     /**
@@ -726,28 +752,38 @@ public enum MagicGameManager {
         if (originRow == MAX_ROW - 1) {
             return;
         }
+
         // 勇士需要移动到的位置
-        if (!handleToCase(getCase(originRow + 1, mWarriorBean.getPosition().getColumn()))) {
-            return;
-        }
-        // 可以移动过去,则修改勇士属性
-        mWarriorBean.setType(Warrior.DOWN);
-        mWarriorBean.setResourceId(R.drawable.magic_tower_warrior_down);
-        mWarriorBean.getPosition().setRow(originRow + 1);
+        CaseBean caseBean = mFloorList.get(mFloor).getCase(originRow + 1, mWarriorBean.getPosition().getColumn());
+        caseBean.handleEvent(mFragmentManager, new IHandleEventCallback() {
+            @Override
+            public void onSuccess(boolean canMove) {
+                if (!canMove) {
+                    return;
+                }
+                // 可以移动过去,则修改勇士属性
+                mWarriorBean.setType(Warrior.DOWN);
+                mWarriorBean.setResourceId(R.drawable.magic_tower_warrior_down);
+                mWarriorBean.getPosition().setRow(originRow + 1);
 
-        // 更新勇士现在的位置的 UI
-        CaseBean toCase = getCase(mWarriorBean.getPosition().getRow(), mWarriorBean.getPosition().getColumn());
-        toCase.setType(Warrior.DOWN);
-        toCase.setResourceId(R.drawable.magic_tower_warrior_down);
-        setCase(toCase);
-        updateUI(toCase);
+                // 更新勇士现在的位置的 UI
+                CaseBean toCase = getCase(mWarriorBean.getPosition().getRow(), mWarriorBean.getPosition().getColumn());
+                toCase.setType(Warrior.DOWN);
+                toCase.setResourceId(R.drawable.magic_tower_warrior_down);
+                setCase(mWarriorBean.getPosition().getRow(), mWarriorBean.getPosition().getColumn(), toCase);
 
-        // 勇士原来的位置变成 Building.ROAD
-        CaseBean fromCase = getCase(originRow, mWarriorBean.getPosition().getColumn());
-        fromCase.setType(Building.ROAD);
-        fromCase.setResourceId(R.drawable.magic_tower_building_road);
-        setCase(fromCase);
-        updateUI(fromCase);
+                // 勇士原来的位置变成 Building.ROAD
+                CaseBean fromCase = getCase(originRow, mWarriorBean.getPosition().getColumn());
+                fromCase.setType(Building.ROAD);
+                fromCase.setResourceId(R.drawable.magic_tower_building_road);
+                setCase(originRow, mWarriorBean.getPosition().getColumn(), fromCase);
+            }
+
+            @Override
+            public void onFailure() {
+
+            }
+        });
     }
 
     /**
@@ -758,10 +794,10 @@ public enum MagicGameManager {
      *
      * @param caseBean 地图格子对象
      */
-    public void updateUI(CaseBean caseBean) {
+    public void updateUI(int row, int column, CaseBean caseBean) {
 //        ((ImageView) ((TableRow) mTableLayout.getChildAt(caseBean.getRow())).getChildAt(caseBean.getColumn())).setImageResource(caseBean.getSpecificEntity(caseBean.getType()).getResourceId());
-        TableRow tableRow = (TableRow) mTableLayout.getChildAt(caseBean.getRow());
-        ImageView imageView = (ImageView) tableRow.getChildAt(caseBean.getColumn());
+        TableRow tableRow = (TableRow) mTableLayout.getChildAt(row);
+        ImageView imageView = (ImageView) tableRow.getChildAt(column);
         imageView.setImageResource(caseBean.getResourceId());
     }
 
@@ -780,7 +816,7 @@ public enum MagicGameManager {
 //                // 保存当前楼层
 //                SharedPreferencesHelper.SINGLETON.putInt(IConstant.FLOOR, mFloor);
                 // 保存勇士属性
-                SharedPreferencesHelper.SINGLETON.putString(IConstant.WARRIOR_BEAN_JSON, new Gson().toJson(WarriorBean.getInstance()));
+//                SharedPreferencesHelper.SINGLETON.putString(IConstant.WARRIOR_BEAN_JSON, new Gson().toJson(WarriorBean.getInstance()));
             }
         }).start();
     }
