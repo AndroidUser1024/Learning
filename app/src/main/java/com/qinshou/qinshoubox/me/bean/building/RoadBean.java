@@ -1,5 +1,6 @@
 package com.qinshou.qinshoubox.me.bean.building;
 
+import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.enums.Building;
 import com.qinshou.qinshoubox.me.enums.Type;
 
@@ -10,7 +11,7 @@ import com.qinshou.qinshoubox.me.enums.Type;
  * Description:类描述
  */
 public class RoadBean extends BuildingBean {
-    public RoadBean(int floor, int row, int column) {
-        super(floor, row, column);
+    public RoadBean() {
+        super(Building.ROAD, R.drawable.magic_tower_building_road);
     }
 }

@@ -26,7 +26,7 @@ import androidx.fragment.app.FragmentManager;
  */
 public class FairyBean extends NpcBean {
     public FairyBean() {
-        super(0, 8, 5, Npc.FAIRY_1, R.drawable.magic_tower_npc_fairy);
+        super(Npc.FAIRY_1, R.drawable.magic_tower_npc_fairy);
     }
 
     @Override
@@ -66,11 +66,11 @@ public class FairyBean extends NpcBean {
                 MagicGameManager.SINGLETON.getWarriorBean().obtainBlueKey();
                 MagicGameManager.SINGLETON.getWarriorBean().obtainRedKey();
 
-                CaseBean caseBean = new CaseBean(0, 8, 4, Npc.FAIRY_2, R.drawable.magic_tower_npc_fairy);
+                CaseBean caseBean = new CaseBean(Npc.FAIRY_2, R.drawable.magic_tower_npc_fairy);
                 MagicGameManager.SINGLETON.setCase(0, 8, 4, caseBean);
                 MagicGameManager.SINGLETON.updateUI(8, 4, caseBean);
 
-                CaseBean roadBean = new RoadBean(0, 8, 5);
+                CaseBean roadBean = new RoadBean();
                 MagicGameManager.SINGLETON.setCase(0, 8, 5, roadBean);
                 MagicGameManager.SINGLETON.updateUI(8, 5, roadBean);
 //                setToCase2Road(toCase);

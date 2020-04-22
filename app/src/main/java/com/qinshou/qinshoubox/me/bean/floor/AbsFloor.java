@@ -87,10 +87,6 @@ public abstract class AbsFloor {
         return mData.get(row).get(column);
     }
 
-    public void setCase(CaseBean caseBean) {
-        mData.get(caseBean.getRow()).set(caseBean.getColumn(), caseBean);
-    }
-
     public void setCase(int row, int column, CaseBean caseBean) {
         mData.get(row).set(column, caseBean);
     }
@@ -112,7 +108,7 @@ public abstract class AbsFloor {
      * Date:2018/4/26
      */
     public void resetWarriorPosition(int row, int column) {
-        CaseBean caseBean = new CaseBean(getFloor(), row, column, Warrior.UP, R.drawable.magic_tower_warrior_up);
+        CaseBean caseBean = new CaseBean(Warrior.UP, R.drawable.magic_tower_warrior_up);
 ////        setCase(row, column, caseBean);
         MagicGameManager.SINGLETON.updateUI(row, column, caseBean);
         MagicGameManager.SINGLETON.getWarriorBean().setPosition(new WarriorBean.Position(row, column));

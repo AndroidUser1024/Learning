@@ -13,9 +13,6 @@ import com.qinshou.qinshoubox.me.enums.Type;
  */
 
 public class CaseBean {
-    private int floor;
-    private int row;
-    private int column;
     private int resourceId;
     /**
      * 格子类型
@@ -25,10 +22,7 @@ public class CaseBean {
     public CaseBean() {
     }
 
-    public CaseBean(int floor, int row, int column, Type type, @DrawableRes int resourceId) {
-        this.floor = floor;
-        this.row = row;
-        this.column = column;
+    public CaseBean(Type type, @DrawableRes int resourceId) {
         this.type = type;
         this.resourceId = resourceId;
     }
@@ -36,36 +30,9 @@ public class CaseBean {
     @Override
     public String toString() {
         return "CaseBean{" +
-                "floor=" + floor +
-                ", 行=" + row +
-                ", 列=" + column +
                 ", 图片资源 Id=" + resourceId +
                 ", 类型=" + type +
                 '}';
-    }
-
-    public int getFloor() {
-        return floor;
-    }
-
-    public void setFloor(int floor) {
-        this.floor = floor;
-    }
-
-    public int getRow() {
-        return row;
-    }
-
-    public void setRow(int row) {
-        this.row = row;
-    }
-
-    public int getColumn() {
-        return column;
-    }
-
-    public void setColumn(int column) {
-        this.column = column;
     }
 
     public int getResourceId() {
@@ -84,6 +51,6 @@ public class CaseBean {
         this.type = type;
     }
 
-    public void handleEvent(FragmentManager fragmentManager,IHandleEventCallback handleEventCallback) {
+    public void handleEvent(FragmentManager fragmentManager, IHandleEventCallback handleEventCallback) {
     }
 }

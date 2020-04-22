@@ -3,24 +3,23 @@ package com.qinshou.qinshoubox.me.bean.building;
 import androidx.fragment.app.FragmentManager;
 
 import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.me.bean.CaseBean;
 import com.qinshou.qinshoubox.me.bean.IHandleEventCallback;
 import com.qinshou.qinshoubox.me.enums.Building;
-import com.qinshou.qinshoubox.me.enums.Type;
 
 /**
  * Author: QinHao
  * Email:qinhao@jeejio.com
- * Date: 20-4-21 下午11:22
- * Description:
+ * Date: 2020/4/22 18:03
+ * Description:类描述
  */
-public abstract class BuildingBean extends CaseBean {
-    public BuildingBean(Type type, int resourceId) {
-        super(type, resourceId);
+public class WallBean extends BuildingBean {
+
+    public WallBean() {
+        super(Building.WALL, R.drawable.magic_tower_building_wall);
     }
 
     @Override
     public void handleEvent(FragmentManager fragmentManager, IHandleEventCallback handleEventCallback) {
-        handleEventCallback.onSuccess(true);
+        handleEventCallback.onFailure(new Exception("再走就要撞墙了!"));
     }
 }

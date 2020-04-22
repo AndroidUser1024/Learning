@@ -12,7 +12,6 @@ import com.qinshou.networkmodule.annotation.Range;
 import com.qinshou.networkmodule.annotation.Url;
 import com.qinshou.networkmodule.call.AbsCall;
 import com.qinshou.networkmodule.callback.IDownloadCallback;
-import com.qinshou.networkmodule.enums.LogLevel;
 import com.qinshou.qinshoubox.constant.IUrlConstant;
 import com.qinshou.qinshoubox.conversation.bean.UploadImgResultBean;
 import com.qinshou.qinshoubox.conversation.bean.UploadVoiceResultBean;
@@ -26,16 +25,16 @@ import java.io.File;
  * Date: 2019/12/30 16:01
  * Description:通用模块 api
  */
-@Api(value = IUrlConstant.DEFAULT_HOST + "/common", logLevel = LogLevel.BASIC)
+@Api(value = IUrlConstant.DEFAULT_HOST + "/common")
 public interface QSBoxCommonApi {
     @Multipart
-    @Post(value = "/uploadVoice")
+    @Post("/uploadVoice")
     AbsCall<QinshouResultBean<UploadVoiceResultBean>> uploadVoice(@Param("userId") String userId
             , @Param("time") long time
             , @Param("voice") File voice);
 
     @Multipart
-    @Post(value = "/uploadImg")
+    @Post("/uploadImg")
     AbsCall<QinshouResultBean<UploadImgResultBean>> uploadImg(@Param("userId") String userId
             , @Param("img") File img);
 

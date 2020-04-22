@@ -10,7 +10,7 @@ import com.qinshou.qinshoubox.me.enums.Type;
  * Description:
  */
 public abstract class NpcBean extends CaseBean {
-    public NpcBean(int floor, int row, int column, Type type, int resourceId) {
-        super(floor, row, column, type, resourceId);
+    public NpcBean( Type type, int resourceId) {
+        super(type, resourceId);
     }
 }

@@ -1,5 +1,4 @@
-package com.qinshou.qinshoubox.homepage.bean;
-
+package com.qinshou.networkmodule.bean;
 
 public class NewsBean {
     private Integer id;

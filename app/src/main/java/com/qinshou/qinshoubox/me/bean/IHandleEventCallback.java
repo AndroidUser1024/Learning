@@ -9,5 +9,5 @@ package com.qinshou.qinshoubox.me.bean;
 public interface IHandleEventCallback {
     void onSuccess(boolean canMove);
 
-    void onFailure();
+    void onFailure(Exception e);
 }

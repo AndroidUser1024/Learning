@@ -572,6 +572,9 @@ public enum MagicGameManager {
     }
 
     private void setCase(int row, int column, CaseBean toCase) {
+        ShowLogUtil.logi("row--->" + row);
+        ShowLogUtil.logi("column--->" + column);
+        ShowLogUtil.logi("toCase--->" + toCase.getType());
         this.setCase(mFloor, row, column, toCase);
     }
 
@@ -612,7 +615,7 @@ public enum MagicGameManager {
      */
     public void warriorMoveLeft() {
         // 勇士原来的位置的纵坐标
-        int originColumn = mWarriorBean.getPosition().getRow();
+        int originColumn = mWarriorBean.getPosition().getColumn();
         if (originColumn == 0) {
             return;
         }
@@ -643,7 +646,7 @@ public enum MagicGameManager {
             }
 
             @Override
-            public void onFailure() {
+            public void onFailure(Exception e) {
 
             }
         });
@@ -684,11 +687,11 @@ public enum MagicGameManager {
                 CaseBean fromCase = getCase(originRow, mWarriorBean.getPosition().getColumn());
                 fromCase.setType(Building.ROAD);
                 fromCase.setResourceId(R.drawable.magic_tower_building_road);
-                setCase(originRow, mWarriorBean.getPosition().getColumn(), toCase);
+                setCase(originRow, mWarriorBean.getPosition().getColumn(), fromCase);
             }
 
             @Override
-            public void onFailure() {
+            public void onFailure(Exception e) {
 
             }
         });
@@ -701,9 +704,8 @@ public enum MagicGameManager {
      * Description:勇士向右移动
      */
     public void warriorMoveRight() {
-
         // 勇士原来的位置的纵坐标
-        int originColumn = mWarriorBean.getPosition().getRow();
+        int originColumn = mWarriorBean.getPosition().getColumn();
         if (originColumn == MAX_COLUMN - 1) {
             return;
         }
@@ -730,11 +732,11 @@ public enum MagicGameManager {
                 CaseBean fromCase = getCase(mWarriorBean.getPosition().getRow(), originColumn);
                 fromCase.setType(Building.ROAD);
                 fromCase.setResourceId(R.drawable.magic_tower_building_road);
-                setCase(mWarriorBean.getPosition().getRow(), originColumn, toCase);
+                setCase(mWarriorBean.getPosition().getRow(), originColumn, fromCase);
             }
 
             @Override
-            public void onFailure() {
+            public void onFailure(Exception e) {
 
             }
         });
@@ -780,7 +782,7 @@ public enum MagicGameManager {
             }
 
             @Override
-            public void onFailure() {
+            public void onFailure(Exception e) {
 
             }
         });

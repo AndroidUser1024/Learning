@@ -5,11 +5,10 @@ import com.qinshou.networkmodule.annotation.Json;
 import com.qinshou.networkmodule.annotation.Param;
 import com.qinshou.networkmodule.annotation.Post;
 import com.qinshou.networkmodule.call.AbsCall;
-import com.qinshou.networkmodule.enums.LogLevel;
 import com.qinshou.qinshoubox.constant.IUrlConstant;
 import com.qinshou.qinshoubox.friend.bean.FriendHistoryBean;
-import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.homepage.bean.QinshouResultBean;
+import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 
 import java.util.List;
 
@@ -18,8 +17,7 @@ import java.util.List;
  * Author: MrQinshou
  * Date: 19-11-25 下午10:20
  */
-
-@Api(value = IUrlConstant.DEFAULT_HOST + "/friend", logLevel = LogLevel.BASIC)
+@Api(value = IUrlConstant.DEFAULT_HOST + "/friend")
 public interface QSBoxFriendApi {
     @Json
     @Post("/add")

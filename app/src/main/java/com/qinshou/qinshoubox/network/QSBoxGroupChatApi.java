@@ -5,12 +5,11 @@ import com.qinshou.networkmodule.annotation.Json;
 import com.qinshou.networkmodule.annotation.Param;
 import com.qinshou.networkmodule.annotation.Post;
 import com.qinshou.networkmodule.call.AbsCall;
-import com.qinshou.networkmodule.enums.LogLevel;
 import com.qinshou.qinshoubox.constant.IUrlConstant;
-import com.qinshou.qinshoubox.im.bean.GroupChatDetailBean;
-import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 import com.qinshou.qinshoubox.homepage.bean.QinshouResultBean;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
+import com.qinshou.qinshoubox.im.bean.GroupChatDetailBean;
+import com.qinshou.qinshoubox.im.bean.UserDetailBean;
 
 import java.util.List;
 
@@ -20,7 +19,7 @@ import java.util.List;
  * Date: 2019/11/22 13:35
  * Description:QSBox 群聊模块的接口
  */
-@Api(value = IUrlConstant.DEFAULT_HOST + "/groupChat", logLevel = LogLevel.BASIC)
+@Api(value = IUrlConstant.DEFAULT_HOST + "/groupChat")
 public interface QSBoxGroupChatApi {
 
     @Json
