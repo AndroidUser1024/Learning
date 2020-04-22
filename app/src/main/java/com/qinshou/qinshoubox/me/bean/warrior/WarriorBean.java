@@ -1,9 +1,15 @@
-package com.qinshou.qinshoubox.me.bean;
+package com.qinshou.qinshoubox.me.bean.warrior;
 
 
-import com.qinshou.qinshoubox.me.enums.Type;
+import com.qinshou.qinshoubox.R;
+import com.qinshou.qinshoubox.me.bean.CaseBean;
+import com.qinshou.qinshoubox.me.bean.IHandleEventCallback;
+import com.qinshou.qinshoubox.me.bean.Position;
+import com.qinshou.qinshoubox.me.enums.Warrior;
 
 import java.util.Observable;
+
+import androidx.fragment.app.FragmentManager;
 
 
 /**
@@ -12,7 +18,7 @@ import java.util.Observable;
  * Created on 2017/6/15
  */
 
-public class WarriorBean extends Observable {
+public class WarriorBean extends Observable implements CaseBean {
     private String name;
     private Type type;
     private int resourceId;
@@ -74,6 +80,26 @@ public class WarriorBean extends Observable {
                 '}';
     }
 
+    @Override
+    public int getResourceId() {
+        switch (type) {
+            case LEFT:
+                return R.drawable.magic_tower_warrior_left;
+            case UP:
+                return R.drawable.magic_tower_warrior_up;
+            case RIGHT:
+                return R.drawable.magic_tower_warrior_right;
+            case DOWN:
+            default:
+                return R.drawable.magic_tower_warrior_down;
+        }
+    }
+
+    @Override
+    public void handleEvent(FragmentManager fragmentManager, int floor, Position position, IHandleEventCallback handleEventCallback) {
+
+    }
+
     public String getName() {
         return name;
     }
@@ -88,10 +114,6 @@ public class WarriorBean extends Observable {
 
     public void setType(Type type) {
         this.type = type;
-    }
-
-    public int getResourceId() {
-        return resourceId;
     }
 
     public void setResourceId(int resourceId) {
@@ -878,7 +900,8 @@ public class WarriorBean extends Observable {
         return true;
 
     }
-//
+
+    //
 //    /**
 //     * author：MrQinshou
 //     * Description:获得黄金盾
@@ -1047,5 +1070,10 @@ public class WarriorBean extends Observable {
 //        }
 //        RxBus.getInstance().post(this);
 //    }
-
+    public enum Type {
+        LEFT,
+        UP,
+        RIGHT,
+        DOWN;
+    }
 }

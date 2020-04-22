@@ -9,9 +9,7 @@ import android.widget.TableRow;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.bean.CaseBean;
 import com.qinshou.qinshoubox.me.bean.Position;
-import com.qinshou.qinshoubox.me.bean.WarriorBean;
-import com.qinshou.qinshoubox.me.enums.Building;
-import com.qinshou.qinshoubox.me.enums.Npc;
+import com.qinshou.qinshoubox.me.bean.warrior.WarriorBean;
 import com.qinshou.qinshoubox.me.enums.Warrior;
 import com.qinshou.qinshoubox.util.MagicGameManager;
 
@@ -64,22 +62,22 @@ public abstract class AbsFloor {
                 ImageView imageView = (ImageView) view1;
                 CaseBean caseBean = mData.get(i).get(j);
                 imageView.setImageResource(caseBean.getResourceId());
-                // 要注掉
-                if (caseBean.getType() == Npc.GO_UPSTAIRS) {
-                    imageView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            MagicGameManager.SINGLETON.goUpstairs();
-                        }
-                    });
-                } else if (caseBean.getType() == Npc.GO_DOWNSTAIRS) {
-                    imageView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            MagicGameManager.SINGLETON.goDownstairs();
-                        }
-                    });
-                }
+//                // 要注掉
+//                if (caseBean.getType() == Npc.GO_UPSTAIRS) {
+//                    imageView.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            MagicGameManager.SINGLETON.goUpstairs();
+//                        }
+//                    });
+//                } else if (caseBean.getType() == Npc.GO_DOWNSTAIRS) {
+//                    imageView.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            MagicGameManager.SINGLETON.goDownstairs();
+//                        }
+//                    });
+//                }
             }
         }
     }
@@ -109,9 +107,8 @@ public abstract class AbsFloor {
      * Date:2018/4/26
      */
     public void resetWarriorPosition(Position position) {
-        CaseBean caseBean = new CaseBean(Warrior.UP, R.drawable.magic_tower_warrior_up);
-////        setCase(row, column, caseBean);
-        MagicGameManager.SINGLETON.updateUI(position, caseBean);
         MagicGameManager.SINGLETON.getWarriorBean().setPosition(position);
+        MagicGameManager.SINGLETON.getWarriorBean().setType(WarriorBean.Type.UP);
+        MagicGameManager.SINGLETON.updateUI(position, MagicGameManager.SINGLETON.getWarriorBean());
     }
 }

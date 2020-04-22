@@ -13,13 +13,5 @@ import com.qinshou.qinshoubox.me.enums.Type;
  * Date: 20-4-21 下午11:22
  * Description:
  */
-public abstract class BuildingBean extends CaseBean {
-    public BuildingBean(Type type, int resourceId) {
-        super(type, resourceId);
-    }
-
-    @Override
-    public void handleEvent(FragmentManager fragmentManager, int floor, Position position, IHandleEventCallback handleEventCallback) {
-        handleEventCallback.onSuccess(true);
-    }
+public interface BuildingBean extends CaseBean {
 }

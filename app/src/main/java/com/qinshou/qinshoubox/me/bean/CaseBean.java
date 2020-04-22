@@ -12,45 +12,9 @@ import com.qinshou.qinshoubox.me.enums.Type;
  * Created on 2018/4/10
  */
 
-public class CaseBean {
-    private int resourceId;
-    /**
-     * 格子类型
-     */
-    private Type type;
+public interface CaseBean {
 
-    public CaseBean() {
-    }
+    int getResourceId();
 
-    public CaseBean(Type type, @DrawableRes int resourceId) {
-        this.type = type;
-        this.resourceId = resourceId;
-    }
-
-    @Override
-    public String toString() {
-        return "CaseBean{" +
-                ", 图片资源 Id=" + resourceId +
-                ", 类型=" + type +
-                '}';
-    }
-
-    public int getResourceId() {
-        return resourceId;
-    }
-
-    public void setResourceId(int resourceId) {
-        this.resourceId = resourceId;
-    }
-
-    public Type getType() {
-        return type;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
-    }
-
-    public void handleEvent(FragmentManager fragmentManager, int floor, Position position, IHandleEventCallback handleEventCallback) {
-    }
+    void handleEvent(FragmentManager fragmentManager, int floor, Position position, IHandleEventCallback handleEventCallback);
 }

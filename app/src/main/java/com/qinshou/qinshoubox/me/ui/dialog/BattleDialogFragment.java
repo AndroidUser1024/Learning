@@ -1,21 +1,17 @@
 package com.qinshou.qinshoubox.me.ui.dialog;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qinshou.commonmodule.base.AbsDialogFragment;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.bean.MonsterBean;
-import com.qinshou.qinshoubox.me.bean.WarriorBean;
+import com.qinshou.qinshoubox.me.bean.warrior.WarriorBean;
 
 /**
  * Description:战斗对话框

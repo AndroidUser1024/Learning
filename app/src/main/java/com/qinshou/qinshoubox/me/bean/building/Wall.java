@@ -13,14 +13,15 @@ import com.qinshou.qinshoubox.me.enums.Building;
  * Date: 2020/4/22 18:03
  * Description:类描述
  */
-public class StarrySkyBean extends BuildingBean {
+public class Wall implements BuildingBean {
 
-    public StarrySkyBean() {
-        super(Building.STARRY_SKY, R.drawable.magic_tower_building_starry_sky);
+    @Override
+    public int getResourceId() {
+        return R.drawable.magic_tower_building_wall;
     }
 
     @Override
     public void handleEvent(FragmentManager fragmentManager, int floor, Position position, IHandleEventCallback handleEventCallback) {
-        handleEventCallback.onFailure(new Exception("你要上天吗?"));
+        handleEventCallback.onFailure(new Exception("再走就要撞墙了!"));
     }
 }

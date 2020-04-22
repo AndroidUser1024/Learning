@@ -13,10 +13,11 @@ import com.qinshou.qinshoubox.me.enums.Building;
  * Date: 2020/4/22 18:03
  * Description:类描述
  */
-public class FireSeaBean extends BuildingBean {
+public class FireSea implements BuildingBean {
 
-    public FireSeaBean() {
-        super(Building.FIRE_SEA, R.drawable.magic_tower_building_fire_sea);
+    @Override
+    public int getResourceId() {
+        return R.drawable.magic_tower_building_fire_sea;
     }
 
     @Override

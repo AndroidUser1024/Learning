@@ -1,26 +1,28 @@
 package com.qinshou.qinshoubox.me.bean.building;
 
-import androidx.fragment.app.FragmentManager;
-
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.bean.IHandleEventCallback;
 import com.qinshou.qinshoubox.me.bean.Position;
 import com.qinshou.qinshoubox.me.enums.Building;
+import com.qinshou.qinshoubox.me.enums.Type;
+
+import androidx.fragment.app.FragmentManager;
 
 /**
  * Author: QinHao
  * Email:qinhao@jeejio.com
- * Date: 2020/4/22 18:03
+ * Date: 2020/4/22 13:18
  * Description:类描述
  */
-public class WallBean extends BuildingBean {
+public class Road implements BuildingBean {
 
-    public WallBean() {
-        super(Building.WALL, R.drawable.magic_tower_building_wall);
+    @Override
+    public int getResourceId() {
+        return R.drawable.magic_tower_building_road;
     }
 
     @Override
     public void handleEvent(FragmentManager fragmentManager, int floor, Position position, IHandleEventCallback handleEventCallback) {
-        handleEventCallback.onFailure(new Exception("再走就要撞墙了!"));
+        handleEventCallback.onSuccess(true);
     }
 }

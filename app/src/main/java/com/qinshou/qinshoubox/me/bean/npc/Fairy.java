@@ -5,12 +5,10 @@ import android.content.DialogInterface;
 import com.qinshou.commonmodule.base.AbsDialogFragment;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.me.bean.CaseBean;
 import com.qinshou.qinshoubox.me.bean.IHandleEventCallback;
 import com.qinshou.qinshoubox.me.bean.Position;
 import com.qinshou.qinshoubox.me.bean.TalkerBean;
-import com.qinshou.qinshoubox.me.bean.building.RoadBean;
-import com.qinshou.qinshoubox.me.enums.Npc;
+import com.qinshou.qinshoubox.me.bean.building.Road;
 import com.qinshou.qinshoubox.me.ui.dialog.TalkDialogFragment;
 import com.qinshou.qinshoubox.util.MagicGameManager;
 
@@ -22,9 +20,10 @@ import androidx.fragment.app.FragmentManager;
  * Date: 2020/4/22 22:43
  * Description:
  */
-public class FairyBean extends NpcBean {
-    public FairyBean() {
-        super(Npc.FAIRY_1, R.drawable.magic_tower_npc_fairy);
+public class Fairy implements NpcBean {
+    @Override
+    public int getResourceId() {
+        return R.drawable.magic_tower_npc_fairy;
     }
 
     @Override
@@ -64,9 +63,9 @@ public class FairyBean extends NpcBean {
                 MagicGameManager.SINGLETON.getWarriorBean().obtainBlueKey();
                 MagicGameManager.SINGLETON.getWarriorBean().obtainRedKey();
 
-                MagicGameManager.SINGLETON.setCase(new Position(8, 4), new Fairy2Bean());
+                MagicGameManager.SINGLETON.setCase(new Position(8, 4), new Fairy2());
 
-                MagicGameManager.SINGLETON.setCase(new Position(8, 5), new RoadBean());
+                MagicGameManager.SINGLETON.setCase(new Position(8, 5), new Road());
 //                setToCase2Road(toCase);
 //
 //                CaseBean caseBean = new CaseBean(toCase.getFloor(), toCase.getRow(), toCase.getColumn() - 1, Npc.FAIRY_2, R.drawable.magic_tower_npc_fairy);

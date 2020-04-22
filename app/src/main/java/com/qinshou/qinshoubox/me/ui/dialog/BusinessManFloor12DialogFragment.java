@@ -1,20 +1,7 @@
 package com.qinshou.qinshoubox.me.ui.dialog;
 
 
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.RadioGroup;
-
-import androidx.annotation.Nullable;
-
 import com.qinshou.commonmodule.base.AbsDialogFragment;
-import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.me.bean.WarriorBean;
 
 /**
  * Description:12 层的商人对话框

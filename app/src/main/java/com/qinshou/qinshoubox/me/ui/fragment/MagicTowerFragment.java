@@ -16,7 +16,7 @@ import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.bean.CaseBean;
 import com.qinshou.qinshoubox.me.bean.MonsterBean;
-import com.qinshou.qinshoubox.me.bean.WarriorBean;
+import com.qinshou.qinshoubox.me.bean.warrior.WarriorBean;
 import com.qinshou.qinshoubox.me.contract.IMagicTowerContract;
 import com.qinshou.qinshoubox.me.enums.Monster;
 import com.qinshou.qinshoubox.me.presenter.MagicTowerPresenter;
@@ -239,9 +239,9 @@ public class MagicTowerFragment extends AbsMVPFragment<MagicTowerPresenter> impl
         Set<MonsterBean> monsterBeanSet = new HashSet<>();
         for (List<CaseBean> caseBeanList : currentFloor) {
             for (CaseBean caseBean : caseBeanList) {
-                if (caseBean.getType() instanceof Monster) {
-                    monsterBeanSet.add(MonsterFactory.getMonster((Monster) caseBean.getType()));
-                }
+//                if (caseBean.getType() instanceof Monster) {
+//                    monsterBeanSet.add(MonsterFactory.getMonster((Monster) caseBean.getType()));
+//                }
             }
         }
         ArrayList<MonsterBean> monsterBeanList = new ArrayList<>(monsterBeanSet);
