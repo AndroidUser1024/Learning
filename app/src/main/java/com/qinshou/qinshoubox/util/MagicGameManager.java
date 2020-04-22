@@ -1,20 +1,18 @@
 package com.qinshou.qinshoubox.util;
 
-import android.content.DialogInterface;
 import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
 import com.google.gson.Gson;
-import com.qinshou.commonmodule.base.AbsDialogFragment;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.me.bean.CaseBean;
 import com.qinshou.qinshoubox.me.bean.IHandleEventCallback;
-import com.qinshou.qinshoubox.me.bean.MonsterBean;
+import com.qinshou.qinshoubox.me.bean.Position;
 import com.qinshou.qinshoubox.me.bean.WarriorBean;
 import com.qinshou.qinshoubox.me.bean.floor.AbsFloor;
 import com.qinshou.qinshoubox.me.bean.floor.Floor0;
@@ -44,7 +42,6 @@ import com.qinshou.qinshoubox.me.enums.Monster;
 import com.qinshou.qinshoubox.me.enums.Npc;
 import com.qinshou.qinshoubox.me.enums.Prop;
 import com.qinshou.qinshoubox.me.enums.Warrior;
-import com.qinshou.qinshoubox.me.ui.dialog.BattleDialogFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,7 +82,7 @@ public enum MagicGameManager {
                 , false
                 , false
                 , false
-                , new WarriorBean.Position(9, 5));
+                , new Position(9, 5));
         mFloorList.add(new Floor0());
         mFloorList.add(new Floor1());
         mFloorList.add(new Floor2());
@@ -116,12 +113,9 @@ public enum MagicGameManager {
      * Email:cqflqinhao@126.com
      * Date:2019//9 11:27
      * Description:获取某一格
-     *
-     * @param row    第几行
-     * @param column 第几列
      */
-    private CaseBean getCase(int row, int column) {
-        return mFloorList.get(mFloor).getCase(row, column);
+    private CaseBean getCase(Position position) {
+        return mFloorList.get(mFloor).getCase(position);
     }
 
     /**
@@ -571,11 +565,8 @@ public enum MagicGameManager {
         return false;
     }
 
-    private void setCase(int row, int column, CaseBean toCase) {
-        ShowLogUtil.logi("row--->" + row);
-        ShowLogUtil.logi("column--->" + column);
-        ShowLogUtil.logi("toCase--->" + toCase.getType());
-        this.setCase(mFloor, row, column, toCase);
+    public void setCase(Position position, CaseBean toCase) {
+        this.setCase(mFloor, position, toCase);
     }
 
     /**
@@ -586,10 +577,10 @@ public enum MagicGameManager {
      *
      * @param caseBean 格子对象
      */
-    public void setCase(int floor, int row, int column, CaseBean caseBean) {
-        mFloorList.get(floor).setCase(row, column, caseBean);
+    public void setCase(int floor, Position position, CaseBean caseBean) {
+        mFloorList.get(floor).setCase(position, caseBean);
         if (floor == mFloor) {
-            updateUI(row, column, caseBean);
+            updateUI(position, caseBean);
         }
     }
 
@@ -614,14 +605,14 @@ public enum MagicGameManager {
      * Description:勇士向左移动
      */
     public void warriorMoveLeft() {
-        // 勇士原来的位置的纵坐标
-        int originColumn = mWarriorBean.getPosition().getColumn();
-        if (originColumn == 0) {
+        // 勇士原来的位置
+        Position oldPosition = mWarriorBean.getPosition();
+        if (oldPosition.getColumn() == 0) {
             return;
         }
         // 勇士需要移动到的位置
-        CaseBean caseBean = mFloorList.get(mFloor).getCase(mWarriorBean.getPosition().getRow(), originColumn - 1);
-        caseBean.handleEvent(mFragmentManager, new IHandleEventCallback() {
+        Position newPosition = new Position(oldPosition.getRow(), oldPosition.getColumn() - 1);
+        mFloorList.get(mFloor).getCase(newPosition).handleEvent(mFragmentManager, mFloor, newPosition, new IHandleEventCallback() {
             @Override
             public void onSuccess(boolean canMove) {
                 if (!canMove) {
@@ -630,19 +621,19 @@ public enum MagicGameManager {
                 // 可以移动过去,则修改勇士属性
                 mWarriorBean.setType(Warrior.LEFT);
                 mWarriorBean.setResourceId(R.drawable.magic_tower_warrior_left);
-                mWarriorBean.getPosition().setColumn(originColumn - 1);
+                mWarriorBean.setPosition(newPosition);
 
                 // 更新勇士现在的位置的 UI
-                CaseBean toCase = getCase(mWarriorBean.getPosition().getRow(), mWarriorBean.getPosition().getColumn());
-                toCase.setType(Warrior.LEFT);
-                toCase.setResourceId(R.drawable.magic_tower_warrior_left);
-                setCase(mWarriorBean.getPosition().getRow(), mWarriorBean.getPosition().getColumn(), toCase);
+                CaseBean newCase = getCase(mWarriorBean.getPosition());
+                newCase.setType(Warrior.LEFT);
+                newCase.setResourceId(R.drawable.magic_tower_warrior_left);
+                setCase(mWarriorBean.getPosition(), newCase);
 
                 // 勇士原来的位置变成 Building.ROAD
-                CaseBean fromCase = getCase(mWarriorBean.getPosition().getRow(), originColumn);
-                fromCase.setType(Building.ROAD);
-                fromCase.setResourceId(R.drawable.magic_tower_building_road);
-                setCase(mWarriorBean.getPosition().getRow(), originColumn, fromCase);
+                CaseBean oldCase = getCase(oldPosition);
+                oldCase.setType(Building.ROAD);
+                oldCase.setResourceId(R.drawable.magic_tower_building_road);
+                setCase(oldPosition, oldCase);
             }
 
             @Override
@@ -659,14 +650,14 @@ public enum MagicGameManager {
      * Description:勇士向上移动
      */
     public void warriorMoveUp() {
-        // 勇士原来的位置的横坐标
-        int originRow = mWarriorBean.getPosition().getRow();
-        if (originRow == 0) {
+        // 勇士原来的位置
+        Position oldPosition = mWarriorBean.getPosition();
+        if (oldPosition.getRow() == 0) {
             return;
         }
         // 勇士需要移动到的位置
-        CaseBean caseBean = mFloorList.get(mFloor).getCase(originRow - 1, mWarriorBean.getPosition().getColumn());
-        caseBean.handleEvent(mFragmentManager, new IHandleEventCallback() {
+        Position newPosition = new Position(oldPosition.getRow() - 1, oldPosition.getColumn());
+        mFloorList.get(mFloor).getCase(newPosition).handleEvent(mFragmentManager, mFloor, newPosition, new IHandleEventCallback() {
             @Override
             public void onSuccess(boolean canMove) {
                 if (!canMove) {
@@ -675,19 +666,19 @@ public enum MagicGameManager {
                 // 可以移动过去,则修改勇士属性
                 mWarriorBean.setType(Warrior.UP);
                 mWarriorBean.setResourceId(R.drawable.magic_tower_warrior_up);
-                mWarriorBean.getPosition().setRow(originRow - 1);
+                mWarriorBean.setPosition(newPosition);
 
                 // 更新勇士现在的位置的 UI
-                CaseBean toCase = getCase(mWarriorBean.getPosition().getRow(), mWarriorBean.getPosition().getColumn());
-                toCase.setType(Warrior.UP);
-                toCase.setResourceId(R.drawable.magic_tower_warrior_up);
-                setCase(mWarriorBean.getPosition().getRow(), mWarriorBean.getPosition().getColumn(), toCase);
+                CaseBean newCase = getCase(mWarriorBean.getPosition());
+                newCase.setType(Warrior.UP);
+                newCase.setResourceId(R.drawable.magic_tower_warrior_up);
+                setCase(mWarriorBean.getPosition(), newCase);
 
                 // 勇士原来的位置变成 Building.ROAD
-                CaseBean fromCase = getCase(originRow, mWarriorBean.getPosition().getColumn());
-                fromCase.setType(Building.ROAD);
-                fromCase.setResourceId(R.drawable.magic_tower_building_road);
-                setCase(originRow, mWarriorBean.getPosition().getColumn(), fromCase);
+                CaseBean oldCase = getCase(oldPosition);
+                oldCase.setType(Building.ROAD);
+                oldCase.setResourceId(R.drawable.magic_tower_building_road);
+                setCase(oldPosition, oldCase);
             }
 
             @Override
@@ -704,14 +695,14 @@ public enum MagicGameManager {
      * Description:勇士向右移动
      */
     public void warriorMoveRight() {
-        // 勇士原来的位置的纵坐标
-        int originColumn = mWarriorBean.getPosition().getColumn();
-        if (originColumn == MAX_COLUMN - 1) {
+        // 勇士原来的位置
+        Position oldPosition = mWarriorBean.getPosition();
+        if (oldPosition.getColumn() == MAX_COLUMN - 1) {
             return;
         }
         // 勇士需要移动到的位置
-        CaseBean caseBean = mFloorList.get(mFloor).getCase(mWarriorBean.getPosition().getRow(), originColumn + 1);
-        caseBean.handleEvent(mFragmentManager, new IHandleEventCallback() {
+        Position newPosition = new Position(oldPosition.getRow(), oldPosition.getColumn() + 1);
+        mFloorList.get(mFloor).getCase(newPosition).handleEvent(mFragmentManager, mFloor, newPosition, new IHandleEventCallback() {
             @Override
             public void onSuccess(boolean canMove) {
                 if (!canMove) {
@@ -720,19 +711,19 @@ public enum MagicGameManager {
                 // 可以移动过去,则修改勇士属性
                 mWarriorBean.setType(Warrior.RIGHT);
                 mWarriorBean.setResourceId(R.drawable.magic_tower_warrior_right);
-                mWarriorBean.getPosition().setColumn(originColumn + 1);
+                mWarriorBean.setPosition(newPosition);
 
                 // 更新勇士现在的位置的 UI
-                CaseBean toCase = getCase(mWarriorBean.getPosition().getRow(), mWarriorBean.getPosition().getColumn());
-                toCase.setType(Warrior.RIGHT);
-                toCase.setResourceId(R.drawable.magic_tower_warrior_right);
-                setCase(mWarriorBean.getPosition().getRow(), mWarriorBean.getPosition().getColumn(), toCase);
+                CaseBean newCase = getCase(mWarriorBean.getPosition());
+                newCase.setType(Warrior.RIGHT);
+                newCase.setResourceId(R.drawable.magic_tower_warrior_right);
+                setCase(mWarriorBean.getPosition(), newCase);
 
                 // 勇士原来的位置变成 Building.ROAD
-                CaseBean fromCase = getCase(mWarriorBean.getPosition().getRow(), originColumn);
-                fromCase.setType(Building.ROAD);
-                fromCase.setResourceId(R.drawable.magic_tower_building_road);
-                setCase(mWarriorBean.getPosition().getRow(), originColumn, fromCase);
+                CaseBean oldCase = getCase(oldPosition);
+                oldCase.setType(Building.ROAD);
+                oldCase.setResourceId(R.drawable.magic_tower_building_road);
+                setCase(oldPosition, oldCase);
             }
 
             @Override
@@ -749,15 +740,14 @@ public enum MagicGameManager {
      * Description:勇士向下移动
      */
     public void warriorMoveDown() {
-        // 勇士原来的位置的横坐标
-        int originRow = mWarriorBean.getPosition().getRow();
-        if (originRow == MAX_ROW - 1) {
+        // 勇士原来的位置
+        Position oldPosition = mWarriorBean.getPosition();
+        if (oldPosition.getRow() == MAX_ROW - 1) {
             return;
         }
-
         // 勇士需要移动到的位置
-        CaseBean caseBean = mFloorList.get(mFloor).getCase(originRow + 1, mWarriorBean.getPosition().getColumn());
-        caseBean.handleEvent(mFragmentManager, new IHandleEventCallback() {
+        Position newPosition = new Position(oldPosition.getRow() + 1, oldPosition.getColumn());
+        mFloorList.get(mFloor).getCase(newPosition).handleEvent(mFragmentManager, mFloor, newPosition, new IHandleEventCallback() {
             @Override
             public void onSuccess(boolean canMove) {
                 if (!canMove) {
@@ -766,19 +756,19 @@ public enum MagicGameManager {
                 // 可以移动过去,则修改勇士属性
                 mWarriorBean.setType(Warrior.DOWN);
                 mWarriorBean.setResourceId(R.drawable.magic_tower_warrior_down);
-                mWarriorBean.getPosition().setRow(originRow + 1);
+                mWarriorBean.setPosition(newPosition);
 
                 // 更新勇士现在的位置的 UI
-                CaseBean toCase = getCase(mWarriorBean.getPosition().getRow(), mWarriorBean.getPosition().getColumn());
-                toCase.setType(Warrior.DOWN);
-                toCase.setResourceId(R.drawable.magic_tower_warrior_down);
-                setCase(mWarriorBean.getPosition().getRow(), mWarriorBean.getPosition().getColumn(), toCase);
+                CaseBean newCase = getCase(mWarriorBean.getPosition());
+                newCase.setType(Warrior.DOWN);
+                newCase.setResourceId(R.drawable.magic_tower_warrior_down);
+                setCase(mWarriorBean.getPosition(), newCase);
 
                 // 勇士原来的位置变成 Building.ROAD
-                CaseBean fromCase = getCase(originRow, mWarriorBean.getPosition().getColumn());
-                fromCase.setType(Building.ROAD);
-                fromCase.setResourceId(R.drawable.magic_tower_building_road);
-                setCase(originRow, mWarriorBean.getPosition().getColumn(), fromCase);
+                CaseBean oldCase = getCase(oldPosition);
+                oldCase.setType(Building.ROAD);
+                oldCase.setResourceId(R.drawable.magic_tower_building_road);
+                setCase(oldPosition, oldCase);
             }
 
             @Override
@@ -796,10 +786,10 @@ public enum MagicGameManager {
      *
      * @param caseBean 地图格子对象
      */
-    public void updateUI(int row, int column, CaseBean caseBean) {
+    public void updateUI(Position position, CaseBean caseBean) {
 //        ((ImageView) ((TableRow) mTableLayout.getChildAt(caseBean.getRow())).getChildAt(caseBean.getColumn())).setImageResource(caseBean.getSpecificEntity(caseBean.getType()).getResourceId());
-        TableRow tableRow = (TableRow) mTableLayout.getChildAt(row);
-        ImageView imageView = (ImageView) tableRow.getChildAt(column);
+        TableRow tableRow = (TableRow) mTableLayout.getChildAt(position.getRow());
+        ImageView imageView = (ImageView) tableRow.getChildAt(position.getColumn());
         imageView.setImageResource(caseBean.getResourceId());
     }
 

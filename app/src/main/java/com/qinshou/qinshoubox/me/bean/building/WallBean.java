@@ -4,6 +4,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.bean.IHandleEventCallback;
+import com.qinshou.qinshoubox.me.bean.Position;
 import com.qinshou.qinshoubox.me.enums.Building;
 
 /**
@@ -19,7 +20,7 @@ public class WallBean extends BuildingBean {
     }
 
     @Override
-    public void handleEvent(FragmentManager fragmentManager, IHandleEventCallback handleEventCallback) {
+    public void handleEvent(FragmentManager fragmentManager, int floor, Position position, IHandleEventCallback handleEventCallback) {
         handleEventCallback.onFailure(new Exception("再走就要撞墙了!"));
     }
 }

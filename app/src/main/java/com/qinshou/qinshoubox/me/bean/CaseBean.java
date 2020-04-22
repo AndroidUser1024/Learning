@@ -51,6 +51,6 @@ public class CaseBean {
         this.type = type;
     }
 
-    public void handleEvent(FragmentManager fragmentManager, IHandleEventCallback handleEventCallback) {
+    public void handleEvent(FragmentManager fragmentManager, int floor, Position position, IHandleEventCallback handleEventCallback) {
     }
 }

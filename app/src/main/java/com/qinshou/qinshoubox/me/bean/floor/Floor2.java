@@ -3,6 +3,7 @@ package com.qinshou.qinshoubox.me.bean.floor;
 
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.bean.CaseBean;
+import com.qinshou.qinshoubox.me.bean.Position;
 import com.qinshou.qinshoubox.me.enums.Building;
 import com.qinshou.qinshoubox.me.enums.Monster;
 import com.qinshou.qinshoubox.me.enums.Npc;
@@ -186,11 +187,11 @@ public class Floor2 extends AbsFloor {
 
     @Override
     public void fromUpstairsToThisFloor() {
-        resetWarriorPosition(9, 0);
+        resetWarriorPosition(new Position(9, 0));
     }
 
     @Override
     public void fromDownstairsToThisFloor() {
-        resetWarriorPosition(1, 0);
+        resetWarriorPosition(new Position(1, 0));
     }
 }

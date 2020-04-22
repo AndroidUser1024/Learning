@@ -3,11 +3,13 @@ package com.qinshou.qinshoubox.me.bean.floor;
 
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.bean.CaseBean;
+import com.qinshou.qinshoubox.me.bean.Position;
 import com.qinshou.qinshoubox.me.bean.building.FireSeaBean;
 import com.qinshou.qinshoubox.me.bean.building.RoadBean;
 import com.qinshou.qinshoubox.me.bean.building.StarrySkyBean;
 import com.qinshou.qinshoubox.me.bean.building.WallBean;
 import com.qinshou.qinshoubox.me.bean.npc.FairyBean;
+import com.qinshou.qinshoubox.me.bean.npc.GateYellowBean;
 import com.qinshou.qinshoubox.me.enums.Building;
 import com.qinshou.qinshoubox.me.enums.Npc;
 
@@ -134,7 +136,7 @@ public class Floor0 extends AbsFloor {
         row7.add(new WallBean());
         row7.add(new WallBean());
         row7.add(new WallBean());
-        row7.add(new CaseBean(Npc.GATE_YELLOW, R.drawable.magic_tower_npc_gate_yellow_1));
+        row7.add(new GateYellowBean());
         row7.add(new WallBean());
         row7.add(new WallBean());
         row7.add(new WallBean());
@@ -189,11 +191,11 @@ public class Floor0 extends AbsFloor {
 
     @Override
     public void fromUpstairsToThisFloor() {
-        resetWarriorPosition(1, 5);
+        resetWarriorPosition(new Position(1, 5));
     }
 
     @Override
     public void fromDownstairsToThisFloor() {
-        resetWarriorPosition(9, 5);
+        resetWarriorPosition(new Position(9, 5));
     }
 }

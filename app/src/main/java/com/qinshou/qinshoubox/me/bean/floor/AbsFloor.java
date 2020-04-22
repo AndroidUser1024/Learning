@@ -8,6 +8,7 @@ import android.widget.TableRow;
 
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.bean.CaseBean;
+import com.qinshou.qinshoubox.me.bean.Position;
 import com.qinshou.qinshoubox.me.bean.WarriorBean;
 import com.qinshou.qinshoubox.me.enums.Building;
 import com.qinshou.qinshoubox.me.enums.Npc;
@@ -83,12 +84,12 @@ public abstract class AbsFloor {
         }
     }
 
-    public CaseBean getCase(int row, int column) {
-        return mData.get(row).get(column);
+    public CaseBean getCase(Position position) {
+        return mData.get(position.getRow()).get(position.getColumn());
     }
 
-    public void setCase(int row, int column, CaseBean caseBean) {
-        mData.get(row).set(column, caseBean);
+    public void setCase(Position position, CaseBean caseBean) {
+        mData.get(position.getRow()).set(position.getColumn(), caseBean);
     }
 
     /**
@@ -107,10 +108,10 @@ public abstract class AbsFloor {
      * Description:重设勇士位置,在 clearWarriorPosition() 方法后且 floor 改变后调用
      * Date:2018/4/26
      */
-    public void resetWarriorPosition(int row, int column) {
+    public void resetWarriorPosition(Position position) {
         CaseBean caseBean = new CaseBean(Warrior.UP, R.drawable.magic_tower_warrior_up);
 ////        setCase(row, column, caseBean);
-        MagicGameManager.SINGLETON.updateUI(row, column, caseBean);
-        MagicGameManager.SINGLETON.getWarriorBean().setPosition(new WarriorBean.Position(row, column));
+        MagicGameManager.SINGLETON.updateUI(position, caseBean);
+        MagicGameManager.SINGLETON.getWarriorBean().setPosition(position);
     }
 }

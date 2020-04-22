@@ -2,10 +2,9 @@ package com.qinshou.qinshoubox.me.bean.building;
 
 import androidx.fragment.app.FragmentManager;
 
-import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.bean.CaseBean;
 import com.qinshou.qinshoubox.me.bean.IHandleEventCallback;
-import com.qinshou.qinshoubox.me.enums.Building;
+import com.qinshou.qinshoubox.me.bean.Position;
 import com.qinshou.qinshoubox.me.enums.Type;
 
 /**
@@ -20,7 +19,7 @@ public abstract class BuildingBean extends CaseBean {
     }
 
     @Override
-    public void handleEvent(FragmentManager fragmentManager, IHandleEventCallback handleEventCallback) {
+    public void handleEvent(FragmentManager fragmentManager, int floor, Position position, IHandleEventCallback handleEventCallback) {
         handleEventCallback.onSuccess(true);
     }
 }
