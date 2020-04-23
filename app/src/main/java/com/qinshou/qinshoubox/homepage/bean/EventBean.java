@@ -63,5 +63,9 @@ public class EventBean<T> {
          * 清空聊天历史
          */
         CLEAR_CHAT_HISTORY,
+        /**
+         * 刷新勇士信息
+         */
+        REFRESH_WARRIOR_INFO,
     }
 }

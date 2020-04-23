@@ -11,24 +11,21 @@ import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.qinshou.commonmodule.base.AbsMVPFragment;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.R;
+import com.qinshou.qinshoubox.base.QSFragment;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.me.bean.CaseBean;
 import com.qinshou.qinshoubox.me.bean.MonsterBean;
 import com.qinshou.qinshoubox.me.bean.warrior.WarriorBean;
 import com.qinshou.qinshoubox.me.contract.IMagicTowerContract;
-import com.qinshou.qinshoubox.me.enums.Monster;
 import com.qinshou.qinshoubox.me.presenter.MagicTowerPresenter;
 import com.qinshou.qinshoubox.me.ui.dialog.MonsterInfoDialogFragment;
 import com.qinshou.qinshoubox.util.MagicGameManager;
-import com.qinshou.qinshoubox.util.MonsterFactory;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.Set;
 
 
@@ -36,7 +33,7 @@ import java.util.Set;
  * Description:魔塔游戏界面
  * Date:2018/4/10
  */
-public class MagicTowerFragment extends AbsMVPFragment<MagicTowerPresenter> implements IMagicTowerContract.IView, Observer {
+public class MagicTowerFragment extends QSFragment<MagicTowerPresenter> implements IMagicTowerContract.IView {
 
     private ImageButton ibMoveUp;
     private ImageButton ibMoveDown;
@@ -94,12 +91,6 @@ public class MagicTowerFragment extends AbsMVPFragment<MagicTowerPresenter> impl
             }
         }
     };
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        MagicGameManager.SINGLETON.getWarriorBean().deleteObserver(this);
-    }
 
     @Override
     public int getLayoutId() {
@@ -195,16 +186,16 @@ public class MagicTowerFragment extends AbsMVPFragment<MagicTowerPresenter> impl
 
     @Override
     public void initData() {
-        MagicGameManager.SINGLETON.getWarriorBean().addObserver(this);
-        MagicGameManager.SINGLETON.startGame(getChildFragmentManager(),mTlMap);
+        MagicGameManager.SINGLETON.startGame(getChildFragmentManager(), mTlMap);
         updateWarriorInfo(MagicGameManager.SINGLETON.getWarriorBean());
     }
 
     @Override
-    public void update(Observable o, Object arg) {
-        updateWarriorInfo(MagicGameManager.SINGLETON.getWarriorBean());
+    public void handleEvent(EventBean<Object> eventBean) {
+        if (eventBean.getType() == EventBean.Type.REFRESH_WARRIOR_INFO) {
+            updateWarriorInfo((WarriorBean) eventBean.getData());
+        }
     }
-
 
     private void updateWarriorInfo(WarriorBean warriorBean) {
         tvLevel.setText(warriorBean.getLevel() + "");
@@ -248,4 +239,5 @@ public class MagicTowerFragment extends AbsMVPFragment<MagicTowerPresenter> impl
         MonsterInfoDialogFragment.newInstance(monsterBeanList).show(getChildFragmentManager(), "MonsterInfoDialogFragment");
         ShowLogUtil.logi("显示怪物信息");
     }
+
 }

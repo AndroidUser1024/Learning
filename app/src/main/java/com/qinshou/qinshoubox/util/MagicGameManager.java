@@ -8,6 +8,7 @@ import android.widget.TableRow;
 import androidx.fragment.app.FragmentManager;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.R;
@@ -64,7 +65,6 @@ public enum MagicGameManager {
     MagicGameManager() {
         mWarriorBean = new WarriorBean("勇士"
                 , WarriorBean.Type.UP
-                , R.drawable.magic_tower_warrior_up
                 , 1
                 , 1000
                 , 10
@@ -616,7 +616,6 @@ public enum MagicGameManager {
                 }
                 // 可以移动过去,则修改勇士属性
                 mWarriorBean.setType(WarriorBean.Type.LEFT);
-                mWarriorBean.setResourceId(R.drawable.magic_tower_warrior_left);
                 mWarriorBean.setPosition(newPosition);
 
                 // 更新勇士现在的位置的 UI
@@ -655,7 +654,6 @@ public enum MagicGameManager {
                 }
                 // 可以移动过去,则修改勇士属性
                 mWarriorBean.setType(WarriorBean.Type.UP);
-                mWarriorBean.setResourceId(R.drawable.magic_tower_warrior_up);
                 mWarriorBean.setPosition(newPosition);
 
                 // 更新勇士现在的位置的 UI
@@ -694,7 +692,6 @@ public enum MagicGameManager {
                 }
                 // 可以移动过去,则修改勇士属性
                 mWarriorBean.setType(WarriorBean.Type.RIGHT);
-                mWarriorBean.setResourceId(R.drawable.magic_tower_warrior_right);
                 mWarriorBean.setPosition(newPosition);
 
                 // 更新勇士现在的位置的 UI
@@ -774,12 +771,13 @@ public enum MagicGameManager {
         new Thread(new Runnable() {
             @Override
             public void run() {
-//                String json = new Gson().toJson(mFloorList);
-//                SharedPreferencesHelper.SINGLETON.putString(IConstant.MAP_JSON, json);
-//                // 保存当前楼层
-//                SharedPreferencesHelper.SINGLETON.putInt(IConstant.FLOOR, mFloor);
                 // 保存勇士属性
-//                SharedPreferencesHelper.SINGLETON.putString(IConstant.WARRIOR_BEAN_JSON, new Gson().toJson(WarriorBean.getInstance()));
+                String json = new Gson().toJson(mWarriorBean);
+                ShowLogUtil.logi("json--->" + json);
+                SharedPreferencesHelper.SINGLETON.putString(IConstant.WARRIOR_BEAN_JSON, new Gson().toJson(mWarriorBean));
+                SharedPreferencesHelper.SINGLETON.putString(IConstant.MAP_JSON, new Gson().toJson(mFloorList));
+                // 保存当前楼层
+                SharedPreferencesHelper.SINGLETON.putInt(IConstant.FLOOR, mFloor);
             }
         }).start();
     }
@@ -798,18 +796,14 @@ public enum MagicGameManager {
                 if (!TextUtils.isEmpty(warriorBeanJson)) {
                     mWarriorBean = new Gson().fromJson(warriorBeanJson, WarriorBean.class);
                 }
-//                mFloorList = new Gson().fromJson(SharedPreferencesHelper.SINGLETON.getString(IConstant.MAP_JSON), new TypeToken<List<List<AbsFloor>>>() {
-//                getType());
-//                // 读取保存的数据
-//                mFloor = SharedPreferencesHelper.SINGLETON.getInt(IConstant.FLOOR);
-//                // 读取勇士属性
-//                mHandler.post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        updateUI();
-//                        WarriorBean.getInstance().update();
-//                    }
-//                });
+                String mapJson = SharedPreferencesHelper.SINGLETON.getString(IConstant.MAP_JSON);
+                if (!TextUtils.isEmpty(mapJson)) {
+                    mFloorList = new Gson().fromJson(mapJson, new TypeToken<List<List<AbsFloor>>>() {
+                    }.getType());
+                }
+                // 读取保存的数据
+                mFloor = SharedPreferencesHelper.SINGLETON.getInt(IConstant.FLOOR);
+                mFloorList.get(mFloor).initFloor(mTableLayout);
             }
         }).start();
     }

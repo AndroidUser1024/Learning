@@ -2,14 +2,14 @@ package com.qinshou.qinshoubox.me.bean.warrior;
 
 
 import com.qinshou.qinshoubox.R;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.me.bean.CaseBean;
 import com.qinshou.qinshoubox.me.bean.IHandleEventCallback;
 import com.qinshou.qinshoubox.me.bean.Position;
-import com.qinshou.qinshoubox.me.enums.Warrior;
-
-import java.util.Observable;
 
 import androidx.fragment.app.FragmentManager;
+
+import org.greenrobot.eventbus.EventBus;
 
 
 /**
@@ -18,10 +18,9 @@ import androidx.fragment.app.FragmentManager;
  * Created on 2017/6/15
  */
 
-public class WarriorBean extends Observable implements CaseBean {
+public class WarriorBean implements CaseBean {
     private String name;
     private Type type;
-    private int resourceId;
     private int level;
     private int lifeValue;
     private int attackValue;
@@ -40,10 +39,9 @@ public class WarriorBean extends Observable implements CaseBean {
     public WarriorBean() {
     }
 
-    public WarriorBean(String name, Type type, int resourceId, int level, int lifeValue, int attackValue, int defenseValue, int money, int experience, int yellowKeyCount, int blueKeyCount, int redKeyCount, boolean hasShengGuangHui, boolean hasFengZhiLuoPan, boolean hasXingGuangShenLang, boolean hasLuckyCross, Position position) {
+    public WarriorBean(String name, Type type, int level, int lifeValue, int attackValue, int defenseValue, int money, int experience, int yellowKeyCount, int blueKeyCount, int redKeyCount, boolean hasShengGuangHui, boolean hasFengZhiLuoPan, boolean hasXingGuangShenLang, boolean hasLuckyCross, Position position) {
         this.name = name;
         this.type = type;
-        this.resourceId = resourceId;
         this.level = level;
         this.lifeValue = lifeValue;
         this.attackValue = attackValue;
@@ -114,10 +112,6 @@ public class WarriorBean extends Observable implements CaseBean {
 
     public void setType(Type type) {
         this.type = type;
-    }
-
-    public void setResourceId(int resourceId) {
-        this.resourceId = resourceId;
     }
 
     public int getLevel() {
@@ -239,10 +233,11 @@ public class WarriorBean extends Observable implements CaseBean {
      * Description:像观察者们发送更新通知
      */
     public void update() {
+        EventBus.getDefault().post(new EventBean<WarriorBean>(EventBean.Type.REFRESH_WARRIOR_INFO, this));
         // 标识状态或内容发生改变
-        setChanged();
+//        setChanged();
         // 通知所有观察者
-        notifyObservers();
+//        notifyObservers();
     }
 
     /**
