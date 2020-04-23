@@ -1,10 +1,6 @@
 package com.qinshou.qinshoubox.me.bean.monster;
 
 import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.me.bean.IHandleEventCallback;
-import com.qinshou.qinshoubox.me.bean.Position;
-
-import androidx.fragment.app.FragmentManager;
 
 /**
  * Author: QinHao
@@ -12,14 +8,14 @@ import androidx.fragment.app.FragmentManager;
  * Date: 2020/4/22 23:28
  * Description:小蝙蝠
  */
-public class XiaoBianFu implements IMonster {
-    @Override
-    public int getResourceId() {
-        return R.drawable.magic_tower_monster_xiao_bian_fu;
-    }
-
-    @Override
-    public void handleEvent(FragmentManager fragmentManager, int floor, Position position, IHandleEventCallback handleEventCallback) {
-
+public class XiaoBianFu extends AbsMonster {
+    public XiaoBianFu() {
+        super("小蝙蝠"
+                , R.drawable.magic_tower_monster_xiao_bian_fu
+                , 100
+                , 20
+                , 5
+                , 3
+                , 3);
     }
 }
