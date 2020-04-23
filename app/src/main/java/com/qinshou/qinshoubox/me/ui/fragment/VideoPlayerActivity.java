@@ -137,12 +137,14 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
 
                 //  开始播放后隐藏控制器
                 hideControlDelay();
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             } else {
                 mIvPlay.setImageResource(R.drawable.video_player_iv_play_src);
                 mHandler.removeCallbacks(mUpdateProgressRunnable);
 
                 // 暂停立即显示控制器
                 showControl();
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             }
         }
 
