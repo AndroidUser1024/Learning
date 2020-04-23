@@ -7,6 +7,8 @@ import com.qinshou.qinshoubox.me.bean.building.Road;
 import com.qinshou.qinshoubox.me.bean.building.Wall;
 import com.qinshou.qinshoubox.me.bean.monster.DaBianFu;
 import com.qinshou.qinshoubox.me.bean.monster.GuaiWang;
+import com.qinshou.qinshoubox.me.bean.monster.HongBianFu;
+import com.qinshou.qinshoubox.me.bean.monster.HongYiFaShi;
 import com.qinshou.qinshoubox.me.bean.monster.MaYiFaShi;
 import com.qinshou.qinshoubox.me.bean.monster.ShouMianWuShi;
 import com.qinshou.qinshoubox.me.bean.npc.GoDownstairs;
@@ -65,7 +67,7 @@ public class Floor10 extends AbsFloor {
         row1.add(new Wall());
         row1.add(new Wall());
         row1.add(new Road());
-        row1.add(new GuaiWang());
+        row1.add(new HongYiFaShi());
         floor10.add(row1);
 
         List<CaseBean> row2 = new ArrayList<>();
@@ -78,7 +80,7 @@ public class Floor10 extends AbsFloor {
         row2.add(new Road());
         row2.add(new Road());
         row2.add(new Road());
-        row2.add(new GuaiWang());
+        row2.add(new HongYiFaShi());
         row2.add(new BigBloodBottle());
         floor10.add(row2);
 
@@ -111,7 +113,7 @@ public class Floor10 extends AbsFloor {
         floor10.add(row4);
 
         List<CaseBean> row5 = new ArrayList<>();
-        row5.add(new GuaiWang());
+        row5.add(new HongBianFu());
         row5.add(new Wall());
         row5.add(new Road());
         row5.add(new Wall());
@@ -134,7 +136,7 @@ public class Floor10 extends AbsFloor {
         row6.add(new Wall());
         row6.add(new Road());
         row6.add(new YellowGate());
-        row6.add(new GuaiWang());
+        row6.add(new HongBianFu());
         row6.add(new Road());
         floor10.add(row6);
 
@@ -160,7 +162,7 @@ public class Floor10 extends AbsFloor {
         row8.add(new RedGem());
         row8.add(new Wall());
         row8.add(new Road());
-        row8.add(new GuaiWang());
+        row8.add(new HongBianFu());
         row8.add(new Road());
         row8.add(new Wall());
         row8.add(new YellowKey());

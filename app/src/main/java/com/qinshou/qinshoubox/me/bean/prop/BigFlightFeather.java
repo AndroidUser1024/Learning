@@ -1,22 +1,21 @@
-package com.qinshou.qinshoubox.me.bean.npc;
-
-
-import androidx.fragment.app.FragmentManager;
+package com.qinshou.qinshoubox.me.bean.prop;
 
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.bean.IHandleEventCallback;
 import com.qinshou.qinshoubox.me.bean.Position;
 
+import androidx.fragment.app.FragmentManager;
+
 /**
  * Author: QinHao
  * Email:qinhao@jeejio.com
- * Date: 2020/4/23 13:44
- * Description:第二层的神秘老人
+ * Date: 2020/4/23 22:22
+ * Description:大飞羽
  */
-public class ShenMiLaoRenFloor2 implements INpc {
+public class BigFlightFeather implements IProp {
     @Override
     public int getResourceId() {
-        return R.drawable.magic_tower_npc_shen_mi_lao_ren;
+        return R.drawable.magic_tower_prop_big_flight_feather;
     }
 
     @Override

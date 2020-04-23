@@ -7,8 +7,10 @@ import com.qinshou.qinshoubox.me.bean.Position;
 import com.qinshou.qinshoubox.me.bean.building.Road;
 import com.qinshou.qinshoubox.me.bean.building.Wall;
 import com.qinshou.qinshoubox.me.bean.monster.BaiYiWuShi;
+import com.qinshou.qinshoubox.me.bean.monster.ChuJiFaShi;
 import com.qinshou.qinshoubox.me.bean.monster.DaBianFu;
 import com.qinshou.qinshoubox.me.bean.monster.GuaiWang;
+import com.qinshou.qinshoubox.me.bean.monster.HongBianFu;
 import com.qinshou.qinshoubox.me.bean.monster.IMonster;
 import com.qinshou.qinshoubox.me.bean.monster.KuLouDuiZhang;
 import com.qinshou.qinshoubox.me.bean.monster.MaYiFaShi;
@@ -117,7 +119,7 @@ public class Floor8 extends AbsFloor {
         floor8.add(row4);
 
         List<CaseBean> row5 = new ArrayList<>();
-        row5.add(new GuaiWang());
+        row5.add(new HongBianFu());
         row5.add(new Wall());
         row5.add(new BlueGem());
         row5.add(new Wall());
@@ -140,7 +142,7 @@ public class Floor8 extends AbsFloor {
         row6.add(new Road());
         row6.add(new Wall());
         row6.add(new Road());
-        row6.add(new GuaiWang());
+        row6.add(new HongBianFu());
         row6.add(new Road());
         floor8.add(row6);
 
@@ -151,7 +153,7 @@ public class Floor8 extends AbsFloor {
         row7.add(new Wall());
         row7.add(new Wall());
         row7.add(new Wall());
-        row7.add(new GuaiWang());
+        row7.add(new ChuJiFaShi());
         row7.add(new Wall());
         row7.add(new YellowGate());
         row7.add(new Wall());

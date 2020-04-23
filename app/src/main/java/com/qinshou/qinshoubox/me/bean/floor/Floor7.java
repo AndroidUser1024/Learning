@@ -7,6 +7,7 @@ import com.qinshou.qinshoubox.me.bean.building.Road;
 import com.qinshou.qinshoubox.me.bean.building.Wall;
 import com.qinshou.qinshoubox.me.bean.monster.BaiYiWuShi;
 import com.qinshou.qinshoubox.me.bean.monster.GuaiWang;
+import com.qinshou.qinshoubox.me.bean.monster.HongBianFu;
 import com.qinshou.qinshoubox.me.bean.monster.KuLouDuiZhang;
 import com.qinshou.qinshoubox.me.bean.npc.BlueGate;
 import com.qinshou.qinshoubox.me.bean.npc.GoDownstairs;
@@ -60,7 +61,7 @@ public class Floor7 extends AbsFloor {
         row1.add(new Wall());
         row1.add(new Wall());
         row1.add(new Road());
-        row1.add(new GuaiWang());
+        row1.add(new HongBianFu());
         row1.add(new Wall());
         row1.add(new BlueGate());
         row1.add(new Wall());
@@ -73,7 +74,7 @@ public class Floor7 extends AbsFloor {
         List<CaseBean> row2 = new ArrayList<>();
         row2.add(new Wall());
         row2.add(new Road());
-        row2.add(new GuaiWang());
+        row2.add(new HongBianFu());
         row2.add(new BlueGem());
         row2.add(new Wall());
         row2.add(new BaiYiWuShi());

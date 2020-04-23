@@ -1,12 +1,10 @@
 package com.qinshou.qinshoubox.me.bean.floor;
 
 
-import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.bean.CaseBean;
 import com.qinshou.qinshoubox.me.bean.Position;
 import com.qinshou.qinshoubox.me.bean.building.Road;
 import com.qinshou.qinshoubox.me.bean.building.Wall;
-import com.qinshou.qinshoubox.me.bean.monster.IMonster;
 import com.qinshou.qinshoubox.me.bean.monster.JinDuiZhang;
 import com.qinshou.qinshoubox.me.bean.monster.JinWeiShi;
 import com.qinshou.qinshoubox.me.bean.npc.BlueGate;
@@ -14,21 +12,16 @@ import com.qinshou.qinshoubox.me.bean.npc.GoDownstairs;
 import com.qinshou.qinshoubox.me.bean.npc.GoUpstairs;
 import com.qinshou.qinshoubox.me.bean.npc.GreenGate;
 import com.qinshou.qinshoubox.me.bean.npc.IronGateCanOpen;
-import com.qinshou.qinshoubox.me.bean.npc.ShangRenFloor2;
-import com.qinshou.qinshoubox.me.bean.npc.ShenMiLaoRenFloor2;
+import com.qinshou.qinshoubox.me.bean.npc.BusinessManFloor2;
+import com.qinshou.qinshoubox.me.bean.npc.MysteriousOldManFloor2;
 import com.qinshou.qinshoubox.me.bean.npc.YellowGate;
 import com.qinshou.qinshoubox.me.bean.prop.BigBloodBottle;
 import com.qinshou.qinshoubox.me.bean.prop.BlueGem;
 import com.qinshou.qinshoubox.me.bean.prop.BlueKey;
-import com.qinshou.qinshoubox.me.bean.prop.IProp;
 import com.qinshou.qinshoubox.me.bean.prop.RedGem;
 import com.qinshou.qinshoubox.me.bean.prop.RedKey;
 import com.qinshou.qinshoubox.me.bean.prop.SmallBloodBottle;
 import com.qinshou.qinshoubox.me.bean.prop.YellowKey;
-import com.qinshou.qinshoubox.me.enums.Building;
-import com.qinshou.qinshoubox.me.enums.Monster;
-import com.qinshou.qinshoubox.me.enums.Npc;
-import com.qinshou.qinshoubox.me.enums.Prop;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -197,9 +190,9 @@ public class Floor2 extends AbsFloor {
         row10.add(new BigBloodBottle());
         row10.add(new BigBloodBottle());
         row10.add(new Wall());
-        row10.add(new ShenMiLaoRenFloor2());
+        row10.add(new MysteriousOldManFloor2());
         row10.add(new Wall());
-        row10.add(new ShangRenFloor2());
+        row10.add(new BusinessManFloor2());
         row10.add(new Wall());
         floor2.add(row10);
 

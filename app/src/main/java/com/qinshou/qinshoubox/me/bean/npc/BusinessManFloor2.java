@@ -10,13 +10,13 @@ import com.qinshou.qinshoubox.me.bean.Position;
 /**
  * Author: QinHao
  * Email:qinhao@jeejio.com
- * Date: 2020/4/23 19:03
- * Description:第 5 层的神秘老人
+ * Date: 2020/4/23 13:44
+ * Description:第 2 层的商人
  */
-public class MysteriousOldManFloor5 implements INpc {
+public class BusinessManFloor2 implements INpc {
     @Override
     public int getResourceId() {
-        return R.drawable.magic_tower_npc_shen_mi_lao_ren;
+        return R.drawable.magic_tower_npc_shang_ren;
     }
 
     @Override

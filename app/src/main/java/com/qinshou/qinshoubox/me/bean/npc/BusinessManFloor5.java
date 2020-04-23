@@ -11,7 +11,7 @@ import com.qinshou.qinshoubox.me.bean.Position;
  * Author: QinHao
  * Email:qinhao@jeejio.com
  * Date: 2020/4/23 19:03
- * Description:第五层的商人
+ * Description:第 5 层的商人
  */
 public class BusinessManFloor5 implements INpc {
     @Override
