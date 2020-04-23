@@ -562,8 +562,6 @@ public enum MagicGameManager {
     }
 
     public void setCase(Position position, CaseBean toCase) {
-        ShowLogUtil.logi("position--->" + position);
-        ShowLogUtil.logi("toCase--->" + toCase);
         this.setCase(mFloor, position, toCase);
     }
 

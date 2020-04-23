@@ -109,10 +109,10 @@ public class BattleDialogFragment extends AbsDialogFragment {
                 if (mMonsterLifeValue <= 0) {
                     dismiss();
                 } else {
-                    mIvMonster.postDelayed(this, 300);
+                    mIvMonster.postDelayed(this, 200);
                 }
             }
-        }, 300);
+        }, 200);
     }
 
     @Override
