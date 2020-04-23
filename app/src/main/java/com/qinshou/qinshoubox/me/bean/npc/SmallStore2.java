@@ -15,8 +15,7 @@ import com.qinshou.qinshoubox.me.ui.dialog.StoreSmallDialogFragment;
  * Email:qinhao@jeejio.com
  * Date: 2020/4/23 17:04
  * Description:小商店老板1
- */
-public class SmallStore2 implements INpc {
+ */public class SmallStore2 implements INpc {
     @Override
     public int getResourceId() {
         return R.drawable.magic_tower_npc_store_2;

@@ -42,7 +42,7 @@ public class SwitchButton extends View {
      */
     private RectF mRectF;
     /**
-     * 开关指示器按钮圆心 X 坐标的偏移量
+     * 开关指示器按钮圆心 StarCross 坐标的偏移量
      */
     private float mButtonCenterXOffset;
     /**
@@ -161,16 +161,16 @@ public class SwitchButton extends View {
         float x;
         float y;
 
-        // 根据是否选中的状态来决定开关按钮指示器圆心的 X 坐标
+        // 根据是否选中的状态来决定开关按钮指示器圆心的 StarCross 坐标
         if (isChecked()) {
 //            // 选中状态时开关按钮指示器在右边
 //            x = getMeasuredWidth() - radius - mPaint.getStrokeWidth() - mPaint.getStrokeWidth();
-            // 选中状态时开关按钮指示器圆心的 X 坐标从左边逐渐移到右边
+            // 选中状态时开关按钮指示器圆心的 StarCross 坐标从左边逐渐移到右边
             x = getMeasuredWidth() - mButtonMargin - radius - mButtonCenterXOffset;
         } else {
 //            // 未选中状态时开关按钮指示器在左边
 //            x = radius + mPaint.getStrokeWidth() + mPaint.getStrokeWidth();
-            // 未选中状态时开关按钮指示器圆心的 X 坐标从右边逐渐移到左边
+            // 未选中状态时开关按钮指示器圆心的 StarCross 坐标从右边逐渐移到左边
             x = mButtonMargin + radius + mButtonCenterXOffset;
         }
         // Y 坐标就是控件高度的一半不变
@@ -218,7 +218,7 @@ public class SwitchButton extends View {
         float radius = mButtonRadius != 0
                 ? mButtonRadius
                 : (getMeasuredHeight() - mButtonMargin) / 2;
-        // 计算开关指示器的 X 坐标的总偏移量
+        // 计算开关指示器的 StarCross 坐标的总偏移量
         float centerXOffset = getMeasuredWidth() - mButtonMargin - radius
                 - (mButtonMargin + radius);
 
@@ -237,7 +237,7 @@ public class SwitchButton extends View {
         ObjectAnimator objectAnimator2 = ObjectAnimator.ofFloat(this, "colorGradientFactor", 0, 1);
         objectAnimator2.setDuration(mAnimateDuration);
 
-        // 同时开始修改开关指示器 X 坐标偏移量的动画和修改背景颜色过渡系数的动画
+        // 同时开始修改开关指示器 StarCross 坐标偏移量的动画和修改背景颜色过渡系数的动画
         animatorSet.play(objectAnimator).with(objectAnimator2);
         animatorSet.start();
     }

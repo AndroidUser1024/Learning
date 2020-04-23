@@ -205,7 +205,7 @@
             android:id="@+id/iv_feng_zhi_luo_pan"
             android:layout_width="@dimen/px100"
             android:layout_height="@dimen/px100"
-            android:src="@drawable/magic_tower_prop_feng_zhi_luo_pan"
+            android:src="@drawable/magic_tower_prop_wind_compass"
             android:visibility="invisible"
             tools:visibility="visible" />
     </LinearLayout>

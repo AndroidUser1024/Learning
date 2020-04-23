@@ -38,7 +38,7 @@ public class WaveSideBar extends View {
     private final static String[] DEFAULT_ITEM_LIST = {"A", "B", "C", "D", "E", "F", "G"
             , "H", "I", "J", "K", "L", "M", "N"
             , "O", "P", "Q", "R", "S", "T"
-            , "U", "V", "W", "X", "Y", "Z"};
+            , "U", "V", "W", "StarCross", "Y", "Z"};
 
     private Paint mPaint;
     private Rect mTextBounds = new Rect();
