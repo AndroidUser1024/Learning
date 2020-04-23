@@ -1,7 +1,5 @@
 package com.qinshou.networkmodule.bean;
 
-import com.google.gson.annotations.SerializedName;
-
 /**
  * Author: QinHao
  * Email:qinhao@jeejio.com
@@ -9,11 +7,8 @@ import com.google.gson.annotations.SerializedName;
  * Description:QinshouBox Api 返回的数据的统一格式
  */
 public class QinshouResultBean<T> {
-    @SerializedName("success")
     private int success;
-    @SerializedName("failureInfo")
     private String failureInfo;
-    @SerializedName("data")
     private T data;
 
     public QinshouResultBean() {

@@ -1,6 +1,5 @@
-package com.qinshou.qinshoubox.homepage.bean;
+package com.qinshou.networkmodule.bean;
 
-import com.qinshou.qinshoubox.constant.IUrlConstant;
 
 /**
  * Author: QinHao
@@ -42,9 +41,6 @@ public class WallpaperBean {
     }
 
     public String getUrl() {
-        if (!url.startsWith(IUrlConstant.DEFAULT_HOST)) {
-            url = IUrlConstant.DEFAULT_HOST + "/" + url;
-        }
         return url;
     }
 
