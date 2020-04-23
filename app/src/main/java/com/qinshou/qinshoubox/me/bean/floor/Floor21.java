@@ -47,7 +47,7 @@ public class Floor21 extends AbsFloor {
 //        row1.add(new CaseBean(Building.ROAD, R.drawable.magic_tower_building_road));
 //        row1.add(new CaseBean(Building.ROAD, R.drawable.magic_tower_building_road));
 //        row1.add(new CaseBean(Building.STARRY_SKY, R.drawable.magic_tower_building_starry_sky));
-//        row1.add(new CaseBean(Monster.MING_LING_MO_WANG_2, R.drawable.magic_tower_monster_ming_ling_mo_wang));
+//        row1.add(new CaseBean(IMonster.MING_LING_MO_WANG_2, R.drawable.magic_tower_monster_ming_ling_mo_wang));
 //        row1.add(new CaseBean(Building.STARRY_SKY, R.drawable.magic_tower_building_starry_sky));
 //        row1.add(new CaseBean(Building.ROAD, R.drawable.magic_tower_building_road));
 //        row1.add(new CaseBean(Building.ROAD, R.drawable.magic_tower_building_road));
@@ -61,7 +61,7 @@ public class Floor21 extends AbsFloor {
 //        row2.add(new CaseBean(Building.ROAD, R.drawable.magic_tower_building_road));
 //        row2.add(new CaseBean(Building.STARRY_SKY, R.drawable.magic_tower_building_starry_sky));
 //        row2.add(new CaseBean(Building.STARRY_SKY, R.drawable.magic_tower_building_starry_sky));
-//        row2.add(new CaseBean(Monster.LING_FA_SHI_2, R.drawable.magic_tower_monster_ling_fa_shi));
+//        row2.add(new CaseBean(IMonster.LING_FA_SHI_2, R.drawable.magic_tower_monster_ling_fa_shi));
 //        row2.add(new CaseBean(Building.STARRY_SKY, R.drawable.magic_tower_building_starry_sky));
 //        row2.add(new CaseBean(Building.STARRY_SKY, R.drawable.magic_tower_building_starry_sky));
 //        row2.add(new CaseBean(Building.ROAD, R.drawable.magic_tower_building_road));
@@ -75,7 +75,7 @@ public class Floor21 extends AbsFloor {
 //        row3.add(new CaseBean(Building.ROAD, R.drawable.magic_tower_building_road));
 //        row3.add(new CaseBean(Building.ROAD, R.drawable.magic_tower_building_road));
 //        row3.add(new CaseBean(Building.STARRY_SKY, R.drawable.magic_tower_building_starry_sky));
-//        row3.add(new CaseBean(Monster.LING_FA_SHI_2, R.drawable.magic_tower_monster_ling_fa_shi));
+//        row3.add(new CaseBean(IMonster.LING_FA_SHI_2, R.drawable.magic_tower_monster_ling_fa_shi));
 //        row3.add(new CaseBean(Building.STARRY_SKY, R.drawable.magic_tower_building_starry_sky));
 //        row3.add(new CaseBean(Building.ROAD, R.drawable.magic_tower_building_road));
 //        row3.add(new CaseBean(Building.ROAD, R.drawable.magic_tower_building_road));

@@ -12,7 +12,7 @@ import androidx.fragment.app.FragmentManager;
  * Date: 2020/4/22 23:28
  * Description:红头怪
  */
-public class HongTouGuai implements Monster {
+public class HongTouGuai implements IMonster {
     @Override
     public int getResourceId() {
         return R.drawable.magic_tower_monster_hong_tou_guai;

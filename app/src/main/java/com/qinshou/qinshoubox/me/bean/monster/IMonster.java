@@ -8,5 +8,5 @@ import com.qinshou.qinshoubox.me.bean.CaseBean;
  * Date: 2020/4/22 23:28
  * Description:怪物
  */
-public interface Monster extends CaseBean {
+public interface IMonster extends CaseBean {
 }

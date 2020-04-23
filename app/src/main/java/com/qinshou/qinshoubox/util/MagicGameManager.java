@@ -5,6 +5,8 @@ import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
+import androidx.fragment.app.FragmentManager;
+
 import com.google.gson.Gson;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.commonmodule.util.ShowLogUtil;
@@ -13,7 +15,6 @@ import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.me.bean.CaseBean;
 import com.qinshou.qinshoubox.me.bean.IHandleEventCallback;
 import com.qinshou.qinshoubox.me.bean.Position;
-import com.qinshou.qinshoubox.me.bean.warrior.WarriorBean;
 import com.qinshou.qinshoubox.me.bean.building.Road;
 import com.qinshou.qinshoubox.me.bean.floor.AbsFloor;
 import com.qinshou.qinshoubox.me.bean.floor.Floor0;
@@ -38,11 +39,10 @@ import com.qinshou.qinshoubox.me.bean.floor.Floor6;
 import com.qinshou.qinshoubox.me.bean.floor.Floor7;
 import com.qinshou.qinshoubox.me.bean.floor.Floor8;
 import com.qinshou.qinshoubox.me.bean.floor.Floor9;
+import com.qinshou.qinshoubox.me.bean.warrior.WarriorBean;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.fragment.app.FragmentManager;
 
 /**
  * Author: QinHao
@@ -128,9 +128,9 @@ public enum MagicGameManager {
 //            return handleBuildingToCase(toCase);
 //        } else if (toCase.getType() instanceof Npc) {
 //            return handleNpcToCase(toCase);
-//        } else if (toCase.getType() instanceof Prop) {
+//        } else if (toCase.getType() instanceof IProp) {
 //            return handlePropToCase(toCase);
-//        } else if (toCase.getType() instanceof Monster) {
+//        } else if (toCase.getType() instanceof IMonster) {
 //            return handleMonsterToCase(toCase);
 //        }
         return true;
@@ -467,49 +467,49 @@ public enum MagicGameManager {
      * @param toCase 勇士将要去的位置
      */
     private boolean handlePropToCase(CaseBean toCase) {
-//        if (toCase.getType() == Prop.KEY_YELLOW) {
+//        if (toCase.getType() == IProp.KEY_YELLOW) {
 //            WarriorBean.getInstance().obtainYellowKey();
-//        } else if (toCase.getType() == Prop.KEY_BLUE) {
+//        } else if (toCase.getType() == IProp.KEY_BLUE) {
 //            WarriorBean.getInstance().obtainBlueKey();
-//        } else if (toCase.getType() == Prop.KEY_RED) {
+//        } else if (toCase.getType() == IProp.KEY_RED) {
 //            WarriorBean.getInstance().obtainRedKey();
-//        } else if (toCase.getType() == Prop.XIE_PING_SMALL) {
+//        } else if (toCase.getType() == IProp.XIE_PING_SMALL) {
 //            WarriorBean.getInstance().obtainSmallBloodBottle();
-//        } else if (toCase.getType() == Prop.XIE_PING_BIG) {
+//        } else if (toCase.getType() == IProp.XIE_PING_BIG) {
 //            WarriorBean.getInstance().obtainBigBloodBottle();
-//        } else if (toCase.getType() == Prop.BAO_SHI_RED) {
+//        } else if (toCase.getType() == IProp.BAO_SHI_RED) {
 //            WarriorBean.getInstance().obtainRedGem();
-//        } else if (toCase.getType() == Prop.BAO_SHI_BLUE) {
+//        } else if (toCase.getType() == IProp.BAO_SHI_BLUE) {
 //            WarriorBean.getInstance().obtainBlueGem();
-//        } else if (toCase.getType() == Prop.SHENG_GUANG_HUI) {
+//        } else if (toCase.getType() == IProp.SHENG_GUANG_HUI) {
 //            WarriorBean.getInstance().obtainShengGuangHui();
-//        } else if (toCase.getType() == Prop.TIE_JIAN) {
+//        } else if (toCase.getType() == IProp.TIE_JIAN) {
 //            WarriorBean.getInstance().obtainIronSword();
-//        } else if (toCase.getType() == Prop.TIE_DUN) {
+//        } else if (toCase.getType() == IProp.TIE_DUN) {
 //            WarriorBean.getInstance().obtainIronShield();
-//        } else if (toCase.getType() == Prop.YAO_SHI_HE) {
+//        } else if (toCase.getType() == IProp.YAO_SHI_HE) {
 //            WarriorBean.getInstance().obtainKeyBox();
-//        } else if (toCase.getType() == Prop.XIAO_FEI_YU) {
+//        } else if (toCase.getType() == IProp.XIAO_FEI_YU) {
 //            WarriorBean.getInstance().obtainSmallFlightFeather();
-//        } else if (toCase.getType() == Prop.JIN_KUAI) {
+//        } else if (toCase.getType() == IProp.JIN_KUAI) {
 //            WarriorBean.getInstance().obtainGoldBullion();
-//        } else if (toCase.getType() == Prop.XING_YUN_SHI_ZI_JIA) {
+//        } else if (toCase.getType() == IProp.XING_YUN_SHI_ZI_JIA) {
 //            WarriorBean.getInstance().obtainLuckyCross();
-//        } else if (toCase.getType() == Prop.FENG_ZHI_LUO_PAN) {
+//        } else if (toCase.getType() == IProp.FENG_ZHI_LUO_PAN) {
 //            WarriorBean.getInstance().obtainWindCompass();
-//        } else if (toCase.getType() == Prop.QING_FENG_JIAN) {
+//        } else if (toCase.getType() == IProp.QING_FENG_JIAN) {
 //            WarriorBean.getInstance().obtainQingFengSword();
-//        } else if (toCase.getType() == Prop.HUANG_JIN_DUN) {
+//        } else if (toCase.getType() == IProp.HUANG_JIN_DUN) {
 //            WarriorBean.getInstance().obtainGoldShield();
-//        } else if (toCase.getType() == Prop.XING_GUANG_SHEN_LANG) {
+//        } else if (toCase.getType() == IProp.XING_GUANG_SHEN_LANG) {
 //            WarriorBean.getInstance().obtainStarlightGodHammer();
-//        } else if (toCase.getType() == Prop.DA_FEI_YU) {
+//        } else if (toCase.getType() == IProp.DA_FEI_YU) {
 //            WarriorBean.getInstance().obtainBigFlightFeather();
-//        } else if (toCase.getType() == Prop.SHENG_SHUI) {
+//        } else if (toCase.getType() == IProp.SHENG_SHUI) {
 //            WarriorBean.getInstance().obtainHolyWater();
-//        } else if (toCase.getType() == Prop.XING_GUANG_SHEN_JIAN) {
+//        } else if (toCase.getType() == IProp.XING_GUANG_SHEN_JIAN) {
 //            WarriorBean.getInstance().obtainStarLightGodSword();
-//        } else if (toCase.getType() == Prop.GUANG_MANG_SHEN_DUN) {
+//        } else if (toCase.getType() == IProp.GUANG_MANG_SHEN_DUN) {
 //            WarriorBean.getInstance().obtainLightGodShield();
 //        }
 //        setToCase2Road(toCase);
@@ -526,7 +526,7 @@ public enum MagicGameManager {
      */
     private boolean handleMonsterToCase(CaseBean toCase) {
 //        WarriorBean warriorBean = WarriorBean.getInstance();
-//        MonsterBean monsterBean = MonsterFactory.getMonster((Monster) toCase.getType());
+//        MonsterBean monsterBean = MonsterFactory.getMonster((IMonster) toCase.getType());
 //        int monsterEachBoutLossLifeValue = warriorBean.getAttackValue() - monsterBean.getDefenseValue();
 //        if (monsterEachBoutLossLifeValue <= 0) {
 //            ShowLogUtil.logi("打不过啊,兄dei,人家一点血不掉");
@@ -540,7 +540,7 @@ public enum MagicGameManager {
 //        int bout = (int) Math.ceil((double) monsterBean.getLifeValue() / (double) monsterEachBoutLossLifeValue);
 //        // 失去的总生命值
 //        int warriorTotalLossLifeValue = warriorEachBoutLossLifeValue * bout;
-////        if (toCase.getType() == Monster.BAI_YI_WU_SHI) {
+////        if (toCase.getType() == IMonster.BAI_YI_WU_SHI) {
 ////            warriorTotalLossLifeValue += warriorBean.getLifeValue() / 4;
 ////        }
 //        if (warriorBean.getLifeValue() <= warriorTotalLossLifeValue) {
@@ -630,7 +630,7 @@ public enum MagicGameManager {
 
             @Override
             public void onFailure(Exception e) {
-
+                ShowLogUtil.logi("onFailure" + " : " + e.getMessage());
             }
         });
     }
@@ -669,7 +669,7 @@ public enum MagicGameManager {
 
             @Override
             public void onFailure(Exception e) {
-
+                ShowLogUtil.logi("onFailure" + " : " + e.getMessage());
             }
         });
     }
@@ -708,7 +708,7 @@ public enum MagicGameManager {
 
             @Override
             public void onFailure(Exception e) {
-
+                ShowLogUtil.logi("onFailure" + " : " + e.getMessage());
             }
         });
     }
@@ -746,7 +746,7 @@ public enum MagicGameManager {
 
             @Override
             public void onFailure(Exception e) {
-
+                ShowLogUtil.logi("onFailure" + " : " + e.getMessage());
             }
         });
     }

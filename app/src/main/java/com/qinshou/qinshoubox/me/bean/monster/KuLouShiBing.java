@@ -12,7 +12,7 @@ import androidx.fragment.app.FragmentManager;
  * Date: 2020/4/22 23:28
  * Description:骷髅士兵
  */
-public class KuLouShiBing implements Monster {
+public class KuLouShiBing implements IMonster {
     @Override
     public int getResourceId() {
         return R.drawable.magic_tower_monster_ku_lou_shi_bing;

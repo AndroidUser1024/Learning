@@ -14,7 +14,7 @@ import androidx.fragment.app.FragmentManager;
  * Date: 2020/4/22 19:06
  * Description:红色门
  */
-public class RedGate implements NpcBean {
+public class RedGate implements INpc {
 
     @Override
     public int getResourceId() {

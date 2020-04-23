@@ -88,9 +88,9 @@ public class Floor15 extends AbsFloor {
 //        row4.add(new CaseBean(Building.STARRY_SKY, R.drawable.magic_tower_building_starry_sky));
 //        row4.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
 //        row4.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
-//        row4.add(new CaseBean(Prop.BAO_SHI_BLUE, R.drawable.magic_tower_prop_gem_blue));
+//        row4.add(new CaseBean(IProp.BAO_SHI_BLUE, R.drawable.magic_tower_prop_gem_blue));
 //        row4.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
-//        row4.add(new CaseBean(Prop.BAO_SHI_BLUE, R.drawable.magic_tower_prop_gem_blue));
+//        row4.add(new CaseBean(IProp.BAO_SHI_BLUE, R.drawable.magic_tower_prop_gem_blue));
 //        row4.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
 //        row4.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
 //        row4.add(new CaseBean(Building.STARRY_SKY, R.drawable.magic_tower_building_starry_sky));
@@ -102,9 +102,9 @@ public class Floor15 extends AbsFloor {
 //        row5.add(new CaseBean(Building.STARRY_SKY, R.drawable.magic_tower_building_starry_sky));
 //        row5.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
 //        row5.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
-//        row5.add(new CaseBean(Prop.BAO_SHI_RED, R.drawable.magic_tower_prop_gem_red));
+//        row5.add(new CaseBean(IProp.BAO_SHI_RED, R.drawable.magic_tower_prop_gem_red));
 //        row5.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
-//        row5.add(new CaseBean(Prop.BAO_SHI_RED, R.drawable.magic_tower_prop_gem_red));
+//        row5.add(new CaseBean(IProp.BAO_SHI_RED, R.drawable.magic_tower_prop_gem_red));
 //        row5.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
 //        row5.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
 //        row5.add(new CaseBean(Building.STARRY_SKY, R.drawable.magic_tower_building_starry_sky));

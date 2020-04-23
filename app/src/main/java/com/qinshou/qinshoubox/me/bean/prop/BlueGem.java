@@ -14,7 +14,7 @@ import androidx.fragment.app.FragmentManager;
  * Date: 2020/4/22 23:19
  * Description:蓝宝石
  */
-public class BlueGem implements Prop {
+public class BlueGem implements IProp {
     @Override
     public int getResourceId() {
         return R.drawable.magic_tower_prop_gem_blue;

@@ -14,7 +14,7 @@ import androidx.fragment.app.FragmentManager;
  * Date: 2020/4/22 23:19
  * Description:蓝钥匙
  */
-public class BlueKey implements Prop {
+public class BlueKey implements IProp {
     @Override
     public int getResourceId() {
         return R.drawable.magic_tower_prop_key_blue;

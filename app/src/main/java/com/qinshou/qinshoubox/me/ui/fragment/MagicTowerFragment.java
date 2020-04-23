@@ -239,8 +239,8 @@ public class MagicTowerFragment extends AbsMVPFragment<MagicTowerPresenter> impl
         Set<MonsterBean> monsterBeanSet = new HashSet<>();
         for (List<CaseBean> caseBeanList : currentFloor) {
             for (CaseBean caseBean : caseBeanList) {
-//                if (caseBean.getType() instanceof Monster) {
-//                    monsterBeanSet.add(MonsterFactory.getMonster((Monster) caseBean.getType()));
+//                if (caseBean.getType() instanceof IMonster) {
+//                    monsterBeanSet.add(MonsterFactory.getMonster((IMonster) caseBean.getType()));
 //                }
             }
         }

@@ -20,7 +20,7 @@ import androidx.fragment.app.FragmentManager;
  * Date: 2020/4/22 22:43
  * Description:
  */
-public class Fairy implements NpcBean {
+public class Fairy implements INpc {
     @Override
     public int getResourceId() {
         return R.drawable.magic_tower_npc_fairy;

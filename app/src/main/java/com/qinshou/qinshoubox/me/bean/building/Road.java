@@ -3,8 +3,6 @@ package com.qinshou.qinshoubox.me.bean.building;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.bean.IHandleEventCallback;
 import com.qinshou.qinshoubox.me.bean.Position;
-import com.qinshou.qinshoubox.me.enums.Building;
-import com.qinshou.qinshoubox.me.enums.Type;
 
 import androidx.fragment.app.FragmentManager;
 
@@ -14,7 +12,7 @@ import androidx.fragment.app.FragmentManager;
  * Date: 2020/4/22 13:18
  * Description:类描述
  */
-public class Road implements BuildingBean {
+public class Road implements IBuilding {
 
     @Override
     public int getResourceId() {

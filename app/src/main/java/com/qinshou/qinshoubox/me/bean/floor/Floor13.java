@@ -30,7 +30,7 @@ public class Floor13 extends AbsFloor {
         List<List<CaseBean>> floor13 = new ArrayList<>();
 //        List<CaseBean> row0 = new ArrayList<>();
 //        row0.add(new CaseBean(Building.ROAD, R.drawable.magic_tower_building_road));
-//        row0.add(new CaseBean(Monster.SHUANG_SHOU_JIAN_SHI, R.drawable.magic_tower_monster_shuang_shou_jian_shi));
+//        row0.add(new CaseBean(IMonster.SHUANG_SHOU_JIAN_SHI, R.drawable.magic_tower_monster_shuang_shou_jian_shi));
 //        row0.add(new CaseBean(Building.ROAD, R.drawable.magic_tower_building_road));
 //        row0.add(new CaseBean(Building.ROAD, R.drawable.magic_tower_building_road));
 //        row0.add(new CaseBean(Building.ROAD, R.drawable.magic_tower_building_road));
@@ -38,7 +38,7 @@ public class Floor13 extends AbsFloor {
 //        row0.add(new CaseBean(Building.ROAD, R.drawable.magic_tower_building_road));
 //        row0.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
 //        row0.add(new CaseBean(Building.ROAD, R.drawable.magic_tower_building_road));
-//        row0.add(new CaseBean(Monster.MING_ZHAN_SHI, R.drawable.magic_tower_monster_ming_zhan_shi));
+//        row0.add(new CaseBean(IMonster.MING_ZHAN_SHI, R.drawable.magic_tower_monster_ming_zhan_shi));
 //        row0.add(new CaseBean(Building.ROAD, R.drawable.magic_tower_building_road));
 //        floor13.add(row0);
 //
@@ -61,7 +61,7 @@ public class Floor13 extends AbsFloor {
 //        row2.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
 //        row2.add(new CaseBean(Building.ROAD, R.drawable.magic_tower_building_road));
 //        row2.add(new CaseBean(Building.ROAD, R.drawable.magic_tower_building_road));
-//        row2.add(new CaseBean(Monster.MING_WEI_BING, R.drawable.magic_tower_monster_ming_wei_bing));
+//        row2.add(new CaseBean(IMonster.MING_WEI_BING, R.drawable.magic_tower_monster_ming_wei_bing));
 //        row2.add(new CaseBean(Building.ROAD, R.drawable.magic_tower_building_road));
 //        row2.add(new CaseBean(Building.ROAD, R.drawable.magic_tower_building_road));
 //        row2.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
@@ -71,7 +71,7 @@ public class Floor13 extends AbsFloor {
 //        floor13.add(row2);
 //
 //        List<CaseBean> row3 = new ArrayList<>();
-//        row3.add(new CaseBean(Prop.XIE_PING_BIG, R.drawable.magic_tower_prop_blood_bottle_big));
+//        row3.add(new CaseBean(IProp.XIE_PING_BIG, R.drawable.magic_tower_prop_blood_bottle_big));
 //        row3.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
 //        row3.add(new CaseBean(Npc.GATE_RED, R.drawable.magic_tower_npc_gate_red_1));
 //        row3.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
@@ -85,45 +85,45 @@ public class Floor13 extends AbsFloor {
 //        floor13.add(row3);
 //
 //        List<CaseBean> row4 = new ArrayList<>();
-//        row4.add(new CaseBean(Monster.JIN_WEI_SHI, R.drawable.magic_tower_monster_jin_wei_shi));
+//        row4.add(new CaseBean(IMonster.JIN_WEI_SHI, R.drawable.magic_tower_monster_jin_wei_shi));
 //        row4.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
 //        row4.add(new CaseBean(Building.ROAD, R.drawable.magic_tower_building_road));
 //        row4.add(new CaseBean(Building.ROAD, R.drawable.magic_tower_building_road));
-//        row4.add(new CaseBean(Monster.MING_ZHAN_SHI, R.drawable.magic_tower_monster_ming_zhan_shi));
+//        row4.add(new CaseBean(IMonster.MING_ZHAN_SHI, R.drawable.magic_tower_monster_ming_zhan_shi));
 //        row4.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
-//        row4.add(new CaseBean(Monster.MING_WEI_BING, R.drawable.magic_tower_monster_ming_wei_bing));
+//        row4.add(new CaseBean(IMonster.MING_WEI_BING, R.drawable.magic_tower_monster_ming_wei_bing));
 //        row4.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
-//        row4.add(new CaseBean(Prop.BAO_SHI_RED, R.drawable.magic_tower_prop_gem_red));
+//        row4.add(new CaseBean(IProp.BAO_SHI_RED, R.drawable.magic_tower_prop_gem_red));
 //        row4.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
 //        row4.add(new CaseBean(Building.ROAD, R.drawable.magic_tower_building_road));
 //        floor13.add(row4);
 //
 //        List<CaseBean> row5 = new ArrayList<>();
-//        row5.add(new CaseBean(Monster.JIN_DUI_ZHANG, R.drawable.magic_tower_monster_jin_dui_zhang));
+//        row5.add(new CaseBean(IMonster.JIN_DUI_ZHANG, R.drawable.magic_tower_monster_jin_dui_zhang));
 //        row5.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
 //        row5.add(new CaseBean(Building.ROAD, R.drawable.magic_tower_building_road));
-//        row5.add(new CaseBean(Monster.MING_DUI_ZHANG_1, R.drawable.magic_tower_monster_ming_dui_zhang));
+//        row5.add(new CaseBean(IMonster.MING_DUI_ZHANG_1, R.drawable.magic_tower_monster_ming_dui_zhang));
 //        row5.add(new CaseBean(Npc.GATE_IRON_CLOSE, R.drawable.magic_tower_npc_gate_iron_1));
 //        row5.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
-//        row5.add(new CaseBean(Monster.GAO_JI_WEI_BING, R.drawable.magic_tower_monster_gao_ji_wei_bing));
+//        row5.add(new CaseBean(IMonster.GAO_JI_WEI_BING, R.drawable.magic_tower_monster_gao_ji_wei_bing));
 //        row5.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
-//        row5.add(new CaseBean(Prop.BAO_SHI_RED, R.drawable.magic_tower_prop_gem_red));
+//        row5.add(new CaseBean(IProp.BAO_SHI_RED, R.drawable.magic_tower_prop_gem_red));
 //        row5.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
 //        row5.add(new CaseBean(Building.ROAD, R.drawable.magic_tower_building_road));
 //        floor13.add(row5);
 //
 //        List<CaseBean> row6 = new ArrayList<>();
-//        row6.add(new CaseBean(Monster.JIN_WEI_SHI, R.drawable.magic_tower_monster_jin_wei_shi));
+//        row6.add(new CaseBean(IMonster.JIN_WEI_SHI, R.drawable.magic_tower_monster_jin_wei_shi));
 //        row6.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
-//        row6.add(new CaseBean(Monster.MING_ZHAN_SHI, R.drawable.magic_tower_monster_ming_zhan_shi));
+//        row6.add(new CaseBean(IMonster.MING_ZHAN_SHI, R.drawable.magic_tower_monster_ming_zhan_shi));
 //        row6.add(new CaseBean(Npc.GATE_IRON_OPEN, R.drawable.magic_tower_npc_gate_iron_1));
 //        row6.add(new CaseBean(Npc.SHEN_MI_LAO_REN_FLOOR_15, R.drawable.magic_tower_npc_shen_mi_lao_ren));
 //        row6.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
-//        row6.add(new CaseBean(Monster.MING_WEI_BING, R.drawable.magic_tower_monster_ming_wei_bing));
+//        row6.add(new CaseBean(IMonster.MING_WEI_BING, R.drawable.magic_tower_monster_ming_wei_bing));
 //        row6.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
-//        row6.add(new CaseBean(Prop.BAO_SHI_RED, R.drawable.magic_tower_prop_gem_red));
+//        row6.add(new CaseBean(IProp.BAO_SHI_RED, R.drawable.magic_tower_prop_gem_red));
 //        row6.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
-//        row6.add(new CaseBean(Prop.BAO_SHI_BLUE, R.drawable.magic_tower_prop_gem_blue));
+//        row6.add(new CaseBean(IProp.BAO_SHI_BLUE, R.drawable.magic_tower_prop_gem_blue));
 //        floor13.add(row6);
 //
 //        List<CaseBean> row7 = new ArrayList<>();
@@ -137,21 +137,21 @@ public class Floor13 extends AbsFloor {
 //        row7.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
 //        row7.add(new CaseBean(Building.ROAD, R.drawable.magic_tower_building_road));
 //        row7.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
-//        row7.add(new CaseBean(Prop.BAO_SHI_BLUE, R.drawable.magic_tower_prop_gem_blue));
+//        row7.add(new CaseBean(IProp.BAO_SHI_BLUE, R.drawable.magic_tower_prop_gem_blue));
 //        floor13.add(row7);
 //
 //        List<CaseBean> row8 = new ArrayList<>();
 //        row8.add(new CaseBean(Building.ROAD, R.drawable.magic_tower_building_road));
-//        row8.add(new CaseBean(Monster.JIN_WEI_SHI, R.drawable.magic_tower_monster_jin_wei_shi));
+//        row8.add(new CaseBean(IMonster.JIN_WEI_SHI, R.drawable.magic_tower_monster_jin_wei_shi));
 //        row8.add(new CaseBean(Building.ROAD, R.drawable.magic_tower_building_road));
 //        row8.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
 //        row8.add(new CaseBean(Building.ROAD, R.drawable.magic_tower_building_road));
 //        row8.add(new CaseBean(Building.ROAD, R.drawable.magic_tower_building_road));
 //        row8.add(new CaseBean(Building.ROAD, R.drawable.magic_tower_building_road));
-//        row8.add(new CaseBean(Monster.MING_ZHAN_SHI, R.drawable.magic_tower_monster_ming_zhan_shi));
+//        row8.add(new CaseBean(IMonster.MING_ZHAN_SHI, R.drawable.magic_tower_monster_ming_zhan_shi));
 //        row8.add(new CaseBean(Building.ROAD, R.drawable.magic_tower_building_road));
 //        row8.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
-//        row8.add(new CaseBean(Prop.BAO_SHI_BLUE, R.drawable.magic_tower_prop_gem_blue));
+//        row8.add(new CaseBean(IProp.BAO_SHI_BLUE, R.drawable.magic_tower_prop_gem_blue));
 //        floor13.add(row8);
 //
 //        List<CaseBean> row9 = new ArrayList<>();
@@ -159,7 +159,7 @@ public class Floor13 extends AbsFloor {
 //        row9.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
 //        row9.add(new CaseBean(Building.ROAD, R.drawable.magic_tower_building_road));
 //        row9.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
-//        row9.add(new CaseBean(Prop.XIE_PING_BIG, R.drawable.magic_tower_prop_blood_bottle_big));
+//        row9.add(new CaseBean(IProp.XIE_PING_BIG, R.drawable.magic_tower_prop_blood_bottle_big));
 //        row9.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
 //        row9.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
 //        row9.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
@@ -176,8 +176,8 @@ public class Floor13 extends AbsFloor {
 //        row10.add(new CaseBean(Building.ROAD, R.drawable.magic_tower_building_road));
 //        row10.add(new CaseBean(Npc.GO_UPSTAIRS, R.drawable.magic_tower_npc_go_upstairs));
 //        row10.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
-//        row10.add(new CaseBean(Prop.DA_FEI_YU, R.drawable.magic_tower_prop_da_fei_yu));
-//        row10.add(new CaseBean(Monster.MING_DUI_ZHANG_1, R.drawable.magic_tower_monster_ming_dui_zhang));
+//        row10.add(new CaseBean(IProp.DA_FEI_YU, R.drawable.magic_tower_prop_da_fei_yu));
+//        row10.add(new CaseBean(IMonster.MING_DUI_ZHANG_1, R.drawable.magic_tower_monster_ming_dui_zhang));
 //        row10.add(new CaseBean(Npc.GATE_YELLOW, R.drawable.magic_tower_npc_gate_yellow_1));
 //        row10.add(new CaseBean(Building.ROAD, R.drawable.magic_tower_building_road));
 //        floor13.add(row10);

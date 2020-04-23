@@ -14,7 +14,7 @@ import androidx.fragment.app.FragmentManager;
  * Date: 2020/4/22 23:19
  * Description:红宝石
  */
-public class RedGem implements Prop {
+public class RedGem implements IProp {
     @Override
     public int getResourceId() {
         return R.drawable.magic_tower_prop_gem_red;

@@ -14,7 +14,7 @@ import androidx.fragment.app.FragmentManager;
  * Date: 2020/4/22 23:19
  * Description:圣光徽
  */
-public class ShengGuangHui implements Prop {
+public class ShengGuangHui implements IProp {
     @Override
     public int getResourceId() {
         return R.drawable.magic_tower_prop_sheng_guang_hui;

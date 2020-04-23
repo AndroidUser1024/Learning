@@ -12,7 +12,7 @@ import androidx.fragment.app.FragmentManager;
  * Date: 2020/4/22 23:28
  * Description:小蝙蝠
  */
-public class XiaoBianFu implements Monster {
+public class XiaoBianFu implements IMonster {
     @Override
     public int getResourceId() {
         return R.drawable.magic_tower_monster_xiao_bian_fu;

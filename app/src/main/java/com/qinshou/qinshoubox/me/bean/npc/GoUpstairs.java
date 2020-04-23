@@ -13,7 +13,7 @@ import androidx.fragment.app.FragmentManager;
  * Date: 2020/4/22 22:55
  * Description:处理上楼事件
  */
-public class GoUpstairs implements NpcBean {
+public class GoUpstairs implements INpc {
 
     @Override
     public int getResourceId() {

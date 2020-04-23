@@ -14,7 +14,7 @@ import androidx.fragment.app.FragmentManager;
  * Date: 2020/4/22 23:19
  * Description:小血瓶
  */
-public class SmallBloodBottle implements Prop {
+public class SmallBloodBottle implements IProp {
     @Override
     public int getResourceId() {
         return R.drawable.magic_tower_prop_blood_bottle_small;

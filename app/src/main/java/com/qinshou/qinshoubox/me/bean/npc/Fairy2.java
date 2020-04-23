@@ -12,7 +12,7 @@ import androidx.fragment.app.FragmentManager;
  * Date: 2020/4/22 22:43
  * Description:
  */
-public class Fairy2 implements NpcBean {
+public class Fairy2 implements INpc {
 
     @Override
     public int getResourceId() {

@@ -8,5 +8,5 @@ import com.qinshou.qinshoubox.me.bean.CaseBean;
  * Date: 20-4-21 下午11:20
  * Description:
  */
-public interface NpcBean extends CaseBean {
+public interface INpc extends CaseBean {
 }

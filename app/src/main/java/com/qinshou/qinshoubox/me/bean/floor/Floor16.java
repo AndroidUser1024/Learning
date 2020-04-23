@@ -103,7 +103,7 @@ public class Floor16 extends AbsFloor {
 //        row5.add(new CaseBean(Building.STARRY_SKY, R.drawable.magic_tower_building_starry_sky));
 //        row5.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
 //        row5.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
-//        row5.add(new CaseBean(Monster.HONG_YI_MO_WANG_1, R.drawable.magic_tower_monster_hong_yi_mo_wang));
+//        row5.add(new CaseBean(IMonster.HONG_YI_MO_WANG_1, R.drawable.magic_tower_monster_hong_yi_mo_wang));
 //        row5.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
 //        row5.add(new CaseBean(Building.WALL, R.drawable.magic_tower_building_wall));
 //        row5.add(new CaseBean(Building.STARRY_SKY, R.drawable.magic_tower_building_starry_sky));

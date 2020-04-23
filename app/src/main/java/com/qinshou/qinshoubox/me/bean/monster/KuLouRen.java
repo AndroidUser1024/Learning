@@ -12,7 +12,7 @@ import androidx.fragment.app.FragmentManager;
  * Date: 2020/4/22 23:28
  * Description:骷髅人
  */
-public class KuLouRen implements Monster {
+public class KuLouRen implements IMonster {
     @Override
     public int getResourceId() {
         return R.drawable.magic_tower_monster_ku_lou_ren;

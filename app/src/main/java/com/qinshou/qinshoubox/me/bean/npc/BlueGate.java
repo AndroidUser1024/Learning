@@ -14,7 +14,7 @@ import androidx.fragment.app.FragmentManager;
  * Date: 2020/4/22 19:06
  * Description:蓝色门
  */
-public class BlueGate implements NpcBean {
+public class BlueGate implements INpc {
 
     @Override
     public int getResourceId() {

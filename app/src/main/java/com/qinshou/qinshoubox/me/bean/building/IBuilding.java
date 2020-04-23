@@ -13,5 +13,5 @@ import com.qinshou.qinshoubox.me.enums.Type;
  * Date: 20-4-21 下午11:22
  * Description:
  */
-public interface BuildingBean extends CaseBean {
+public interface IBuilding extends CaseBean {
 }

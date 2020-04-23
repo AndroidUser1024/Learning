@@ -8,5 +8,5 @@ import com.qinshou.qinshoubox.me.bean.CaseBean;
  * Date: 2020/4/22 23:19
  * Description:道具
  */
-public interface Prop extends CaseBean {
+public interface IProp extends CaseBean {
 }
