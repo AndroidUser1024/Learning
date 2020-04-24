@@ -495,8 +495,8 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
         if (mMediaSourceBeanList.size() == 0) {
             return;
         }
-//        playHls(mMediaSourceBeanList.get(0).getUrl());
-        playHls("https://gcdnc.v.dwion.com/gc/tyhjtys_1_md.m3u8");
+        playHls(mMediaSourceBeanList.get(0).getUrl());
+//        playHls("https://gcdnc.v.dwion.com/gc/tyhjtys_1_md.m3u8");
     }
 
     @Override

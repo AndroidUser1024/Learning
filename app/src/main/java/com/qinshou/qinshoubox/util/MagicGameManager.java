@@ -1,5 +1,7 @@
 package com.qinshou.qinshoubox.util;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TableLayout;
@@ -772,10 +774,25 @@ public enum MagicGameManager {
             @Override
             public void run() {
                 // 保存勇士属性
-                String json = new Gson().toJson(mWarriorBean);
-                ShowLogUtil.logi("json--->" + json);
                 SharedPreferencesHelper.SINGLETON.putString(IConstant.WARRIOR_BEAN_JSON, new Gson().toJson(mWarriorBean));
-                SharedPreferencesHelper.SINGLETON.putString(IConstant.MAP_JSON, new Gson().toJson(mFloorList));
+                // 保存所有楼层
+                // 遍历所有层
+                List<List<List<String>>> floorList = new ArrayList<>();
+                for (AbsFloor absFloor : mFloorList) {
+                    List<List<CaseBean>> data = absFloor.getData();
+                    // 遍历每一层所有行
+                    List<List<String>> rowList = new ArrayList<>();
+                    for (List<CaseBean> caseBeanList : data) {
+                        // 遍历每一行所有列
+                        List<String> columnList = new ArrayList<>();
+                        for (CaseBean caseBean : caseBeanList) {
+                            columnList.add(caseBean.getClass().getName());
+                        }
+                        rowList.add(columnList);
+                    }
+                    floorList.add(rowList);
+                }
+                SharedPreferencesHelper.SINGLETON.putString(IConstant.MAP_JSON, new Gson().toJson(floorList));
                 // 保存当前楼层
                 SharedPreferencesHelper.SINGLETON.putInt(IConstant.FLOOR, mFloor);
             }
@@ -798,12 +815,36 @@ public enum MagicGameManager {
                 }
                 String mapJson = SharedPreferencesHelper.SINGLETON.getString(IConstant.MAP_JSON);
                 if (!TextUtils.isEmpty(mapJson)) {
-                    mFloorList = new Gson().fromJson(mapJson, new TypeToken<List<List<AbsFloor>>>() {
+                    List<List<List<String>>> floorList = new Gson().fromJson(mapJson, new TypeToken<List<List<List<String>>>>() {
                     }.getType());
+                    for (int i = 0; i < floorList.size(); i++) {
+                        List<List<String>> rowList = floorList.get(i);
+                        for (int j = 0; j < rowList.size(); j++) {
+                            List<String> columnList = rowList.get(j);
+                            for (int k = 0; k < columnList.size(); k++) {
+                                try {
+                                    Class<?> clazz = Class.forName(columnList.get(k));
+                                    Object o = clazz.newInstance();
+                                    if (o instanceof WarriorBean) {
+                                        o = mWarriorBean;
+                                    }
+                                    mFloorList.get(i).setCase(new Position(j, k), (CaseBean) o);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
                 }
                 // 读取保存的数据
                 mFloor = SharedPreferencesHelper.SINGLETON.getInt(IConstant.FLOOR);
-                mFloorList.get(mFloor).initFloor(mTableLayout);
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mWarriorBean.update();
+                        mFloorList.get(mFloor).initFloor(mTableLayout);
+                    }
+                });
             }
         }).start();
     }
