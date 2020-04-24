@@ -1,7 +1,9 @@
 package com.qinshou.qinshoubox.me.ui.dialog;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -86,7 +88,13 @@ public class TalkDialogFragment extends AbsDialogFragment {
     public Dialog customDialog(Dialog dialog) {
         //设置点击外部不可消失
         dialog.setCanceledOnTouchOutside(false);
-        return super.customDialog(dialog);
+        dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                return keyCode == KeyEvent.KEYCODE_BACK;
+            }
+        });
+        return dialog;
     }
 
     public static TalkDialogFragment newInstance(TalkerBean talker1, TalkerBean talker2) {

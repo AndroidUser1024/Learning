@@ -1,16 +1,14 @@
 package com.qinshou.qinshoubox.me.ui.dialog;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.os.SystemClock;
+import android.view.KeyEvent;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qinshou.commonmodule.base.AbsDialogFragment;
 import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.me.bean.MonsterBean;
 import com.qinshou.qinshoubox.me.bean.monster.AbsMonster;
 import com.qinshou.qinshoubox.me.bean.warrior.WarriorBean;
 import com.qinshou.qinshoubox.util.MagicGameManager;
@@ -119,6 +117,12 @@ public class BattleDialogFragment extends AbsDialogFragment {
     public Dialog customDialog(Dialog dialog) {
         // 设置点击外部不可消失
         dialog.setCanceledOnTouchOutside(false);
+        dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                return keyCode == KeyEvent.KEYCODE_BACK;
+            }
+        });
         return dialog;
     }
 
