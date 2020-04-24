@@ -2,6 +2,9 @@ package com.qinshou.qinshoubox.me.bean.prop;
 
 import androidx.fragment.app.FragmentManager;
 
+import com.google.android.material.snackbar.Snackbar;
+import com.qinshou.commonmodule.util.SnackbarUtil;
+import com.qinshou.qinshoubox.App;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.bean.IHandleEventCallback;
 import com.qinshou.qinshoubox.me.bean.Position;
@@ -31,5 +34,9 @@ public class IronSword implements IProp {
 
         MagicGameManager.SINGLETON.setCase(position, new Road());
         handleEventCallback.onSuccess(false);
+//        Snackbar.make(MagicGameManager.SINGLETON.getTableLayout()
+//                , "获得铁剑,攻击+10"
+//                , Snackbar.LENGTH_SHORT
+//        ).show();
     }
 }

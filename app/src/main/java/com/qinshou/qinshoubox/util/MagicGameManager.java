@@ -563,6 +563,10 @@ public enum MagicGameManager {
         return false;
     }
 
+    public TableLayout getTableLayout() {
+        return mTableLayout;
+    }
+
     public void setCase(Position position, CaseBean toCase) {
         this.setCase(mFloor, position, toCase);
     }
@@ -795,12 +799,12 @@ public enum MagicGameManager {
                 SharedPreferencesHelper.SINGLETON.putString(IConstant.MAP_JSON, new Gson().toJson(floorList));
                 // 保存当前楼层
                 SharedPreferencesHelper.SINGLETON.putInt(IConstant.FLOOR, mFloor);
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         gameProgressCallback.onSuccess();
                     }
-                });
+                }, 1000);
             }
         }).start();
     }
@@ -816,9 +820,16 @@ public enum MagicGameManager {
             @Override
             public void run() {
                 String warriorBeanJson = SharedPreferencesHelper.SINGLETON.getString(IConstant.WARRIOR_BEAN_JSON);
-                if (!TextUtils.isEmpty(warriorBeanJson)) {
-                    mWarriorBean = new Gson().fromJson(warriorBeanJson, WarriorBean.class);
+                if (TextUtils.isEmpty(warriorBeanJson)) {
+                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            gameProgressCallback.onFailure();
+                        }
+                    }, 1000);
+                    return;
                 }
+                mWarriorBean = new Gson().fromJson(warriorBeanJson, WarriorBean.class);
                 String mapJson = SharedPreferencesHelper.SINGLETON.getString(IConstant.MAP_JSON);
                 if (!TextUtils.isEmpty(mapJson)) {
                     List<List<List<String>>> floorList = new Gson().fromJson(mapJson, new TypeToken<List<List<List<String>>>>() {
@@ -836,7 +847,12 @@ public enum MagicGameManager {
                                     }
                                     mFloorList.get(i).setCase(new Position(j, k), (CaseBean) o);
                                 } catch (Exception e) {
-                                    gameProgressCallback.onFailure();
+                                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            gameProgressCallback.onFailure();
+                                        }
+                                    }, 500);
                                     return;
                                 }
                             }
@@ -845,14 +861,14 @@ public enum MagicGameManager {
                 }
                 // 读取保存的数据
                 mFloor = SharedPreferencesHelper.SINGLETON.getInt(IConstant.FLOOR);
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         mWarriorBean.update();
                         mFloorList.get(mFloor).initFloor(mTableLayout);
                         gameProgressCallback.onSuccess();
                     }
-                });
+                }, 1000);
             }
         }).start();
     }

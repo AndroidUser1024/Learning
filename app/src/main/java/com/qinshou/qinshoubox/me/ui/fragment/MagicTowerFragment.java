@@ -76,7 +76,7 @@ public class MagicTowerFragment extends QSFragment<MagicTowerPresenter> implemen
 
                         @Override
                         public void onFailure() {
-
+                            loadingDialog.dismiss();
                         }
                     });
                     loadingDialog.show(getFragmentManager());
@@ -90,7 +90,7 @@ public class MagicTowerFragment extends QSFragment<MagicTowerPresenter> implemen
 
                         @Override
                         public void onFailure() {
-
+                            loadingDialog.dismiss();
                         }
                     });
                     loadingDialog.show(getFragmentManager());

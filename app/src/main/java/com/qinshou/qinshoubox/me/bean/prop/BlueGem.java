@@ -1,5 +1,6 @@
 package com.qinshou.qinshoubox.me.bean.prop;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.bean.IHandleEventCallback;
 import com.qinshou.qinshoubox.me.bean.Position;
@@ -29,5 +30,9 @@ public class BlueGem implements IProp {
 
         MagicGameManager.SINGLETON.setCase(position, new Road());
         handleEventCallback.onSuccess(false);
+//        Snackbar.make(MagicGameManager.SINGLETON.getTableLayout()
+//                , "获得蓝宝石,防御力+3"
+//                , Snackbar.LENGTH_SHORT
+//        ).show();
     }
 }
