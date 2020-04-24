@@ -4,6 +4,7 @@ import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.bean.IHandleEventCallback;
 import com.qinshou.qinshoubox.me.bean.Position;
 import com.qinshou.qinshoubox.me.bean.building.Road;
+import com.qinshou.qinshoubox.me.bean.warrior.WarriorBean;
 import com.qinshou.qinshoubox.util.MagicGameManager;
 
 import androidx.fragment.app.FragmentManager;
@@ -22,7 +23,10 @@ public class BigBloodBottle implements IProp {
 
     @Override
     public void handleEvent(FragmentManager fragmentManager, int floor, Position position, IHandleEventCallback handleEventCallback) {
-        MagicGameManager.SINGLETON.getWarriorBean().obtainBigBloodBottle();
+        WarriorBean warriorBean = MagicGameManager.SINGLETON.getWarriorBean();
+        warriorBean.setLifeValue(warriorBean.getLifeValue() + 500);
+        warriorBean.update();
+
         MagicGameManager.SINGLETON.setCase(position, new Road());
         handleEventCallback.onSuccess(false);
     }

@@ -241,42 +241,6 @@ public class WarriorBean implements CaseBean {
     }
 
     /**
-     * author：MrQinshou
-     * Description:获得一把黄钥匙
-     * date:2018/11/29 20:43
-     * param
-     * return
-     */
-    public void obtainYellowKey() {
-        yellowKeyCount++;
-        update();
-    }
-
-    /**
-     * author：MrQinshou
-     * Description:获得一把蓝钥匙
-     * date:2018/11/29 20:43
-     * param
-     * return
-     */
-    public void obtainBlueKey() {
-        blueKeyCount++;
-        update();
-    }
-
-    /**
-     * author：MrQinshou
-     * Description:获得一把红钥匙
-     * date:2018/11/29 20:43
-     * param
-     * return
-     */
-    public void obtainRedKey() {
-        redKeyCount++;
-        update();
-    }
-
-    /**
      * Author: QinHao
      * Email:cqflqinhao@126.com
      * Date:2019/10/9 19:20
@@ -309,57 +273,6 @@ public class WarriorBean implements CaseBean {
         update();
     }
 
-    public void beatMonster(int loseLifeValue, int experience, int money) {
-        lifeValue -= loseLifeValue;
-        this.experience += experience;
-        this.money += money;
-        update();
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/10 9:30
-     * Description:获得小血瓶
-     */
-    public void obtainSmallBloodBottle() {
-        lifeValue += 200;
-        update();
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/10 9:30
-     * Description:获得大血瓶
-     */
-    public void obtainBigBloodBottle() {
-        lifeValue += 500;
-        update();
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/10 9:31
-     * Description:获得红宝石
-     */
-    public void obtainRedGem() {
-        attackValue += 3;
-        update();
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/10 9:31
-     * Description:获得蓝宝石
-     */
-    public void obtainBlueGem() {
-        defenseValue += 3;
-        update();
-    }
-
     /**
      * Author: QinHao
      * Email:cqflqinhao@126.com
@@ -370,28 +283,6 @@ public class WarriorBean implements CaseBean {
      */
     public void obtainShengGuangHui() {
         hasShengGuangHui = true;
-        update();
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/10 9:45
-     * Description:获得铁剑
-     */
-    public void obtainIronSword() {
-        attackValue += 10;
-        update();
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/10 9:45
-     * Description:获得铁盾
-     */
-    public void obtainIronShield() {
-        defenseValue += 10;
         update();
     }
 
@@ -473,103 +364,6 @@ public class WarriorBean implements CaseBean {
         blueKeyCount++;
         redKeyCount++;
         update();
-    }
-
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/10 16:46
-     * Description:升 1 级
-     */
-    public void levelUp() {
-        if (experience < 100) {
-            return;
-        }
-        level++;
-        lifeValue += 1000;
-        attackValue += 7;
-        defenseValue += 7;
-        experience -= 100;
-        update();
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/10 16:46
-     * Description:用 30 经验值来提升 5 攻击力
-     */
-    public void buy5AttackValueWith30Experience() {
-        if (experience < 30) {
-            return;
-        }
-        attackValue += 5;
-        experience -= 30;
-        update();
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/10 16:45
-     * Description:用 30 经验值来提升 5 防御力
-     */
-    public void buy5DefenseValueWith30Experience() {
-        if (experience < 30) {
-            return;
-        }
-        defenseValue += 5;
-        experience -= 30;
-        update();
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/10 16:48
-     * Description:使用 10 金币购买 1 把黄钥匙
-     */
-    public boolean buyYellowKeyWith10Money() {
-        if (money < 10) {
-            return false;
-        }
-        yellowKeyCount++;
-        money -= 10;
-        update();
-        return true;
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/10 16:48
-     * Description:使用 50 金币购买1 把蓝钥匙
-     */
-    public boolean buyBlueKeyWith50Money() {
-        if (money < 50) {
-            return false;
-        }
-        blueKeyCount++;
-        money -= 50;
-        update();
-        return true;
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/10 16:48
-     * Description:使用 100 金币购买 1 把红钥匙
-     */
-    public boolean buyKeyRedWith100Money() {
-        if (money < 100) {
-            return false;
-        }
-        redKeyCount++;
-        money -= 100;
-        update();
-        return true;
     }
 
     /**

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.Window;
 
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.qinshou.commonmodule.util.StatusBarUtil;
 
@@ -123,6 +124,10 @@ public abstract class AbsDialogFragment extends DialogFragment {
 
     public void setOnDismissListener(OnDismissListener onDismissListener) {
         mOnDismissListener = onDismissListener;
+    }
+
+    public void show(FragmentManager fragmentManager) {
+        show(fragmentManager, getClass().getSimpleName());
     }
 
     public interface OnDismissListener {

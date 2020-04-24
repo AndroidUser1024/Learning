@@ -16,6 +16,7 @@ import com.qinshou.qinshoubox.me.bean.monster.QingTouGuai;
 import com.qinshou.qinshoubox.me.bean.monster.ShouMianRen;
 import com.qinshou.qinshoubox.me.bean.monster.XiaoBianFu;
 import com.qinshou.qinshoubox.me.bean.npc.BlueGate;
+import com.qinshou.qinshoubox.me.bean.npc.BusinessManFloor5;
 import com.qinshou.qinshoubox.me.bean.npc.GoDownstairs;
 import com.qinshou.qinshoubox.me.bean.npc.GoUpstairs;
 import com.qinshou.qinshoubox.me.bean.npc.MysteriousOldManFloor5;
@@ -103,7 +104,7 @@ public class Floor5 extends AbsFloor {
         row3.add(new Road());
         row3.add(new ShouMianRen());
         row3.add(new KuLouShiBing());
-        row3.add(new MysteriousOldManFloor5());
+        row3.add(new BusinessManFloor5());
         floor5.add(row3);
 
         List<CaseBean> row4 = new ArrayList<>();

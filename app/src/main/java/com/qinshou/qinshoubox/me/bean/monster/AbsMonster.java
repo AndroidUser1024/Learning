@@ -90,8 +90,12 @@ public abstract class AbsMonster implements IMonster, Serializable {
         battleDialogFragment.setOnDismissListener(new AbsDialogFragment.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
+                warriorBean.setLifeValue(warriorBean.getLifeValue() - warriorTotalLossLifeValue);
+                warriorBean.setExperience(warriorBean.getExperience() + experience);
+                warriorBean.setMoney(warriorBean.getExperience() + money);
+                warriorBean.update();
+
                 MagicGameManager.SINGLETON.setCase(position, new Road());
-                MagicGameManager.SINGLETON.getWarriorBean().beatMonster(warriorTotalLossLifeValue, getExperience(), getMoney());
                 handleEventCallback.onSuccess(false);
             }
         });
