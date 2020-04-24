@@ -16,7 +16,7 @@ import com.qinshou.qinshoubox.util.MagicGameManager;
  * Created on 2018/4/27
  */
 
-public class MysteriousOldManFloor5DialogFragment extends AbsDialogFragment {
+public class MysteriousOldManFloor5Dialog extends AbsDialogFragment {
     private RadioGroup mRadioGroup;
     //    @Override
 //    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

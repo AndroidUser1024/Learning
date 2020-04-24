@@ -9,7 +9,7 @@ import com.qinshou.commonmodule.base.AbsDialogFragment;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.bean.IHandleEventCallback;
 import com.qinshou.qinshoubox.me.bean.Position;
-import com.qinshou.qinshoubox.me.ui.dialog.BusinessManFloor5DialogFragment;
+import com.qinshou.qinshoubox.me.ui.dialog.BusinessManFloor5Dialog;
 
 /**
  * Author: QinHao
@@ -25,9 +25,9 @@ public class BusinessManFloor5 implements INpc {
 
     @Override
     public void handleEvent(FragmentManager fragmentManager, int floor, Position position, IHandleEventCallback handleEventCallback) {
-        BusinessManFloor5DialogFragment businessManFloor5DialogFragment = new BusinessManFloor5DialogFragment();
-        businessManFloor5DialogFragment.show(fragmentManager);
-        businessManFloor5DialogFragment.setOnDismissListener(new AbsDialogFragment.OnDismissListener() {
+        BusinessManFloor5Dialog businessManFloor5Dialog = new BusinessManFloor5Dialog();
+        businessManFloor5Dialog.show(fragmentManager);
+        businessManFloor5Dialog.setOnDismissListener(new AbsDialogFragment.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
                 handleEventCallback.onSuccess(false);

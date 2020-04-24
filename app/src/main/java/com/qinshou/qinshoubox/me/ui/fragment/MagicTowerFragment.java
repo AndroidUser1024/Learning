@@ -20,6 +20,7 @@ import com.qinshou.qinshoubox.me.bean.MonsterBean;
 import com.qinshou.qinshoubox.me.bean.warrior.WarriorBean;
 import com.qinshou.qinshoubox.me.contract.IMagicTowerContract;
 import com.qinshou.qinshoubox.me.presenter.MagicTowerPresenter;
+import com.qinshou.qinshoubox.me.ui.dialog.LoadingDialog;
 import com.qinshou.qinshoubox.me.ui.dialog.MonsterInfoDialogFragment;
 import com.qinshou.qinshoubox.util.MagicGameManager;
 
@@ -60,15 +61,39 @@ public class MagicTowerFragment extends QSFragment<MagicTowerPresenter> implemen
      */
     private ImageView mIvFengZhiLuoPan;
 
+    private LoadingDialog loadingDialog = new LoadingDialog();
+
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.btn_save:
-                    MagicGameManager.SINGLETON.save();
+                    MagicGameManager.SINGLETON.save(new MagicGameManager.IGameProgressCallback() {
+                        @Override
+                        public void onSuccess() {
+                            loadingDialog.dismiss();
+                        }
+
+                        @Override
+                        public void onFailure() {
+
+                        }
+                    });
+                    loadingDialog.show(getFragmentManager());
                     break;
                 case R.id.btn_read:
-                    MagicGameManager.SINGLETON.read();
+                    MagicGameManager.SINGLETON.read(new MagicGameManager.IGameProgressCallback() {
+                        @Override
+                        public void onSuccess() {
+                            loadingDialog.dismiss();
+                        }
+
+                        @Override
+                        public void onFailure() {
+
+                        }
+                    });
+                    loadingDialog.show(getFragmentManager());
                     break;
                 case R.id.iv_sheng_guang_hui:
                     ShowLogUtil.logi("圣光徽");

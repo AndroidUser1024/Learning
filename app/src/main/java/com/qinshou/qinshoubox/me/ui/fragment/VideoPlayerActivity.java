@@ -28,12 +28,15 @@ import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.qinshou.commonmodule.util.PreventRepeatOnClickListener;
@@ -397,25 +400,26 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
 //                + File.separator
 //                + "190309153658147087.mp4";
         String path = "http://vfx.mtime.cn/Video/2019/03/12/mp4/190312083533415853.mp4";
-//        String path2 = "http://vfx.mtime.cn/Video/2019/03/09/mp4/190309153658147087.mp4";
+        String path2 = "http://vfx.mtime.cn/Video/2019/03/09/mp4/190309153658147087.mp4";
         mExoPlayer = new SimpleExoPlayer.Builder(getContext()).build();
         mExoPlayer.addListener(mEventListener);
-        mExoPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
+//        mExoPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
 //        mExoPlayer.setPlayWhenReady(true);
 
         String userAgent = Util.getUserAgent(getContext(), "QinshouBox");
+        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(), userAgent);
         // 播放单个视频
-//        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(), userAgent);
-//        // 设置播放源
+        // 设置播放源
 //        MediaSource mediaSource = new ProgressiveMediaSource.Factory(dataSourceFactory)
 //                .createMediaSource(Uri.parse(path));
 //        mExoPlayer.prepare(mediaSource);
 
-//        MediaSource mediaSource2 = new ProgressiveMediaSource.Factory(dataSourceFactory)
-//                .createMediaSource(Uri.parse(path2));
         // Prepare the player with the source.
         // ConcatenatingMediaSource 可以设置多个播放源
+//        MediaSource mediaSource2 = new ProgressiveMediaSource.Factory(dataSourceFactory)
+//                .createMediaSource(Uri.parse(path2));
 //        ConcatenatingMediaSource concatenatingMediaSource = new ConcatenatingMediaSource(mediaSource, mediaSource2);
+//        mExoPlayer.prepare(concatenatingMediaSource);
 
         // 播放 HLS 流
 //        DataSource.Factory dataSourceFactory = new DefaultHttpDataSourceFactory(userAgent);

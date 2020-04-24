@@ -8,7 +8,7 @@ import com.qinshou.commonmodule.base.AbsDialogFragment;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.bean.IHandleEventCallback;
 import com.qinshou.qinshoubox.me.bean.Position;
-import com.qinshou.qinshoubox.me.ui.dialog.StoreSmallDialogFragment;
+import com.qinshou.qinshoubox.me.ui.dialog.StoreSmallDialog;
 
 /**
  * Author: QinHao
@@ -23,9 +23,9 @@ import com.qinshou.qinshoubox.me.ui.dialog.StoreSmallDialogFragment;
 
     @Override
     public void handleEvent(FragmentManager fragmentManager, int floor, Position position, IHandleEventCallback handleEventCallback) {
-        StoreSmallDialogFragment storeSmallDialogFragment = new StoreSmallDialogFragment();
-        storeSmallDialogFragment.show(fragmentManager, "StoreSmallDialogFragment");
-        storeSmallDialogFragment.setOnDismissListener(new AbsDialogFragment.OnDismissListener() {
+        StoreSmallDialog storeSmallDialog = new StoreSmallDialog();
+        storeSmallDialog.show(fragmentManager, "StoreSmallDialog");
+        storeSmallDialog.setOnDismissListener(new AbsDialogFragment.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
                 handleEventCallback.onSuccess(false);

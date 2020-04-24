@@ -19,7 +19,7 @@ import com.qinshou.qinshoubox.util.MagicGameManager;
  * Created on 2018/4/27
  */
 
-public class BattleDialogFragment extends AbsDialogFragment {
+public class BattleDialog extends AbsDialogFragment {
     private static final String MONSTER = "IMonster";
     private ImageView mIvMonster;
     private TextView mTvMonsterName;
@@ -126,12 +126,12 @@ public class BattleDialogFragment extends AbsDialogFragment {
         return dialog;
     }
 
-    public static BattleDialogFragment newInstance(AbsMonster monster) {
+    public static BattleDialog newInstance(AbsMonster monster) {
         // 谷歌推荐使用这种方式保存传进来的数据
-        BattleDialogFragment battleDialogFragment = new BattleDialogFragment();
+        BattleDialog battleDialog = new BattleDialog();
         Bundle bundle = new Bundle();
         bundle.putSerializable(MONSTER, monster);
-        battleDialogFragment.setArguments(bundle);
-        return battleDialogFragment;
+        battleDialog.setArguments(bundle);
+        return battleDialog;
     }
 }

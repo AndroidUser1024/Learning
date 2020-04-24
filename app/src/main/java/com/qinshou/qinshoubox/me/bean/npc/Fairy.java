@@ -9,6 +9,7 @@ import com.qinshou.qinshoubox.me.bean.IHandleEventCallback;
 import com.qinshou.qinshoubox.me.bean.Position;
 import com.qinshou.qinshoubox.me.bean.TalkerBean;
 import com.qinshou.qinshoubox.me.bean.building.Road;
+import com.qinshou.qinshoubox.me.bean.warrior.WarriorBean;
 import com.qinshou.qinshoubox.me.ui.dialog.TalkDialogFragment;
 import com.qinshou.qinshoubox.util.MagicGameManager;
 
@@ -59,9 +60,10 @@ public class Fairy implements INpc {
             @Override
             public void onDismiss(DialogInterface dialog) {
                 handleEventCallback.onSuccess(false);
-                MagicGameManager.SINGLETON.getWarriorBean().obtainYellowKey();
-                MagicGameManager.SINGLETON.getWarriorBean().obtainBlueKey();
-                MagicGameManager.SINGLETON.getWarriorBean().obtainRedKey();
+                WarriorBean warriorBean = MagicGameManager.SINGLETON.getWarriorBean();
+                warriorBean.setYellowKeyCount(warriorBean.getYellowKeyCount() + 1);
+                warriorBean.setBlueKeyCount(warriorBean.getBlueKeyCount() + 1);
+                warriorBean.setRedKeyCount(warriorBean.getRedKeyCount() + 1);
 
                 MagicGameManager.SINGLETON.setCase(new Position(8, 4), new Fairy2());
 

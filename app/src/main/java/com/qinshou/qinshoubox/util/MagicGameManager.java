@@ -314,7 +314,7 @@ public enum MagicGameManager {
 //        } else if (toCase.getType() == Npc.SHANG_DIAN_LAO_BAN_SMALL_1) {
 //
 //        } else if (toCase.getType() == Npc.SHANG_DIAN_LAO_BAN_SMALL_2) {
-////            new StoreSmallDialogFragment().show(fragmentManager, "StoreSmallDialogFragment");
+////            new StoreSmallDialog().show(fragmentManager, "StoreSmallDialog");
 //        } else if (toCase.getType() == Npc.SHANG_DIAN_LAO_BAN_SMALL_3) {
 //
 //        } else if (toCase.getType() == Npc.THIEF_1) {
@@ -355,15 +355,15 @@ public enum MagicGameManager {
 //        } else if (toCase.getType() == Npc.THIEF_2) {
 //
 //        } else if (toCase.getType() == Npc.SHEN_MI_LAO_REN_FLOOR_5) {
-////            new MysteriousOldManFloor5DialogFragment().show(fragmentManager, "MysteriousOldManFloor5DialogFragment");
+////            new MysteriousOldManFloor5Dialog().show(fragmentManager, "MysteriousOldManFloor5Dialog");
 //        } else if (toCase.getType() == Npc.SHANG_REN_FLOOR_5) {
-////            new BusinessManFloor5DialogFragment().show(fragmentManager, "BusinessManFloor5DialogFragment");
+////            new BusinessManFloor5Dialog().show(fragmentManager, "BusinessManFloor5Dialog");
 //        } else if (toCase.getType() == Npc.SHANG_DIAN_LAO_BAN_BIG_2) {
-////            new StoreBigDialogFragment().show(fragmentManager, "StoreBigDialogFragment");
+////            new StoreBigDialog().show(fragmentManager, "StoreBigDialog");
 //        } else if (toCase.getType() == Npc.SHANG_REN_FLOOR_12) {
-////            new BusinessManFloor12DialogFragment().show(fragmentManager, "BusinessManFloor12DialogFragment");
+////            new BusinessManFloor12Dialog().show(fragmentManager, "BusinessManFloor12Dialog");
 //        } else if (toCase.getType() == Npc.SHEN_MI_LAO_REN_FLOOR_13) {
-////            new MysteriousOldManFloor13DialogFragment().show(fragmentManager, "MysteriousOldManFloor13DialogFragment");
+////            new MysteriousOldManFloor13Dialog().show(fragmentManager, "MysteriousOldManFloor13Dialog");
 //        } else if (toCase.getType() == Npc.SHEN_MI_LAO_REN_FLOOR_15) {
 ////            String[] content1;
 ////            String[] content2;
@@ -549,7 +549,7 @@ public enum MagicGameManager {
 //            ShowLogUtil.logi("打是打得动,但是打着打着你就死了啊,兄dei");
 //            return false;
 //        }
-//        BattleDialogFragment battleDialogFragment = BattleDialogFragment.newInstance(monsterBean);
+//        BattleDialog battleDialogFragment = BattleDialog.newInstance(monsterBean);
 //        // 失去的总生命值
 //        int finalWarriorTotalLossLifeValue = warriorTotalLossLifeValue;
 //        battleDialogFragment.setOnDismissListener(new AbsDialogFragment.OnDismissListener() {
@@ -559,7 +559,7 @@ public enum MagicGameManager {
 //                WarriorBean.getInstance().beatMonster(finalWarriorTotalLossLifeValue, monsterBean.getExperience(), monsterBean.getMoney());
 //            }
 //        });
-//        battleDialogFragment.show(mFragmentManager, "BattleDialogFragment");
+//        battleDialogFragment.show(mFragmentManager, "BattleDialog");
         return false;
     }
 
@@ -769,7 +769,7 @@ public enum MagicGameManager {
      * Date:2019/10/9 20:19
      * Description:保存地图所有楼层当前状态
      */
-    public void save() {
+    public void save(IGameProgressCallback gameProgressCallback) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -795,6 +795,12 @@ public enum MagicGameManager {
                 SharedPreferencesHelper.SINGLETON.putString(IConstant.MAP_JSON, new Gson().toJson(floorList));
                 // 保存当前楼层
                 SharedPreferencesHelper.SINGLETON.putInt(IConstant.FLOOR, mFloor);
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        gameProgressCallback.onSuccess();
+                    }
+                });
             }
         }).start();
     }
@@ -805,7 +811,7 @@ public enum MagicGameManager {
      * Date:2019/10/9 20:41
      * Description:读取之前存储的地图状态
      */
-    public void read() {
+    public void read(IGameProgressCallback gameProgressCallback) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -830,7 +836,8 @@ public enum MagicGameManager {
                                     }
                                     mFloorList.get(i).setCase(new Position(j, k), (CaseBean) o);
                                 } catch (Exception e) {
-                                    e.printStackTrace();
+                                    gameProgressCallback.onFailure();
+                                    return;
                                 }
                             }
                         }
@@ -843,6 +850,7 @@ public enum MagicGameManager {
                     public void run() {
                         mWarriorBean.update();
                         mFloorList.get(mFloor).initFloor(mTableLayout);
+                        gameProgressCallback.onSuccess();
                     }
                 });
             }
@@ -889,5 +897,11 @@ public enum MagicGameManager {
         mFloor--;
         mFloorList.get(mFloor).initFloor(mTableLayout);
         mFloorList.get(mFloor).fromUpstairsToThisFloor();
+    }
+
+    public interface IGameProgressCallback {
+        void onSuccess();
+
+        void onFailure();
     }
 }

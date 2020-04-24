@@ -16,7 +16,7 @@ import com.qinshou.qinshoubox.util.MagicGameManager;
  * Created on 2018/4/27
  */
 
-public class BusinessManFloor5DialogFragment extends AbsDialogFragment {
+public class BusinessManFloor5Dialog extends AbsDialogFragment {
 
     private RadioGroup mRadioGroup;
 

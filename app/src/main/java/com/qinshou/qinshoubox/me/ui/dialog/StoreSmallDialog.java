@@ -1,10 +1,6 @@
 package com.qinshou.qinshoubox.me.ui.dialog;
 
-import android.app.Dialog;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.view.View;
-import android.view.Window;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -19,7 +15,7 @@ import com.qinshou.qinshoubox.util.MagicGameManager;
  * Created by 禽兽先生
  * Created on 2018/4/27
  */
-public class StoreSmallDialogFragment extends AbsDialogFragment {
+public class StoreSmallDialog extends AbsDialogFragment {
     private RadioGroup mRadioGroup;
 
     @Override

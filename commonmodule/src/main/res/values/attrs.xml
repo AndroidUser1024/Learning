@@ -97,4 +97,23 @@
         <attr name="rightImagePaddingRight" format="dimension|reference" />
         <attr name="rightImagePaddingBottom" format="dimension|reference" />
     </declare-styleable>
+
+    <!-- 通用圆角布局 -->
+    <declare-styleable name="RoundCornerLayout">
+        <attr name="radius" format="dimension" />
+        <attr name="leftTopRadius" format="dimension" />
+        <attr name="leftBottomRadius" format="dimension" />
+        <attr name="rightTopRadius" format="dimension" />
+        <attr name="rightBottomRadius" format="dimension" />
+    </declare-styleable>
+
+    <!-- 通用阴影布局 -->
+    <declare-styleable name="ShadowLayout">
+        <attr name="bgColor" format="color|reference" />
+        <attr name="shadowColor" format="color|reference" />
+        <attr name="shadowWidth" format="dimension|reference" />
+        <attr name="shadowRadius" format="dimension|reference" />
+        <attr name="shadowOffsetX" format="dimension|reference" />
+        <attr name="shadowOffsetY" format="dimension|reference" />
+    </declare-styleable>
 </resources>

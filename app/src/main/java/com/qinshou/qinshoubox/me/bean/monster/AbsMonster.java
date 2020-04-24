@@ -9,7 +9,7 @@ import com.qinshou.qinshoubox.me.bean.IHandleEventCallback;
 import com.qinshou.qinshoubox.me.bean.Position;
 import com.qinshou.qinshoubox.me.bean.building.Road;
 import com.qinshou.qinshoubox.me.bean.warrior.WarriorBean;
-import com.qinshou.qinshoubox.me.ui.dialog.BattleDialogFragment;
+import com.qinshou.qinshoubox.me.ui.dialog.BattleDialog;
 import com.qinshou.qinshoubox.util.MagicGameManager;
 
 import java.io.Serializable;
@@ -85,9 +85,9 @@ public abstract class AbsMonster implements IMonster, Serializable {
             handleEventCallback.onFailure(new Exception("打是打得动,但是打着打着你就死了啊,兄dei"));
             return;
         }
-        BattleDialogFragment battleDialogFragment = BattleDialogFragment.newInstance(this);
+        BattleDialog battleDialog = BattleDialog.newInstance(this);
         // 失去的总生命值
-        battleDialogFragment.setOnDismissListener(new AbsDialogFragment.OnDismissListener() {
+        battleDialog.setOnDismissListener(new AbsDialogFragment.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
                 warriorBean.setLifeValue(warriorBean.getLifeValue() - warriorTotalLossLifeValue);
@@ -99,7 +99,7 @@ public abstract class AbsMonster implements IMonster, Serializable {
                 handleEventCallback.onSuccess(false);
             }
         });
-        battleDialogFragment.show(fragmentManager, "BattleDialogFragment");
+        battleDialog.show(fragmentManager, "BattleDialog");
     }
 
     public String getName() {
