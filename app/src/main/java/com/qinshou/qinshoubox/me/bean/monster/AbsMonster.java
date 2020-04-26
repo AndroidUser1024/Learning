@@ -86,7 +86,6 @@ public abstract class AbsMonster implements IMonster, Serializable {
             return;
         }
         BattleDialog battleDialog = BattleDialog.newInstance(this);
-        // 失去的总生命值
         battleDialog.setOnDismissListener(new AbsDialogFragment.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {

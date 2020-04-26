@@ -17,6 +17,7 @@ import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.me.bean.CaseBean;
 import com.qinshou.qinshoubox.me.bean.IHandleEventCallback;
+import com.qinshou.qinshoubox.me.bean.MonsterBean;
 import com.qinshou.qinshoubox.me.bean.Position;
 import com.qinshou.qinshoubox.me.bean.building.Road;
 import com.qinshou.qinshoubox.me.bean.floor.AbsFloor;
@@ -42,10 +43,15 @@ import com.qinshou.qinshoubox.me.bean.floor.Floor6;
 import com.qinshou.qinshoubox.me.bean.floor.Floor7;
 import com.qinshou.qinshoubox.me.bean.floor.Floor8;
 import com.qinshou.qinshoubox.me.bean.floor.Floor9;
+import com.qinshou.qinshoubox.me.bean.monster.AbsMonster;
 import com.qinshou.qinshoubox.me.bean.warrior.WarriorBean;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Author: QinHao
@@ -830,7 +836,6 @@ public enum MagicGameManager {
                     return;
                 }
                 mWarriorBean = new Gson().fromJson(warriorBeanJson, WarriorBean.class);
-                ShowLogUtil.logi("mWarriorBean--->" + mWarriorBean);
                 String mapJson = SharedPreferencesHelper.SINGLETON.getString(IConstant.MAP_JSON);
                 if (!TextUtils.isEmpty(mapJson)) {
                     List<List<List<String>>> floorList = new Gson().fromJson(mapJson, new TypeToken<List<List<List<String>>>>() {
@@ -848,7 +853,6 @@ public enum MagicGameManager {
                                     }
                                     mFloorList.get(i).setCase(new Position(j, k), (CaseBean) o);
                                 } catch (Exception e) {
-                                    ShowLogUtil.logi("e--->" + e.getMessage());
                                     new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
@@ -868,10 +872,7 @@ public enum MagicGameManager {
                     public void run() {
                         mWarriorBean.update();
                         mFloorList.get(mFloor).initFloor(mTableLayout);
-                        ShowLogUtil.logi("mFloor--->" + mFloor);
-                        ShowLogUtil.logi("mFloorList--->" + mFloorList);
                         gameProgressCallback.onSuccess();
-                        ShowLogUtil.logi("读取成功了呀");
                     }
                 }, 1000);
             }
@@ -886,6 +887,19 @@ public enum MagicGameManager {
      */
     public List<List<CaseBean>> getCurrentFloor() {
         return mFloorList.get(mFloor).getData();
+    }
+
+    public List<AbsMonster> getCurrentFloorMonsterList() {
+        Map<String, AbsMonster> monsterMap = new HashMap<>();
+        for (List<CaseBean> rowList : mFloorList.get(mFloor).getData()) {
+            for (CaseBean caseBean : rowList) {
+                if (caseBean instanceof AbsMonster
+                        && !monsterMap.containsKey(((AbsMonster) caseBean).getName())) {
+                    monsterMap.put(((AbsMonster) caseBean).getName(), (AbsMonster) caseBean);
+                }
+            }
+        }
+        return new ArrayList<>(monsterMap.values());
     }
 
     /**
