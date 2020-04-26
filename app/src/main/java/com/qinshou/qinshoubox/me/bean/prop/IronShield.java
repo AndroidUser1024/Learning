@@ -1,7 +1,10 @@
 package com.qinshou.qinshoubox.me.bean.prop;
 
+import android.widget.Toast;
+
 import androidx.fragment.app.FragmentManager;
 
+import com.qinshou.qinshoubox.App;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.bean.IHandleEventCallback;
 import com.qinshou.qinshoubox.me.bean.Position;
@@ -28,6 +31,9 @@ public class IronShield implements IProp {
         warriorBean.update();
 
         MagicGameManager.SINGLETON.setCase(position, new Road());
+
         handleEventCallback.onSuccess(false);
+
+        Toast.makeText(App.getInstance(), "获得铁盾,防御力+10", Toast.LENGTH_SHORT).show();
     }
 }

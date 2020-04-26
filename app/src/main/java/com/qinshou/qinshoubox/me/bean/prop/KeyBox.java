@@ -1,7 +1,10 @@
 package com.qinshou.qinshoubox.me.bean.prop;
 
+import android.widget.Toast;
+
 import androidx.fragment.app.FragmentManager;
 
+import com.qinshou.qinshoubox.App;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.bean.IHandleEventCallback;
 import com.qinshou.qinshoubox.me.bean.Position;
@@ -30,7 +33,10 @@ public class KeyBox implements IProp {
         warriorBean.update();
 
         MagicGameManager.SINGLETON.setCase(position, new Road());
+
         handleEventCallback.onSuccess(false);
+
+        Toast.makeText(App.getInstance(), "获得钥匙盒,各钥匙+1", Toast.LENGTH_SHORT).show();
 
     }
 }

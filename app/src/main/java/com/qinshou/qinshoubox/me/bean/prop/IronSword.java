@@ -1,5 +1,7 @@
 package com.qinshou.qinshoubox.me.bean.prop;
 
+import android.widget.Toast;
+
 import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -33,7 +35,10 @@ public class IronSword implements IProp {
         warriorBean.update();
 
         MagicGameManager.SINGLETON.setCase(position, new Road());
+
         handleEventCallback.onSuccess(false);
+
+        Toast.makeText(App.getInstance(), "获得铁剑,攻击力+10", Toast.LENGTH_SHORT).show();
 //        Snackbar.make(MagicGameManager.SINGLETON.getTableLayout()
 //                , "获得铁剑,攻击+10"
 //                , Snackbar.LENGTH_SHORT
