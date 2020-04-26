@@ -211,7 +211,7 @@ public class MagicTowerFragment extends QSFragment<MagicTowerPresenter> implemen
 
     @Override
     public void initData() {
-        MagicGameManager.SINGLETON.startGame(gen    tChildFragmentManager(), mTlMap);
+        MagicGameManager.SINGLETON.startGame(getChildFragmentManager(), mTlMap);
         updateWarriorInfo(MagicGameManager.SINGLETON.getWarriorBean());
     }
 
