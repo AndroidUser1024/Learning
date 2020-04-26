@@ -30,7 +30,7 @@ public class WarriorBean implements CaseBean {
     private int yellowKeyCount;
     private int blueKeyCount;
     private int redKeyCount;
-    private boolean hasShengGuangHui;
+    private boolean hasHolyLightBadge;
     private boolean hasFengZhiLuoPan;
     private boolean hasXingGuangShenLang;
     private boolean hasLuckyCross;
@@ -39,7 +39,7 @@ public class WarriorBean implements CaseBean {
     public WarriorBean() {
     }
 
-    public WarriorBean(String name, Type type, int level, int lifeValue, int attackValue, int defenseValue, int money, int experience, int yellowKeyCount, int blueKeyCount, int redKeyCount, boolean hasShengGuangHui, boolean hasFengZhiLuoPan, boolean hasXingGuangShenLang, boolean hasLuckyCross, Position position) {
+    public WarriorBean(String name, Type type, int level, int lifeValue, int attackValue, int defenseValue, int money, int experience, int yellowKeyCount, int blueKeyCount, int redKeyCount, boolean hasHolyLightBadge, boolean hasFengZhiLuoPan, boolean hasXingGuangShenLang, boolean hasLuckyCross, Position position) {
         this.name = name;
         this.type = type;
         this.level = level;
@@ -51,7 +51,7 @@ public class WarriorBean implements CaseBean {
         this.yellowKeyCount = yellowKeyCount;
         this.blueKeyCount = blueKeyCount;
         this.redKeyCount = redKeyCount;
-        this.hasShengGuangHui = hasShengGuangHui;
+        this.hasHolyLightBadge = hasHolyLightBadge;
         this.hasFengZhiLuoPan = hasFengZhiLuoPan;
         this.hasXingGuangShenLang = hasXingGuangShenLang;
         this.hasLuckyCross = hasLuckyCross;
@@ -71,7 +71,7 @@ public class WarriorBean implements CaseBean {
                 ", 黄钥匙数量:" + yellowKeyCount +
                 ", 蓝钥匙数量:" + blueKeyCount +
                 ", 红钥匙数量:" + redKeyCount +
-                ", 是否拥有圣光徽:" + hasShengGuangHui +
+                ", 是否拥有圣光徽:" + hasHolyLightBadge +
                 ", 是否拥有风之罗盘:" + hasFengZhiLuoPan +
                 ", 是否拥有星光神榔:" + hasXingGuangShenLang +
                 ", 是否拥有幸运十字架:" + hasLuckyCross +
@@ -186,12 +186,12 @@ public class WarriorBean implements CaseBean {
         this.redKeyCount = mRedKeyCount;
     }
 
-    public boolean isHasShengGuangHui() {
-        return hasShengGuangHui;
+    public boolean isHasHolyLightBadge() {
+        return hasHolyLightBadge;
     }
 
-    public void setHasShengGuangHui(boolean hasShengGuangHui) {
-        this.hasShengGuangHui = hasShengGuangHui;
+    public void setHasHolyLightBadge(boolean hasHolyLightBadge) {
+        this.hasHolyLightBadge = hasHolyLightBadge;
     }
 
     public boolean isHasFengZhiLuoPan() {
@@ -282,7 +282,7 @@ public class WarriorBean implements CaseBean {
      * Description:获得蓝宝石
      */
     public void obtainShengGuangHui() {
-        hasShengGuangHui = true;
+        hasHolyLightBadge = true;
         update();
     }
 

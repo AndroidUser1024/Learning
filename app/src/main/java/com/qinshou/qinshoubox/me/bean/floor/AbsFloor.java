@@ -90,18 +90,6 @@ public abstract class AbsFloor {
     }
 
     /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/8 18:43
-     * Description:清除勇士当前位置,在上下楼时调用
-     */
-    public void clearWarriorPosition() {
-//        setCase(WarriorBean.getInstance().getPosition().getRow()
-//                , WarriorBean.getInstance().getPosition().getColumn()
-//                , new CaseBean(getFloor(), WarriorBean.getInstance().getPosition().getRow(), WarriorBean.getInstance().getPosition().getColumn(), Building.ROAD, R.drawable.magic_tower_building_road));
-    }
-
-    /**
      * Description:重设勇士位置,在 clearWarriorPosition() 方法后且 floor 改变后调用
      * Date:2018/4/26
      */

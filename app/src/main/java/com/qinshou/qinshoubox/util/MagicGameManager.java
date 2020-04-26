@@ -830,6 +830,7 @@ public enum MagicGameManager {
                     return;
                 }
                 mWarriorBean = new Gson().fromJson(warriorBeanJson, WarriorBean.class);
+                ShowLogUtil.logi("mWarriorBean--->" + mWarriorBean);
                 String mapJson = SharedPreferencesHelper.SINGLETON.getString(IConstant.MAP_JSON);
                 if (!TextUtils.isEmpty(mapJson)) {
                     List<List<List<String>>> floorList = new Gson().fromJson(mapJson, new TypeToken<List<List<List<String>>>>() {
@@ -847,6 +848,7 @@ public enum MagicGameManager {
                                     }
                                     mFloorList.get(i).setCase(new Position(j, k), (CaseBean) o);
                                 } catch (Exception e) {
+                                    ShowLogUtil.logi("e--->" + e.getMessage());
                                     new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
@@ -866,7 +868,10 @@ public enum MagicGameManager {
                     public void run() {
                         mWarriorBean.update();
                         mFloorList.get(mFloor).initFloor(mTableLayout);
+                        ShowLogUtil.logi("mFloor--->" + mFloor);
+                        ShowLogUtil.logi("mFloorList--->" + mFloorList);
                         gameProgressCallback.onSuccess();
+                        ShowLogUtil.logi("读取成功了呀");
                     }
                 }, 1000);
             }
@@ -893,7 +898,8 @@ public enum MagicGameManager {
         if (mFloor == mFloorList.size() - 1) {
             return;
         }
-        mFloorList.get(mFloor).clearWarriorPosition();
+        setCase(mWarriorBean.getPosition(), new Road());
+
         mFloor++;
         mFloorList.get(mFloor).initFloor(mTableLayout);
         mFloorList.get(mFloor).fromDownstairsToThisFloor();
@@ -909,7 +915,8 @@ public enum MagicGameManager {
         if (mFloor == 0) {
             return;
         }
-        mFloorList.get(mFloor).clearWarriorPosition();
+        setCase(mWarriorBean.getPosition(), new Road());
+
         mFloor--;
         mFloorList.get(mFloor).initFloor(mTableLayout);
         mFloorList.get(mFloor).fromUpstairsToThisFloor();

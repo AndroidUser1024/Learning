@@ -232,7 +232,7 @@ public class MagicTowerFragment extends QSFragment<MagicTowerPresenter> implemen
         tvYellowKeyCount.setText(warriorBean.getYellowKeyCount() + "");
         tvBlueKeyCount.setText(warriorBean.getBlueKeyCount() + "");
         tvRedKeyCount.setText(warriorBean.getRedKeyCount() + "");
-        if (warriorBean.isHasShengGuangHui()) {
+        if (warriorBean.isHasHolyLightBadge()) {
             mIvShengGuangHui.setVisibility(View.VISIBLE);
         } else {
             mIvShengGuangHui.setVisibility(View.INVISIBLE);

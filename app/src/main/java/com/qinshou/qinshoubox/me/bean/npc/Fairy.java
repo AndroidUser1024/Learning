@@ -64,6 +64,7 @@ public class Fairy implements INpc {
                 warriorBean.setYellowKeyCount(warriorBean.getYellowKeyCount() + 1);
                 warriorBean.setBlueKeyCount(warriorBean.getBlueKeyCount() + 1);
                 warriorBean.setRedKeyCount(warriorBean.getRedKeyCount() + 1);
+                warriorBean.update();
 
                 MagicGameManager.SINGLETON.setCase(new Position(8, 4), new Fairy2());
 

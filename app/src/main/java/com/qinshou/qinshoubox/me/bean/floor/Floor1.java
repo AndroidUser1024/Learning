@@ -24,7 +24,7 @@ import com.qinshou.qinshoubox.me.bean.prop.RedGem;
 import com.qinshou.qinshoubox.me.bean.prop.BlueKey;
 import com.qinshou.qinshoubox.me.bean.prop.RedKey;
 import com.qinshou.qinshoubox.me.bean.prop.YellowKey;
-import com.qinshou.qinshoubox.me.bean.prop.ShengGuangHui;
+import com.qinshou.qinshoubox.me.bean.prop.HolyLightBadge;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -187,7 +187,7 @@ public class Floor1 extends AbsFloor {
 
         List<CaseBean> row10 = new ArrayList<>();
         row10.add(new SmallBloodBottle());
-        row10.add(new ShengGuangHui());
+        row10.add(new HolyLightBadge());
         row10.add(new YellowKey());
         row10.add(new Wall());
         row10.add(new Road());
