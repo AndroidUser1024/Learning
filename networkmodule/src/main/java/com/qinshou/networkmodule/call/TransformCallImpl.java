@@ -49,7 +49,7 @@ public class TransformCallImpl<I, O> extends AbsCall<O> {
                     return;
                 }
                 try {
-                    I i = new Gson().fromJson(json, mType);
+                    I i = getGson().fromJson(json, mType);
                     O o = mResponseTransformer.transform(i);
                     mHandler.post(new SuccessRunnable<>(callback, o));
                 } catch (Exception e) {
@@ -66,7 +66,7 @@ public class TransformCallImpl<I, O> extends AbsCall<O> {
         if (responseBody == null) {
             return null;
         }
-        I i = new Gson().fromJson(responseBody.string(), mType);
+        I i = getGson().fromJson(responseBody.string(), mType);
         return mResponseTransformer.transform(i);
     }
 

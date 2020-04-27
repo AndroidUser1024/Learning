@@ -49,7 +49,7 @@ public class CallImpl<T> extends AbsCall<T> {
                 }
                 try {
                     String json = response.body().string();
-                    T t = new Gson().fromJson(json, mType);
+                    T t = getGson().fromJson(json, mType);
                     mHandler.post(new SuccessRunnable<>(callback, t));
                 } catch (IOException e) {
                     mHandler.post(new FailureRunnable<>(callback, e));
@@ -65,7 +65,7 @@ public class CallImpl<T> extends AbsCall<T> {
         if (responseBody == null) {
             return null;
         }
-        return new Gson().fromJson(responseBody.string(), mType);
+        return getGson().fromJson(responseBody.string(), mType);
     }
 
     @Override

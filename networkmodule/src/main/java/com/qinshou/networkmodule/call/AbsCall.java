@@ -4,7 +4,16 @@ package com.qinshou.networkmodule.call;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapter;
+import com.google.gson.internal.bind.TypeAdapters;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
+import com.google.gson.stream.JsonWriter;
 import com.qinshou.networkmodule.callback.Callback;
+
+import java.io.IOException;
 
 import okhttp3.Call;
 
@@ -20,6 +29,91 @@ public abstract class AbsCall<T> {
 
     public AbsCall(Call call) {
         mCall = call;
+    }
+
+    protected Gson getGson() {
+        return new GsonBuilder()
+                .registerTypeAdapterFactory(TypeAdapters.newFactory(int.class, Integer.class, new TypeAdapter<Number>() {
+                    @Override
+                    public void write(JsonWriter out, Number value) throws IOException {
+                        out.value(value);
+                    }
+
+                    @Override
+                    public Number read(JsonReader in) throws IOException {
+                        if (in.peek() == JsonToken.NULL) {
+                            in.nextNull();
+                            return null;
+                        }
+                        try {
+                            return in.nextInt();
+                        } catch (NumberFormatException e) {
+                            in.skipValue();
+                            return 0;
+                        }
+                    }
+                }))
+                .registerTypeAdapterFactory(TypeAdapters.newFactory(long.class, Long.class, new TypeAdapter<Number>() {
+                    @Override
+                    public void write(JsonWriter out, Number value) throws IOException {
+                        out.value(value);
+                    }
+
+                    @Override
+                    public Number read(JsonReader in) throws IOException {
+                        if (in.peek() == JsonToken.NULL) {
+                            in.nextNull();
+                            return null;
+                        }
+                        try {
+                            return in.nextLong();
+                        } catch (NumberFormatException e) {
+                            in.skipValue();
+                            return 0L;
+                        }
+                    }
+                }))
+                .registerTypeAdapterFactory(TypeAdapters.newFactory(float.class, Float.class, new TypeAdapter<Number>() {
+                    @Override
+                    public void write(JsonWriter out, Number value) throws IOException {
+                      out.value(value);
+                    }
+
+                    @Override
+                    public Number read(JsonReader in) throws IOException {
+                        if (in.peek() == JsonToken.NULL) {
+                            in.nextNull();
+                            return null;
+                        }
+                        try {
+                            return in.nextDouble();
+                        } catch (NumberFormatException e) {
+                            in.skipValue();
+                            return 0F;
+                        }
+                    }
+                }))
+                .registerTypeAdapterFactory(TypeAdapters.newFactory(double.class, Double.class, new TypeAdapter<Number>() {
+                    @Override
+                    public void write(JsonWriter out, Number value) throws IOException {
+                      out.value(value);
+                    }
+
+                    @Override
+                    public Number read(JsonReader in) throws IOException {
+                        if (in.peek() == JsonToken.NULL) {
+                            in.nextNull();
+                            return null;
+                        }
+                        try {
+                            return in.nextDouble();
+                        } catch (NumberFormatException e) {
+                            in.skipValue();
+                            return 0D;
+                        }
+                    }
+                }))
+                .create();
     }
 
     /**
