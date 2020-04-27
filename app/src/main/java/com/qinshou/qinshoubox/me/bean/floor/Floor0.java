@@ -10,6 +10,8 @@ import com.qinshou.qinshoubox.me.bean.building.Wall;
 import com.qinshou.qinshoubox.me.bean.npc.Fairy;
 import com.qinshou.qinshoubox.me.bean.npc.YellowGate;
 import com.qinshou.qinshoubox.me.bean.npc.GoUpstairs;
+import com.qinshou.qinshoubox.me.bean.warrior.WarriorBean;
+import com.qinshou.qinshoubox.util.MagicGameManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -189,11 +191,15 @@ public class Floor0 extends AbsFloor {
 
     @Override
     public void fromUpstairsToThisFloor() {
-        resetWarriorPosition(new Position(1, 5));
+        WarriorBean warriorBean = MagicGameManager.SINGLETON.getWarriorBean();
+        warriorBean.setPosition(new Position(1, 5));
+        MagicGameManager.SINGLETON.setCase(warriorBean.getPosition(), warriorBean);
     }
 
     @Override
     public void fromDownstairsToThisFloor() {
-        resetWarriorPosition(new Position(9, 5));
+        WarriorBean warriorBean = MagicGameManager.SINGLETON.getWarriorBean();
+        warriorBean.setPosition(new Position(9, 5));
+        MagicGameManager.SINGLETON.setCase(warriorBean.getPosition(), warriorBean);
     }
 }

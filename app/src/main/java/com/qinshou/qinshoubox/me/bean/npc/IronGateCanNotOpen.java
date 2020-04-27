@@ -21,6 +21,6 @@ public class IronGateCanNotOpen implements INpc {
 
     @Override
     public void handleEvent(FragmentManager fragmentManager, int floor, Position position, IHandleEventCallback handleEventCallback) {
-
+        handleEventCallback.onFailure(new Exception("这种门打不开或者是需要特殊方式打开"));
     }
 }

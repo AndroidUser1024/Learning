@@ -1,7 +1,14 @@
 package com.qinshou.qinshoubox.me.ui.dialog;
 
 
+import android.view.View;
+import android.widget.RadioGroup;
+import android.widget.Toast;
+
 import com.qinshou.commonmodule.base.AbsDialogFragment;
+import com.qinshou.qinshoubox.R;
+import com.qinshou.qinshoubox.me.bean.warrior.WarriorBean;
+import com.qinshou.qinshoubox.util.MagicGameManager;
 
 /**
  * Description:11 层的大商店对话框
@@ -10,56 +17,57 @@ import com.qinshou.commonmodule.base.AbsDialogFragment;
  */
 
 public class StoreBigDialog extends AbsDialogFragment {
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        //设置对话框无标题
-//        getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
-//
-//        //设置对话框自带背景透明,才能显示布局的背景
-//        final Window mWindow = getDialog().getWindow();
-//        if (mWindow != null) {
-//            mWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//        }
-//        //设置点击外部不可消失
-//        getDialog().setCanceledOnTouchOutside(false);
-//
-//        View rootView = inflater.inflate(R.layout.dialog_store_big, null);
-//        final RadioGroup radioGroup = rootView.findViewById(R.id.radio_group);
-//        rootView.findViewById(R.id.btn_confirm).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                switch (radioGroup.getCheckedRadioButtonId()) {
-//                    case R.id.radio_button_1:
-//                        WarriorBean.getInstance().buy4000LifeValueWith100Money();
-//                        break;
-//                    case R.id.radio_button_2:
-//                        WarriorBean.getInstance().buy20AttackValueWith100Money();
-//                        break;
-//                    case R.id.radio_button_3:
-//                        WarriorBean.getInstance().buy20DefenseValueWith100Money();
-//                        break;
-//                    case R.id.radio_button_4:
-//                        dismiss();
-//                        break;
-//                }
-//            }
-//        });
-//        return rootView;
-//    }
+
+    private RadioGroup mRadioGroup;
 
     @Override
     public int initLayoutId() {
-        return 0;
+        return R.layout.dialog_big_store;
     }
 
     @Override
     public void initView() {
-
+        mRadioGroup = findViewByID(R.id.radio_group);
     }
 
     @Override
     public void setListener() {
-
+        findViewByID(R.id.btn_confirm).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WarriorBean warriorBean = MagicGameManager.SINGLETON.getWarriorBean();
+                switch (mRadioGroup.getCheckedRadioButtonId()) {
+                    case R.id.radio_button_1:
+                        if (warriorBean.getMoney() < 100) {
+                            Toast.makeText(getContext(), "金币不足", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        warriorBean.setLifeValue(warriorBean.getLifeValue() + 4000);
+                        warriorBean.setMoney(warriorBean.getMoney() - 100);
+                        break;
+                    case R.id.radio_button_2:
+                        if (warriorBean.getMoney() < 100) {
+                            Toast.makeText(getContext(), "金币不足", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        warriorBean.setAttackValue(warriorBean.getAttackValue() + 20);
+                        warriorBean.setMoney(warriorBean.getMoney() - 100);
+                        break;
+                    case R.id.radio_button_3:
+                        if (warriorBean.getMoney() < 100) {
+                            Toast.makeText(getContext(), "金币不足", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        warriorBean.setDefenseValue(warriorBean.getDefenseValue() + 20);
+                        warriorBean.setMoney(warriorBean.getMoney() - 100);
+                        break;
+                    case R.id.radio_button_4:
+                        dismiss();
+                        break;
+                }
+                warriorBean.update();
+            }
+        });
     }
 
     @Override

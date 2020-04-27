@@ -6,6 +6,8 @@ import androidx.fragment.app.FragmentManager;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.bean.IHandleEventCallback;
 import com.qinshou.qinshoubox.me.bean.Position;
+import com.qinshou.qinshoubox.me.bean.building.Road;
+import com.qinshou.qinshoubox.util.MagicGameManager;
 
 /**
  * Author: QinHao
@@ -21,6 +23,8 @@ public class IronGateCanOpen implements INpc {
 
     @Override
     public void handleEvent(FragmentManager fragmentManager, int floor, Position position, IHandleEventCallback handleEventCallback) {
+        MagicGameManager.SINGLETON.setCase(position, new Road());
 
+        handleEventCallback.onSuccess(false);
     }
 }

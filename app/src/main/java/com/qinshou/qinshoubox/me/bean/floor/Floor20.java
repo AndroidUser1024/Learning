@@ -20,10 +20,12 @@ import com.qinshou.qinshoubox.me.bean.prop.RedGem;
 import com.qinshou.qinshoubox.me.bean.prop.RedKey;
 import com.qinshou.qinshoubox.me.bean.prop.SmallBloodBottle;
 import com.qinshou.qinshoubox.me.bean.prop.YellowKey;
+import com.qinshou.qinshoubox.me.bean.warrior.WarriorBean;
 import com.qinshou.qinshoubox.me.enums.Building;
 import com.qinshou.qinshoubox.me.enums.Monster;
 import com.qinshou.qinshoubox.me.enums.Npc;
 import com.qinshou.qinshoubox.me.enums.Prop;
+import com.qinshou.qinshoubox.util.MagicGameManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -208,6 +210,8 @@ public class Floor20 extends AbsFloor {
 
     @Override
     public void fromDownstairsToThisFloor() {
-        resetWarriorPosition(new Position(4, 5));
+        WarriorBean warriorBean = MagicGameManager.SINGLETON.getWarriorBean();
+        warriorBean.setPosition(new Position(4, 5));
+        MagicGameManager.SINGLETON.setCase(warriorBean.getPosition(), warriorBean);
     }
 }

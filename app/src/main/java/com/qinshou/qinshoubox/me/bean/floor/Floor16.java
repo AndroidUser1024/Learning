@@ -10,9 +10,11 @@ import com.qinshou.qinshoubox.me.bean.building.Wall;
 import com.qinshou.qinshoubox.me.bean.monster.HongYiMoWang;
 import com.qinshou.qinshoubox.me.bean.npc.GoDownstairs;
 import com.qinshou.qinshoubox.me.bean.npc.GoUpstairs;
+import com.qinshou.qinshoubox.me.bean.warrior.WarriorBean;
 import com.qinshou.qinshoubox.me.enums.Building;
 import com.qinshou.qinshoubox.me.enums.Monster;
 import com.qinshou.qinshoubox.me.enums.Npc;
+import com.qinshou.qinshoubox.util.MagicGameManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -192,11 +194,15 @@ public class Floor16 extends AbsFloor {
 
     @Override
     public void fromUpstairsToThisFloor() {
-        resetWarriorPosition(new Position(6, 5));
+        WarriorBean warriorBean = MagicGameManager.SINGLETON.getWarriorBean();
+        warriorBean.setPosition(new Position(6, 5));
+        MagicGameManager.SINGLETON.setCase(warriorBean.getPosition(), warriorBean);
     }
 
     @Override
     public void fromDownstairsToThisFloor() {
-        resetWarriorPosition(new Position(0, 5));
+        WarriorBean warriorBean = MagicGameManager.SINGLETON.getWarriorBean();
+        warriorBean.setPosition(new Position(0, 5));
+        MagicGameManager.SINGLETON.setCase(warriorBean.getPosition(), warriorBean);
     }
 }

@@ -13,6 +13,8 @@ import com.qinshou.qinshoubox.me.bean.npc.MysteriousOldManFloor15;
 import com.qinshou.qinshoubox.me.bean.npc.YellowGate;
 import com.qinshou.qinshoubox.me.bean.prop.BlueGem;
 import com.qinshou.qinshoubox.me.bean.prop.RedGem;
+import com.qinshou.qinshoubox.me.bean.warrior.WarriorBean;
+import com.qinshou.qinshoubox.util.MagicGameManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -192,11 +194,15 @@ public class Floor15 extends AbsFloor {
 
     @Override
     public void fromUpstairsToThisFloor() {
-        resetWarriorPosition(new Position(10, 7));
+        WarriorBean warriorBean = MagicGameManager.SINGLETON.getWarriorBean();
+        warriorBean.setPosition(new Position(10, 7));
+        MagicGameManager.SINGLETON.setCase(warriorBean.getPosition(), warriorBean);
     }
 
     @Override
     public void fromDownstairsToThisFloor() {
-        resetWarriorPosition(new Position(0, 3));
+        WarriorBean warriorBean = MagicGameManager.SINGLETON.getWarriorBean();
+        warriorBean.setPosition(new Position(0, 3));
+        MagicGameManager.SINGLETON.setCase(warriorBean.getPosition(), warriorBean);
     }
 }

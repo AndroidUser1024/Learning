@@ -23,6 +23,8 @@ import com.qinshou.qinshoubox.me.bean.prop.RedGem;
 import com.qinshou.qinshoubox.me.bean.prop.SmallBloodBottle;
 import com.qinshou.qinshoubox.me.bean.prop.StarLightGodHammer;
 import com.qinshou.qinshoubox.me.bean.prop.YellowKey;
+import com.qinshou.qinshoubox.me.bean.warrior.WarriorBean;
+import com.qinshou.qinshoubox.util.MagicGameManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -202,11 +204,15 @@ public class Floor12 extends AbsFloor {
 
     @Override
     public void fromUpstairsToThisFloor() {
-        resetWarriorPosition(new Position(10, 1));
+        WarriorBean warriorBean = MagicGameManager.SINGLETON.getWarriorBean();
+        warriorBean.setPosition(new Position(10, 1));
+        MagicGameManager.SINGLETON.setCase(warriorBean.getPosition(), warriorBean);
     }
 
     @Override
     public void fromDownstairsToThisFloor() {
-        resetWarriorPosition(new Position(10, 9));
+        WarriorBean warriorBean = MagicGameManager.SINGLETON.getWarriorBean();
+        warriorBean.setPosition(new Position(10, 9));
+        MagicGameManager.SINGLETON.setCase(warriorBean.getPosition(), warriorBean);
     }
 }

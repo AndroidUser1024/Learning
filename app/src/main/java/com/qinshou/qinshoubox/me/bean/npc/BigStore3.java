@@ -20,6 +20,6 @@ public class BigStore3 implements INpc {
 
     @Override
     public void handleEvent(FragmentManager fragmentManager, int floor, Position position, IHandleEventCallback handleEventCallback) {
-        handleEventCallback.onFailure(new Exception("大门在右边"));
+        handleEventCallback.onFailure(new Exception("大门在左边"));
     }
 }

@@ -31,5 +31,7 @@ public class YellowGate implements INpc {
         MagicGameManager.SINGLETON.getWarriorBean().update();
 
         MagicGameManager.SINGLETON.setCase(position, new Road());
+
+        handleEventCallback.onSuccess(false);
     }
 }

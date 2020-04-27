@@ -21,7 +21,7 @@ import com.qinshou.qinshoubox.util.MagicGameManager;
 public class GoldBullion implements IProp {
     @Override
     public int getResourceId() {
-        return R.drawable.magic_tower_prop_star_cross;
+        return R.drawable.magic_tower_prop_gold_bullion;
     }
 
     @Override

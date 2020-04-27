@@ -782,14 +782,34 @@ public enum MagicGameManager {
                 // 保存所有楼层
                 // 遍历所有层
                 List<List<List<String>>> floorList = new ArrayList<>();
-                for (AbsFloor absFloor : mFloorList) {
+//                for (AbsFloor absFloor : mFloorList) {
+//                    List<List<CaseBean>> data = absFloor.getData();
+//                    // 遍历每一层所有行
+//                    List<List<String>> rowList = new ArrayList<>();
+//                    for (List<CaseBean> caseBeanList : data) {
+//                        // 遍历每一行所有列
+//                        List<String> columnList = new ArrayList<>();
+//                        for (CaseBean caseBean : caseBeanList) {
+//                            columnList.add(caseBean.getClass().getName());
+//                        }
+//                        rowList.add(columnList);
+//                    }
+//                    floorList.add(rowList);
+//                }
+                for (int i = 0; i < mFloorList.size(); i++) {
+                    AbsFloor absFloor = mFloorList.get(i);
                     List<List<CaseBean>> data = absFloor.getData();
                     // 遍历每一层所有行
                     List<List<String>> rowList = new ArrayList<>();
-                    for (List<CaseBean> caseBeanList : data) {
+                    for (int j = 0; j < data.size(); j++) {
+                        List<CaseBean> caseBeanList = data.get(j);
                         // 遍历每一行所有列
                         List<String> columnList = new ArrayList<>();
-                        for (CaseBean caseBean : caseBeanList) {
+                        for (int k = 0; k < caseBeanList.size(); k++) {
+                            CaseBean caseBean = caseBeanList.get(k);
+                            if (i == 10 && j == 6 && k == 4) {
+                                ShowLogUtil.logi(caseBean);
+                            }
                             columnList.add(caseBean.getClass().getName());
                         }
                         rowList.add(columnList);
@@ -830,7 +850,6 @@ public enum MagicGameManager {
                     return;
                 }
                 mWarriorBean = new Gson().fromJson(warriorBeanJson, WarriorBean.class);
-                ShowLogUtil.logi("mWarriorBean--->" + mWarriorBean);
                 String mapJson = SharedPreferencesHelper.SINGLETON.getString(IConstant.MAP_JSON);
                 if (!TextUtils.isEmpty(mapJson)) {
                     List<List<List<String>>> floorList = new Gson().fromJson(mapJson, new TypeToken<List<List<List<String>>>>() {
@@ -845,6 +864,9 @@ public enum MagicGameManager {
                                     Object o = clazz.newInstance();
                                     if (o instanceof WarriorBean) {
                                         o = mWarriorBean;
+                                    }
+                                    if (i == 10 && j == 6 && k == 4) {
+                                        ShowLogUtil.logi(o);
                                     }
                                     mFloorList.get(i).setCase(new Position(j, k), (CaseBean) o);
                                 } catch (Exception e) {
@@ -868,10 +890,7 @@ public enum MagicGameManager {
                     public void run() {
                         mWarriorBean.update();
                         mFloorList.get(mFloor).initFloor(mTableLayout);
-                        ShowLogUtil.logi("mFloor--->" + mFloor);
-                        ShowLogUtil.logi("mFloorList--->" + mFloorList);
                         gameProgressCallback.onSuccess();
-                        ShowLogUtil.logi("读取成功了呀");
                     }
                 }, 1000);
             }

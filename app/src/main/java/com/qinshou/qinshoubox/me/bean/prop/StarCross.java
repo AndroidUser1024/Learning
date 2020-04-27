@@ -15,12 +15,12 @@ import com.qinshou.qinshoubox.util.MagicGameManager;
  * Author: QinHao
  * Email:qinhao@jeejio.com
  * Date: 2020/4/23 19:22
- * Description:星光十字架
+ * Description:幸运十字架
  */
 public class StarCross implements IProp {
     @Override
     public int getResourceId() {
-        return R.drawable.magic_tower_prop_star_cross;
+        return R.drawable.magic_tower_prop_lucky_cross;
     }
 
     @Override
