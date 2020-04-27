@@ -35,7 +35,7 @@ public class YellowKey implements IProp {
 
         handleEventCallback.onSuccess(false);
 
-        Toast.makeText(App.getInstance(), "获得 1 一把黄钥匙", Toast.LENGTH_SHORT).show();
+        Toast.makeText(App.getInstance(), "获得1把黄钥匙", Toast.LENGTH_SHORT).show();
 //        Snackbar.make(MagicGameManager.SINGLETON.getTableLayout()
 //                , "获得一把黄钥匙"
 //                , Snackbar.LENGTH_SHORT

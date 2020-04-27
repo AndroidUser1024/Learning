@@ -16,6 +16,6 @@ public class DaBianFu extends AbsMonster {
                 , 65
                 , 30
                 , 10
-                , 87);
+                , 8);
     }
 }
