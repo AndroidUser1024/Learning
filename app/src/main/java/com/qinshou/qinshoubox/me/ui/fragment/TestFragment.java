@@ -34,7 +34,7 @@ public class TestFragment extends AbsMVPFragment<TestPresenter> implements ITest
     private SwitchButton mSbWaveSideBarWave;
     private SwitchButton mSbWaveSideBarItemSelectedPopupWindow;
     private WaveSideBar mWaveSideBar;
-    private AbsCall mCall;
+    private AbsCall<File> mCall;
 
     @Override
     public int getLayoutId() {
@@ -98,7 +98,7 @@ public class TestFragment extends AbsMVPFragment<TestPresenter> implements ITest
 //        mSbWaveSideBarItemSelectedPopupWindow = findViewByID(R.id.sb_wave_side_bar_show_item_selected_popup_window);
 //        mWaveSideBar = findViewByID(R.id.wave_side_bar);
 //        String url = "https://gets.ddooo.com/dl.asp?sid=114131&rm=0&downurl=http://gd.ddooo.com:8081/androidkfjj_114131.rar";
-        String url = "http://vfx.mtime.cn/Video/2019/03/12/mp4/190312143927981075.mp4";
+        String url = "http://vfx.mtime.cn/Video/2019/03/09/mp4/190309153658147087.mp4";
         ProgressBar progressBar = findViewByID(R.id.progress_bar);
         Button btnStart = findViewByID(R.id.btn_start);
         Button btnPause = findViewByID(R.id.btn_pause);

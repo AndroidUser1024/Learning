@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#80000000"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="@dimen/px30">
+
+    <ImageView
+        android:id="@+id/iv_monster"
+        android:layout_width="@dimen/px100"
+        android:layout_height="@dimen/px100"
+        tools:src="@drawable/magic_tower_monster_lv_tou_guai" />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/px30"
+        android:layout_marginLeft="@dimen/px30"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:textColor="#FFFFFFFF"
+        android:textSize="@dimen/px26"
+        tools:text="青头怪" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/px30"
+        android:layout_marginLeft="@dimen/px30"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:text="攻击"
+                android:textColor="#FFFFFFFF"
+                android:textSize="@dimen/px24" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="·"
+                android:textColor="#FFFFFFFF"
+                android:textSize="@dimen/px24" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:text="防御"
+                android:textColor="#FFFFFFFF"
+                android:textSize="@dimen/px24" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_attack_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:textColor="#FFFFFFFF"
+                android:textSize="@dimen/px24"
+                tools:text="20" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="·"
+                android:textColor="#FFFFFFFF"
+                android:textSize="@dimen/px24" />
+
+            <TextView
+                android:id="@+id/tv_defense_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:textColor="#FFFFFFFF"
+                android:textSize="@dimen/px24"
+                tools:text="10" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/px30"
+        android:layout_marginLeft="@dimen/px30"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:text="金币"
+                android:textColor="#FFFFFFFF"
+                android:textSize="@dimen/px24" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:text="·"
+                android:textColor="#FFFFFFFF"
+                android:textSize="@dimen/px24" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:text="经验"
+                android:textColor="#FFFFFFFF"
+                android:textSize="@dimen/px24" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_money"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:textColor="#FFFFFFFF"
+                android:textSize="@dimen/px24"
+                tools:text="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="·"
+                android:textColor="#FFFFFFFF"
+                android:textSize="@dimen/px24" />
+
+            <TextView
+                android:id="@+id/tv_experience"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:textColor="#FFFFFFFF"
+                android:textSize="@dimen/px24"
+                tools:text="1" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/px30"
+        android:layout_marginLeft="@dimen/px30"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="损失生命"
+            android:textColor="#FFFFFFFF"
+            android:textSize="@dimen/px24" />
+
+        <TextView
+            android:id="@+id/tv_total_loss_life_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="100"
+            android:textColor="#FFFFFFFF"
+            android:textSize="@dimen/px24" />
+    </LinearLayout>
+
+
+</LinearLayout>

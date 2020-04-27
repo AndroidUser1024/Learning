@@ -1,12 +1,22 @@
 package com.qinshou.qinshoubox.me.ui.dialog;
 
 
-import android.os.Bundle;
+
+import android.app.Dialog;
+import android.view.Window;
+import android.view.WindowManager;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.qinshou.commonmodule.base.AbsDialogFragment;
-import com.qinshou.qinshoubox.me.bean.MonsterBean;
+import com.qinshou.commonmodule.rcvdecoration.DividerDecoration;
+import com.qinshou.qinshoubox.R;
+import com.qinshou.qinshoubox.me.bean.monster.AbsMonster;
+import com.qinshou.qinshoubox.me.ui.adapter.RcvMonsterAdapter;
+import com.qinshou.qinshoubox.util.MagicGameManager;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Author: QinHao
@@ -15,65 +25,20 @@ import java.util.ArrayList;
  * Description:点击圣光徽,显示怪物信息列表的对话框
  */
 public class MonsterInfoDialogFragment extends AbsDialogFragment {
-    private static final String MONSTER_LIST = "MonsterList";
-//    private RcvMonsterInfoAdapter mRcvMonsterInfoAdapter;
-
-//    @Override
-//    public int initLayoutId() {
-//        return R.layout.dialog_monster_info;
-//    }
-//
-//    @Override
-//    public void initView() {
-//        RecyclerView rcvMonsterInfo = findViewByID(R.id.rcv_monster_info);
-//        rcvMonsterInfo.setLayoutManager(new LinearLayoutManager(getContext()));
-//        rcvMonsterInfo.addItemDecoration(new DividerDecoration(DividerDecoration.Orientation.VERTICAL, 1, 0xFF696969));
-//        mRcvMonsterInfoAdapter = new RcvMonsterInfoAdapter(getContext());
-//        rcvMonsterInfo.setAdapter(mRcvMonsterInfoAdapter);
-//
-//    }
-//
-//    @Override
-//    public void setListener() {
-//
-//    }
-//
-//    @Override
-//    public void initData() {
-//        Bundle bundle = getArguments();
-//        if (bundle == null) {
-//            return;
-//        }
-//        List<MonsterBean> monsterBeanList = bundle.getParcelableArrayList(MONSTER_LIST);
-//        mRcvMonsterInfoAdapter.setDataList(monsterBeanList);
-//    }
-//
-//    @Override
-//    public Dialog customDialog(Dialog dialog) {
-//        Window window = dialog.getWindow();
-//        if (window != null) {
-//            //底部对话框
-//            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
-//        }
-//        return dialog;
-//    }
-
-    public static MonsterInfoDialogFragment newInstance(ArrayList<MonsterBean> monsterBeanList) {
-        Bundle args = new Bundle();
-        MonsterInfoDialogFragment fragment = new MonsterInfoDialogFragment();
-        args.putParcelableArrayList(MONSTER_LIST, monsterBeanList);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private RcvMonsterAdapter mRcvMonsterAdapter;
 
     @Override
     public int initLayoutId() {
-        return 0;
+        return R.layout.dialog_monster_info;
     }
 
     @Override
     public void initView() {
-
+        RecyclerView rcvMonsterInfo = findViewByID(R.id.rcv_monster_info);
+        rcvMonsterInfo.setLayoutManager(new LinearLayoutManager(getContext()));
+        rcvMonsterInfo.addItemDecoration(new DividerDecoration(new DividerDecoration.Builder().setColor(0xFF696969)));
+        mRcvMonsterAdapter = new RcvMonsterAdapter(getContext());
+        rcvMonsterInfo.setAdapter(mRcvMonsterAdapter);
     }
 
     @Override
@@ -83,6 +48,16 @@ public class MonsterInfoDialogFragment extends AbsDialogFragment {
 
     @Override
     public void initData() {
+        List<AbsMonster> currentFloorMonsterList = MagicGameManager.SINGLETON.getCurrentFloorMonsterList();
+        mRcvMonsterAdapter.setDataList(currentFloorMonsterList);
+    }
 
+    @Override
+    public Dialog customDialog(Dialog dialog) {
+        Window window = dialog.getWindow();
+        if (window != null) {
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        }
+        return dialog;
     }
 }

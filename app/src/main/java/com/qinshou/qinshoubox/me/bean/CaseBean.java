@@ -10,7 +10,6 @@ import androidx.fragment.app.FragmentManager;
  */
 
 public interface CaseBean {
-
     int getResourceId();
 
     void handleEvent(FragmentManager fragmentManager, int floor, Position position, IHandleEventCallback handleEventCallback);

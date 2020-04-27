@@ -40,11 +40,11 @@ public interface QSBoxCommonApi {
 
     @Download
     @Get()
-    AbsCall download(@Url String url, @FileTarget File file);
+    AbsCall<File> download(@Url String url, @FileTarget File file);
 
     @Download
     @Get()
-    AbsCall download(@Url String url, @FileTarget File file, @DownloadCallback IDownloadCallback downloadCallback);
+    AbsCall<File> download(@Url String url, @FileTarget File file, @DownloadCallback IDownloadCallback downloadCallback);
 
     /**
      * 断点续传
@@ -52,5 +52,5 @@ public interface QSBoxCommonApi {
      */
     @Download
     @Get()
-    AbsCall download(@Url String url, @Range long start, @FileTarget File file, @DownloadCallback IDownloadCallback downloadCallback);
+    AbsCall<File> download(@Url String url, @Range long start, @FileTarget File file, @DownloadCallback IDownloadCallback downloadCallback);
 }

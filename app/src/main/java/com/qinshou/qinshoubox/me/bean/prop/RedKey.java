@@ -35,7 +35,7 @@ public class RedKey implements IProp {
 
         handleEventCallback.onSuccess(false);
 
-        Toast.makeText(App.getInstance(), "获得 1 一把红钥匙", Toast.LENGTH_SHORT).show();
+        Toast.makeText(App.getInstance(), "获得1把红钥匙", Toast.LENGTH_SHORT).show();
 //        Snackbar.make(MagicGameManager.SINGLETON.getTableLayout()
 //                , "获得一把红钥匙"
 //                , Snackbar.LENGTH_SHORT

@@ -17,6 +17,7 @@ import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.me.bean.CaseBean;
 import com.qinshou.qinshoubox.me.bean.MonsterBean;
+import com.qinshou.qinshoubox.me.bean.monster.AbsMonster;
 import com.qinshou.qinshoubox.me.bean.warrior.WarriorBean;
 import com.qinshou.qinshoubox.me.contract.IMagicTowerContract;
 import com.qinshou.qinshoubox.me.presenter.MagicTowerPresenter;
@@ -25,6 +26,7 @@ import com.qinshou.qinshoubox.me.ui.dialog.MonsterInfoDialogFragment;
 import com.qinshou.qinshoubox.util.MagicGameManager;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -251,18 +253,7 @@ public class MagicTowerFragment extends QSFragment<MagicTowerPresenter> implemen
      * Description:显示怪物信息
      */
     private void showMonsterInfo() {
-        List<List<CaseBean>> currentFloor = MagicGameManager.SINGLETON.getCurrentFloor();
-        Set<MonsterBean> monsterBeanSet = new HashSet<>();
-        for (List<CaseBean> caseBeanList : currentFloor) {
-            for (CaseBean caseBean : caseBeanList) {
-//                if (caseBean.getType() instanceof IMonster) {
-//                    monsterBeanSet.add(MonsterFactory.getMonster((IMonster) caseBean.getType()));
-//                }
-            }
-        }
-        ArrayList<MonsterBean> monsterBeanList = new ArrayList<>(monsterBeanSet);
-        MonsterInfoDialogFragment.newInstance(monsterBeanList).show(getChildFragmentManager(), "MonsterInfoDialogFragment");
-        ShowLogUtil.logi("显示怪物信息");
+        new MonsterInfoDialogFragment().show(getChildFragmentManager());
     }
 
 }

@@ -1,5 +1,8 @@
 package com.qinshou.qinshoubox.me.bean.npc;
 
+import android.widget.Toast;
+
+import com.qinshou.qinshoubox.App;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.bean.IHandleEventCallback;
 import com.qinshou.qinshoubox.me.bean.Position;
@@ -31,6 +34,8 @@ public class BlueGate implements INpc {
         MagicGameManager.SINGLETON.getWarriorBean().update();
 
         MagicGameManager.SINGLETON.setCase(position, new Road());
+
+        Toast.makeText(App.getInstance(), "打开蓝色门,蓝钥匙-1", Toast.LENGTH_SHORT).show();
 
         handleEventCallback.onSuccess(false);
     }
