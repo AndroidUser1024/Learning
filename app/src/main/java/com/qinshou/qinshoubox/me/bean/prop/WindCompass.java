@@ -1,10 +1,15 @@
 package com.qinshou.qinshoubox.me.bean.prop;
 
+import android.widget.Toast;
+
 import androidx.fragment.app.FragmentManager;
 
+import com.qinshou.qinshoubox.App;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.bean.IHandleEventCallback;
 import com.qinshou.qinshoubox.me.bean.Position;
+import com.qinshou.qinshoubox.me.bean.building.Road;
+import com.qinshou.qinshoubox.util.MagicGameManager;
 
 /**
  * Author: QinHao
@@ -20,6 +25,11 @@ public class WindCompass implements IProp {
 
     @Override
     public void handleEvent(FragmentManager fragmentManager, int floor, Position position, IHandleEventCallback handleEventCallback) {
+        MagicGameManager.SINGLETON.getWarriorBean().setHasWindCompass(true);
+        MagicGameManager.SINGLETON.setCase(position, new Road());
 
+        handleEventCallback.onSuccess(false);
+
+        Toast.makeText(App.getInstance(), "恭喜你获得风之罗盘,现在你可以随意去你去过的楼层", Toast.LENGTH_SHORT).show();
     }
 }

@@ -31,15 +31,15 @@ public class WarriorBean implements CaseBean {
     private int blueKeyCount;
     private int redKeyCount;
     private boolean hasHolyLightBadge;
-    private boolean hasFengZhiLuoPan;
-    private boolean hasXingGuangShenLang;
+    private boolean hasWindCompass;
+    private boolean hasStarLightGodHammer;
     private boolean hasLuckyCross;
     private Position position;
 
     public WarriorBean() {
     }
 
-    public WarriorBean(String name, Type type, int level, int lifeValue, int attackValue, int defenseValue, int money, int experience, int yellowKeyCount, int blueKeyCount, int redKeyCount, boolean hasHolyLightBadge, boolean hasFengZhiLuoPan, boolean hasXingGuangShenLang, boolean hasLuckyCross, Position position) {
+    public WarriorBean(String name, Type type, int level, int lifeValue, int attackValue, int defenseValue, int money, int experience, int yellowKeyCount, int blueKeyCount, int redKeyCount, boolean hasHolyLightBadge, boolean hasWindCompass, boolean hasStarLightGodHammer, boolean hasLuckyCross, Position position) {
         this.name = name;
         this.type = type;
         this.level = level;
@@ -52,8 +52,8 @@ public class WarriorBean implements CaseBean {
         this.blueKeyCount = blueKeyCount;
         this.redKeyCount = redKeyCount;
         this.hasHolyLightBadge = hasHolyLightBadge;
-        this.hasFengZhiLuoPan = hasFengZhiLuoPan;
-        this.hasXingGuangShenLang = hasXingGuangShenLang;
+        this.hasWindCompass = hasWindCompass;
+        this.hasStarLightGodHammer = hasStarLightGodHammer;
         this.hasLuckyCross = hasLuckyCross;
         this.position = position;
     }
@@ -72,8 +72,8 @@ public class WarriorBean implements CaseBean {
                 ", 蓝钥匙数量:" + blueKeyCount +
                 ", 红钥匙数量:" + redKeyCount +
                 ", 是否拥有圣光徽:" + hasHolyLightBadge +
-                ", 是否拥有风之罗盘:" + hasFengZhiLuoPan +
-                ", 是否拥有星光神榔:" + hasXingGuangShenLang +
+                ", 是否拥有风之罗盘:" + hasWindCompass +
+                ", 是否拥有星光神榔:" + hasStarLightGodHammer +
                 ", 是否拥有幸运十字架:" + hasLuckyCross +
                 '}';
     }
@@ -194,20 +194,20 @@ public class WarriorBean implements CaseBean {
         this.hasHolyLightBadge = hasHolyLightBadge;
     }
 
-    public boolean isHasFengZhiLuoPan() {
-        return hasFengZhiLuoPan;
+    public boolean isHasWindCompass() {
+        return hasWindCompass;
     }
 
-    public void setHasFengZhiLuoPan(boolean hasFengZhiLuoPan) {
-        this.hasFengZhiLuoPan = hasFengZhiLuoPan;
+    public void setHasWindCompass(boolean hasWindCompass) {
+        this.hasWindCompass = hasWindCompass;
     }
 
-    public boolean isHasXingGuangShenLang() {
-        return hasXingGuangShenLang;
+    public boolean isHasStarLightGodHammer() {
+        return hasStarLightGodHammer;
     }
 
-    public void setHasXingGuangShenLang(boolean hasXingGuangShenLang) {
-        this.hasXingGuangShenLang = hasXingGuangShenLang;
+    public void setHasStarLightGodHammer(boolean hasStarLightGodHammer) {
+        this.hasStarLightGodHammer = hasStarLightGodHammer;
     }
 
     public boolean isHasLuckyCross() {
@@ -308,63 +308,6 @@ public class WarriorBean implements CaseBean {
         update();
     }
 
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/10 11:46
-     * Description:用 25 金币购买 800 生命值
-     */
-    public void buy800LifeValueWith25Money() {
-        if (money < 25) {
-            return;
-        }
-        lifeValue += 800;
-        money -= 25;
-        update();
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/10 11:48
-     * Description:用 25 金币购买 4 攻击
-     */
-    public void buy4AttackValueWith25Money() {
-        if (money < 25) {
-            return;
-        }
-        attackValue += 4;
-        money -= 25;
-        update();
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/10 11:48
-     * Description:用 25 金币购买 4 防御
-     */
-    public void buy4DefenseValueWith25Money() {
-        if (money < 25) {
-            return;
-        }
-        defenseValue += 4;
-        money -= 25;
-        update();
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/10 16:38
-     * Description:获得钥匙盒
-     */
-    public void obtainKeyBox() {
-        yellowKeyCount++;
-        blueKeyCount++;
-        redKeyCount++;
-        update();
-    }
 
     /**
      * Author: QinHao
@@ -377,17 +320,6 @@ public class WarriorBean implements CaseBean {
         lifeValue += 1000;
         attackValue += 7;
         defenseValue += 7;
-        update();
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/10 16:59
-     * Description:获得金块
-     */
-    public void obtainGoldBullion() {
-        money += 300;
         update();
     }
 
@@ -409,18 +341,7 @@ public class WarriorBean implements CaseBean {
      * Description:获得风之罗盘
      */
     public void obtainWindCompass() {
-        hasFengZhiLuoPan = true;
-        update();
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/12 17:25
-     * Description:获得青锋剑
-     */
-    public void obtainQingFengSword() {
-        defenseValue += 85;
+        hasWindCompass = true;
         update();
     }
 
@@ -538,7 +459,7 @@ public class WarriorBean implements CaseBean {
      * Description:获得星光神榔
      */
     public void obtainStarlightGodHammer() {
-        hasXingGuangShenLang = true;
+        hasStarLightGodHammer = true;
         update();
     }
 
@@ -712,7 +633,7 @@ public class WarriorBean implements CaseBean {
 //     * return
 //     */
 //    public void obtainXingGuangShenLang() {
-//        setHasXingGuangShenLang(true);
+//        setHasStarLightGodHammer(true);
 //        RxBus.getInstance().post(this);
 //        RxBus.getInstance().post("获得星光神榔，把它交给第 4 层的小偷，就可以打开第 18 层的隐藏地面啦。");
 //    }

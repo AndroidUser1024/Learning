@@ -1,6 +1,9 @@
 package com.qinshou.qinshoubox.me.bean.prop;
 
+import android.widget.Toast;
+
 import com.google.android.material.snackbar.Snackbar;
+import com.qinshou.qinshoubox.App;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.bean.IHandleEventCallback;
 import com.qinshou.qinshoubox.me.bean.Position;
@@ -29,8 +32,10 @@ public class BigBloodBottle implements IProp {
         warriorBean.update();
 
         MagicGameManager.SINGLETON.setCase(position, new Road());
+
         handleEventCallback.onSuccess(false);
 
+        Toast.makeText(App.getInstance(), "获得大血瓶,生命值+500", Toast.LENGTH_SHORT).show();
 //        Snackbar.make(MagicGameManager.SINGLETON.getTableLayout()
 //                , "获得大血瓶,生命值+500"
 //                , Snackbar.LENGTH_SHORT

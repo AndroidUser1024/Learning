@@ -239,7 +239,7 @@ public class MagicTowerFragment extends QSFragment<MagicTowerPresenter> implemen
         } else {
             mIvShengGuangHui.setVisibility(View.INVISIBLE);
         }
-        if (warriorBean.isHasFengZhiLuoPan()) {
+        if (warriorBean.isHasWindCompass()) {
             mIvFengZhiLuoPan.setVisibility(View.VISIBLE);
         } else {
             mIvFengZhiLuoPan.setVisibility(View.INVISIBLE);
