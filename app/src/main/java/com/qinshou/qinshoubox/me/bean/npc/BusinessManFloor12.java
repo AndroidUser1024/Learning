@@ -16,7 +16,7 @@ import androidx.fragment.app.FragmentManager;
 public class BusinessManFloor12 implements INpc {
     @Override
     public int getResourceId() {
-        return R.drawable.magic_tower_npc_shang_ren;
+        return R.drawable.magic_tower_npc_business_man;
     }
 
     @Override

@@ -16,7 +16,7 @@ import androidx.fragment.app.FragmentManager;
 public class MysteriousOldManFloor13 implements INpc {
     @Override
     public int getResourceId() {
-        return R.drawable.magic_tower_npc_shen_mi_lao_ren;
+        return R.drawable.magic_tower_npc_mysterious_old_man;
     }
 
     @Override

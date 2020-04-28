@@ -7,6 +7,7 @@ import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.bean.IHandleEventCallback;
 import com.qinshou.qinshoubox.me.bean.Position;
 import com.qinshou.qinshoubox.me.bean.building.Road;
+import com.qinshou.qinshoubox.me.bean.warrior.WarriorBean;
 import com.qinshou.qinshoubox.util.MagicGameManager;
 
 import androidx.fragment.app.FragmentManager;
@@ -26,16 +27,17 @@ public class RedGate implements INpc {
 
     @Override
     public void handleEvent(FragmentManager fragmentManager, int floor, Position position, IHandleEventCallback handleEventCallback) {
-        if (MagicGameManager.SINGLETON.getWarriorBean().getRedKeyCount() == 0) {
+        WarriorBean warriorBean = MagicGameManager.SINGLETON.getWarriorBean();
+        if (warriorBean.getRedKeyCount() == 0) {
             handleEventCallback.onFailure(new Exception("没有红钥匙啦,可以找五楼的商人买一把去."));
             return;
         }
-        MagicGameManager.SINGLETON.getWarriorBean().loseRedKey();
-        MagicGameManager.SINGLETON.getWarriorBean().update();
+        warriorBean.setRedKeyCount(warriorBean.getRedKeyCount() - 1);
+        warriorBean.update();
 
         MagicGameManager.SINGLETON.setCase(position, new Road());
 
-        Toast.makeText(App.getInstance(),"打开红色门,红钥匙-1",Toast.LENGTH_SHORT).show();
+        Toast.makeText(App.getInstance(), "打开红色门,红钥匙-1", Toast.LENGTH_SHORT).show();
 
         handleEventCallback.onSuccess(false);
     }

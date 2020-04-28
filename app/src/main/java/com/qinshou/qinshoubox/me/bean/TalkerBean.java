@@ -3,6 +3,7 @@ package com.qinshou.qinshoubox.me.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -13,69 +14,8 @@ import java.util.Arrays;
  */
 public class TalkerBean implements Parcelable {
     private String name;
-    private int resourceId;
-    private String[] content;
-
-    public TalkerBean() {
-    }
-
-    public TalkerBean(String name, int resourceId, String[] content) {
-        this.name = name;
-        this.resourceId = resourceId;
-        this.content = content;
-    }
-
-    protected TalkerBean(Parcel in) {
-        name = in.readString();
-        resourceId = in.readInt();
-        content = in.createStringArray();
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getResourceId() {
-        return resourceId;
-    }
-
-    public void setResourceId(int resourceId) {
-        this.resourceId = resourceId;
-    }
-
-    public String[] getContent() {
-        return content;
-    }
-
-    public void setContent(String[] content) {
-        this.content = content;
-
-    }
-
-    @Override
-    public String toString() {
-        return "TalkerBean{" +
-                "name='" + name + '\'' +
-                ", resourceId=" + resourceId +
-                ", content=" + Arrays.toString(content) +
-                '}';
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(name);
-        dest.writeInt(resourceId);
-        dest.writeStringArray(content);
-    }
+    private int resId;
+    private ArrayList<String> contentList;
 
     public static final Creator<TalkerBean> CREATOR = new Creator<TalkerBean>() {
         @Override
@@ -88,4 +28,64 @@ public class TalkerBean implements Parcelable {
             return new TalkerBean[size];
         }
     };
+
+    public TalkerBean() {
+    }
+
+    public TalkerBean(String name, int resId, ArrayList<String> contentList) {
+        this.name = name;
+        this.resId = resId;
+        this.contentList = contentList;
+    }
+
+    protected TalkerBean(Parcel in) {
+        name = in.readString();
+        resId = in.readInt();
+        contentList = in.createStringArrayList();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeInt(resId);
+        dest.writeStringList(contentList);
+    }
+
+    @Override
+    public String toString() {
+        return "TalkerBean{" +
+                "name='" + name + '\'' +
+                ", resId=" + resId +
+                ", contentList=" + contentList +
+                '}';
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getResId() {
+        return resId;
+    }
+
+    public void setResId(int resId) {
+        this.resId = resId;
+    }
+
+    public ArrayList<String> getContentList() {
+        return contentList;
+    }
+
+    public void setContentList(ArrayList<String> contentList) {
+        this.contentList = contentList;
+    }
 }

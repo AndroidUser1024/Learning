@@ -7,6 +7,7 @@ import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.bean.IHandleEventCallback;
 import com.qinshou.qinshoubox.me.bean.Position;
 import com.qinshou.qinshoubox.me.bean.building.Road;
+import com.qinshou.qinshoubox.me.bean.warrior.WarriorBean;
 import com.qinshou.qinshoubox.util.MagicGameManager;
 
 import androidx.fragment.app.FragmentManager;
@@ -26,12 +27,13 @@ public class YellowGate implements INpc {
 
     @Override
     public void handleEvent(FragmentManager fragmentManager, int floor, Position position, IHandleEventCallback handleEventCallback) {
-        if (MagicGameManager.SINGLETON.getWarriorBean().getYellowKeyCount() == 0) {
+        WarriorBean warriorBean = MagicGameManager.SINGLETON.getWarriorBean();
+        if (warriorBean.getYellowKeyCount() == 0) {
             handleEventCallback.onFailure(new Exception("没有黄钥匙啦,可以找五楼的商人买一把去."));
             return;
         }
-        MagicGameManager.SINGLETON.getWarriorBean().loseYellowKey();
-        MagicGameManager.SINGLETON.getWarriorBean().update();
+        warriorBean.setYellowKeyCount(warriorBean.getYellowKeyCount() - 1);
+        warriorBean.update();
 
         MagicGameManager.SINGLETON.setCase(position, new Road());
 

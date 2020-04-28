@@ -1,7 +1,5 @@
 package com.qinshou.qinshoubox.me.bean.floor;
 
-
-import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.bean.CaseBean;
 import com.qinshou.qinshoubox.me.bean.Position;
 import com.qinshou.qinshoubox.me.bean.building.Road;
@@ -10,7 +8,6 @@ import com.qinshou.qinshoubox.me.bean.monster.ChuJiWeiBing;
 import com.qinshou.qinshoubox.me.bean.monster.DaBianFu;
 import com.qinshou.qinshoubox.me.bean.monster.HongBianFu;
 import com.qinshou.qinshoubox.me.bean.monster.HongTouGuai;
-import com.qinshou.qinshoubox.me.bean.monster.IMonster;
 import com.qinshou.qinshoubox.me.bean.monster.KuLouRen;
 import com.qinshou.qinshoubox.me.bean.monster.QingTouGuai;
 import com.qinshou.qinshoubox.me.bean.monster.ShouMianRen;
@@ -18,7 +15,7 @@ import com.qinshou.qinshoubox.me.bean.monster.XiaoBianFu;
 import com.qinshou.qinshoubox.me.bean.npc.BlueGate;
 import com.qinshou.qinshoubox.me.bean.npc.GoDownstairs;
 import com.qinshou.qinshoubox.me.bean.npc.GoUpstairs;
-import com.qinshou.qinshoubox.me.bean.npc.IronGateCanNotOpen;
+import com.qinshou.qinshoubox.me.bean.npc.IronGateCanOpen;
 import com.qinshou.qinshoubox.me.bean.npc.RedGate;
 import com.qinshou.qinshoubox.me.bean.npc.Thief;
 import com.qinshou.qinshoubox.me.bean.npc.YellowGate;
@@ -27,10 +24,6 @@ import com.qinshou.qinshoubox.me.bean.prop.RedGem;
 import com.qinshou.qinshoubox.me.bean.prop.SmallBloodBottle;
 import com.qinshou.qinshoubox.me.bean.prop.YellowKey;
 import com.qinshou.qinshoubox.me.bean.warrior.WarriorBean;
-import com.qinshou.qinshoubox.me.enums.Building;
-import com.qinshou.qinshoubox.me.enums.Monster;
-import com.qinshou.qinshoubox.me.enums.Npc;
-import com.qinshou.qinshoubox.me.enums.Prop;
 import com.qinshou.qinshoubox.util.MagicGameManager;
 
 import java.util.ArrayList;
@@ -86,7 +79,7 @@ public class Floor4 extends AbsFloor {
         row2.add(new Road());
         row2.add(new Wall());
         row2.add(new Wall());
-        row2.add(new IronGateCanNotOpen());
+        row2.add(new IronGateCanOpen());
         row2.add(new Wall());
         row2.add(new Wall());
         row2.add(new Road());

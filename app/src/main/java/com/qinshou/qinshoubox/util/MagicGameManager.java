@@ -350,7 +350,7 @@ public enum MagicGameManager {
 ////                        for (CaseBean caseBean : caseBeanList) {
 ////                            if (caseBean.getType() == Npc.GATE_GREEN) {
 ////                                caseBean.setType(Building.ROAD);
-////                                caseBean.setResourceId(R.drawable.magic_tower_building_road);
+////                                caseBean.setResId(R.drawable.magic_tower_building_road);
 ////                                setCase(caseBean.getRow(), caseBean.getColumn(), caseBean);
 ////                                break;
 ////                            }
@@ -767,7 +767,7 @@ public enum MagicGameManager {
      * @param caseBean 地图格子对象
      */
     public void updateUI(Position position, CaseBean caseBean) {
-//        ((ImageView) ((TableRow) mTableLayout.getChildAt(caseBean.getRow())).getChildAt(caseBean.getColumn())).setImageResource(caseBean.getSpecificEntity(caseBean.getType()).getResourceId());
+//        ((ImageView) ((TableRow) mTableLayout.getChildAt(caseBean.getRow())).getChildAt(caseBean.getColumn())).setImageResource(caseBean.getSpecificEntity(caseBean.getType()).getResId());
         TableRow tableRow = (TableRow) mTableLayout.getChildAt(position.getRow());
         ImageView imageView = (ImageView) tableRow.getChildAt(position.getColumn());
         imageView.setImageResource(caseBean.getResourceId());

@@ -243,170 +243,6 @@ public class WarriorBean implements CaseBean {
     /**
      * Author: QinHao
      * Email:cqflqinhao@126.com
-     * Date:2019/10/9 19:20
-     * Description:失去一把黄钥匙
-     */
-    public void loseYellowKey() {
-        yellowKeyCount--;
-        update();
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/9 19:21
-     * Description:失去一把蓝钥匙
-     */
-    public void loseBlueKey() {
-        blueKeyCount--;
-        update();
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/9 19:21
-     * Description:失去一把红钥匙
-     */
-    public void loseRedKey() {
-        redKeyCount--;
-        update();
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/10 9:32
-     * <p>
-     * <p>
-     * Description:获得蓝宝石
-     */
-    public void obtainShengGuangHui() {
-        hasHolyLightBadge = true;
-        update();
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/10 11:35
-     * Description:获得钢剑
-     */
-    public void obtainSteelSword() {
-        attackValue += 30;
-        update();
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/10 11:35
-     * Description:获得钢盾
-     */
-    public void obtainSteelShield() {
-        defenseValue += 30;
-        update();
-    }
-
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/10 16:54
-     * Description:获得小飞羽
-     */
-    public void obtainSmallFlightFeather() {
-        level++;
-        lifeValue += 1000;
-        attackValue += 7;
-        defenseValue += 7;
-        update();
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/10 17:34
-     * Description:获得幸运十字架
-     */
-    public void obtainLuckyCross() {
-        hasLuckyCross = true;
-        update();
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/12 17:25
-     * Description:获得风之罗盘
-     */
-    public void obtainWindCompass() {
-        hasWindCompass = true;
-        update();
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/12 19:30
-     * Description:获得黄金盾
-     */
-    public void obtainGoldShield() {
-        attackValue += 70;
-        update();
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/12 19:08
-     * Description:用 100 金币购买 800 生命值
-     */
-    public boolean buy4000LifeValueWith100Money() {
-        if (money < 100) {
-            return false;
-        }
-        lifeValue += 4000;
-        money -= 100;
-        update();
-        return true;
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/12 19:08
-     * Description:用 100 金币购买 4 攻击
-     */
-    public boolean buy20AttackValueWith100Money() {
-        if (money < 100) {
-            return false;
-        }
-        attackValue += 20;
-        money -= 100;
-        update();
-        return true;
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/12 19:08
-     * Description:用 100 金币购买 20 防御
-     */
-    public boolean buy20DefenseValueWith100Money() {
-        if (money < 100) {
-            return false;
-        }
-        defenseValue += 20;
-        money -= 100;
-        update();
-        return true;
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
      * Date:2019/10/12 19:24
      * Description:卖出 1 把黄钥匙得到 7 金币
      */
@@ -726,7 +562,7 @@ public class WarriorBean implements CaseBean {
 //            return;
 //        }
 //        setType(CaseBean.WARRIOR_UP);
-//        setResourceId(R.drawable.warrior_up);
+//        setResId(R.drawable.warrior_up);
 //        CaseBean fromCase = MapManager.getInstance().getCase(position.row, position.column);
 //        CaseBean toCase = MapManager.getInstance().getCase(position.row - 1, position.column);
 //        AbsBean AbsBean = toCase.getSpecificEntity(toCase.getType());
@@ -741,7 +577,7 @@ public class WarriorBean implements CaseBean {
 //            return;
 //        }
 //        setType(CaseBean.WARRIOR_DOWN);
-//        setResourceId(R.drawable.warrior_down);
+//        setResId(R.drawable.warrior_down);
 //        CaseBean fromCase = MapManager.getInstance().getCase(position.row, position.column);
 //        CaseBean toCase = MapManager.getInstance().getCase(position.row + 1, position.column);
 //        AbsBean AbsBean = toCase.getSpecificEntity(toCase.getType());
@@ -756,7 +592,7 @@ public class WarriorBean implements CaseBean {
 //            return;
 //        }
 //        setType(CaseBean.WARRIOR_LEFT);
-//        setResourceId(R.drawable.warrior_left);
+//        setResId(R.drawable.warrior_left);
 //        CaseBean fromCase = MapManager.getInstance().getCase(position.row, position.column);
 //        CaseBean toCase = MapManager.getInstance().getCase(position.row, position.column - 1);
 //        AbsBean AbsBean = toCase.getSpecificEntity(toCase.getType());
@@ -771,7 +607,7 @@ public class WarriorBean implements CaseBean {
 //            return;
 //        }
 //        setType(CaseBean.WARRIOR_RIGHT);
-//        setResourceId(R.drawable.warrior_right);
+//        setResId(R.drawable.warrior_right);
 //        CaseBean fromCase = MapManager.getInstance().getCase(position.row, position.column);
 //        CaseBean toCase = MapManager.getInstance().getCase(position.row, position.column + 1);
 //        AbsBean AbsBean = toCase.getSpecificEntity(toCase.getType());

@@ -25,8 +25,6 @@ public class TalkDialogFragment extends AbsDialogFragment {
     private ImageView mIvTalker2;
     private TextView mTvContent;
     private Button mBtnNext;
-    private int mTalker1Index = 0;
-    private int mTalker2Index = 0;
     private TalkerBean mTalker1;
     private TalkerBean mTalker2;
 
@@ -41,28 +39,28 @@ public class TalkDialogFragment extends AbsDialogFragment {
         mIvTalker2 = findViewByID(R.id.iv_talker_2);
         mTvContent = findViewByID(R.id.tv_content);
         mBtnNext = findViewByID(R.id.btn_next);
-
-
     }
 
+    private boolean mTalker1Bout = true;
     @Override
     public void setListener() {
         mBtnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mTalker1Index == mTalker1.getContent().length && mTalker2Index == mTalker2.getContent().length) {
+                if (mTalker1.getContentList().size() == 0 && mTalker2.getContentList().size() == 0) {
                     dismiss();
                     return;
                 }
-                if (mTalker2Index < mTalker1Index) {
-                    mTvContent.setText(mTalker2.getContent()[mTalker2Index++]);
+                if (mTalker1Bout) {
+                    mTvContent.setText(mTalker2.getContentList().remove(0));
                     mIvTalker1.setVisibility(View.INVISIBLE);
                     mIvTalker2.setVisibility(View.VISIBLE);
-                } else {
-                    mTvContent.setText(mTalker1.getContent()[mTalker1Index++]);
+                }else {
+                    mTvContent.setText(mTalker1.getContentList().remove(0));
                     mIvTalker1.setVisibility(View.VISIBLE);
                     mIvTalker2.setVisibility(View.INVISIBLE);
                 }
+                mTalker1Bout = !mTalker1Bout;
             }
         });
     }
@@ -75,12 +73,8 @@ public class TalkDialogFragment extends AbsDialogFragment {
         }
         mTalker1 = bundle.getParcelable(TALKER_1);
         mTalker2 = bundle.getParcelable(TALKER_2);
-        if (mTalker1 == null || mTalker2 == null
-                || mTalker1.getContent().length == 0 || mTalker2.getContent().length == 0) {
-            return;
-        }
-        mIvTalker1.setImageResource(mTalker1.getResourceId());
-        mIvTalker2.setImageResource(mTalker2.getResourceId());
+        mIvTalker1.setImageResource(mTalker1.getResId());
+        mIvTalker2.setImageResource(mTalker2.getResId());
         mBtnNext.performClick();
     }
 

@@ -9,7 +9,6 @@ import com.qinshou.commonmodule.base.AbsDialogFragment;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.bean.IHandleEventCallback;
 import com.qinshou.qinshoubox.me.bean.Position;
-import com.qinshou.qinshoubox.me.ui.dialog.BusinessManFloor5Dialog;
 import com.qinshou.qinshoubox.me.ui.dialog.MysteriousOldManFloor5Dialog;
 
 /**
@@ -21,7 +20,7 @@ import com.qinshou.qinshoubox.me.ui.dialog.MysteriousOldManFloor5Dialog;
 public class MysteriousOldManFloor5 implements INpc {
     @Override
     public int getResourceId() {
-        return R.drawable.magic_tower_npc_shen_mi_lao_ren;
+        return R.drawable.magic_tower_npc_mysterious_old_man;
     }
 
     @Override

@@ -26,6 +26,8 @@
                 android:id="@+id/iv_talker_2"
                 android:layout_width="@dimen/px80"
                 android:layout_height="@dimen/px80"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 tools:src="@drawable/magic_tower_warrior_down" />
 
         </RelativeLayout>

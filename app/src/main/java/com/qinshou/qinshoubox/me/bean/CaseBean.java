@@ -9,7 +9,7 @@ import androidx.fragment.app.FragmentManager;
  * Created on 2018/4/10
  */
 
-public interface CaseBean {
+public interface CaseBean{
     int getResourceId();
 
     void handleEvent(FragmentManager fragmentManager, int floor, Position position, IHandleEventCallback handleEventCallback);

@@ -20,7 +20,7 @@ import com.qinshou.qinshoubox.me.ui.dialog.BusinessManFloor5Dialog;
 public class BusinessManFloor5 implements INpc {
     @Override
     public int getResourceId() {
-        return R.drawable.magic_tower_npc_shang_ren;
+        return R.drawable.magic_tower_npc_business_man;
     }
 
     @Override
