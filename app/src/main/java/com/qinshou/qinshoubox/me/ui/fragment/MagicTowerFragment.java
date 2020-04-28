@@ -98,7 +98,6 @@ public class MagicTowerFragment extends QSFragment<MagicTowerPresenter> implemen
                     loadingDialog.show(getFragmentManager());
                     break;
                 case R.id.iv_sheng_guang_hui:
-                    ShowLogUtil.logi("圣光徽");
                     showMonsterInfo();
                     break;
                 case R.id.iv_feng_zhi_luo_pan:

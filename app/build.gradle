@@ -13,6 +13,10 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
+        // NDK 版本
+        ndk {
+            abiFilters "armeabi"
+        }
     }
     signingConfigs {
         debug {
@@ -40,8 +44,8 @@ android {
             signingConfig signingConfigs.release
         }
     }
-//    sourceSets {
-//        main {
+    sourceSets {
+        main {
 //            res.srcDirs = [
 //                    '/src/main/res/',
 //                    '/src/main/res/layout/activity',
@@ -51,8 +55,10 @@ android {
 //                    '/src/main/res/layout/popupwindow',
 //                    '/src/main/res/layout/dialog'
 //            ]
-//        }
-//    }
+            // JNI 目录
+            jni.srcDirs = []
+        }
+    }
     compileOptions {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8

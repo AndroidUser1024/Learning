@@ -34,6 +34,12 @@ public class SplashActivity extends QSActivity<SplashPresenter> implements ISpla
     private TextView mTvAuthor;
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ShowLogUtil.logi("onDestroy");
+    }
+
+    @Override
     public int getLayoutId() {
         return R.layout.activity_splash;
     }

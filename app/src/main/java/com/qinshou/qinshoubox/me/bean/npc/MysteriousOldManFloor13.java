@@ -1,9 +1,14 @@
 package com.qinshou.qinshoubox.me.bean.npc;
 
 
+import android.content.DialogInterface;
+
+import com.qinshou.commonmodule.base.AbsDialogFragment;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.me.bean.IHandleEventCallback;
 import com.qinshou.qinshoubox.me.bean.Position;
+import com.qinshou.qinshoubox.me.ui.dialog.MysteriousOldManFloor13Dialog;
+import com.qinshou.qinshoubox.me.ui.dialog.MysteriousOldManFloor5Dialog;
 
 import androidx.fragment.app.FragmentManager;
 
@@ -21,6 +26,13 @@ public class MysteriousOldManFloor13 implements INpc {
 
     @Override
     public void handleEvent(FragmentManager fragmentManager, int floor, Position position, IHandleEventCallback handleEventCallback) {
-
+        MysteriousOldManFloor13Dialog mysteriousOldManFloor13Dialog = new MysteriousOldManFloor13Dialog();
+        mysteriousOldManFloor13Dialog.show(fragmentManager);
+        mysteriousOldManFloor13Dialog.setOnDismissListener(new AbsDialogFragment.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                handleEventCallback.onSuccess(false);
+            }
+        });
     }
 }

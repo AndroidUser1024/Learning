@@ -299,56 +299,6 @@ public class WarriorBean implements CaseBean {
         update();
     }
 
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/13 10:22
-     * Description:升 3 级
-     */
-    public boolean levelUp3() {
-        if (experience < 270) {
-            return false;
-        }
-        level += 3;
-        lifeValue += 3000;
-        attackValue += 21;
-        defenseValue += 21;
-        experience -= 270;
-        update();
-        return true;
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/13 10:22
-     * Description:用 395 经验 +17 攻击
-     */
-    public boolean buy17AttackValueWith95Experience() {
-        if (experience < 95) {
-            return false;
-        }
-        attackValue += 17;
-        experience -= 95;
-        update();
-        return true;
-    }
-
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/13 10:22
-     * Description:用 95 经验 +17 防御
-     */
-    public boolean buy17DefenseValueWith95Experience() {
-        if (experience < 95) {
-            return false;
-        }
-        defenseValue += 17;
-        experience -= 95;
-        update();
-        return true;
-    }
 
     /**
      * Author: QinHao

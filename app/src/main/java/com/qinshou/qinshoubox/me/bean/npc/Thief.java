@@ -47,7 +47,7 @@ public class Thief implements INpc {
         TalkerBean talker2 = new TalkerBean("小偷", R.drawable.magic_tower_npc_thief, contentList2);
 
         TalkDialogFragment talkDialogFragment = TalkDialogFragment.newInstance(talker1, talker2);
-        talkDialogFragment.show(fragmentManager, "TalkDialogFragment");
+        talkDialogFragment.show(fragmentManager);
         talkDialogFragment.setOnDismissListener(new AbsDialogFragment.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {

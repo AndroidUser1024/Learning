@@ -44,7 +44,7 @@ public class BusinessManFloor2 implements INpc {
         TalkerBean talker2 = new TalkerBean("商人", R.drawable.magic_tower_npc_business_man, contentList2);
 
         TalkDialogFragment talkDialogFragment = TalkDialogFragment.newInstance(talker1, talker2);
-        talkDialogFragment.show(fragmentManager, "TalkDialogFragment");
+        talkDialogFragment.show(fragmentManager);
         talkDialogFragment.setOnDismissListener(new AbsDialogFragment.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {

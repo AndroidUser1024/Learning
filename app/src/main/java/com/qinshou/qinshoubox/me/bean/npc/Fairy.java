@@ -57,7 +57,7 @@ public class Fairy implements INpc {
         TalkerBean talker2 = new TalkerBean("仙子", R.drawable.magic_tower_npc_fairy, contentList2);
 
         TalkDialogFragment talkDialogFragment = TalkDialogFragment.newInstance(talker1, talker2);
-        talkDialogFragment.show(fragmentManager, "TalkDialogFragment");
+        talkDialogFragment.show(fragmentManager);
         talkDialogFragment.setOnDismissListener(new AbsDialogFragment.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
