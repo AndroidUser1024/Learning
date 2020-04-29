@@ -194,15 +194,15 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
-            android:id="@+id/iv_sheng_guang_hui"
+            android:id="@+id/iv_holy_light_badge"
             android:layout_width="@dimen/px100"
             android:layout_height="@dimen/px100"
-            android:src="@drawable/magic_tower_prop_sheng_guang_hui"
+            android:src="@drawable/magic_tower_prop_holy_light_badge"
             android:visibility="invisible"
             tools:visibility="visible" />
 
         <ImageView
-            android:id="@+id/iv_feng_zhi_luo_pan"
+            android:id="@+id/iv_wind_compass"
             android:layout_width="@dimen/px100"
             android:layout_height="@dimen/px100"
             android:src="@drawable/magic_tower_prop_wind_compass"

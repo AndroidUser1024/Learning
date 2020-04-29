@@ -24,7 +24,7 @@ import java.util.List;
  * Date: 2019/10/10 19:02
  * Description:点击圣光徽,显示怪物信息列表的对话框
  */
-public class MonsterInfoDialogFragment extends AbsDialogFragment {
+public class MonsterInfoDialog extends AbsDialogFragment {
     private RcvMonsterAdapter mRcvMonsterAdapter;
 
     @Override

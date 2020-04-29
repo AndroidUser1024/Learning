@@ -15,21 +15,13 @@ import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
-import com.qinshou.qinshoubox.me.bean.CaseBean;
-import com.qinshou.qinshoubox.me.bean.MonsterBean;
-import com.qinshou.qinshoubox.me.bean.monster.AbsMonster;
 import com.qinshou.qinshoubox.me.bean.warrior.WarriorBean;
 import com.qinshou.qinshoubox.me.contract.IMagicTowerContract;
 import com.qinshou.qinshoubox.me.presenter.MagicTowerPresenter;
+import com.qinshou.qinshoubox.me.ui.dialog.FloorListDialog;
 import com.qinshou.qinshoubox.me.ui.dialog.LoadingDialog;
-import com.qinshou.qinshoubox.me.ui.dialog.MonsterInfoDialogFragment;
+import com.qinshou.qinshoubox.me.ui.dialog.MonsterInfoDialog;
 import com.qinshou.qinshoubox.util.MagicGameManager;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 
 /**
@@ -57,11 +49,11 @@ public class MagicTowerFragment extends QSFragment<MagicTowerPresenter> implemen
     /**
      * 圣光徽
      */
-    private ImageView mIvShengGuangHui;
+    private ImageView mIvHolyLightBadge;
     /**
      * 风之罗盘
      */
-    private ImageView mIvFengZhiLuoPan;
+    private ImageView mIvWindCompass;
 
     private LoadingDialog loadingDialog = new LoadingDialog();
 
@@ -97,10 +89,11 @@ public class MagicTowerFragment extends QSFragment<MagicTowerPresenter> implemen
                     });
                     loadingDialog.show(getFragmentManager());
                     break;
-                case R.id.iv_sheng_guang_hui:
+                case R.id.iv_holy_light_badge:
                     showMonsterInfo();
                     break;
-                case R.id.iv_feng_zhi_luo_pan:
+                case R.id.iv_wind_compass:
+                    showFloorList();
                     break;
                 case R.id.ib_move_up:
                     MagicGameManager.SINGLETON.warriorMoveUp();
@@ -163,8 +156,8 @@ public class MagicTowerFragment extends QSFragment<MagicTowerPresenter> implemen
         tvBlueKeyCount = findViewByID(R.id.tv_blue_key_count);
         tvRedKeyCount = findViewByID(R.id.tv_red_key_count);
 
-        mIvShengGuangHui = findViewByID(R.id.iv_sheng_guang_hui);
-        mIvFengZhiLuoPan = findViewByID(R.id.iv_feng_zhi_luo_pan);
+        mIvHolyLightBadge = findViewByID(R.id.iv_holy_light_badge);
+        mIvWindCompass = findViewByID(R.id.iv_wind_compass);
 
         ibMoveUp = findViewByID(R.id.ib_move_up);
         ibMoveDown = findViewByID(R.id.ib_move_down);
@@ -176,7 +169,7 @@ public class MagicTowerFragment extends QSFragment<MagicTowerPresenter> implemen
     public void setListener() {
         btnSave.setOnClickListener(mOnClickListener);
         btnRead.setOnClickListener(mOnClickListener);
-        mIvShengGuangHui.setOnClickListener(new View.OnClickListener() {
+        mIvHolyLightBadge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ShowLogUtil.logi("圣光徽");
@@ -234,14 +227,14 @@ public class MagicTowerFragment extends QSFragment<MagicTowerPresenter> implemen
         tvBlueKeyCount.setText(warriorBean.getBlueKeyCount() + "");
         tvRedKeyCount.setText(warriorBean.getRedKeyCount() + "");
         if (warriorBean.isHasHolyLightBadge()) {
-            mIvShengGuangHui.setVisibility(View.VISIBLE);
+            mIvHolyLightBadge.setVisibility(View.VISIBLE);
         } else {
-            mIvShengGuangHui.setVisibility(View.INVISIBLE);
+            mIvHolyLightBadge.setVisibility(View.INVISIBLE);
         }
         if (warriorBean.isHasWindCompass()) {
-            mIvFengZhiLuoPan.setVisibility(View.VISIBLE);
+            mIvWindCompass.setVisibility(View.VISIBLE);
         } else {
-            mIvFengZhiLuoPan.setVisibility(View.INVISIBLE);
+            mIvWindCompass.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -252,7 +245,10 @@ public class MagicTowerFragment extends QSFragment<MagicTowerPresenter> implemen
      * Description:显示怪物信息
      */
     private void showMonsterInfo() {
-        new MonsterInfoDialogFragment().show(getChildFragmentManager());
+        new MonsterInfoDialog().show(getChildFragmentManager());
     }
 
+    private void showFloorList() {
+        new FloorListDialog().show(getChildFragmentManager());
+    }
 }

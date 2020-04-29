@@ -69,6 +69,7 @@ public enum MagicGameManager {
     private FragmentManager mFragmentManager;
     private TableLayout mTableLayout;
     private int mFloor;
+    private int mMaxFloorHaveBeTo;
 
     MagicGameManager() {
         mWarriorBean = new WarriorBean("勇士"
@@ -110,6 +111,7 @@ public enum MagicGameManager {
         mFloorList.add(new Floor20());
         mFloorList.add(new Floor21());
         mFloor = 0;
+        mMaxFloorHaveBeTo = 0;
     }
 
     /**
@@ -940,6 +942,10 @@ public enum MagicGameManager {
         mFloor++;
         mFloorList.get(mFloor).initFloor(mTableLayout);
         mFloorList.get(mFloor).fromDownstairsToThisFloor();
+
+        if (mMaxFloorHaveBeTo < mFloor) {
+            mMaxFloorHaveBeTo = mFloor;
+        }
     }
 
     /**
@@ -959,6 +965,24 @@ public enum MagicGameManager {
         mFloorList.get(mFloor).fromUpstairsToThisFloor();
     }
 
+    public int getFloorListSize() {
+        return mFloorList.size();
+    }
+    public int getMaxFloorHaveBeTo() {
+        return mMaxFloorHaveBeTo;
+    }
+
+    public boolean goToFloor(int floor) {
+        if (floor > MagicGameManager.SINGLETON.getMaxFloorHaveBeTo()) {
+            // 你还没有去过这一层呢
+            return false;
+        }
+        setCase(mWarriorBean.getPosition(), new Road());
+        mFloor = floor;
+        mFloorList.get(mFloor).initFloor(mTableLayout);
+        mFloorList.get(mFloor).fromDownstairsToThisFloor();
+        return true;
+    }
     public interface IGameProgressCallback {
         void onSuccess();
 

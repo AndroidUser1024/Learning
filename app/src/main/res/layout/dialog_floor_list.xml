@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.qinshou.qinshoubox.me.ui.dialog.FloorListDialog">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcv_floor"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#99000000"
+        app:layoutManager="GridLayoutManager"
+        app:spanCount="3"
+        tools:itemCount="20"
+        tools:listitem="@layout/item_rcv_floor" />
+</FrameLayout>

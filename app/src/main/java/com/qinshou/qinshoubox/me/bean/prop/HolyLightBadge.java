@@ -20,7 +20,7 @@ import androidx.fragment.app.FragmentManager;
 public class HolyLightBadge implements IProp {
     @Override
     public int getResourceId() {
-        return R.drawable.magic_tower_prop_sheng_guang_hui;
+        return R.drawable.magic_tower_prop_holy_light_badge;
     }
 
     @Override
