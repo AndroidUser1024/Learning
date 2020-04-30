@@ -27,6 +27,7 @@ public class StarLightGodHammer implements IProp {
     public void handleEvent(FragmentManager fragmentManager, int floor, Position position, IHandleEventCallback handleEventCallback) {
         MagicGameManager.SINGLETON.getWarriorBean().setHasStarLightGodHammer(true);
         MagicGameManager.SINGLETON.setCase(position, new Road());
+        MagicGameManager.SINGLETON.getWarriorBean().update();
 
         handleEventCallback.onSuccess(false);
 

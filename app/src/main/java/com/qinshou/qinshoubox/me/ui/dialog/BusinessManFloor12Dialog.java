@@ -1,7 +1,14 @@
 package com.qinshou.qinshoubox.me.ui.dialog;
 
 
+import android.view.View;
+import android.widget.RadioGroup;
+import android.widget.Toast;
+
 import com.qinshou.commonmodule.base.AbsDialogFragment;
+import com.qinshou.qinshoubox.R;
+import com.qinshou.qinshoubox.me.bean.warrior.WarriorBean;
+import com.qinshou.qinshoubox.util.MagicGameManager;
 
 /**
  * Description:12 层的商人对话框
@@ -10,7 +17,8 @@ import com.qinshou.commonmodule.base.AbsDialogFragment;
  */
 
 public class BusinessManFloor12Dialog extends AbsDialogFragment {
-//    @Override
+    private RadioGroup mRadioGroup;
+    //    @Override
 //    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 //        //设置对话框无标题
 //        getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -30,13 +38,13 @@ public class BusinessManFloor12Dialog extends AbsDialogFragment {
 //            public void onClick(View v) {
 //                switch (radioGroup.getCheckedRadioButtonId()) {
 //                    case R.id.radio_button_1:
-//                        WarriorBean.getInstance().sellYellowKeyFor7Money();
+//                        warriorBean.sellYellowKeyFor7Money();
 //                        break;
 //                    case R.id.radio_button_2:
-//                        WarriorBean.getInstance().sellBlueKeyFor35Money();
+//                        warriorBean.sellBlueKeyFor35Money();
 //                        break;
 //                    case R.id.radio_button_3:
-//                        WarriorBean.getInstance().sellRedKeyFor70Money();
+//                        warriorBean.sellRedKeyFor70Money();
 //                        break;
 //                    case R.id.radio_button_4:
 //                        dismiss();
@@ -49,17 +57,52 @@ public class BusinessManFloor12Dialog extends AbsDialogFragment {
 
     @Override
     public int initLayoutId() {
-        return 0;
+        return R.layout.dialog_business_man_floor_12;
     }
 
     @Override
     public void initView() {
-
+        mRadioGroup = findViewByID(R.id.radio_group);
     }
 
     @Override
     public void setListener() {
-
+        findViewByID(R.id.btn_confirm).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WarriorBean warriorBean = MagicGameManager.SINGLETON.getWarriorBean();
+                switch (mRadioGroup.getCheckedRadioButtonId()) {
+                    case R.id.radio_button_1:
+                        if (warriorBean.getYellowKeyCount() <= 0) {
+                            Toast.makeText(getContext(), "黄钥匙不足", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        warriorBean.setYellowKeyCount(warriorBean.getYellowKeyCount() - 1);
+                        warriorBean.setMoney(warriorBean.getMoney() + 7);
+                        break;
+                    case R.id.radio_button_2:
+                        if (warriorBean.getBlueKeyCount() <= 0) {
+                            Toast.makeText(getContext(), "蓝钥匙不足", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        warriorBean.setBlueKeyCount(warriorBean.getBlueKeyCount() - 1);
+                        warriorBean.setMoney(warriorBean.getMoney() + 35);
+                        break;
+                    case R.id.radio_button_3:
+                        if (warriorBean.getRedKeyCount() <= 0) {
+                            Toast.makeText(getContext(), "红钥匙不足", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        warriorBean.setRedKeyCount(warriorBean.getRedKeyCount() - 1);
+                        warriorBean.setMoney(warriorBean.getMoney() + 70);
+                        break;
+                    case R.id.radio_button_4:
+                        dismiss();
+                        break;
+                }
+                warriorBean.update();
+            }
+        });
     }
 
     @Override

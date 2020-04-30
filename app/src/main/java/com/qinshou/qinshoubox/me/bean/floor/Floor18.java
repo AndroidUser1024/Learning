@@ -10,6 +10,7 @@ import com.qinshou.qinshoubox.me.bean.building.Wall;
 import com.qinshou.qinshoubox.me.bean.npc.GoDownstairs;
 import com.qinshou.qinshoubox.me.bean.npc.GoUpstairs;
 import com.qinshou.qinshoubox.me.bean.npc.Princess;
+import com.qinshou.qinshoubox.me.bean.npc.RedGate;
 import com.qinshou.qinshoubox.me.bean.warrior.WarriorBean;
 import com.qinshou.qinshoubox.me.enums.Building;
 import com.qinshou.qinshoubox.me.enums.Npc;
@@ -110,7 +111,7 @@ public class Floor18 extends AbsFloor {
         row5.add(new StarrySky());
         row5.add(new Wall());
         row5.add(new Wall());
-        row5.add(new Road());
+        row5.add(new RedGate());
         row5.add(new Wall());
         row5.add(new Wall());
         row5.add(new StarrySky());
@@ -124,7 +125,7 @@ public class Floor18 extends AbsFloor {
         row6.add(new StarrySky());
         row6.add(new Wall());
         row6.add(new Wall());
-        row6.add(new Road());
+        row6.add(new RedGate());
         row6.add(new Wall());
         row6.add(new Wall());
         row6.add(new StarrySky());
@@ -166,7 +167,7 @@ public class Floor18 extends AbsFloor {
         row9.add(new StarrySky());
         row9.add(new StarrySky());
         row9.add(new StarrySky());
-        row9.add(new Road());
+        row9.add(new StarrySky());
         row9.add(new StarrySky());
         row9.add(new StarrySky());
         row9.add(new StarrySky());
@@ -185,7 +186,7 @@ public class Floor18 extends AbsFloor {
         row10.add(new Road());
         row10.add(new Road());
         row10.add(new Road());
-        row10.add(new GoUpstairs());
+        row10.add(new Road());
         floor18.add(row10);
 
         return floor18;
