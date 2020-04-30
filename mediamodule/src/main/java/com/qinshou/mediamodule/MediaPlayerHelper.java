@@ -32,6 +32,9 @@ public class MediaPlayerHelper {
         mMediaPlayer.setDisplay(surfaceHolder);
     }
 
+    public void play(Uri uri) {
+
+    }
     public void setDataSource(Uri uri) {
         mMediaPlayer.setDataSource(uri);
     }

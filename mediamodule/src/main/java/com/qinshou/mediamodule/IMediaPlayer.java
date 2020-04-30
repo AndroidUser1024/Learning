@@ -12,11 +12,7 @@ import android.view.SurfaceHolder;
 public interface IMediaPlayer {
     void setDisplay(SurfaceHolder surfaceHolder);
 
-    void setDataSource(Uri uri);
-
-    void prepare();
-
-    void start();
+    void play(Uri uri);
 
     void pause();
 

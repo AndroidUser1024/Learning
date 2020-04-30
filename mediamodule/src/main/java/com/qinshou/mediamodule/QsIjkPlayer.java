@@ -68,26 +68,31 @@ public class QsIjkPlayer extends BasePlayer {
     }
 
     @Override
-    public void setDataSource(Uri uri) {
-        try {
-            mIjkMediaPlayer.setDataSource(mContext, uri);
-        } catch (IOException e) {
-            return;
-        }
+    public void play(Uri uri) {
+
     }
 
-    @Override
-    public void prepare() {
-        mIjkMediaPlayer.prepareAsync();
-    }
-
-    @Override
-    public void start() {
-        mIjkMediaPlayer.start();
-        if (mMediaPlayerListener != null) {
-            mMediaPlayerListener.onStart();
-        }
-    }
+//    @Override
+//    public void setDataSource(Uri uri) {
+//        try {
+//            mIjkMediaPlayer.setDataSource(mContext, uri);
+//        } catch (IOException e) {
+//            return;
+//        }
+//    }
+//
+//    @Override
+//    public void prepare() {
+//        mIjkMediaPlayer.prepareAsync();
+//    }
+//
+//    @Override
+//    public void start() {
+//        mIjkMediaPlayer.start();
+//        if (mMediaPlayerListener != null) {
+//            mMediaPlayerListener.onStart();
+//        }
+//    }
 
     @Override
     public void pause() {
