@@ -27,6 +27,8 @@ public class TalkDialogFragment extends AbsDialogFragment {
     private Button mBtnNext;
     private TalkerBean mTalker1;
     private TalkerBean mTalker2;
+    private boolean mTalker1Bout = false;
+
 
     @Override
     public int initLayoutId() {
@@ -41,7 +43,6 @@ public class TalkDialogFragment extends AbsDialogFragment {
         mBtnNext = findViewByID(R.id.btn_next);
     }
 
-    private boolean mTalker1Bout = true;
     @Override
     public void setListener() {
         mBtnNext.setOnClickListener(new View.OnClickListener() {
@@ -55,7 +56,7 @@ public class TalkDialogFragment extends AbsDialogFragment {
                     mTvContent.setText(mTalker2.getContentList().remove(0));
                     mIvTalker1.setVisibility(View.INVISIBLE);
                     mIvTalker2.setVisibility(View.VISIBLE);
-                }else {
+                } else {
                     mTvContent.setText(mTalker1.getContentList().remove(0));
                     mIvTalker1.setVisibility(View.VISIBLE);
                     mIvTalker2.setVisibility(View.INVISIBLE);
