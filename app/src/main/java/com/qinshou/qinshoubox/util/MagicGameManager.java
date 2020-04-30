@@ -127,27 +127,6 @@ public enum MagicGameManager {
         return mFloorList.get(mFloor).getCase(position);
     }
 
-    /**
-     * Author: QinHao
-     * Email:cqflqinhao@126.com
-     * Date:2019/10/9 16:36
-     * Description:勇士将要去的位置为建筑类的处理
-     *
-     * @param toCase 勇士将要去的位置
-     */
-    private boolean handleBuildingToCase(CaseBean toCase) {
-//        if (toCase.getType() == Building.ROAD) {
-//            return true;
-//        } else if (toCase.getType() == Building.WALL) {
-//            ShowLogUtil.logi("再走就要撞墙了!");
-//        } else if (toCase.getType() == Building.STARRY_SKY) {
-//            ShowLogUtil.logi("你要上天吗?");
-//        } else if (toCase.getType() == Building.FIRE_SEA) {
-//            ShowLogUtil.logi("碳烤人肉串?");
-//        }
-        return false;
-    }
-
     public void setCase(Position position, CaseBean toCase) {
         this.setCase(mFloor, position, toCase);
     }
@@ -455,7 +434,6 @@ public enum MagicGameManager {
                 mFloor = SharedPreferencesHelper.SINGLETON.getInt(IConstant.FLOOR);
                 // 读取保存的数据
                 mMaxFloorHaveBeTo = SharedPreferencesHelper.SINGLETON.getInt(IConstant.MAX_FLOOR_HAVE_BE_TO);
-
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
                     public void run() {

@@ -35,7 +35,7 @@ public class Fairy2 implements INpc {
     @Override
     public void handleEvent(FragmentManager fragmentManager, int floor, Position position, IHandleEventCallback handleEventCallback) {
         WarriorBean warriorBean = MagicGameManager.SINGLETON.getWarriorBean();
-        if (warriorBean.isHasLuckyCross()) {
+        if (!warriorBean.isHasLuckyCross()) {
             handleEventCallback.onFailure(new Exception("你没有幸运十字架哦！"));
             return;
         }

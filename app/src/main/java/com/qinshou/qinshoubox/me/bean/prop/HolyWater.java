@@ -28,6 +28,7 @@ public class HolyWater implements IProp {
     public void handleEvent(FragmentManager fragmentManager, int floor, Position position, IHandleEventCallback handleEventCallback) {
         WarriorBean warriorBean = MagicGameManager.SINGLETON.getWarriorBean();
         warriorBean.setLifeValue(warriorBean.getLifeValue() * 2);
+        warriorBean.update();
 
         MagicGameManager.SINGLETON.setCase(position, new Road());
 
