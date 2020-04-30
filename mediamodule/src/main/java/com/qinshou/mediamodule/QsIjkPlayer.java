@@ -38,16 +38,16 @@ public class QsIjkPlayer extends BasePlayer {
         mIjkMediaPlayer.setOnPreparedListener(new tv.danmaku.ijk.media.player.IMediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(tv.danmaku.ijk.media.player.IMediaPlayer iMediaPlayer) {
-                if (mOnPreparedListener != null) {
-                    mOnPreparedListener.onPrepared();
+                if (mMediaPlayerListener != null) {
+                    mMediaPlayerListener.onPrepared();
                 }
             }
         });
         mIjkMediaPlayer.setOnErrorListener(new tv.danmaku.ijk.media.player.IMediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(tv.danmaku.ijk.media.player.IMediaPlayer iMediaPlayer, int i, int i1) {
-                if (mOnErrorListener != null) {
-                    mOnErrorListener.onError(new Exception("播放失败"));
+                if (mMediaPlayerListener != null) {
+                    mMediaPlayerListener.onError(new Exception("播放失败"));
                 }
                 return true;
             }
@@ -55,8 +55,8 @@ public class QsIjkPlayer extends BasePlayer {
         mIjkMediaPlayer.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(IMediaPlayer iMediaPlayer) {
-                if (mOnCompleteListener != null) {
-                    mOnCompleteListener.onComplete();
+                if (mMediaPlayerListener != null) {
+                    mMediaPlayerListener.onComplete();
                 }
             }
         });
@@ -84,16 +84,25 @@ public class QsIjkPlayer extends BasePlayer {
     @Override
     public void start() {
         mIjkMediaPlayer.start();
+        if (mMediaPlayerListener != null) {
+            mMediaPlayerListener.onStart();
+        }
     }
 
     @Override
     public void pause() {
         mIjkMediaPlayer.pause();
+        if (mMediaPlayerListener != null) {
+            mMediaPlayerListener.onPause();
+        }
     }
 
     @Override
     public void stop() {
         mIjkMediaPlayer.stop();
+        if (mMediaPlayerListener != null) {
+            mMediaPlayerListener.onStop();
+        }
     }
 
     @Override

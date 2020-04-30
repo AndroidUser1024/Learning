@@ -2,6 +2,7 @@ package com.qinshou.mediamodule;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.view.SurfaceHolder;
 
 /**
@@ -71,15 +72,7 @@ public class MediaPlayerHelper {
         return mMediaPlayer.getDuration();
     }
 
-    public void setOnPreparedListener(IOnPreparedListener preparedListener) {
-        mMediaPlayer.setOnPreparedListener(preparedListener);
-    }
-
-    public void setOnErrorListener(IOnErrorListener onErrorListener) {
-        mMediaPlayer.setOnErrorListener(onErrorListener);
-    }
-
-    public void setOnCompleteListener(IOnCompleteListener onCompleteListener) {
-        mMediaPlayer.setOnCompleteListener(onCompleteListener);
+    public void setMediaPlayerListener(IMediaPlayerListener mediaPlayerListener) {
+        mMediaPlayer.setMediaPlayerListener(mediaPlayerListener);
     }
 }

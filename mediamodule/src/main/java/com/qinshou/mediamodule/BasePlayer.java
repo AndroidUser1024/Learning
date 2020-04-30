@@ -10,26 +10,15 @@ import android.content.Context;
  */
 public abstract class BasePlayer implements IMediaPlayer {
     protected Context mContext;
-    protected IOnPreparedListener mOnPreparedListener;
-    protected IOnErrorListener mOnErrorListener;
-    protected IOnCompleteListener mOnCompleteListener;
+    protected IMediaPlayerListener mMediaPlayerListener;
 
     public BasePlayer(Context context) {
         mContext = context;
     }
 
     @Override
-    public void setOnPreparedListener(IOnPreparedListener onPreparedListener) {
-        mOnPreparedListener = onPreparedListener;
+    public void setMediaPlayerListener(IMediaPlayerListener mediaPlayerListener) {
+        mMediaPlayerListener = mediaPlayerListener;
     }
 
-    @Override
-    public void setOnErrorListener(IOnErrorListener onErrorListener) {
-        mOnErrorListener = onErrorListener;
-    }
-
-    @Override
-    public void setOnCompleteListener(IOnCompleteListener onCompleteListener) {
-        mOnCompleteListener = onCompleteListener;
-    }
 }

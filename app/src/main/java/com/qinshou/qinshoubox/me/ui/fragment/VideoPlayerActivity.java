@@ -9,7 +9,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Handler;
-import android.text.TextUtils;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -28,9 +28,7 @@ import com.qinshou.commonmodule.util.PreventRepeatOnClickListener;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.util.StatusBarUtil;
 import com.qinshou.commonmodule.util.SystemUtil;
-import com.qinshou.mediamodule.IOnCompleteListener;
-import com.qinshou.mediamodule.IOnErrorListener;
-import com.qinshou.mediamodule.IOnPreparedListener;
+import com.qinshou.mediamodule.IMediaPlayerListener;
 import com.qinshou.mediamodule.MediaPlayerHelper;
 import com.qinshou.mediamodule.QsIjkPlayer;
 import com.qinshou.qinshoubox.R;
@@ -231,6 +229,8 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
             }
             long currentPosition = mMediaPlayerHelper.getCurrentPosition();
             long duration = mMediaPlayerHelper.getDuration();
+            ShowLogUtil.logi("currentPosition--->" + currentPosition);
+            ShowLogUtil.logi("duration--->" + duration);
             mSeekBar.setMax((int) duration);
             mSeekBar.setProgress((int) currentPosition);
 
@@ -279,12 +279,10 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
             totalTime.append(totalTimeSecond);
             mTvTotalTime.setText(totalTime);
 
-            if (mMediaPlayerHelper.isPlaying()) {
 //                float speed = mMediaPlayerHelper.getPlaybackParameters().speed;
-                float speed = 1;
-                long delayMillis = (long) (1000 / speed);
-                mHandler.postDelayed(this, delayMillis);
-            }
+            float speed = 1;
+            long delayMillis = (long) (1000 / speed);
+            mHandler.postDelayed(this, delayMillis);
         }
     };
     private boolean mContinuePlay = false;
@@ -525,11 +523,16 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
 //        String path2 = "http://vfx.mtime.cn/Video/2019/03/09/mp4/190309153658147087.mp4";
 //        String path = getContext().getCacheDir() + File.separator + "190309153658147087.mp4";
         String path = getContext().getCacheDir() + File.separator + "tmp1.mp4";
-        mMediaPlayerHelper.setOnPreparedListener(new IOnPreparedListener() {
+        mMediaPlayerHelper.setMediaPlayerListener(new IMediaPlayerListener() {
             @Override
             public void onPrepared() {
+                Log.i("daolema", "onPrepared");
                 mMediaPlayerHelper.start();
+            }
 
+            @Override
+            public void onStart() {
+                Log.i("daolema", "onStart");
                 mIvPlay.setImageResource(R.drawable.video_player_iv_play_src_2);
                 mHandler.removeCallbacks(mUpdateProgressRunnable);
                 mHandler.post(mUpdateProgressRunnable);
@@ -538,23 +541,45 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
                 hideControlDelay();
                 getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             }
-        });
-        mMediaPlayerHelper.setOnErrorListener(new IOnErrorListener() {
+
             @Override
-            public void onError(Exception e) {
-                mMediaPlayerHelper.setMediaPlayer(new QsIjkPlayer(getContext()));
-                play(surfaceHolder);
-            }
-        });
-        mMediaPlayerHelper.setOnCompleteListener(new IOnCompleteListener() {
-            @Override
-            public void onComplete() {
+            public void onPause() {
+                Log.i("daolema", "onPause");
                 mIvPlay.setImageResource(R.drawable.video_player_iv_play_src);
                 mHandler.removeCallbacks(mUpdateProgressRunnable);
 
                 // 暂停立即显示控制器
                 showControl();
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            }
+
+            @Override
+            public void onStop() {
+                Log.i("daolema", "onStop");
+                mIvPlay.setImageResource(R.drawable.video_player_iv_play_src);
+                mHandler.removeCallbacks(mUpdateProgressRunnable);
+
+                // 暂停立即显示控制器
+                showControl();
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            }
+
+            @Override
+            public void onComplete() {
+                Log.i("daolema", "onComplete");
+                mIvPlay.setImageResource(R.drawable.video_player_iv_play_src);
+                mHandler.removeCallbacks(mUpdateProgressRunnable);
+
+                // 暂停立即显示控制器
+                showControl();
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Log.i("daolema", "onError");
+                mMediaPlayerHelper.setMediaPlayer(new QsIjkPlayer(getContext()));
+                play(surfaceHolder);
             }
         });
         mMediaPlayerHelper.setDisplay(surfaceHolder);

@@ -22,16 +22,16 @@ public class QsMediaPlayer extends BasePlayer {
         mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer iMediaPlayer) {
-                if (mOnPreparedListener != null) {
-                    mOnPreparedListener.onPrepared();
+                if (mMediaPlayerListener != null) {
+                    mMediaPlayerListener.onPrepared();
                 }
             }
         });
         mMediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(MediaPlayer iMediaPlayer, int i, int i1) {
-                if (mOnErrorListener != null) {
-                    mOnErrorListener.onError(new Exception("播放失败"));
+                if (mMediaPlayerListener != null) {
+                    mMediaPlayerListener.onError(new Exception("播放失败"));
                 }
                 return true;
             }
@@ -39,8 +39,8 @@ public class QsMediaPlayer extends BasePlayer {
         mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                if (mOnCompleteListener != null) {
-                    mOnCompleteListener.onComplete();
+                if (mMediaPlayerListener != null) {
+                    mMediaPlayerListener.onComplete();
                 }
                 mMediaPlayer.reset();
             }
@@ -69,16 +69,25 @@ public class QsMediaPlayer extends BasePlayer {
     @Override
     public void start() {
         mMediaPlayer.start();
+        if (mMediaPlayerListener != null) {
+            mMediaPlayerListener.onStart();
+        }
     }
 
     @Override
     public void pause() {
         mMediaPlayer.pause();
+        if (mMediaPlayerListener != null) {
+            mMediaPlayerListener.onPause();
+        }
     }
 
     @Override
     public void stop() {
         mMediaPlayer.stop();
+        if (mMediaPlayerListener != null) {
+            mMediaPlayerListener.onStop();
+        }
     }
 
     @Override

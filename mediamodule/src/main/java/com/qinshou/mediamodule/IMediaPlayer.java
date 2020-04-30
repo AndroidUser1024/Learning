@@ -32,9 +32,5 @@ public interface IMediaPlayer {
 
     long getDuration();
 
-    void setOnPreparedListener(IOnPreparedListener preparedListener);
-
-    void setOnErrorListener(IOnErrorListener onErrorListener);
-
-    void setOnCompleteListener(IOnCompleteListener onCompleteListener);
+    void setMediaPlayerListener(IMediaPlayerListener mediaPlayerListener);
 }

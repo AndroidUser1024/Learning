@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
+import androidx.appcompat.view.menu.ShowableListMenu;
+
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.Player;
@@ -29,7 +31,6 @@ public class QsExoPlayer extends BasePlayer {
     public QsExoPlayer(Context context) {
         super(context);
         mSimpleExoPlayer = new SimpleExoPlayer.Builder(context).build();
-        mSimpleExoPlayer.setVideoScalingMode(C.VIDEO_SCALING_MODE_SCALE_TO_FIT);
         mSimpleExoPlayer.addListener(new Player.EventListener() {
             @Override
             public void onIsPlayingChanged(boolean isPlaying) {
@@ -45,21 +46,21 @@ public class QsExoPlayer extends BasePlayer {
                         + ",playbackState--->" + playbackState
                         + ",mPlaying--->" + mPlaying);
                 if (!playWhenReady && playbackState == Player.STATE_READY && !mPlaying) {
-                    if (mOnPreparedListener != null) {
-                        mOnPreparedListener.onPrepared();
+                    if (mMediaPlayerListener != null) {
+                        mMediaPlayerListener.onPrepared();
                     }
                 }
                 if (playWhenReady && playbackState == Player.STATE_ENDED) {
-                    if (mOnCompleteListener != null) {
-                        mOnCompleteListener.onComplete();
+                    if (mMediaPlayerListener != null) {
+                        mMediaPlayerListener.onComplete();
                     }
                 }
             }
 
             @Override
             public void onPlayerError(ExoPlaybackException error) {
-                if (mOnErrorListener != null) {
-                    mOnErrorListener.onError(error);
+                if (mMediaPlayerListener != null) {
+                    mMediaPlayerListener.onError(error);
                 }
             }
         });
@@ -86,22 +87,28 @@ public class QsExoPlayer extends BasePlayer {
     @Override
     public void start() {
         if (mSimpleExoPlayer.getPlaybackState() == Player.STATE_ENDED) {
-            mSimpleExoPlayer.seekToDefaultPosition(0);
-            // 需要加这一行代码才会重新计算进度
-            mSimpleExoPlayer.setPlayWhenReady(false);
-        } else {
-            mSimpleExoPlayer.setPlayWhenReady(true);
+            mSimpleExoPlayer.seekToDefaultPosition();
+        }
+        mSimpleExoPlayer.setPlayWhenReady(true);
+        if (mMediaPlayerListener != null) {
+            mMediaPlayerListener.onStart();
         }
     }
 
     @Override
     public void pause() {
         mSimpleExoPlayer.setPlayWhenReady(false);
+        if (mMediaPlayerListener != null) {
+            mMediaPlayerListener.onPause();
+        }
     }
 
     @Override
     public void stop() {
-        mSimpleExoPlayer.setPlayWhenReady(false);
+        mSimpleExoPlayer.stop(true);
+        if (mMediaPlayerListener != null) {
+            mMediaPlayerListener.onStop();
+        }
     }
 
     @Override
