@@ -40,6 +40,7 @@ public class FloorListDialog extends AbsDialogFragment {
             @Override
             public void onItemClick(BaseViewHolder holder, String itemData, int position) {
                 MagicGameManager.SINGLETON.goToFloor(position);
+                dismiss();
             }
         });
     }

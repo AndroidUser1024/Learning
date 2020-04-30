@@ -50,6 +50,10 @@ public interface IConstant {
      * 魔塔界面,当前楼层
      */
     String FLOOR = "floor";
+    /**
+     * 魔塔界面,当前楼层
+     */
+    String MAX_FLOOR_HAVE_BE_TO = "maxFloorHaveBeTo";
     //友盟推送
     String UMENG_KEY = "5be28f97f1f5563b0f000070";
     String UMENG_SECRET = "212a6a59153e7caf27b6f32db77fa974";

@@ -40,6 +40,7 @@ public class MagicTowerFragment extends QSFragment<MagicTowerPresenter> implemen
     private TextView tvLifeValue;
     private TextView tvAttackValue;
     private TextView tvDefenseValue;
+    private TextView mTvCurrentFloor;
     private TextView tvYellowKeyCount;
     private TextView tvBlueKeyCount;
     private TextView tvRedKeyCount;
@@ -78,7 +79,7 @@ public class MagicTowerFragment extends QSFragment<MagicTowerPresenter> implemen
                 case R.id.btn_read:
                     MagicGameManager.SINGLETON.read(new MagicGameManager.IGameProgressCallback() {
                         @Override
-                        public void onSuccess() {
+                        public void onSuccess() {mTvCurrentFloor.setText(getString(R.string.magic_tower_tv_current_floor_text, MagicGameManager.SINGLETON.getCurrentFloor()));
                             loadingDialog.dismiss();
                         }
 
@@ -152,6 +153,7 @@ public class MagicTowerFragment extends QSFragment<MagicTowerPresenter> implemen
         tvLifeValue = findViewByID(R.id.tv_life_value);
         tvAttackValue = findViewByID(R.id.tv_attack_value);
         tvDefenseValue = findViewByID(R.id.tv_defense_value);
+        mTvCurrentFloor = findViewByID(R.id.tv_current_floor);
         tvYellowKeyCount = findViewByID(R.id.tv_yellow_key_count);
         tvBlueKeyCount = findViewByID(R.id.tv_blue_key_count);
         tvRedKeyCount = findViewByID(R.id.tv_red_key_count);
@@ -169,19 +171,8 @@ public class MagicTowerFragment extends QSFragment<MagicTowerPresenter> implemen
     public void setListener() {
         btnSave.setOnClickListener(mOnClickListener);
         btnRead.setOnClickListener(mOnClickListener);
-        mIvHolyLightBadge.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ShowLogUtil.logi("圣光徽");
-                showMonsterInfo();
-            }
-        });
-        findViewByID(R.id.linear_layout_4).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ShowLogUtil.logi("点这里呢");
-            }
-        });
+        mIvHolyLightBadge.setOnClickListener(mOnClickListener);
+        mIvWindCompass.setOnClickListener(mOnClickListener);
         ibMoveUp.setOnClickListener(mOnClickListener);
         ibMoveDown.setOnClickListener(mOnClickListener);
         ibMoveLeft.setOnClickListener(mOnClickListener);

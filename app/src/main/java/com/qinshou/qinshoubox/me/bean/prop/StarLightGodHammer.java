@@ -20,7 +20,7 @@ import androidx.fragment.app.FragmentManager;
 public class StarLightGodHammer implements IProp {
     @Override
     public int getResourceId() {
-        return R.drawable.magic_tower_prop_light_god_shield;
+        return R.drawable.magic_tower_prop_start_light_god_hammer;
     }
 
     @Override

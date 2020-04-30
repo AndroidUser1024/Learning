@@ -235,4 +235,7 @@
     <string name="video_player_tv_play_list_text">播放列表</string>
     <string name="video_player_tv_speed_text_2">1.5x</string>
     <string name="video_player_tv_speed_text_3">2x</string>
+
+    <!-- 魔塔界面 -->
+    <string name="magic_tower_tv_current_floor_text">第<xliff:g id="filePath">%1$d</xliff:g>层</string>
 </resources>

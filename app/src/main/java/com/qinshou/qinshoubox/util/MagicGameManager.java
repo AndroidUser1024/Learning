@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.Toast;
 
 import androidx.fragment.app.FragmentManager;
 
@@ -13,6 +14,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.commonmodule.util.ShowLogUtil;
+import com.qinshou.qinshoubox.App;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.me.bean.CaseBean;
@@ -790,20 +792,6 @@ public enum MagicGameManager {
                 // 保存所有楼层
                 // 遍历所有层
                 List<List<List<String>>> floorList = new ArrayList<>();
-//                for (AbsFloor absFloor : mFloorList) {
-//                    List<List<CaseBean>> data = absFloor.getData();
-//                    // 遍历每一层所有行
-//                    List<List<String>> rowList = new ArrayList<>();
-//                    for (List<CaseBean> caseBeanList : data) {
-//                        // 遍历每一行所有列
-//                        List<String> columnList = new ArrayList<>();
-//                        for (CaseBean caseBean : caseBeanList) {
-//                            columnList.add(caseBean.getClass().getName());
-//                        }
-//                        rowList.add(columnList);
-//                    }
-//                    floorList.add(rowList);
-//                }
                 for (int i = 0; i < mFloorList.size(); i++) {
                     AbsFloor absFloor = mFloorList.get(i);
                     List<List<CaseBean>> data = absFloor.getData();
@@ -827,6 +815,8 @@ public enum MagicGameManager {
                 SharedPreferencesHelper.SINGLETON.putString(IConstant.MAP_JSON, new Gson().toJson(floorList));
                 // 保存当前楼层
                 SharedPreferencesHelper.SINGLETON.putInt(IConstant.FLOOR, mFloor);
+                // 保存去过的最高楼层
+                SharedPreferencesHelper.SINGLETON.putInt(IConstant.MAX_FLOOR_HAVE_BE_TO, mMaxFloorHaveBeTo);
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -892,6 +882,8 @@ public enum MagicGameManager {
                 }
                 // 读取保存的数据
                 mFloor = SharedPreferencesHelper.SINGLETON.getInt(IConstant.FLOOR);
+                // 读取保存的数据
+                mMaxFloorHaveBeTo = SharedPreferencesHelper.SINGLETON.getInt(IConstant.MAX_FLOOR_HAVE_BE_TO);
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -908,10 +900,10 @@ public enum MagicGameManager {
      * Author: QinHao
      * Email:cqflqinhao@126.com
      * Date:2019/10/10 18:33
-     * Description:获取当前楼层的所有地图格子
+     * Description:获取当前楼层
      */
-    public List<List<CaseBean>> getCurrentFloor() {
-        return mFloorList.get(mFloor).getData();
+    public int getCurrentFloor() {
+        return mFloor;
     }
 
     public List<AbsMonster> getCurrentFloorMonsterList() {
@@ -974,7 +966,7 @@ public enum MagicGameManager {
 
     public boolean goToFloor(int floor) {
         if (floor > MagicGameManager.SINGLETON.getMaxFloorHaveBeTo()) {
-            // 你还没有去过这一层呢
+            Toast.makeText(App.getInstance(), "你还没有去过这一层呢", Toast.LENGTH_SHORT).show();
             return false;
         }
         setCase(mWarriorBean.getPosition(), new Road());

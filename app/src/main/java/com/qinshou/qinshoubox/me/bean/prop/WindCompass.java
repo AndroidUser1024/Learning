@@ -27,6 +27,7 @@ public class WindCompass implements IProp {
     public void handleEvent(FragmentManager fragmentManager, int floor, Position position, IHandleEventCallback handleEventCallback) {
         MagicGameManager.SINGLETON.getWarriorBean().setHasWindCompass(true);
         MagicGameManager.SINGLETON.setCase(position, new Road());
+        MagicGameManager.SINGLETON.getWarriorBean().update();
 
         handleEventCallback.onSuccess(false);
 

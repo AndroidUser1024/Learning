@@ -24,7 +24,7 @@ import com.google.android.exoplayer2.util.Util;
 public class QsExoPlayer extends BasePlayer {
     private SimpleExoPlayer mSimpleExoPlayer;
     private MediaSource mMediaSource;
-    private boolean mIsPlaying = false;
+    private boolean mPlaying = false;
 
     public QsExoPlayer(Context context) {
         super(context);
@@ -33,7 +33,7 @@ public class QsExoPlayer extends BasePlayer {
         mSimpleExoPlayer.addListener(new Player.EventListener() {
             @Override
             public void onIsPlayingChanged(boolean isPlaying) {
-                mIsPlaying = isPlaying;
+                mPlaying = isPlaying;
             }
 
             @Override
@@ -43,8 +43,8 @@ public class QsExoPlayer extends BasePlayer {
                 Log.i("daolema", "onPlayerStateChanged" + " : "
                         + "playWhenReady--->" + playWhenReady
                         + ",playbackState--->" + playbackState
-                        + ",mIsPlaying--->" + mIsPlaying);
-                if (!playWhenReady && playbackState == Player.STATE_READY && !mIsPlaying) {
+                        + ",mPlaying--->" + mPlaying);
+                if (!playWhenReady && playbackState == Player.STATE_READY && !mPlaying) {
                     if (mOnPreparedListener != null) {
                         mOnPreparedListener.onPrepared();
                     }
@@ -85,10 +85,13 @@ public class QsExoPlayer extends BasePlayer {
 
     @Override
     public void start() {
-        // TODO getCurrentPosition()>getDuration() 时是不是就可以算是重新播
-        Log.i("daolema", "getCurrentPosition()--->" + getCurrentPosition());
-        Log.i("daolema", "getDuration()--->" + getDuration());
-        mSimpleExoPlayer.setPlayWhenReady(true);
+        if (mSimpleExoPlayer.getPlaybackState() == Player.STATE_ENDED) {
+            mSimpleExoPlayer.seekToDefaultPosition(0);
+            // 需要加这一行代码才会重新计算进度
+            mSimpleExoPlayer.setPlayWhenReady(false);
+        } else {
+            mSimpleExoPlayer.setPlayWhenReady(true);
+        }
     }
 
     @Override
