@@ -79,7 +79,7 @@ public class MagicTowerFragment extends QSFragment<MagicTowerPresenter> implemen
                 case R.id.btn_read:
                     MagicGameManager.SINGLETON.read(new MagicGameManager.IGameProgressCallback() {
                         @Override
-                        public void onSuccess() {mTvCurrentFloor.setText(getString(R.string.magic_tower_tv_current_floor_text, MagicGameManager.SINGLETON.getCurrentFloor()));
+                        public void onSuccess() {
                             loadingDialog.dismiss();
                         }
 
@@ -204,6 +204,8 @@ public class MagicTowerFragment extends QSFragment<MagicTowerPresenter> implemen
     public void handleEvent(EventBean<Object> eventBean) {
         if (eventBean.getType() == EventBean.Type.REFRESH_WARRIOR_INFO) {
             updateWarriorInfo((WarriorBean) eventBean.getData());
+        } else if (eventBean.getType() == EventBean.Type.REFRESH_CURRENT_FLOOR) {
+            mTvCurrentFloor.setText(getString(R.string.magic_tower_tv_current_floor_text, MagicGameManager.SINGLETON.getCurrentFloor()));
         }
     }
 

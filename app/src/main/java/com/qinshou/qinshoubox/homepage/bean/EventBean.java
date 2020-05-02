@@ -67,5 +67,9 @@ public class EventBean<T> {
          * 刷新勇士信息
          */
         REFRESH_WARRIOR_INFO,
+        /**
+         * 刷新当前楼层
+         */
+        REFRESH_CURRENT_FLOOR,
     }
 }

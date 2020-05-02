@@ -39,21 +39,9 @@ public interface IConstant {
     //天气界面
     String LAST_CHOOSE_CITY = "lastChooseCity";
     /**
-     * 魔塔界面,地图信息 Json
+     * 魔塔游戏进度
      */
-    String MAP_JSON = "mapJson";
-    /**
-     * 魔塔界面,勇士信息 Json
-     */
-    String WARRIOR_BEAN_JSON = "warriorBeanJson";
-    /**
-     * 魔塔界面,当前楼层
-     */
-    String FLOOR = "floor";
-    /**
-     * 魔塔界面,当前楼层
-     */
-    String MAX_FLOOR_HAVE_BE_TO = "maxFloorHaveBeTo";
+    String MAGIC_TOWER_GAME_PROGRESS = "magicTowerGameProgress";
     //友盟推送
     String UMENG_KEY = "5be28f97f1f5563b0f000070";
     String UMENG_SECRET = "212a6a59153e7caf27b6f32db77fa974";

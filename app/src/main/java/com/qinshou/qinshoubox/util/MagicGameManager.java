@@ -11,15 +11,14 @@ import android.widget.Toast;
 import androidx.fragment.app.FragmentManager;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.App;
-import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.constant.IConstant;
+import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.me.bean.CaseBean;
 import com.qinshou.qinshoubox.me.bean.IHandleEventCallback;
-import com.qinshou.qinshoubox.me.bean.MonsterBean;
+import com.qinshou.qinshoubox.me.bean.MagicTowerGameProgressBean;
 import com.qinshou.qinshoubox.me.bean.Position;
 import com.qinshou.qinshoubox.me.bean.building.Road;
 import com.qinshou.qinshoubox.me.bean.floor.AbsFloor;
@@ -46,12 +45,11 @@ import com.qinshou.qinshoubox.me.bean.floor.Floor7;
 import com.qinshou.qinshoubox.me.bean.floor.Floor8;
 import com.qinshou.qinshoubox.me.bean.floor.Floor9;
 import com.qinshou.qinshoubox.me.bean.monster.AbsMonster;
-import com.qinshou.qinshoubox.me.bean.npc.GoUpstairs;
 import com.qinshou.qinshoubox.me.bean.warrior.WarriorBean;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,7 +69,7 @@ public enum MagicGameManager {
     private List<AbsFloor> mFloorList = new ArrayList<>();
     private FragmentManager mFragmentManager;
     private TableLayout mTableLayout;
-    private int mFloor;
+    private int mCurrentFloor;
     private int mMaxFloorHaveBeTo;
 
     MagicGameManager() {
@@ -113,7 +111,7 @@ public enum MagicGameManager {
         mFloorList.add(new Floor19());
         mFloorList.add(new Floor20());
         mFloorList.add(new Floor21());
-        mFloor = 0;
+        mCurrentFloor = 0;
         mMaxFloorHaveBeTo = 0;
     }
 
@@ -124,11 +122,11 @@ public enum MagicGameManager {
      * Description:获取某一格
      */
     private CaseBean getCase(Position position) {
-        return mFloorList.get(mFloor).getCase(position);
+        return mFloorList.get(mCurrentFloor).getCase(position);
     }
 
     public void setCase(Position position, CaseBean toCase) {
-        this.setCase(mFloor, position, toCase);
+        this.setCase(mCurrentFloor, position, toCase);
     }
 
     /**
@@ -141,7 +139,7 @@ public enum MagicGameManager {
      */
     public void setCase(int floor, Position position, CaseBean caseBean) {
         mFloorList.get(floor).setCase(position, caseBean);
-        if (floor == mFloor) {
+        if (floor == mCurrentFloor) {
             updateUI(position, caseBean);
         }
     }
@@ -156,8 +154,10 @@ public enum MagicGameManager {
         if (tableLayout.getChildCount() != MAX_ROW) {
             return;
         }
-        mFloorList.get(mFloor).initFloor(tableLayout);
-        mFloorList.get(mFloor).fromDownstairsToThisFloor();
+        mFloorList.get(mCurrentFloor).initFloor(tableLayout);
+        mFloorList.get(mCurrentFloor).fromDownstairsToThisFloor();
+
+        EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CURRENT_FLOOR, mCurrentFloor));
     }
 
     /**
@@ -174,7 +174,7 @@ public enum MagicGameManager {
         }
         // 勇士需要移动到的位置
         Position newPosition = new Position(oldPosition.getRow(), oldPosition.getColumn() - 1);
-        mFloorList.get(mFloor).getCase(newPosition).handleEvent(mFragmentManager, mFloor, newPosition, new IHandleEventCallback() {
+        mFloorList.get(mCurrentFloor).getCase(newPosition).handleEvent(mFragmentManager, mCurrentFloor, newPosition, new IHandleEventCallback() {
             @Override
             public void onSuccess(boolean canMove) {
                 if (!canMove) {
@@ -212,7 +212,7 @@ public enum MagicGameManager {
         }
         // 勇士需要移动到的位置
         Position newPosition = new Position(oldPosition.getRow() - 1, oldPosition.getColumn());
-        mFloorList.get(mFloor).getCase(newPosition).handleEvent(mFragmentManager, mFloor, newPosition, new IHandleEventCallback() {
+        mFloorList.get(mCurrentFloor).getCase(newPosition).handleEvent(mFragmentManager, mCurrentFloor, newPosition, new IHandleEventCallback() {
             @Override
             public void onSuccess(boolean canMove) {
                 if (!canMove) {
@@ -250,7 +250,7 @@ public enum MagicGameManager {
         }
         // 勇士需要移动到的位置
         Position newPosition = new Position(oldPosition.getRow(), oldPosition.getColumn() + 1);
-        mFloorList.get(mFloor).getCase(newPosition).handleEvent(mFragmentManager, mFloor, newPosition, new IHandleEventCallback() {
+        mFloorList.get(mCurrentFloor).getCase(newPosition).handleEvent(mFragmentManager, mCurrentFloor, newPosition, new IHandleEventCallback() {
             @Override
             public void onSuccess(boolean canMove) {
                 if (!canMove) {
@@ -288,7 +288,7 @@ public enum MagicGameManager {
         }
         // 勇士需要移动到的位置
         Position newPosition = new Position(oldPosition.getRow() + 1, oldPosition.getColumn());
-        mFloorList.get(mFloor).getCase(newPosition).handleEvent(mFragmentManager, mFloor, newPosition, new IHandleEventCallback() {
+        mFloorList.get(mCurrentFloor).getCase(newPosition).handleEvent(mFragmentManager, mCurrentFloor, newPosition, new IHandleEventCallback() {
             @Override
             public void onSuccess(boolean canMove) {
                 if (!canMove) {
@@ -337,9 +337,6 @@ public enum MagicGameManager {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                // 保存勇士属性
-                SharedPreferencesHelper.SINGLETON.putString(IConstant.WARRIOR_BEAN_JSON, new Gson().toJson(mWarriorBean));
-                // 保存所有楼层
                 // 遍历所有层
                 List<List<List<String>>> floorList = new ArrayList<>();
                 for (int i = 0; i < mFloorList.size(); i++) {
@@ -353,20 +350,17 @@ public enum MagicGameManager {
                         List<String> columnList = new ArrayList<>();
                         for (int k = 0; k < caseBeanList.size(); k++) {
                             CaseBean caseBean = caseBeanList.get(k);
-                            if (i == 10 && j == 6 && k == 4) {
-                                ShowLogUtil.logi(caseBean);
-                            }
                             columnList.add(caseBean.getClass().getName());
                         }
                         rowList.add(columnList);
                     }
                     floorList.add(rowList);
                 }
-                SharedPreferencesHelper.SINGLETON.putString(IConstant.MAP_JSON, new Gson().toJson(floorList));
-                // 保存当前楼层
-                SharedPreferencesHelper.SINGLETON.putInt(IConstant.FLOOR, mFloor);
-                // 保存去过的最高楼层
-                SharedPreferencesHelper.SINGLETON.putInt(IConstant.MAX_FLOOR_HAVE_BE_TO, mMaxFloorHaveBeTo);
+                MagicTowerGameProgressBean magicTowerGameProgressBean = new MagicTowerGameProgressBean(mWarriorBean
+                        , floorList
+                        , mCurrentFloor
+                        , mMaxFloorHaveBeTo);
+                SharedPreferencesHelper.SINGLETON.putString(IConstant.MAGIC_TOWER_GAME_PROGRESS, new Gson().toJson(magicTowerGameProgressBean));
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -387,8 +381,8 @@ public enum MagicGameManager {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                String warriorBeanJson = SharedPreferencesHelper.SINGLETON.getString(IConstant.WARRIOR_BEAN_JSON);
-                if (TextUtils.isEmpty(warriorBeanJson)) {
+                String magicTowerGameProgressJson = SharedPreferencesHelper.SINGLETON.getString(IConstant.MAGIC_TOWER_GAME_PROGRESS);
+                if (TextUtils.isEmpty(magicTowerGameProgressJson)) {
                     new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -397,48 +391,44 @@ public enum MagicGameManager {
                     }, 1000);
                     return;
                 }
-                mWarriorBean = new Gson().fromJson(warriorBeanJson, WarriorBean.class);
-                String mapJson = SharedPreferencesHelper.SINGLETON.getString(IConstant.MAP_JSON);
-                if (!TextUtils.isEmpty(mapJson)) {
-                    List<List<List<String>>> floorList = new Gson().fromJson(mapJson, new TypeToken<List<List<List<String>>>>() {
-                    }.getType());
-                    for (int i = 0; i < floorList.size(); i++) {
-                        List<List<String>> rowList = floorList.get(i);
-                        for (int j = 0; j < rowList.size(); j++) {
-                            List<String> columnList = rowList.get(j);
-                            for (int k = 0; k < columnList.size(); k++) {
-                                try {
-                                    Class<?> clazz = Class.forName(columnList.get(k));
-                                    Object o = clazz.newInstance();
-                                    if (o instanceof WarriorBean) {
-                                        o = mWarriorBean;
-                                    }
-                                    if (i == 10 && j == 6 && k == 4) {
-                                        ShowLogUtil.logi(o);
-                                    }
-                                    mFloorList.get(i).setCase(new Position(j, k), (CaseBean) o);
-                                } catch (Exception e) {
-                                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            gameProgressCallback.onFailure();
-                                        }
-                                    }, 500);
-                                    return;
+                MagicTowerGameProgressBean magicTowerGameProgressBean = new Gson().fromJson(magicTowerGameProgressJson, MagicTowerGameProgressBean.class);
+
+                mWarriorBean = magicTowerGameProgressBean.getWarriorBean();
+                for (int i = 0; i < magicTowerGameProgressBean.getFloorList().size(); i++) {
+                    List<List<String>> rowList = magicTowerGameProgressBean.getFloorList().get(i);
+                    for (int j = 0; j < rowList.size(); j++) {
+                        List<String> columnList = rowList.get(j);
+                        for (int k = 0; k < columnList.size(); k++) {
+                            try {
+                                Class<?> clazz = Class.forName(columnList.get(k));
+                                Object o = clazz.newInstance();
+                                if (o instanceof WarriorBean) {
+                                    o = mWarriorBean;
                                 }
+                                if (i == 10 && j == 6 && k == 4) {
+                                    ShowLogUtil.logi(o);
+                                }
+                                mFloorList.get(i).setCase(new Position(j, k), (CaseBean) o);
+                            } catch (Exception e) {
+                                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        gameProgressCallback.onFailure();
+                                    }
+                                }, 500);
+                                return;
                             }
                         }
                     }
                 }
-                // 读取保存的数据
-                mFloor = SharedPreferencesHelper.SINGLETON.getInt(IConstant.FLOOR);
-                // 读取保存的数据
-                mMaxFloorHaveBeTo = SharedPreferencesHelper.SINGLETON.getInt(IConstant.MAX_FLOOR_HAVE_BE_TO);
+                mCurrentFloor = magicTowerGameProgressBean.getCurrentFloor();
+                mMaxFloorHaveBeTo = magicTowerGameProgressBean.getMaxFloorHaveBeTo();
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         mWarriorBean.update();
-                        mFloorList.get(mFloor).initFloor(mTableLayout);
+                        EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CURRENT_FLOOR, mCurrentFloor));
+                        mFloorList.get(mCurrentFloor).initFloor(mTableLayout);
                         gameProgressCallback.onSuccess();
                     }
                 }, 1000);
@@ -453,12 +443,12 @@ public enum MagicGameManager {
      * Description:获取当前楼层
      */
     public int getCurrentFloor() {
-        return mFloor;
+        return mCurrentFloor;
     }
 
     public List<AbsMonster> getCurrentFloorMonsterList() {
         Map<String, AbsMonster> monsterMap = new HashMap<>();
-        for (List<CaseBean> rowList : mFloorList.get(mFloor).getData()) {
+        for (List<CaseBean> rowList : mFloorList.get(mCurrentFloor).getData()) {
             for (CaseBean caseBean : rowList) {
                 if (caseBean instanceof AbsMonster
                         && !monsterMap.containsKey(((AbsMonster) caseBean).getName())) {
@@ -476,18 +466,19 @@ public enum MagicGameManager {
      * Description:上楼
      */
     public void goUpstairs() {
-        if (mFloor == mFloorList.size() - 1) {
+        if (mCurrentFloor == mFloorList.size() - 1) {
             return;
         }
         setCase(mWarriorBean.getPosition(), new Road());
 
-        mFloor++;
-        mFloorList.get(mFloor).initFloor(mTableLayout);
-        mFloorList.get(mFloor).fromDownstairsToThisFloor();
+        mCurrentFloor++;
+        mFloorList.get(mCurrentFloor).initFloor(mTableLayout);
+        mFloorList.get(mCurrentFloor).fromDownstairsToThisFloor();
 
-        if (mMaxFloorHaveBeTo < mFloor) {
-            mMaxFloorHaveBeTo = mFloor;
+        if (mMaxFloorHaveBeTo < mCurrentFloor) {
+            mMaxFloorHaveBeTo = mCurrentFloor;
         }
+        EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CURRENT_FLOOR, mCurrentFloor));
     }
 
     /**
@@ -497,14 +488,15 @@ public enum MagicGameManager {
      * Description:下楼
      */
     public void goDownstairs() {
-        if (mFloor == 0) {
+        if (mCurrentFloor == 0) {
             return;
         }
         setCase(mWarriorBean.getPosition(), new Road());
 
-        mFloor--;
-        mFloorList.get(mFloor).initFloor(mTableLayout);
-        mFloorList.get(mFloor).fromUpstairsToThisFloor();
+        mCurrentFloor--;
+        mFloorList.get(mCurrentFloor).initFloor(mTableLayout);
+        mFloorList.get(mCurrentFloor).fromUpstairsToThisFloor();
+        EventBus.getDefault().post(new EventBean<>(EventBean.Type.REFRESH_CURRENT_FLOOR, mCurrentFloor));
     }
 
     public int getFloorListSize() {
@@ -521,9 +513,9 @@ public enum MagicGameManager {
             return false;
         }
         setCase(mWarriorBean.getPosition(), new Road());
-        mFloor = floor;
-        mFloorList.get(mFloor).initFloor(mTableLayout);
-        mFloorList.get(mFloor).fromDownstairsToThisFloor();
+        mCurrentFloor = floor;
+        mFloorList.get(mCurrentFloor).initFloor(mTableLayout);
+        mFloorList.get(mCurrentFloor).fromDownstairsToThisFloor();
         return true;
     }
 
