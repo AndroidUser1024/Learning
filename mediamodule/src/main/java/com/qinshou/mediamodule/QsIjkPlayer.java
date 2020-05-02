@@ -38,8 +38,12 @@ public class QsIjkPlayer extends BasePlayer {
         mIjkMediaPlayer.setOnPreparedListener(new tv.danmaku.ijk.media.player.IMediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(tv.danmaku.ijk.media.player.IMediaPlayer iMediaPlayer) {
+//                if (mMediaPlayerListener != null) {
+//                    mMediaPlayerListener.onPrepared();
+//                }
+                mIjkMediaPlayer.start();
                 if (mMediaPlayerListener != null) {
-                    mMediaPlayerListener.onPrepared();
+                    mMediaPlayerListener.onStart();
                 }
             }
         });
@@ -68,31 +72,36 @@ public class QsIjkPlayer extends BasePlayer {
     }
 
     @Override
-    public void play(Uri uri) {
-
+    public void setDataSource(Uri uri) {
+        try {
+            mIjkMediaPlayer.setDataSource(mContext, uri);
+        } catch (IOException e) {
+            return;
+        }
     }
 
-//    @Override
-//    public void setDataSource(Uri uri) {
-//        try {
-//            mIjkMediaPlayer.setDataSource(mContext, uri);
-//        } catch (IOException e) {
-//            return;
-//        }
-//    }
-//
-//    @Override
-//    public void prepare() {
-//        mIjkMediaPlayer.prepareAsync();
-//    }
-//
-//    @Override
-//    public void start() {
-//        mIjkMediaPlayer.start();
-//        if (mMediaPlayerListener != null) {
-//            mMediaPlayerListener.onStart();
-//        }
-//    }
+    @Override
+    public void prepare() {
+        mIjkMediaPlayer.prepareAsync();
+    }
+
+    @Override
+    public void start() {
+        mIjkMediaPlayer.start();
+        if (mMediaPlayerListener != null) {
+            mMediaPlayerListener.onStart();
+        }
+    }
+
+    @Override
+    public void play(Uri uri) {
+        try {
+            mIjkMediaPlayer.setDataSource(mContext, uri);
+        } catch (IOException e) {
+            return;
+        }
+        mIjkMediaPlayer.prepareAsync();
+    }
 
     @Override
     public void pause() {

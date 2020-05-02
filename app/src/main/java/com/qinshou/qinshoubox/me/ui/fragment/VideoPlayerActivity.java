@@ -524,11 +524,11 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
 //        String path = getContext().getCacheDir() + File.separator + "190309153658147087.mp4";
         String path = getContext().getCacheDir() + File.separator + "tmp1.mp4";
         mMediaPlayerHelper.setMediaPlayerListener(new IMediaPlayerListener() {
-            @Override
-            public void onPrepared() {
-                Log.i("daolema", "onPrepared");
-                mMediaPlayerHelper.start();
-            }
+//            @Override
+//            public void onPrepared() {
+//                Log.i("daolema", "onPrepared");
+//                mMediaPlayerHelper.start();
+//            }
 
             @Override
             public void onStart() {
@@ -583,8 +583,9 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
             }
         });
         mMediaPlayerHelper.setDisplay(surfaceHolder);
-        mMediaPlayerHelper.setDataSource(Uri.parse(path));
-        mMediaPlayerHelper.prepare();
+//        mMediaPlayerHelper.setDataSource(Uri.parse(path));
+//        mMediaPlayerHelper.prepare();
+        mMediaPlayerHelper.play(Uri.parse(path));
     }
 
     /**

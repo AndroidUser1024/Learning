@@ -22,9 +22,9 @@ public class QsMediaPlayer extends BasePlayer {
         mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer iMediaPlayer) {
-                if (mMediaPlayerListener != null) {
-                    mMediaPlayerListener.onPrepared();
-                }
+//                if (mMediaPlayerListener != null) {
+//                    mMediaPlayerListener.onPrepared();
+//                }
                 mMediaPlayer.start();
                 if (mMediaPlayerListener != null) {
                     mMediaPlayerListener.onStart();
@@ -57,13 +57,35 @@ public class QsMediaPlayer extends BasePlayer {
     }
 
     @Override
-    public void play(Uri uri) {
+    public void setDataSource(Uri uri) {
         try {
             mMediaPlayer.setDataSource(mContext, uri);
-            mMediaPlayer.prepareAsync();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void prepare() {
+        mMediaPlayer.prepareAsync();
+    }
+
+    @Override
+    public void start() {
+        mMediaPlayer.start();
+        if (mMediaPlayerListener != null) {
+            mMediaPlayerListener.onStart();
+        }
+    }
+
+    @Override
+    public void play(Uri uri) {
+        try {
+            mMediaPlayer.setDataSource(mContext, uri);
+        } catch (IOException e) {
+            return;
+        }
+        mMediaPlayer.prepareAsync();
     }
 
     @Override

@@ -7,7 +7,7 @@ package com.qinshou.mediamodule;
  * Description:类描述
  */
 public interface IMediaPlayerListener {
-    void onPrepared();
+//    void onPrepared();
 
     void onStart();
 

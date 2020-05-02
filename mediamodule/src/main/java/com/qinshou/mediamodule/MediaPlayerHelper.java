@@ -33,18 +33,18 @@ public class MediaPlayerHelper {
     }
 
     public void play(Uri uri) {
-
+        mMediaPlayer.play(uri);
     }
     public void setDataSource(Uri uri) {
-//        mMediaPlayer.setDataSource(uri);
+        mMediaPlayer.setDataSource(uri);
     }
 
     public void prepare() {
-//        mMediaPlayer.prepare();
+        mMediaPlayer.prepare();
     }
 
     public void start() {
-//        mMediaPlayer.start();
+        mMediaPlayer.start();
     }
 
     public void pause() {

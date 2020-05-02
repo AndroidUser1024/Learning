@@ -46,8 +46,12 @@ public class QsExoPlayer extends BasePlayer {
                         + ",playbackState--->" + playbackState
                         + ",mPlaying--->" + mPlaying);
                 if (!playWhenReady && playbackState == Player.STATE_READY && !mPlaying) {
+//                    if (mMediaPlayerListener != null) {
+//                        mMediaPlayerListener.onPrepared();
+//                    }
+                    mSimpleExoPlayer.setPlayWhenReady(true);
                     if (mMediaPlayerListener != null) {
-                        mMediaPlayerListener.onPrepared();
+                        mMediaPlayerListener.onStart();
                     }
                 }
                 if (playWhenReady && playbackState == Player.STATE_ENDED) {
@@ -72,37 +76,37 @@ public class QsExoPlayer extends BasePlayer {
     }
 
     @Override
+    public void setDataSource(Uri uri) {
+        String userAgent = Util.getUserAgent(mContext, "QinshouBox");
+        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(mContext, userAgent);
+        mMediaSource = new ProgressiveMediaSource.Factory(dataSourceFactory)
+                .createMediaSource(uri);
+    }
+
+    @Override
+    public void prepare() {
+        mSimpleExoPlayer.prepare(mMediaSource);
+    }
+
+    @Override
+    public void start() {
+        if (mSimpleExoPlayer.getPlaybackState() == Player.STATE_ENDED) {
+            mSimpleExoPlayer.seekToDefaultPosition();
+        }
+        mSimpleExoPlayer.setPlayWhenReady(true);
+        if (mMediaPlayerListener != null) {
+            mMediaPlayerListener.onStart();
+        }
+    }
+
+    @Override
     public void play(Uri uri) {
         String userAgent = Util.getUserAgent(mContext, "QinshouBox");
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(mContext, userAgent);
         mMediaSource = new ProgressiveMediaSource.Factory(dataSourceFactory)
-                .createMediaSource(uri);  mSimpleExoPlayer.prepare(mMediaSource);
+                .createMediaSource(uri);
+        mSimpleExoPlayer.prepare(mMediaSource);
     }
-
-//    @Override
-//    public void setDataSource(Uri uri) {
-//        String userAgent = Util.getUserAgent(mContext, "QinshouBox");
-//        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(mContext, userAgent);
-//        mMediaSource = new ProgressiveMediaSource.Factory(dataSourceFactory)
-//                .createMediaSource(uri);
-//        mSimpleExoPlayer.prepare(mMediaSource);
-//    }
-
-//    @Override
-//    public void prepare() {
-//        mSimpleExoPlayer.prepare(mMediaSource);
-//    }
-//
-//    @Override
-//    public void start() {
-//        if (mSimpleExoPlayer.getPlaybackState() == Player.STATE_ENDED) {
-//            mSimpleExoPlayer.seekToDefaultPosition();
-//        }
-//        mSimpleExoPlayer.setPlayWhenReady(true);
-//        if (mMediaPlayerListener != null) {
-//            mMediaPlayerListener.onStart();
-//        }
-//    }
 
     @Override
     public void pause() {
