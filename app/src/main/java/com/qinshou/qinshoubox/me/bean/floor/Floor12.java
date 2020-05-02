@@ -12,6 +12,7 @@ import com.qinshou.qinshoubox.me.bean.monster.LingFaShi;
 import com.qinshou.qinshoubox.me.bean.monster.LingWuShi;
 import com.qinshou.qinshoubox.me.bean.monster.MingWeiBing;
 import com.qinshou.qinshoubox.me.bean.monster.MingZhanShi;
+import com.qinshou.qinshoubox.me.bean.monster.ShuangShouJianShi;
 import com.qinshou.qinshoubox.me.bean.npc.BlueGate;
 import com.qinshou.qinshoubox.me.bean.npc.BusinessManFloor12;
 import com.qinshou.qinshoubox.me.bean.npc.GoDownstairs;
@@ -89,7 +90,7 @@ public class Floor12 extends AbsFloor {
 
         List<CaseBean> row3 = new ArrayList<>();
         row3.add(new Road());
-        row3.add(new GaoJiWeiBing());
+        row3.add(new ShuangShouJianShi());
         row3.add(new Wall());
         row3.add(new Road());
         row3.add(new Wall());
@@ -102,7 +103,7 @@ public class Floor12 extends AbsFloor {
         floor12.add(row3);
 
         List<CaseBean> row4 = new ArrayList<>();
-        row4.add(new GaoJiWeiBing());
+        row4.add(new ShuangShouJianShi());
         row4.add(new MingZhanShi());
         row4.add(new Wall());
         row4.add(new Road());
@@ -159,7 +160,7 @@ public class Floor12 extends AbsFloor {
 
         List<CaseBean> row8 = new ArrayList<>();
         row8.add(new BlueGem());
-        row8.add(new GaoJiWeiBing());
+        row8.add(new ShuangShouJianShi());
         row8.add(new YellowGate());
         row8.add(new MingWeiBing());
         row8.add(new MingWeiBing());
@@ -167,7 +168,7 @@ public class Floor12 extends AbsFloor {
         row8.add(new MingWeiBing());
         row8.add(new MingWeiBing());
         row8.add(new YellowGate());
-        row8.add(new GaoJiWeiBing());
+        row8.add(new ShuangShouJianShi());
         row8.add(new RedGem());
         floor12.add(row8);
 

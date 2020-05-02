@@ -8,6 +8,7 @@ import com.qinshou.qinshoubox.me.bean.building.Wall;
 import com.qinshou.qinshoubox.me.bean.monster.GaoJiWeiBing;
 import com.qinshou.qinshoubox.me.bean.monster.MingWeiBing;
 import com.qinshou.qinshoubox.me.bean.monster.ShouMianWuShi;
+import com.qinshou.qinshoubox.me.bean.monster.ShuangShouJianShi;
 import com.qinshou.qinshoubox.me.bean.npc.BigStore1;
 import com.qinshou.qinshoubox.me.bean.npc.BigStore2;
 import com.qinshou.qinshoubox.me.bean.npc.BigStore3;
@@ -136,7 +137,7 @@ public class Floor11 extends AbsFloor {
         row6.add(new Road());
         row6.add(new MingWeiBing());
         row6.add(new BigBloodBottle());
-        row6.add(new GaoJiWeiBing());
+        row6.add(new ShuangShouJianShi());
         row6.add(new BigBloodBottle());
         row6.add(new MingWeiBing());
         row6.add(new Road());

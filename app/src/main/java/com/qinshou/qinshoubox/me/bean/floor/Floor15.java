@@ -195,7 +195,7 @@ public class Floor15 extends AbsFloor {
     @Override
     public void fromUpstairsToThisFloor() {
         WarriorBean warriorBean = MagicGameManager.SINGLETON.getWarriorBean();
-        warriorBean.setPosition(new Position(10, 7));
+        warriorBean.setPosition(new Position(0, 7));
         MagicGameManager.SINGLETON.setCase(warriorBean.getPosition(), warriorBean);
     }
 

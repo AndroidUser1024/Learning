@@ -11,6 +11,7 @@ import com.qinshou.qinshoubox.me.bean.monster.JinWeiShi;
 import com.qinshou.qinshoubox.me.bean.monster.MingDuiZhang;
 import com.qinshou.qinshoubox.me.bean.monster.MingWeiBing;
 import com.qinshou.qinshoubox.me.bean.monster.MingZhanShi;
+import com.qinshou.qinshoubox.me.bean.monster.ShuangShouJianShi;
 import com.qinshou.qinshoubox.me.bean.npc.BlueGate;
 import com.qinshou.qinshoubox.me.bean.npc.GoDownstairs;
 import com.qinshou.qinshoubox.me.bean.npc.GoUpstairs;
@@ -47,7 +48,7 @@ public class Floor13 extends AbsFloor {
         List<List<CaseBean>> floor13 = new ArrayList<>();
         List<CaseBean> row0 = new ArrayList<>();
         row0.add(new Road());
-        row0.add(new GaoJiWeiBing());
+        row0.add(new ShuangShouJianShi());
         row0.add(new Road());
         row0.add(new Road());
         row0.add(new Road());
