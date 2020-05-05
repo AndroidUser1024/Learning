@@ -4,9 +4,8 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
-
-import androidx.viewpager.widget.ViewPager;
-
+import android.net.Uri;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
@@ -17,9 +16,9 @@ import android.widget.TextView;
 
 import com.qinshou.commonmodule.adapter.VpSingleViewAdapter;
 import com.qinshou.commonmodule.util.DisplayUtil;
-import com.qinshou.commonmodule.util.MediaPlayerHelper;
-import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.commonmodule.widget.TitleBar;
+import com.qinshou.mediamodule.IMediaPlayerListener;
+import com.qinshou.mediamodule.MediaPlayerHelper;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
@@ -29,6 +28,8 @@ import com.qinshou.qinshoubox.music.presenter.MusicPlayPresenter;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.viewpager.widget.ViewPager;
 
 /**
  * Description:音乐播放界面
@@ -56,11 +57,78 @@ public class MusicPlayActivity extends QSActivity<MusicPlayPresenter> implements
     private float mIvDiskRodRotation = -25f;    //唱片杆旋转动画的角度
     private ObjectAnimator mIvDiskRodAnimator; //唱片杆的旋转动画
     private ObjectAnimator mIvDiskAnimator; //唱片旋转动画
+    private MediaPlayerHelper mMediaPlayerHelper;
+    private Handler mHandler = new Handler();
+    /**
+     * 更新进度条的任务
+     */
+    private Runnable mUpdateProgressRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (mMediaPlayerHelper == null) {
+                return;
+            }
+            long currentPosition = mMediaPlayerHelper.getCurrentPosition();
+            long duration = mMediaPlayerHelper.getDuration();
+            mSbPlayProgress.setMax((int) duration);
+            mSbPlayProgress.setProgress((int) currentPosition);
+
+            final long currentTimeHour = currentPosition / 1000 / 60 / 60;
+            final long currentTimeMinute = currentPosition / 1000 / 60;
+            final long currentTimeSecond = currentPosition / 1000 % 60;
+            final long totalTimeHour = duration / 1000 / 60 / 60;
+            final long totalTimeMinute = duration / 1000 / 60;
+            final long totalTimeSecond = duration / 1000 % 60;
+
+            StringBuilder currentTime = new StringBuilder();
+            if (currentTimeHour > 0) {
+                if (currentTimeHour < 10) {
+                    currentTime.append(0);
+                }
+                currentTime.append(currentTimeHour)
+                        .append(":");
+            }
+            if (currentTimeMinute < 10) {
+                currentTime.append(0);
+            }
+            currentTime.append(currentTimeMinute)
+                    .append(":");
+            if (currentTimeSecond < 10) {
+                currentTime.append(0);
+            }
+            currentTime.append(currentTimeSecond);
+            mTvCurrentTime.setText(currentTime);
+
+            StringBuilder totalTime = new StringBuilder();
+            if (totalTimeHour > 0) {
+                if (totalTimeHour < 10) {
+                    totalTime.append(0);
+                }
+                totalTime.append(totalTimeHour)
+                        .append(":");
+            }
+            if (totalTimeMinute < 10) {
+                totalTime.append(0);
+            }
+            totalTime.append(totalTimeMinute)
+                    .append(":");
+            if (totalTimeSecond < 10) {
+                totalTime.append(0);
+            }
+            totalTime.append(totalTimeSecond);
+            mTvTotalTime.setText(totalTime);
+
+//                float speed = mMediaPlayerHelper.getPlaybackParameters().speed;
+            float speed = 1;
+            long delayMillis = (long) (1000 / speed);
+            mHandler.postDelayed(this, delayMillis);
+        }
+    };
 
     @Override
-    public void finish() {
-        super.finish();
-        MediaPlayerHelper.SINGLETON.stop();
+    protected void onDestroy() {
+        super.onDestroy();
+        mHandler.removeCallbacks(mUpdateProgressRunnable);
     }
 
     @Override
@@ -119,6 +187,8 @@ public class MusicPlayActivity extends QSActivity<MusicPlayPresenter> implements
         mIvDiskAnimator.setRepeatCount(ValueAnimator.INFINITE);
         mIvDiskAnimator.setRepeatMode(ValueAnimator.RESTART);
         mIvDiskAnimator.setInterpolator(new LinearInterpolator());
+
+        mMediaPlayerHelper = new MediaPlayerHelper(getContext());
     }
 
     @Override
@@ -141,10 +211,10 @@ public class MusicPlayActivity extends QSActivity<MusicPlayPresenter> implements
         mSbPlayProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (!fromUser || !MediaPlayerHelper.SINGLETON.isPlaying()) {
+                if (!fromUser || !mMediaPlayerHelper.isPlaying()) {
                     return;
                 }
-                MediaPlayerHelper.SINGLETON.seekTo(progress);
+                mMediaPlayerHelper.seekTo(progress);
             }
 
             @Override
@@ -155,6 +225,62 @@ public class MusicPlayActivity extends QSActivity<MusicPlayPresenter> implements
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
 
+            }
+        });
+        mMediaPlayerHelper.setMediaPlayerListener(new IMediaPlayerListener() {
+            @Override
+            public void onStart() {
+//                mHandler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+                        long duration = mMediaPlayerHelper.getDuration();
+                        //设置进度条 max
+                        mSbPlayProgress.setMax((int) duration);
+                        //设置播放暂停按钮的图片资源
+                        mIbPlayAndPause.setImageResource(R.drawable.music_play_ib_play_or_pause_src_pause);
+                        //开始唱片旋转动画
+                        mIvDiskAnimator.setFloatValues(0, 360);
+                        mIvDiskAnimator.start();
+
+                        //如果唱片杆动画正在运行,先取消之前的动画
+                        if (mIvDiskRodAnimator.isRunning()) {
+                            mIvDiskRodAnimator.cancel();
+                        }
+                        //如果唱片杆已经移动了,则先恢复原位再移动
+                        if (mIvDiskRod.getRotation() == 0) {
+                            mIvDiskRodAnimator.setFloatValues(0, mIvDiskRodRotation, 0);
+                        } else {
+                            mIvDiskRodAnimator.setFloatValues(mIvDiskRodRotation, 0);
+                        }
+                        mIvDiskRodAnimator.setDuration(1000);
+                        mIvDiskRodAnimator.start();
+
+//                    }
+//                });
+
+                mHandler.removeCallbacks(mUpdateProgressRunnable);
+                mHandler.post(mUpdateProgressRunnable);
+            }
+
+            @Override
+            public void onPause() {
+
+            }
+
+            @Override
+            public void onStop() {
+
+            }
+
+            @Override
+            public void onComplete() {
+                mIbPlayAndPause.setImageResource(R.drawable.music_play_ib_play_or_pause_src_play);
+                mIbNext.performClick();
+            }
+
+            @Override
+            public void onError(Exception e) {
+                mIbPlayAndPause.setImageResource(R.drawable.music_play_ib_play_or_pause_src_play);
             }
         });
     }
@@ -201,80 +327,7 @@ public class MusicPlayActivity extends QSActivity<MusicPlayPresenter> implements
         MusicBean musicBean = mMusicBeanList.get(mIndex);
         mTitleBar.setTitleText(musicBean.getName());
         mIvDisk.setImageResource(R.drawable.music_play_iv_disk_src_default);
-        MediaPlayerHelper.SINGLETON.playMusic(musicBean.getPath(), new MediaPlayerHelper.IOnMediaPlayerListener() {
-            @Override
-            public void onStart(int totalProgress) {
-                //设置进度条 max
-                mSbPlayProgress.setMax(totalProgress);
-                //设置播放暂停按钮的图片资源
-                mIbPlayAndPause.setImageResource(R.drawable.music_play_ib_play_or_pause_src_pause);
-                //开始唱片旋转动画
-                mIvDiskAnimator.setFloatValues(0, 360);
-                mIvDiskAnimator.start();
-
-                //如果唱片杆动画正在运行,先取消之前的动画
-                if (mIvDiskRodAnimator.isRunning()) {
-                    mIvDiskRodAnimator.cancel();
-                }
-                //如果唱片杆已经移动了,则先恢复原位再移动
-                if (mIvDiskRod.getRotation() == 0) {
-                    mIvDiskRodAnimator.setFloatValues(0, mIvDiskRodRotation, 0);
-                } else {
-                    mIvDiskRodAnimator.setFloatValues(mIvDiskRodRotation, 0);
-                }
-                mIvDiskRodAnimator.setDuration(1000);
-                mIvDiskRodAnimator.start();
-            }
-
-            @Override
-            public void onError() {
-                mIbPlayAndPause.setImageResource(R.drawable.music_play_ib_play_or_pause_src_play);
-            }
-
-            @Override
-            public void onComplete() {
-                mIbPlayAndPause.setImageResource(R.drawable.music_play_ib_play_or_pause_src_play);
-                mIbNext.performClick();
-            }
-
-            @Override
-            public void onProgress(int currentPosition, int duration, int currentHour, int currentTimeMinute, int currentTimeSecond, int totalTimeHour, int totalTimeMinute, int totalTimeSecond) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mSbPlayProgress.setProgress(currentPosition);
-                        StringBuilder stringBuilder = new StringBuilder();
-                        if (currentTimeMinute < 10) {
-                            stringBuilder.append(0);
-                        }
-                        stringBuilder.append(currentTimeMinute)
-                                .append(":");
-                        if (currentTimeSecond < 10) {
-                            stringBuilder.append(0);
-                        }
-                        stringBuilder.append(currentTimeSecond);
-                        mTvCurrentTime.setText(stringBuilder);
-
-                        stringBuilder = new StringBuilder();
-                        if (totalTimeMinute < 10) {
-                            stringBuilder.append(0);
-                        }
-                        stringBuilder.append(totalTimeMinute)
-                                .append(":");
-                        if (totalTimeSecond < 10) {
-                            stringBuilder.append(0);
-                        }
-                        stringBuilder.append(totalTimeSecond);
-                        mTvTotalTime.setText(stringBuilder);
-                    }
-                });
-            }
-
-            @Override
-            public void onBufferingUpdate(int percent) {
-
-            }
-        });
+        mMediaPlayerHelper.play(Uri.parse(musicBean.getPath()));
     }
 
     /**
@@ -283,9 +336,9 @@ public class MusicPlayActivity extends QSActivity<MusicPlayPresenter> implements
      * date:2019/4/4 19:04
      */
     private void playOrPause() {
-        if (MediaPlayerHelper.SINGLETON.isPlaying()) {
+        if (mMediaPlayerHelper.isPlaying()) {
             //暂停播放
-            MediaPlayerHelper.SINGLETON.pause();
+            mMediaPlayerHelper.pause();
             //修改播放暂停按钮的图片资源
             mIbPlayAndPause.setImageResource(R.drawable.music_play_ib_play_or_pause_src_play);
             //暂停唱片旋转动画
@@ -301,7 +354,7 @@ public class MusicPlayActivity extends QSActivity<MusicPlayPresenter> implements
             mIvDiskRodAnimator.start();
         } else {
             //开始播放
-            MediaPlayerHelper.SINGLETON.start();
+            mMediaPlayerHelper.start();
             //修改播放暂停按钮的图片资源
             mIbPlayAndPause.setImageResource(R.drawable.music_play_ib_play_or_pause_src_pause);
             //开始唱片旋转动画

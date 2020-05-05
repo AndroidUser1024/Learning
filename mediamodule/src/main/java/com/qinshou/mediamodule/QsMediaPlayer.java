@@ -80,6 +80,7 @@ public class QsMediaPlayer extends BasePlayer {
 
     @Override
     public void play(Uri uri) {
+        mMediaPlayer.reset();
         try {
             mMediaPlayer.setDataSource(mContext, uri);
         } catch (IOException e) {

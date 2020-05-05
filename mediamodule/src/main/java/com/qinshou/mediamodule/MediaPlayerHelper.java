@@ -16,8 +16,8 @@ public class MediaPlayerHelper {
 
     public MediaPlayerHelper(Context context) {
 //        mMediaPlayer = new QsMediaPlayer(context);
-        mMediaPlayer = new QsExoPlayer(context);
-//        mMediaPlayer = new QsIjkPlayer(context);
+//        mMediaPlayer = new QsExoPlayer(context);
+        mMediaPlayer = new QsIjkPlayer(context);
     }
 
     public IMediaPlayer getMediaPlayer() {

@@ -95,6 +95,7 @@ public class QsIjkPlayer extends BasePlayer {
 
     @Override
     public void play(Uri uri) {
+        mIjkMediaPlayer.reset();
         try {
             mIjkMediaPlayer.setDataSource(mContext, uri);
         } catch (IOException e) {

@@ -229,8 +229,6 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
             }
             long currentPosition = mMediaPlayerHelper.getCurrentPosition();
             long duration = mMediaPlayerHelper.getDuration();
-            ShowLogUtil.logi("currentPosition--->" + currentPosition);
-            ShowLogUtil.logi("duration--->" + duration);
             mSeekBar.setMax((int) duration);
             mSeekBar.setProgress((int) currentPosition);
 
@@ -262,7 +260,7 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
 
             StringBuilder totalTime = new StringBuilder();
             if (totalTimeHour > 0) {
-                if (currentTimeHour < 10) {
+                if (totalTimeHour < 10) {
                     totalTime.append(0);
                 }
                 totalTime.append(totalTimeHour)
@@ -526,13 +524,11 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
         mMediaPlayerHelper.setMediaPlayerListener(new IMediaPlayerListener() {
 //            @Override
 //            public void onPrepared() {
-//                Log.i("daolema", "onPrepared");
 //                mMediaPlayerHelper.start();
 //            }
 
             @Override
             public void onStart() {
-                Log.i("daolema", "onStart");
                 mIvPlay.setImageResource(R.drawable.video_player_iv_play_src_2);
                 mHandler.removeCallbacks(mUpdateProgressRunnable);
                 mHandler.post(mUpdateProgressRunnable);
@@ -544,7 +540,6 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
 
             @Override
             public void onPause() {
-                Log.i("daolema", "onPause");
                 mIvPlay.setImageResource(R.drawable.video_player_iv_play_src);
                 mHandler.removeCallbacks(mUpdateProgressRunnable);
 
@@ -555,7 +550,6 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
 
             @Override
             public void onStop() {
-                Log.i("daolema", "onStop");
                 mIvPlay.setImageResource(R.drawable.video_player_iv_play_src);
                 mHandler.removeCallbacks(mUpdateProgressRunnable);
 
@@ -566,7 +560,6 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
 
             @Override
             public void onComplete() {
-                Log.i("daolema", "onComplete");
                 mIvPlay.setImageResource(R.drawable.video_player_iv_play_src);
                 mHandler.removeCallbacks(mUpdateProgressRunnable);
 
@@ -577,7 +570,6 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
 
             @Override
             public void onError(Exception e) {
-                Log.i("daolema", "onError");
                 mMediaPlayerHelper.setMediaPlayer(new QsIjkPlayer(getContext()));
                 play(surfaceHolder);
             }

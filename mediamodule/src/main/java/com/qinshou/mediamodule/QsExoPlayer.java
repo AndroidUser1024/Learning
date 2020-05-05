@@ -101,6 +101,7 @@ public class QsExoPlayer extends BasePlayer {
 
     @Override
     public void play(Uri uri) {
+        mSimpleExoPlayer.stop(true);
         String userAgent = Util.getUserAgent(mContext, "QinshouBox");
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(mContext, userAgent);
         mMediaSource = new ProgressiveMediaSource.Factory(dataSourceFactory)
