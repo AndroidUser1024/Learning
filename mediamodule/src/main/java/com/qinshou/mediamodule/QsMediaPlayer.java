@@ -15,6 +15,7 @@ import java.io.IOException;
  */
 public class QsMediaPlayer extends BasePlayer {
     private MediaPlayer mMediaPlayer;
+    private SurfaceHolder mSurfaceHolder;
 
     public QsMediaPlayer(Context context) {
         super(context);
@@ -53,6 +54,7 @@ public class QsMediaPlayer extends BasePlayer {
 
     @Override
     public void setDisplay(SurfaceHolder surfaceHolder) {
+        mSurfaceHolder = surfaceHolder;
         mMediaPlayer.setDisplay(surfaceHolder);
     }
 
@@ -73,6 +75,7 @@ public class QsMediaPlayer extends BasePlayer {
     @Override
     public void play(Uri uri) {
         mMediaPlayer.reset();
+        mMediaPlayer.setDisplay(mSurfaceHolder);
         try {
             mMediaPlayer.setDataSource(mContext, uri);
         } catch (IOException e) {

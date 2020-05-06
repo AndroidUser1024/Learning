@@ -383,6 +383,57 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
         mIvBrightness = findViewByID(R.id.iv_brightness);
         mLlBrightnessValue = findViewByID(R.id.ll_brightness_value);
         mSurfaceView = findViewByID(R.id.surface_view);
+
+        mMediaPlayerHelper = new MediaPlayerHelper(getContext());
+        mMediaPlayerHelper.setMediaPlayerListener(new IMediaPlayerListener() {
+
+            @Override
+            public void onStart() {
+                mIvPlay.setImageResource(R.drawable.video_player_iv_play_src_2);
+                mHandler.removeCallbacks(mUpdateProgressRunnable);
+                mHandler.post(mUpdateProgressRunnable);
+
+                //  开始播放后隐藏控制器
+                hideControlDelay();
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            }
+
+            @Override
+            public void onPause() {
+                mIvPlay.setImageResource(R.drawable.video_player_iv_play_src);
+                mHandler.removeCallbacks(mUpdateProgressRunnable);
+
+                // 暂停立即显示控制器
+                showControl();
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            }
+
+            @Override
+            public void onStop() {
+                mIvPlay.setImageResource(R.drawable.video_player_iv_play_src);
+                mHandler.removeCallbacks(mUpdateProgressRunnable);
+
+                // 暂停立即显示控制器
+                showControl();
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            }
+
+            @Override
+            public void onComplete() {
+                mIvPlay.setImageResource(R.drawable.video_player_iv_play_src);
+                mHandler.removeCallbacks(mUpdateProgressRunnable);
+
+                // 暂停立即显示控制器
+                showControl();
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                ShowLogUtil.logi("e--->" + e.getMessage());
+                mMediaPlayerHelper.setMediaPlayer(new QsIjkPlayer(getContext()));
+            }
+        });
     }
 
     @Override
@@ -395,7 +446,9 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
 
             @Override
             public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-                play(holder);
+                mMediaPlayerHelper.setDisplay(holder);
+
+                getPresenter().getHlsPlayList();
             }
 
             @Override
@@ -504,79 +557,13 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
         if (mMediaSourceBeanList.size() == 0) {
             return;
         }
-        playHls(mMediaSourceBeanList.get(0).getUrl());
-//        playHls("https://gcdnc.v.dwion.com/gc/tyhjtys_1_md.m3u8");
+        play("https://gcdnc.v.dwion.com/gc/tyhjtys_1_md.m3u8");
+//        play(mMediaSourceBeanList.get(0).getUrl());
     }
 
     @Override
     public void getHlsPlayListFailure(Exception e) {
 
-    }
-
-    private void play(SurfaceHolder surfaceHolder) {
-        if (mMediaPlayerHelper == null) {
-            mMediaPlayerHelper = new MediaPlayerHelper(getContext());
-        }
-//        String path = "http://vfx.mtime.cn/Video/2019/03/12/mp4/190312083533415853.mp4";
-//        String path2 = "http://vfx.mtime.cn/Video/2019/03/09/mp4/190309153658147087.mp4";
-//        String path = getContext().getCacheDir() + File.separator + "190309153658147087.mp4";
-        String path = getContext().getCacheDir() + File.separator + "tmp1.mp4";
-        mMediaPlayerHelper.setMediaPlayerListener(new IMediaPlayerListener() {
-//            @Override
-//            public void onPrepared() {
-//                mMediaPlayerHelper.start();
-//            }
-
-            @Override
-            public void onStart() {
-                mIvPlay.setImageResource(R.drawable.video_player_iv_play_src_2);
-                mHandler.removeCallbacks(mUpdateProgressRunnable);
-                mHandler.post(mUpdateProgressRunnable);
-
-                //  开始播放后隐藏控制器
-                hideControlDelay();
-                getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            }
-
-            @Override
-            public void onPause() {
-                mIvPlay.setImageResource(R.drawable.video_player_iv_play_src);
-                mHandler.removeCallbacks(mUpdateProgressRunnable);
-
-                // 暂停立即显示控制器
-                showControl();
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            }
-
-            @Override
-            public void onStop() {
-                mIvPlay.setImageResource(R.drawable.video_player_iv_play_src);
-                mHandler.removeCallbacks(mUpdateProgressRunnable);
-
-                // 暂停立即显示控制器
-                showControl();
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            }
-
-            @Override
-            public void onComplete() {
-                mIvPlay.setImageResource(R.drawable.video_player_iv_play_src);
-                mHandler.removeCallbacks(mUpdateProgressRunnable);
-
-                // 暂停立即显示控制器
-                showControl();
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            }
-
-            @Override
-            public void onError(Exception e) {
-                ShowLogUtil.logi("e--->" + e.getMessage());
-                mMediaPlayerHelper.setMediaPlayer(new QsIjkPlayer(getContext()));
-                play(surfaceHolder);
-            }
-        });
-        mMediaPlayerHelper.setDisplay(surfaceHolder);
-        mMediaPlayerHelper.play(Uri.parse(path));
     }
 
     /**
@@ -702,13 +689,7 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
         mHandler.postDelayed(mHideControlRunnable, HIDE_CONTROL_DELAY);
     }
 
-    public void playHls(String url) {
-//        String userAgent = Util.getUserAgent(getContext(), "QinshouBox");
-//        // 播放 HLS 流
-//        DataSource.Factory dataSourceFactory = new DefaultHttpDataSourceFactory(userAgent);
-//        Uri uri = Uri.parse(url);
-//        MediaSource mediaSource = new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(uri);
-//        mExoPlayer.prepare(mediaSource);
-//        mExoPlayer.setPlayWhenReady(true);
+    public void play(String url) {
+        mMediaPlayerHelper.play(Uri.parse(url));
     }
 }

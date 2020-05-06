@@ -96,6 +96,14 @@ public class QsExoPlayer extends BasePlayer {
         mMediaSource = new ProgressiveMediaSource.Factory(dataSourceFactory)
                 .createMediaSource(uri);
         mSimpleExoPlayer.prepare(mMediaSource);
+        
+//        String userAgent = Util.getUserAgent(getContext(), "QinshouBox");
+//        // 播放 HLS 流
+//        DataSource.Factory dataSourceFactory = new DefaultHttpDataSourceFactory(userAgent);
+//        Uri uri = Uri.parse(url);
+//        MediaSource mediaSource = new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(uri);
+//        mExoPlayer.prepare(mediaSource);
+//        mExoPlayer.setPlayWhenReady(true);
     }
 
     @Override

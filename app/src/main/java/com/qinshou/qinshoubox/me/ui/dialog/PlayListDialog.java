@@ -55,7 +55,7 @@ public class PlayListDialog extends AbsDialogFragment {
                 if (!(getActivity() instanceof VideoPlayerActivity)) {
                     return;
                 }
-                ((VideoPlayerActivity) getActivity()).playHls(itemData.getUrl());
+                ((VideoPlayerActivity) getActivity()).play(itemData.getUrl());
             }
         });
     }
