@@ -130,6 +130,10 @@ public abstract class AbsDialogFragment extends DialogFragment {
         show(fragmentManager, getClass().getSimpleName());
     }
 
+    public boolean isShowing() {
+        return getDialog() != null && getDialog().isShowing();
+    }
+
     public interface OnDismissListener {
         void onDismiss(DialogInterface dialog);
     }

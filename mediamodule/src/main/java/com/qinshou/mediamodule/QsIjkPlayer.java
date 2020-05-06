@@ -2,6 +2,7 @@ package com.qinshou.mediamodule;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.view.SurfaceHolder;
 
 import java.io.IOException;
@@ -17,6 +18,7 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer;
  */
 public class QsIjkPlayer extends BasePlayer {
     private final IjkMediaPlayer mIjkMediaPlayer;
+    private SurfaceHolder mSurfaceHolder;
 
     public QsIjkPlayer(Context context) {
         super(context);
@@ -41,6 +43,7 @@ public class QsIjkPlayer extends BasePlayer {
 //                if (mMediaPlayerListener != null) {
 //                    mMediaPlayerListener.onPrepared();
 //                }
+                Log.i("daolema", "onPrepared");
                 mIjkMediaPlayer.start();
                 if (mMediaPlayerListener != null) {
                     mMediaPlayerListener.onStart();
@@ -50,6 +53,7 @@ public class QsIjkPlayer extends BasePlayer {
         mIjkMediaPlayer.setOnErrorListener(new tv.danmaku.ijk.media.player.IMediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(tv.danmaku.ijk.media.player.IMediaPlayer iMediaPlayer, int i, int i1) {
+                Log.i("daolema", "onError--->" + i);
                 if (mMediaPlayerListener != null) {
                     mMediaPlayerListener.onError(new Exception("播放失败"));
                 }
@@ -68,20 +72,37 @@ public class QsIjkPlayer extends BasePlayer {
 
     @Override
     public void setDisplay(SurfaceHolder surfaceHolder) {
+        mSurfaceHolder = surfaceHolder;
         mIjkMediaPlayer.setDisplay(surfaceHolder);
     }
 
+//    @Override
+//    public void setDataSource(Uri uri) {
+//        try {
+//            mIjkMediaPlayer.setDataSource(mContext, uri);
+//        } catch (IOException e) {
+//            return;
+//        }
+//    }
+//
+//    @Override
+//    public void prepare() {
+//        mIjkMediaPlayer.prepareAsync();
+//    }
+
     @Override
-    public void setDataSource(Uri uri) {
+    public void play(Uri uri) {
+        mIjkMediaPlayer.reset();
+        mIjkMediaPlayer.setDisplay(mSurfaceHolder);
         try {
             mIjkMediaPlayer.setDataSource(mContext, uri);
         } catch (IOException e) {
+            Log.i("daolema", "e--->" + e.getMessage());
+            if (mMediaPlayerListener != null) {
+                mMediaPlayerListener.onError(e);
+            }
             return;
         }
-    }
-
-    @Override
-    public void prepare() {
         mIjkMediaPlayer.prepareAsync();
     }
 
@@ -91,17 +112,6 @@ public class QsIjkPlayer extends BasePlayer {
         if (mMediaPlayerListener != null) {
             mMediaPlayerListener.onStart();
         }
-    }
-
-    @Override
-    public void play(Uri uri) {
-        mIjkMediaPlayer.reset();
-        try {
-            mIjkMediaPlayer.setDataSource(mContext, uri);
-        } catch (IOException e) {
-            return;
-        }
-        mIjkMediaPlayer.prepareAsync();
     }
 
     @Override

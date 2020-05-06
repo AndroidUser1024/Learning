@@ -75,16 +75,26 @@ public class QsExoPlayer extends BasePlayer {
         mSimpleExoPlayer.setVideoSurfaceHolder(surfaceHolder);
     }
 
+    //    @Override
+//    public void setDataSource(Uri uri) {
+//        String userAgent = Util.getUserAgent(mContext, "QinshouBox");
+//        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(mContext, userAgent);
+//        mMediaSource = new ProgressiveMediaSource.Factory(dataSourceFactory)
+//                .createMediaSource(uri);
+//    }
+//
+//    @Override
+//    public void prepare() {
+//        mSimpleExoPlayer.prepare(mMediaSource);
+//    }
+//
     @Override
-    public void setDataSource(Uri uri) {
+    public void play(Uri uri) {
+        mSimpleExoPlayer.stop(true);
         String userAgent = Util.getUserAgent(mContext, "QinshouBox");
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(mContext, userAgent);
         mMediaSource = new ProgressiveMediaSource.Factory(dataSourceFactory)
                 .createMediaSource(uri);
-    }
-
-    @Override
-    public void prepare() {
         mSimpleExoPlayer.prepare(mMediaSource);
     }
 
@@ -97,16 +107,6 @@ public class QsExoPlayer extends BasePlayer {
         if (mMediaPlayerListener != null) {
             mMediaPlayerListener.onStart();
         }
-    }
-
-    @Override
-    public void play(Uri uri) {
-        mSimpleExoPlayer.stop(true);
-        String userAgent = Util.getUserAgent(mContext, "QinshouBox");
-        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(mContext, userAgent);
-        mMediaSource = new ProgressiveMediaSource.Factory(dataSourceFactory)
-                .createMediaSource(uri);
-        mSimpleExoPlayer.prepare(mMediaSource);
     }
 
     @Override

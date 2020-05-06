@@ -56,27 +56,19 @@ public class QsMediaPlayer extends BasePlayer {
         mMediaPlayer.setDisplay(surfaceHolder);
     }
 
-    @Override
-    public void setDataSource(Uri uri) {
-        try {
-            mMediaPlayer.setDataSource(mContext, uri);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void prepare() {
-        mMediaPlayer.prepareAsync();
-    }
-
-    @Override
-    public void start() {
-        mMediaPlayer.start();
-        if (mMediaPlayerListener != null) {
-            mMediaPlayerListener.onStart();
-        }
-    }
+//    @Override
+//    public void setDataSource(Uri uri) {
+//        try {
+//            mMediaPlayer.setDataSource(mContext, uri);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    @Override
+//    public void prepare() {
+//        mMediaPlayer.prepareAsync();
+//    }
 
     @Override
     public void play(Uri uri) {
@@ -87,6 +79,14 @@ public class QsMediaPlayer extends BasePlayer {
             return;
         }
         mMediaPlayer.prepareAsync();
+    }
+
+    @Override
+    public void start() {
+        mMediaPlayer.start();
+        if (mMediaPlayerListener != null) {
+            mMediaPlayerListener.onStart();
+        }
     }
 
     @Override

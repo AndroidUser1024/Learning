@@ -570,13 +570,12 @@ public class VideoPlayerActivity extends QSActivity<VideoPlayerPresenter> implem
 
             @Override
             public void onError(Exception e) {
+                ShowLogUtil.logi("e--->" + e.getMessage());
                 mMediaPlayerHelper.setMediaPlayer(new QsIjkPlayer(getContext()));
                 play(surfaceHolder);
             }
         });
         mMediaPlayerHelper.setDisplay(surfaceHolder);
-//        mMediaPlayerHelper.setDataSource(Uri.parse(path));
-//        mMediaPlayerHelper.prepare();
         mMediaPlayerHelper.play(Uri.parse(path));
     }
 

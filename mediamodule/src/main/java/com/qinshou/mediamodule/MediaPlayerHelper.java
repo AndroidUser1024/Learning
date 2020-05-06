@@ -16,8 +16,8 @@ public class MediaPlayerHelper {
 
     public MediaPlayerHelper(Context context) {
 //        mMediaPlayer = new QsMediaPlayer(context);
-//        mMediaPlayer = new QsExoPlayer(context);
-        mMediaPlayer = new QsIjkPlayer(context);
+        mMediaPlayer = new QsExoPlayer(context);
+//        mMediaPlayer = new QsIjkPlayer(context);
     }
 
     public IMediaPlayer getMediaPlayer() {
@@ -35,13 +35,13 @@ public class MediaPlayerHelper {
     public void play(Uri uri) {
         mMediaPlayer.play(uri);
     }
-    public void setDataSource(Uri uri) {
-        mMediaPlayer.setDataSource(uri);
-    }
-
-    public void prepare() {
-        mMediaPlayer.prepare();
-    }
+//    public void setDataSource(Uri uri) {
+//        mMediaPlayer.setDataSource(uri);
+//    }
+//
+//    public void prepare() {
+//        mMediaPlayer.prepare();
+//    }
 
     public void start() {
         mMediaPlayer.start();
