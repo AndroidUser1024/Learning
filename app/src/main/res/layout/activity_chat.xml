@@ -204,6 +204,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_video_call"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -212,6 +213,16 @@
                 android:paddingTop="@dimen/px65"
                 android:paddingBottom="@dimen/px65">
 
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/chat_iv_send_img_src" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/px29"
+                    android:text="@string/chat_tv_video_call_text" />
             </LinearLayout>
 
             <LinearLayout

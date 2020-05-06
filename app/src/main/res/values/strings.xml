@@ -87,6 +87,8 @@
     <string name="chat_tv_cancel_send_voice_prompt_text_2">松开手指,取消发送</string>
     <string name="chat_tv_send_file_text">文件</string>
     <string name="chat_tv_send_img_text">图片</string>
+    <string name="chat_tv_video_call_text">视频通话</string>
+    <string name="chat_tv_audio_call_text">语音通话</string>
     <string name="chat_et_content_hint">请输入命令</string>
     <string name="chat_agree_add_text">您已经和%1$s成为好友,现在可以开始聊天了</string>
 

@@ -39,6 +39,7 @@ import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.conversation.contract.IChatContract;
 import com.qinshou.qinshoubox.conversation.presenter.ChatPresenter;
 import com.qinshou.qinshoubox.conversation.view.adapter.RcvMessageAdapter;
+import com.qinshou.qinshoubox.conversation.view.dialog.WebRTCDialog;
 import com.qinshou.qinshoubox.conversation.view.fragment.ChatSettingFragment;
 import com.qinshou.qinshoubox.im.bean.ConversationDetailBean;
 import com.qinshou.qinshoubox.im.bean.UserDetailBean;
@@ -236,9 +237,13 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
                 case R.id.ll_send_img:
                     pickPhoto();
                     break;
+                case R.id.ll_video_call:
+                    showWebRTCDialog();
+                    break;
             }
         }
     };
+
     /**
      * 按住说话按钮触摸监听器
      */
@@ -363,6 +368,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
 
         }
     };
+
     /**
      * 消息发送状态监听器
      */
@@ -530,6 +536,7 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
         mIvMore.setOnClickListener(mOnClickListener);
         mBtnSend.setOnClickListener(mOnClickListener);
         findViewByID(R.id.ll_send_img).setOnClickListener(mOnClickListener);
+        findViewByID(R.id.ll_video_call).setOnClickListener(mOnClickListener);
     }
 
     @Override
@@ -787,6 +794,16 @@ public class ChatActivity extends QSActivity<ChatPresenter> implements IChatCont
                         }).launch();
             }
         });
+    }
+
+    /**
+     * Author: QinHao
+     * Email:qinhao@jeejio.com
+     * Date:2020/5/6 18:37
+     * Description:显示音视频实时通话选择框
+     */
+    private void showWebRTCDialog() {
+        new WebRTCDialog().show(getSupportFragmentManager());
     }
 
     /**
