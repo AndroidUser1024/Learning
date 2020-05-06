@@ -60,7 +60,7 @@ public class WebRTCDialog extends AbsDialogFragment {
             //底部对话框
             window.setGravity(Gravity.BOTTOM);
             window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-            window.setWindowAnimations(R.style.Translate);
+            window.setWindowAnimations(R.style.TranslateB2T);
         }
         return dialog;
     }

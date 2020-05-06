@@ -19,10 +19,14 @@
         <!--<item name="android:windowIsTranslucent">true</item>-->
     </style>
 
-    <!-- ActionSheet进出动画 -->
-    <style name="Translate" parent="@android:style/Animation.Dialog">
-        <item name="android:windowEnterAnimation">@anim/translate_in</item>
-        <item name="android:windowExitAnimation">@anim/translate_out</item>
+    <style name="TranslateB2T" parent="@android:style/Animation.Dialog">
+        <item name="android:windowEnterAnimation">@anim/translate_y_in</item>
+        <item name="android:windowExitAnimation">@anim/translate_y_out</item>
+    </style>
+
+    <style name="TranslateL2R" parent="@android:style/Animation.Dialog">
+        <item name="android:windowEnterAnimation">@anim/translate_x_in</item>
+        <item name="android:windowExitAnimation">@anim/translate_x_out</item>
     </style>
 
 </resources>
