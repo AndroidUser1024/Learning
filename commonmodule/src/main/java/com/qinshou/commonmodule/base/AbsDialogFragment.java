@@ -23,7 +23,7 @@ import com.qinshou.commonmodule.util.StatusBarUtil;
  * Created on 2019/1/17
  */
 public abstract class AbsDialogFragment extends DialogFragment {
-    private View rootView;
+    private View mRootView;
     private OnDismissListener mOnDismissListener;
 
     /**
@@ -53,11 +53,11 @@ public abstract class AbsDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        rootView = LayoutInflater.from(getContext()).inflate(initLayoutId(), null);
+        mRootView = LayoutInflater.from(getContext()).inflate(initLayoutId(), null);
         Dialog dialog = new Dialog(getContext());
         //设置对话框无标题，该方法必须在 setContentView() 之前调用
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(rootView);
+        dialog.setContentView(mRootView);
         Window window = dialog.getWindow();
         if (window != null) {
             window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -96,8 +96,8 @@ public abstract class AbsDialogFragment extends DialogFragment {
     }
 
     public <T extends View> T findViewByID(int viewId) {
-        if (rootView != null) {
-            return (T) rootView.findViewById(viewId);
+        if (mRootView != null) {
+            return (T) mRootView.findViewById(viewId);
         }
         return null;
     }
