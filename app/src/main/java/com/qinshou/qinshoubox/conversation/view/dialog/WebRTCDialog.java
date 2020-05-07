@@ -58,10 +58,10 @@ public class WebRTCDialog extends AbsDialogFragment {
     public Dialog customDialog(Dialog dialog) {
         Window window = dialog.getWindow();
         if (window != null) {
-            //底部对话框
-            window.setGravity(Gravity.BOTTOM);
+            // 底部对话框
+            window.setGravity(Gravity.CENTER);
             window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-            window.setWindowAnimations(R.style.TranslateB2T);
+            window.setWindowAnimations(R.style.Scale);
         }
         return dialog;
     }

@@ -43,4 +43,10 @@
         <item name="android:windowExitAnimation">@anim/translate_r2l_out</item>
     </style>
 
+    <!-- 缩放动画 -->
+    <style name="Scale" parent="@android:style/Animation.Dialog">
+        <item name="android:windowEnterAnimation">@anim/scale_in</item>
+        <item name="android:windowExitAnimation">@anim/scale_out</item>
+    </style>
+
 </resources>
