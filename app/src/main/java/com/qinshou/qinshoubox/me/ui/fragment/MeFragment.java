@@ -11,6 +11,7 @@ import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
+import com.qinshou.qinshoubox.conversation.view.dialog.WebRTCDialog;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.me.contract.IMeContract;
@@ -96,7 +97,8 @@ public class MeFragment extends QSFragment<MePresenter> implements IMeContract.I
                     startActivity(new Intent(getContext(), VideoPlayerActivity.class));
                     break;
                 case R.id.btn_test:
-                    startActivity(ContainerActivity.getJumpIntent(getContext(), TestFragment.class));
+//                    startActivity(ContainerActivity.getJumpIntent(getContext(), TestFragment.class));
+                    new WebRTCDialog().show(getChildFragmentManager());
                     break;
                 default:
                     break;

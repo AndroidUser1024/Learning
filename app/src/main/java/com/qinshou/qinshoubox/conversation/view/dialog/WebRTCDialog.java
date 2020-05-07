@@ -7,6 +7,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.qinshou.commonmodule.base.AbsDialogFragment;
+import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.R;
 
 /**
@@ -23,7 +24,7 @@ public class WebRTCDialog extends AbsDialogFragment {
 
     @Override
     public void initView() {
-
+        ShowLogUtil.logi("");
     }
 
     @Override

@@ -19,14 +19,28 @@
         <!--<item name="android:windowIsTranslucent">true</item>-->
     </style>
 
+    <!-- 平移动画,从底部出现 -->
     <style name="TranslateB2T" parent="@android:style/Animation.Dialog">
-        <item name="android:windowEnterAnimation">@anim/translate_y_in</item>
-        <item name="android:windowExitAnimation">@anim/translate_y_out</item>
+        <item name="android:windowEnterAnimation">@anim/translate_b2t_in</item>
+        <item name="android:windowExitAnimation">@anim/translate_b2t_out</item>
     </style>
 
+    <!-- 平移动画,从顶部出现 -->
+    <style name="TranslateT2B" parent="@android:style/Animation.Dialog">
+        <item name="android:windowEnterAnimation">@anim/translate_t2b_in</item>
+        <item name="android:windowExitAnimation">@anim/translate_t2b_out</item>
+    </style>
+
+    <!-- 平移动画,从左边出现 -->
     <style name="TranslateL2R" parent="@android:style/Animation.Dialog">
-        <item name="android:windowEnterAnimation">@anim/translate_x_in</item>
-        <item name="android:windowExitAnimation">@anim/translate_x_out</item>
+        <item name="android:windowEnterAnimation">@anim/translate_l2r_in</item>
+        <item name="android:windowExitAnimation">@anim/translate_l2r_out</item>
+    </style>
+
+    <!-- 平移动画,从右边出现 -->
+    <style name="TranslateR2L" parent="@android:style/Animation.Dialog">
+        <item name="android:windowEnterAnimation">@anim/translate_r2l_in</item>
+        <item name="android:windowExitAnimation">@anim/translate_r2l_out</item>
     </style>
 
 </resources>
