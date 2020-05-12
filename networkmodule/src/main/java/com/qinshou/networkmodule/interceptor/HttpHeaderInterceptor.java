@@ -1,8 +1,6 @@
 package com.qinshou.networkmodule.interceptor;
 
 
-import android.util.Log;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;

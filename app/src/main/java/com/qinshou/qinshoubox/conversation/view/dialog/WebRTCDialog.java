@@ -1,6 +1,7 @@
 package com.qinshou.qinshoubox.conversation.view.dialog;
 
 import android.app.Dialog;
+import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -17,6 +18,9 @@ import com.qinshou.qinshoubox.R;
  * Description:音视频实时通话选择框
  */
 public class WebRTCDialog extends AbsDialogFragment {
+    private static final String TO_USER_ID = "toUserId";
+    private String mToUserId;
+
     @Override
     public int initLayoutId() {
         return R.layout.dialog_web_rtc;
@@ -33,6 +37,7 @@ public class WebRTCDialog extends AbsDialogFragment {
             @Override
             public void onClick(View v) {
 
+                dismiss();
             }
         });
         findViewByID(R.id.tv_audio_call).setOnClickListener(new View.OnClickListener() {
@@ -51,7 +56,11 @@ public class WebRTCDialog extends AbsDialogFragment {
 
     @Override
     public void initData() {
-
+        Bundle bundle = getArguments();
+        if (bundle == null) {
+            return;
+        }
+        mToUserId = bundle.getString(TO_USER_ID);
     }
 
     @Override
@@ -66,4 +75,13 @@ public class WebRTCDialog extends AbsDialogFragment {
         return dialog;
     }
 
+    public static WebRTCDialog newInstance(String toUserId) {
+
+        Bundle args = new Bundle();
+        args.putString(TO_USER_ID, toUserId);
+
+        WebRTCDialog fragment = new WebRTCDialog();
+        fragment.setArguments(args);
+        return fragment;
+    }
 }

@@ -283,9 +283,9 @@ public enum MagicGameManager {
     public void warriorMoveDown() {
         // 勇士原来的位置
         Position oldPosition = mWarriorBean.getPosition();
-        if (oldPosition.getRow() == MAX_ROW - 1) {
-            return;
-        }
+//        if (oldPosition.getRow() == MAX_ROW - 1) {
+//            return;
+//        }
         // 勇士需要移动到的位置
         Position newPosition = new Position(oldPosition.getRow() + 1, oldPosition.getColumn());
         mFloorList.get(mCurrentFloor).getCase(newPosition).handleEvent(mFragmentManager, mCurrentFloor, newPosition, new IHandleEventCallback() {

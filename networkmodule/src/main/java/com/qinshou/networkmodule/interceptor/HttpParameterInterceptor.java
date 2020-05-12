@@ -4,6 +4,7 @@ package com.qinshou.networkmodule.interceptor;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.LongSerializationPolicy;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -86,7 +87,8 @@ public class HttpParameterInterceptor implements Interceptor {
                 requestBody.writeTo(buffer);
                 //读取参数字符串
                 String json = buffer.readUtf8();
-                Map<String, Object> map = new Gson().fromJson(json, Map.class);
+                Map<String, Object> map = (new Gson()).fromJson(json, new TypeToken<Map<String, Object>>() {
+                }.getType());
                 //添加公共参数
                 for (Map.Entry<String, Object> parameter : parametersMap.entrySet()) {
                     if (parameter.getKey() != null && parameter.getValue() != null) {

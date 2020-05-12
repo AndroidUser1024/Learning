@@ -1,10 +1,15 @@
 package com.qinshou.commonmodule.crash;
 
+import android.app.ActivityManager;
+import android.app.Application;
 import android.content.Context;
 import android.os.Looper;
+import android.os.Process;
 import android.util.Log;
 import android.widget.Toast;
 
+
+import com.qinshou.commonmodule.base.BaseApplication;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +17,7 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.logging.Logger;
 
 /**
  * Author: MrQinshou
@@ -38,6 +44,7 @@ public enum CrashHandler implements Thread.UncaughtExceptionHandler {
                 Log.e(TAG, "uncaughtException : e--->", e);
             }
             // 退出程序
+            BaseApplication.getInstance().exit();
             android.os.Process.killProcess(android.os.Process.myPid());
             System.exit(1);
         }
