@@ -167,13 +167,13 @@ public class PuzzleActivity extends QSActivity<AbsPresenter> {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.btn_choose_img:
-//                    chooseImg();
+                    chooseImg();
                     break;
                 case R.id.btn_choose_difficulty:
-//                    chooseDifficulty();
-                    View viewByID = findViewByID(R.id.btn_choose_img);
+                    chooseDifficulty();
+//                    View viewByID = findViewByID(R.id.btn_choose_img);
 //                    viewByID.setEnabled(!viewByID.isEnabled());
-                    viewByID.setSelected(!viewByID.isSelected());
+//                    viewByID.setSelected(!viewByID.isSelected());
                     break;
                 case R.id.btn_show_origin_img:
                     showOriginImg();

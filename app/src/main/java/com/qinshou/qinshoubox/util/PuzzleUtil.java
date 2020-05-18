@@ -85,17 +85,18 @@ public class PuzzleUtil {
      */
     public static boolean canResolve(List<PuzzleItemBean> list) {
         if (PUZZLE_TYPE % 2 != 0) {
-            //宽度为奇数时，倒置和必须为偶数
+            // 宽度为奇数时，倒置和必须为偶数
             return getInversionSum(list) % 2 == 0;
         } else {
-            //宽度为偶数时，空格位置位于从下往上数的奇数行时，倒置和必须为偶数
-            //空格位置位于从下往上数的偶数行时，倒置和必须为奇数
+            // 宽度为偶数时
+            // 空格位置位于从下往上数的奇数行时，倒置和必须为奇数
+            // 空格位置位于从下往上数的偶数行时，倒置和必须为偶数
             int blankPositionRow = BLANK_POSITION / PUZZLE_TYPE + 1;
             int blankPositionRowReverse = PUZZLE_TYPE - blankPositionRow + 1;
             if (blankPositionRowReverse % 2 != 0) {
-                return getInversionSum(list) % 2 == 0;
-            } else {
                 return getInversionSum(list) % 2 != 0;
+            } else {
+                return getInversionSum(list) % 2 == 0;
             }
         }
     }
