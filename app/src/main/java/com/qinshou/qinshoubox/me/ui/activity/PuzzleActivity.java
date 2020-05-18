@@ -51,9 +51,6 @@ public class PuzzleActivity extends QSActivity<AbsPresenter> {
     private RecyclerView rvPuzzle;  //拼图块列表容器
     private RvPuzzleAdapter mRvPuzzleAdapter;   //拼图块列表适配器
 
-    @Background(solid = 0xFFFFFF00, strokeColor = 0xFFFF0000, strokeWidth = 5, radius = 10)
-    @Background(state = State.SELECTED, solid = 0xFF00FF00, strokeColor = 0xFFFF0000, strokeWidth = 5, radius = 10)
-    @Background(state = State.PRESSED, solid = 0xFF00FF00, strokeColor = 0xFFFF0000, strokeWidth = 5, radius = 10)
     private Button btnChooseImg;    //选择相册中的图片按钮
     private Button btnChooseDifficulty; //选择难度按钮
     private Button btnShowOriginImg;    //显示原图按钮
@@ -84,7 +81,6 @@ public class PuzzleActivity extends QSActivity<AbsPresenter> {
         btnReset = findViewByID(R.id.btn_reset);
         tvStep = findViewByID(R.id.tv_step);
         tvTime = findViewByID(R.id.tv_time);
-        BackgroundManager.SINGLETON.init(this);
     }
 
     @Override

@@ -7,13 +7,17 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentActivity;
+
 import com.qinshou.commonmodule.ContainerActivity;
+import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.conversation.view.dialog.WebRTCDialog;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.login.bean.UserBean;
+import com.qinshou.qinshoubox.login.view.fragment.LoginOrRegisterFragment;
 import com.qinshou.qinshoubox.me.contract.IMeContract;
 import com.qinshou.qinshoubox.me.presenter.MePresenter;
 import com.qinshou.qinshoubox.me.ui.activity.ChartActivity;
@@ -59,7 +63,11 @@ public class MeFragment extends QSFragment<MePresenter> implements IMeContract.I
                 case R.id.iv_head_img:
                 case R.id.tv_click_2_login:
                 case R.id.tv_login_2_have_more_function:
-                    startActivity(ContainerActivity.getJumpIntent(getContext(), DataSettingFragment.class));
+                    if (UserStatusManager.SINGLETON.getUserBean() == null) {
+                        startActivity(ContainerActivity.getJumpIntent(getContext(), LoginOrRegisterFragment.class));
+                    } else {
+                        startActivity(ContainerActivity.getJumpIntent(getContext(), DataSettingFragment.class));
+                    }
                     break;
 //                case R.id.ib_login_by_qq:
 //                    break;
@@ -97,8 +105,8 @@ public class MeFragment extends QSFragment<MePresenter> implements IMeContract.I
                     startActivity(new Intent(getContext(), VideoPlayerActivity.class));
                     break;
                 case R.id.btn_test:
-//                    startActivity(ContainerActivity.getJumpIntent(getContext(), TestFragment.class));
-                    new WebRTCDialog().show(getChildFragmentManager());
+                    startActivity(ContainerActivity.getJumpIntent(getContext(), TestFragment.class));
+//                    new WebRTCDialog().show(getChildFragmentManager());
                     break;
                 default:
                     break;
@@ -164,6 +172,9 @@ public class MeFragment extends QSFragment<MePresenter> implements IMeContract.I
     @Override
     public void initData() {
         UserBean userBean = UserStatusManager.SINGLETON.getUserBean();
+        if (userBean == null) {
+            return;
+        }
         ImageLoadUtil.SINGLETON.loadImage(getContext(), userBean.getHeadImgSmall(), mIvHeadImg);
         mTvNickname.setText(userBean.getNickname());
         mTvUsername.setText(userBean.getUsername());
@@ -171,15 +182,5 @@ public class MeFragment extends QSFragment<MePresenter> implements IMeContract.I
 
     @Override
     public void handleEvent(EventBean<Object> eventBean) {
-//        if (eventBean.getType() == EventBean.Type.LOGIN || eventBean.getType() == EventBean.Type.REFRESH_USER_BEAN) {
-//            UserBean userBean = UserStatusManager.SINGLETON.getUserBean();
-//            ImageLoadUtil.SINGLETON.loadImage(getContext(), userBean.getHeadImgSmall(), mIvHeadImg);
-//            mTvNickname.setText(userBean.getNickname());
-//            mTvUsername.setText(userBean.getUsername());
-//        } else if (eventBean.getType() == EventBean.Type.LOGOUT) {
-//            ImageLoadUtil.SINGLETON.loadImage(getContext(), R.drawable.default_head_img, mIvHeadImg);
-//            mTvNickname.setText(getString(R.string.me_tv_click_2_login_text));
-//            mTvUsername.setText(getString(R.string.me_tv_login_2_have_more_function_text));
-//        }
     }
 }

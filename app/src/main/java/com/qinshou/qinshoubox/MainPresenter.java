@@ -2,6 +2,8 @@ package com.qinshou.qinshoubox;
 
 
 import com.qinshou.commonmodule.base.AbsPresenter;
+import com.qinshou.networkmodule.callback.Callback;
+import com.qinshou.qinshoubox.login.bean.UserBean;
 
 /**
  * Author: QinHao
@@ -13,5 +15,26 @@ public class MainPresenter extends AbsPresenter<IMainContract.IView, IMainContra
     @Override
     public IMainContract.IModel initModel() {
         return new MainModel();
+    }
+
+    @Override
+    public void login(String username, String password) {
+        getModel().login(username, password, new Callback<UserBean>() {
+            @Override
+            public void onSuccess(UserBean data) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().loginSuccess(data);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                if (!isViewAttached()) {
+                    return;
+                }
+                getView().loginFailure(e);
+            }
+        });
     }
 }

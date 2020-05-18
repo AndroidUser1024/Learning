@@ -73,13 +73,6 @@ public class SplashActivity extends QSActivity<SplashPresenter> implements ISpla
     }
 
     @Override
-    public void onAuthenticated() {
-        super.onAuthenticated();
-        startActivity(new Intent(getContext(), MainActivity.class));
-        finish();
-    }
-
-    @Override
     public void handleEvent(EventBean<Object> eventBean) {
     }
 
@@ -87,16 +80,7 @@ public class SplashActivity extends QSActivity<SplashPresenter> implements ISpla
         if (isFinishing()) {
             return;
         }
-        String username = SharedPreferencesHelper.SINGLETON.getString(IConstant.SP_KEY_LAST_LOGIN_USERNAME);
-        String password = SharedPreferencesHelper.SINGLETON.getString(IConstant.SP_KEY_LAST_LOGIN_PASSWORD);
-        if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
-            // 对存储的密码进行解密,并自动登录
-            getPresenter().login(username, EncryptUtil.decrypt(password));
-        } else {
-            startActivity(ContainerActivity.getJumpIntent(getContext(), LoginOrRegisterFragment.class));
-//        startActivity(new Intent(getContext(), MainActivity.class));
-            finish();
-        }
+        startActivity(new Intent(getContext(), MainActivity.class));
     }
 
     @Override
@@ -122,24 +106,5 @@ public class SplashActivity extends QSActivity<SplashPresenter> implements ISpla
     @Override
     public void getRandomFailure(Exception e) {
 
-    }
-
-    @Override
-    public void loginSuccess(UserBean userBean) {
-        ShowLogUtil.logi("loginSuccess" + " : " + "userBean--->" + userBean);
-        UserStatusManager.SINGLETON.setUserBean(userBean);
-
-        // 连接 IM 服务
-        IMClient.SINGLETON.connect(userBean.getId());
-    }
-
-    @Override
-    public void loginFailure(Exception e) {
-        ShowLogUtil.logi("loginFailure" + " : " + "e--->" + e.getMessage());
-        toastShort(e.getMessage());
-        // 刪除保存的密码,这样下次打开应用就不会自动登录了
-        SharedPreferencesHelper.SINGLETON.remove(IConstant.SP_KEY_LAST_LOGIN_PASSWORD);
-        startActivity(ContainerActivity.getJumpIntent(getContext(), LoginOrRegisterFragment.class));
-        finish();
     }
 }

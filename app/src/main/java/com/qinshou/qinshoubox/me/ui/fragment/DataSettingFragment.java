@@ -1,5 +1,6 @@
 package com.qinshou.qinshoubox.me.ui.fragment;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -9,6 +10,7 @@ import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.commonmodule.widget.TitleBar;
 import com.qinshou.imagemodule.util.ImageLoadUtil;
 import com.qinshou.qinshoubox.App;
+import com.qinshou.qinshoubox.MainActivity;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.constant.IConstant;
@@ -58,14 +60,14 @@ public class DataSettingFragment extends QSFragment<DataSettingPresenter> implem
                     startActivity(ContainerActivity.getJumpIntent(getContext(), MyQRCodeFragment.class));
                     break;
                 case R.id.btn_logout:
-                    // 连接聊天服务
-                    IMClient.SINGLETON.disconnect();
+                    // 通知后台,退出了
                     getPresenter().logout(UserStatusManager.SINGLETON.getUserBean().getUsername());
+                    UserStatusManager.SINGLETON.setUserBean(null);
                     // 刪除保存的密码,这样下次打开应用就不会自动登录了
                     SharedPreferencesHelper.SINGLETON.remove(IConstant.SP_KEY_LAST_LOGIN_PASSWORD);
-                    // 关闭所有界面,然后再跳转到主界面
-                    App.getInstance().exit();
-                    startActivity(ContainerActivity.getJumpIntent(getContext(), LoginOrRegisterFragment.class));
+                    // 断开聊天服务
+                    IMClient.SINGLETON.disconnect();
+                    startActivity(new Intent(getContext(), MainActivity.class));
                     break;
             }
         }
@@ -100,15 +102,9 @@ public class DataSettingFragment extends QSFragment<DataSettingPresenter> implem
     @Override
     public void initData() {
         UserBean userBean = UserStatusManager.SINGLETON.getUserBean();
-        if (userBean == null) {
-            ImageLoadUtil.SINGLETON.loadImage(getContext(), R.drawable.default_head_img, mIvHeadImg);
-            mTvNickname.setText(getString(R.string.me_tv_click_2_login_text));
-            mTvUsername.setText(getString(R.string.me_tv_login_2_have_more_function_text));
-        } else {
-            ImageLoadUtil.SINGLETON.loadImage(getContext(), userBean.getHeadImgSmall(), mIvHeadImg);
-            mTvNickname.setText(userBean.getNickname());
-            mTvUsername.setText(userBean.getUsername());
-        }
+        ImageLoadUtil.SINGLETON.loadImage(getContext(), userBean.getHeadImgSmall(), mIvHeadImg);
+        mTvNickname.setText(userBean.getNickname());
+        mTvUsername.setText(userBean.getUsername());
     }
 
     @Override

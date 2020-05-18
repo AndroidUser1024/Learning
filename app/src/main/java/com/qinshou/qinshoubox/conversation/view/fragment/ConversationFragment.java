@@ -26,7 +26,9 @@ import com.qinshou.qinshoubox.im.bean.ConversationDetailBean;
 import com.qinshou.qinshoubox.im.bean.MessageBean;
 import com.qinshou.qinshoubox.im.enums.MessageType;
 import com.qinshou.qinshoubox.im.listener.IOnMessageListener;
+import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.util.QSUtil;
+import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 import java.util.List;
 
@@ -131,13 +133,12 @@ public class ConversationFragment extends QSFragment<ConversationPresenter> impl
 
     @Override
     public void initData() {
+        UserBean userBean = UserStatusManager.SINGLETON.getUserBean();
+        if (userBean == null) {
+            return;
+        }
         updateUnreadCount(null);
         getPresenter().getConversationList();
-    }
-
-    @Override
-    public void onAuthenticated() {
-        super.onAuthenticated();
     }
 
     @Override

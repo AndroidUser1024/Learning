@@ -1,6 +1,7 @@
 package com.qinshou.commonmodule.util;
 
 import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -48,18 +49,18 @@ public class FragmentUtil {
                 fragmentTransaction.hide(fragment);
             }
         }
-        if (fragmentManager.findFragmentByTag(showFragment.getClass().getSimpleName()) == null) {
-            if (bundle != null) {
-                showFragment.setArguments(bundle);
-            }
-            fragmentTransaction.add(containerId, showFragment, showFragment.getClass().getSimpleName());
-        } else {
+        if (checkFragment(fragmentManager, showFragment)) {
             if (bundle != null) {
                 showFragment.setArguments(bundle);
             }
             fragmentTransaction.show(showFragment);
+        } else {
+            if (bundle != null) {
+                showFragment.setArguments(bundle);
+            }
+            fragmentTransaction.add(containerId, showFragment, showFragment.getClass().getSimpleName() + "_" + showFragment.hashCode());
         }
-        fragmentTransaction.commitAllowingStateLoss();
+        fragmentTransaction.commitNowAllowingStateLoss();
         return showFragment;
     }
 
@@ -68,10 +69,9 @@ public class FragmentUtil {
      * Date:2017/3/24
      */
     public static void addFragment(FragmentManager fragmentManager, int containerId, Fragment addFragment) {
-        fragmentManager.beginTransaction().add(containerId, addFragment, addFragment.getClass().getSimpleName())
+        fragmentManager.beginTransaction().add(containerId, addFragment, addFragment.getClass().getSimpleName() + "_" + addFragment.hashCode())
                 .hide(addFragment)
-                .commitAllowingStateLoss();
-        fragmentManager.executePendingTransactions();
+                .commitNowAllowingStateLoss();
     }
 
     /**
@@ -79,8 +79,12 @@ public class FragmentUtil {
      * Date:2017/3/24
      */
     public static void removeFragment(FragmentManager fragmentManager, Fragment removeFragment) {
-        fragmentManager.beginTransaction().remove(fragmentManager.findFragmentByTag(removeFragment.getClass().getSimpleName()))
-                .commitAllowingStateLoss();
+        Fragment fragmentByTag = fragmentManager.findFragmentByTag(removeFragment.getClass().getSimpleName() + "_" + removeFragment.hashCode());
+        if (fragmentByTag == null) {
+            return;
+        }
+        fragmentManager.beginTransaction().remove(fragmentByTag)
+                .commitNowAllowingStateLoss();
     }
 
     /**
@@ -90,6 +94,6 @@ public class FragmentUtil {
      * @re
      */
     public static boolean checkFragment(FragmentManager fragmentManager, Fragment checkFragment) {
-        return fragmentManager.findFragmentByTag(checkFragment.getClass().getSimpleName()) != null;
+        return fragmentManager.findFragmentByTag(checkFragment.getClass().getSimpleName() + "_" + checkFragment.hashCode()) != null;
     }
 }

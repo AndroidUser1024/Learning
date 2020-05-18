@@ -22,17 +22,6 @@ public interface ISplashContract extends IBaseContract {
          * Description:获取一首随机诗词
          */
         void getRandomPoem(Callback<PoemBean> callback);
-
-        /**
-         * Author: QinHao
-         * Email:cqflqinhao@126.com
-         * Date:2020/1/10 17:42
-         * Description:登录
-         *
-         * @param username 用户名
-         * @param password 密码
-         */
-        void login(String username, String password, Callback<UserBean> callback);
     }
 
     interface ISplashView extends IBaseView {
@@ -56,26 +45,6 @@ public interface ISplashContract extends IBaseContract {
          * @param e 错误信息
          */
         void getRandomFailure(Exception e);
-
-        /**
-         * Author: QinHao
-         * Email:cqflqinhao@126.com
-         * Date:2020/1/10 17:42
-         * Description:登录成功
-         *
-         * @param userBean 用户信息
-         */
-        void loginSuccess(UserBean userBean);
-
-        /**
-         * Author: QinHao
-         * Email:cqflqinhao@126.com
-         * Date:2020/1/10 17:42
-         * Description:登录失败
-         *
-         * @param e 错误信息
-         */
-        void loginFailure(Exception e);
     }
 
     interface ISplashPresenter {
@@ -86,16 +55,5 @@ public interface ISplashContract extends IBaseContract {
          * Description:获取随机诗词
          */
         void getRandomPoem();
-
-        /**
-         * Author: QinHao
-         * Email:cqflqinhao@126.com
-         * Date:2020/1/10 17:44
-         * Description:登录
-         *
-         * @param username 用户名
-         * @param password 密码
-         */
-        void login(String username, String password);
     }
 }

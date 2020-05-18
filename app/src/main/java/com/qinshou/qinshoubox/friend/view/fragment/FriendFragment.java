@@ -31,6 +31,8 @@ import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.im.bean.GroupChatBean;
 import com.qinshou.qinshoubox.im.listener.IOnFriendStatusListener;
 import com.qinshou.qinshoubox.im.listener.IOnGroupChatStatusListener;
+import com.qinshou.qinshoubox.im.manager.UserManager;
+import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.util.QSUtil;
 import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
@@ -249,6 +251,10 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
 
     @Override
     public void initData() {
+        UserBean userBean = UserStatusManager.SINGLETON.getUserBean();
+        if (userBean == null) {
+            return;
+        }
         // 初始化 TabLayout
         String[] nameArray = getResources().getStringArray(R.array.friend_tv_tab_text);
         for (int i = 0; i < nameArray.length; i++) {
@@ -280,11 +286,6 @@ public class FriendFragment extends QSFragment<FriendPresenter> implements IFrie
         getPresenter().getMyGroupChatList();
         getPresenter().getFriendList();
         updateFriendHistoryUnreadCount();
-    }
-
-    @Override
-    public void onAuthenticated() {
-        super.onAuthenticated();
     }
 
     @Override

@@ -39,25 +39,4 @@ public class SplashPresenter extends AbsPresenter<ISplashContract.ISplashView, I
             }
         });
     }
-
-    @Override
-    public void login(String username, String password) {
-        getModel().login(username, password, new Callback<UserBean>() {
-            @Override
-            public void onSuccess(UserBean data) {
-                if (!isViewAttached()) {
-                    return;
-                }
-                getView().loginSuccess(data);
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                if (!isViewAttached()) {
-                    return;
-                }
-                getView().loginFailure(e);
-            }
-        });
-    }
 }

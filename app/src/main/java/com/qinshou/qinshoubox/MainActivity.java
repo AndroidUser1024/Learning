@@ -1,24 +1,38 @@
 package com.qinshou.qinshoubox;
 
+import android.content.Context;
 import android.content.Intent;
 
 import com.google.android.material.tabs.TabLayout;
 
+import android.content.IntentFilter;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.util.FragmentUtil;
+import com.qinshou.commonmodule.util.SharedPreferencesHelper;
+import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.base.QSFragment;
+import com.qinshou.qinshoubox.broadcast.TimeTickBroadcastReceiver;
+import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.conversation.view.fragment.ConversationFragment;
 import com.qinshou.qinshoubox.friend.view.fragment.FriendFragment;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
 import com.qinshou.qinshoubox.homepage.ui.fragment.HomepageFragment;
+import com.qinshou.qinshoubox.im.IMClient;
+import com.qinshou.qinshoubox.login.bean.UserBean;
+import com.qinshou.qinshoubox.login.view.fragment.LoginOrRegisterFragment;
+import com.qinshou.qinshoubox.login.view.fragment.NotLoginFragment;
 import com.qinshou.qinshoubox.me.ui.fragment.MeFragment;
 import com.qinshou.qinshoubox.music.view.fragment.MusicListFragment;
+import com.qinshou.qinshoubox.util.EncryptUtil;
+import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 /**
  * Description:主 Activity
@@ -44,6 +58,23 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
             , R.drawable.main_iv_tab_conversation_src, R.drawable.main_iv_tab_conversation_src_selected
             , R.drawable.main_iv_tab_friend_src, R.drawable.main_iv_tab_friend_src_selected
             , R.drawable.main_iv_tab_me_src, R.drawable.main_iv_tab_me_src_selected};
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        FragmentUtil.removeFragment(getSupportFragmentManager(), mFriendFragment);
+        FragmentUtil.removeFragment(getSupportFragmentManager(), mConversationFragment);
+        FragmentUtil.removeFragment(getSupportFragmentManager(), mMeFragment);
+
+        FragmentUtil.addFragment(getSupportFragmentManager(), R.id.fl_fragment_container, mFriendFragment = new FriendFragment());
+        FragmentUtil.addFragment(getSupportFragmentManager(), R.id.fl_fragment_container, mConversationFragment = new ConversationFragment());
+        FragmentUtil.addFragment(getSupportFragmentManager(), R.id.fl_fragment_container, mMeFragment = new MeFragment());
+
+        TabLayout.Tab tab = mTlMain.getTabAt(0);
+        if (tab != null) {
+            tab.select();
+        }
+    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -98,6 +129,9 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
 
             }
         });
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Intent.ACTION_TIME_TICK);
+        registerReceiver(new TimeTickBroadcastReceiver(), intentFilter);
     }
 
     @Override
@@ -128,6 +162,35 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
             tab.setCustomView(view);
             mTlMain.addTab(tab, i == 0);
         }
+
+        String username = SharedPreferencesHelper.SINGLETON.getString(IConstant.SP_KEY_LAST_LOGIN_USERNAME);
+        String password = SharedPreferencesHelper.SINGLETON.getString(IConstant.SP_KEY_LAST_LOGIN_PASSWORD);
+        if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
+            // 对存储的密码进行解密,并自动登录
+            getPresenter().login(username, EncryptUtil.decrypt(password));
+        }
+    }
+
+    @Override
+    public void handleEvent(EventBean<Object> eventBean) {
+    }
+
+    @Override
+    public void loginSuccess(UserBean userBean) {
+        ShowLogUtil.logi("loginSuccess" + " : " + "userBean--->" + userBean);
+        UserStatusManager.SINGLETON.setUserBean(userBean);
+        // 连接 IM 服务
+        IMClient.SINGLETON.connect(userBean.getId());
+    }
+
+    @Override
+    public void loginFailure(Exception e) {
+        ShowLogUtil.logi("loginFailure" + " : " + "e--->" + e.getMessage());
+        toastShort(e.getMessage());
+        // 刪除保存的密码,这样下次打开应用就不会自动登录了
+        SharedPreferencesHelper.SINGLETON.remove(IConstant.SP_KEY_LAST_LOGIN_PASSWORD);
+        startActivity(ContainerActivity.getJumpIntent(getContext(), LoginOrRegisterFragment.class));
+        finish();
     }
 
     /**
@@ -156,10 +219,5 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
             ivTab.setImageResource(i == position ? mTabIvResourceArray[i * 2 + 1] : mTabIvResourceArray[i * 2]);
             tvTab.setTextColor(i == position ? 0xFF3498DB : 0xFF666666);
         }
-    }
-
-    @Override
-    public void handleEvent(EventBean<Object> eventBean) {
-
     }
 }

@@ -1,12 +1,15 @@
 package com.qinshou.qinshoubox.me.presenter;
 
 
+import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.networkmodule.callback.Callback;
 import com.qinshou.commonmodule.base.AbsPresenter;
+import com.qinshou.qinshoubox.constant.IConstant;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.me.contract.IDataSettingContract;
 import com.qinshou.qinshoubox.me.model.DataSettingModel;
 import com.qinshou.qinshoubox.me.ui.fragment.DataSettingFragment;
+import com.qinshou.qinshoubox.util.userstatusmanager.UserStatusManager;
 
 /**
  * Author: QinHao

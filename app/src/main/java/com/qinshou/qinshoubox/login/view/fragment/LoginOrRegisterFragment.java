@@ -123,17 +123,14 @@ public class LoginOrRegisterFragment extends QSFragment<LoginOrRegisterPresenter
     }
 
     @Override
-    public void onAuthenticated() {
-        super.onAuthenticated();
-        if (getContext() == null) {
-            return;
-        }
-        startActivity(new Intent(getContext(), MainActivity.class));
-        finish();
+    public void handleEvent(EventBean<Object> eventBean) {
     }
 
     @Override
-    public void handleEvent(EventBean<Object> eventBean) {
+    public void onAuthenticated() {
+        super.onAuthenticated();
+        startActivity(new Intent(getContext(), MainActivity.class));
+        finish();
     }
 
     @Override

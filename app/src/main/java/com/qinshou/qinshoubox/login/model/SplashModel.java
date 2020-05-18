@@ -22,11 +22,4 @@ public class SplashModel implements ISplashContract.ISplashModel {
                 .transform(new QSApiTransformer<PoemBean>())
                 .enqueue(callback);
     }
-
-    @Override
-    public void login(String username, String password, Callback<UserBean> callback) {
-        OkHttpHelper.SINGLETON.getCaller(QSBoxUserApi.class).login(username, password)
-                .transform(new QSApiTransformer<UserBean>())
-                .enqueue(callback);
-    }
 }
