@@ -6,14 +6,14 @@
     <LinearLayout
         android:layout_width="@dimen/px600"
         android:layout_height="@dimen/px600"
-        android:background="@color/black"
+        android:background="#FF000000"
         android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="想要增加你的能力吗?如果你有 25 个金币,你可以选择任意一项:"
-            android:textColor="@color/white" />
+            android:textColor="#FFFFFFFF" />
 
         <RadioGroup
             android:id="@+id/radio_group"
@@ -29,7 +29,7 @@
                 android:layout_weight="1"
                 android:checked="true"
                 android:text="增加 800 生命"
-                android:textColor="@color/white" />
+                android:textColor="#FFFFFFFF" />
 
             <RadioButton
                 android:id="@+id/radio_button_2"
@@ -37,7 +37,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:text="增加 4 点攻击"
-                android:textColor="@color/white" />
+                android:textColor="#FFFFFFFF" />
 
             <RadioButton
                 android:id="@+id/radio_button_3"
@@ -45,7 +45,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:text="增加 4 点防御"
-                android:textColor="@color/white" />
+                android:textColor="#FFFFFFFF" />
 
             <RadioButton
                 android:id="@+id/radio_button_4"
@@ -53,7 +53,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:text="退出商店"
-                android:textColor="@color/white" />
+                android:textColor="#FFFFFFFF" />
         </RadioGroup>
 
         <Button
@@ -63,6 +63,6 @@
             android:layout_gravity="center_horizontal"
             android:background="@null"
             android:text="确定"
-            android:textColor="@color/white" />
+            android:textColor="#FFFFFFFF" />
     </LinearLayout>
 </FrameLayout>
