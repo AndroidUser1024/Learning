@@ -81,6 +81,7 @@ public class SplashActivity extends QSActivity<SplashPresenter> implements ISpla
             return;
         }
         startActivity(new Intent(getContext(), MainActivity.class));
+        finish();
     }
 
     @Override

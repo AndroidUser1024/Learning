@@ -1,10 +1,6 @@
 package com.qinshou.qinshoubox;
 
-import android.content.Context;
 import android.content.Intent;
-
-import com.google.android.material.tabs.TabLayout;
-
 import android.content.IntentFilter;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -13,6 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.material.tabs.TabLayout;
 import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.util.FragmentUtil;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
@@ -28,7 +25,6 @@ import com.qinshou.qinshoubox.homepage.ui.fragment.HomepageFragment;
 import com.qinshou.qinshoubox.im.IMClient;
 import com.qinshou.qinshoubox.login.bean.UserBean;
 import com.qinshou.qinshoubox.login.view.fragment.LoginOrRegisterFragment;
-import com.qinshou.qinshoubox.login.view.fragment.NotLoginFragment;
 import com.qinshou.qinshoubox.me.ui.fragment.MeFragment;
 import com.qinshou.qinshoubox.music.view.fragment.MusicListFragment;
 import com.qinshou.qinshoubox.util.EncryptUtil;
