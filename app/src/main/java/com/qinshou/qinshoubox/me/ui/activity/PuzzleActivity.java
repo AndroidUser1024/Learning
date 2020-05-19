@@ -19,9 +19,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.qinshou.commonmodule.background.BackgroundManager;
-import com.qinshou.commonmodule.background.Background;
-import com.qinshou.commonmodule.background.State;
 import com.qinshou.commonmodule.base.AbsPresenter;
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.commonmodule.rcvbaseadapter.listener.IOnItemClickListener;
@@ -36,7 +33,7 @@ import com.qinshou.imagemodule.util.ImagePathUtil;
 import com.qinshou.qinshoubox.R;
 import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.homepage.bean.EventBean;
-import com.qinshou.qinshoubox.me.ui.adapter.RvPuzzleAdapter;
+import com.qinshou.qinshoubox.me.ui.adapter.RcvPuzzleAdapter;
 import com.qinshou.qinshoubox.me.bean.PuzzleItemBean;
 import com.qinshou.qinshoubox.util.PuzzleUtil;
 
@@ -48,8 +45,8 @@ import java.util.List;
  * Created on 2018/8/29
  */
 public class PuzzleActivity extends QSActivity<AbsPresenter> {
-    private RecyclerView rvPuzzle;  //拼图块列表容器
-    private RvPuzzleAdapter mRvPuzzleAdapter;   //拼图块列表适配器
+    private RecyclerView rcvPuzzle;  //拼图块列表容器
+    private RcvPuzzleAdapter mRcvPuzzleAdapter;   //拼图块列表适配器
 
     private Button btnChooseImg;    //选择相册中的图片按钮
     private Button btnChooseDifficulty; //选择难度按钮
@@ -70,10 +67,10 @@ public class PuzzleActivity extends QSActivity<AbsPresenter> {
 
     @Override
     public void initView() {
-        rvPuzzle = findViewByID(R.id.rv_puzzle);
-        rvPuzzle.setLayoutManager(new GridLayoutManager(getContext(), PuzzleUtil.PUZZLE_TYPE));
-        mRvPuzzleAdapter = new RvPuzzleAdapter(getContext());
-        rvPuzzle.setAdapter(mRvPuzzleAdapter);
+        rcvPuzzle = findViewByID(R.id.rcv_puzzle);
+        rcvPuzzle.setLayoutManager(new GridLayoutManager(getContext(), PuzzleUtil.PUZZLE_TYPE));
+        mRcvPuzzleAdapter = new RcvPuzzleAdapter(getContext());
+        rcvPuzzle.setAdapter(mRcvPuzzleAdapter);
 
         btnChooseImg = findViewByID(R.id.btn_choose_img);
         btnChooseDifficulty = findViewByID(R.id.btn_choose_difficulty);
@@ -89,11 +86,11 @@ public class PuzzleActivity extends QSActivity<AbsPresenter> {
         btnChooseDifficulty.setOnClickListener(mOnClickListener);
         btnShowOriginImg.setOnClickListener(mOnClickListener);
         btnReset.setOnClickListener(mOnClickListener);
-        mRvPuzzleAdapter.setOnItemClickListener(new IOnItemClickListener<PuzzleItemBean>() {
+        mRcvPuzzleAdapter.setOnItemClickListener(new IOnItemClickListener<PuzzleItemBean>() {
             @Override
             public void onItemClick(BaseViewHolder holder, PuzzleItemBean puzzleItemBean, int position) {
                 //如果已经成功了，重新加载
-                if (PuzzleUtil.success(mRvPuzzleAdapter.getDataList())) {
+                if (PuzzleUtil.success(mRcvPuzzleAdapter.getDataList())) {
                     loadPuzzle(mPuzzleBitmap);
                     return;
                 }
@@ -110,7 +107,7 @@ public class PuzzleActivity extends QSActivity<AbsPresenter> {
                     mHandler.postDelayed(mTimeRunnable, 1000);
                 }
                 //得到交换后的拼图块数组
-                List<PuzzleItemBean> puzzleItemBeanList = PuzzleUtil.swapPuzzleItemBean(mRvPuzzleAdapter.getDataList(), position);
+                List<PuzzleItemBean> puzzleItemBeanList = PuzzleUtil.swapPuzzleItemBean(mRcvPuzzleAdapter.getDataList(), position);
                 //如果已经拼图成功，则给出提示，停止计时
                 if (PuzzleUtil.success(puzzleItemBeanList)) {
                     puzzleItemBeanList = PuzzleUtil.addMissingBitmap(puzzleItemBeanList);
@@ -119,7 +116,7 @@ public class PuzzleActivity extends QSActivity<AbsPresenter> {
                     mTimeRunnable = null;
                 }
                 //刷新拼图块列表
-                mRvPuzzleAdapter.setDataList(puzzleItemBeanList);
+                mRcvPuzzleAdapter.setDataList(puzzleItemBeanList);
             }
         });
     }
@@ -147,7 +144,7 @@ public class PuzzleActivity extends QSActivity<AbsPresenter> {
         List<PuzzleItemBean> puzzleItemBeanList = PuzzleUtil.getPuzzleItemBeanList(mPuzzleBitmap);
         //如果拼图块数组有解，则设置拼图块列表，如果没有解则重新创建
         if (PuzzleUtil.canResolve(puzzleItemBeanList)) {
-            mRvPuzzleAdapter.setDataList(puzzleItemBeanList);
+            mRcvPuzzleAdapter.setDataList(puzzleItemBeanList);
         } else {
             loadPuzzle(mPuzzleBitmap);
         }
@@ -243,7 +240,7 @@ public class PuzzleActivity extends QSActivity<AbsPresenter> {
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        rvPuzzle.setLayoutManager(new GridLayoutManager(getContext(), PuzzleUtil.PUZZLE_TYPE));
+                        rcvPuzzle.setLayoutManager(new GridLayoutManager(getContext(), PuzzleUtil.PUZZLE_TYPE));
                         loadPuzzle(mPuzzleBitmap);
                     }
                 })

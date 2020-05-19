@@ -1,11 +1,13 @@
 package com.qinshou.commonmodule.adapter;
 
 import android.content.Context;
+import android.view.View;
 
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.qinshou.commonmodule.rcvbaseadapter.RcvSingleBaseAdapter;
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
+import com.qinshou.commonmodule.util.ShowLogUtil;
 
 import java.util.List;
 
@@ -48,7 +50,29 @@ public abstract class InfiniteCycleViewPagerAdapter2<T> extends RcvSingleBaseAda
         if (getDataList() == null || getDataList().size() == 0) {
             return;
         }
-        super.onBindViewHolder(holder, position % getDataList().size());
+        if (getOnItemClickListener() != null) {
+            holder.getItemView().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = holder.getLayoutPosition();
+                    position = position % getDataList().size();
+                    getOnItemClickListener().onItemClick(holder, getDataList().get(position), position);
+                }
+            });
+        }
+        if (getOnItemLongClickListener() != null) {
+            holder.getItemView().setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    int position = holder.getLayoutPosition();
+                    position = position % getDataList().size();
+                    getOnItemLongClickListener().onItemLongClick(holder, getDataList().get(position), position);
+                    return true;
+                }
+            });
+        }
+        position = position % getDataList().size();
+        bindViewHolder(holder, getDataList().get(position), position);
     }
 
     @Override

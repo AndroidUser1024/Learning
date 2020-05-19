@@ -12,10 +12,10 @@ import com.qinshou.qinshoubox.me.bean.PuzzleItemBean;
  * Created by 禽兽先生
  * Created on 2018/8/30
  */
-public class RvPuzzleAdapter extends RcvBaseAdapter<PuzzleItemBean> {
+public class RcvPuzzleAdapter extends RcvBaseAdapter<PuzzleItemBean> {
 
-    public RvPuzzleAdapter(Context context) {
-        super(context, R.layout.item_rv_puzzle);
+    public RcvPuzzleAdapter(Context context) {
+        super(context, R.layout.item_rcv_puzzle);
     }
 
     @Override

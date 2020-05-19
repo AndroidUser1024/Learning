@@ -77,6 +77,9 @@ public class MeFragment extends QSFragment<MePresenter> implements IMeContract.I
                 case R.id.btn_puzzle:
                     startActivity(new Intent(getContext(), PuzzleActivity.class));
                     break;
+                case R.id.btn_klotski:
+                    startActivity(ContainerActivity.getJumpIntent(getContext(), KlotskiFragment.class));
+                    break;
                 case R.id.btn_turning_robot:
                     startActivity(new Intent(getContext(), TurningRobotActivity.class));
                     break;
@@ -159,6 +162,7 @@ public class MeFragment extends QSFragment<MePresenter> implements IMeContract.I
         btnTurningRobot.setOnClickListener(mOnClickListener);
         btnMagicTower.setOnClickListener(mOnClickListener);
         btnPuzzle.setOnClickListener(mOnClickListener);
+        findViewByID(R.id.btn_klotski).setOnClickListener(mOnClickListener);
         btnContactList.setOnClickListener(mOnClickListener);
         btnWeather.setOnClickListener(mOnClickListener);
         mBtnWheelOfFortune.setOnClickListener(mOnClickListener);

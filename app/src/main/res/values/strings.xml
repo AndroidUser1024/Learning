@@ -30,6 +30,7 @@
     <string name="me_turning_robot">图灵机器人</string>
     <string name="me_magic_tower">魔塔</string>
     <string name="me_puzzle">拼图</string>
+    <string name="me_klotski">华容道</string>
     <string name="me_exit_current_account">退出当前账号</string>
     <string name="me_contact_list">通讯录</string>
     <string name="me_weather">天气</string>
