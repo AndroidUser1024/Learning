@@ -1,4 +1,4 @@
-package com.qinshou.qinshoubox.me.bean;
+package com.qinshou.qinshoubox.me.bean.klotski;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -13,7 +13,7 @@ public class KlotskiBean {
     /**
      * 华容道方块对应的图片
      */
-    private Bitmap bitmap;
+     Bitmap bitmap;
     /**
      * 华容道方块对应的文字
      */
@@ -28,8 +28,15 @@ public class KlotskiBean {
     public static final KlotskiBean ZHAO_YUN = new KlotskiBean(Type.ZHAO_YUN);
     public static final KlotskiBean HUANG_ZHONG = new KlotskiBean(Type.HUANG_ZHONG);
     public static final KlotskiBean MA_CHAO = new KlotskiBean(Type.MA_CHAO);
-    public static final KlotskiBean BING = new KlotskiBean(Type.BING);
+    public static final KlotskiBean BING = new KlotskiBean(Type.SHI_BING);
     public static final KlotskiBean NULL = new KlotskiBean(Type.NULL);
+
+    public KlotskiBean(String text, int width, int height, Type type) {
+        this.text = text;
+        this.width = width;
+        this.height = height;
+        this.type = type;
+    }
 
     private KlotskiBean(Type type) {
         switch (type) {
@@ -75,12 +82,12 @@ public class KlotskiBean {
                 height = 2;
                 this.type = Type.MA_CHAO;
                 break;
-            case BING:
+            case SHI_BING:
                 text = "兵";
                 color = Color.GREEN;
                 width = 1;
                 height = 1;
-                this.type = Type.BING;
+                this.type = Type.SHI_BING;
                 break;
             case NULL:
                 text = "空";
@@ -159,7 +166,7 @@ public class KlotskiBean {
         ZHAO_YUN,
         HUANG_ZHONG,
         MA_CHAO,
-        BING,
+        SHI_BING,
         NULL,
     }
 }

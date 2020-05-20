@@ -5,15 +5,29 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
-import com.qinshou.commonmodule.util.ShowLogUtil;
-import com.qinshou.qinshoubox.me.bean.KlotskiBean;
+import com.qinshou.qinshoubox.me.bean.klotski.CaoCao1;
+import com.qinshou.qinshoubox.me.bean.klotski.CaoCao2;
+import com.qinshou.qinshoubox.me.bean.klotski.CaoCao3;
+import com.qinshou.qinshoubox.me.bean.klotski.CaoCao4;
+import com.qinshou.qinshoubox.me.bean.klotski.GuanYu1;
+import com.qinshou.qinshoubox.me.bean.klotski.GuanYu2;
+import com.qinshou.qinshoubox.me.bean.klotski.HuangZhong1;
+import com.qinshou.qinshoubox.me.bean.klotski.HuangZhong2;
+import com.qinshou.qinshoubox.me.bean.klotski.KlotskiBean;
+import com.qinshou.qinshoubox.me.bean.klotski.MaChao1;
+import com.qinshou.qinshoubox.me.bean.klotski.MaChao2;
+import com.qinshou.qinshoubox.me.bean.klotski.Null;
+import com.qinshou.qinshoubox.me.bean.klotski.ShiBing;
+import com.qinshou.qinshoubox.me.bean.klotski.ZhangFei1;
+import com.qinshou.qinshoubox.me.bean.klotski.ZhangFei2;
+import com.qinshou.qinshoubox.me.bean.klotski.ZhaoYun1;
+import com.qinshou.qinshoubox.me.bean.klotski.ZhaoYun2;
 
 /**
  * Author: QinHao
@@ -22,14 +36,6 @@ import com.qinshou.qinshoubox.me.bean.KlotskiBean;
  * Description:华容道控件
  */
 public class KlotskiView extends View {
-    /**
-     * 控件宽，为屏幕宽和高的较小值
-     */
-    private int mWidth;
-    /**
-     * 控件高，为屏幕宽和高的较小值
-     */
-    private int mHeight;
     private Paint mPaint = new Paint();
     private Rect mRect = new Rect();
     //    private KlotskiBean[][] mKlotskiBeanArray = new KlotskiBean[][]{
@@ -40,11 +46,11 @@ public class KlotskiView extends View {
 //            , new KlotskiBean[]{KlotskiBean.BING, KlotskiBean.NULL, KlotskiBean.NULL, KlotskiBean.BING}
 //    };
     private KlotskiBean[][] mKlotskiBeanArray = new KlotskiBean[][]{
-            new KlotskiBean[]{KlotskiBean.BING, KlotskiBean.CAO_CAO, KlotskiBean.CAO_CAO, KlotskiBean.BING}
-            , new KlotskiBean[]{KlotskiBean.BING, KlotskiBean.CAO_CAO, KlotskiBean.CAO_CAO, KlotskiBean.BING}
-            , new KlotskiBean[]{KlotskiBean.NULL, KlotskiBean.GUAN_YU, KlotskiBean.GUAN_YU, KlotskiBean.NULL}
-            , new KlotskiBean[]{KlotskiBean.ZHANG_FEI, KlotskiBean.ZHAO_YUN, KlotskiBean.HUANG_ZHONG, KlotskiBean.MA_CHAO}
-            , new KlotskiBean[]{KlotskiBean.ZHANG_FEI, KlotskiBean.ZHAO_YUN, KlotskiBean.HUANG_ZHONG, KlotskiBean.MA_CHAO}
+            new KlotskiBean[]{new ShiBing(getContext()), new CaoCao1(getContext()), new CaoCao2(getContext()), new ShiBing(getContext())}
+            , new KlotskiBean[]{new ShiBing(getContext()), new CaoCao3(getContext()), new CaoCao4(getContext()), new ShiBing(getContext())}
+            , new KlotskiBean[]{new Null(), new GuanYu1(getContext()), new GuanYu2(getContext()), new Null()}
+            , new KlotskiBean[]{new ZhangFei1(getContext()), new ZhaoYun1(getContext()), new HuangZhong1(getContext()), new MaChao1(getContext())}
+            , new KlotskiBean[]{new ZhangFei2(getContext()), new ZhaoYun2(getContext()), new HuangZhong2(getContext()), new MaChao2(getContext())}
     };
     private boolean mSuccess = false;
 
@@ -64,8 +70,10 @@ public class KlotskiView extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        mWidth = mHeight = Math.min(getContext().getResources().getDisplayMetrics().widthPixels, getContext().getResources().getDisplayMetrics().heightPixels);
-        setMeasuredDimension(mWidth, mHeight);
+        int min = Math.min(getContext().getResources().getDisplayMetrics().widthPixels, getContext().getResources().getDisplayMetrics().heightPixels);
+        int width = min;
+        int height = min / 4 * 5;
+        setMeasuredDimension(width, height);
     }
 
     @Override
@@ -75,14 +83,14 @@ public class KlotskiView extends View {
             int top = getHeight() / mKlotskiBeanArray.length * x;
             int bottom = getHeight() / mKlotskiBeanArray.length * (x + 1);
             for (int y = 0; y < mKlotskiBeanArray[x].length; y++) {
-                if (mKlotskiBeanArray[x][y] == null) {
-                    continue;
-                }
                 int left = getWidth() / mKlotskiBeanArray[y].length * y;
-                int right = getWidth() / mKlotskiBeanArray[y].length * (y + 1);
-                mRect.set(left, top, right, bottom);
-                mPaint.setColor(mKlotskiBeanArray[x][y].getColor());
-                canvas.drawRect(mRect, mPaint);
+//                int right = getWidth() / mKlotskiBeanArray[y].length * (y + 1);
+//                mRect.set(left, top, right, bottom);
+//                mPaint.setColor(mKlotskiBeanArray[x][y].getColor());
+//                canvas.drawRect(mRect, mPaint);
+                if (mKlotskiBeanArray[x][y].getBitmap() != null) {
+                    canvas.drawBitmap(mKlotskiBeanArray[x][y].getBitmap(), left, top, mPaint);
+                }
             }
         }
     }
@@ -403,8 +411,8 @@ public class KlotskiView extends View {
 
     public void startGame() {
         mKlotskiBeanArray = new KlotskiBean[][]{
-                new KlotskiBean[]{KlotskiBean.BING, KlotskiBean.CAO_CAO, KlotskiBean.CAO_CAO, KlotskiBean.BING}
-                , new KlotskiBean[]{KlotskiBean.BING, KlotskiBean.CAO_CAO, KlotskiBean.CAO_CAO, KlotskiBean.BING}
+                new KlotskiBean[]{new ShiBing(getContext()), KlotskiBean.CAO_CAO, KlotskiBean.CAO_CAO, new ShiBing(getContext())}
+                , new KlotskiBean[]{new ShiBing(getContext()), KlotskiBean.CAO_CAO, KlotskiBean.CAO_CAO, new ShiBing(getContext())}
                 , new KlotskiBean[]{KlotskiBean.NULL, KlotskiBean.GUAN_YU, KlotskiBean.GUAN_YU, KlotskiBean.NULL}
                 , new KlotskiBean[]{KlotskiBean.ZHANG_FEI, KlotskiBean.ZHAO_YUN, KlotskiBean.HUANG_ZHONG, KlotskiBean.MA_CHAO}
                 , new KlotskiBean[]{KlotskiBean.ZHANG_FEI, KlotskiBean.ZHAO_YUN, KlotskiBean.HUANG_ZHONG, KlotskiBean.MA_CHAO}

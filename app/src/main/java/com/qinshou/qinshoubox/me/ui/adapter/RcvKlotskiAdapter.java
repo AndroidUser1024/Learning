@@ -5,7 +5,7 @@ import android.content.Context;
 import com.qinshou.commonmodule.rcvbaseadapter.RcvSingleBaseAdapter;
 import com.qinshou.commonmodule.rcvbaseadapter.baseholder.BaseViewHolder;
 import com.qinshou.qinshoubox.R;
-import com.qinshou.qinshoubox.me.bean.KlotskiBean;
+import com.qinshou.qinshoubox.me.bean.klotski.KlotskiBean;
 
 /**
  * Author: QinHao
