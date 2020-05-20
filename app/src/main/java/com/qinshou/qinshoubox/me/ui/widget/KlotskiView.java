@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.qinshou.commonmodule.util.ShowLogUtil;
 import com.qinshou.qinshoubox.me.bean.klotski.CaoCao1;
 import com.qinshou.qinshoubox.me.bean.klotski.CaoCao2;
 import com.qinshou.qinshoubox.me.bean.klotski.CaoCao3;
@@ -53,6 +54,8 @@ public class KlotskiView extends View {
             , new KlotskiBean[]{new ZhangFei2(getContext()), new ZhaoYun2(getContext()), new HuangZhong2(getContext()), new MaChao2(getContext())}
     };
     private boolean mSuccess = false;
+    private int mCount;
+    private IOnCountCallback mOnCountCallback;
 
     public KlotskiView(Context context) {
         this(context, null);
@@ -112,28 +115,32 @@ public class KlotskiView extends View {
             case MotionEvent.ACTION_UP:
                 int x = (int) mDownY / (getHeight() / mKlotskiBeanArray.length);
                 int y = (int) mDownX / (getWidth() / mKlotskiBeanArray[x].length);
-                if (mKlotskiBeanArray[x][y] == null) {
+                if (mKlotskiBeanArray[x][y].getType() == KlotskiBean.Type.NULL) {
                     break;
                 }
+                boolean moveResult;
                 if (Math.abs(event.getX() - mDownX) > Math.abs(event.getY() - mDownY)) {
                     if (event.getX() - mDownX > 0) {
                         // 右滑
-                        swapRight(x, y);
+                        moveResult = move2Right(x, y);
                     } else {
                         // 左滑
-                        swapLeft(x, y);
+                        moveResult = move2Left(x, y);
                     }
                 } else {
                     if (event.getY() - mDownY > 0) {
                         // 下滑
-                        swapBottom(x, y);
+                        moveResult = move2Bottom(x, y);
                     } else {
                         // 上滑
-                        swapTop(x, y);
+                        moveResult = move2Top(x, y);
                     }
                 }
                 mDownX = 0;
                 mDownY = 0;
+                if (mOnCountCallback != null && moveResult) {
+                    mOnCountCallback.onCount(++mCount);
+                }
                 if (mSuccess = success()) {
                     Toast.makeText(getContext(), "恭喜成功", Toast.LENGTH_SHORT).show();
                 }
@@ -142,50 +149,68 @@ public class KlotskiView extends View {
         return true;
     }
 
-    private void swapLeft(int x, int y) {
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2020/5/20 18:08
+     * Description:移动到左边
+     *
+     * @param x 触摸的方块在棋盘中的 x 坐标,非绘制坐标
+     * @param y 触摸的方块在棋盘中的 y 坐标,非绘制坐标
+     */
+    private boolean move2Left(int x, int y) {
         if (y == 0) {
-            return;
+            return false;
         }
+        // 记录这一方块在做完交换后,是否还有另一方块需要移动
         boolean again = false;
         KlotskiBean touchKlotskiBean = mKlotskiBeanArray[x][y];
+        // 向左移动时,如果宽度为 2,还需要移动相关联的那一个方块
         if (touchKlotskiBean.getWidth() == 2) {
             if (mKlotskiBeanArray[x][y - 1].getType() == touchKlotskiBean.getType()) {
-                swapLeft(x, y - 1);
+                // 如果相关联的方块是在左边,则先移动关联方块,再移动这一块
+                return move2Left(x, y - 1);
             } else if (y < mKlotskiBeanArray[x].length - 1
                     && mKlotskiBeanArray[x][y + 1].getType() == touchKlotskiBean.getType()) {
+                // 如果相关联的方块是在右边,则将标志位置为 true,在这一块移动完之后再移动关联方块
                 again = true;
             }
         }
         if (touchKlotskiBean.getHeight() == 1) {
+            // 高度为 1 时,判断是否可以交换后直接交换
             if (mKlotskiBeanArray[x][y - 1].getType() != KlotskiBean.Type.NULL) {
-                return;
+                return false;
             }
             mKlotskiBeanArray[x][y - 1] = touchKlotskiBean;
             mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
         } else if (touchKlotskiBean.getHeight() == 2) {
+            // 高度为 2 时,判断完这一块是否可以交换后,还需要判断关联方块是否可以交换
             if (mKlotskiBeanArray[x][y - 1].getType() != KlotskiBean.Type.NULL) {
-                return;
+                return false;
             }
             if (x == 0) {
+                // 触摸的方块在最上方,直接判断下方方块就好
                 if (mKlotskiBeanArray[x + 1][y - 1].getType() != KlotskiBean.Type.NULL) {
-                    return;
+                    return false;
                 }
                 mKlotskiBeanArray[x][y - 1] = touchKlotskiBean;
                 mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
                 mKlotskiBeanArray[x + 1][y - 1] = mKlotskiBeanArray[x + 1][y];
                 mKlotskiBeanArray[x + 1][y] = KlotskiBean.NULL;
             } else if (x == mKlotskiBeanArray.length - 1) {
+                // 触摸的方块在最下方,直接判断上方方块就好
                 if (mKlotskiBeanArray[x - 1][y - 1].getType() != KlotskiBean.Type.NULL) {
-                    return;
+                    return false;
                 }
                 mKlotskiBeanArray[x][y - 1] = touchKlotskiBean;
                 mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
                 mKlotskiBeanArray[x - 1][y - 1] = mKlotskiBeanArray[x - 1][y];
                 mKlotskiBeanArray[x - 1][y] = KlotskiBean.NULL;
             } else {
+                // 触摸的方块在中间,需要先判读关联方块在上还是在下
                 if (mKlotskiBeanArray[x - 1][y].getType() == touchKlotskiBean.getType()) {
                     if (mKlotskiBeanArray[x - 1][y - 1].getType() != KlotskiBean.Type.NULL) {
-                        return;
+                        return false;
                     }
                     mKlotskiBeanArray[x][y - 1] = touchKlotskiBean;
                     mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
@@ -193,7 +218,7 @@ public class KlotskiView extends View {
                     mKlotskiBeanArray[x - 1][y] = KlotskiBean.NULL;
                 } else if (mKlotskiBeanArray[x + 1][y].getType() == touchKlotskiBean.getType()) {
                     if (mKlotskiBeanArray[x + 1][y - 1].getType() != KlotskiBean.Type.NULL) {
-                        return;
+                        return false;
                     }
                     mKlotskiBeanArray[x][y - 1] = touchKlotskiBean;
                     mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
@@ -203,54 +228,73 @@ public class KlotskiView extends View {
             }
         }
         if (again) {
-            swapLeft(x, y + 1);
+            move2Left(x, y + 1);
         }
         invalidate();
+        return true;
     }
 
-    private void swapRight(int x, int y) {
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2020/5/20 18:08
+     * Description:移动到右边
+     *
+     * @param x 触摸的方块在棋盘中的 x 坐标,非绘制坐标
+     * @param y 触摸的方块在棋盘中的 y 坐标,非绘制坐标
+     */
+    private boolean move2Right(int x, int y) {
         if (y == mKlotskiBeanArray[x].length - 1) {
-            return;
+            return false;
         }
+        // 记录这一方块在做完交换后,是否还有另一方块需要移动
         boolean again = false;
         KlotskiBean touchKlotskiBean = mKlotskiBeanArray[x][y];
+        // 向右移动时,如果宽度为 2,还需要移动相关联的那一个方块
         if (touchKlotskiBean.getWidth() == 2) {
             if (y > 0 && mKlotskiBeanArray[x][y - 1].getType() == touchKlotskiBean.getType()) {
+                // 如果相关联的方块是在左边,则将标志位置为 true,在这一块移动完之后再移动关联方块
                 again = true;
             } else if (mKlotskiBeanArray[x][y + 1].getType() == touchKlotskiBean.getType()) {
-                swapRight(x, y + 1);
+                // 如果相关联的方块是在右边,则先移动关联方块,再移动这一块
+                return move2Right(x, y + 1);
             }
         }
         if (touchKlotskiBean.getHeight() == 1) {
+            // 高度为 1 时,判断是否可以交换后直接交换
             if (mKlotskiBeanArray[x][y + 1].getType() != KlotskiBean.Type.NULL) {
-                return;
+                return false;
             }
             mKlotskiBeanArray[x][y + 1] = touchKlotskiBean;
             mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
         } else if (touchKlotskiBean.getHeight() == 2) {
+            // 高度为 2 时,判断完这一块是否可以交换后,还需要判断关联方块是否可以交换
             if (mKlotskiBeanArray[x][y + 1].getType() != KlotskiBean.Type.NULL) {
-                return;
+                return false;
             }
             if (x == 0) {
+                // 触摸的方块在最上方,直接判断下方方块就好
                 if (mKlotskiBeanArray[x + 1][y + 1].getType() != KlotskiBean.Type.NULL) {
-                    return;
+                    return false;
                 }
                 mKlotskiBeanArray[x][y + 1] = touchKlotskiBean;
                 mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
                 mKlotskiBeanArray[x + 1][y + 1] = mKlotskiBeanArray[x + 1][y];
                 mKlotskiBeanArray[x + 1][y] = KlotskiBean.NULL;
             } else if (x == mKlotskiBeanArray.length - 1) {
+                // 触摸的方块在最下方,直接判断上方方块就好
                 if (mKlotskiBeanArray[x - 1][y + 1].getType() != KlotskiBean.Type.NULL) {
-                    return;
+                    return false;
                 }
                 mKlotskiBeanArray[x][y + 1] = touchKlotskiBean;
                 mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
                 mKlotskiBeanArray[x - 1][y + 1] = mKlotskiBeanArray[x - 1][y];
                 mKlotskiBeanArray[x - 1][y] = KlotskiBean.NULL;
             } else {
+                // 触摸的方块在中间,需要先判读关联方块在上还是在下
                 if (mKlotskiBeanArray[x - 1][y].getType() == touchKlotskiBean.getType()) {
                     if (mKlotskiBeanArray[x - 1][y + 1].getType() != KlotskiBean.Type.NULL) {
-                        return;
+                        return false;
                     }
                     mKlotskiBeanArray[x][y + 1] = touchKlotskiBean;
                     mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
@@ -258,7 +302,7 @@ public class KlotskiView extends View {
                     mKlotskiBeanArray[x - 1][y] = KlotskiBean.NULL;
                 } else if (mKlotskiBeanArray[x + 1][y].getType() == touchKlotskiBean.getType()) {
                     if (mKlotskiBeanArray[x + 1][y + 1].getType() != KlotskiBean.Type.NULL) {
-                        return;
+                        return false;
                     }
                     mKlotskiBeanArray[x][y + 1] = touchKlotskiBean;
                     mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
@@ -268,55 +312,74 @@ public class KlotskiView extends View {
             }
         }
         if (again) {
-            swapRight(x, y - 1);
+            move2Right(x, y - 1);
         }
         invalidate();
+        return true;
     }
 
-    private void swapTop(int x, int y) {
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2020/5/20 18:08
+     * Description:移动到上面
+     *
+     * @param x 触摸的方块在棋盘中的 x 坐标,非绘制坐标
+     * @param y 触摸的方块在棋盘中的 y 坐标,非绘制坐标
+     */
+    private boolean move2Top(int x, int y) {
         if (x == 0) {
-            return;
+            return false;
         }
+        // 记录这一方块在做完交换后,是否还有另一方块需要移动
         boolean again = false;
         KlotskiBean touchKlotskiBean = mKlotskiBeanArray[x][y];
+        // 向上移动时,如果高度为 2,还需要移动相关联的那一个方块
         if (touchKlotskiBean.getHeight() == 2) {
             if (mKlotskiBeanArray[x - 1][y].getType() == touchKlotskiBean.getType()) {
-                swapTop(x - 1, y);
+                // 如果相关联的方块是在上方,则先移动关联方块,再移动这一块
+                return move2Top(x - 1, y);
             } else if (x < mKlotskiBeanArray.length - 1 &&
                     mKlotskiBeanArray[x + 1][y].getType() == touchKlotskiBean.getType()) {
+                // 如果相关联的方块是在下方,则将标志位置为 true,在这一块移动完之后再移动关联方块
                 again = true;
             }
         }
         if (touchKlotskiBean.getWidth() == 1) {
+            // 宽度为 1 时,判断是否可以交换后直接交换
             if (mKlotskiBeanArray[x - 1][y].getType() != KlotskiBean.Type.NULL) {
-                return;
+                return false;
             }
             mKlotskiBeanArray[x - 1][y] = touchKlotskiBean;
             mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
         } else if (touchKlotskiBean.getWidth() == 2) {
+            // 宽度为 2 时,判断完这一块是否可以交换后,还需要判断关联方块是否可以交换
             if (mKlotskiBeanArray[x - 1][y].getType() != KlotskiBean.Type.NULL) {
-                return;
+                return false;
             }
             if (y == 0) {
                 if (mKlotskiBeanArray[x - 1][y + 1].getType() != KlotskiBean.Type.NULL) {
-                    return;
+                    return false;
                 }
+                // 触摸的方块在最左边,直接判断右边方块就好
                 mKlotskiBeanArray[x - 1][y] = touchKlotskiBean;
                 mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
                 mKlotskiBeanArray[x - 1][y + 1] = mKlotskiBeanArray[x][y + 1];
                 mKlotskiBeanArray[x][y + 1] = KlotskiBean.NULL;
             } else if (y == mKlotskiBeanArray.length - 1) {
+                // 触摸的方块在最右边,直接判断左边方块就好
                 if (mKlotskiBeanArray[x - 1][y - 1].getType() != KlotskiBean.Type.NULL) {
-                    return;
+                    return false;
                 }
                 mKlotskiBeanArray[x - 1][y] = touchKlotskiBean;
                 mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
                 mKlotskiBeanArray[x - 1][y - 1] = mKlotskiBeanArray[x][y - 1];
                 mKlotskiBeanArray[x][y - 1] = KlotskiBean.NULL;
             } else {
+                // 触摸的方块在中间,需要先判读关联方块在左还是在右
                 if (mKlotskiBeanArray[x][y - 1].getType() == touchKlotskiBean.getType()) {
                     if (mKlotskiBeanArray[x - 1][y - 1].getType() != KlotskiBean.Type.NULL) {
-                        return;
+                        return false;
                     }
                     mKlotskiBeanArray[x - 1][y] = touchKlotskiBean;
                     mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
@@ -324,7 +387,7 @@ public class KlotskiView extends View {
                     mKlotskiBeanArray[x][y - 1] = KlotskiBean.NULL;
                 } else if (mKlotskiBeanArray[x][y + 1].getType() == touchKlotskiBean.getType()) {
                     if (mKlotskiBeanArray[x - 1][y + 1].getType() != KlotskiBean.Type.NULL) {
-                        return;
+                        return false;
                     }
                     mKlotskiBeanArray[x - 1][y] = touchKlotskiBean;
                     mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
@@ -334,55 +397,74 @@ public class KlotskiView extends View {
             }
         }
         if (again) {
-            swapTop(x + 1, y);
+            move2Top(x + 1, y);
         }
         invalidate();
+        return true;
     }
 
-    private void swapBottom(int x, int y) {
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2020/5/20 18:08
+     * Description:移动到下面
+     *
+     * @param x 触摸的方块在棋盘中的 x 坐标,非绘制坐标
+     * @param y 触摸的方块在棋盘中的 y 坐标,非绘制坐标
+     */
+    private boolean move2Bottom(int x, int y) {
         if (x == mKlotskiBeanArray.length - 1) {
-            return;
+            return false;
         }
+        // 记录这一方块在做完交换后,是否还有另一方块需要移动
         boolean again = false;
         KlotskiBean touchKlotskiBean = mKlotskiBeanArray[x][y];
+        // 向下移动时,如果高度为 2,还需要移动相关联的那一个方块
         if (touchKlotskiBean.getHeight() == 2) {
             if (x > 0
                     && mKlotskiBeanArray[x - 1][y].getType() == touchKlotskiBean.getType()) {
+                // 如果相关联的方块是在上方,则将标志位置为 true,在这一块移动完之后再移动关联方块
                 again = true;
             } else if (mKlotskiBeanArray[x + 1][y].getType() == touchKlotskiBean.getType()) {
-                swapBottom(x + 1, y);
+                // 如果相关联的方块是在下方,则先移动关联方块,再移动这一块
+                return move2Bottom(x + 1, y);
             }
         }
         if (touchKlotskiBean.getWidth() == 1) {
+            // 宽度为 1 时,判断是否可以交换后直接交换
             if (mKlotskiBeanArray[x + 1][y].getType() != KlotskiBean.Type.NULL) {
-                return;
+                return false;
             }
             mKlotskiBeanArray[x + 1][y] = touchKlotskiBean;
             mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
         } else if (touchKlotskiBean.getWidth() == 2) {
+            // 宽度为 2 时,判断完这一块是否可以交换后,还需要判断关联方块是否可以交换
             if (mKlotskiBeanArray[x + 1][y].getType() != KlotskiBean.Type.NULL) {
-                return;
+                return false;
             }
             if (y == 0) {
+                // 触摸的方块在最左边,直接判断右边方块就好
                 if (mKlotskiBeanArray[x + 1][y + 1].getType() != KlotskiBean.Type.NULL) {
-                    return;
+                    return false;
                 }
                 mKlotskiBeanArray[x + 1][y] = touchKlotskiBean;
                 mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
                 mKlotskiBeanArray[x + 1][y + 1] = mKlotskiBeanArray[x][y + 1];
                 mKlotskiBeanArray[x][y + 1] = KlotskiBean.NULL;
             } else if (y == mKlotskiBeanArray.length - 1) {
+                // 触摸的方块在最右边,直接判断左边方块就好
                 if (mKlotskiBeanArray[x + 1][y - 1].getType() != KlotskiBean.Type.NULL) {
-                    return;
+                    return false;
                 }
                 mKlotskiBeanArray[x + 1][y] = touchKlotskiBean;
                 mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
                 mKlotskiBeanArray[x + 1][y - 1] = mKlotskiBeanArray[x][y - 1];
                 mKlotskiBeanArray[x][y - 1] = KlotskiBean.NULL;
             } else {
+                // 触摸的方块在中间,需要先判读关联方块在左还是在右
                 if (mKlotskiBeanArray[x][y - 1].getType() == touchKlotskiBean.getType()) {
                     if (mKlotskiBeanArray[x + 1][y - 1].getType() != KlotskiBean.Type.NULL) {
-                        return;
+                        return false;
                     }
                     mKlotskiBeanArray[x + 1][y] = touchKlotskiBean;
                     mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
@@ -390,7 +472,7 @@ public class KlotskiView extends View {
                     mKlotskiBeanArray[x][y - 1] = KlotskiBean.NULL;
                 } else if (mKlotskiBeanArray[x][y + 1].getType() == touchKlotskiBean.getType()) {
                     if (mKlotskiBeanArray[x + 1][y + 1].getType() != KlotskiBean.Type.NULL) {
-                        return;
+                        return false;
                     }
                     mKlotskiBeanArray[x + 1][y] = touchKlotskiBean;
                     mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
@@ -400,24 +482,47 @@ public class KlotskiView extends View {
             }
         }
         if (again) {
-            swapBottom(x - 1, y);
+            move2Bottom(x - 1, y);
         }
         invalidate();
+        return true;
     }
 
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2020/5/20 18:30
+     * Description:判断是否成功,曹操在棋盘最下面的中间时,即为解密成功
+     *
+     * @return 是否解密成功
+     */
     private boolean success() {
         return mKlotskiBeanArray[4][1].getType() == KlotskiBean.Type.CAO_CAO && mKlotskiBeanArray[4][2].getType() == KlotskiBean.Type.CAO_CAO;
     }
 
+    /**
+     * Author: QinHao
+     * Email:cqflqinhao@126.com
+     * Date:2020/5/20 18:30
+     * Description:开始游戏
+     */
     public void startGame() {
         mKlotskiBeanArray = new KlotskiBean[][]{
-                new KlotskiBean[]{new ShiBing(getContext()), KlotskiBean.CAO_CAO, KlotskiBean.CAO_CAO, new ShiBing(getContext())}
-                , new KlotskiBean[]{new ShiBing(getContext()), KlotskiBean.CAO_CAO, KlotskiBean.CAO_CAO, new ShiBing(getContext())}
-                , new KlotskiBean[]{KlotskiBean.NULL, KlotskiBean.GUAN_YU, KlotskiBean.GUAN_YU, KlotskiBean.NULL}
-                , new KlotskiBean[]{KlotskiBean.ZHANG_FEI, KlotskiBean.ZHAO_YUN, KlotskiBean.HUANG_ZHONG, KlotskiBean.MA_CHAO}
-                , new KlotskiBean[]{KlotskiBean.ZHANG_FEI, KlotskiBean.ZHAO_YUN, KlotskiBean.HUANG_ZHONG, KlotskiBean.MA_CHAO}
+                new KlotskiBean[]{new ShiBing(getContext()), new CaoCao1(getContext()), new CaoCao2(getContext()), new ShiBing(getContext())}
+                , new KlotskiBean[]{new ShiBing(getContext()), new CaoCao3(getContext()), new CaoCao4(getContext()), new ShiBing(getContext())}
+                , new KlotskiBean[]{new Null(), new GuanYu1(getContext()), new GuanYu2(getContext()), new Null()}
+                , new KlotskiBean[]{new ZhangFei1(getContext()), new ZhaoYun1(getContext()), new HuangZhong1(getContext()), new MaChao1(getContext())}
+                , new KlotskiBean[]{new ZhangFei2(getContext()), new ZhaoYun2(getContext()), new HuangZhong2(getContext()), new MaChao2(getContext())}
         };
         mSuccess = false;
         invalidate();
+    }
+
+    public void setOnCountCallback(IOnCountCallback onCountCallback) {
+        mOnCountCallback = onCountCallback;
+    }
+
+    public interface IOnCountCallback {
+        void onCount(int count);
     }
 }

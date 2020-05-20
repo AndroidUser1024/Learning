@@ -10,7 +10,7 @@ import com.qinshou.qinshoubox.R;
  * Author: QinHao
  * Email:qinhao@jeejio.com
  * Date: 2020/5/20 17:21
- * Description:类描述
+ * Description:马超2
  */
 public class MaChao2 extends KlotskiBean {
 

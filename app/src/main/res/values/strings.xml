@@ -240,5 +240,9 @@
     <string name="video_player_tv_speed_text_3">2x</string>
 
     <!-- 魔塔界面 -->
-    <string name="magic_tower_tv_current_floor_text">第<xliff:g id="filePath">%1$d</xliff:g>层</string>
+    <string name="magic_tower_tv_current_floor_text">第<xliff:g id="floor">%1$d</xliff:g>层</string>
+
+    <!-- 华容道界面 -->
+    <string name="klotski_tv_step_text">计步:<xliff:g id="step">%1$d</xliff:g></string>
+    <string name="klotski_tv_teim_text">计时:<xliff:g id="step">%1$s</xliff:g></string>
 </resources>

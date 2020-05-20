@@ -10,7 +10,7 @@ import com.qinshou.qinshoubox.R;
  * Author: QinHao
  * Email:qinhao@jeejio.com
  * Date: 2020/5/20 17:21
- * Description:类描述
+ * Description:士兵
  */
 public class ShiBing extends KlotskiBean {
 
