@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -31,74 +32,21 @@ public class KlotskiView extends View {
     private int mHeight;
     private Paint mPaint = new Paint();
     private Rect mRect = new Rect();
-    /**
-     * 手势监听器
-     */
-    private GestureDetector mGestureDetector;
+    //    private KlotskiBean[][] mKlotskiBeanArray = new KlotskiBean[][]{
+//            new KlotskiBean[]{KlotskiBean.ZHAO_YUN, KlotskiBean.CAO_CAO, KlotskiBean.CAO_CAO, KlotskiBean.HUANG_ZHONG}
+//            , new KlotskiBean[]{KlotskiBean.ZHAO_YUN, KlotskiBean.CAO_CAO, KlotskiBean.CAO_CAO, KlotskiBean.HUANG_ZHONG}
+//            , new KlotskiBean[]{KlotskiBean.ZHANG_FEI, KlotskiBean.GUAN_YU, KlotskiBean.GUAN_YU, KlotskiBean.MA_CHAO}
+//            , new KlotskiBean[]{KlotskiBean.ZHANG_FEI, KlotskiBean.BING, KlotskiBean.BING, KlotskiBean.MA_CHAO}
+//            , new KlotskiBean[]{KlotskiBean.BING, KlotskiBean.NULL, KlotskiBean.NULL, KlotskiBean.BING}
+//    };
     private KlotskiBean[][] mKlotskiBeanArray = new KlotskiBean[][]{
-            new KlotskiBean[]{KlotskiBean.ZHAO_YUN, KlotskiBean.CAO_CAO, KlotskiBean.CAO_CAO, KlotskiBean.HUANG_ZHONG}
-            , new KlotskiBean[]{KlotskiBean.ZHAO_YUN, KlotskiBean.CAO_CAO, KlotskiBean.CAO_CAO, KlotskiBean.HUANG_ZHONG}
-            , new KlotskiBean[]{KlotskiBean.ZHANG_FEI, KlotskiBean.GUAN_YU, KlotskiBean.GUAN_YU, KlotskiBean.MA_CHAO}
-            , new KlotskiBean[]{KlotskiBean.ZHANG_FEI, KlotskiBean.BING, KlotskiBean.BING, KlotskiBean.MA_CHAO}
-            , new KlotskiBean[]{KlotskiBean.BING, null, null, KlotskiBean.BING}
-
+            new KlotskiBean[]{KlotskiBean.BING, KlotskiBean.CAO_CAO, KlotskiBean.CAO_CAO, KlotskiBean.BING}
+            , new KlotskiBean[]{KlotskiBean.BING, KlotskiBean.CAO_CAO, KlotskiBean.CAO_CAO, KlotskiBean.BING}
+            , new KlotskiBean[]{KlotskiBean.NULL, KlotskiBean.GUAN_YU, KlotskiBean.GUAN_YU, KlotskiBean.NULL}
+            , new KlotskiBean[]{KlotskiBean.ZHANG_FEI, KlotskiBean.ZHAO_YUN, KlotskiBean.HUANG_ZHONG, KlotskiBean.MA_CHAO}
+            , new KlotskiBean[]{KlotskiBean.ZHANG_FEI, KlotskiBean.ZHAO_YUN, KlotskiBean.HUANG_ZHONG, KlotskiBean.MA_CHAO}
     };
-    private GestureDetector.OnGestureListener mOnGestureListener = new GestureDetector.OnGestureListener() {
-        private KlotskiBean mTouchKlotskiBean;
-
-        @Override
-        public boolean onDown(MotionEvent e) {
-            //return true 才会响应后续事件，如 onSingleTapUp、onFling 等
-            int x = (int) e.getY() / (getHeight() / mKlotskiBeanArray.length);
-            int y = (int) e.getX() / (getWidth() / mKlotskiBeanArray[x].length);
-            mTouchKlotskiBean = mKlotskiBeanArray[x][y];
-            ShowLogUtil.logi(mTouchKlotskiBean.getText());
-            return true;
-        }
-
-        @Override
-        public void onShowPress(MotionEvent e) {
-
-        }
-
-        @Override
-        public boolean onSingleTapUp(MotionEvent e) {
-            return false;
-        }
-
-        @Override
-        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            if (Math.abs(e1.getX() - e2.getX()) > Math.abs(e1.getY() - e2.getY())) {
-                // 左右滑
-                ShowLogUtil.logi("左右滑");
-            } else {
-                // 上下滑
-                ShowLogUtil.logi("上下滑");
-            }
-//
-//            KlotskiBean left = mKlotskiBeanArray[i][j - 1];
-//            KlotskiBean right = mKlotskiBeanArray[i][j + 1];
-//            KlotskiBean top = mKlotskiBeanArray[i - 1][j];
-//            KlotskiBean bottom = mKlotskiBeanArray[i + 1][j];
-//            ShowLogUtil.logi("onScroll" + " : "
-//                    + "e1.getX()--->" + e1.getX() + ",e1.getY()--->" + e1.getY()
-//                    + ",e2.getX()--->" + e2.getX() + ",e2.getY()--->" + e2.getY()
-//                    + ",distanceX--->" + distanceX
-//                    + ",distanceY--->" + distanceY
-//            );
-            return false;
-        }
-
-        @Override
-        public void onLongPress(MotionEvent e) {
-
-        }
-
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            return false;
-        }
-    };
+    private boolean mSuccess = false;
 
     public KlotskiView(Context context) {
         this(context, null);
@@ -111,7 +59,6 @@ public class KlotskiView extends View {
     public KlotskiView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mPaint.setAntiAlias(true);
-        mGestureDetector = new GestureDetector(getContext(), mOnGestureListener);
     }
 
     @Override
@@ -141,10 +88,12 @@ public class KlotskiView extends View {
     }
 
     private float mDownX, mDownY;
-    private KlotskiBean mTouchKlotskiBean;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if (mSuccess) {
+            return true;
+        }
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 mDownX = event.getX();
@@ -155,54 +104,312 @@ public class KlotskiView extends View {
             case MotionEvent.ACTION_UP:
                 int x = (int) mDownY / (getHeight() / mKlotskiBeanArray.length);
                 int y = (int) mDownX / (getWidth() / mKlotskiBeanArray[x].length);
-                KlotskiBean touchKlotskiBean = mKlotskiBeanArray[x][y];
-                if (touchKlotskiBean == null) {
+                if (mKlotskiBeanArray[x][y] == null) {
                     break;
                 }
                 if (Math.abs(event.getX() - mDownX) > Math.abs(event.getY() - mDownY)) {
                     if (event.getX() - mDownX > 0) {
                         // 右滑
-                        ShowLogUtil.logi("右滑");
-                        swapRight(x, y, touchKlotskiBean);
+                        swapRight(x, y);
                     } else {
                         // 左滑
-                        ShowLogUtil.logi("左滑");
-                        swapLeft(x, y, touchKlotskiBean);
+                        swapLeft(x, y);
                     }
                 } else {
                     if (event.getY() - mDownY > 0) {
                         // 下滑
-                        ShowLogUtil.logi("下滑");
+                        swapBottom(x, y);
                     } else {
                         // 上滑
-                        ShowLogUtil.logi("上滑");
+                        swapTop(x, y);
                     }
                 }
                 mDownX = 0;
                 mDownY = 0;
+                if (mSuccess = success()) {
+                    Toast.makeText(getContext(), "恭喜成功", Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
         return true;
     }
 
-    private void swapLeft(int x, int y, KlotskiBean touchKlotskiBean) {
+    private void swapLeft(int x, int y) {
         if (y == 0) {
             return;
         }
-        if (touchKlotskiBean.getWidth() == 1) {
-            if (mKlotskiBeanArray[x][y - 1] != null) {
+        boolean again = false;
+        KlotskiBean touchKlotskiBean = mKlotskiBeanArray[x][y];
+        if (touchKlotskiBean.getWidth() == 2) {
+            if (mKlotskiBeanArray[x][y - 1].getType() == touchKlotskiBean.getType()) {
+                swapLeft(x, y - 1);
+            } else if (y < mKlotskiBeanArray[x].length - 1
+                    && mKlotskiBeanArray[x][y + 1].getType() == touchKlotskiBean.getType()) {
+                again = true;
+            }
+        }
+        if (touchKlotskiBean.getHeight() == 1) {
+            if (mKlotskiBeanArray[x][y - 1].getType() != KlotskiBean.Type.NULL) {
                 return;
             }
             mKlotskiBeanArray[x][y - 1] = touchKlotskiBean;
-            mKlotskiBeanArray[x][y] = null;
+            mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+        } else if (touchKlotskiBean.getHeight() == 2) {
+            if (mKlotskiBeanArray[x][y - 1].getType() != KlotskiBean.Type.NULL) {
+                return;
+            }
+            if (x == 0) {
+                if (mKlotskiBeanArray[x + 1][y - 1].getType() != KlotskiBean.Type.NULL) {
+                    return;
+                }
+                mKlotskiBeanArray[x][y - 1] = touchKlotskiBean;
+                mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+                mKlotskiBeanArray[x + 1][y - 1] = mKlotskiBeanArray[x + 1][y];
+                mKlotskiBeanArray[x + 1][y] = KlotskiBean.NULL;
+            } else if (x == mKlotskiBeanArray.length - 1) {
+                if (mKlotskiBeanArray[x - 1][y - 1].getType() != KlotskiBean.Type.NULL) {
+                    return;
+                }
+                mKlotskiBeanArray[x][y - 1] = touchKlotskiBean;
+                mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+                mKlotskiBeanArray[x - 1][y - 1] = mKlotskiBeanArray[x - 1][y];
+                mKlotskiBeanArray[x - 1][y] = KlotskiBean.NULL;
+            } else {
+                if (mKlotskiBeanArray[x - 1][y].getType() == touchKlotskiBean.getType()) {
+                    if (mKlotskiBeanArray[x - 1][y - 1].getType() != KlotskiBean.Type.NULL) {
+                        return;
+                    }
+                    mKlotskiBeanArray[x][y - 1] = touchKlotskiBean;
+                    mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+                    mKlotskiBeanArray[x - 1][y - 1] = mKlotskiBeanArray[x - 1][y];
+                    mKlotskiBeanArray[x - 1][y] = KlotskiBean.NULL;
+                } else if (mKlotskiBeanArray[x + 1][y].getType() == touchKlotskiBean.getType()) {
+                    if (mKlotskiBeanArray[x + 1][y - 1].getType() != KlotskiBean.Type.NULL) {
+                        return;
+                    }
+                    mKlotskiBeanArray[x][y - 1] = touchKlotskiBean;
+                    mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+                    mKlotskiBeanArray[x + 1][y - 1] = mKlotskiBeanArray[x + 1][y];
+                    mKlotskiBeanArray[x + 1][y] = KlotskiBean.NULL;
+                }
+            }
+        }
+        if (again) {
+            swapLeft(x, y + 1);
         }
         invalidate();
     }
 
-    private void swapRight(int x, int y, KlotskiBean touchKlotskiBean) {
-        if (y == mKlotskiBeanArray[x].length) {
+    private void swapRight(int x, int y) {
+        if (y == mKlotskiBeanArray[x].length - 1) {
             return;
         }
+        boolean again = false;
+        KlotskiBean touchKlotskiBean = mKlotskiBeanArray[x][y];
+        if (touchKlotskiBean.getWidth() == 2) {
+            if (y > 0 && mKlotskiBeanArray[x][y - 1].getType() == touchKlotskiBean.getType()) {
+                again = true;
+            } else if (mKlotskiBeanArray[x][y + 1].getType() == touchKlotskiBean.getType()) {
+                swapRight(x, y + 1);
+            }
+        }
+        if (touchKlotskiBean.getHeight() == 1) {
+            if (mKlotskiBeanArray[x][y + 1].getType() != KlotskiBean.Type.NULL) {
+                return;
+            }
+            mKlotskiBeanArray[x][y + 1] = touchKlotskiBean;
+            mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+        } else if (touchKlotskiBean.getHeight() == 2) {
+            if (mKlotskiBeanArray[x][y + 1].getType() != KlotskiBean.Type.NULL) {
+                return;
+            }
+            if (x == 0) {
+                if (mKlotskiBeanArray[x + 1][y + 1].getType() != KlotskiBean.Type.NULL) {
+                    return;
+                }
+                mKlotskiBeanArray[x][y + 1] = touchKlotskiBean;
+                mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+                mKlotskiBeanArray[x + 1][y + 1] = mKlotskiBeanArray[x + 1][y];
+                mKlotskiBeanArray[x + 1][y] = KlotskiBean.NULL;
+            } else if (x == mKlotskiBeanArray.length - 1) {
+                if (mKlotskiBeanArray[x - 1][y + 1].getType() != KlotskiBean.Type.NULL) {
+                    return;
+                }
+                mKlotskiBeanArray[x][y + 1] = touchKlotskiBean;
+                mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+                mKlotskiBeanArray[x - 1][y + 1] = mKlotskiBeanArray[x - 1][y];
+                mKlotskiBeanArray[x - 1][y] = KlotskiBean.NULL;
+            } else {
+                if (mKlotskiBeanArray[x - 1][y].getType() == touchKlotskiBean.getType()) {
+                    if (mKlotskiBeanArray[x - 1][y + 1].getType() != KlotskiBean.Type.NULL) {
+                        return;
+                    }
+                    mKlotskiBeanArray[x][y + 1] = touchKlotskiBean;
+                    mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+                    mKlotskiBeanArray[x - 1][y + 1] = mKlotskiBeanArray[x - 1][y];
+                    mKlotskiBeanArray[x - 1][y] = KlotskiBean.NULL;
+                } else if (mKlotskiBeanArray[x + 1][y].getType() == touchKlotskiBean.getType()) {
+                    if (mKlotskiBeanArray[x + 1][y + 1].getType() != KlotskiBean.Type.NULL) {
+                        return;
+                    }
+                    mKlotskiBeanArray[x][y + 1] = touchKlotskiBean;
+                    mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+                    mKlotskiBeanArray[x + 1][y + 1] = mKlotskiBeanArray[x + 1][y];
+                    mKlotskiBeanArray[x + 1][y] = KlotskiBean.NULL;
+                }
+            }
+        }
+        if (again) {
+            swapRight(x, y - 1);
+        }
+        invalidate();
+    }
 
+    private void swapTop(int x, int y) {
+        if (x == 0) {
+            return;
+        }
+        boolean again = false;
+        KlotskiBean touchKlotskiBean = mKlotskiBeanArray[x][y];
+        if (touchKlotskiBean.getHeight() == 2) {
+            if (mKlotskiBeanArray[x - 1][y].getType() == touchKlotskiBean.getType()) {
+                swapTop(x - 1, y);
+            } else if (x < mKlotskiBeanArray.length - 1 &&
+                    mKlotskiBeanArray[x + 1][y].getType() == touchKlotskiBean.getType()) {
+                again = true;
+            }
+        }
+        if (touchKlotskiBean.getWidth() == 1) {
+            if (mKlotskiBeanArray[x - 1][y].getType() != KlotskiBean.Type.NULL) {
+                return;
+            }
+            mKlotskiBeanArray[x - 1][y] = touchKlotskiBean;
+            mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+        } else if (touchKlotskiBean.getWidth() == 2) {
+            if (mKlotskiBeanArray[x - 1][y].getType() != KlotskiBean.Type.NULL) {
+                return;
+            }
+            if (y == 0) {
+                if (mKlotskiBeanArray[x - 1][y + 1].getType() != KlotskiBean.Type.NULL) {
+                    return;
+                }
+                mKlotskiBeanArray[x - 1][y] = touchKlotskiBean;
+                mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+                mKlotskiBeanArray[x - 1][y + 1] = mKlotskiBeanArray[x][y + 1];
+                mKlotskiBeanArray[x][y + 1] = KlotskiBean.NULL;
+            } else if (y == mKlotskiBeanArray.length - 1) {
+                if (mKlotskiBeanArray[x - 1][y - 1].getType() != KlotskiBean.Type.NULL) {
+                    return;
+                }
+                mKlotskiBeanArray[x - 1][y] = touchKlotskiBean;
+                mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+                mKlotskiBeanArray[x - 1][y - 1] = mKlotskiBeanArray[x][y - 1];
+                mKlotskiBeanArray[x][y - 1] = KlotskiBean.NULL;
+            } else {
+                if (mKlotskiBeanArray[x][y - 1].getType() == touchKlotskiBean.getType()) {
+                    if (mKlotskiBeanArray[x - 1][y - 1].getType() != KlotskiBean.Type.NULL) {
+                        return;
+                    }
+                    mKlotskiBeanArray[x - 1][y] = touchKlotskiBean;
+                    mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+                    mKlotskiBeanArray[x - 1][y - 1] = mKlotskiBeanArray[x][y - 1];
+                    mKlotskiBeanArray[x][y - 1] = KlotskiBean.NULL;
+                } else if (mKlotskiBeanArray[x][y + 1].getType() == touchKlotskiBean.getType()) {
+                    if (mKlotskiBeanArray[x - 1][y + 1].getType() != KlotskiBean.Type.NULL) {
+                        return;
+                    }
+                    mKlotskiBeanArray[x - 1][y] = touchKlotskiBean;
+                    mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+                    mKlotskiBeanArray[x - 1][y + 1] = mKlotskiBeanArray[x][y + 1];
+                    mKlotskiBeanArray[x][y + 1] = KlotskiBean.NULL;
+                }
+            }
+        }
+        if (again) {
+            swapTop(x + 1, y);
+        }
+        invalidate();
+    }
+
+    private void swapBottom(int x, int y) {
+        if (x == mKlotskiBeanArray.length - 1) {
+            return;
+        }
+        boolean again = false;
+        KlotskiBean touchKlotskiBean = mKlotskiBeanArray[x][y];
+        if (touchKlotskiBean.getHeight() == 2) {
+            if (x > 0
+                    && mKlotskiBeanArray[x - 1][y].getType() == touchKlotskiBean.getType()) {
+                again = true;
+            } else if (mKlotskiBeanArray[x + 1][y].getType() == touchKlotskiBean.getType()) {
+                swapBottom(x + 1, y);
+            }
+        }
+        if (touchKlotskiBean.getWidth() == 1) {
+            if (mKlotskiBeanArray[x + 1][y].getType() != KlotskiBean.Type.NULL) {
+                return;
+            }
+            mKlotskiBeanArray[x + 1][y] = touchKlotskiBean;
+            mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+        } else if (touchKlotskiBean.getWidth() == 2) {
+            if (mKlotskiBeanArray[x + 1][y].getType() != KlotskiBean.Type.NULL) {
+                return;
+            }
+            if (y == 0) {
+                if (mKlotskiBeanArray[x + 1][y + 1].getType() != KlotskiBean.Type.NULL) {
+                    return;
+                }
+                mKlotskiBeanArray[x + 1][y] = touchKlotskiBean;
+                mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+                mKlotskiBeanArray[x + 1][y + 1] = mKlotskiBeanArray[x][y + 1];
+                mKlotskiBeanArray[x][y + 1] = KlotskiBean.NULL;
+            } else if (y == mKlotskiBeanArray.length - 1) {
+                if (mKlotskiBeanArray[x + 1][y - 1].getType() != KlotskiBean.Type.NULL) {
+                    return;
+                }
+                mKlotskiBeanArray[x + 1][y] = touchKlotskiBean;
+                mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+                mKlotskiBeanArray[x + 1][y - 1] = mKlotskiBeanArray[x][y - 1];
+                mKlotskiBeanArray[x][y - 1] = KlotskiBean.NULL;
+            } else {
+                if (mKlotskiBeanArray[x][y - 1].getType() == touchKlotskiBean.getType()) {
+                    if (mKlotskiBeanArray[x + 1][y - 1].getType() != KlotskiBean.Type.NULL) {
+                        return;
+                    }
+                    mKlotskiBeanArray[x + 1][y] = touchKlotskiBean;
+                    mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+                    mKlotskiBeanArray[x + 1][y - 1] = mKlotskiBeanArray[x][y - 1];
+                    mKlotskiBeanArray[x][y - 1] = KlotskiBean.NULL;
+                } else if (mKlotskiBeanArray[x][y + 1].getType() == touchKlotskiBean.getType()) {
+                    if (mKlotskiBeanArray[x + 1][y + 1].getType() != KlotskiBean.Type.NULL) {
+                        return;
+                    }
+                    mKlotskiBeanArray[x + 1][y] = touchKlotskiBean;
+                    mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+                    mKlotskiBeanArray[x + 1][y + 1] = mKlotskiBeanArray[x][y + 1];
+                    mKlotskiBeanArray[x][y + 1] = KlotskiBean.NULL;
+                }
+            }
+        }
+        if (again) {
+            swapBottom(x - 1, y);
+        }
+        invalidate();
+    }
+
+    private boolean success() {
+        return mKlotskiBeanArray[4][1].getType() == KlotskiBean.Type.CAO_CAO && mKlotskiBeanArray[4][2].getType() == KlotskiBean.Type.CAO_CAO;
+    }
+
+    public void startGame() {
+        mKlotskiBeanArray = new KlotskiBean[][]{
+                new KlotskiBean[]{KlotskiBean.BING, KlotskiBean.CAO_CAO, KlotskiBean.CAO_CAO, KlotskiBean.BING}
+                , new KlotskiBean[]{KlotskiBean.BING, KlotskiBean.CAO_CAO, KlotskiBean.CAO_CAO, KlotskiBean.BING}
+                , new KlotskiBean[]{KlotskiBean.NULL, KlotskiBean.GUAN_YU, KlotskiBean.GUAN_YU, KlotskiBean.NULL}
+                , new KlotskiBean[]{KlotskiBean.ZHANG_FEI, KlotskiBean.ZHAO_YUN, KlotskiBean.HUANG_ZHONG, KlotskiBean.MA_CHAO}
+                , new KlotskiBean[]{KlotskiBean.ZHANG_FEI, KlotskiBean.ZHAO_YUN, KlotskiBean.HUANG_ZHONG, KlotskiBean.MA_CHAO}
+        };
+        mSuccess = false;
+        invalidate();
     }
 }

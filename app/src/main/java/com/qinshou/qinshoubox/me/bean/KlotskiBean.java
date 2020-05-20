@@ -29,6 +29,7 @@ public class KlotskiBean {
     public static final KlotskiBean HUANG_ZHONG = new KlotskiBean(Type.HUANG_ZHONG);
     public static final KlotskiBean MA_CHAO = new KlotskiBean(Type.MA_CHAO);
     public static final KlotskiBean BING = new KlotskiBean(Type.BING);
+    public static final KlotskiBean NULL = new KlotskiBean(Type.NULL);
 
     private KlotskiBean(Type type) {
         switch (type) {
@@ -37,51 +38,70 @@ public class KlotskiBean {
                 color = Color.WHITE;
                 width = 2;
                 height = 2;
-                type = Type.CAO_CAO;
+                this.type = Type.CAO_CAO;
                 break;
             case GUAN_YU:
                 text = "关羽";
                 color = Color.RED;
                 width = 2;
                 height = 1;
-                type = Type.GUAN_YU;
+                this.type = Type.GUAN_YU;
                 break;
             case ZHANG_FEI:
                 text = "张飞";
                 color = Color.BLACK;
                 width = 1;
                 height = 2;
-                type = Type.ZHANG_FEI;
+                this.type = Type.ZHANG_FEI;
                 break;
             case ZHAO_YUN:
                 text = "赵云";
                 color = Color.BLUE;
                 width = 1;
                 height = 2;
-                type = Type.ZHAO_YUN;
+                this.type = Type.ZHAO_YUN;
                 break;
             case HUANG_ZHONG:
                 text = "黄忠";
                 color = Color.YELLOW;
                 width = 1;
                 height = 2;
-                type = Type.HUANG_ZHONG;
+                this.type = Type.HUANG_ZHONG;
                 break;
             case MA_CHAO:
                 text = "马超";
                 color = Color.CYAN;
                 width = 1;
                 height = 2;
-                type = Type.MA_CHAO;
+                this.type = Type.MA_CHAO;
                 break;
             case BING:
                 text = "兵";
                 color = Color.GREEN;
                 width = 1;
                 height = 1;
-                type = Type.BING;
+                this.type = Type.BING;
+                break;
+            case NULL:
+                text = "空";
+                color = Color.TRANSPARENT;
+                width = 1;
+                height = 1;
+                this.type = Type.NULL;
                 break;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "KlotskiBean{" +
+                "bitmap=" + bitmap +
+                ", text='" + text + '\'' +
+                ", color=" + color +
+                ", width=" + width +
+                ", height=" + height +
+                ", type=" + type +
+                '}';
     }
 
     public Bitmap getBitmap() {
@@ -139,6 +159,7 @@ public class KlotskiBean {
         ZHAO_YUN,
         HUANG_ZHONG,
         MA_CHAO,
-        BING
+        BING,
+        NULL,
     }
 }
