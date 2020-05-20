@@ -29,6 +29,7 @@ import com.qinshou.qinshoubox.me.bean.klotski.ZhangFei1;
 import com.qinshou.qinshoubox.me.bean.klotski.ZhangFei2;
 import com.qinshou.qinshoubox.me.bean.klotski.ZhaoYun1;
 import com.qinshou.qinshoubox.me.bean.klotski.ZhaoYun2;
+import com.qinshou.qinshoubox.util.KlotskiUtil;
 
 /**
  * Author: QinHao
@@ -46,13 +47,7 @@ public class KlotskiView extends View {
 //            , new KlotskiBean[]{KlotskiBean.ZHANG_FEI, KlotskiBean.BING, KlotskiBean.BING, KlotskiBean.MA_CHAO}
 //            , new KlotskiBean[]{KlotskiBean.BING, KlotskiBean.NULL, KlotskiBean.NULL, KlotskiBean.BING}
 //    };
-    private KlotskiBean[][] mKlotskiBeanArray = new KlotskiBean[][]{
-            new KlotskiBean[]{new ShiBing(getContext()), new CaoCao1(getContext()), new CaoCao2(getContext()), new ShiBing(getContext())}
-            , new KlotskiBean[]{new ShiBing(getContext()), new CaoCao3(getContext()), new CaoCao4(getContext()), new ShiBing(getContext())}
-            , new KlotskiBean[]{new Null(), new GuanYu1(getContext()), new GuanYu2(getContext()), new Null()}
-            , new KlotskiBean[]{new ZhangFei1(getContext()), new ZhaoYun1(getContext()), new HuangZhong1(getContext()), new MaChao1(getContext())}
-            , new KlotskiBean[]{new ZhangFei2(getContext()), new ZhaoYun2(getContext()), new HuangZhong2(getContext()), new MaChao2(getContext())}
-    };
+    private KlotskiBean[][] mKlotskiBeanArray = KlotskiUtil.getRandomLevel();
     private boolean mSuccess = false;
     private int mCount;
     private IOnCountCallback mOnCountCallback;
@@ -182,7 +177,8 @@ public class KlotskiView extends View {
                 return false;
             }
             mKlotskiBeanArray[x][y - 1] = touchKlotskiBean;
-            mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+            mKlotskiBeanArray[x][y] = new Null();
+            ;
         } else if (touchKlotskiBean.getHeight() == 2) {
             // 高度为 2 时,判断完这一块是否可以交换后,还需要判断关联方块是否可以交换
             if (mKlotskiBeanArray[x][y - 1].getType() != KlotskiBean.Type.NULL) {
@@ -194,18 +190,22 @@ public class KlotskiView extends View {
                     return false;
                 }
                 mKlotskiBeanArray[x][y - 1] = touchKlotskiBean;
-                mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+                mKlotskiBeanArray[x][y] = new Null();
+                ;
                 mKlotskiBeanArray[x + 1][y - 1] = mKlotskiBeanArray[x + 1][y];
-                mKlotskiBeanArray[x + 1][y] = KlotskiBean.NULL;
+                mKlotskiBeanArray[x + 1][y] = new Null();
+                ;
             } else if (x == mKlotskiBeanArray.length - 1) {
                 // 触摸的方块在最下方,直接判断上方方块就好
                 if (mKlotskiBeanArray[x - 1][y - 1].getType() != KlotskiBean.Type.NULL) {
                     return false;
                 }
                 mKlotskiBeanArray[x][y - 1] = touchKlotskiBean;
-                mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+                mKlotskiBeanArray[x][y] = new Null();
+                ;
                 mKlotskiBeanArray[x - 1][y - 1] = mKlotskiBeanArray[x - 1][y];
-                mKlotskiBeanArray[x - 1][y] = KlotskiBean.NULL;
+                mKlotskiBeanArray[x - 1][y] = new Null();
+                ;
             } else {
                 // 触摸的方块在中间,需要先判读关联方块在上还是在下
                 if (mKlotskiBeanArray[x - 1][y].getType() == touchKlotskiBean.getType()) {
@@ -213,17 +213,21 @@ public class KlotskiView extends View {
                         return false;
                     }
                     mKlotskiBeanArray[x][y - 1] = touchKlotskiBean;
-                    mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+                    mKlotskiBeanArray[x][y] = new Null();
+                    ;
                     mKlotskiBeanArray[x - 1][y - 1] = mKlotskiBeanArray[x - 1][y];
-                    mKlotskiBeanArray[x - 1][y] = KlotskiBean.NULL;
+                    mKlotskiBeanArray[x - 1][y] = new Null();
+                    ;
                 } else if (mKlotskiBeanArray[x + 1][y].getType() == touchKlotskiBean.getType()) {
                     if (mKlotskiBeanArray[x + 1][y - 1].getType() != KlotskiBean.Type.NULL) {
                         return false;
                     }
                     mKlotskiBeanArray[x][y - 1] = touchKlotskiBean;
-                    mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+                    mKlotskiBeanArray[x][y] = new Null();
+                    ;
                     mKlotskiBeanArray[x + 1][y - 1] = mKlotskiBeanArray[x + 1][y];
-                    mKlotskiBeanArray[x + 1][y] = KlotskiBean.NULL;
+                    mKlotskiBeanArray[x + 1][y] = new Null();
+                    ;
                 }
             }
         }
@@ -266,7 +270,8 @@ public class KlotskiView extends View {
                 return false;
             }
             mKlotskiBeanArray[x][y + 1] = touchKlotskiBean;
-            mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+            mKlotskiBeanArray[x][y] = new Null();
+            ;
         } else if (touchKlotskiBean.getHeight() == 2) {
             // 高度为 2 时,判断完这一块是否可以交换后,还需要判断关联方块是否可以交换
             if (mKlotskiBeanArray[x][y + 1].getType() != KlotskiBean.Type.NULL) {
@@ -278,18 +283,22 @@ public class KlotskiView extends View {
                     return false;
                 }
                 mKlotskiBeanArray[x][y + 1] = touchKlotskiBean;
-                mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+                mKlotskiBeanArray[x][y] = new Null();
+                ;
                 mKlotskiBeanArray[x + 1][y + 1] = mKlotskiBeanArray[x + 1][y];
-                mKlotskiBeanArray[x + 1][y] = KlotskiBean.NULL;
+                mKlotskiBeanArray[x + 1][y] = new Null();
+                ;
             } else if (x == mKlotskiBeanArray.length - 1) {
                 // 触摸的方块在最下方,直接判断上方方块就好
                 if (mKlotskiBeanArray[x - 1][y + 1].getType() != KlotskiBean.Type.NULL) {
                     return false;
                 }
                 mKlotskiBeanArray[x][y + 1] = touchKlotskiBean;
-                mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+                mKlotskiBeanArray[x][y] = new Null();
+                ;
                 mKlotskiBeanArray[x - 1][y + 1] = mKlotskiBeanArray[x - 1][y];
-                mKlotskiBeanArray[x - 1][y] = KlotskiBean.NULL;
+                mKlotskiBeanArray[x - 1][y] = new Null();
+                ;
             } else {
                 // 触摸的方块在中间,需要先判读关联方块在上还是在下
                 if (mKlotskiBeanArray[x - 1][y].getType() == touchKlotskiBean.getType()) {
@@ -297,17 +306,21 @@ public class KlotskiView extends View {
                         return false;
                     }
                     mKlotskiBeanArray[x][y + 1] = touchKlotskiBean;
-                    mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+                    mKlotskiBeanArray[x][y] = new Null();
+                    ;
                     mKlotskiBeanArray[x - 1][y + 1] = mKlotskiBeanArray[x - 1][y];
-                    mKlotskiBeanArray[x - 1][y] = KlotskiBean.NULL;
+                    mKlotskiBeanArray[x - 1][y] = new Null();
+                    ;
                 } else if (mKlotskiBeanArray[x + 1][y].getType() == touchKlotskiBean.getType()) {
                     if (mKlotskiBeanArray[x + 1][y + 1].getType() != KlotskiBean.Type.NULL) {
                         return false;
                     }
                     mKlotskiBeanArray[x][y + 1] = touchKlotskiBean;
-                    mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+                    mKlotskiBeanArray[x][y] = new Null();
+                    ;
                     mKlotskiBeanArray[x + 1][y + 1] = mKlotskiBeanArray[x + 1][y];
-                    mKlotskiBeanArray[x + 1][y] = KlotskiBean.NULL;
+                    mKlotskiBeanArray[x + 1][y] = new Null();
+                    ;
                 }
             }
         }
@@ -351,7 +364,8 @@ public class KlotskiView extends View {
                 return false;
             }
             mKlotskiBeanArray[x - 1][y] = touchKlotskiBean;
-            mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+            mKlotskiBeanArray[x][y] = new Null();
+            ;
         } else if (touchKlotskiBean.getWidth() == 2) {
             // 宽度为 2 时,判断完这一块是否可以交换后,还需要判断关联方块是否可以交换
             if (mKlotskiBeanArray[x - 1][y].getType() != KlotskiBean.Type.NULL) {
@@ -363,18 +377,22 @@ public class KlotskiView extends View {
                 }
                 // 触摸的方块在最左边,直接判断右边方块就好
                 mKlotskiBeanArray[x - 1][y] = touchKlotskiBean;
-                mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+                mKlotskiBeanArray[x][y] = new Null();
+                ;
                 mKlotskiBeanArray[x - 1][y + 1] = mKlotskiBeanArray[x][y + 1];
-                mKlotskiBeanArray[x][y + 1] = KlotskiBean.NULL;
+                mKlotskiBeanArray[x][y + 1] = new Null();
+                ;
             } else if (y == mKlotskiBeanArray.length - 1) {
                 // 触摸的方块在最右边,直接判断左边方块就好
                 if (mKlotskiBeanArray[x - 1][y - 1].getType() != KlotskiBean.Type.NULL) {
                     return false;
                 }
                 mKlotskiBeanArray[x - 1][y] = touchKlotskiBean;
-                mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+                mKlotskiBeanArray[x][y] = new Null();
+                ;
                 mKlotskiBeanArray[x - 1][y - 1] = mKlotskiBeanArray[x][y - 1];
-                mKlotskiBeanArray[x][y - 1] = KlotskiBean.NULL;
+                mKlotskiBeanArray[x][y - 1] = new Null();
+                ;
             } else {
                 // 触摸的方块在中间,需要先判读关联方块在左还是在右
                 if (mKlotskiBeanArray[x][y - 1].getType() == touchKlotskiBean.getType()) {
@@ -382,17 +400,21 @@ public class KlotskiView extends View {
                         return false;
                     }
                     mKlotskiBeanArray[x - 1][y] = touchKlotskiBean;
-                    mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+                    mKlotskiBeanArray[x][y] = new Null();
+                    ;
                     mKlotskiBeanArray[x - 1][y - 1] = mKlotskiBeanArray[x][y - 1];
-                    mKlotskiBeanArray[x][y - 1] = KlotskiBean.NULL;
+                    mKlotskiBeanArray[x][y - 1] = new Null();
+                    ;
                 } else if (mKlotskiBeanArray[x][y + 1].getType() == touchKlotskiBean.getType()) {
                     if (mKlotskiBeanArray[x - 1][y + 1].getType() != KlotskiBean.Type.NULL) {
                         return false;
                     }
                     mKlotskiBeanArray[x - 1][y] = touchKlotskiBean;
-                    mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+                    mKlotskiBeanArray[x][y] = new Null();
+                    ;
                     mKlotskiBeanArray[x - 1][y + 1] = mKlotskiBeanArray[x][y + 1];
-                    mKlotskiBeanArray[x][y + 1] = KlotskiBean.NULL;
+                    mKlotskiBeanArray[x][y + 1] = new Null();
+                    ;
                 }
             }
         }
@@ -436,7 +458,8 @@ public class KlotskiView extends View {
                 return false;
             }
             mKlotskiBeanArray[x + 1][y] = touchKlotskiBean;
-            mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+            mKlotskiBeanArray[x][y] = new Null();
+            ;
         } else if (touchKlotskiBean.getWidth() == 2) {
             // 宽度为 2 时,判断完这一块是否可以交换后,还需要判断关联方块是否可以交换
             if (mKlotskiBeanArray[x + 1][y].getType() != KlotskiBean.Type.NULL) {
@@ -448,18 +471,22 @@ public class KlotskiView extends View {
                     return false;
                 }
                 mKlotskiBeanArray[x + 1][y] = touchKlotskiBean;
-                mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+                mKlotskiBeanArray[x][y] = new Null();
+                ;
                 mKlotskiBeanArray[x + 1][y + 1] = mKlotskiBeanArray[x][y + 1];
-                mKlotskiBeanArray[x][y + 1] = KlotskiBean.NULL;
+                mKlotskiBeanArray[x][y + 1] = new Null();
+                ;
             } else if (y == mKlotskiBeanArray.length - 1) {
                 // 触摸的方块在最右边,直接判断左边方块就好
                 if (mKlotskiBeanArray[x + 1][y - 1].getType() != KlotskiBean.Type.NULL) {
                     return false;
                 }
                 mKlotskiBeanArray[x + 1][y] = touchKlotskiBean;
-                mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+                mKlotskiBeanArray[x][y] = new Null();
+                ;
                 mKlotskiBeanArray[x + 1][y - 1] = mKlotskiBeanArray[x][y - 1];
-                mKlotskiBeanArray[x][y - 1] = KlotskiBean.NULL;
+                mKlotskiBeanArray[x][y - 1] = new Null();
+                ;
             } else {
                 // 触摸的方块在中间,需要先判读关联方块在左还是在右
                 if (mKlotskiBeanArray[x][y - 1].getType() == touchKlotskiBean.getType()) {
@@ -467,17 +494,21 @@ public class KlotskiView extends View {
                         return false;
                     }
                     mKlotskiBeanArray[x + 1][y] = touchKlotskiBean;
-                    mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+                    mKlotskiBeanArray[x][y] = new Null();
+                    ;
                     mKlotskiBeanArray[x + 1][y - 1] = mKlotskiBeanArray[x][y - 1];
-                    mKlotskiBeanArray[x][y - 1] = KlotskiBean.NULL;
+                    mKlotskiBeanArray[x][y - 1] = new Null();
+                    ;
                 } else if (mKlotskiBeanArray[x][y + 1].getType() == touchKlotskiBean.getType()) {
                     if (mKlotskiBeanArray[x + 1][y + 1].getType() != KlotskiBean.Type.NULL) {
                         return false;
                     }
                     mKlotskiBeanArray[x + 1][y] = touchKlotskiBean;
-                    mKlotskiBeanArray[x][y] = KlotskiBean.NULL;
+                    mKlotskiBeanArray[x][y] = new Null();
+                    ;
                     mKlotskiBeanArray[x + 1][y + 1] = mKlotskiBeanArray[x][y + 1];
-                    mKlotskiBeanArray[x][y + 1] = KlotskiBean.NULL;
+                    mKlotskiBeanArray[x][y + 1] = new Null();
+                    ;
                 }
             }
         }
@@ -507,13 +538,7 @@ public class KlotskiView extends View {
      * Description:开始游戏
      */
     public void startGame() {
-        mKlotskiBeanArray = new KlotskiBean[][]{
-                new KlotskiBean[]{new ShiBing(getContext()), new CaoCao1(getContext()), new CaoCao2(getContext()), new ShiBing(getContext())}
-                , new KlotskiBean[]{new ShiBing(getContext()), new CaoCao3(getContext()), new CaoCao4(getContext()), new ShiBing(getContext())}
-                , new KlotskiBean[]{new Null(), new GuanYu1(getContext()), new GuanYu2(getContext()), new Null()}
-                , new KlotskiBean[]{new ZhangFei1(getContext()), new ZhaoYun1(getContext()), new HuangZhong1(getContext()), new MaChao1(getContext())}
-                , new KlotskiBean[]{new ZhangFei2(getContext()), new ZhaoYun2(getContext()), new HuangZhong2(getContext()), new MaChao2(getContext())}
-        };
+        mKlotskiBeanArray = KlotskiUtil.getRandomLevel();
         mSuccess = false;
         invalidate();
     }

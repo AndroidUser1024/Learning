@@ -15,7 +15,7 @@ import com.qinshou.qinshoubox.R;
 public class ZhangFei2 extends KlotskiBean {
 
     public ZhangFei2(Context context) {
-        super("张飞", 1, 2, Type.CAO_CAO);
+        super("张飞", 1, 2, Type.ZHANG_FEI);
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.klotski_zhang_fei);
         super.bitmap = Bitmap.createBitmap(bitmap, 0, bitmap.getHeight() / 2, bitmap.getWidth(), bitmap.getHeight() / 2);
     }
