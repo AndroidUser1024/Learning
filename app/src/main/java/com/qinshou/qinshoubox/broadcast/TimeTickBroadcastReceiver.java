@@ -27,16 +27,16 @@ public class TimeTickBroadcastReceiver extends BroadcastReceiver {
         if (!TextUtils.equals(Intent.ACTION_TIME_TICK, intent.getAction())) {
             return;
         }
-        Calendar calendar = Calendar.getInstance();
-        int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
-        ShowLogUtil.logi("hourOfDay--->" + hourOfDay);
-        WallpaperManager wallpaperManager = WallpaperManager.getInstance(context);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            try {
-                wallpaperManager.setResource(R.drawable.splash_iv_advertisement_src, WallpaperManager.FLAG_LOCK);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+//        Calendar calendar = Calendar.getInstance();
+//        int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
+//        ShowLogUtil.logi("hourOfDay--->" + hourOfDay);
+//        WallpaperManager wallpaperManager = WallpaperManager.getInstance(context);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//            try {
+//                wallpaperManager.setResource(R.drawable.splash_iv_advertisement_src, WallpaperManager.FLAG_LOCK);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
     }
 }

@@ -14,6 +14,7 @@ import com.qinshou.commonmodule.ContainerActivity;
 import com.qinshou.commonmodule.util.FragmentUtil;
 import com.qinshou.commonmodule.util.SharedPreferencesHelper;
 import com.qinshou.commonmodule.util.ShowLogUtil;
+import com.qinshou.im.protobuf.MessageProtobuf;
 import com.qinshou.qinshoubox.base.QSActivity;
 import com.qinshou.qinshoubox.base.QSFragment;
 import com.qinshou.qinshoubox.broadcast.TimeTickBroadcastReceiver;
@@ -109,9 +110,23 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
                 } else if (position == TAB_INDEX_CONVERSATION) {
                     FragmentUtil.showFragment(getSupportFragmentManager(), R.id.fl_fragment_container, mConversationFragment);
                 } else if (position == TAB_INDEX_FRIEND) {
+                    com.qinshou.im.IMClient.SINGLETON.sendMessage(MessageProtobuf.Message.newBuilder()
+                            .setCid(1)
+                            .setSid("10000")
+                            .setFromUserId("100")
+                            .setToUserId("200")
+                            .setType(1000)
+                            .setContentType(1)
+                            .setContent("测试文字")
+                            .setSendTimestamp(System.currentTimeMillis())
+                            .setReceiveTimestamp(System.currentTimeMillis())
+                            .setStatus(0)
+                            .setExtend("")
+                            .build());
                     FragmentUtil.showFragment(getSupportFragmentManager(), R.id.fl_fragment_container, mFriendFragment);
                 } else if (position == TAB_INDEX_ME) {
                     FragmentUtil.showFragment(getSupportFragmentManager(), R.id.fl_fragment_container, mMeFragment);
+                    com.qinshou.im.IMClient.SINGLETON.disconnect();
                 }
             }
 
@@ -165,6 +180,7 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
             // 对存储的密码进行解密,并自动登录
             getPresenter().login(username, EncryptUtil.decrypt(password));
         }
+        com.qinshou.im.IMClient.SINGLETON.connect();
     }
 
     @Override
