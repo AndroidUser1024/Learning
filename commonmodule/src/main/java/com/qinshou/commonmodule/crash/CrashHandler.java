@@ -74,7 +74,6 @@ public enum CrashHandler implements Thread.UncaughtExceptionHandler {
      * @return 是否已处理，已处理返回 true，否则返回 false
      */
     private boolean handleException(Throwable throwable) {
-        Log.i("daolema", "嗯哼");
         throwable.printStackTrace();
         // 使用Toast来显示异常信息
         new Thread() {

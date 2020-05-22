@@ -24,4 +24,10 @@ public class IMClientHandler extends ChannelInboundHandlerAdapter {
         Log.i(TAG, "channelRead--->" + msg);
     }
 
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        super.exceptionCaught(ctx, cause);
+        cause.printStackTrace();
+        Log.i(TAG, "exceptionCaught--->" + cause.getMessage());
+    }
 }

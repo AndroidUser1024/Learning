@@ -1,13 +1,14 @@
 package com.qinshou.im;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.qinshou.im.enums.ReconnectStrategy;
 import com.qinshou.im.handler.HeartBeatHandler;
 import com.qinshou.im.handler.IMClientHandler;
+import com.qinshou.im.manager.SslManager;
 import com.qinshou.im.protobuf.MessageProtobuf;
 
-import java.io.IOException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -41,6 +42,7 @@ public enum IMClient {
 
     private final String TAG = getClass().getSimpleName();
     private final long HEART_BEAT_INTERVAL = 10;
+    private Context mContext;
     private Channel mChannel;
     private String mHost = "10.11.11.179";
     private int mPort = 8888;
@@ -71,6 +73,9 @@ public enum IMClient {
     private long mDelay = 0;
     private ReconnectStrategy mReconnectStrategy = ReconnectStrategy.SMART;
 
+    public void init(Context context) {
+        mContext = context;
+    }
     public void connect() {
         new Thread(new Runnable() {
             @Override
@@ -96,6 +101,7 @@ public enum IMClient {
                                                     , TimeUnit.SECONDS))
                                             // 自定义心跳处理
                                             .addLast("HeartBeatHandler", new HeartBeatHandler())
+                                            .addFirst("SslHandler", SslManager.getSslHandler(mContext))
                                             .addLast(new IMClientHandler());
                                 }
                             })
@@ -105,37 +111,36 @@ public enum IMClient {
                     Log.i(TAG, "mChannel--->" + mChannel.id().asShortText());
                     mChannel.closeFuture().sync();
                 } catch (InterruptedException e) {
-                    Log.i("TAG", "e" + " : " + e.getMessage());
+                    Log.i(TAG, "e" + " : " + e.getMessage());
                 } catch (Exception e1) {
                     Log.i(TAG, "e1--->" + e1);
                     if (e1 instanceof ConnectTimeoutException) {
                         Log.i(TAG, "ignore ConnectTimeoutException");
                     }
                 } finally {
-                    Log.i("daolema", "退出了");
                     eventLoopGroup.shutdownGracefully();
-                    if (mReconnectSchedule != null) {
-                        mReconnectSchedule.cancel(true);
-                        mReconnectSchedule = null;
-                    }
-                    if (mReconnectStrategy == ReconnectStrategy.FIXED) {
-                        mDelay = 10;
-                    } else {
-                        if (mCount < 10) {
-                            mDelay += 1;
-                        } else if (mCount < 20) {
-                            mDelay = 30;
-                        } else {
-                            mDelay = 60;
-                        }
-                    }
-                    Log.i(TAG, mDelay + "s 后重连");
-                    mScheduledExecutorService.schedule(new Runnable() {
-                        @Override
-                        public void run() {
-                            connect();
-                        }
-                    }, mDelay, TimeUnit.SECONDS);
+//                    if (mReconnectSchedule != null) {
+//                        mReconnectSchedule.cancel(true);
+//                        mReconnectSchedule = null;
+//                    }
+//                    if (mReconnectStrategy == ReconnectStrategy.FIXED) {
+//                        mDelay = 10;
+//                    } else {
+//                        if (mCount < 10) {
+//                            mDelay += 1;
+//                        } else if (mCount < 20) {
+//                            mDelay = 30;
+//                        } else {
+//                            mDelay = 60;
+//                        }
+//                    }
+//                    Log.i(TAG, mDelay + "s 后重连");
+//                    mScheduledExecutorService.schedule(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            connect();
+//                        }
+//                    }, mDelay, TimeUnit.SECONDS);
                 }
             }
         }).start();

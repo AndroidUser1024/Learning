@@ -180,7 +180,7 @@ public class MainActivity extends QSActivity<MainPresenter> implements IMainCont
             // 对存储的密码进行解密,并自动登录
             getPresenter().login(username, EncryptUtil.decrypt(password));
         }
-        com.qinshou.im.IMClient.SINGLETON.connect();
+//        com.qinshou.im.IMClient.SINGLETON.connect();
     }
 
     @Override
